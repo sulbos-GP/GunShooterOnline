@@ -6,8 +6,6 @@ REM 직접적으로 먼저 실행이 불가능합니다
 
 echo WebServer batch file is running.
 
-set Configuration=Debug
-
 if %Configuration%==Debug (
 	set SolutionPath="%~dp0GSO_WebServer.sln"
 	set GsoWebServerPath="%~dp0GsoWebServer\bin\Debug\net8.0\"
