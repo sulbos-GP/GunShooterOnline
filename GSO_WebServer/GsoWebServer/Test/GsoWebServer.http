@@ -1,0 +1,25 @@
+@GsoWebServer_HostAddress = http://localhost:5000/api
+
+POST {{GsoWebServer_HostAddress}}/Authorize/Login
+Content-Type: application/json
+
+{
+    "code":"a_1",
+    "error":"a0983694-050c",
+    "error_description":"a_1",
+    "state":"a0983694-050c"
+}
+
+###
+
+POST {{GsoWebServer_HostAddress}}/Matchmaking/Cancle
+Content-Type: application/json
+
+{
+    "user_id":"a_1",
+    "access_token":"a0983694-050c-4230-c576-bf863afc066c"
+}
+
+###
+
+###

@@ -7,9 +7,18 @@ REM 직접적으로 먼저 실행이 불가능합니다
 echo WebServer batch file is running.
 
 set Configuration=Debug
-set SolutionPath="%~dp0GSO_WebServer\GSO_WebServer.sln"
-set AuthenticationPath="%~dp0GSO_WebServer\AuthenticationServer\bin\Debug\net8.0\"
-set MatchmakingPath="%~dp0GSO_WebServer\MatchmakingServer\bin\Debug\net8.0\"
+
+if %Configuration%==Debug (
+	set SolutionPath="%~dp0GSO_WebServer.sln"
+	set GsoWebServerPath="%~dp0GsoWebServer\bin\Debug\net8.0\"
+	set MatchmakingPath="%~dp0MatchmakingServer\bin\Debug\net8.0\"
+	set GameSessionPath="%~dp0GameSessionServer\bin\Debug\net8.0\"
+) else if %Configuration%==Release (
+	set SolutionPath="%~dp0GSO_WebServer.sln"
+	set GsoWebServerPath="%~dp0GsoWebServer\bin\Release\net8.0\"
+	set MatchmakingPath="%~dp0MatchmakingServer\bin\Release\net8.0\"
+	set GameSessionPath="%~dp0GameSessionServer\bin\Release\net8.0\"
+)
 
 if %START_CALL%==true (
 
@@ -24,11 +33,16 @@ if %START_CALL%==true (
 	)
 
 	REM 인증 서버 시작
-	echo start to AuthenticationServer.
-	start /d %AuthenticationPath% AuthenticationServer.exe
+	echo start to GsoWebServer.
+	start /d %GsoWebServerPath% GsoWebServer.exe
 
 	REM 매칭 서버
-	REM start /d %MatchmakingPath% MatchmakingServer.exe
+	REM echo start to MatchmakingServer.
+	REM start /d %GsoWebServerPath% MatchmakingServer.exe
+	
+	REM 게임 세션 서버
+	REM echo start to GameSessionServer.
+	REM start /d %GameSessionPath% GameSessionServer.exe
 	
 ) else (
 	echo This batch file cannot be run directly.
