@@ -21,7 +21,7 @@ echo MSBuildPath is set to %MSBuildPath%
 
 REM 웹 서버 배치파일 실행
 echo call WebServer batch file
-call WebServerStart.bat
+call GSO_WebServer\WebServerStart.bat
 
 REM 소켓 서버 배치파일 실행
 
