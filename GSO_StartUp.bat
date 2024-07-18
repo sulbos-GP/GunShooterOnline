@@ -5,9 +5,12 @@ pushd %~dp0
 REM Build log clear
 echo. > build.log
 
-REM ServerStart
+REM StartUp
 set START_CALL=true
 echo START_CALL is set to %START_CALL%
+
+set Configuration=Debug
+echo Configuration is set to %Configuration%
 
 if not exist LocalConfig.txt (
 	echo %date% %time% Not exist LocalConfig.txt >> build.log
@@ -28,5 +31,3 @@ REM 소켓 서버 배치파일 실행
 
 REM unset parent call
 set START_CALL=
-
-pause
