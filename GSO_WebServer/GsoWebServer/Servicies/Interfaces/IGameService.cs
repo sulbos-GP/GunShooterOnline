@@ -13,6 +13,11 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<(WebErrorCode, int)> SingUpWithNewUserGameData(String userId, String service);
 
         /// <summary>
+        /// 유저의 닉네임 변경
+        /// </summary>
+        public Task<(WebErrorCode, string)> UpdateNickname(Int32 uid, String newNickname);
+
+        /// <summary>
         /// 유저 정보 가져오기
         /// </summary>
         public Task<(WebErrorCode, UserInfo?)> GetUserInfo(int uid);

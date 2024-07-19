@@ -1,7 +1,7 @@
-DELIMITER //
-
 USE game_database;
 
+DELIMITER $$ 
+DROP PROCEDURE IF EXISTS create_dummy $$
 CREATE PROCEDURE create_dummy()
 BEGIN
 	DECLARE counter INT DEFAULT 1;
@@ -15,7 +15,7 @@ BEGIN
     WHILE counter <= max_count DO
         SET new_id = CONCAT('a_', counter);
         
-        INSERT INTO user(player_id, service) VALUES(new_id, 'Google');
+        INSERT INTO user(player_id, nickname, service) VALUES(new_id, new_id, 'Google');
         SET new_uid = LAST_INSERT_ID();
         
         INSERT INTO user_metadata(uid) VALUES(new_uid);
@@ -27,6 +27,5 @@ BEGIN
         
         SET counter = counter + 1;
 	END WHILE;
-END //
-
+END $$
 DELIMITER ;

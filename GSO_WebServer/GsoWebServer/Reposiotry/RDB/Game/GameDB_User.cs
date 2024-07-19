@@ -15,7 +15,7 @@ namespace GsoWebServer.Reposiotry.RDB.Game
         public async Task<UserInfo?> GetUserByPlayerId(String playerId)
         {
             return await mQueryFactory.Query("user")
-                .Where("id", playerId).
+                .Where("player_id", playerId).
                 FirstOrDefaultAsync<UserInfo>();
         }
 
@@ -40,6 +40,16 @@ namespace GsoWebServer.Reposiotry.RDB.Game
                 .UpdateAsync(new
                 {
                     recent_login_dt = DateTime.Now,
+                });
+        }
+
+        public async Task<int> UpdateNickname(int uid, String nickname)
+        {
+            return await mQueryFactory.Query("user")
+                .Where("uid", uid)
+                .UpdateAsync(new
+                {
+                    nickname = nickname,
                 });
         }
 

@@ -65,11 +65,41 @@ namespace GsoWebServer.Servicies.Authentication
                     return (WebErrorCode.SignInFailMismatchService, 0);
                 }
 
-                return (WebErrorCode.MyPlayerFailException, userInfo.uid);
+                return (WebErrorCode.None, userInfo.uid);
             }
             catch /*(Exception ex)*/
             {
                 return (WebErrorCode.MyPlayerFailException, 0);
+            }
+        }
+
+        public async Task<WebErrorCode> VerifyNickname(Int32 uid, String nickname)
+        {
+            try
+            {
+
+                var userInfo = await mGameDB.GetUserByUid(uid);
+
+                if (userInfo is null)
+                {
+                    return (WebErrorCode.SignInFailUserNotExist);
+                }
+
+                if (userInfo.nickname == string.Empty)
+                {
+                    return (WebErrorCode.SetNicknameInitNickname);
+                }
+
+                if(userInfo.nickname == nickname)
+                {
+                    return (WebErrorCode.SetNicknameFailSameNickname);
+                }
+
+                return (WebErrorCode.None);
+            }
+            catch /*(Exception ex)*/
+            {
+                return (WebErrorCode.MyPlayerFailException);
             }
         }
 

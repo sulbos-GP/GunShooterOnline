@@ -43,6 +43,11 @@ namespace GsoWebServer.Reposiotry.Interfaces
         public Task<int> UpdateRecentLogin(int uid);
 
         /// <summary>
+        /// 유저의 닉네임 변경
+        /// </summary>
+        public Task<int> UpdateNickname(int uid, String nickname);
+
+        /// <summary>
         /// 유저의 유니크 아이디로 user 메타데이터 불러오기
         /// </summary>
         public Task<MetadataInfo?> GetUserMetaDataByUid(int uid);

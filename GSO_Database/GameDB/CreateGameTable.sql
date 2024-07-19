@@ -1,9 +1,9 @@
 USE game_database;
 
-DROP TABLE IF EXISTS users_metadata;
-DROP TABLE IF EXISTS skills;
+DROP TABLE IF EXISTS user_metadata;
+DROP TABLE IF EXISTS user_skill;
 
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS user;
 
 #유저의 로그인 정보
 CREATE TABLE IF NOT EXISTS user (
@@ -45,7 +45,6 @@ CREATE TABLE IF NOT EXISTS user_skill (
 );
 
 #더미 생성 (CreateDummyProcedures 참고)
-CALL create_dummy();
 
 SELECT * FROM user;
 SELECT * FROM user_metadata;

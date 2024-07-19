@@ -29,6 +29,9 @@
         SignInFailUserNotExist,
         SignInFailMismatchService,
 
+        SetNicknameInitNickname,
+        SetNicknameFailSameNickname,
+
         // Account 2000 ~
         CreateAccountFailException = 2001,
         LoginFailException = 2002,
