@@ -4,7 +4,11 @@ using GsoWebServer.Reposiotry.RDB.Master;
 using GsoWebServer.Reposiotry.RDB.Game;
 using GsoWebServer.Servicies.Interfaces;
 using GsoWebServer.Servicies.Google;
+using GsoWebServer.Servicies.Authentication;
+using GsoWebServer.Servicies.DataLoad;
+using GsoWebServer.Servicies.Game;
 using GsoWebServer.Reposiotry.NoSQL;
+using System;
 
 namespace GsoWebServer.Startup
 {
@@ -46,6 +50,9 @@ namespace GsoWebServer.Startup
             services.AddTransient<IGameDB, GameDB>();
 
             services.AddScoped<IGoogleService, GoogleService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IDataLoadService, DataLoadService>();
+            services.AddScoped<IGameService, GameService>();
 
             services.AddSingleton<IMemoryDB, MemoryDB>();
         }

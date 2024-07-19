@@ -19,6 +19,11 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<(WebErrorCode, int)> VerifyUser(String playerId, String service);
 
         /// <summary>
+        /// 유저의 닉네임이 존재하는지 확인
+        /// </summary>
+        public Task<WebErrorCode> VerifyNickname(Int32 uid, String nickname);
+
+        /// <summary>
         /// 토큰 공유 레디스에 저장
         /// </summary>
         public Task<WebErrorCode> RegisterToken(int uid, long expires, String accessToken, String refreshToken);

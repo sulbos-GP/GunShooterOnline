@@ -28,13 +28,14 @@ namespace GsoWebServer.Servicies.Game
                     return (WebErrorCode.AuthTokenFailSetNx, 0);
                 }
 
-                rowCount = await mGameDB.InitUserMatadata(uid, transaction);
+                rowCount = await mGameDB.InitUserSkill(uid, transaction);
                 if (rowCount != 1)
                 {
                     transaction.Rollback();
                     return (WebErrorCode.AuthTokenFailSetNx, 0);
                 }
 
+                transaction.Commit();
                 return (WebErrorCode.None, uid);
             }
             catch /*(Exception e)*/
@@ -45,6 +46,30 @@ namespace GsoWebServer.Servicies.Game
             finally
             {
                 transaction.Dispose();
+            }
+        }
+
+        public async Task<(WebErrorCode, string)> UpdateNickname(Int32 uid, String newNickname)
+        {
+            try
+            {
+                var user = await mGameDB.GetUserByNickname(newNickname);
+                if (user is not null)
+                {
+                    return (WebErrorCode.AuthTokenFailSetNx, string.Empty);
+                }
+
+                var rowCount = await mGameDB.UpdateNickname(uid, newNickname);
+                if (rowCount != 1)
+                {
+                    return (WebErrorCode.AuthTokenFailSetNx, string.Empty);
+                }
+
+                return (WebErrorCode.None, newNickname);
+            }
+            catch /*(Exception e)*/
+            {
+                return (WebErrorCode.CheckAuthFailException, string.Empty);
             }
         }
 
