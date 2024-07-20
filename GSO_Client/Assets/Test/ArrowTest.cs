@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArrowTest : MonoBehaviour
 {
-    Rigidbody2D rigidbody;
+    //Rigidbody2D rigidbody;
     Vector2 dir = new Vector2(1, 0);
     Vector2 target = new Vector2(8, 0);
     float t;

@@ -110,10 +110,10 @@ public class PlayerController : CreatureController
     }
 
 
-    public override void UseSkillTodo(SkillType skillType, float Time)
+    public override void UseSkillTodo(SkillType inSkillType, float Time)
     {
         //중요
-        switch (skillType)
+        switch (inSkillType)
         {
             case SkillType.None:
 
@@ -140,7 +140,7 @@ public class PlayerController : CreatureController
 
     protected IEnumerator CoStartRangeSkill(float time)
     {
-        skillType = SkillType.Range;
+        this.skillType = SkillType.Range;
         State = CreatureState.Skill;
         yield return new WaitForSeconds(time);
         State = CreatureState.Idle;
@@ -149,7 +149,7 @@ public class PlayerController : CreatureController
 
     protected IEnumerator CoStartMeleeSkill(float time)
     {
-        skillType = SkillType.Melee;
+        this.skillType = SkillType.Melee;
         State = CreatureState.Skill;
         yield return new WaitForSeconds(time);
         State = CreatureState.Idle;
@@ -158,7 +158,7 @@ public class PlayerController : CreatureController
 
     protected IEnumerator CoStartBuffSkill(float time)
     {
-        skillType = SkillType.Buff;
+        this.skillType = SkillType.Buff;
         State = CreatureState.Skill;
         yield return new WaitForSeconds(time);
         State = CreatureState.Idle;

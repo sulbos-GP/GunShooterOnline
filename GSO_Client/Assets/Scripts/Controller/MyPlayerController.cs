@@ -20,7 +20,7 @@ public partial class MyPlayerController : PlayerController
 
     private MyPlayerAttack _myPlayerAttack;
 
-    private Vector2 _skillDir = new();
+    //private Vector2 _skillDir = new();
     private SkillRequst _skillPanel;
 
     private Vector3 _target;
