@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Google.Protobuf.Protocol;
 using UnityEngine.UIElements;
 using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
@@ -21,6 +22,8 @@ public class InputController : MonoBehaviour
     public BasicFov basicFov;
 
     private bool isFiring;
+    private CreatureState State;
+    private Vector3 lastPos;
 
     private void Awake()
     {
@@ -36,10 +39,15 @@ public class InputController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        //Move Logic
-        Vector2 newVec2 = _direction * 5.0f * Time.fixedDeltaTime;
-        rig.MovePosition(rig.position + newVec2);
+        UpdateState();
 
+        if(Mathf.Abs(lookInput.x)+Mathf.Abs(lookInput.y)>1.0f)
+        {
+            isFiring = true;
+            StartCoroutine(FireContinuously());
+        }
+        else
+            isFiring = false;
         //Mouse Move Logic
         //Vector3 mousePosition = lookInput;
         //mousePosition.z = -mainCamera.transform.position.z;
@@ -47,9 +55,9 @@ public class InputController : MonoBehaviour
         //mousePosition.z = 0f;
 
 
-        //Vector3 direction = mousePosition - transform.position;
-        //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+            //Vector3 direction = mousePosition - transform.position;
+            //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
         float angle = Mathf.Atan2(lookInput.y, lookInput.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle-90f));
 
@@ -64,8 +72,8 @@ public class InputController : MonoBehaviour
         var playerInput = new PlayerInput();
         playerInput.Player.Enable();
         playerInput.Player.Look.performed += OnLookInput;
-        playerInput.Player.Fire.started += OnStartFireInput;
-        playerInput.Player.Fire.canceled += OnStopFireInput;
+        //playerInput.Player.Fire.started += OnStartFireInput;
+        //playerInput.Player.Fire.canceled += OnStopFireInput;
         playerInput.Player.Reload.performed += OnReloadInput;
         playerInput.Player.Move.started += OnMove; ;
         playerInput.Player.Move.performed += OnMove;
@@ -76,8 +84,8 @@ public class InputController : MonoBehaviour
     {
         var playerInput = new PlayerInput();
         playerInput.Player.Look.performed -= OnLookInput;
-        playerInput.Player.Fire.started -= OnStartFireInput;
-        playerInput.Player.Fire.canceled -= OnStopFireInput;
+        //playerInput.Player.Fire.started -= OnStartFireInput;
+        //playerInput.Player.Fire.canceled -= OnStopFireInput;
         playerInput.Player.Reload.performed -= OnReloadInput;
         playerInput.Player.Move.started -= OnMove;
         playerInput.Player.Move.performed -= OnMove;
@@ -87,13 +95,13 @@ public class InputController : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext callbackContext)
     {
-        if(callbackContext.started)
+        if(callbackContext.performed)
         {
-            
+            State = CreatureState.Moving;
         }
         else if(callbackContext.canceled)
         {
-
+            State = CreatureState.Idle;
         }
         Vector2 input = callbackContext.ReadValue<Vector2>();
         _direction = new Vector2(input.x,input.y);
@@ -133,5 +141,45 @@ public class InputController : MonoBehaviour
         Debug.Log("RightClicked");
         Gun playerGun = localUnit._guns[localUnit.CurGun];
         playerGun.Reload();
+    }
+
+    private void UpdateState()
+    {
+        switch (State)
+        {
+            case CreatureState.Moving:
+                UpdateMove();
+                break;
+            case CreatureState.Idle:
+                break;
+            default:
+                break;
+        }
+    }
+    private void UpdateMove()
+    {
+        //Move Logic
+        Vector2 newVec2 = _direction * 5.0f * Time.fixedDeltaTime;
+        rig.MovePosition(rig.position + newVec2);
+        UpdateServer();
+    }
+
+    private void UpdateServer()
+    {
+        if (lastPos == null || Vector3.Distance(lastPos, transform.position)>0.05f)
+        {
+            lastPos = transform.position;
+            var movePack = new C_Move();
+            movePack.PositionInfo = new PositionInfo
+            {
+                CurrentRoomId = 0,
+                DirX = lookInput.x,
+                DirY = lookInput.y,
+                PosX = transform.position.x,
+                PosY = transform.position.y,
+                RotZ = transform.rotation.z,
+            };
+            Managers.Network.Send(movePack);
+        }
     }
 }
