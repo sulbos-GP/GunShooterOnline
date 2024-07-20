@@ -53,7 +53,7 @@ public class SignInUI : MonoBehaviour
     /// </summary>
     private void OnClickSignOut()
     {
-
+        //미지원
     }
 
     /// <summary>
@@ -76,6 +76,7 @@ public class SignInUI : MonoBehaviour
         else if (status == SignInStatus.Canceled)
         {
             //모바일로 실행을 안할 경우
+            //TODO : PC에서 무시하고 진행할 수 있도록
             mLoadingBackground.enabled = false;
             mResultText.text = "The sign in was canceled.";
         }

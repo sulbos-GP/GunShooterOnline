@@ -38,86 +38,70 @@ public class DummyScript : CreatureController
     
 
     // Update is called once per frame
-    void Update()
-    {
+    //void Update()
+    //{
 
-        //Debug.Log(transform.rotation.z);
-        //Debug.Log(transform.rotation.eulerAngles.z);
-        CellPos = new Vector3(4, -3.5f, 0);
-        float dis = (CellPos - transform.position).magnitude;
-        Speed = 6f;
+    //    //Debug.Log(transform.rotation.z);
+    //    //Debug.Log(transform.rotation.eulerAngles.z);
+    //    CellPos = new Vector3(4, -3.5f, 0);
+    //    float dis = (CellPos - transform.position).magnitude;
+    //    Speed = 6f;
 
+    //    return;
 
+    //    Vector2 t = (target.transform.position - transform.position).normalized;
 
-        
+    //    GameObject go = Managers.Resource.Instantiate("Creature/Arrow");
+    //    go.name = "Arrow";
 
+    //    ArrowController ac = go.GetComponent<ArrowController>();
+    //    ac.PosInfo = new Google.Protobuf.Protocol.PositionInfo()
+    //    {
+    //        DirX = (float)Math.Round(t.x, 2),
+    //        DirY = (float)Math.Round(t.y, 2),
+    //        CurrentRoomId = 0,
+    //        PosX = transform.position.x,
+    //        PosY = transform.position.y,
+    //        State = Google.Protobuf.Protocol.CreatureState.Moving
 
+    //    };
+    //    ac.Stat = new Google.Protobuf.Protocol.StatInfo()
+    //    {
+    //        Speed = 10f
+    //    };
+    //    ac.SyncPos();
+    //    Debug.Log
+    //        ($"{ac.PosInfo.DirX},{ac.PosInfo.DirY},{ac.PosInfo.PosX},{ac.PosInfo.PosY}");
 
-        
+    //    return;
+    //    for (int i = 0; i < ttemp.Count; i++)
+    //    {
+    //        if (i == 0)
+    //        {
+    //            ttemp[i].transform.Rotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), Space.World);
+    //        }
+    //        if (i == 1)
+    //        {
+    //            ttemp[i].transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z);
 
-
-
-
-
-
-
-
-
-        return;
-
-        Vector2 t = (target.transform.position - transform.position).normalized;
-
-        GameObject go = Managers.Resource.Instantiate("Creature/Arrow");
-        go.name = "Arrow";
-
-        ArrowController ac = go.GetComponent<ArrowController>();
-        ac.PosInfo = new Google.Protobuf.Protocol.PositionInfo()
-        {
-            DirX = (float)Math.Round(t.x, 2),
-            DirY = (float)Math.Round(t.y, 2),
-            CurrentRoomId = 0,
-            PosX = transform.position.x,
-            PosY = transform.position.y,
-            State = Google.Protobuf.Protocol.CreatureState.Moving
-
-        };
-        ac.Stat = new Google.Protobuf.Protocol.StatInfo()
-        {
-            Speed = 10f
-        };
-        ac.SyncPos();
-        Debug.Log
-            ($"{ac.PosInfo.DirX},{ac.PosInfo.DirY},{ac.PosInfo.PosX},{ac.PosInfo.PosY}");
-
-        return;
-        for (int i = 0; i < ttemp.Count; i++)
-        {
-            if (i == 0)
-            {
-                ttemp[i].transform.Rotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), Space.World);
-            }
-            if (i == 1)
-            {
-                ttemp[i].transform.rotation = Quaternion.Euler(0, 0, transform.rotation.eulerAngles.z);
-
-            }
-            if (i == 2)
-            {
-                ttemp[i].transform.Rotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), Space.Self);
+    //        }
+    //        if (i == 2)
+    //        {
+    //            ttemp[i].transform.Rotate(new Vector3(0, 0, transform.rotation.eulerAngles.z), Space.Self);
 
 
-            }
-            if (i == 3)
-            {
-                ttemp[i].transform.eulerAngles = new Vector3(0, 0, transform.rotation.eulerAngles.z);
+    //        }
+    //        if (i == 3)
+    //        {
+    //            ttemp[i].transform.eulerAngles = new Vector3(0, 0, transform.rotation.eulerAngles.z);
 
-            }
-            if (i == 4)
-            {
-                //ttemp[i].transform.rotation = new Vector3(0, 0, transform.rotation.z);
+    //        }
+    //        if (i == 4)
+    //        {
+    //            //ttemp[i].transform.rotation = new Vector3(0, 0, transform.rotation.z);
 
-            }
-        }
+    //        }
+    //    }
 
 
 
@@ -125,42 +109,42 @@ public class DummyScript : CreatureController
 
 
 
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            StartCoroutine(Move());
-        }
+    //    if (Input.GetKeyDown(KeyCode.K))
+    //    {
+    //        StartCoroutine(Move());
+    //    }
 
-        Vector2 Dir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        transform.Translate(Dir.normalized * 3 * Time.fixedDeltaTime, Space.Self);
+    //    Vector2 Dir = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+    //    transform.Translate(Dir.normalized * 3 * Time.fixedDeltaTime, Space.Self);
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartCoroutine("Jump");
-        }
-        //Rigidbody.AddForce(10 * Vector2.down);
+    //    if (Input.GetKeyDown(KeyCode.Space))
+    //    {
+    //        StartCoroutine("Jump");
+    //    }
+    //    //Rigidbody.AddForce(10 * Vector2.down);
 
 
-        foreach (Transform tr in transform)
-        {
-            if (tr.name == "Ground")
-            {
-                RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, Vector2.down, 0.1f, mask);
-                foreach (RaycastHit2D hit in hits)
-                {
-                    if (grounds.Contains(hit.transform.gameObject) == false)
-                        grounds.Add(hit.transform.gameObject);
-                }
+    //    foreach (Transform tr in transform)
+    //    {
+    //        if (tr.name == "Ground")
+    //        {
+    //            RaycastHit2D[] hits = Physics2D.RaycastAll(tr.position, Vector2.down, 0.1f, mask);
+    //            foreach (RaycastHit2D hit in hits)
+    //            {
+    //                if (grounds.Contains(hit.transform.gameObject) == false)
+    //                    grounds.Add(hit.transform.gameObject);
+    //            }
 
-                if (grounds.Count > 0)
-                    return;
+    //            if (grounds.Count > 0)
+    //                return;
 
-                return;
-            }//foreach (Transform tr in transform)
+    //            return;
+    //        }//foreach (Transform tr in transform)
 
-        }
+    //    }
 
-        return;
-    }
+    //    return;
+    //}
 
 
 

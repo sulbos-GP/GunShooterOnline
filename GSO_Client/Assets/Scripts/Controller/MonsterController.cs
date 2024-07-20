@@ -9,12 +9,6 @@ public class MonsterController : CreatureController
 
     private bool canMove = true;
 
-    
-    private void Update()
-    {
-        base.Update();
-    }
-
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
