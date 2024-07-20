@@ -20,7 +20,7 @@ public class MapEditor
     public static List<Tuple<Transform, Vector2Int>> Rooms = new List<Tuple<Transform, Vector2Int>>();
     static string MapStr = "";
     static string MapTempStr = "";
-    static string Path = "/Users/jiseunghyeon/Documents/GitHub/GameServer/Common/MapData/";
+    static string Path = "D:\\/";
     static int[,] map;
     static float distance; // -55.5 -55.5 -> -55 -55   = result = 0.5f
     static Vector2 startPosTopLeft = Vector2.zero;
