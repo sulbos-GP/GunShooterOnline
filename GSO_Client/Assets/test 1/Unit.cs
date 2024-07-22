@@ -13,4 +13,10 @@ public class Unit : MonoBehaviour
     {
         _health = 100;
     }
+
+    public void Awake()
+    {
+        Init();
+    }
+
 }

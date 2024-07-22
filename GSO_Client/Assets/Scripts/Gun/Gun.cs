@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.IO.Pipes;
 using UnityEngine;
 using UnityEngine.AI;
@@ -19,17 +19,18 @@ public class Gun : MonoBehaviour
     private GunStat _gunStat;
 
     [SerializeField]
-    private int _shooterId; //½î´Â Ä³¸¯ÅÍÀÇ id È¤Àº ÇÃ·¹ÀÌ¾îÀÇ id
+    private int _shooterId; //ì˜ëŠ” ìºë¦­í„°ì˜ id í˜¹ì€ í”Œë ˆì´ì–´ì˜ id
     [SerializeField]
-    private int _curAmmo; //ÇöÀç ÀåÅº
+    public int _curAmmo { get; private set; } //í˜„ì¬ ì¥íƒ„
     [SerializeField]
-    private int _reloadTime = 3; //ÀÓÀÇ ÁöÁ¤
+    private int _reloadTime = 3; //ì„ì˜ ì§€ì •
 
-    private bool _isAmmoEmpty; //ÇöÀç ÀåÅºÀÌ ºñ¾ú´ÂÁö.
+    private bool _isAmmoEmpty; //í˜„ì¬ ì¥íƒ„ì´ ë¹„ì—ˆëŠ”ì§€.
     private float _lastFireTime;
     private Transform fireStartPos;
 
     public bool isBulletPrefShoot = false;
+
 
 
     private void Awake()
@@ -37,11 +38,16 @@ public class Gun : MonoBehaviour
         _gunStat.PrintGunStatInfo();
         Init();
     }
+
+    public GunStat getGunStat()
+    {
+        return _gunStat;
+    }
     
     private void Init()
     {
-        //°ÔÀÓ ½ÃÀÛ½Ã ½ÇÇàÇÒ ·çÆ¾
-        _shooterId = 1; //ÀÓÀÇ ÁöÁ¤. Ä³¸¯ÅÍ³ª ÇÃ·¹ÀÌ¾î id ¼³Á¤ÇÏ±â
+        //ê²Œì„ ì‹œì‘ì‹œ ì‹¤í–‰í•  ë£¨í‹´
+        _shooterId = 1; //ì„ì˜ ì§€ì •. ìºë¦­í„°ë‚˜ í”Œë ˆì´ì–´ id ì„¤ì •í•˜ê¸°
         _curAmmo = _gunStat.ammo; 
         gunState = GunState.Shootable;
         fireStartPos = transform.GetChild(0);
@@ -59,7 +65,7 @@ public class Gun : MonoBehaviour
 
     private void SetFireLine()
     {
-        //¹ß»ç¹üÀ§ ¼± 2°³ ±ß±â
+        //ë°œì‚¬ë²”ìœ„ ì„  2ê°œ ê¸‹ê¸°
         if (fireStartPos == null) return;
 
         float halfAngle = _gunStat.accuracy * 0.5f;
@@ -68,7 +74,7 @@ public class Gun : MonoBehaviour
         //RaycastHit2D hit1 = Physics2D.Raycast(fireStartPos.position, direction1, _gunStat.range);
         Vector3 endPoint1 = fireStartPos.position + direction1 * _gunStat.range;
 
-        /*if (hit1.collider != null) //ÃÑ Á¶ÁØ¼±ÀÌ º®¿¡ ¸·È÷³ª?
+        /*if (hit1.collider != null) //ì´ ì¡°ì¤€ì„ ì´ ë²½ì— ë§‰íˆë‚˜?
         {
             endPoint1 = hit1.point;
         }*/
@@ -89,44 +95,44 @@ public class Gun : MonoBehaviour
 
     }
 
-    //¹ß»ç¹öÆ° ´©¸¦½Ã
+    //ë°œì‚¬ë²„íŠ¼ ëˆ„ë¥¼ì‹œ
     public bool Fire()
     {
         if(gunState == GunState.Shootable && Time.time >= _lastFireTime + 1/ _gunStat.fireRate )
         {
             Debug.Log("FireSuccess");
             /*
-             ¹ß»ç ÄÚµå ÀÛ¼º.
-             ÃÑ¾ËÀ» ¹ß»çÇÏµç ·¹ÀÌÄÉ½ºÆ®·Î Ãæµ¹°¨Áö¸¦ ÇÏµç
-             ÀûÁß½Ã ÆĞÅ¶À» ¼­¹ö¿¡°Ô Àü´Ş
+             ë°œì‚¬ ì½”ë“œ ì‘ì„±.
+             ì´ì•Œì„ ë°œì‚¬í•˜ë“  ë ˆì´ì¼€ìŠ¤íŠ¸ë¡œ ì¶©ëŒê°ì§€ë¥¼ í•˜ë“ 
+             ì ì¤‘ì‹œ íŒ¨í‚·ì„ ì„œë²„ì—ê²Œ ì „ë‹¬
              */
 
-            /* ±×³É ·£´ıÀ¸·Î ¹ß»ç
+            /* ê·¸ëƒ¥ ëœë¤ìœ¼ë¡œ ë°œì‚¬
             float halfAngle = _gunStat.accuracy * 0.5f;
-            float randomAngle = Random.Range(-halfAngle, halfAngle); // accuracy ¹üÀ§ ³» ·£´ı °¢µµ
+            float randomAngle = Random.Range(-halfAngle, halfAngle); // accuracy ë²”ìœ„ ë‚´ ëœë¤ ê°ë„
             Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * fireStartPos.up;
             */
 
-            //Á¤±ÔºĞÆ÷¸¦ »ç¿ëÇÑ ¹ß»ç
+            //ì •ê·œë¶„í¬ë¥¼ ì‚¬ìš©í•œ ë°œì‚¬
             float halfAccuracyRange = _gunStat.accuracy / 2f;
 
-            float meanAngle = 0f;  // ¹ß»ç °¢µµÀÇ Æò±Õ (Áß¾Ó)
-            float standardDeviation = halfAccuracyRange / 3f;  // ¹ß»ç °¢µµÀÇ Ç¥ÁØÆíÂ÷ (Á¤È®µµ ±â¹İ)
+            float meanAngle = 0f;  // ë°œì‚¬ ê°ë„ì˜ í‰ê·  (ì¤‘ì•™)
+            float standardDeviation = halfAccuracyRange / 3f;  // ë°œì‚¬ ê°ë„ì˜ í‘œì¤€í¸ì°¨ (ì •í™•ë„ ê¸°ë°˜)
             float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
             Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * fireStartPos.up;
 
-            //·¹ÀÌÄ³½ºÆ®¸¦ »ç¿ëÇÑ ¹æ¹ı
+            //ë ˆì´ìºìŠ¤íŠ¸ë¥¼ ì‚¬ìš©í•œ ë°©ë²•
             RaycastHit2D hit = Physics2D.Raycast(fireStartPos.position, direction, _gunStat.range);
             if (hit.collider != null)
             {
-                //ÆĞÅ¶ Àü¼Û
+                //íŒ¨í‚· ì „ì†¡
                 Debug.Log("Hit: " + hit.collider.name);
             }
             Debug.DrawRay(fireStartPos.position, direction * _gunStat.range, Color.yellow, 0.5f);
 
             if (isBulletPrefShoot)
             {
-                //ÃÑ¾ËÀ» »ç¿ëÇÑ ¹æ¹ı
+                //ì´ì•Œì„ ì‚¬ìš©í•œ ë°©ë²•
                 Bullet bullet = _gunStat.bulletObj.GetComponent<Bullet>();
                 bullet._shooterId = _shooterId;
                 bullet._damage = _gunStat.damage;
@@ -136,9 +142,9 @@ public class Gun : MonoBehaviour
 
             }
 
-            _lastFireTime = Time.time;//¸¶Áö¸· »ç°İ ½Ã°£ ¾÷µ¥ÀÌÆ®
+            _lastFireTime = Time.time;//ë§ˆì§€ë§‰ ì‚¬ê²© ì‹œê°„ ì—…ë°ì´íŠ¸
 
-            _curAmmo--; //ÇöÀç ÃÑ¾Ë°¨¼Ò
+            _curAmmo--; //í˜„ì¬ ì´ì•Œê°ì†Œ
             _curAmmo = Mathf.Max(_curAmmo, 0);
             if(_curAmmo == 0 )
             {
@@ -148,21 +154,21 @@ public class Gun : MonoBehaviour
             return true;
         }
         Debug.Log("FireFailed");
-        return false; //¹ß»ç ¼º°ø ¿©ºÎ
+        return false; //ë°œì‚¬ ì„±ê³µ ì—¬ë¶€
     }
 
     public float GetRandomNormalDistribution(float mean, float standard)   
     {
-        // Á¤±Ô ºĞÆ÷·Î ºÎÅÍ ·£´ı°ªÀ» °¡Á®¿À´Â ÇÔ¼ö
+        // ì •ê·œ ë¶„í¬ë¡œ ë¶€í„° ëœë¤ê°’ì„ ê°€ì ¸ì˜¤ëŠ” í•¨ìˆ˜
         float x1 = Random.Range(0f, 1f);
         float x2 = Random.Range(0f, 1f);
         float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(x1)) * Mathf.Sin(2.0f * Mathf.PI * x2);
-        float randNormal = mean + standard * randStdNormal; //Æò±Õ + Ç¥ÁØÆíÂ÷* ·£´ıÁ¤±ÔºĞÆ÷
+        float randNormal = mean + standard * randStdNormal; //í‰ê·  + í‘œì¤€í¸ì°¨* ëœë¤ì •ê·œë¶„í¬
         return randNormal;
     }
 
 
-    //ÀçÀåÀü ¹öÆ° ´©¸¦½Ã
+    //ì¬ì¥ì „ ë²„íŠ¼ ëˆ„ë¥¼ì‹œ
     public void Reload()
     {
         if(_curAmmo < _gunStat.ammo || gunState != GunState.Reloading)
@@ -172,7 +178,7 @@ public class Gun : MonoBehaviour
         }
     }
 
-    //½ÇÁúÀûÀÎ ÀçÀåÀü
+    //ì‹¤ì§ˆì ì¸ ì¬ì¥ì „
     private IEnumerator Reloading()
     {
         gunState = GunState.Reloading;
@@ -183,9 +189,14 @@ public class Gun : MonoBehaviour
         Debug.Log("Reload Complete");
     }
 
-    //FovPlayerÀÇ ÄÚ·çÆ¾¿¡¼­ »ç¿ë
+    //FovPlayerì˜ ì½”ë£¨í‹´ì—ì„œ ì‚¬ìš©
     public float GetFireRate()
     {
-        return _gunStat.fireRate; // GunStat Å¬·¡½º¿¡¼­ ¼³Á¤ÇÑ ¹ß»ç ¼Óµµ¸¦ ¹İÈ¯
+        return _gunStat.fireRate; // GunStat í´ë˜ìŠ¤ì—ì„œ ì„¤ì •í•œ ë°œì‚¬ ì†ë„ë¥¼ ë°˜í™˜
+    }
+
+    public void GunChange(GunStat gun)
+    {
+        
     }
 }
