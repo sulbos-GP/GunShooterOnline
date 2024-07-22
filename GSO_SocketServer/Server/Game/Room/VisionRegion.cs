@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.Protocol;
 
@@ -18,7 +19,7 @@ public class VisionRegion
 
     public HashSet<GameObject> GatherObjects()
     {
-        if (Owner == null || Owner.gameRoom == null || Owner.CurrentRoomId == -1)
+        /*if (Owner == null || Owner.gameRoom == null || Owner.CurrentRoomId == -1)
             return null;
 
         var objects = Owner.gameRoom.Map.GetPlanetObjects(Owner.CurrentRoomId);
@@ -26,25 +27,32 @@ public class VisionRegion
         if (objects == null)
             return null;
 
-        return objects;
+        return objects;*/
+
+        return null;
     }
 
     public HashSet<GameObject> GatherPlayers()
     {
-        if (Owner == null || Owner.gameRoom == null || Owner.CurrentRoomId == -1)
+       /* if (Owner == null || Owner.gameRoom == null || Owner.CurrentRoomId == -1)
             return null;
 
         var objects = Owner.gameRoom.Map.GetPlanetPlayers(Owner.CurrentRoomId).ToHashSet<GameObject>();
 
         if (objects == null)
             return null;
-        return objects;
+        return objects;*/
+
+
+        return null;
     }
 
     public void Update()
     {
         if (Owner == null || Owner.gameRoom == null || Owner.CurrentRoomId == -1)
             return;
+
+        throw new Exception("Still working..");
 
         var currentObject = GatherObjects();
         currentObject.UnionWith(GatherPlayers());

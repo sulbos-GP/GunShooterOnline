@@ -9,7 +9,10 @@ namespace Server
 
 		public static ServerNetworkService mNetworkService = new ServerNetworkService();
 
-		static void Main(string[] args)
+        public static ushort ServerTickCount { get; internal set; } = 0;
+        public static int ServerIntervalTick { get; internal set; } = 250;
+
+        static void Main(string[] args)
 		{
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);

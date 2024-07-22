@@ -39,7 +39,7 @@ public class GameObject
     }
 
 
-    public GameRoom gameRoom { get; set; }
+    public BattleGameRoom gameRoom { get; set; }
     public PositionInfo PosInfo { get; } = new();
     public StatInfo stat { get; private set; } = new();
 
@@ -60,11 +60,11 @@ public class GameObject
         }
     }
 
-    public CreatureState State
+    /*public CreatureState State
     {
         get => PosInfo.State;
         set => PosInfo.State = value;
-    }
+    }*/
 
     public int Attack
     {
@@ -78,11 +78,11 @@ public class GameObject
         set => stat.AttackRange = value;
     }
 
-    public float Speed
+    /*public float Speed
     {
         get => stat.Speed;
         set => stat.Speed = value;
-    }
+    }*/
 
     public int Hp
     {
@@ -102,48 +102,7 @@ public class GameObject
     }
 
 
-    public void AddExp(int addnum)
-    {
-        if (addnum > 0)
-            stat.Exp += addnum;
-        else
-            return;
-
-        Console.WriteLine($"---------{info.Name} Exp {addnum} 증가------------");
-        if (stat.Exp >= stat.MaxExp) //일단 레벨업
-        {
-            var addtional = stat.Exp - stat.MaxExp;
-
-            SetLevelUp();
-
-            //천천히 오르는 이팩트
-
-            if (addtional >= stat.MaxExp) // 한번더 레벨업 할경우
-                AddExp(addtional);
-        }
-    }
-
-    public void SetLevelUp()
-    {
-        Console.WriteLine($"{info.Name}Level Up");
-        stat.Level += 1;
-        StatInfo nextStat;
-        if (DataManager.StatDict.TryGetValue(100 * stat.Class + stat.Level, out nextStat))
-        {
-            stat = nextStat;
-            stat.Exp = 0;
-
-            var statPacket = new S_StatChange();
-            statPacket.ObjectId = Id;
-            statPacket.StatInfo = stat;
-            gameRoom.Push(gameRoom.BroadCast, CurrentRoomId, statPacket);
-        }
-        else
-        {
-            Console.WriteLine("레벨업 오류");
-        }
-    }
-
+  
     public virtual void Update()
     {
     }
@@ -199,7 +158,7 @@ public class GameObject
         room.Push(new Job(() =>
         {
             stat.Hp = stat.MaxHp;
-            PosInfo.State = CreatureState.Idle;
+            //PosInfo.State = CreatureState.Idle;
         }));
 
         room.PushAfter(10, room.EnterGame, this, true);

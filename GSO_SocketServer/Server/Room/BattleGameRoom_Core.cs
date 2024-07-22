@@ -9,14 +9,18 @@ using System.Text;
 
 namespace Server
 {
-    class BattleGameRoom : GameRoom
+    public partial class BattleGameRoom : GameRoom
     {
-        public Map mMap { get; } = new();
+        Dictionary<int, Player> _playerDic = new Dictionary<int, Player>();
+        Dictionary<int, CreatureObj> _monsterDic = new Dictionary<int, CreatureObj>();
+        Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
-        private readonly Dictionary<int, Monster> _MonsterList = new();
-        private readonly Dictionary<int, Player> _playerList = new();
-        private readonly Dictionary<int, SkillObj> _skillObjList = new();
 
+        public Map mMap { get; } 
+        public BattleGameRoom()
+        {
+            mMap = new Map(r: this);
+        }
 
         public override void Init()
         {
@@ -41,14 +45,14 @@ namespace Server
         public override void Clear()
         {
         }
+        
+      
+
 
         public override void BroadCast(int id, IMessage message)
         {
-            var _players = mMap.GetPlanetPlayers(id);
-            if (_players == null || _players.Count <= 0)
-                return;
-
-            foreach (var player in _players) player.Session.Send(message);
+            foreach (Player player in _playerDic.Values) 
+                player.Session.Send(message,DeliveryMethod.ReliableSequenced);
 
         }
         
@@ -65,7 +69,7 @@ namespace Server
             if (type == GameObjectType.Player)
             {
                 var player = gameObject as Player;
-                _playerList.Add(gameObject.Id, player);
+                _playerDic.Add(gameObject.Id, player);
                 player.gameRoom = this;
 
                 //player.RefreshAddtionalStat();
@@ -81,11 +85,11 @@ namespace Server
                 //    if (Map.ApplyMove(player, new Vector2Int(player.CellPos.x, player.CellPos.y)) == true)
                 //        break;
                 //}
-
+/*
                 if (mMap.SetPosAndRoomtsId(player) == false) 
-                    Console.WriteLine("맵 스폰 오류");
+                    Console.WriteLine("맵 스폰 오류");*/
 
-                mMap.AddObject(player);
+                //mMap.AddObject(player);
 
 
                 //본인에게 정보 전송
@@ -94,28 +98,28 @@ namespace Server
                     enterPacket.Player = player.info;
                     player.Session.Send(enterPacket);
 
-                    player.Vision.Update();
+                    //player.Vision.Update();
 
                     //--------------------------------------------
-                    mMap.SendMapInfo(player);
+                   // mMap.SendMapInfo(player);
                 }
             }
             else if (type == GameObjectType.Monster)
             {
                 var monster = gameObject as Monster;
-                _MonsterList.Add(gameObject.Id, monster);
+                _monsterDic.Add(gameObject.Id, monster);
                 monster.gameRoom = this;
 
-                mMap.AddObject(monster);
+                //mMap.AddObject(monster);
                 monster.Update();
             }
-            else if (type == GameObjectType.Projectile && type == GameObjectType.Scopeskill)
+            else if (type == GameObjectType.Projectile) //&& type == GameObjectType.Scopeskill)
             {
                 var skillObj = gameObject as SkillObj;
-                _skillObjList.Add(gameObject.Id, skillObj);
+                _skillObjDic.Add(gameObject.Id, skillObj);
                 skillObj.gameRoom = this;
 
-                mMap.AddObject(skillObj);
+                //mMap.AddObject(skillObj);
                 skillObj.Update();
             } //if끝
 
@@ -136,7 +140,10 @@ namespace Server
         {
             
         }
-
         
+        public Player GetPlayer(int id)
+        {
+            return _playerDic.TryGetValue(id , out var player) ? player : null;
+        }
     }
 }
