@@ -10,21 +10,18 @@ namespace Server.Game;
 public class GameObject
 {
     public Shape currentShape { get; set; } = null; // 충돌때만 하면 
-    
+
+    public int CurrentRoomId = 0;
+
     public GameObject()
     {
         info.PositionInfo = PosInfo;
-        info.StatInfo = stat;
+        //info.StatInfo = stat;
     }
 
     public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;
     public ObjectInfo info { get; set; } = new() { OwnerId = -1 };
 
-    public int CurrentRoomId
-    {
-        get => info.PositionInfo.CurrentRoomId;
-        set => info.PositionInfo.CurrentRoomId = value;
-    }
 
     public int Id
     {
@@ -161,7 +158,7 @@ public class GameObject
             //PosInfo.State = CreatureState.Idle;
         }));
 
-        room.PushAfter(10, room.EnterGame, this, true);
+        room.PushAfter(10, room.EnterGame, this);
     }
 
     public virtual GameObject GetOwner()

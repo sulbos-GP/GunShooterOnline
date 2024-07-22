@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
+using QuadTree;
 using ServerCore;
 
 namespace Server
@@ -7,10 +9,23 @@ namespace Server
 	class Program
 	{
 
+        Thread t;
+
+
 		public static ServerNetworkService mNetworkService = new ServerNetworkService();
 
         public static ushort ServerTickCount { get; internal set; } = 0;
         public static int ServerIntervalTick { get; internal set; } = 250;
+
+
+
+        public void OnLogicUpdate()
+        {
+            while (true)
+            {
+             
+            }
+        }
 
         static void Main(string[] args)
 		{
@@ -22,6 +37,10 @@ namespace Server
             //Func<Session> session = () => { return new ClientSession(); };
             
             //NetworkService.Init(endPoint, session, "SomeConnectionKey", 100, 100);
+            
+            BattleGameRoom room = new BattleGameRoom();
+            
+            
             mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
             mNetworkService.Start();
 
@@ -35,6 +54,9 @@ namespace Server
                     break;
                 }
             }
+
+
+
 
             ////FlushRoom();
             //JobTimer.Instance.Push(FlushRoom);

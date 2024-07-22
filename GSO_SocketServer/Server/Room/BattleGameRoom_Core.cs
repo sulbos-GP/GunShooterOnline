@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using LiteNetLib;
+using QuadTree;
 using Server.Game;
 using ServerCore;
 using System;
@@ -30,6 +31,14 @@ namespace Server
         public override void LogicUpdate()
         {
             Flush();
+
+
+            QuadTreeManager quadTreeManager = new QuadTreeManager();
+            quadTreeManager.Update();
+
+
+
+
         }
 
         public override void Start()
@@ -56,7 +65,7 @@ namespace Server
 
         }
         
-        public override void EnterGame(object obj, bool randomPos)
+        public override void EnterGame(object obj)
         {
             GameObject gameObject = (GameObject)obj;
 

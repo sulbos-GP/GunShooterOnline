@@ -79,7 +79,6 @@ namespace QuadTree
         
         public void Update()
         {
-            //  we iterate over a copy of _objects because the original gets modified
             var objectsCopy = new List<GameObject>(_totalObjects);
             UpdateQuadTree();
             

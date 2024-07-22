@@ -28,7 +28,7 @@ float speed = 18;
 int32 totalExp = 19;
 }*/
 
-[Serializable]
+/*[Serializable]
 public class StatData : ILoader<int, StatInfo>
 {
     public List<StatInfo> stats = new();
@@ -48,7 +48,7 @@ public class StatData : ILoader<int, StatInfo>
         return dict;
     }
 }
-
+*/
 #endregion
 
 #region Skill
