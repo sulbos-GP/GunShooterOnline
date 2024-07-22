@@ -24,7 +24,7 @@ namespace ServerCore
             {
                 GameRoom room = mNetworkService.mGameRoomFactory.Invoke();
                 room.mGameRoomNumber = Convert.ToByte(number);
-                room.mGameRoomManager = this;
+                //room.mGameRoomManager = this;
             }
         }
 

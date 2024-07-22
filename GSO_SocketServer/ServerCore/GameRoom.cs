@@ -1,21 +1,20 @@
-﻿using LiteNetLib;
+﻿using Google.Protobuf;
+using LiteNetLib;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Numerics;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+
+
 
 namespace ServerCore
 {
     public abstract class GameRoom : JobSerializer
     {
-        public GameRoomManager mGameRoomManager;
+        //public GameRoomManager mGameRoomManager;
         public byte mGameRoomNumber;
 
         public int RoomId { get; set; }
-       
+
+
 
         List<Session> mSessions = new List<Session>();
         //JobQueue mJobQueue = new JobQueue();
