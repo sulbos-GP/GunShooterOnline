@@ -29,7 +29,7 @@ namespace ServerCore
 
         public abstract void BroadCast(int id, IMessage message);
 
-        public abstract void EnterGame(object gameObject, bool randomPos);
+        public abstract void EnterGame(object gameObject);
 
         public abstract void LeaveGame(int id);
 
