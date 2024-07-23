@@ -9,10 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
-using Unity.Mathematics;
-using Unity.VisualScripting;
-using UnityEngine;
-using static UnityEditor.PlayerSettings;
+
 using Vector2 = System.Numerics.Vector2;
 
 
@@ -76,7 +73,7 @@ public class Raycast
     public RaycastHit2D Cast2CArcPoly(Shape shape)
     {
 
-        ArcPoly arc = (ArcPoly)shape;
+        /*ArcPoly arc = (ArcPoly)shape;
 
         Vector2 s = new Vector2(origin.X - arc.position.x, origin.Y - arc.position.y);
         float b = Vector2.Dot(s, direction);
@@ -146,8 +143,9 @@ public class Raycast
             hit.hitPoint = (Vector2)pos;
 
             return hit;
-        }
+        }*/
 
+        return null;
 
     }
 
