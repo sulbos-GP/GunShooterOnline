@@ -47,7 +47,8 @@ namespace QuadTree
         
         Circle GetBounds(GameObject obj) 
         {
-            return new Circle(obj.PosInfo.PosX,obj.PosInfo.PosY,obj.currentShape.GetapproximateRadius());
+            return new Circle(obj.PosInfo.PosX,obj.PosInfo.PosY,
+                obj.currentShape.GetapproximateRadius());
         }
         
        
