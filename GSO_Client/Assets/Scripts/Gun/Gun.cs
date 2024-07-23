@@ -195,8 +195,10 @@ public class Gun : MonoBehaviour
         return _gunStat.fireRate; // GunStat 클래스에서 설정한 발사 속도를 반환
     }
 
-    public void GunChange(GunStat gun)
+    //TO-DO : 추후에 총 쓰던거 다시 바꿀 시 총알 이어지도록 해야 함.
+    public void GunChange(int index)
     {
-        
+        Unit localUnit = gameObject.GetComponentInParent<Unit>();
+        _gunStat = localUnit._guns[index];
     }
 }
