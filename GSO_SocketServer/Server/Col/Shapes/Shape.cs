@@ -10,6 +10,7 @@ namespace Collision.Shapes
         CIRCLE = 1,
         RECTANGLE = 2,
         POLYGON = 3,
+        ARCPOLY,
     }
     public class Shape
     {
@@ -24,6 +25,15 @@ namespace Collision.Shapes
         
         //어떤 종류인지
         public ShapeType Type;
+
+
+        public float bounds
+        {
+            get
+            {
+                return GetapproximateRadius();
+            }
+        }
 
         public Vector position {
             get => _position;
