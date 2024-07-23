@@ -15,7 +15,7 @@ public class RaycastManager
 
     private void Awake()
     {
-        Instance = this;
+        //Instance = this;
     }
 
 
