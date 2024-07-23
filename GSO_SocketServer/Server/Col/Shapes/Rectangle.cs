@@ -19,6 +19,8 @@ public class Rectangle : Polygon
         Height = height;
 
         Type = ShapeType.RECTANGLE;
+
+        updateBounds();
     }
     
     /** Helper generate a rectangle at x,y with a given width/height and centered state.
@@ -44,5 +46,6 @@ public class Rectangle : Polygon
         }
 
         return new Polygon(x,y,vertices);
+
     }
 }
