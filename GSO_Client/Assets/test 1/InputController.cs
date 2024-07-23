@@ -40,13 +40,10 @@ public class InputController : MonoBehaviour
     {
         UpdateState();
 
-        if(Mathf.Abs(lookInput.x)+Mathf.Abs(lookInput.y)>1.0f)
+        if(isFiring)
         {
-            isFiring = true;
             StartCoroutine(FireContinuously());
         }
-        else
-            isFiring = false;
         //Mouse Move Logic
         //Vector3 mousePosition = lookInput;
         //mousePosition.z = -mainCamera.transform.position.z;
@@ -71,6 +68,7 @@ public class InputController : MonoBehaviour
         var playerInput = new PlayerInput();
         playerInput.Player.Enable();
         playerInput.Player.Look.performed += OnLookInput;
+        playerInput.Player.Look.canceled += OnLookInput;
         //playerInput.Player.Fire.started += OnStartFireInput;
         //playerInput.Player.Fire.canceled += OnStopFireInput;
         playerInput.Player.Reload.performed += OnReloadInput;
@@ -83,6 +81,7 @@ public class InputController : MonoBehaviour
     {
         var playerInput = new PlayerInput();
         playerInput.Player.Look.performed -= OnLookInput;
+        playerInput.Player.Look.canceled -= OnMove;
         //playerInput.Player.Fire.started -= OnStartFireInput;
         //playerInput.Player.Fire.canceled -= OnStopFireInput;
         playerInput.Player.Reload.performed -= OnReloadInput;
@@ -113,7 +112,14 @@ public class InputController : MonoBehaviour
 
     private void OnLookInput(InputAction.CallbackContext context)
     {
-        lookInput = context.ReadValue<Vector2>();
+        if (context.performed)
+        {
+            lookInput = context.ReadValue<Vector2>();
+            if (Mathf.Abs(lookInput.x) + Mathf.Abs(lookInput.y) > 1.0f)
+                isFiring = true;
+        }
+        if(context.canceled)
+            isFiring = false;
     }
     private void OnStartFireInput(InputAction.CallbackContext context)
     {
@@ -130,7 +136,8 @@ public class InputController : MonoBehaviour
     {
         while (isFiring)
         {
-            Gun playerGun = localUnit._guns[localUnit.CurGun];
+            Debug.Log(isFiring);
+            Gun playerGun = localUnit.GetComponentInChildren<Gun>();
             playerGun.Fire(); // 발사 메서드 호출
             yield return new WaitForSeconds(1 / playerGun.GetFireRate()); // 발사 속도에 따라 대기
         }
@@ -138,7 +145,7 @@ public class InputController : MonoBehaviour
     private void OnReloadInput(InputAction.CallbackContext context)
     {
         Debug.Log("RightClicked");
-        Gun playerGun = localUnit._guns[localUnit.CurGun];
+        Gun playerGun = localUnit.GetComponentInChildren<Gun>();
         playerGun.Reload();
     }
 

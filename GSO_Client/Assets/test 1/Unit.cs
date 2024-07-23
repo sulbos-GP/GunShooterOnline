@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Unit : MonoBehaviour
 {
-    public Gun[] _guns = new Gun[2];
+    public GunStat[] _guns = new GunStat[2];
     public int CurGun = 0;
 
     public int _health { get; private set; }
