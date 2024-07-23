@@ -1,15 +1,38 @@
 ﻿using Google.Protobuf;
+using Google.Protobuf.Protocol;
 using LiteNetLib;
 using Server;
+using Server.Data;
+using Server.Game;
+using Server.Game.Utils;
 using ServerCore;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 class PacketHandler
 {
+    
+    internal static void C_EnterGameHandler(PacketSession session, IMessage message)
+    {
+        ClientSession clientSession = session as ClientSession;
+        C_EnterGame enterGamePacket = (C_EnterGame)message;
+        clientSession.MyPlayer = ObjectManager.Instance.Add<Player>();
+        {
+            clientSession.MyPlayer.Session = clientSession;
+            clientSession.MyPlayer.info.Name = enterGamePacket.Name + clientSession.SessionId;
+            clientSession.MyPlayer.info.PositionInfo.PosX = 0;
+            clientSession.MyPlayer.info.PositionInfo.PosY = 0;
+        }
 
-	/*public static void C2S_ChatHandler(PacketSession session, IPacket packet)
+        BattleGameRoom room = clientSession.Room; //나중에 null로 바꿔도 참조가능
+
+        room.Push(room.EnterGame, clientSession.MyPlayer);
+
+    }
+
+    /*public static void C2S_ChatHandler(PacketSession session, IPacket packet)
 	{
         C2S_Chat pkt = packet as C2S_Chat;
         ClientSession clientSession = session as ClientSession;
@@ -23,6 +46,11 @@ class PacketHandler
 
     internal static void C_MoveHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        ClientSession clientSession = session as ClientSession;
+
+        C_Move move = (C_Move)message;
+        BattleGameRoom room = clientSession.Room; //나중에 null로 바꿔도 참조가능
+
+        room.Push(room.HandleMove , clientSession.MyPlayer, move);
     }
 }

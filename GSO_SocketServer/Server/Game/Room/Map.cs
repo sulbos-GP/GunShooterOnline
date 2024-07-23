@@ -63,99 +63,6 @@ public struct PQNode : IComparable<PQNode>
     }
 }
 
-public enum RoomType //TODO : 서보와 자동화
-{
-    SPAWN = 0,
-    ROOM = 1,
-    PATH = 2,
-    BOSSROOM = 3,
-    PLAYEROWNROOM = 4
-}
-
-public class Room
-{
-    //-------------------------- 게임 룰 ------------------------------------
-    public static readonly int rOwnerValInitCount = 100;
-
-    private long coolDown;
-
-    /*$"{tr.position.x}/{tr.position.y}/1/{room.RoomTypeId}/{room.RoomId}";
-     x,y,roomtype,roomtempletType  roomttype 1:스폰 2:일반 3:통로
-    roomtempletType 1:1번형태의 방 2:2번형태*/
-
-
-    public QuadTreeManager quadTreeManager = new QuadTreeManager();
-    
-    public bool[,] Collisions { get; set; }
-    public float PosX { get; set; }
-    public float PosY { get; set; }
-    public int Id { get; set; }
-    public RoomType RoomType { get; set; }
-    public int RoomLevel { get; set; } = 0;
-    public int RoomskinId { get; set; } = 0;
-    public bool isSpawnPoint => RoomType == RoomType.SPAWN;
-    public List<Player> Players { get; } = new();
-    public List<Room> TouarableRooms { get; } = new();
-    public List<GameObject> Objects { get; } = new();
-    public Vector2Int Owner { get; private set; } = new(0, 0);
-    public int TryOwnerId { get; private set; }
-
-    public bool AddOwnerValue(Map map, Player Player, int value = 1)
-    {
-        var targetID = Player.Id;
-
-        if (Owner.x == targetID) //본인이면
-            return false;
-
-        if (coolDown <= Environment.TickCount64) coolDown = Environment.TickCount64 + 100; //0.1초 쿨타임	
-        else return false;
-
-        if (Owner.x == 0) //주인이 없으면
-        {
-            var owner = Owner;
-            owner.y += value; //실제 빼기
-            Owner = owner;
-            TryOwnerId = targetID;
-
-            if (Owner.y >= rOwnerValInitCount)
-            {
-                //점령 했으면 내꺼인 상태
-                var _owner = Owner;
-
-                //---------------------------- 손실 -----------------------
-                var lostPlayer = map.FindObjById(Id, _owner.x) as Player;
-                if (lostPlayer != null)
-                    lostPlayer.RemoveRoomList(this);
-
-                //------------------------------ 점령 --------------------
-                _owner.x = TryOwnerId;
-                _owner.y = rOwnerValInitCount; //10초
-                Owner = _owner;
-                Player.AddOwnRoomList(this);
-
-                foreach (var go in Objects) ObjectManager.Instance.Remove(go.Id);
-            }
-        }
-        else //주인이 있으면
-        {
-            var owner = Owner;
-            owner.y -= value; //실제 빼기
-            Owner = owner;
-            TryOwnerId = targetID;
-
-            if (Owner.y <= 0)
-            {
-                //점령 했으면 태초의 상태로
-                var _owner = Owner;
-                _owner.x = 0;
-                _owner.y = 0; //10초
-                Owner = _owner;
-            }
-        }
-
-        return true;
-    }
-}
 
 public class Map
 {
@@ -163,13 +70,26 @@ public class Map
     private GameObject[,] _objects;
 
     private int roomSize;
+
+
     public Vector2Int Bleft { get; private set; }
     public Vector2Int Tright { get; private set; }
-    private List<Room> Rooms { get; } = new(); //요기서만 사용
+
+    BattleGameRoom battleRoom;
+     
+    public Map(BattleGameRoom r)
+    {
+        battleRoom = r;
+    }
+
+
+
+
+
 
     public void LoadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
     {
-        var Distance = 22;
+       /* var Distance = 22;
 
         //----------------------------------------
         var mapName = "Map_" + mapId.ToString("000");
@@ -187,17 +107,17 @@ public class Map
 
             if (rInfo.Length == 5)
             {
-                //Room room = new Room();
+                Room room = new Room();
 
-                //room.PosX = int.Parse(rInfo[0]);
-                //room.PosY = int.Parse(rInfo[1]);
+                room.PosX = int.Parse(rInfo[0]);
+                room.PosY = int.Parse(rInfo[1]);
 
-                //if (int.Parse(rInfo[2]) == 1)
-                //	room.isSpawnPoint = true;
-                //room.RoomTypeId = int.Parse(rInfo[2]); // 1,2 방 3 길
-                //room.RoomskinId = int.Parse(rInfo[3]); //1 기본 2 특수
-                //room.Id = int.Parse(rInfo[4]);
-                //Rooms.Add(room);   
+                if (int.Parse(rInfo[2]) == 1)
+                	room.isSpawnPoint = true;
+                room.RoomTypeId = int.Parse(rInfo[2]); // 1,2 방 3 길
+                room.RoomskinId = int.Parse(rInfo[3]); //1 기본 2 특수
+                room.Id = int.Parse(rInfo[4]);
+                Rooms.Add(room);   
             }
             else if (rInfo.Length == 4)
             {
@@ -290,17 +210,17 @@ public class Map
         //	int y = int.Parse(Console.ReadLine());
         //	bool k = CanGo(new Vector2Int(x, y), false);
         //             Console.WriteLine(k);
-        //}
+        //}*/
     } //LoadMap
 
     public void UpdateMap()
     {
         //속도가 느릴것 같음 쓰레드 새로 생성하는 느낌으로 가자!!
-        foreach (Room room in Rooms)
+        /*  foreach (Room room in Rooms)
         {
             room.quadTreeManager.Insert(room.Players,room.Objects);
             room.quadTreeManager.Update();
-        }
+        }*/
     }
     
     
@@ -308,8 +228,8 @@ public class Map
     {
         if (gameObject.gameRoom == null)
             return false;
-        if (gameObject.gameRoom.Map != this)
-            return false;
+        /*if (gameObject.gameRoom.Map != this)
+            return false;*/
 
         var posInfo = gameObject.PosInfo;
         if (posInfo.PosX < Bleft.x || posInfo.PosX > Tright.x)
@@ -332,8 +252,8 @@ public class Map
 
         if (gameObject.gameRoom == null)
             return false;
-        if (gameObject.gameRoom.Map != this)
-            return false;
+        /*if (gameObject.gameRoom.Map != this)
+            return false;*/
 
         var posInfo = gameObject.PosInfo;
         if (CanGo(dest, false)) return true;
@@ -368,7 +288,7 @@ public class Map
     {
         var CanSpwanRandomMonsterArr = DataManager.MonsterDict.Keys.Where(i => i < 50).ToArray();
 
-        foreach (var r in Rooms)
+        /*foreach (var r in Rooms)
         {
             if (r.RoomType == RoomType.PATH)
                 continue;
@@ -391,276 +311,66 @@ public class Map
 
                 room.Push(room.EnterGame, monster, false);
             } //갯수마다
-        } //	방마다
+        } //	방마다*/
 
-        //foreach (Room p in Rooms)
-        //{
-        //    for (int i = 0; i < monsterCount; i++)
-        //    {
-        //        //나중에는 맵의 불,물,지옥 지형에 따라 몬스터 class로 이런식으로 렌덤값 추출
-        //        Random rand = new Random();
-        //        int r = rand.Next(1, DataManager.MonsterDict.Count + 1);
-        //        Monster monster = ObjectManager.Instance.Add<Monster>();
-        //        {
-        //            monster.CurrentPlanetId = p.Id;
-        //            monster.Init(r); //side , posinfo
-
-        //            int t = monster.Side;
-        //            float small = 0.3f;
-        //            if (t == 0)
-        //            {
-        //                monster.PosInfo.PosX = p.PosX + rand.Next(-(p.Round / 2 - 1), p.Round / 2 - 1);
-        //                monster.PosInfo.PosY = p.PosY + p.Round / 2 + small;
-        //            }
-        //            else if (t == 1)
-        //            {
-        //                monster.PosInfo.PosX = p.PosX + p.Round / 2 + small;
-        //                monster.PosInfo.PosY = p.PosY + rand.Next(-(p.Round / 2 - 1), p.Round / 2 - 1);
-        //            }
-        //            else if (t == 2)
-        //            {
-        //                monster.PosInfo.PosX = p.PosX + rand.Next(-(p.Round / 2 - 1), p.Round / 2 - 1);
-        //                monster.PosInfo.PosY = p.PosY - p.Round / 2 - small;
-        //            }
-        //            else if (t == 3)
-        //            {
-        //                monster.PosInfo.PosX = p.PosX - p.Round / 2 - small;
-        //                monster.PosInfo.PosY = p.PosY + rand.Next(-(p.Round / 2 - 1), p.Round / 2 - 1);
-        //            }
-        //            else
-        //            {
-        //                Console.WriteLine("GetPlanetRotationById 오류");
-        //            }
-
-
-        //        };
-
-
-        //        room.Push(room.EnterGame, monster, false);
-        //        //p.Objects.Add(monster);
-
-        //    }
-
-        //}
-    }
-
-
-    public void AddObject(GameObject go)
-    {
-        var room = Rooms.Find(p => p.Id == go.CurrentRoomId);
-
-        if (go.ObjectType == GameObjectType.Player)
+        /*foreach (Room p in Rooms)
         {
-            if (room == null || room.Players.Contains((Player)go))
-                return;
-            room.Players.Add((Player)go);
-        }
-        else
-        {
-            if (room == null || room.Objects.Contains(go))
-                return;
-            room.Objects.Add(go);
-        }
-        
-    }
-
-    public GameObject FindObjById(int roomId, int playerId, int level = 2)
-    {
-        var t = GetPlanetPlayers(roomId, level);
-        GameObject go = t.Find(p => p.Id == playerId);
-        return go;
-    }
-
-    public int RemoveObject(GameObject go)
-    {
-        if (go.ObjectType == GameObjectType.Player)
-        {
-            var room = Rooms.Find(r => { return r.Id == go.CurrentRoomId; });
-            if (room == null || room.Players.Contains((Player)go) == false)
-                return -1;
-
-            room.Players.Remove((Player)go);
-            return go.Id;
-        }
-        else
-        {
-            var room = Rooms.Find(r => { return r.Id == go.CurrentRoomId; });
-            if (room == null || room.Objects.Contains(go) == false)
-                return -1;
-
-            room.Objects.Remove(go);
-            return go.Id;
-        }
-    }
-
-
-    public List<Player> GetPlanetPlayers(int roomId, int level = 1)
-    {
-        if (roomId == -1)
-            return null;
-
-        var room = Rooms.Find(r => { return r.Id == roomId; });
-
-        if (room == null)
-        {
-            Console.WriteLine("방찾기 실패");
-            return null;
-        }
-
-        var _players = room.Players;
-
-        if (level == 1) //현제의 오브젝트와 가는 중에 오브젝트 가져오기
-        {
-            //할일   
-        }
-        else if (level == 2) //완전히 갈수있는곳의 오브젝트 전부 가져오기
-        {
-            foreach (var r in room.TouarableRooms)
+            for (int i = 0; i < monsterCount; i++)
             {
-                var _room = Rooms.Find(p => { return p.Id == r.Id; });
-                _players.AddRange(_room.Players);
+                //나중에는 맵의 불,물,지옥 지형에 따라 몬스터 class로 이런식으로 렌덤값 추출
+                Random rand = new Random();
+                int r = rand.Next(1, DataManager.MonsterDict.Count + 1);
+                Monster monster = ObjectManager.Instance.Add<Monster>();
+                {
+                    monster.CurrentPlanetId = p.Id;
+                    monster.Init(r); //side , posinfo
+
+                    int t = monster.Side;
+                    float small = 0.3f;
+                    if (t == 0)
+                    {
+                        monster.PosInfo.PosX = p.PosX + rand.Next(-(p.Round / 2 - 1), p.Round / 2 - 1);
+                        monster.PosInfo.PosY = p.PosY + p.Round / 2 + small;
+                    }
+                    else if (t == 1)
+                    {
+                        monster.PosInfo.PosX = p.PosX + p.Round / 2 + small;
+                        monster.PosInfo.PosY = p.PosY + rand.Next(-(p.Round / 2 - 1), p.Round / 2 - 1);
+                    }
+                    else if (t == 2)
+                    {
+                        monster.PosInfo.PosX = p.PosX + rand.Next(-(p.Round / 2 - 1), p.Round / 2 - 1);
+                        monster.PosInfo.PosY = p.PosY - p.Round / 2 - small;
+                    }
+                    else if (t == 3)
+                    {
+                        monster.PosInfo.PosX = p.PosX - p.Round / 2 - small;
+                        monster.PosInfo.PosY = p.PosY + rand.Next(-(p.Round / 2 - 1), p.Round / 2 - 1);
+                    }
+                    else
+                    {
+                        Console.WriteLine("GetPlanetRotationById 오류");
+                    }
+
+
+                };
+
+
+                room.Push(room.EnterGame, monster, false);
+                //p.Objects.Add(monster);
+
             }
-        }
 
-        return _players;
+        }*/
     }
 
-    public GameObject FindClosestObjAndPlayer(GameObject go)
-    {
-        var plant = Rooms.Find(p => { return p.Id == go.CurrentRoomId; });
-
-        var _objects = new HashSet<GameObject>();
-        _objects.UnionWith(plant.Objects);
-        _objects.UnionWith(plant.Players);
-
-        var target = _objects.OrderByDescending(tgo => tgo.CellPos - go.CellPos).Single();
-        return target;
-    }
-
-    public HashSet<GameObject> GetPlanetObjects(int id, int level = 1)
-    {
-        if (id == -1)
-            return null;
-
-        var plant = Rooms.Find(p => { return p.Id == id; });
-
-        if (plant == null)
-        {
-            Console.WriteLine("행성 아이디 없음 오류");
-            return null;
-        }
-
-        var _objects = new HashSet<GameObject>();
-        _objects.UnionWith(plant.Objects);
-
-        if (level == 1) //현제의 오브젝트와 가는 중에 오브젝트 가져오기
-        {
-            //할일   
-        }
-        else if (level == 2) //완전히 갈수있는곳의 오브젝트 전부 가져오기
-        {
-            foreach (var room in plant.TouarableRooms)
-            {
-                var _room = Rooms.Find(p => { return p.Id == room.Id; });
-                _objects.UnionWith(_room.Objects);
-            }
-        }
-
-        return _objects;
-    }
-
-
-    //충돌처리로 바꾸기
-    public List<Player> AddPlayerInOccupationPos(int Range = 2)
-    {
-        var _players = new List<Player>();
-
-        foreach (var room in Rooms)
-        {
-            if ((room.RoomType == RoomType.PATH) | (room.RoomType == RoomType.BOSSROOM)) continue;
-
-            var Pos = new Vector2(room.PosX, room.PosY);
-            var target = room.Players.Where(P => (Pos - P.CellPos).Length() < Range * Range).ToList();
-            if (target == null)
-                continue;
-
-            foreach (var player in target)
-                if (room.AddOwnerValue(this, player)) //실제 추가
-                    _players.Add(player);
-        }
-
-        return _players;
-    }
-
-
-    public bool SetPosAndRoomtsId(Player player)
-    {
-        var _rooms = Rooms.FindAll(p => p.isSpawnPoint);
-        //임시
-
-        if (_rooms == null || _rooms.Count == 0)
-            return false;
-
-        player.CellPos = new Vector2(_rooms[0].PosX, _rooms[0].PosY);
-        player.CurrentRoomId = _rooms[0].Id;
-        return true;
-    }
-
-    public void MoveRoom(GameObject Target, int NextRoom)
-    {
-        var now = Target.CurrentRoomId;
-
-        var nowRoom = GetRoom(now);
-        if (nowRoom == null)
-        {
-            Console.WriteLine("방 오류");
-            return;
-        }
-
-        var nextRoom = nowRoom.TouarableRooms.Find(t => t.Id == NextRoom);
-        if (nextRoom == null)
-        {
-            Console.WriteLine($"이동 오류{nowRoom.TouarableRooms}");
-            return;
-        }
-
-        if (RemoveObject(Target) == 1)
-            Console.WriteLine("지우기 오류");
-
-        Target.CurrentRoomId = NextRoom;
-        AddObject(Target);
-
-
-        //----------------- 자신의 몬스터이동 -------------------
-        foreach (var ownMonster in GetPlanetObjects(now).Where(obj => obj.OwnerId == Target.Id).ToArray())
-        {
-            if (RemoveObject(ownMonster) == -1)
-                Console.WriteLine("지우기 오류");
-
-            ownMonster.CurrentRoomId = NextRoom;
-            AddObject(ownMonster);
-        }
-
-        //-------------- 몬스터 이동끝-----------------------------
-
-
-        //디버그
-        Console.WriteLine($"{Target.info.Name}이 {now}에서 {NextRoom}로 이동");
-        Console.WriteLine($"{nextRoom.Objects.Count}");
-        foreach (var go in nextRoom.Objects) Console.WriteLine($"{go.CellPos}{go.CurrentRoomId}{go.State}");
-    }
 
     public void ApplyProjectile(Vector2 pos, Vector2 dir)
     {
         //dir - pos
     }
 
-    public Room GetRoom(int id)
-    {
-        return Rooms.Find(r => r.Id == id);
-    }
-
-    public void SendMapInfo(Player p)
+   /* public void SendMapInfo(Player p)
     {
         var roomPacket = new S_RoomInfo();
         foreach (var room in Rooms)
@@ -675,7 +385,7 @@ public class Map
         }
 
         p.Session.Send(roomPacket);
-    }
+    }*/
 
 
     #region A* PathFinding

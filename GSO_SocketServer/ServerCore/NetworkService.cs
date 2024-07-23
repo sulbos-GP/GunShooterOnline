@@ -86,7 +86,7 @@ namespace ServerCore
         {
             if (mManager.IsRunning)
             {
-
+                //QuadTreeManmager Update()
             }
         }
 
@@ -96,7 +96,6 @@ namespace ServerCore
     {
         public Listener        mListener;
         public SessionManager  mSessionManager;
-        public GameRoomManager mGameRoomManager;
 
         public int  mRegister = 100;
         public int  mBackLog = 100;
@@ -109,7 +108,7 @@ namespace ServerCore
         {
             mListener = new Listener(this);
             mManager = new NetManager(mListener);
-            mGameRoomManager = new GameRoomManager(this);
+            //mGameRoomManager = new GameRoomManager(this);
             mSessionManager = new SessionManager();
         }
 
