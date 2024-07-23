@@ -33,7 +33,7 @@ public class ScopeSkill : SkillObj
     public ScopeSkill(Shape shape)
     {
         active = true;
-        ObjectType = GameObjectType.Scopeskill;
+        //ObjectType = GameObjectType.Scopeskill;
         _shape = shape;
     }
 
@@ -54,8 +54,8 @@ public class ScopeSkill : SkillObj
 
     public override void OnCollision(GameObject other)
     {
-        if (other != null || active || other.gameRoom != null || other.gameRoom == this.gameRoom ||
-            other.State != CreatureState.Dead) 
+        if (other != null || active || other.gameRoom != null || other.gameRoom == this.gameRoom) //  other.State != CreatureState.Dead) 
+
         {
             if (_hitList.Contains(other) == false) // 적합하고 충돌에 없다면
             {

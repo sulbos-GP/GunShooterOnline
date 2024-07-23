@@ -1,4 +1,5 @@
-﻿using LiteNetLib;
+﻿using Google.Protobuf;
+using LiteNetLib;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -75,8 +76,8 @@ namespace ServerCore
 		{
             mPeer = peer;
 		}
-
-		public void Send(List<ArraySegment<byte>> sendBuffList, DeliveryMethod deliveryMethod)
+        
+        public void Send(List<(ArraySegment<byte>, DeliveryMethod)> sendBuffList)
 		{
 			if (sendBuffList.Count == 0)
 			{
@@ -91,10 +92,10 @@ namespace ServerCore
             lock (_lock)
 			{
 				int sentByte = 0;
-                foreach (ArraySegment<byte> sendBuff in sendBuffList)
+                foreach ((ArraySegment<byte>, DeliveryMethod) item in sendBuffList)
 				{
-					sentByte += sendBuff.Count;
-                    mPeer.Send(sendBuff, deliveryMethod);
+					sentByte += item.Item1.Count;
+                    mPeer.Send(item.Item1, item.Item2);
                 }
 				OnSend(sentByte);
             }

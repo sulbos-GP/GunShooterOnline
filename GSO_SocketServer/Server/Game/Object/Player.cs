@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Numerics;
 using Google.Protobuf.Protocol;
-using Server.Session;
 
 namespace Server.Game;
 
 public class Player : CreatureObj
 {
-    //-------------------------------------------
-    private readonly List<Room> ownRooms = new();
     public SkillCoolDown SkillCoolDown = new();
 
     public Player()
@@ -51,15 +48,7 @@ public class Player : CreatureObj
 
     #region InGames
 
-    public void AddOwnRoomList(Room room)
-    {
-        ownRooms.Add(room);
-    }
-
-    public void RemoveRoomList(Room room)
-    {
-        ownRooms.Remove(room);
-    }
+    
 
     #endregion
 
