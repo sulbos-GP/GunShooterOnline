@@ -28,6 +28,9 @@ public class WebManager : MonoBehaviour
         {
             Destroy(this.gameObject);
         }
+
+        mUserInfo = new DataLoadUserInfo();
+        mCredential = new WebClientCredential();
     }
 
     public static WebManager Instance

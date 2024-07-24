@@ -50,11 +50,21 @@ namespace GsoWebServer.Reposiotry.Interfaces
         /// <summary>
         /// 유저의 유니크 아이디로 user 메타데이터 불러오기
         /// </summary>
-        public Task<MetadataInfo?> GetUserMetaDataByUid(int uid);
+        public Task<UserMetadataInfo?> GetUserMetadataByUid(Int32 uid);
+
+        /// <summary>
+        /// 유저의 유니크 아이디로 user 메타데이터 업데이트
+        /// </summary>
+        public Task<int> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user 스킬 불러오기
         /// </summary>
-        public Task<SkillInfo?> GetUserSkillByUid(int uid);
+        public Task<UserSkillInfo?> GetUserSkillByUid(Int32 uid);
+
+        /// <summary>
+        /// 유저의 유니크 아이디로 user 스킬 업데이트
+        /// </summary>
+        public Task<int> UpdateUserSkill(Int32 uid, UserSkillInfo skill);
     }
 }

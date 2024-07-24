@@ -83,7 +83,7 @@ namespace AuthenticationServer.Controllers
                 }
 
                 //Redis에 토큰 저장
-                errorCode = await mAuthenticationService.RegisterToken(uid, token.ExpiresInSeconds.Value, token.AccessToken, token.RefreshToken);
+                errorCode = await mAuthenticationService.RegisterToken(uid, player.GamePlayerId, token.AccessToken, token.RefreshToken, token.ExpiresInSeconds.Value);
 
                 //이미 저장되어 있다면 중복 로그인으로 생각
                 //TODO : 나중에 처리

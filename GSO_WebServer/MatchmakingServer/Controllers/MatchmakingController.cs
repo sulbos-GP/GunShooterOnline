@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using MatchmakingServer.Repository;
-using MatchmakingServer.Models;
+using Matchmaker.Repository;
+using Matchmaker.Models;
 using GSO_WebServerLibrary;
 
-namespace MatchmakingServer.Controllers
+namespace Matchmaker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]

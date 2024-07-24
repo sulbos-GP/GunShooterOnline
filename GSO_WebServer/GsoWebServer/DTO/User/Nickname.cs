@@ -9,10 +9,8 @@ namespace GsoWebServer.DTO.User
         public string new_nickname { get; set; } = string.Empty;
     }
 
-    public class SetNicknameRes
+    public class SetNicknameRes : ErrorCodeDTO
     {
-        public WebErrorCode error { get; set; } = WebErrorCode.None;
-
         public string nickname { get; set; } = string.Empty;
     }
 }

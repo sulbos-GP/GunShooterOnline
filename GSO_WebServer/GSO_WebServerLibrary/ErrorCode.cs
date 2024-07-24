@@ -10,6 +10,10 @@
     {
         None = 0,
 
+        //TEMP ERROR
+        TEMP_ERROR = 1,
+        TEMP_Exception = 2,
+
         // Common 1000 ~
         UnhandleException = 1001,
         RedisFailException = 1002,

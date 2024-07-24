@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using SqlKata.Execution;
-using MatchmakingServer.Models;
+using Matchmaker.Models;
 using GSO_WebServerLibrary;
 
-namespace MatchmakingServer.Repository
+namespace Matchmaker.Repository
 {
     public class GameDB : IGameDB
     {

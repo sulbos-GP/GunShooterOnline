@@ -9,12 +9,15 @@ using UnityEngine;
 /// </summary>
 public class GsoWebService : WebClientService
 {
+
     public AuthorizeResource mAuthorizeResource;
+    public UserResource mUserResource;
 
     public GsoWebService()
     {
         this.mBaseUrl = "http://10.0.2.2:5000/api";
         mAuthorizeResource = new AuthorizeResource(this);
+        mUserResource = new UserResource(this);
     }
 
 }
@@ -41,10 +44,48 @@ public class AuthorizeResource
     {
         public AuthenticationRequest(GsoWebService service, SignInReq request)
         {
-            this.mFrom = request;
+            this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/Authorize/SignIn";
             this.mMethod = ERequestMethod.POST;
         }
     }
 
+}
+
+/// <summary>
+/// 인증 관련 서비스
+/// </summary>
+public class UserResource
+{
+    private readonly GsoWebService mService;
+
+    public UserResource(GsoWebService service)
+    {
+        mService = service;
+    }
+
+    /// <summary>
+    /// 닉네임 변경 요청
+    /// </summary>
+    public SetNicknameRequest GetSetNicknameRequest(SetNicknameReq packet)
+    {
+        return new SetNicknameRequest(this.mService, packet);
+    }
+
+
+    public class SetNicknameRequest : WebClientServiceRequest<SetNicknameRes>
+    {
+        public SetNicknameRequest(GsoWebService service, SetNicknameReq request)
+        {
+            this.mFromHeader = new HeaderDTO
+            {
+                uid = WebManager.Instance.mCredential.uid,
+                access_token = WebManager.Instance.mCredential.access_token,
+            };
+
+            this.mFromBody = request;
+            this.mEndPoint = service.mBaseUrl + "/User/SetNickname";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
 }

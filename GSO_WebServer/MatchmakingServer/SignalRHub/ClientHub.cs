@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 
-namespace MatchmakingServer.SignalRHub
+namespace Matchmaker.SignalRHub
 {
     public class ClientHub : Hub
     {

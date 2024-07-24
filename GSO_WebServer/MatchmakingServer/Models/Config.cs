@@ -1,4 +1,4 @@
-﻿namespace MatchmakingServer.Models
+﻿namespace Matchmaker.Models
 {
     public class DbConfig
     {

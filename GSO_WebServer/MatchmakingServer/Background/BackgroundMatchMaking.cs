@@ -1,10 +1,10 @@
-﻿using MatchmakingServer.Repository;
+﻿using Matchmaker.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using GSO_WebServerLibrary;
-using MatchmakingServer.Models;
+using Matchmaker.Models;
 
-namespace MatchmakingServer.Background
+namespace Matchmaker.Background
 {
     public class BackgroundMatchMaking : BackgroundService
     {

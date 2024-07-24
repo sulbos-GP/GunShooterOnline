@@ -1,6 +1,6 @@
-@MatchmakingServer_HostAddress = http://localhost:5200/api
+@Matchmaker_HostAddress = http://localhost:5200/api
 
-POST {{MatchmakingServer_HostAddress}}/Matchmaking/Join
+POST {{Matchmaker_HostAddress}}/Matchmaking/Join
 Content-Type: application/json
 
 {
@@ -10,7 +10,7 @@ Content-Type: application/json
 
 ###
 
-POST {{MatchmakingServer_HostAddress}}/Matchmaking/Cancle
+POST {{Matchmaker_HostAddress}}/Matchmaking/Cancle
 Content-Type: application/json
 
 {

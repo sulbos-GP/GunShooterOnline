@@ -1,8 +1,8 @@
 ﻿using CloudStructures.Structures;
 using GSO_WebServerLibrary;
-using MatchmakingServer.Models;
+using Matchmaker.Models;
 
-namespace MatchmakingServer.Repository
+namespace Matchmaker.Repository
 {
     public interface IMatchingQueue : IDisposable
     {

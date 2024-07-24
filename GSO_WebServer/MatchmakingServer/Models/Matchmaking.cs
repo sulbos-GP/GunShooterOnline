@@ -1,6 +1,6 @@
 ﻿using GSO_WebServerLibrary;
 
-namespace MatchmakingServer.Models
+namespace Matchmaker.Models
 {
     public class JoinMatchMakingReq
     {
