@@ -11,9 +11,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Models\" />
+    <Folder Include="DTO\Session\" />
+    <Folder Include="Middleware\" />
+    <Folder Include="Models\Session\" />
   </ItemGroup>
 
 </Project>
