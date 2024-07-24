@@ -1,6 +1,6 @@
-using MatchmakingServer.Background;
-using MatchmakingServer.Models;
-using MatchmakingServer.Repository;
+using Matchmaker.Background;
+using Matchmaker.Models;
+using Matchmaker.Repository;
 using System;
 using System.Numerics;
 

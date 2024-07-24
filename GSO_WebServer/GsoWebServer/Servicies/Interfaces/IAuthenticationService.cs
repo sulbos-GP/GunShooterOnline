@@ -5,11 +5,11 @@ using static Google.Apis.Requests.RequestError;
 
 namespace GsoWebServer.Servicies.Interfaces
 {
-    public interface IAuthenticationService
+    public interface IAuthenticationService : IDisposable
     {
 
         public Task<(WebErrorCode, TokenResponse?)> ExchangeToken(String userId, String serverCode);
-        public Task<(WebErrorCode, TokenResponse?)> RefreshToken(String userId, String serverCode);
+        public Task<(WebErrorCode, TokenResponse?)> RefreshToken(String userId, String refreshToken);
         public Task<WebErrorCode> RevokeToken(String userId, String accessToken);
         public Task<(WebErrorCode, Player?)> GetMyPlayer(String userId, String accessToken);
 
@@ -26,7 +26,7 @@ namespace GsoWebServer.Servicies.Interfaces
         /// <summary>
         /// 토큰 공유 레디스에 저장
         /// </summary>
-        public Task<WebErrorCode> RegisterToken(int uid, long expires, String accessToken, String refreshToken);
+        public Task<WebErrorCode> RegisterToken(Int32 uid, String user_id, String accessToken, String refreshToken, Int64 expires);
 
         /// <summary>
         /// 최근 로그인한 시간 기록

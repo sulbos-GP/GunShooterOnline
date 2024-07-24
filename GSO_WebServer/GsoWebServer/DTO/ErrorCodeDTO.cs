@@ -4,6 +4,6 @@ namespace GsoWebServer.DTO
 {
     public class ErrorCodeDTO
     {
-        public WebErrorCode Result { get; set; } = WebErrorCode.None;
+        public WebErrorCode error { get; set; } = WebErrorCode.None;
     }
 }

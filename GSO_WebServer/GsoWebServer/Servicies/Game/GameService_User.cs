@@ -85,11 +85,11 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
-        public async Task<(WebErrorCode, MetadataInfo?)> GetMetadataInfo(int uid)
+        public async Task<(WebErrorCode, UserMetadataInfo?)> GetMetadataInfo(int uid)
         {
             try
             {
-                return (WebErrorCode.None, await mGameDB.GetUserMetaDataByUid(uid));
+                return (WebErrorCode.None, await mGameDB.GetUserMetadataByUid(uid));
             }
             catch /*(Exception e)*/
             {
@@ -97,7 +97,25 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
-        public async Task<(WebErrorCode, SkillInfo?)> GetSkillInfo(int uid)
+        public async Task<WebErrorCode> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata)
+        {
+            try
+            {
+                var rowCount = await mGameDB.UpdateUserMetadata(uid, matadata);
+                if (rowCount != 1)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                return (WebErrorCode.None);
+            }
+            catch /*(Exception e)*/
+            {
+                return (WebErrorCode.TEMP_Exception);
+            }
+        }
+
+        public async Task<(WebErrorCode, UserSkillInfo?)> GetSkillInfo(int uid)
         {
             try
             {
@@ -106,6 +124,24 @@ namespace GsoWebServer.Servicies.Game
             catch /*(Exception e)*/
             {
                 return (WebErrorCode.AuthTokenFailSetNx, null);
+            }
+        }
+
+        public async Task<WebErrorCode> UpdateUserSkill(Int32 uid, UserSkillInfo skill)
+        {
+            try
+            {
+                var rowCount = await mGameDB.UpdateUserSkill(uid, skill);
+                if (rowCount != 1)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                return (WebErrorCode.None);
+            }
+            catch /*(Exception e)*/
+            {
+                return (WebErrorCode.TEMP_Exception);
             }
         }
 

@@ -121,9 +121,9 @@ public class SignInUI : MonoBehaviour
         //로비로 이동 (임시)
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
-        WebManager.Instance.mCredential = new WebClientCredential()
+        WebManager.Instance.mCredential = new WebClientCredential
         {
-            uid = response.uid,
+            uid = response.uid.ToString(),
             access_token = response.access_token,
             expires_in = response.expires_in,
             scope = response.scope,

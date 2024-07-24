@@ -14,6 +14,11 @@ namespace GsoWebServer.Servicies.DataLoad
             mGameService = gameService;
         }
 
+        public void Dispose()
+        {
+
+        }
+
         public async Task<(WebErrorCode, DataLoadUserInfo?)> LoadUserData(int uid)
         {
             DataLoadUserInfo loadData = new DataLoadUserInfo();

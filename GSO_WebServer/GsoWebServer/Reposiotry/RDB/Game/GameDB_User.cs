@@ -52,20 +52,6 @@ namespace GsoWebServer.Reposiotry.RDB.Game
                     nickname = nickname,
                 });
         }
-
-        public async Task<MetadataInfo?> GetUserMetaDataByUid(int uid)
-        {
-            return await mQueryFactory.Query("user_metadata")
-                .Where("uid", uid)
-                .FirstOrDefaultAsync<MetadataInfo>();
-        }
-
-        public async Task<SkillInfo?> GetUserSkillByUid(int uid)
-        {
-            return await mQueryFactory.Query("user_skill")
-                .Where("uid", uid)
-                .FirstOrDefaultAsync<SkillInfo>();
-        }
     
     }
 }

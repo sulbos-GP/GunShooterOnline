@@ -11,7 +11,8 @@ namespace GSO_WebServerLibrary
         public enum EKey
         {
             UID,
-            ULock,
+            UidLock,
+            REFRESH,
         }
 
         public static long GetUID(string key)
@@ -20,16 +21,16 @@ namespace GSO_WebServerLibrary
             if (parts.Length > 1)
             {
                 string valueAfterUnderscore = parts[1];
-                if (long.TryParse(valueAfterUnderscore, out long result))
+                if (int.TryParse(valueAfterUnderscore, out int uid))
                 {
-                    return result;
+                    return uid;
                 }
             }
 
             return 0;
         }
 
-        public static string MakeKey(EKey key, long uid)
+        public static string MakeKey(EKey key, int uid)
         {
             return key.ToString() + "_" + uid.ToString();
         }

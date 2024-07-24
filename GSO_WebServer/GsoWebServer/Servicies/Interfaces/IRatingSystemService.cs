@@ -6,6 +6,6 @@ namespace GsoWebServer.Servicies.Interfaces
 {
     public interface IRatingSystemService : IDisposable
     {
-        public Dictionary<long, SkillInfo> UpdatePlayerRatings(List<long> uids, List<SkillInfo> skills, List<MatchOutcomeInfo> outcomes);
+        public UserSkillInfo UpdatePlayerRating(UserSkillInfo skill, Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches);
     }
 }

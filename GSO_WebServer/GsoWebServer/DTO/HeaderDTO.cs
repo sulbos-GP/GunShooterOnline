@@ -4,7 +4,10 @@ namespace GsoWebServer.DTO
 {
     public class HeaderDTO
     {
-        [FromHeader]
-        public int uid { get; set; }
+        [FromHeader(Name = "uid")]
+        public int uid { get; set; } = 0;
+
+        [FromHeader(Name = "access_token")]
+        public string access_token { get; set; } = string.Empty;
     }
 }

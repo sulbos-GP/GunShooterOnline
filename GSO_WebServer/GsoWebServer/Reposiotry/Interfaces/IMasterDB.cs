@@ -2,5 +2,6 @@
 {
     public interface IMasterDB : IDisposable
     {
+        public Task<bool> LoadMasterData();
     }
 }

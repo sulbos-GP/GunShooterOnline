@@ -1,9 +1,13 @@
 ﻿using GSO_WebServerLibrary;
+using GsoWebServer.DTO;
+using GsoWebServer.Models.GameDB;
 using GsoWebServer.Models.Statistic;
 using GsoWebServer.Reposiotry.Interfaces;
 using GsoWebServer.Servicies.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace StatisticServer.Controllers
 {
@@ -11,49 +15,76 @@ namespace StatisticServer.Controllers
     [ApiController]
     public class RatingSystemController : ControllerBase
     {
-        private readonly IGameDB mGameDB_Skills;
+        private readonly IGameService mGameService;
         private readonly IRatingSystemService mRatingSystem;
 
-        public RatingSystemController(IGameDB gameDB, IRatingSystemService ratingSystem)
+        public RatingSystemController(IGameService gameservice, IRatingSystemService ratingSystem)
         {
-            mGameDB_Skills = gameDB;
+            mGameService = gameservice;
             mRatingSystem = ratingSystem;
         }
 
         /// <summary>
         /// 매칭에 관한 결과
         /// </summary>
-        //[HttpPost]
-        //[Route("MatchOutcome")]
-        //public async Task<MatchOutComeRes> MatchOutcome([FromBody] MatchOutComeReq request)
-        //{
+        [HttpPost]
+        [Route("MatchOutcome")]
+        public async Task<MatchOutComeRes> MatchOutcome([FromHeader] HeaderDTO header, [FromBody] MatchOutComeReq request)
+        {
 
-        //    var response = new MatchOutComeRes();
-        //    if (!WebUtils.IsValidModelState(request))
-        //    {
-        //        response.error = WebErrorCode.IsNotValidModelState;
-        //        return response;
-        //    }
+            var response = new MatchOutComeRes();
+            if (!WebUtils.IsValidModelState(request))
+            {
+                response.error = WebErrorCode.IsNotValidModelState;
+                return response;
+            }
 
-        //    if(request.user_id == null || request.user_match_outcome == null)
-        //    {
-        //        response.error = WebErrorCode.IsNotValidModelState;
-        //        return response;
-        //    }
+            Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches = new Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>>();
+            if (request.outcomes == null)
+            {
+                response.error = WebErrorCode.IsNotValidModelState;
+                return response;
+            }
 
-        //    Console.WriteLine($"[MatchOutcome] outcome:{request.user_id.Count}");
+            foreach (var match in request.outcomes)
+            {
+                int uid = match.Key;
+                var outcome = match.Value;
 
-        //    //유저아디이와 토큰 확인
-        //    List<string> user_ids = request.user_id;
+                var (error, skill) = await mGameService.GetSkillInfo(uid);
+                if (error != WebErrorCode.None || skill == null)
+                {
+                    response.error = WebErrorCode.TEMP_ERROR;
+                    return response;
+                }
 
-        //    foreach (var user_id in user_ids)
-        //    {
-        //        var Skills = await mGameDB_Skills.SelectPlayerSkills(user_id);
-        //    }
+                matches.Add(uid, new(skill, outcome));
 
-        //    List<MatchOutcome> outcomes = request.user_match_outcome;
 
-        //    mRatingSystem.UpdatePlayerRatings(uids, outcomes);
-        //}
+                (error, var metadata) = await mGameService.GetMetadataInfo(uid);
+                if (error == WebErrorCode.None && metadata != null)
+                {
+
+                    metadata.total_games    += 1;
+                    metadata.kills          += outcome.kills;
+                    metadata.deaths         += outcome.death;
+                    metadata.damage         += outcome.damage;
+                    metadata.farming        += outcome.farming;
+                    metadata.escape         += outcome.escape;
+                    metadata.survival_time  += outcome.survival_time;
+
+                    await mGameService.UpdateUserMetadata(uid, metadata);
+                }
+            }
+
+            foreach(var match in matches)
+            {
+                UserSkillInfo newSkill = mRatingSystem.UpdatePlayerRating(match.Value.Item1, matches);
+                await mGameService.UpdateUserSkill(match.Key, newSkill);
+            }
+
+            response.error = WebErrorCode.None;
+            return response;
+        }
     }
 }

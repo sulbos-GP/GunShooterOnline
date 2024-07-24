@@ -1,4 +1,4 @@
-﻿using MatchmakingServer.Models;
+﻿using Matchmaker.Models;
 using CloudStructures;
 using CloudStructures.Structures;
 using Microsoft.Extensions.Options;
@@ -9,7 +9,7 @@ using ZLogger;
 using System.Linq;
 using Microsoft.VisualBasic;
 
-namespace MatchmakingServer.Repository
+namespace Matchmaker.Repository
 {
     public class MemoryMatchingQueue : IMatchingQueue
     {

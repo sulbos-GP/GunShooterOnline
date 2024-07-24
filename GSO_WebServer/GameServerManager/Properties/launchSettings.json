@@ -4,7 +4,7 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "http://localhost:53604",
+      "applicationUrl": "http://localhost:23359",
       "sslPort": 0
     }
   },
@@ -12,17 +12,17 @@
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "launchUrl": "weatherforecast",
-      "applicationUrl": "http://localhost:6900",
+      //"launchBrowser": true,
+      "launchUrl": "gameservermanager",
+      "applicationUrl": "http://localhost:7000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchBrowser": true,
-      "launchUrl": "weatherforecast",
+      //"launchBrowser": true,
+      "launchUrl": "gameservermanager",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

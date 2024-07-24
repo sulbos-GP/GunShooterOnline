@@ -18,6 +18,19 @@ CREATE TABLE IF NOT EXISTS user (
      UNIQUE KEY (nickname)
 );
 
+#유저의 계정 정보
+CREATE TABLE IF NOT EXISTS user_account (
+    uid					INT 			NOT NULL								COMMENT '유저 아이디',
+	refresh_token 		VARCHAR(512) 	NOT NULL								COMMENT '갱신 토큰',
+    service 			VARCHAR(32) 	NOT NULL								COMMENT '서비스',
+	create_dt           DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '생성 일시', 
+    recent_login_dt     DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '최근 로그인 일시',
+	recent_refresh_dt   DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '최근 갱신 토큰 사용 일시',
+        
+    PRIMARY KEY (`uid`),
+    CONSTRAINT FK_user_account_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
 #유저의 메타데이터
 CREATE TABLE IF NOT EXISTS user_metadata (
     uid					INT 			NOT NULL								COMMENT '유저 아이디',

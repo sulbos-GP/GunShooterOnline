@@ -49,21 +49,33 @@ namespace GsoWebServer.Startup
             services.AddTransient<IMasterDB, MasterDB>();
             services.AddTransient<IGameDB, GameDB>();
 
-            services.AddScoped<IGoogleService, GoogleService>();
-            services.AddScoped<IAuthenticationService, AuthenticationService>();
-            services.AddScoped<IDataLoadService, DataLoadService>();
-            services.AddScoped<IGameService, GameService>();
+            services.AddTransient<IGoogleService, GoogleService>();
+            services.AddTransient<IAuthenticationService, AuthenticationService>();
+            services.AddTransient<IDataLoadService, DataLoadService>();
+            services.AddTransient<IGameService, GameService>();
 
             services.AddSingleton<IMemoryDB, MemoryDB>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // 마스터 DB가 등록이 안되어 있다면 없으면 반드시 에러
+            IMasterDB masterDB = app.ApplicationServices.GetRequiredService<IMasterDB>();
+            if(!await masterDB.LoadMasterData())
+            {
+                return;
+            }
+
+            // Add middleware to the container.
+            //app.UseMiddleware<GsoWebServer.Middleware.VersionCheck>();
+            app.UseMiddleware<GsoWebServer.Middleware.CheckUserAuth>();
 
             app.UseHttpsRedirection();
 
@@ -75,6 +87,7 @@ namespace GsoWebServer.Startup
             {
                 endpoints.MapControllers();
             });
+
         }
     }
 }

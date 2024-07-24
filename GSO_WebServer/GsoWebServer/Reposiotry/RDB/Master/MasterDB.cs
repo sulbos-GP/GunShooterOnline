@@ -12,7 +12,7 @@ namespace GsoWebServer.Reposiotry.RDB.Master
     {
         private readonly IOptions<DbConfig> mDbConfig;
 
-        private IDbConnection? mDbConn;
+        private IDbConnection mDbConn;
         private readonly SqlKata.Compilers.MySqlCompiler mCompiler;
         private readonly QueryFactory mQueryFactory;
 
@@ -20,6 +20,7 @@ namespace GsoWebServer.Reposiotry.RDB.Master
         {
             mDbConfig = dbConfig;
 
+            mDbConn = new MySqlConnection(mDbConfig.Value.MasterDB);
             Open();
 
             mCompiler = new SqlKata.Compilers.MySqlCompiler();
@@ -33,14 +34,17 @@ namespace GsoWebServer.Reposiotry.RDB.Master
 
         private void Open()
         {
-            mDbConn = new MySqlConnection(mDbConfig.Value.MasterDB);
-
             mDbConn.Open();
         }
 
         private void Close()
         {
             mDbConn?.Close();
+        }
+
+        public async Task<bool> LoadMasterData()
+        {
+            return true;
         }
     }
 }

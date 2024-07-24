@@ -14,9 +14,9 @@ public enum ERequestMethod
     POST
 }
 
-public class WebClientCredential : MonoBehaviour
+public class WebClientCredential
 {
-    public int uid { get; set; } = 0;
+    public string uid { get; set; } = string.Empty;
 
     public string access_token { get; set; } = string.Empty;
 
@@ -35,7 +35,8 @@ public abstract class WebClientService : MonoBehaviour
 
 public abstract class WebClientServiceRequest<TResponse>
 {
-    protected object mFrom = null;
+    protected HeaderDTO mFromHeader = null;
+    protected object mFromBody = null;
     protected string mEndPoint = null;
     protected ERequestMethod mMethod = ERequestMethod.None;
 
@@ -43,7 +44,7 @@ public abstract class WebClientServiceRequest<TResponse>
     {
         Misc.CheckNotNull(callback);
 
-        Misc.CheckNotNull(mFrom);
+        Misc.CheckNotNull(mFromBody);
 
         Misc.CheckNotNull(mEndPoint);
 
@@ -54,13 +55,19 @@ public abstract class WebClientServiceRequest<TResponse>
 
     private IEnumerator CoExecuteAsync(Action<TResponse> callback)
     {
-        string jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(mFrom);
+        string jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(mFromBody);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStr);
 
         UnityWebRequest request = new UnityWebRequest(mEndPoint, mMethod.ToString());
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
+
+        if(mFromHeader != null)
+        {
+            request.SetRequestHeader("uid", mFromHeader.uid);
+            request.SetRequestHeader("access_token", mFromHeader.access_token);
+        }
 
         yield return request.SendWebRequest();
 

@@ -2,19 +2,107 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
+using static AuthorizeResource;
+using static UserResource;
 
-public class NewBehaviourScript : MonoBehaviour
+public class UI_Nickname : MonoBehaviour
 {
+    [SerializeField]
+    private GameObject nicknameWindow;
 
-    // Start is called before the first frame update
+    [SerializeField]
+    private string inputText;
+
+    [SerializeField]
+    private TMP_InputField nicknameInputField;
+
+    [SerializeField]
+    private TMP_Text nicknameDescription;
+
+    private void Awake()
+    {
+        nicknameInputField.onValueChanged.AddListener(OnChangeNicknameValue);
+    }
+
     void Start()
     {
-        
+        nicknameDescription.enabled = false;    
+
+        string nickname = WebManager.Instance.mUserInfo.UserInfo.nickname;
+
+        nicknameWindow.SetActive(nickname == string.Empty);
+    }
+
+    private void Update()
+    {
+        if (WebManager.Instance == null)
+        {
+            Debug.LogError("WebManager.Instance is null");
+        }
+        else if (WebManager.Instance.mCredential == null)
+        {
+            Debug.LogError("WebManager.Instance.mCredential is null");
+        }
+        else if (WebManager.Instance.mCredential.uid == string.Empty)
+        {
+            Debug.LogError("WebManager.Instance.mCredential.uid is empty");
+        }
+    }
+
+    public void OnChangeNicknameValue(string value)
+    {
+        nicknameDescription.enabled = false;
+        inputText = value;
     }
 
     public void OnClickSetNickname()
     {
+        Debug.Log("OnClickSetNickname");
 
+        if (inputText == string.Empty)
+        {
+            ShowDescription("닉네임은 공백일 수 없습니다.");
+            return;
+        }
+
+        if(2 > inputText.Length || inputText.Length > 10)
+        {
+            ShowDescription("닉네임은 최소 2자에서 10자까지 입력할 수 있습니다.");
+            return;
+        }
+
+        //보내기
+        SetNicknameReq packet = new SetNicknameReq
+        {
+            new_nickname = inputText,
+        };
+
+        GsoWebService service = new GsoWebService();
+        SetNicknameRequest request = service.mUserResource.GetSetNicknameRequest(packet);
+        request.ExecuteAsync(OnProcessSetNickname);
+
+        ShowDescription("닉네임 요청 확인중");
+    }
+
+    public void OnProcessSetNickname(SetNicknameRes response)
+    {
+        if(response.error == 0)
+        {
+            WebManager.Instance.mUserInfo.UserInfo.nickname = response.nickname;
+            nicknameWindow.SetActive(false);
+        }
+        else
+        {
+            ShowDescription("사용할 수 없는 닉네임 입니다.");
+        }
+    }
+
+    public void ShowDescription(string text)
+    {
+        nicknameDescription.enabled = true;
+
+        nicknameDescription.text = text;
     }
 
 
