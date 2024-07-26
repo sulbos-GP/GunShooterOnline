@@ -10,15 +10,14 @@ namespace GsoWebServer.Reposiotry.RDB.Game
         /// <summary>
         /// 유저 신규 회원가입
         /// </summary>
-        public async Task<int> SingUp(String playerId, String service, IDbTransaction transaction)
+        public async Task<int> SingUp(String playerId, String service, String refresh_token, IDbTransaction transaction)
         {
             return await mQueryFactory.Query("user")
                 .InsertGetIdAsync<int>(new
                 {
-
                     player_id = playerId,
-                    service = service
-
+                    service = service,
+                    refresh_token = refresh_token
                 }, transaction);
         }
 

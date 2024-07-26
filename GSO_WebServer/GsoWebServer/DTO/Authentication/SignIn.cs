@@ -12,14 +12,12 @@ namespace GsoWebServer.DTO.Authentication
         [Required]
         public string server_code { get; set; } = string.Empty;
 
+        [Required]
         public string service { get; set; } = string.Empty;
     }
 
-    public class SignInRes
+    public class SignInRes : ErrorCodeDTO
     {
-        [Required]
-        public WebErrorCode error { get; set; } = WebErrorCode.None;
-
         [Required]
         public int          uid { get; set; } = 0;
 
@@ -34,4 +32,5 @@ namespace GsoWebServer.DTO.Authentication
 
         public DataLoadUserInfo? userData { get; set; } = null;
     }
+
 }

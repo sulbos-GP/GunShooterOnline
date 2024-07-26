@@ -10,7 +10,7 @@ namespace GsoWebServer.Reposiotry.Interfaces
         public IDbConnection GetConnection();
 
         //GameDB_Init
-        public Task<int> SingUp(String playerId, String service, IDbTransaction transaction);
+        public Task<int> SingUp(String playerId, String service, String refresh_token, IDbTransaction transaction);
         public Task<int> InitUserMatadata(int uid, IDbTransaction transaction);
         public Task<int> InitUserSkill(int uid, IDbTransaction transaction);
 

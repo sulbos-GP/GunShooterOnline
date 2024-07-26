@@ -10,7 +10,7 @@ namespace GsoWebServer.Servicies.Interfaces
         /// <summary>
         /// 유저의 회원가입 및 게임 데이터 생성
         /// </summary>
-        public Task<(WebErrorCode, int)> SingUpWithNewUserGameData(String userId, String service);
+        public Task<(WebErrorCode, int)> SingUpWithNewUserGameData(String userId, String service, String refresh_token);
 
         /// <summary>
         /// 유저의 닉네임 변경

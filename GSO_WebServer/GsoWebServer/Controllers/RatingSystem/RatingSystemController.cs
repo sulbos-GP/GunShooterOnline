@@ -35,14 +35,16 @@ namespace StatisticServer.Controllers
             var response = new MatchOutComeRes();
             if (!WebUtils.IsValidModelState(request))
             {
-                response.error = WebErrorCode.IsNotValidModelState;
+                response.error_code = WebErrorCode.IsNotValidModelState;
+                response.error_description = "";
                 return response;
             }
 
             Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches = new Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>>();
             if (request.outcomes == null)
             {
-                response.error = WebErrorCode.IsNotValidModelState;
+                response.error_code = WebErrorCode.IsNotValidModelState;
+                response.error_description = "";
                 return response;
             }
 
@@ -54,7 +56,8 @@ namespace StatisticServer.Controllers
                 var (error, skill) = await mGameService.GetSkillInfo(uid);
                 if (error != WebErrorCode.None || skill == null)
                 {
-                    response.error = WebErrorCode.TEMP_ERROR;
+                    response.error_code = WebErrorCode.TEMP_ERROR;
+                    response.error_description = "";
                     return response;
                 }
 
@@ -83,7 +86,7 @@ namespace StatisticServer.Controllers
                 await mGameService.UpdateUserSkill(match.Key, newSkill);
             }
 
-            response.error = WebErrorCode.None;
+            response.error_code = WebErrorCode.None;
             return response;
         }
     }
