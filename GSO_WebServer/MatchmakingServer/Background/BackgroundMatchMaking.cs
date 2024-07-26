@@ -9,8 +9,8 @@ namespace Matchmaker.Background
     public class BackgroundMatchMaking : BackgroundService
     {
         private PeriodicTimer?  mTimer = null;
-        private const double    mDelaySecond = 1;                           //1초마다 매칭 검색
-        private const int       mMaxPlayerNumber = 10;                      //최대 매치될 인원
+        private const double    mPeriodicSecond = 5;                        //5초마다 매칭 검색
+        private const int       mPlayerCapacity = 10;                       //최대 매치될 인원
         private const long      mMaxWaitTimeCount = 120;                    //최대로 기다릴 수 있는 시간
         private const long      mMaxExpandingRatingRangeTimeCount = 100;    //최대로 늘어날 수 있는 범위 증가
         private const long      mExpandingRatingRangeTimeCount = 5;         //5초마다 레이팅 증가
