@@ -10,12 +10,12 @@ namespace GsoWebServer.Servicies.Game
     {
 
 
-        public async Task<(WebErrorCode, int)> SingUpWithNewUserGameData(String userId, String service)
+        public async Task<(WebErrorCode, int)> SingUpWithNewUserGameData(String userId, String service, String refresh_token)
         {
             var transaction = mGameDB.GetConnection().BeginTransaction();
             try
             {
-                var uid = await mGameDB.SingUp(userId, service, transaction);
+                var uid = await mGameDB.SingUp(userId, service, refresh_token, transaction);
                 if(uid == 0)
                 {
                     return (WebErrorCode.AuthTokenFailSetNx, 0);

@@ -27,7 +27,7 @@ public class WebClientCredential
     public string token_type { get; set; } = string.Empty;
 }
 
-public abstract class WebClientService : MonoBehaviour
+public abstract class WebClientService
 {
     public string mBaseUrl { get; set; }
 

@@ -29,6 +29,11 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<WebErrorCode> RegisterToken(Int32 uid, String user_id, String accessToken, String refreshToken, Int64 expires);
 
         /// <summary>
+        /// 토큰 공유 레디스에서 삭제
+        /// </summary>
+        public Task<WebErrorCode> RemoveToken(Int32 uid);
+
+        /// <summary>
         /// 최근 로그인한 시간 기록
         /// </summary>
         public Task<WebErrorCode> UpdateLastSignInTime(int uid);

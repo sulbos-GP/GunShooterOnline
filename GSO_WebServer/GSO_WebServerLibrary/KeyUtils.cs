@@ -15,7 +15,7 @@ namespace GSO_WebServerLibrary
             REFRESH,
         }
 
-        public static long GetUID(string key)
+        public static int GetUID(string key)
         {
             string[] parts = key.Split('_');
             if (parts.Length > 1)

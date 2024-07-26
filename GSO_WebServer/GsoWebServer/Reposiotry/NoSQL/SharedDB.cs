@@ -41,6 +41,26 @@ namespace GsoWebServer.Reposiotry.NoSQL
 
         }
 
+        public async Task<WebErrorCode> RemoveAuthUserData(Int32 uid)
+        {
+            string key = KeyUtils.MakeKey(KeyUtils.EKey.UID, uid);
+
+            try
+            {
+                RedisString<AuthUserDataInfo> redis = new(mRedisConn, key, null);
+                if (await redis.DeleteAsync() == false)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                return WebErrorCode.None;
+            }
+            catch
+            {
+                return WebErrorCode.TEMP_Exception;
+            }
+        }
+
         public async Task<WebErrorCode> RegisterRefreshToken(Int32 uid, String userID, String refreshToken)
         {
 
@@ -70,6 +90,26 @@ namespace GsoWebServer.Reposiotry.NoSQL
 
         }
 
+        public async Task<WebErrorCode> RemoveRefreshToken(Int32 uid)
+        {
+            string key = KeyUtils.MakeKey(KeyUtils.EKey.REFRESH, uid);
+
+            try
+            {
+                RedisString<RefreshDataInfo> redis = new(mRedisConn, key, null);
+                if (await redis.DeleteAsync() == false)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                return WebErrorCode.None;
+            }
+            catch
+            {
+                return WebErrorCode.TEMP_Exception;
+            }
+        }
+
         public async Task<(WebErrorCode, AuthUserDataInfo?)> ValidateAndGetUserData(Int32 uid)
         {
             try
@@ -97,7 +137,7 @@ namespace GsoWebServer.Reposiotry.NoSQL
             try
             {
 
-                string key = KeyUtils.MakeKey(KeyUtils.EKey.UID, Convert.ToInt32(uid));
+                string key = KeyUtils.MakeKey(KeyUtils.EKey.REFRESH, Convert.ToInt32(uid));
 
                 RedisString<RefreshDataInfo> redis = new(mRedisConn, key, null);
                 var refreshToken = await redis.GetAsync();

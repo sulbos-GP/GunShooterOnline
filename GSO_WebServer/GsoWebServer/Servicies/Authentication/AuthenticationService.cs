@@ -112,14 +112,31 @@ namespace GsoWebServer.Servicies.Authentication
                 return WebErrorCode.TEMP_ERROR;
             }
 
-            error = await mSharedDB.RegisterRefreshToken(uid, user_id, refreshToken);
+            //error = await mSharedDB.RegisterRefreshToken(uid, user_id, refreshToken);
+            //if (error != WebErrorCode.None)
+            //{
+            //    return WebErrorCode.TEMP_ERROR;
+            //}
+
+            return WebErrorCode.None;
+
+        }
+
+        public async Task<WebErrorCode> RemoveToken(Int32 uid)
+        {
+            var error = await mSharedDB.RemoveAuthUserData(uid);
+            if (error != WebErrorCode.None)
+            {
+                return WebErrorCode.TEMP_ERROR;
+            }
+
+            error = await mSharedDB.RemoveRefreshToken(uid);
             if (error != WebErrorCode.None)
             {
                 return WebErrorCode.TEMP_ERROR;
             }
 
             return WebErrorCode.None;
-
         }
 
         public async Task<WebErrorCode> UpdateLastSignInTime(int uid)

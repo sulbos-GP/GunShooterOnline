@@ -36,18 +36,6 @@ public class UI_Nickname : MonoBehaviour
 
     private void Update()
     {
-        if (WebManager.Instance == null)
-        {
-            Debug.LogError("WebManager.Instance is null");
-        }
-        else if (WebManager.Instance.mCredential == null)
-        {
-            Debug.LogError("WebManager.Instance.mCredential is null");
-        }
-        else if (WebManager.Instance.mCredential.uid == string.Empty)
-        {
-            Debug.LogError("WebManager.Instance.mCredential.uid is empty");
-        }
     }
 
     public void OnChangeNicknameValue(string value)
@@ -87,14 +75,14 @@ public class UI_Nickname : MonoBehaviour
 
     public void OnProcessSetNickname(SetNicknameRes response)
     {
-        if(response.error == 0)
+        if(response.error_code == 0)
         {
             WebManager.Instance.mUserInfo.UserInfo.nickname = response.nickname;
             nicknameWindow.SetActive(false);
         }
         else
         {
-            ShowDescription("사용할 수 없는 닉네임 입니다.");
+            ShowDescription(response.error_description);
         }
     }
 

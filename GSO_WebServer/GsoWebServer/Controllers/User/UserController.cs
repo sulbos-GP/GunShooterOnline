@@ -34,7 +34,8 @@ namespace GsoWebServer.Controllers.User
 
             if (!WebUtils.IsValidModelState(request))
             {
-                response.error = WebErrorCode.IsNotValidModelState;
+                response.error_code = WebErrorCode.IsNotValidModelState;
+                response.error_description = "요청이 올바르지 않습니다.";
                 return response;
             }
 
@@ -42,7 +43,8 @@ namespace GsoWebServer.Controllers.User
             var error = await mAuthenticationService.VerifyNickname(header.uid, request.new_nickname);
             if(error != WebErrorCode.None)
             {
-                response.error = error;
+                response.error_code = error;
+                response.error_description = "이전 닉네임과 일치 합니다.";
                 return response;
             }
 
@@ -50,11 +52,12 @@ namespace GsoWebServer.Controllers.User
             (error, var nickname) = await mGameService.UpdateNickname(header.uid, request.new_nickname);
             if (error != WebErrorCode.None)
             {
-                response.error = error;
+                response.error_code = error;
+                response.error_description = "이미 사용중인 닉네임 입니다.";
                 return response;
             }
 
-            response.error = WebErrorCode.None;
+            response.error_code = WebErrorCode.None;
             response.nickname = nickname;
             return response;
         }

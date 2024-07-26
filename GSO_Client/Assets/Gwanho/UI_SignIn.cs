@@ -1,7 +1,5 @@
 using GooglePlayGames;
 using GooglePlayGames.BasicApi;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using static AuthorizeResource;
@@ -10,16 +8,19 @@ using UnityEngine.SceneManagement;
 
 public class SignInUI : MonoBehaviour
 {
-
     [SerializeField]
-    private Image mLoadingBackground;
+    private GameObject      mLoading;
 
     [SerializeField]
     private TextMeshProUGUI mResultText;
 
+    [SerializeField]
+    private Button          mSingInButton;
+
     private void Awake()
     {
-        mLoadingBackground.enabled = false;
+        mSingInButton.onClick.AddListener(OnClickSignIn);
+        SetActiveLoading(false);
     }
 
     void Start()
@@ -35,16 +36,17 @@ public class SignInUI : MonoBehaviour
     /// </summary>
     private void AutoSignIn()
     {
-        mLoadingBackground.enabled = true;
+        ResultMessage("구글 플레이 서비스 자동 인증 시도...");
+        SetActiveLoading(true);
         PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
     }
 
     /// <summary>
-    /// 자동 로그인이 안되었을 경우 (에러 상황)
+    /// 자동 로그인이 안되었을 경우 (에러 상황 or 테스트)
+    /// 이것도 권장 사항이 아니라서 안씀
     /// </summary>
     public void OnClickSignIn()
     {
-        mLoadingBackground.enabled = true;
         PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
     }
 
@@ -64,22 +66,48 @@ public class SignInUI : MonoBehaviour
 
         if (status == SignInStatus.Success)
         {
-            //토큰을 얻기위한 일회용 Code받아오기
-            PlayGamesPlatform.Instance.RequestServerSideAccess(true, ProcessServerAuthCode);
+            ResultMessage("구글 플레이 서비스 인증 성공");
+
+            AuthenticationReq packet = new AuthenticationReq()
+            {
+                user_id = PlayGamesPlatform.Instance.GetUserId(),
+                service = "Google"
+            };
+
+            GsoWebService service = new GsoWebService();
+            AuthenticationRequest request = service.mAuthorizeResource.GetAuthenticationRequest(packet);
+            request.ExecuteAsync(OnProcessAuthentication);
         }
         else if (status == SignInStatus.InternalError)
         {
             //구글 플레이 로그인 에러
-            mLoadingBackground.enabled = false;
-            mResultText.text = "An internal error occurred.";
+            ResultMessage("인증 도중 에러가 발생하였습니다.");
+            SetActiveLoading(false);
         }
         else if (status == SignInStatus.Canceled)
         {
             //모바일로 실행을 안할 경우
             //TODO : PC에서 무시하고 진행할 수 있도록
-            mLoadingBackground.enabled = false;
-            mResultText.text = "The sign in was canceled.";
+            ResultMessage("인증이 취소 되었습니다.");
+            SetActiveLoading(false);
         }
+
+    }
+
+    /// <summary>
+    /// 기존에 있던 유저인지 확인후 서버코드 요청
+    /// </summary>
+    private void OnProcessAuthentication(AuthenticationRes response)
+    {
+
+        ResultMessage("구글 플레이 서버 코드 요청...");
+
+        //기존에 있던 유저라면 False
+        //새로운 유저라면 True
+        bool forceRefreshToken = (response.error_code != 0);
+
+        //토큰을 얻기위한 일회용 Code받아오기
+        PlayGamesPlatform.Instance.RequestServerSideAccess(forceRefreshToken, ProcessServerAuthCode);
     }
 
     /// <summary>
@@ -87,8 +115,14 @@ public class SignInUI : MonoBehaviour
     /// </summary>
     private void ProcessServerAuthCode(string code)
     {
+        if(code is null)
+        {
+            ResultMessage("구글 플레이 서버 코드 요청 실패");
+            SetActiveLoading(false);
+            return;
+        }
 
-        Debug.Log($"[ProcessServerAuthCode] : {code}");
+        ResultMessage("로그인 요청 시도...");
 
         SignInReq packet = new SignInReq()
         {
@@ -98,7 +132,7 @@ public class SignInUI : MonoBehaviour
         };
 
         GsoWebService service = new GsoWebService();
-        AuthenticationRequest request = service.mAuthorizeResource.GetAuthenticationRequest(packet);
+        SingInRequest request = service.mAuthorizeResource.GetSignInRequest(packet);
         request.ExecuteAsync(ProcessAccessToken);
     }
 
@@ -107,33 +141,46 @@ public class SignInUI : MonoBehaviour
     /// </summary>
     private void ProcessAccessToken(SignInRes response)
     {
-        mLoadingBackground.enabled = false;
 
-        if(response.error == 0)
+        if (response.error_code != 0)
         {
-            mResultText.text = "The operation was successful.";
+            ResultMessage($"로그인 요청 실패 : {response.error_description}");
+            SetActiveLoading(false);
+            return;
         }
-        else
-        {
-            mResultText.text = "The operation was failure.";
-        }
+        ResultMessage("로그인 요청 성공");
 
-        //로비로 이동 (임시)
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
-        WebManager.Instance.mCredential = new WebClientCredential
         {
-            uid = response.uid.ToString(),
-            access_token = response.access_token,
-            expires_in = response.expires_in,
-            scope = response.scope,
-            token_type = response.token_type
-        };
+            WebManager.Instance.mCredential = new WebClientCredential
+            {
+                uid = response.uid.ToString(),
+                access_token = response.access_token,
+                expires_in = response.expires_in,
+                scope = response.scope,
+                token_type = response.token_type
+            };
 
-        WebManager.Instance.mUserInfo = response.userData;
+            WebManager.Instance.mUserInfo = response.userData;
+        }
 
         //로비로 이동
-        SceneManager.LoadScene("LobbyScene");
+        {
+            SceneManager.LoadSceneAsync("LobbyScene");
+        }
 
     }
+
+    private void ResultMessage(string message)
+    {
+        mResultText.text = message;
+        SystemLogManager.Instance.LogMessage(message);
+    }
+    
+    private void SetActiveLoading(bool active)
+    {
+        mLoading.SetActive(active);
+    }
+
 }

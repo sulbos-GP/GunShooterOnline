@@ -12,12 +12,14 @@ namespace GsoWebServer.Middleware
     {
         readonly IAuthenticationService authenticationService;
         readonly IMemoryDB mMemoryDB;
+        readonly IGameDB mGameDB;
         readonly RequestDelegate mNext;
 
-        public CheckUserAuth(RequestDelegate next, IMemoryDB memoryDb, IAuthenticationService authcationService)
+        public CheckUserAuth(RequestDelegate next, IMemoryDB memoryDb, IGameDB gameDB, IAuthenticationService authcationService)
         {
             authenticationService = authcationService;
             mMemoryDB = memoryDb;
+            mGameDB = gameDB;
             mNext = next;
         }
 
@@ -33,7 +35,8 @@ namespace GsoWebServer.Middleware
 
             //로그인은 제외
             var formString = context.Request.Path.Value;
-            if (formString.EndsWith("/SignIn", StringComparison.OrdinalIgnoreCase) == true)
+            if (formString.EndsWith("/Authentication", StringComparison.OrdinalIgnoreCase) == true ||
+                formString.EndsWith("/SignIn", StringComparison.OrdinalIgnoreCase) == true)
             {
                 await mNext(context);
                 return;
@@ -56,27 +59,28 @@ namespace GsoWebServer.Middleware
             }
             Int32 uid = Convert.ToInt32(uidstr);
 
+            var userData = await mGameDB.GetUserByUid(uid);
+            if (userData == null)
+            {
+                await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, WebErrorCode.TEMP_ERROR);
+                return;
+            }
+
             //uid와 token을 통해 정보가 있는지 확인
             var (error, user) = await mMemoryDB.ValidateAndGetUserData(uid);
             if (user == null)
             {
 
                 //갱신 토큰을 이용하여 엑세스 토큰 갱신하기
-                (error, var refreshTokenData) = await mMemoryDB.ValidateAndGetRefreshToken(uid);
-                if (refreshTokenData == null)
-                {
-                    await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, error);
-                    return;
-                }
-
-                (error, var accessTokenData) = await authenticationService.RefreshToken(refreshTokenData.user_id, refreshTokenData.refresh_token);
+                //(error, var refreshTokenData) = await mMemoryDB.ValidateAndGetRefreshToken(uid);
+                (error, var accessTokenData) = await authenticationService.RefreshToken(userData.player_id, userData.refresh_token);
                 if (accessTokenData == null || accessTokenData.ExpiresInSeconds == null)
                 {
                     await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, error);
                     return;
                 }
 
-                error = await mMemoryDB.RegisterAuthUserData(uid, refreshTokenData.user_id, accessTokenData.AccessToken, accessTokenData.ExpiresInSeconds.Value);
+                error = await mMemoryDB.RegisterAuthUserData(uid, userData.player_id, accessTokenData.AccessToken, accessTokenData.ExpiresInSeconds.Value);
                 if (error != WebErrorCode.None)
                 {
                     await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, error);
@@ -86,15 +90,17 @@ namespace GsoWebServer.Middleware
                 user = new AuthUserDataInfo
                 {
                     uid = uidstr,
-                    user_id = refreshTokenData.user_id,
+                    user_id = userData.player_id,
                     access_token = accessTokenData.AccessToken,
                 };
+
+            }else
+            {
 
             }
 
             //이번 api 호출 끝날 때까지 redis키 잠금
             //만약 잠겨있다면 호출이 중복되므로 에러
-
             error = await mMemoryDB.RegisterLockAuthUserData(uid);
             if (error != WebErrorCode.None)
             {
@@ -116,7 +122,7 @@ namespace GsoWebServer.Middleware
             context.Response.StatusCode = statusCode;
             var errorJsonResponse = JsonSerializer.Serialize(new MiddlewareResponse
             {
-                error = error
+                error_code = error
             });
             await context.Response.WriteAsync(errorJsonResponse);
         }

@@ -11,25 +11,14 @@ CREATE TABLE IF NOT EXISTS user (
     player_id 			VARCHAR(256) 	NOT NULL 								COMMENT '플레이어 아이디',
     nickname			VARCHAR(10) 	NULL 		DEFAULT NULL 				COMMENT '닉네임',
     service 			VARCHAR(32) 	NOT NULL								COMMENT '서비스',
+	refresh_token 		VARCHAR(512) 	NULL 		DEFAULT NULL				COMMENT '갱신 토큰',	#TODO NotNull로 교채
 	create_dt           DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '생성 일시', 
     recent_login_dt     DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '최근 로그인 일시',
     
 	 PRIMARY KEY (uid),
      UNIQUE KEY (nickname)
 );
-
-#유저의 계정 정보
-CREATE TABLE IF NOT EXISTS user_account (
-    uid					INT 			NOT NULL								COMMENT '유저 아이디',
-	refresh_token 		VARCHAR(512) 	NOT NULL								COMMENT '갱신 토큰',
-    service 			VARCHAR(32) 	NOT NULL								COMMENT '서비스',
-	create_dt           DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '생성 일시', 
-    recent_login_dt     DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '최근 로그인 일시',
-	recent_refresh_dt   DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '최근 갱신 토큰 사용 일시',
-        
-    PRIMARY KEY (`uid`),
-    CONSTRAINT FK_user_account_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT
-);
+#ALTER TABLE user ADD COLUMN refresh_token VARCHAR(512) NULL DEFAULT NULL AFTER service;
 
 #유저의 메타데이터
 CREATE TABLE IF NOT EXISTS user_metadata (
@@ -58,6 +47,7 @@ CREATE TABLE IF NOT EXISTS user_skill (
 );
 
 #더미 생성 (CreateDummyProcedures 참고)
+CALL create_dummy;
 
 SELECT * FROM user;
 SELECT * FROM user_metadata;
