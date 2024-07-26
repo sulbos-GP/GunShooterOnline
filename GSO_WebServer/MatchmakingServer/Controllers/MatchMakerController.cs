@@ -8,12 +8,12 @@ namespace Matchmaker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MatchmakingController : ControllerBase
+    public class MatchMakerController : ControllerBase
     {
         private readonly IGameDB mGameDB;
         private readonly IMatchingQueue mMatchingQueue;
 
-        public MatchmakingController(IGameDB gameDB, IMatchingQueue matchingQueue)
+        public MatchMakerController(IGameDB gameDB, IMatchingQueue matchingQueue)
         {
             mGameDB = gameDB;
             mMatchingQueue = matchingQueue;
@@ -28,7 +28,6 @@ namespace Matchmaker.Controllers
         {
 
             //로그
-
             var response = new JoinMatchMakingRes();
 
             if (!WebUtils.IsValidModelState(request))
@@ -37,18 +36,8 @@ namespace Matchmaker.Controllers
                 return response;
             }
 
-            //MySql에서 UID, Skill 얻기
-            var uidResult = await mGameDB.GetUID(request.user_id);
-            if(uidResult.Item1 != WebErrorCode.None)
-            {
-                return response;
-            }
+            // 정보를 가져와야함
 
-            var skillResult = await mGameDB.GetUserSkill(uidResult.Item2);
-            if (skillResult.Item1 != WebErrorCode.None || skillResult.Item2 == null)
-            {
-                return response;
-            }
 
             //TODO : UID를 이용하여 엑세스 토큰이 올바른지 확인
 

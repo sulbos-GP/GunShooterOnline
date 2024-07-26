@@ -4,8 +4,8 @@ namespace Matchmaker.Models
 {
     public class JoinMatchMakingReq
     {
-        public string user_id { get; set; } = string.Empty;
-        public string access_token { get; set; } = string.Empty;
+        public int      uid { get; set; } = 0;
+        public string   access_token { get; set; } = string.Empty;
     }
 
     public class JoinMatchMakingRes
@@ -15,8 +15,8 @@ namespace Matchmaker.Models
 
     public class CancleMatchMakingReq
     {
-        public string user_id { get; set; } = string.Empty;
-        public string access_token { get; set; } = string.Empty;
+        public int      uid { get; set; } = 0;
+        public string   access_token { get; set; } = string.Empty;
     }
 
     public class CancleMatchMakingRes
@@ -34,7 +34,29 @@ namespace Matchmaker.Models
         public double   deviation { get; set; } = 0.0;
         public string   state { get; set; } = string.Empty;
         public long     count { get; set; } = 0;
-        public long     time { get; set; } = 0;
+        public long     latency { get; set; } = 0;
+        public long     match_start_time { get; set; } = 0;
+    }
+
+    public enum EPlayerState
+    {
+        Join = 0,
+        Ready = 1,
+        Cancle = 2,
+
+    }
+
+    /// <summary>
+    /// 매칭 큐에 들어갈 정보 (Redis)
+    /// </summary>
+    public class TicketInfo
+    {
+        public string   key { get; set; } = string.Empty;
+        public string   state { get; set; } = string.Empty;
+        public double   skill_level { get; set; } = 0.0;
+        public long     count { get; set; } = 0;
+        public long     latency { get; set; } = 0;
+        public long     match_start_time { get; set; } = 0;
     }
 
     /// <summary>
