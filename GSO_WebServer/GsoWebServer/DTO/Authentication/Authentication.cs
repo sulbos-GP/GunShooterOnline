@@ -2,6 +2,15 @@
 
 namespace GsoWebServer.DTO.Authentication
 {
+    public class GoogleAuthenticationReq
+    {
+    }
+
+    public class GoogleAuthenticationRes : ErrorCodeDTO
+    {
+
+    }
+
     public class AuthenticationReq
     {
         [Required]
