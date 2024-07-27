@@ -36,12 +36,12 @@ public class MatchmakerResource
     /// </summary>
     /// 
 
-    public MatchJoinRequest GetMatchJoinRequest(AuthenticationReq packet)
+    public MatchJoinRequest GetMatchJoinRequest(MatchmakerJoinReq packet)
     {
         return new MatchJoinRequest(this.mService, packet);
     }
 
-    public MatchCancleRequest GetMatchCancleRequest(SignInReq packet)
+    public MatchCancleRequest GetMatchCancleRequest(MatchmakerCancleReq packet)
     {
         return new MatchCancleRequest(this.mService, packet);
     }
@@ -50,10 +50,10 @@ public class MatchmakerResource
     /// Requset
     /// </summary>
 
-    //기존에 접속한적이 있는지?
-    public class MatchJoinRequest : WebClientServiceRequest<AuthenticationRes>
+    //매칭 참여
+    public class MatchJoinRequest : WebClientServiceRequest<MatchmakerJoinRes>
     {
-        public MatchJoinRequest(MatchmakerService service, AuthenticationReq request)
+        public MatchJoinRequest(MatchmakerService service, MatchmakerJoinReq request)
         {
             this.mFromHeader = new HeaderDTO
             {
@@ -67,10 +67,10 @@ public class MatchmakerResource
         }
     }
 
-    //로그인 요청
-    public class MatchCancleRequest : WebClientServiceRequest<SignInRes>
+    //매칭 취소
+    public class MatchCancleRequest : WebClientServiceRequest<MatchmakerCancleRes>
     {
-        public MatchCancleRequest(MatchmakerService service, SignInReq request)
+        public MatchCancleRequest(MatchmakerService service, MatchmakerCancleReq request)
         {
             this.mFromHeader = new HeaderDTO
             {
