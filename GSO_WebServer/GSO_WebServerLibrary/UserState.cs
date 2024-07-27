@@ -15,5 +15,6 @@ namespace GSO_WebServerLibrary
         Ready,              //다른 행동을 할 수 있는 준비된 상태
         MatchJoin,          //매칭큐에 들어가 있는 상태
         MatchCancle,        //매칭큐 취소하는 상태
+        Game,               //게임 진행중
     }
 }
