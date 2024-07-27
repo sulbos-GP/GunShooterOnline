@@ -1,14 +1,13 @@
 ﻿using Google.Apis.Auth.OAuth2.Flows;
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Auth.OAuth2;
-using GsoWebServer.Servicies.Interfaces;
 using static Google.Apis.Requests.BatchRequest;
 using GSO_WebServerLibrary;
 using Google.Apis.Auth;
-using GsoWebServer.DTO.Authentication;
 using Newtonsoft.Json.Linq;
+using GSO_WebServerLibrary.Servicies.Google.Interface;
 
-namespace GsoWebServer.Servicies.Google
+namespace GSO_WebServerLibrary.Servicies.Google
 {
     public partial class GoogleService : IGoogleService
     {
@@ -24,7 +23,7 @@ namespace GsoWebServer.Servicies.Google
                 {
                     var tokenInfo = JObject.Parse(content);
 
-                    int expiresIn = tokenInfo.Value<int>("expires_in");
+                    long expiresIn = tokenInfo.Value<long>("expires_in");
 
                     return (WebErrorCode.None);
                 }

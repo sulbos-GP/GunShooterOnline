@@ -7,11 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
+    <PackageReference Include="Google.Apis.Games.v1" Version="1.68.0.3469" />
+    <PackageReference Include="Google.Apis.Oauth2.v2" Version="1.68.0.1869" />
+    <PackageReference Include="ZLogger" Version="2.5.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ZLogger" Version="2.5.2" />
+    <Folder Include="Logger\" />
   </ItemGroup>
 
 </Project>

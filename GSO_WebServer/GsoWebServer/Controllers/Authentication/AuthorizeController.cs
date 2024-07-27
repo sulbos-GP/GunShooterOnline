@@ -30,7 +30,6 @@ namespace AuthenticationServer.Controllers
             mDataLoadService = dataload;
         }
 
-
         /// <summary>
         /// 기존 유저인지 인증
         /// </summary>

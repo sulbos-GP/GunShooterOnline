@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GSO_WebServerLibrary", "GSO
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GsoWebServer", "GsoWebServer\GsoWebServer.csproj", "{B3C422E4-DBC2-4EE9-B9A8-BF4CC45F01AC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServerManager", "GameServerManager\GameServerManager.csproj", "{7F4E11D6-2F91-4EC9-AFCD-D417AD8515B8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameServerManager", "GameServerManager\GameServerManager.csproj", "{7F4E11D6-2F91-4EC9-AFCD-D417AD8515B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Authorization", "Authorization\Authorization.csproj", "{22AB5791-26C6-463B-92EF-7460D91D53B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{7F4E11D6-2F91-4EC9-AFCD-D417AD8515B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7F4E11D6-2F91-4EC9-AFCD-D417AD8515B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7F4E11D6-2F91-4EC9-AFCD-D417AD8515B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{22AB5791-26C6-463B-92EF-7460D91D53B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{22AB5791-26C6-463B-92EF-7460D91D53B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{22AB5791-26C6-463B-92EF-7460D91D53B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{22AB5791-26C6-463B-92EF-7460D91D53B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

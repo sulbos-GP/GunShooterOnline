@@ -94,9 +94,6 @@ namespace GsoWebServer.Middleware
                     access_token = accessTokenData.AccessToken,
                 };
 
-            }else
-            {
-
             }
 
             //이번 api 호출 끝날 때까지 redis키 잠금

@@ -8,12 +8,12 @@ namespace Matchmaker.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class MatchMakerController : ControllerBase
+    public class MatchmakerController : ControllerBase
     {
         private readonly IGameDB mGameDB;
         private readonly IMatchingQueue mMatchingQueue;
 
-        public MatchMakerController(IGameDB gameDB, IMatchingQueue matchingQueue)
+        public MatchmakerController(IGameDB gameDB, IMatchingQueue matchingQueue)
         {
             mGameDB = gameDB;
             mMatchingQueue = matchingQueue;
