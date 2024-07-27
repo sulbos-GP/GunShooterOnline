@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matchmaker", "MatchmakingServer\Matchmaker.csproj", "{B96612FD-EBE1-4B45-99B3-7D7A0A5AFA29}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Matchmaker", "Matchmaker\Matchmaker.csproj", "{B96612FD-EBE1-4B45-99B3-7D7A0A5AFA29}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GSO_WebServerLibrary", "GSO_WebServerLibrary\GSO_WebServerLibrary.csproj", "{26D6B9D2-CC12-40E5-B4B8-703010E9021E}"
 EndProject
