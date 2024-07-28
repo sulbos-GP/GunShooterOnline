@@ -1,4 +1,9 @@
-﻿using Matchmaker.Hubs;
+﻿using GSO_WebServerLibrary.Config;
+using Matchmaker.Hubs;
+using Matchmaker.Repository;
+using Matchmaker.Repository.Interface;
+using Matchmaker.Service;
+using Matchmaker.Service.Interfaces;
 using System;
 
 namespace Matchmaker.Startup
@@ -35,19 +40,19 @@ namespace Matchmaker.Startup
             services.AddSignalR();
 
             // Add services to the config
-            //services.Configure<DbConfig>(Configuration.GetSection(nameof(DbConfig)));
+            services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(DatabaseConfig)));
             //services.Configure<GoogleConfig>(Configuration.GetSection(nameof(GoogleConfig)));
 
             // Add services to the container.
             //services.AddTransient<IMasterDB, MasterDB>();
             //services.AddTransient<IGameDB, GameDB>();
-            //
+            
             //services.AddTransient<IGoogleService, GoogleService>();
             //services.AddTransient<IAuthenticationService, AuthenticationService>();
             //services.AddTransient<IDataLoadService, DataLoadService>();
-            //services.AddTransient<IGameService, GameService>();
-            //
-            //services.AddSingleton<IMemoryDB, MemoryDB>();
+            services.AddTransient<IMatchmakerService, MatchmakerService>();
+            
+            services.AddSingleton<IMatchQueue, MatchQueue>();
 
         }
 
@@ -60,7 +65,6 @@ namespace Matchmaker.Startup
             }
 
             // Add middleware to the container.
-            //app.UseMiddleware<GsoWebServer.Middleware.VersionCheck>();
             //app.UseMiddleware<GsoWebServer.Middleware.CheckUserAuth>();
 
             app.UseHttpsRedirection();
@@ -72,7 +76,7 @@ namespace Matchmaker.Startup
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<MatchmakerHub>("/NotificationHub");
+                endpoints.MapHub<MatchmakerHub>("/MatchmakerHub");
             });
 
         }

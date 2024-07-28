@@ -80,27 +80,21 @@ public class SystemLogManager : MonoBehaviour
             if (text != null)
             {
                 mSystemLogScrollView = scrollView.GetComponent<ScrollRect>();
-                UpdateLogDisplay();
                 mSystemLogScrollView.gameObject.SetActive(false);
+                UpdateLogDisplay();
             }
         }
     }
 
     private void UpdateLogDisplay()
     {
-        if (mSystemLogText != null)
-        {
-            mSystemLogText.text = string.Join("\n", mSystemLogMessages.ToArray());
-            mSystemLogScrollView.verticalNormalizedPosition = 0.0f;
-        }
+        mSystemLogText.text = string.Join("\n", mSystemLogMessages.ToArray());
+        mSystemLogScrollView.verticalNormalizedPosition = 0.0f;
     }
 
     private void OnToggleSystemLog()
     {
-        if(mSystemLogText != null)
-        {
-            mSystemLogScrollView.gameObject.SetActive(!mSystemLogScrollView.gameObject.activeSelf);
-        }
+        mSystemLogScrollView.gameObject.SetActive(!mSystemLogScrollView.gameObject.activeSelf);
     }
 
     /// <summary>

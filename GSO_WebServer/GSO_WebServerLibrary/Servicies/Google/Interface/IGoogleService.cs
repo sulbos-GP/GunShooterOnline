@@ -33,6 +33,6 @@ namespace GSO_WebServerLibrary.Servicies.Google.Interface
         /// <summary>
         /// 엑세스 토큰을 이용하여 플레이어의 프로필 정보를 얻는다
         /// </summary>
-        public Task<(WebErrorCode, Player?)> GetMyPlayer(string userId, string accessToken);
+        //public Task<(WebErrorCode, Player?)> GetMyPlayer(string userId, string accessToken);
     }
 }

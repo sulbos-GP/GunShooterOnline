@@ -2,48 +2,15 @@
 
 namespace Matchmaker.Models
 {
-    public class JoinMatchMakingReq
-    {
-        public int      uid { get; set; } = 0;
-        public string   access_token { get; set; } = string.Empty;
-    }
 
-    public class JoinMatchMakingRes
-    {
-        public WebErrorCode error { get; set; } = WebErrorCode.None;
-    }
-
-    public class CancleMatchMakingReq
-    {
-        public int      uid { get; set; } = 0;
-        public string   access_token { get; set; } = string.Empty;
-    }
-
-    public class CancleMatchMakingRes
-    {
-        public WebErrorCode error { get; set; } = WebErrorCode.None;
-    }
 
     /// <summary>
-    /// 매칭 큐에 들어갈 정보 (Redis)
+    /// 플레이어 스캔 되었을때 정보
     /// </summary>
-    public class MatchQueueInfo
+    public class PlayerInfo
     {
-        public string   uid { get; set; } = string.Empty;
-        public double   rating { get; set; } = 0.0;
-        public double   deviation { get; set; } = 0.0;
-        public string   state { get; set; } = string.Empty;
-        public long     count { get; set; } = 0;
-        public long     latency { get; set; } = 0;
-        public long     match_start_time { get; set; } = 0;
-    }
-
-    public enum EPlayerState
-    {
-        Join = 0,
-        Ready = 1,
-        Cancle = 2,
-
+        public double       rating { get; set; } = 0.0;
+        public TicketInfo?  ticket { get; set; } = null;
     }
 
     /// <summary>
@@ -51,12 +18,11 @@ namespace Matchmaker.Models
     /// </summary>
     public class TicketInfo
     {
-        public string   key { get; set; } = string.Empty;
-        public string   state { get; set; } = string.Empty;
-        public double   skill_level { get; set; } = 0.0;
-        public long     count { get; set; } = 0;
-        public long     latency { get; set; } = 0;
-        public long     match_start_time { get; set; } = 0;
+        public string   client_id { get; set; } = string.Empty; //클라이언트 아이디
+        public string   world { get; set; } = string.Empty;     //맵
+        public string   region { get; set; } = string.Empty;    //리전
+        public long     latency { get; set; } = 0;              //레이턴시
+        public int      match_start_time { get; set; } = 0;     //매칭 시작 시간
     }
 
     /// <summary>

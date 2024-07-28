@@ -1,10 +1,18 @@
 ﻿using Matchmaker.DTO.Matchmaker;
+using Matchmaker.Service;
+using Matchmaker.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace Matchmaker.Hubs
 {
     public class MatchmakerHub : Hub
     {
+        private readonly IMatchmakerService mMatchmakerService;
+
+        public MatchmakerHub(IMatchmakerService matchmakerService)
+        {
+            mMatchmakerService = matchmakerService;
+        }
 
         public override async Task OnConnectedAsync()
         {
@@ -13,6 +21,7 @@ namespace Matchmaker.Hubs
             Console.WriteLine($"Client connected: {connectionId}");
 
             await base.OnConnectedAsync();
+
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
@@ -23,18 +32,25 @@ namespace Matchmaker.Hubs
 
             await base.OnDisconnectedAsync(exception);
         }
-
-        public async Task Ping(long timestamp)
+        
+        //임시
+        public async Task C2S_VerfiyToken(int uid)
         {
-            await Clients.Caller.SendAsync("Pong", timestamp);
+            string connectionId = Context.ConnectionId;
+            await mMatchmakerService.InitMatchQueue(uid, connectionId);
         }
 
-        /// <summary>
-        /// 매치가 완료되었다는 것을 알린다
-        /// </summary>
-        public async Task NotifyMatchComplete(string clientId, RoomInfo info)
+        //임시
+        public async Task C2S_Ping(int uid, long timestamp, long avgLatency)
         {
-            await Clients.Client(clientId).SendAsync("ReceiveMatchComplete", info);
+            long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            long latency = now - timestamp;
+
+            string connectionId = Context.ConnectionId;
+
+            await mMatchmakerService.UpdateLatency(uid, avgLatency);
+
+            await Clients.Caller.SendAsync("S2C_Pong", timestamp);
         }
 
     }

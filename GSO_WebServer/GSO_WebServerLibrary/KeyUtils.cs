@@ -13,6 +13,7 @@ namespace GSO_WebServerLibrary
             UID,
             UidLock,
             REFRESH,
+            MATCH,
         }
 
         public static int GetUID(string key)

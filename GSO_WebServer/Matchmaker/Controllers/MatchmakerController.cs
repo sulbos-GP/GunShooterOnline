@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Matchmaker.Repository;
 using Matchmaker.Models;
 using GSO_WebServerLibrary;
+using Matchmaker.Service.Interfaces;
+using Matchmaker.DTO;
+using Matchmaker.DTO.Matchmaker;
 
 namespace Matchmaker.Controllers
 {
@@ -10,13 +12,11 @@ namespace Matchmaker.Controllers
     [ApiController]
     public class MatchmakerController : ControllerBase
     {
-        private readonly IGameDB mGameDB;
-        private readonly IMatchingQueue mMatchingQueue;
+        private readonly IMatchmakerService mMatchmakerService;
 
-        public MatchmakerController(IGameDB gameDB, IMatchingQueue matchingQueue)
+        public MatchmakerController(IMatchmakerService matchmakerService)
         {
-            mGameDB = gameDB;
-            mMatchingQueue = matchingQueue;
+            mMatchmakerService = matchmakerService;
         }
 
         /// <summary>
@@ -24,35 +24,25 @@ namespace Matchmaker.Controllers
         /// </summary>
         [HttpPost]
         [Route("Join")]
-        public async Task<JoinMatchMakingRes> Join([FromBody] JoinMatchMakingReq request)
+        public async Task<JoinMatchRes> Join([FromHeader] HeaderDTO header, [FromBody] JoinMatchReq request)
         {
 
-            //로그
-            var response = new JoinMatchMakingRes();
+            var response = new JoinMatchRes();
 
             if (!WebUtils.IsValidModelState(request))
             {
-                response.error = WebErrorCode.IsNotValidModelState;
+                response.error_code = WebErrorCode.IsNotValidModelState;
                 return response;
             }
 
-            // 정보를 가져와야함
-
-
-            //TODO : UID를 이용하여 엑세스 토큰이 올바른지 확인
-
-
-            //TODO : 없다면 RefreshToken API 사용
-
-
-            //이미 큐에 들어와 있는지 확인 + 삽입
-            var isQueue = await mMatchingQueue.PushAsync(uidResult.Item2, skillResult.Item2.rating, skillResult.Item2.deviation);
-            if(isQueue != WebErrorCode.None)
+            var error = await mMatchmakerService.AddMatchQueue(header.uid, 0, request.world, request.region);
+            if(error != WebErrorCode.None)
             {
+                response.error_code = error;
                 return response;
             }
 
-            response.error = WebErrorCode.None;
+            response.error_code = WebErrorCode.None;
             return response;
         }
 
@@ -61,41 +51,25 @@ namespace Matchmaker.Controllers
         /// </summary>
         [HttpPost]
         [Route("Cancle")]
-        public async Task<CancleMatchMakingRes> Cancle([FromBody] CancleMatchMakingReq request)
+        public async Task<CancleMatchRes> Cancle([FromHeader] HeaderDTO header, [FromBody] CancleMatchReq request)
         {
-            //로그
 
-            var response = new CancleMatchMakingRes();
+            var response = new CancleMatchRes();
 
             if (!WebUtils.IsValidModelState(request))
             {
-                response.error = WebErrorCode.IsNotValidModelState;
+                response.error_code = WebErrorCode.IsNotValidModelState;
                 return response;
             }
 
-            //MySql에서 UID 얻기
-            var uidResult = await mGameDB.GetUID(request.user_id);
-            if (uidResult.Item1 != WebErrorCode.None)
+            var error = await mMatchmakerService.RemoveMatchQueue(header.uid);
+            if (error != WebErrorCode.None)
             {
-                response.error = uidResult.Item1;
+                response.error_code = error;
                 return response;
             }
 
-            //TODO : UID를 이용하여 엑세스 토큰이 올바른지 확인
-
-            //TODO : 없다면 RefreshToken API 사용
-
-            //방이 잡혔는지 확인
-
-            //Redis에 UID, Rating 제거
-            var popResult = await mMatchingQueue.PopAsync(uidResult.Item2);
-            if (popResult != WebErrorCode.None)
-            {
-                response.error = popResult;
-                return response;
-            }
-
-            response.error = WebErrorCode.None;
+            response.error_code = WebErrorCode.None;
             return response;
         }
     }
