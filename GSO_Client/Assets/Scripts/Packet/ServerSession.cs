@@ -29,6 +29,8 @@ public class ServerSession : PacketSession
         Array.Copy(BitConverter.GetBytes((ushort)msgId), 0, sendBuffer, sizeof(ushort), sizeof(ushort));
         Array.Copy(packet.ToByteArray(), 0, sendBuffer, 2 * sizeof(ushort), size);
 
+
+
         lock (_lock)
         {
             _reserveQueue.Add((sendBuffer, reliableSequenced));
@@ -42,8 +44,8 @@ public class ServerSession : PacketSession
         List<(ArraySegment<byte> Segment, DeliveryMethod reliableSequenced)> sendList = null;
         lock (_lock)
         {
-            if ( _reservedSendBytes < 1500)
-                return;
+            //if ( _reservedSendBytes < 1500)
+                //return;
 
             _reservedSendBytes = 0;
 
@@ -57,7 +59,14 @@ public class ServerSession : PacketSession
 
     public override void OnConnected(EndPoint endPoint)
     {
-        Console.WriteLine($"OnConnected : {endPoint}");
+        //onsole.WriteLine($"OnConnected : {endPoint}");
+        Debug.Log("OnConnected");
+
+        C_EnterGame c_EnterGame = new C_EnterGame();
+        c_EnterGame.Name = "jish";
+
+        Managers.Network.Send(c_EnterGame);
+        Debug.Log("Send c_EnterGame");
 
         //C2S_Chat chat = new C2S_Chat();
         //chat.chat = "Hello";
@@ -66,7 +75,9 @@ public class ServerSession : PacketSession
 
     public override void OnDisconnected(EndPoint endPoint)
     {
-        Console.WriteLine($"OnDisconnected : {endPoint}");
+        //Console.WriteLine($"OnDisconnected : {endPoint}");
+        Debug.Log("OnDisconnected");
+
     }
 
     public override void OnRecvPacket(ArraySegment<byte> buffer, byte channelNumber)
@@ -76,6 +87,8 @@ public class ServerSession : PacketSession
 
     public override void OnSend(int numOfBytes)
     {
+        Debug.Log("OnSend");
+
         //Console.WriteLine($"Transferred bytes: {numOfBytes}");
     }
 }
