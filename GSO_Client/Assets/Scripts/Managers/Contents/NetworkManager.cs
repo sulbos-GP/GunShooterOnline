@@ -10,6 +10,9 @@ using UnityEngine;
 public class NetworkManager
 {
     private readonly ServerSession _session = new();
+
+    public static ClientNetworkService mNetworkService = new ClientNetworkService();
+
     public int AccountId { get; set; }
     public int Token { get; set; }
 
@@ -55,10 +58,10 @@ public class NetworkManager
 
         Debug.Log($"tryConnection to {ipAddr}");
         var endPoint = new IPEndPoint(ipAddr, 7777);
-        
-        var connector = new Connector();
-        
-        connector.Connect(endPoint, () => { return _session; });
+        Func<Session> session = () => { return new ServerSession(); };
+
+        mNetworkService.Init(endPoint, session, "SomeConnectionKey");
+        mNetworkService.Start();
     }
 
     public void Update()

@@ -32,7 +32,7 @@ namespace Collision.Shapes
             this.angle = angle;
             const int polygon = 19; // 얼마나 정확한 원인지 기본은 20 클라와 동기화 해야함
             this.radius = radius;
-            bounds = radius;
+            //bounds = radius;
             Type = ShapeType.ARCPOLY;
             name = "ArcPoly";
 
@@ -50,7 +50,7 @@ namespace Collision.Shapes
                      MathF.Sin(_angle) * radius));
             }
 
-            bounds = radius;
+            //bounds = radius;
         }
 
         // public override ShapeCollision test (Shape shape)

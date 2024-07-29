@@ -113,7 +113,7 @@ namespace Collision.Shapes
                     float t = vertex.lengthsq;
                     if (t > max) max = t;
                 }
-                bounds = MathF.Sqrt(max);
+                //bounds = MathF.Sqrt(max);
             }
         }
 
