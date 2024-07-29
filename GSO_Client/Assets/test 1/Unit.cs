@@ -14,6 +14,12 @@ public class Unit : MonoBehaviour
         _health = 100;
     }
 
+    //TO-DO : 추후에 스텟 클래스 제작 예정.
+    public void SetHealth(int var)
+    {
+        _health += var;
+    }
+
     public void Awake()
     {
         Init();
