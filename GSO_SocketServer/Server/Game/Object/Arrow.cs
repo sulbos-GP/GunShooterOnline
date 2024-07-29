@@ -44,7 +44,8 @@ public class Arrow : Projectile
         }
         else
         {
-            CellPos += Speed * Program.ServerIntervalTick / 1000 * Dir;
+            //CellPos += Speed * Program.ServerIntervalTick / 1000 * Dir;
+            CellPos += 3 * 250 / 1000 * Dir;
         }
 
         Console.WriteLine("Arw" + CellPos + $"time {Environment.TickCount64}");
@@ -75,8 +76,7 @@ public class Arrow : Projectile
         if (OwnerId == -1 || OwnerId == 0)
             return null;
 
-        GameObject Owner;
-        Owner = gameRoom.Map.FindObjById(CurrentRoomId, OwnerId); //데이터 레이스?
+        Player Owner = gameRoom.GetPlayer(OwnerId); //데이터 레이스?
         return Owner;
     }
 

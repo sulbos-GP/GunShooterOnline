@@ -46,6 +46,7 @@ namespace Collision.Shapes
             _transformedVertices = new List<Vector>();
             Type = ShapeType.POLYGON;
             this.vertices = vertices;
+            updateBounds();
         }
 
         public override ShapeCollision test (Shape shape)
@@ -99,12 +100,25 @@ namespace Collision.Shapes
         public static Polygon triangle(float x, float y, float radius) {
             return create(x, y, 3, radius);
         }
-        
-        
-        
-        
-        
-        
+
+
+        protected void updateBounds()
+        {
+            if (_vertices is not null && _vertices.Count > 0)
+            {
+                //QuadTree¸¦ À§ÇØ
+                float max = 0f;
+                foreach (var vertex in _vertices)
+                {
+                    float t = vertex.lengthsq;
+                    if (t > max) max = t;
+                }
+                //bounds = MathF.Sqrt(max);
+            }
+        }
+
+
+
     }
     
     

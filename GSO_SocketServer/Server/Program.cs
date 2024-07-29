@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Net;
+using System.Threading;
+using QuadTree;
 using ServerCore;
 
 namespace Server
@@ -7,19 +9,41 @@ namespace Server
 	class Program
 	{
 
+        Thread t;
+
+
 		public static ServerNetworkService mNetworkService = new ServerNetworkService();
 
-		static void Main(string[] args)
+        public static ushort ServerTickCount { get; internal set; } = 0;
+        public static int ServerIntervalTick { get; internal set; } = 250;
+
+
+
+        public void OnLogicUpdate()
+        {
+            while (true)
+            {
+             
+            }
+        }
+
+        static void Main(string[] args)
 		{
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 9050);
 
-            //Func<Session> session = () => { return new ClientSession(); };
+            //IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Loopback, 7777);
+
+            Func<Session> session = () => { return new ClientSession(); };
+
+            mNetworkService.Init(endPoint, session, "SomeConnectionKey", 100, 100);
             
-            //NetworkService.Init(endPoint, session, "SomeConnectionKey", 100, 100);
-            mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
+            BattleGameRoom room = new BattleGameRoom();
+            
+            
+           // mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
+            //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
             mNetworkService.Start();
 
             Console.WriteLine("q: Quit Server.");
@@ -32,6 +56,9 @@ namespace Server
                     break;
                 }
             }
+
+
+
 
             ////FlushRoom();
             //JobTimer.Instance.Push(FlushRoom);
