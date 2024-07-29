@@ -16,6 +16,7 @@ class PacketHandler
     
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
     {
+        Console.WriteLine("C_EnterGameHandler");
         ClientSession clientSession = session as ClientSession;
         C_EnterGame enterGamePacket = (C_EnterGame)message;
         clientSession.MyPlayer = ObjectManager.Instance.Add<Player>();
@@ -25,8 +26,10 @@ class PacketHandler
             clientSession.MyPlayer.info.PositionInfo.PosX = 0;
             clientSession.MyPlayer.info.PositionInfo.PosY = 0;
         }
-
-        BattleGameRoom room = clientSession.Room; //나중에 null로 바꿔도 참조가능
+        
+        
+        
+        BattleGameRoom room = (BattleGameRoom)Program.mNetworkService.gameRoom; //나중에 null로 바꿔도 참조가능
 
         room.Push(room.EnterGame, clientSession.MyPlayer);
 

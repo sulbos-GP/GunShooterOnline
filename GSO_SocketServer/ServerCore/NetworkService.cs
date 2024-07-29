@@ -15,8 +15,8 @@ namespace ServerCore
     public abstract class NetworkService
     {
         public NetManager       mManager;
-        public LogicTimer       mLogicTimer;
-        public Thread           mWorkThread;
+        public LogicTimer       mGameLogicTimer;
+        public Thread           mCoreWorkThread;
 
         public IPEndPoint       mEndPoint;
         public Func<Session>    mSessionFactory;
@@ -24,8 +24,8 @@ namespace ServerCore
 
         public NetworkService()
         {
-            mLogicTimer = new LogicTimer(OnLogicUpdate);
-            mWorkThread = new Thread(OnWorkLoop);
+            mCoreWorkThread = new Thread(OnCoreWorkLoop);
+
         }
 
         protected abstract bool OnStart();
@@ -43,8 +43,8 @@ namespace ServerCore
                 return;
             }
 
-            mWorkThread.Start();
-            mLogicTimer.Start();
+            mCoreWorkThread.Start();
+            mGameLogicTimer.Start();
 
         }
 
@@ -66,27 +66,19 @@ namespace ServerCore
                 mManager.Stop(true);
             }
 
-            if(mLogicTimer != null)
+            if(mGameLogicTimer != null)
             {
-                mLogicTimer.Stop();
+                mGameLogicTimer.Stop();
             }
 
         }
 
-        public void OnWorkLoop()
+        public void OnCoreWorkLoop()
         {
             while (mManager.IsRunning)
             {
                 mManager.PollEvents();
-                mLogicTimer.Update();
-            }
-        }
-
-        public void OnLogicUpdate()
-        {
-            if (mManager.IsRunning)
-            {
-                //QuadTreeManmager Update()
+                mGameLogicTimer.Update();
             }
         }
 
@@ -101,11 +93,12 @@ namespace ServerCore
         public int  mBackLog = 100;
 
         public bool mUseChannel = false;
-        public Func<GameRoom> mGameRoomFactory;
+        public GameRoom gameRoom;
         public int mMaxChannelNumber =  1;
 
         public ServerNetworkService()
         {
+            mGameLogicTimer = new LogicTimer(OnLogicUpdate);
             mListener = new Listener(this);
             mManager = new NetManager(mListener);
             //mGameRoomManager = new GameRoomManager(this);
@@ -128,10 +121,10 @@ namespace ServerCore
         }
 
         //채널(게임방) 설정
-        public void SetChannel(bool use, Func<GameRoom> roomFactory, int number)
+        public void SetChannel(bool use, GameRoom roomFactory, int number)
         {
             mUseChannel = use;
-            mGameRoomFactory = roomFactory;
+            gameRoom = roomFactory;
             mMaxChannelNumber = number;
         }
 
@@ -154,6 +147,15 @@ namespace ServerCore
         protected override bool OnStop()
         {
             return true;
+        }
+
+        public void OnLogicUpdate()
+        {
+            if (mManager.IsRunning)
+            {
+                gameRoom.LogicUpdate();
+                //QuadTreeManmager Update()
+            }
         }
     }
 

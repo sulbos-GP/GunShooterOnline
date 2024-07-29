@@ -45,6 +45,7 @@ namespace Server
            // mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
             //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
             mNetworkService.Start();
+            mNetworkService.SetChannel(true, room,0);
 
             Console.WriteLine("q: Quit Server.");
             while (true)

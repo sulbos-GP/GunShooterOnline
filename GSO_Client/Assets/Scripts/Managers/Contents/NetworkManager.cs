@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Google.Protobuf;
 using ServerCore;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 
 
@@ -21,6 +22,7 @@ public class NetworkManager
     {
         _session.Send(packet);
     }
+
 
     public void ConnectToGame(string ip = "")
     {
@@ -58,7 +60,7 @@ public class NetworkManager
 
         Debug.Log($"tryConnection to {ipAddr}");
         var endPoint = new IPEndPoint(ipAddr, 7777);
-        Func<Session> session = () => { return new ServerSession(); };
+        Func<Session> session = () => { return _session; };
 
         mNetworkService.Init(endPoint, session, "SomeConnectionKey");
         mNetworkService.Start();
@@ -66,7 +68,9 @@ public class NetworkManager
 
     public void Update()
     {
-        var list = PacketQueue.Instance.PopAll();
+        _session.FlushSend();
+
+         var list = PacketQueue.Instance.PopAll();
         foreach (var packet in list)
         {
             var handler = PacketManager.Instance.GetPacketHandler(packet.Id);
