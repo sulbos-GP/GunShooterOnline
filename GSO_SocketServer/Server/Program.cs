@@ -31,17 +31,19 @@ namespace Server
 		{
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
-            IPAddress ipAddr = ipHost.AddressList[0];
-            IPEndPoint endPoint = new IPEndPoint(ipAddr, 9050);
 
-            //Func<Session> session = () => { return new ClientSession(); };
-            
-            //NetworkService.Init(endPoint, session, "SomeConnectionKey", 100, 100);
+            //IPAddress ipAddr = ipHost.AddressList[0];
+            IPEndPoint endPoint = new IPEndPoint(IPAddress.Loopback, 7777);
+
+            Func<Session> session = () => { return new ClientSession(); };
+
+            mNetworkService.Init(endPoint, session, "SomeConnectionKey", 100, 100);
             
             BattleGameRoom room = new BattleGameRoom();
             
             
-            mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
+           // mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
+            //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
             mNetworkService.Start();
 
             Console.WriteLine("q: Quit Server.");
