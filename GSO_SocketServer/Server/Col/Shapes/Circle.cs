@@ -20,6 +20,7 @@ namespace Collision.Shapes
         
         public Circle (float x, float y, float radius) : base(x, y)
         {
+            //bounds = radius;
             this.radius = radius;
             Type = ShapeType.CIRCLE;
             name = "Circle";

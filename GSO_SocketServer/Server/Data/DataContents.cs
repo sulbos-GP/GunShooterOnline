@@ -40,7 +40,7 @@ public class StatData : ILoader<int, StatInfo>
         {
             stat.Hp = stat.MaxHp;
             stat.Mp = stat.MaxMp;
-            stat.Speed = 3; //속도
+            //stat.Speed = 3; //속도
             stat.Exp = 0;
             dict.Add(100 * stat.Class + stat.Level, stat); //101
         }
@@ -264,14 +264,14 @@ public class MonsterLoader : ILoader<int, MonsterData>
             monster.stat.Critical = mStat.critical;
             monster.stat.Exp = mStat.exp * 10; //Todo: 삭제
 
-            monster.stat.Faith = mStat.faith;
+           /* monster.stat.Faith = mStat.faith;
             monster.stat.Will = mStat.will;
             monster.stat.Friendly = mStat.friendly;
             monster.stat.Karma = mStat.karma;
             monster.stat.Frame = mStat.frame;
             monster.stat.Credit = mStat.credit;
             monster.stat.Speed = mStat.speed;
-            monster.stat.MaxExp = mStat.maxExp;
+            monster.stat.MaxExp = mStat.maxExp;*/
 
 
             //---------------------------------

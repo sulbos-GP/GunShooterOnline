@@ -47,7 +47,8 @@ namespace QuadTree
         
         Circle GetBounds(GameObject obj) 
         {
-            return new Circle(obj.PosInfo.PosX,obj.PosInfo.PosY,obj.currentShape.GetapproximateRadius());
+            return new Circle(obj.PosInfo.PosX,obj.PosInfo.PosY,
+                obj.currentShape.GetapproximateRadius());
         }
         
        
@@ -79,7 +80,6 @@ namespace QuadTree
         
         public void Update()
         {
-            //  we iterate over a copy of _objects because the original gets modified
             var objectsCopy = new List<GameObject>(_totalObjects);
             UpdateQuadTree();
             

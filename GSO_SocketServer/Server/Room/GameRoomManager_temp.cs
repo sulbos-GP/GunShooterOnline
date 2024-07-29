@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server
 {
+    [Obsolete]
     public class GameRoomManager_temp : JobSerializer
     {
         private int _roomId = 1;

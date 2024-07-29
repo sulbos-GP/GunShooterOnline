@@ -21,7 +21,7 @@ public enum MonsterSpawnType //직접 소환 or 세력 느낌
 
 public class Monster : CreatureObj
 {
-    private readonly int FindRange = 12;
+    /*private readonly int FindRange = 12;
 
 
     private IJob _job;
@@ -382,5 +382,5 @@ public class Monster : CreatureObj
 
     protected virtual void UpdateDead()
     {
-    }
+    }*/
 }

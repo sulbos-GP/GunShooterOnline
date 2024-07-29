@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Collision.Shapes;
 using Google.Protobuf.Protocol;
 
 namespace Server.Game;
@@ -66,5 +67,23 @@ internal class ObjectManager
         }
 
         return null;
+    }
+
+
+    public Shape[] GetValue()
+    {
+
+        List<Shape> shape = new ();
+
+        lock (_lock)
+        {
+            foreach (Player p in _players.Values)
+            {
+                shape.Add(p.currentShape);
+            }
+        }
+
+        return shape.ToArray();
+
     }
 }
