@@ -218,6 +218,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""InventoryControl"",
+                    ""type"": ""Button"",
+                    ""id"": ""592fb859-9299-4bb7-a9b9-e47abaa22ec8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -251,6 +260,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""MouseRightClick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""27ab907a-3c40-4048-871f-e1a78f66d6de"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""InventoryControl"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -298,6 +318,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_UI_MouseMove = m_UI.FindAction("MouseMove", throwIfNotFound: true);
         m_UI_MouseLeftClick = m_UI.FindAction("MouseLeftClick", throwIfNotFound: true);
         m_UI_MouseRightClick = m_UI.FindAction("MouseRightClick", throwIfNotFound: true);
+        m_UI_InventoryControl = m_UI.FindAction("InventoryControl", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -432,6 +453,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_MouseMove;
     private readonly InputAction m_UI_MouseLeftClick;
     private readonly InputAction m_UI_MouseRightClick;
+    private readonly InputAction m_UI_InventoryControl;
     public struct UIActions
     {
         private @PlayerInput m_Wrapper;
@@ -439,6 +461,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @MouseMove => m_Wrapper.m_UI_MouseMove;
         public InputAction @MouseLeftClick => m_Wrapper.m_UI_MouseLeftClick;
         public InputAction @MouseRightClick => m_Wrapper.m_UI_MouseRightClick;
+        public InputAction @InventoryControl => m_Wrapper.m_UI_InventoryControl;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -457,6 +480,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @MouseRightClick.started += instance.OnMouseRightClick;
             @MouseRightClick.performed += instance.OnMouseRightClick;
             @MouseRightClick.canceled += instance.OnMouseRightClick;
+            @InventoryControl.started += instance.OnInventoryControl;
+            @InventoryControl.performed += instance.OnInventoryControl;
+            @InventoryControl.canceled += instance.OnInventoryControl;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -470,6 +496,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @MouseRightClick.started -= instance.OnMouseRightClick;
             @MouseRightClick.performed -= instance.OnMouseRightClick;
             @MouseRightClick.canceled -= instance.OnMouseRightClick;
+            @InventoryControl.started -= instance.OnInventoryControl;
+            @InventoryControl.performed -= instance.OnInventoryControl;
+            @InventoryControl.canceled -= instance.OnInventoryControl;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -517,5 +546,6 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnMouseMove(InputAction.CallbackContext context);
         void OnMouseLeftClick(InputAction.CallbackContext context);
         void OnMouseRightClick(InputAction.CallbackContext context);
+        void OnInventoryControl(InputAction.CallbackContext context);
     }
 }
