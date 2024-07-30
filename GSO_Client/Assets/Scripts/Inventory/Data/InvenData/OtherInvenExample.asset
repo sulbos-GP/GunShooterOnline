@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d532c9f827bc843b795dd3f9f89456, type: 3}
+  m_Name: OtherInvenExample
+  m_EditorClassIdentifier: 
+  limitWeight: 20
+  gridList:
+  - {fileID: 11400000, guid: 52a561d24467c9b438070b1159e8fdc9, type: 2}
