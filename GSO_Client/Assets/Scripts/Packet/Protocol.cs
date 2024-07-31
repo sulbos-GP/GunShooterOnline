@@ -60,23 +60,24 @@ namespace Google.Protobuf.Protocol {
             "Cg1jdXJyZW50Um9vbUlkGAEgASgFEgwKBGRpclgYAiABKAISDAoEZGlyWRgD",
             "IAEoAhIMCgRwb3NYGAQgASgCEgwKBHBvc1kYBSABKAISDAoEcm90WhgGIAEo",
             "AiJOCg1JbnZlbkRhdGFJbmZvEhMKC2xpbWl0V2VpZ2h0GAEgASgCEigKCEdy",
-            "aWREYXRhGAIgAygLMhYuUHJvdG9jb2wuR3JpZERhdGFJbmZvIrYBCgxHcmlk",
-            "RGF0YUluZm8SEQoJZ3JpZFNpemVYGAEgASgFEhEKCWdyaWRTaXplWRgCIAEo",
-            "BRIQCghncmlkUG9zWBgDIAEoBRIQCghncmlkUG9zWRgEIAEoBRIoCghpdGVt",
-            "TGlzdBgFIAMoCzIWLlByb3RvY29sLkl0ZW1EYXRhSW5mbxIYChBjcmVhdGVS",
-            "YW5kb21JdGVtGAYgASgIEhgKEHJhbmRvbUl0ZW1BbW91bnQYByABKAUilgEK",
-            "DEl0ZW1EYXRhSW5mbxIOCgZpdGVtSWQYASABKAUSEAoIaXRlbUNvZGUYAiAB",
-            "KAUSEAoIaXRlbVBvc1gYAyABKAUSEAoIaXRlbVBvc1kYBCABKAUSEgoKaXRl",
-            "bVJvdGF0ZRgFIAEoBRISCgppdGVtQW1vdW50GAYgASgFEhgKEHNlYXJjaGVk",
-            "UGxheWVySWQYByADKAUqkgIKBU1zZ0lkEhAKDFNfRU5URVJfR0FNRRAAEhAK",
-            "DFNfTEVBVkVfR0FNRRABEgsKB1NfU1BBV04QAhINCglTX0RFU1BBV04QAxIK",
-            "CgZTX01PVkUQBBIKCgZDX01PVkUQBRIPCgtTX0NPTk5FQ1RFRBAGEg8KC1Nf",
-            "Q0hBTkdFX0hQEAcSCQoFU19ESUUQCBIQCgxDX0VOVEVSX0dBTUUQCRIUChBD",
-            "X0xPQURfSU5WRU5UT1JZEAoSFAoQU19MT0FEX0lOVkVOVE9SWRALEg8KC0Nf",
-            "TU9WRV9JVEVNEAwSDwoLU19NT1ZFX0lURU0QDRIRCg1DX0RFTEVURV9JVEVN",
-            "EA4SEQoNU19ERUxFVEVfSVRFTRAPKkMKDkdhbWVPYmplY3RUeXBlEggKBE5P",
-            "TkUQABIKCgZQTEFZRVIQARILCgdNT05TVEVSEAISDgoKUFJPSkVDVElMRRAD",
-            "QhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
+            "aWREYXRhGAIgAygLMhYuUHJvdG9jb2wuR3JpZERhdGFJbmZvIsYBCgxHcmlk",
+            "RGF0YUluZm8SDgoGZ3JpZElkGAEgASgFEhEKCWdyaWRTaXplWBgCIAEoBRIR",
+            "CglncmlkU2l6ZVkYAyABKAUSEAoIZ3JpZFBvc1gYBCABKAUSEAoIZ3JpZFBv",
+            "c1kYBSABKAUSKAoIaXRlbUxpc3QYBiADKAsyFi5Qcm90b2NvbC5JdGVtRGF0",
+            "YUluZm8SGAoQY3JlYXRlUmFuZG9tSXRlbRgHIAEoCBIYChByYW5kb21JdGVt",
+            "QW1vdW50GAggASgFIpYBCgxJdGVtRGF0YUluZm8SDgoGaXRlbUlkGAEgASgF",
+            "EhAKCGl0ZW1Db2RlGAIgASgFEhAKCGl0ZW1Qb3NYGAMgASgFEhAKCGl0ZW1Q",
+            "b3NZGAQgASgFEhIKCml0ZW1Sb3RhdGUYBSABKAUSEgoKaXRlbUFtb3VudBgG",
+            "IAEoBRIYChBzZWFyY2hlZFBsYXllcklkGAcgAygFKpICCgVNc2dJZBIQCgxT",
+            "X0VOVEVSX0dBTUUQABIQCgxTX0xFQVZFX0dBTUUQARILCgdTX1NQQVdOEAIS",
+            "DQoJU19ERVNQQVdOEAMSCgoGU19NT1ZFEAQSCgoGQ19NT1ZFEAUSDwoLU19D",
+            "T05ORUNURUQQBhIPCgtTX0NIQU5HRV9IUBAHEgkKBVNfRElFEAgSEAoMQ19F",
+            "TlRFUl9HQU1FEAkSFAoQQ19MT0FEX0lOVkVOVE9SWRAKEhQKEFNfTE9BRF9J",
+            "TlZFTlRPUlkQCxIPCgtDX01PVkVfSVRFTRAMEg8KC1NfTU9WRV9JVEVNEA0S",
+            "EQoNQ19ERUxFVEVfSVRFTRAOEhEKDVNfREVMRVRFX0lURU0QDypDCg5HYW1l",
+            "T2JqZWN0VHlwZRIICgROT05FEAASCgoGUExBWUVSEAESCwoHTU9OU1RFUhAC",
+            "Eg4KClBST0pFQ1RJTEUQA0IbqgIYR29vZ2xlLlByb3RvYnVmLlByb3RvY29s",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -100,7 +101,7 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.StatInfo), global::Google.Protobuf.Protocol.StatInfo.Parser, new[]{ "Class", "Level", "Hp", "MaxHp", "Mp", "MaxMp", "AttackRange", "Attack", "AttackSpeed", "Defence", "Critical", "Exp", "MaxExp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PositionInfo), global::Google.Protobuf.Protocol.PositionInfo.Parser, new[]{ "CurrentRoomId", "DirX", "DirY", "PosX", "PosY", "RotZ" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.InvenDataInfo), global::Google.Protobuf.Protocol.InvenDataInfo.Parser, new[]{ "LimitWeight", "GridData" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.GridDataInfo), global::Google.Protobuf.Protocol.GridDataInfo.Parser, new[]{ "GridSizeX", "GridSizeY", "GridPosX", "GridPosY", "ItemList", "CreateRandomItem", "RandomItemAmount" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.GridDataInfo), global::Google.Protobuf.Protocol.GridDataInfo.Parser, new[]{ "GridId", "GridSizeX", "GridSizeY", "GridPosX", "GridPosY", "ItemList", "CreateRandomItem", "RandomItemAmount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ItemDataInfo), global::Google.Protobuf.Protocol.ItemDataInfo.Parser, new[]{ "ItemId", "ItemCode", "ItemPosX", "ItemPosY", "ItemRotate", "ItemAmount", "SearchedPlayerId" }, null, null, null, null)
           }));
     }
@@ -5966,6 +5967,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public GridDataInfo(GridDataInfo other) : this() {
+      gridId_ = other.gridId_;
       gridSizeX_ = other.gridSizeX_;
       gridSizeY_ = other.gridSizeY_;
       gridPosX_ = other.gridPosX_;
@@ -5982,8 +5984,20 @@ namespace Google.Protobuf.Protocol {
       return new GridDataInfo(this);
     }
 
+    /// <summary>Field number for the "gridId" field.</summary>
+    public const int GridIdFieldNumber = 1;
+    private int gridId_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int GridId {
+      get { return gridId_; }
+      set {
+        gridId_ = value;
+      }
+    }
+
     /// <summary>Field number for the "gridSizeX" field.</summary>
-    public const int GridSizeXFieldNumber = 1;
+    public const int GridSizeXFieldNumber = 2;
     private int gridSizeX_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -5995,7 +6009,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "gridSizeY" field.</summary>
-    public const int GridSizeYFieldNumber = 2;
+    public const int GridSizeYFieldNumber = 3;
     private int gridSizeY_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6007,7 +6021,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "gridPosX" field.</summary>
-    public const int GridPosXFieldNumber = 3;
+    public const int GridPosXFieldNumber = 4;
     private int gridPosX_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6019,7 +6033,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "gridPosY" field.</summary>
-    public const int GridPosYFieldNumber = 4;
+    public const int GridPosYFieldNumber = 5;
     private int gridPosY_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6031,9 +6045,9 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "itemList" field.</summary>
-    public const int ItemListFieldNumber = 5;
+    public const int ItemListFieldNumber = 6;
     private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.ItemDataInfo> _repeated_itemList_codec
-        = pb::FieldCodec.ForMessage(42, global::Google.Protobuf.Protocol.ItemDataInfo.Parser);
+        = pb::FieldCodec.ForMessage(50, global::Google.Protobuf.Protocol.ItemDataInfo.Parser);
     private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.ItemDataInfo> itemList_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.ItemDataInfo>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6042,7 +6056,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "createRandomItem" field.</summary>
-    public const int CreateRandomItemFieldNumber = 6;
+    public const int CreateRandomItemFieldNumber = 7;
     private bool createRandomItem_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6054,7 +6068,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "randomItemAmount" field.</summary>
-    public const int RandomItemAmountFieldNumber = 7;
+    public const int RandomItemAmountFieldNumber = 8;
     private int randomItemAmount_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6080,6 +6094,7 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (GridId != other.GridId) return false;
       if (GridSizeX != other.GridSizeX) return false;
       if (GridSizeY != other.GridSizeY) return false;
       if (GridPosX != other.GridPosX) return false;
@@ -6094,6 +6109,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (GridId != 0) hash ^= GridId.GetHashCode();
       if (GridSizeX != 0) hash ^= GridSizeX.GetHashCode();
       if (GridSizeY != 0) hash ^= GridSizeY.GetHashCode();
       if (GridPosX != 0) hash ^= GridPosX.GetHashCode();
@@ -6119,29 +6135,33 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (GridSizeX != 0) {
+      if (GridId != 0) {
         output.WriteRawTag(8);
+        output.WriteInt32(GridId);
+      }
+      if (GridSizeX != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(GridSizeX);
       }
       if (GridSizeY != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(GridSizeY);
       }
       if (GridPosX != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteInt32(GridPosX);
       }
       if (GridPosY != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteInt32(GridPosY);
       }
       itemList_.WriteTo(output, _repeated_itemList_codec);
       if (CreateRandomItem != false) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(56);
         output.WriteBool(CreateRandomItem);
       }
       if (RandomItemAmount != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(64);
         output.WriteInt32(RandomItemAmount);
       }
       if (_unknownFields != null) {
@@ -6154,29 +6174,33 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (GridSizeX != 0) {
+      if (GridId != 0) {
         output.WriteRawTag(8);
+        output.WriteInt32(GridId);
+      }
+      if (GridSizeX != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(GridSizeX);
       }
       if (GridSizeY != 0) {
-        output.WriteRawTag(16);
+        output.WriteRawTag(24);
         output.WriteInt32(GridSizeY);
       }
       if (GridPosX != 0) {
-        output.WriteRawTag(24);
+        output.WriteRawTag(32);
         output.WriteInt32(GridPosX);
       }
       if (GridPosY != 0) {
-        output.WriteRawTag(32);
+        output.WriteRawTag(40);
         output.WriteInt32(GridPosY);
       }
       itemList_.WriteTo(ref output, _repeated_itemList_codec);
       if (CreateRandomItem != false) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(56);
         output.WriteBool(CreateRandomItem);
       }
       if (RandomItemAmount != 0) {
-        output.WriteRawTag(56);
+        output.WriteRawTag(64);
         output.WriteInt32(RandomItemAmount);
       }
       if (_unknownFields != null) {
@@ -6189,6 +6213,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (GridId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridId);
+      }
       if (GridSizeX != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridSizeX);
       }
@@ -6219,6 +6246,9 @@ namespace Google.Protobuf.Protocol {
     public void MergeFrom(GridDataInfo other) {
       if (other == null) {
         return;
+      }
+      if (other.GridId != 0) {
+        GridId = other.GridId;
       }
       if (other.GridSizeX != 0) {
         GridSizeX = other.GridSizeX;
@@ -6259,30 +6289,34 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            GridSizeX = input.ReadInt32();
+            GridId = input.ReadInt32();
             break;
           }
           case 16: {
-            GridSizeY = input.ReadInt32();
+            GridSizeX = input.ReadInt32();
             break;
           }
           case 24: {
-            GridPosX = input.ReadInt32();
+            GridSizeY = input.ReadInt32();
             break;
           }
           case 32: {
+            GridPosX = input.ReadInt32();
+            break;
+          }
+          case 40: {
             GridPosY = input.ReadInt32();
             break;
           }
-          case 42: {
+          case 50: {
             itemList_.AddEntriesFrom(input, _repeated_itemList_codec);
             break;
           }
-          case 48: {
+          case 56: {
             CreateRandomItem = input.ReadBool();
             break;
           }
-          case 56: {
+          case 64: {
             RandomItemAmount = input.ReadInt32();
             break;
           }
@@ -6306,30 +6340,34 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            GridSizeX = input.ReadInt32();
+            GridId = input.ReadInt32();
             break;
           }
           case 16: {
-            GridSizeY = input.ReadInt32();
+            GridSizeX = input.ReadInt32();
             break;
           }
           case 24: {
-            GridPosX = input.ReadInt32();
+            GridSizeY = input.ReadInt32();
             break;
           }
           case 32: {
+            GridPosX = input.ReadInt32();
+            break;
+          }
+          case 40: {
             GridPosY = input.ReadInt32();
             break;
           }
-          case 42: {
+          case 50: {
             itemList_.AddEntriesFrom(ref input, _repeated_itemList_codec);
             break;
           }
-          case 48: {
+          case 56: {
             CreateRandomItem = input.ReadBool();
             break;
           }
-          case 56: {
+          case 64: {
             RandomItemAmount = input.ReadInt32();
             break;
           }

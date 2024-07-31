@@ -13,7 +13,11 @@ using System.Text;
 
 class PacketHandler
 {
-    
+    internal static void C_DeleteItemHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
+
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
     {
         Console.WriteLine("C_EnterGameHandler");
@@ -64,5 +68,10 @@ class PacketHandler
         BattleGameRoom room = clientSession.Room; //나중에 null로 바꿔도 참조가능
 
         room.Push(room.HandleMove , clientSession.MyPlayer, move);
+    }
+
+    internal static void C_MoveItemHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
     }
 }
