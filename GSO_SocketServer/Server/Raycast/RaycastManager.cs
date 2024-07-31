@@ -1,41 +1,143 @@
-Ôªøusing Collision.Shapes;
-using Server.Game;
-using System;
+using Collision.Shapes;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Linq;
-using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.Serialization;
+using Vector2 = System.Numerics.Vector2;
+using Server.Game;
+using ObjectManager = Server.Game.ObjectManager;
 
-public class RaycastManager
+namespace Server
 {
-    public static RaycastManager Instance { get; } = new();
-
-    private void Awake()
+    public class RaycastManager
     {
-        //Instance = this;
-    }
+        public static RaycastManager Instance;
+        static DDA _dda = new DDA(); //æ»ø° ∏  µ•¿Ã≈Õ ¿÷¿Ω
+        private static int _index = 0;
 
-
-    private Dictionary<int, Raycast> raycasts = new Dictionary<int, Raycast>();
-
-
-    public void Add(int key, Vector3 origin, Vector3 direction, float distance)
-    {
-        /*if (!raycasts.ContainsKey(key))
+        private void Awake()
         {
-            Raycast newRaycast = new Raycast(origin, direction, distance);
-            raycasts.Add(key, newRaycast);
+            //Physics2D.Raycast()
+            Instance = this;
+            _dda.Init();
         }
-        else
+
+        private void OnEnable()
         {
-            Debug.LogWarning($"Raycast with key {key} already exists.");
-        }*/
+            _index = 0;
+        }
+
+
+
+        public static RaycastHit2D Raycast(Vector2 StartPos, Vector2 Dir, float Length)
+        {
+
+            #region Packet
+
+            #endregion
+
+            _index++;
+
+            //Debug.Log(_index);
+
+            Ray raycast = new Ray(_index, StartPos, Dir, Length);
+            Shape[] shapes = ObjectManager.Instance.GetValue();
+
+
+            RaycastHit2D rayRes = null;
+
+            foreach (Shape shape in shapes)
+            {
+                RaycastHit2D temp = raycast.Cast(shape);
+
+                if (temp == null)
+                    continue;
+
+                if (rayRes != null)
+                {
+                    if (rayRes.distance > temp.distance)
+                    {
+                        rayRes = temp;
+                        rayRes.Id = _index;
+
+                        //hitpos = res.hitPoint;
+                    }
+                }
+                else
+                {
+                    rayRes = temp;
+                    rayRes.Id = _index;
+
+                    //hitpos = res.hitPoint;
+                }
+            }
+
+            //return rayRes;  
+
+            if (rayRes == null)
+            {
+                rayRes = new RaycastHit2D();
+
+                rayRes.hitPoint = raycast.origin + raycast.direction * Length;
+            }
+
+
+            #region DDA
+            RaycastHit2D _ddaRes = _dda.RayCast2Map(raycast.origin, rayRes.hitPoint);
+
+            if (_ddaRes == null)
+            {
+                //ddaø°º≠ ∞À√‚ æ»µ«∏È ±‚¡∏ ∞·∞˙ ∏Æ≈œ
+                return rayRes;
+            }
+            else
+            {
+                //∞À√‚Ω√ ∫Æ ¿ßƒ° ∫∏≥ª±‚
+                return _ddaRes;
+            }
+            #endregion
+
+        }
+
+        //Vector2 hitpos;
+
+        private void Update()
+        {
+            //hitpos = Vector2.Zero;
+
+
+        }
+
+
+        void OnDrawGizmos()
+        {
+            // Gizmos ªˆªÛ¿ª ∫”¿∫ªˆ¿∏∑Œ º≥¡§
+            //Gizmos.color = Color.red;
+
+            // ¡ˆ¡§µ» ¿ßƒ°ø° ±∏√º∏¶ ±◊∏Æ±‚
+            //Gizmos.DrawSphere(new Vector3(hitpos.X, hitpos.Y), 1f);
+        }
+
     }
 
-    public void Add(int key, Raycast raycast)
+
+
+    /*
+        private Dictionary<int, Raycast> raycasts = new Dictionary<int, Raycast>();
+
+
+        public void Add(int key, Vector3 origin, Vector3 direction, float distance)
+        {
+            if (!raycasts.ContainsKey(key))
+            {
+                Raycast newRaycast = new Raycast(origin, direction, distance);
+                raycasts.Add(key, newRaycast);
+            }
+            else
+            {
+                Debug.LogWarning($"Raycast with key {key} already exists.");
+            }
+        }
+
+        public void Add(int key, Raycast raycast)
     {
         if (!raycasts.ContainsKey(key))
         {
@@ -43,7 +145,7 @@ public class RaycastManager
         }
         else
         {
-            Console.WriteLine($"Raycast with key {key} already exists.");
+            Debug.LogWarning($"Raycast with key {key} already exists.");
         }
     }
 
@@ -57,11 +159,11 @@ public class RaycastManager
         }
         else
         {
-            Console.WriteLine($"Raycast with key {key} does not exist.");
+            Debug.LogWarning($"Raycast with key {key} does not exist.");
         }
     }
 
-    // ÌäπÏ†ï Raycast Í∞ÄÏ†∏Ïò§Îäî Î©îÏÑúÎìú
+    // ∆Ø¡§ Raycast ∞°¡Æø¿¥¬ ∏ﬁº≠µÂ
     public Raycast GetRaycast(int key)
     {
         if (raycasts.TryGetValue(key, out Raycast raycast))
@@ -70,53 +172,9 @@ public class RaycastManager
         }
         else
         {
-            Console.WriteLine($"Raycast with key {key} does not exist.");
+            Debug.LogWarning($"Raycast with key {key} does not exist.");
             return null;
         }
     }
-
-    Vector2 hitpos;
-
-    private void Update()
-    {
-        hitpos = Vector2.Zero;
-        Shape[] shapes = ObjectManager.Instance.GetValue();
-
-        foreach (Raycast raycast in raycasts.Values)
-        {
-            RaycastHit2D res = null;
-
-            foreach (Shape shape in shapes)
-            {
-                RaycastHit2D temp = raycast.Cast(shape);
-
-                if (temp == null)
-                    continue;
-
-                if (res != null)
-                {
-                    if (res.distance > temp.distance)
-                    {
-                        res = temp;
-                        hitpos = res.hitPoint;
-
-                    }
-                }
-                else
-                {
-                    res = temp;
-                    hitpos = res.hitPoint;
-                }
-
-
-
-
-            }
-        }
-
-    }
-
-
-    
-
+    */
 }

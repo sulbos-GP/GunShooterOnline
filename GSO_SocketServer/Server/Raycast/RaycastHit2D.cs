@@ -1,17 +1,15 @@
-﻿using Collision.Shapes;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Collision.Shapes;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using Vector2 = System.Numerics.Vector2;
+
 
 
 public class RaycastHit2D
 {
+    public int Id;
     public Shape Collider;
     //public GameObject hitObj;
     public float distance;
     //public Vector2 normal;
-    public Vector2 hitPoint;
+    public Vector2? hitPoint;
 }

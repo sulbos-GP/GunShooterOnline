@@ -84,7 +84,7 @@ namespace ServerCore
                 return;
             }
 
-            if (mPeer.ConnectionState.Equals(ConnectionState.Disconnected))
+            if (mPeer ==null || mPeer.ConnectionState.Equals(ConnectionState.Disconnected))
             {
                 return;
             }

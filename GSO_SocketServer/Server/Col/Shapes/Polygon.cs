@@ -12,7 +12,11 @@ namespace Collision.Shapes
 
             set {
                 _vertices = value;
-                name = "polygon(sides:" + _vertices.Count + ")";
+                
+                if(vertices != null)
+                {
+                    name = "polygon(sides:" + _vertices.Count + ")";
+                }
             }
         }
         private IList<Vector> _vertices { get; set; }

@@ -1,9 +1,3 @@
-ï»¿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Collision.Shapes;
 using System;
 using System.Collections;
@@ -13,14 +7,17 @@ using System.Numerics;
 using Vector2 = System.Numerics.Vector2;
 
 
-public class Raycast
+public class Ray
 {
-    Vector2 origin;
-    Vector2 direction;
-    float distance; //todo ì„¤ì •í•˜ê¸°
+    public int id;
+    public Vector2 origin;
+    public Vector2 direction;
+    public float distance; //todo ¼³Á¤ÇÏ±â
 
-    public Raycast(Vector2 origin, Vector2 direction, float distance)
+
+    public Ray(int id, Vector2 origin, Vector2 direction, float distance)
     {
+        this.id = id;
         this.origin = origin;
         this.direction = Vector2.Normalize(direction);
         this.distance = distance;
@@ -32,7 +29,7 @@ public class Raycast
         this.direction = Vector2.Normalize(direction);
     }
 
-
+    
 
 
     public RaycastHit2D Cast(Shape shape)
@@ -73,7 +70,7 @@ public class Raycast
     public RaycastHit2D Cast2CArcPoly(Shape shape)
     {
 
-        /*ArcPoly arc = (ArcPoly)shape;
+        ArcPoly arc = (ArcPoly)shape;
 
         Vector2 s = new Vector2(origin.X - arc.position.x, origin.Y - arc.position.y);
         float b = Vector2.Dot(s, direction);
@@ -92,17 +89,17 @@ public class Raycast
         //far pos : t = -b + h;
 
         Vector2 pos = origin + Math.Max((float)t, 0) * direction;
-        //ìš”ê¸°ê¹Œì§€ê°€ ì› ì•ˆì— ìž‡ìœ¼ë©´
+        //¿ä±â±îÁö°¡ ¿ø ¾È¿¡ ÀÕÀ¸¸é
 
+        
 
-
-        Vector2 center = new Vector2(pos.X - arc.position.x, pos.Y - arc.position.y);
+        Vector2 center =  new Vector2( pos.X - arc.position.x, pos.Y - arc.position.y );
 
         Vector2 left = new Vector2(arc.transformedVertices[1].x - arc.position.x, arc.transformedVertices[1].y - arc.position.y);
         Vector2 right = new Vector2(arc.transformedVertices[arc.transformedVertices.Count - 1].x - arc.position.x, arc.transformedVertices[arc.transformedVertices.Count - 1].y - arc.position.y);
 
 
-        if (Vector2.Dot(left, center) > 0 && Vector2.Dot(center, right) > 0)
+        if(Vector2.Dot(left, center) > 0 && Vector2.Dot(center, right) > 0)
         {
             RaycastHit2D hit = new RaycastHit2D();
 
@@ -143,10 +140,9 @@ public class Raycast
             hit.hitPoint = (Vector2)pos;
 
             return hit;
-        }*/
+        }
 
-        return null;
-
+        
     }
 
 
@@ -162,7 +158,7 @@ public class Raycast
 
         Vector2 s = new Vector2(origin.X - circle.position.x, origin.Y - circle.position.y);
         float b = Vector2.Dot(s, direction);
-        float c = Vector2.Dot(s, s) - circle.radius * circle.radius;
+        float c = Vector2.Dot(s, s) -  circle.radius * circle.radius;
 
         double h = b * b - c;
         if (h < 0.0f)
@@ -218,7 +214,7 @@ public class Raycast
 
         if (closestPos != null)
         {
-            // ì¶©ëŒ ìœ„ì¹˜ ì²˜ë¦¬
+            // Ãæµ¹ À§Ä¡ Ã³¸®
             hit = new RaycastHit2D();
 
             hit.Collider = shape;
