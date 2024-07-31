@@ -201,13 +201,6 @@ internal class PacketHandler
         //item.curGrid.CleanItemSlot(item)으로 해당 그리드의 아이템 슬롯에서 해당 아이템 제거
         deleteItemGrid.CleanItemSlot(deleteItem);
 
-        //현재 하이라키에 해당 아이디의 게임 오브젝트가 있다면 Destroy(item.gameObject)로 해당 아이템의 프리팹 제거.
-        /*if (deleteItem.gameObject != null)
-        {
-            //이게 필요한가?
-            deleteItem.DestroyItem();
-        }*/
-
         Managers.Object.RemoveItem(packet.ItemId);
 
     }

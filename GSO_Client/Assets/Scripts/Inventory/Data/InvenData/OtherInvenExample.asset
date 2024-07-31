@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3d532c9f827bc843b795dd3f9f89456, type: 3}
+  m_Script: {fileID: 11500000, guid: 94cf351f5f005744e9e70da66cb90a3f, type: 3}
   m_Name: OtherInvenExample
   m_EditorClassIdentifier: 
+  inventoryId: 1
   limitWeight: 20
   gridList:
-  - {fileID: 11400000, guid: 52a561d24467c9b438070b1159e8fdc9, type: 2}
+  - {fileID: 11400000, guid: 345cda3871f9f8b429b5068b7318d17b, type: 2}

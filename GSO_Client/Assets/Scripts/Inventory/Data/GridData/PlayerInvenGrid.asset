@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c51dd9f63b13634e9a2f7f88bbbab94, type: 3}
+  m_Script: {fileID: 11500000, guid: cdcab0aae7dbe8143838a59a29d4e6bf, type: 3}
   m_Name: PlayerInvenGrid
   m_EditorClassIdentifier: 
-  gridSize: {x: 6, y: 6}
-  gridPos: {x: 0, y: 0}
-  itemList:
-  - {fileID: 11400000, guid: 92d09948365c26f4bb4c31f8b3bc5500, type: 2}
+  gridId: 0
+  gridSize: {x: 6, y: 7}
+  itemList: []
   createRandomItem: 0
   randomItemAmount: 0
