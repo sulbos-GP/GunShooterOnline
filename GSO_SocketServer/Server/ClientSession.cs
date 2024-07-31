@@ -79,7 +79,7 @@ namespace Server
 
         public override void OnRecvPacket(ArraySegment<byte> buffer, byte channelNumber)
         {
-            Console.WriteLine($"OnRecvPacket  buffer: {buffer} ,channelNumber {channelNumber} ");
+            //Console.WriteLine($"OnRecvPacket  buffer: {buffer} ,channelNumber {channelNumber} ");
 
             PacketManager.Instance.OnRecvPacket(this, buffer);
         }

@@ -172,6 +172,8 @@ public class InputController : MonoBehaviour
 
     private void UpdateServer()
     {
+
+        Debug.Log("UpdateServer");
         if (lastPos == null || Vector3.Distance(lastPos, transform.position)>0.05f)
         {
             lastPos = transform.position;

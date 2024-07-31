@@ -12,7 +12,7 @@ using static System.Net.Mime.MediaTypeNames;
 namespace Server
 {
 
-    internal class tempLoadMap
+    internal class LoadMap
     {
 
 
@@ -22,7 +22,7 @@ namespace Server
 
 
 
-        public void LoadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
+        public void loadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
         {
 
             var Distance = 22;

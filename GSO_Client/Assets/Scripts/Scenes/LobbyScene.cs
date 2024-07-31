@@ -54,6 +54,6 @@ public class LobbyScene : BaseScene
 
     public void GamePlay()
     {
-        Managers.Scene.LoadScene(Define.Scene.Game);
+        Managers.Scene.LoadScene(Define.Scene.FieldOfViewTest);
     }
 }

@@ -23,6 +23,7 @@ namespace Server
 
             //검사--------------------
 
+            Console.WriteLine("HandleMove" + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
 
             var movePosInfo = packet.PositionInfo; //C요청
 
