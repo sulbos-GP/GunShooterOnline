@@ -142,7 +142,9 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("MONSTER")] Monster = 2,
     [pbr::OriginalName("PROJECTILE")] Projectile = 3,
     [pbr::OriginalName("ITEM")] Item = 4,
-  }
+    [pbr::OriginalName("InvenData")] InvenData = 5, //인벤 데이터
+    [pbr::OriginalName("Box")] Box = 6, //인벤토리를 가지는 객체
+    }
 
   #endregion
 

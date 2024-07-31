@@ -110,11 +110,11 @@ public partial class InventoryController : MonoBehaviour
 
     /*
     //인벤토리 드래그 관련
-    [SerializeField] private Inventory selectedInven; //드래그할 인벤토리
+    [SerializeField] private InvenData selectedInven; //드래그할 인벤토리
     public bool isInvenSelected; //드래그할 인벤이 선택됨
     public bool isDragging;
     public RectTransform draggedInvenRect;
-    public Inventory SelectedInven
+    public InvenData SelectedInven
     {
         get => selectedInven;
         set

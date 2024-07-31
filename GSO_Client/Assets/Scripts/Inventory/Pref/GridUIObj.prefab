@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4260000714788938102}
   - component: {fileID: 6978129206973195425}
   - component: {fileID: 3448406649467271630}
-  - component: {fileID: 4514314190353503758}
-  - component: {fileID: 8742368032706646125}
+  - component: {fileID: 1091051800505275237}
+  - component: {fileID: 3509726442526363923}
   m_Layer: 5
   m_Name: GridUIObj
   m_TagString: Untagged
@@ -77,7 +77,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4514314190353503758
+--- !u!114 &1091051800505275237
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -86,7 +86,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 109246022809251751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f443e2f067e058948865c0622ea8d470, type: 3}
+  m_Script: {fileID: 11500000, guid: 1176033fa14b7c3489c4b8ab0f91b984, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   gridData: {fileID: 0}
@@ -94,8 +94,8 @@ MonoBehaviour:
   invenScr: {fileID: 0}
   gridWeight: 0
   backupWeight: 0
-  itemPref: {fileID: 7700662711098545541, guid: 95277de10a78c0f459b6e07d826fb6d4, type: 3}
---- !u!114 &8742368032706646125
+  itemPref: {fileID: 7700662711098545541, guid: 77d0ce21f175ecd4aaf7b2c4ef2f0281, type: 3}
+--- !u!114 &3509726442526363923
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -104,6 +104,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 109246022809251751}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: db931010219965949a3622e57be6c217, type: 3}
+  m_Script: {fileID: 11500000, guid: 1d79583ff4584ac4a8cc5f4ee307aeae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

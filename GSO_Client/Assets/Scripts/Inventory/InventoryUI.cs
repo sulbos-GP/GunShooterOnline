@@ -9,6 +9,11 @@ public class InventoryUI : MonoBehaviour
      */
     public bool isActive = false;
 
+    private void Awake()
+    {
+        isActive = gameObject.activeSelf;
+    }
+
     public void invenUIControl()
     {
         isActive = !isActive;

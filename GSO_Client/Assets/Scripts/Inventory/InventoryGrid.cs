@@ -307,7 +307,7 @@ public class InventoryGrid : MonoBehaviour
     }
 
     /// <summary>
-    /// 배열에 아이템 저장
+    /// 배열에 아이템 저장 및 해당 아이템 UI 객체 이동
     /// </summary>
     public void PlaceItem(ItemObject item, int posX, int posY)
     {
@@ -327,7 +327,7 @@ public class InventoryGrid : MonoBehaviour
     }
 
     /// <summary>
-    /// 아이템 월드상의 좌표 이동
+    /// 아이템의 렉트를 해당위치로 이동
     /// </summary>
     public void PlaceSprite(ItemObject inventoryItem, int posX, int posY, RectTransform itemRect)
     {
