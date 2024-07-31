@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6978129206973195425}
   - component: {fileID: 3448406649467271630}
   - component: {fileID: 4514314190353503758}
-  - component: {fileID: 5537044339576628193}
+  - component: {fileID: 8742368032706646125}
   m_Layer: 5
   m_Name: GridUIObj
   m_TagString: Untagged
@@ -95,7 +95,7 @@ MonoBehaviour:
   gridWeight: 0
   backupWeight: 0
   itemPref: {fileID: 7700662711098545541, guid: 95277de10a78c0f459b6e07d826fb6d4, type: 3}
---- !u!114 &5537044339576628193
+--- !u!114 &8742368032706646125
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -113,6 +113,21 @@ internal class PacketHandler
 
     }
 
+    internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal static void S_MoveItemHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
+
+    internal static void S_DeleteItemHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
+
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
