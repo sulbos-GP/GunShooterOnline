@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3d532c9f827bc843b795dd3f9f89456, type: 3}
+  m_Name: floatingBagExample
+  m_EditorClassIdentifier: 
+  isFloatInven: 1
+  invenWeightLimit: 30
+  grids:
+  - {fileID: 11400000, guid: f4cad47f34fda014f9c72a03f994aa3d, type: 2}
+  - {fileID: 11400000, guid: f322188bfc1510c4bae70d0b6fcbc1ae, type: 2}
+  - {fileID: 11400000, guid: b32f05dab2634f142a41cf0ef3b0d06e, type: 2}
+  - {fileID: 11400000, guid: b443eca4bc5b34047b5fd764fc52152c, type: 2}

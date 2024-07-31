@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c51dd9f63b13634e9a2f7f88bbbab94, type: 3}
+  m_Name: PlayerInvenGrid
+  m_EditorClassIdentifier: 
+  gridSize: {x: 6, y: 6}
+  gridPos: {x: 0, y: 0}
+  itemList:
+  - {fileID: 11400000, guid: 92d09948365c26f4bb4c31f8b3bc5500, type: 2}
+  createRandomItem: 0
+  randomItemAmount: 0
