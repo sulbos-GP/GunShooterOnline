@@ -155,7 +155,7 @@ public partial class MyPlayerController : PlayerController
             var inputMovement = context.ReadValue<Vector2>().normalized;
             Dir = new Vector2(inputMovement.x, inputMovement.y);
 
-            State = CreatureState.Moving;
+            //State = CreatureState.Moving;
 
             if (Dir == Vector2.zero)
                 Dir = _joystick.GetDir();
@@ -167,7 +167,7 @@ public partial class MyPlayerController : PlayerController
     {
         Dir = Vector2.zero;
 
-        State = CreatureState.Idle;
+        //State = CreatureState.Idle;
     }
 
     public void UseSkill_Requst(int number, int[] targets = null, Vector2? dir = null)
@@ -191,7 +191,7 @@ public partial class MyPlayerController : PlayerController
     }
 
 
-    protected override void UpdateController()
+    /*protected override void UpdateController()
     {
         GetUIKeyInput();
 
@@ -223,7 +223,7 @@ public partial class MyPlayerController : PlayerController
             GetComponent<SpriteRenderer>().flipX = false;
 
         base.UpdateController();
-    }
+    }*/
 
 
     private void OnAttack(InputValue value)
@@ -271,7 +271,7 @@ public partial class MyPlayerController : PlayerController
         // 이동 상태로 갈지 확인
         if (Dir == Vector2.zero)
         {
-            State = CreatureState.Moving;
+            //State = CreatureState.Moving;
         }
     }
 
@@ -294,7 +294,7 @@ public partial class MyPlayerController : PlayerController
             if (_rig2d.velocity.magnitude < 0.1f)
                 _rig2d.velocity = Vector2.zero;
 
-            State = CreatureState.Idle;
+            //State = CreatureState.Idle;
 
             return;
         }
@@ -350,8 +350,8 @@ public partial class MyPlayerController : PlayerController
         foreach (var creature in _attackableList)
         {
             var _no = 0; //초기화
-            if (State == CreatureState.Dead)
-                return Vector2.zero;
+            /*if (State == CreatureState.Dead)
+                return Vector2.zero;*/
 
             Vector2 distance = creature.transform.position - transform.position;
             var direction = distance.normalized;

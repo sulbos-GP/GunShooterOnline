@@ -14,7 +14,7 @@ public class SkillManager
     public static SkillManager Instance { get { return _instance; } }
     #endregion
 
-    public SkillManager()
+    /*public SkillManager()
     {
         Register();
     }
@@ -50,6 +50,6 @@ public class SkillManager
         if (_handler.TryGetValue(packet.Info.SkillId, out action))
             action.Invoke(cc);
 
-    }
+    }*/
 }
 

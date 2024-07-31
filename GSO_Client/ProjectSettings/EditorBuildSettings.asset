@@ -17,5 +17,8 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Gwanho/LobbyScene.unity
     guid: d4549d549b8179b42a49b449bab4a8e6
+  - enabled: 1
+    path: Assets/Scenes/FieldOfViewTest.unity
+    guid: ab10ec30c1ee61b4d98ffcfa5ae1769b
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 6ae272c81aa1d45999670f9634ff8736, type: 2}

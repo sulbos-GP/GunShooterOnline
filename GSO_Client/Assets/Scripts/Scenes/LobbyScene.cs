@@ -37,7 +37,7 @@ public class LobbyScene : BaseScene
     //    }
     //}
 
-    public void DataUpdate(S_LobbyPlayerInfo lobbyPlayerInfo)
+    /*public void DataUpdate(S_LobbyPlayerInfo lobbyPlayerInfo)
     {
         var profileTexts = Profile.GetComponentsInChildren<TextMeshProUGUI>();
         profileTexts.First(t => t.name == "PlayerName").text = lobbyPlayerInfo.Profile.Name; //PlayerName
@@ -50,7 +50,7 @@ public class LobbyScene : BaseScene
         for (var i = 0; i < temp.Count; i++) coinTexts[i].text = temp[i].ToString();
 
         Debug.Log(lobbyPlayerInfo.Profile.CharacterID);
-    }
+    }*/
 
     public void GamePlay()
     {

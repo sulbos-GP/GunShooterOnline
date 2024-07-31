@@ -35,7 +35,7 @@ public class ObjectManager
                 MyPlayer = go.GetComponent<MyPlayerController>();
                 MyPlayer.Id = info.ObjectId;
                 MyPlayer.PosInfo = info.PositionInfo;
-                MyPlayer.Stat.MergeFrom(info.StatInfo);
+                //MyPlayer.Stat.MergeFrom(info.StatInfo);
                 MyPlayer.SyncPos();
             }
             else
@@ -47,7 +47,7 @@ public class ObjectManager
                 var pc = go.GetComponent<PlayerController>();
                 pc.Id = info.ObjectId;
                 pc.PosInfo = info.PositionInfo;
-                pc.Stat = info.StatInfo;
+                //pc.Stat = info.StatInfo;
                 pc.SyncPos();
 
                 foreach (Transform t in Managers.Map.CurrentMap.transform)
@@ -73,7 +73,7 @@ public class ObjectManager
             //mc.PlanetSide = info.PositionInfo.Side;
             mc.Id = info.ObjectId;
             mc.PosInfo = info.PositionInfo;
-            mc.Stat = info.StatInfo;
+            //mc.Stat = info.StatInfo;
             mc.SyncPos();
 
             Debug.Log("다시소환");
@@ -101,7 +101,7 @@ public class ObjectManager
             ac.Id = info.ObjectId;
             ac.OwnerId = info.OwnerId;
             ac.PosInfo = info.PositionInfo;
-            ac.Stat = info.StatInfo;
+            //ac.Stat = info.StatInfo;
             ac.SyncPos(false);
             if (info.SkillId != 0)
                 ac.SkillId = info.SkillId;
