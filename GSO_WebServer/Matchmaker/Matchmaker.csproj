@@ -20,4 +20,8 @@
     <ProjectReference Include="..\GSO_WebServerLibrary\GSO_WebServerLibrary.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DTO\GameServerManager\" />
+  </ItemGroup>
+
 </Project>

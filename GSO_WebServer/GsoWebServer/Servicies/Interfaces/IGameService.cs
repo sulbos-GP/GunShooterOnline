@@ -1,7 +1,5 @@
-﻿using GSO_WebServerLibrary;
-using GsoWebServer.Models.GameDB;
-using System.Data;
-using static Google.Apis.Requests.RequestError;
+﻿using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Models.GameDB;
 
 namespace GsoWebServer.Servicies.Interfaces
 {

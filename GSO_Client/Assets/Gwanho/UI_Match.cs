@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Http;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,21 +31,6 @@ public class UI_Match : MonoBehaviour
         mMatchTimeText.transform.parent.gameObject.SetActive(false);
     }
 
-    void Start()
-    {
-        //임시
-        //나중에 로비에 입장할떄마다 연결 할 수 있도록
-
-
-    }
-
-    private void OnDestroy()
-    {
-        //임시
-        //로비에 나갈때마다 나가지게 할 수 있도록 해야함
-
-    }
-
     /// <summary>
     /// 매칭 버튼 클릭시
     /// </summary>
@@ -71,17 +58,26 @@ public class UI_Match : MonoBehaviour
     /// </summary>
     private void OnMatchJoin()
     {
-        SystemLogManager.Instance.LogMessage("매칭 참여 요청...");
-        mIsProcessMatch = true;
-
-        var packet = new MatchmakerJoinReq
+        try
         {
+            SystemLogManager.Instance.LogMessage("매칭 참여 요청...");
+            mIsProcessMatch = true;
 
-        };
+            var packet = new MatchmakerJoinReq
+            {
+                world = "Forest",
+                region = "asia"
+            };
 
-        MatchmakerService service = new MatchmakerService();
-        MatchJoinRequest request = service.mMatchmakerResource.GetMatchJoinRequest(packet);
-        request.ExecuteAsync(OnProcessMatchJoin);
+            MatchmakerService service = new MatchmakerService();
+            MatchJoinRequest request = service.mMatchmakerResource.GetMatchJoinRequest(packet);
+            request.ExecuteAsync(OnProcessMatchJoin);
+        }
+        catch (HttpRequestException error)
+        {
+            SystemLogManager.Instance.LogMessage($"매칭 참여 실패 : {error}");
+        }
+
     }
 
     /// <summary>
@@ -111,17 +107,24 @@ public class UI_Match : MonoBehaviour
     /// </summary>
     private void OnMatchCancle()
     {
-        SystemLogManager.Instance.LogMessage("매칭 취소 요청...");
-        mIsProcessMatch = true;
-
-        var packet = new MatchmakerCancleReq
+        try
         {
+            SystemLogManager.Instance.LogMessage("매칭 취소 요청...");
+            mIsProcessMatch = true;
 
-        };
+            var packet = new MatchmakerCancleReq
+            {
 
-        MatchmakerService service = new MatchmakerService();
-        MatchCancleRequest request = service.mMatchmakerResource.GetMatchCancleRequest(packet);
-        request.ExecuteAsync(OnProcessMatchCancle);
+            };
+
+            MatchmakerService service = new MatchmakerService();
+            MatchCancleRequest request = service.mMatchmakerResource.GetMatchCancleRequest(packet);
+            request.ExecuteAsync(OnProcessMatchCancle);
+        }
+        catch (HttpRequestException error)
+        {
+            SystemLogManager.Instance.LogMessage($"매칭 취소 실패 : {error}");
+        }
     }
 
     /// <summary>

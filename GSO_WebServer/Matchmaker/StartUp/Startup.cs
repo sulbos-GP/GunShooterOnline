@@ -1,4 +1,6 @@
 ﻿using GSO_WebServerLibrary.Config;
+using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
+using GSO_WebServerLibrary.Reposiotry.Interfaces;
 using Matchmaker.Hubs;
 using Matchmaker.Repository;
 using Matchmaker.Repository.Interface;
@@ -28,7 +30,7 @@ namespace Matchmaker.Startup
 
             services.AddHttpClient("GameServerManager", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:6900");
+                httpclient.BaseAddress = new Uri("http://localhost:7000");
             });
 
             services.AddControllers().AddJsonOptions(options =>
@@ -45,7 +47,7 @@ namespace Matchmaker.Startup
 
             // Add services to the container.
             //services.AddTransient<IMasterDB, MasterDB>();
-            //services.AddTransient<IGameDB, GameDB>();
+            services.AddTransient<IGameDB, GameDB>();
             
             //services.AddTransient<IGoogleService, GoogleService>();
             //services.AddTransient<IAuthenticationService, AuthenticationService>();

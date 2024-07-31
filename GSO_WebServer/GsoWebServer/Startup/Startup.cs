@@ -1,13 +1,17 @@
-﻿using GsoWebServer.Models.Config;
-using GsoWebServer.Reposiotry.Interfaces;
-using GsoWebServer.Reposiotry.RDB.Master;
-using GsoWebServer.Reposiotry.RDB.Game;
+﻿using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using GSO_WebServerLibrary.Reposiotry.Define.MasterDB;
+using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
+using GSO_WebServerLibrary.Reposiotry.Define.MemoryDB;
+
+using GSO_WebServerLibrary.Servicies.Google;
+using GSO_WebServerLibrary.Servicies.Interfaces;
+
+using GSO_WebServerLibrary.Config;
+
 using GsoWebServer.Servicies.Interfaces;
-using GsoWebServer.Servicies.Google;
 using GsoWebServer.Servicies.Authentication;
 using GsoWebServer.Servicies.DataLoad;
 using GsoWebServer.Servicies.Game;
-using GsoWebServer.Reposiotry.NoSQL;
 using System;
 
 namespace GsoWebServer.Startup
@@ -24,16 +28,6 @@ namespace GsoWebServer.Startup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add services to the http client
-            services.AddHttpClient("GSO_Matchmaking", httpclient =>
-            {
-                httpclient.BaseAddress = new Uri("http://localhost:5200");
-            });
-
-            services.AddHttpClient("GSO_GameSession", httpclient =>
-            {
-                httpclient.BaseAddress = new Uri("http://localhost:6900");
-            });
 
             services.AddControllers().AddJsonOptions(options =>
             {
@@ -42,7 +36,7 @@ namespace GsoWebServer.Startup
             });
 
             // Add services to the config
-            services.Configure<DbConfig>(Configuration.GetSection(nameof(DbConfig)));
+            services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(DatabaseConfig)));
             services.Configure<GoogleConfig>(Configuration.GetSection(nameof(GoogleConfig)));
 
             // Add services to the container.

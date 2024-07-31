@@ -2,12 +2,11 @@
 using Google.Apis.Games.v1.Data;
 using Google.Apis.Games.v1;
 using Google.Apis.Services;
-using GSO_WebServerLibrary;
-using GsoWebServer.Reposiotry.Interfaces;
+using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using GSO_WebServerLibrary.Servicies.Interfaces;
 using GsoWebServer.Servicies.Interfaces;
-using Microsoft.Extensions.Options;
 using Google.Apis.Auth.OAuth2.Responses;
-using static Google.Apis.Requests.RequestError;
+using GSO_WebServerLibrary.Error;
 
 namespace GsoWebServer.Servicies.Authentication
 {

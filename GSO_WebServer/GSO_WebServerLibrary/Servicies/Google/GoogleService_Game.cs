@@ -2,9 +2,8 @@
 using Google.Apis.Games.v1.Data;
 using Google.Apis.Games.v1;
 using Google.Apis.Services;
-using GSO_WebServerLibrary;
-using GSO_WebServerLibrary.Servicies.Google.Interface;
-using GSO_WebServerLibrary.Config;
+using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Servicies.Interfaces;
 
 namespace GSO_WebServerLibrary.Servicies.Google
 {

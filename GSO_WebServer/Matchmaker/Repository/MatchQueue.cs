@@ -2,9 +2,11 @@
 using CloudStructures;
 using CloudStructures.Structures;
 using Microsoft.Extensions.Options;
-using GSO_WebServerLibrary;
 using Matchmaker.Repository.Interface;
 using GSO_WebServerLibrary.Config;
+using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Utils;
+using StackExchange.Redis;
 
 namespace Matchmaker.Repository
 {
@@ -34,7 +36,7 @@ namespace Matchmaker.Repository
 
             string key = KeyUtils.MakeKey(KeyUtils.EKey.MATCH, uid);
 
-            var reuslt = await mMatchRating.AddAsync(key, rating, null, StackExchange.Redis.When.NotExists);
+            var reuslt = await mMatchRating.AddAsync(key, rating, null, When.NotExists);
             if (reuslt == false)
             {
                 return WebErrorCode.TEMP_ERROR;
@@ -76,7 +78,7 @@ namespace Matchmaker.Repository
                 client_id = clientId,
             };
 
-            bool reuslt = await mMatchTickets.SetAsync(key, ticket, null, StackExchange.Redis.When.NotExists);
+            bool reuslt = await mMatchTickets.SetAsync(key, ticket);
             if (reuslt == false)
             {
                 return WebErrorCode.TEMP_ERROR;
@@ -126,7 +128,7 @@ namespace Matchmaker.Repository
         public async Task<bool> UpdateTicket(Int32 uid, TicketInfo ticket)
         {
             string key = KeyUtils.MakeKey(KeyUtils.EKey.MATCH, uid);
-            return await mMatchTickets.SetAsync(key, ticket, null);
+            return await mMatchTickets.SetAsync(key, ticket);
         }
 
     }

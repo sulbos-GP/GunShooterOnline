@@ -1,5 +1,5 @@
 ﻿using CloudStructures.Structures;
-using GSO_WebServerLibrary;
+using GSO_WebServerLibrary.Error;
 using Matchmaker.Models;
 
 namespace Matchmaker.Repository.Interface

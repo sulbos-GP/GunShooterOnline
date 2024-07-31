@@ -88,8 +88,11 @@ public class SystemLogManager : MonoBehaviour
 
     private void UpdateLogDisplay()
     {
-        mSystemLogText.text = string.Join("\n", mSystemLogMessages.ToArray());
-        mSystemLogScrollView.verticalNormalizedPosition = 0.0f;
+        if(mSystemLogScrollView != null)
+        {
+            mSystemLogText.text = string.Join("\n", mSystemLogMessages.ToArray());
+            mSystemLogScrollView.verticalNormalizedPosition = 0.0f;
+        }
     }
 
     private void OnToggleSystemLog()

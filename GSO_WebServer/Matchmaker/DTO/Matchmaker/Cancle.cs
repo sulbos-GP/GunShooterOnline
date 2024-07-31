@@ -1,4 +1,5 @@
 ﻿using GSO_WebServerLibrary;
+using GSO_WebServerLibrary.DTO;
 
 namespace Matchmaker.DTO.Matchmaker
 {

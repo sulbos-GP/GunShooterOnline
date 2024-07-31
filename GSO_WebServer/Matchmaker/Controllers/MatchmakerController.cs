@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Matchmaker.Models;
-using GSO_WebServerLibrary;
 using Matchmaker.Service.Interfaces;
 using Matchmaker.DTO;
 using Matchmaker.DTO.Matchmaker;
+using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Utils;
+using GSO_WebServerLibrary.DTO;
 
 namespace Matchmaker.Controllers
 {
@@ -35,7 +37,7 @@ namespace Matchmaker.Controllers
                 return response;
             }
 
-            var error = await mMatchmakerService.AddMatchQueue(header.uid, 0, request.world, request.region);
+            var error = await mMatchmakerService.AddMatchQueue(header.uid, request.world, request.region);
             if(error != WebErrorCode.None)
             {
                 response.error_code = error;

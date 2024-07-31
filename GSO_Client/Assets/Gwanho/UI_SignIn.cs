@@ -5,6 +5,8 @@ using TMPro;
 using static AuthorizeResource;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System;
+using System.Net.Http;
 
 public class SignInUI : MonoBehaviour
 {
@@ -74,9 +76,20 @@ public class SignInUI : MonoBehaviour
                 service = "Google"
             };
 
-            GsoWebService service = new GsoWebService();
-            AuthenticationRequest request = service.mAuthorizeResource.GetAuthenticationRequest(packet);
-            request.ExecuteAsync(OnProcessAuthentication);
+            try
+            {
+
+                ResultMessage("유저 확인 요청...");
+
+                GsoWebService service = new GsoWebService();
+                AuthenticationRequest request = service.mAuthorizeResource.GetAuthenticationRequest(packet);
+                request.ExecuteAsync(OnProcessAuthentication);
+            }
+            catch (HttpRequestException error)
+            {
+                ResultMessage($"유저 확인 실패 : {error}");
+            }
+
         }
         else if (status == SignInStatus.InternalError)
         {
@@ -87,7 +100,6 @@ public class SignInUI : MonoBehaviour
         else if (status == SignInStatus.Canceled)
         {
             //모바일로 실행을 안할 경우
-            //TODO : PC에서 무시하고 진행할 수 있도록
             ResultMessage("인증이 취소 되었습니다.");
             SetActiveLoading(false);
         }
@@ -122,18 +134,26 @@ public class SignInUI : MonoBehaviour
             return;
         }
 
-        ResultMessage("로그인 요청 시도...");
-
-        SignInReq packet = new SignInReq()
+        try
         {
-            user_id = PlayGamesPlatform.Instance.GetUserId(),
-            server_code = code,
-            service = "Google"
-        };
+            ResultMessage("로그인 요청 시도...");
 
-        GsoWebService service = new GsoWebService();
-        SingInRequest request = service.mAuthorizeResource.GetSignInRequest(packet);
-        request.ExecuteAsync(ProcessAccessToken);
+            SignInReq packet = new SignInReq()
+            {
+                user_id = PlayGamesPlatform.Instance.GetUserId(),
+                server_code = code,
+                service = "Google"
+            };
+
+            GsoWebService service = new GsoWebService();
+            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(packet);
+            request.ExecuteAsync(ProcessAccessToken);
+        }
+        catch (HttpRequestException error)
+        {
+            ResultMessage($"르그인 요청 실패 : {error}");
+        }
+
     }
 
     /// <summary>

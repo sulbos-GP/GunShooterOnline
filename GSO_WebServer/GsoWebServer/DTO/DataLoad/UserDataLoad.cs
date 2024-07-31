@@ -1,4 +1,5 @@
-﻿using GsoWebServer.Models.GameDB;
+﻿using GSO_WebServerLibrary.Models.GameDB;
+using GSO_WebServerLibrary.DTO;
 
 namespace GsoWebServer.DTO.DataLoad
 {

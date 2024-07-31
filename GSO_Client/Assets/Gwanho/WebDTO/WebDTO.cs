@@ -90,6 +90,8 @@ public class SetNicknameRes : ErrorCodeDTO
 ///////////////////////////////////
 public class MatchmakerJoinReq
 {
+    public string world { get; set; } = string.Empty;
+    public string region { get; set; } = string.Empty;
 }
 
 public class MatchmakerJoinRes : ErrorCodeDTO

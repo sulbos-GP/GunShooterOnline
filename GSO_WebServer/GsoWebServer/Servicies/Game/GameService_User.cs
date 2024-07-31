@@ -1,8 +1,6 @@
-﻿using Google.Apis.Games.v1.Data;
-using GSO_WebServerLibrary;
-using GsoWebServer.Models.GameDB;
+﻿using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Models.GameDB;
 using GsoWebServer.Servicies.Interfaces;
-using static Google.Apis.Requests.RequestError;
 
 namespace GsoWebServer.Servicies.Game
 {

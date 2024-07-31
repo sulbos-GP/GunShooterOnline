@@ -1,6 +1,6 @@
 ﻿using GSO_WebServerLibrary;
-using GsoWebServer.DTO;
-using GsoWebServer.Models.GameDB;
+using GSO_WebServerLibrary.DTO;
+using GSO_WebServerLibrary.Models.GameDB;
 
 namespace GsoWebServer.Models.Statistic
 {

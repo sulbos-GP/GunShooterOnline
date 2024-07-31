@@ -30,7 +30,6 @@ public class WebClientCredential
 public abstract class WebClientService
 {
     public string mBaseUrl { get; set; }
-
 }
 
 public abstract class WebClientServiceRequest<TResponse>
@@ -78,7 +77,7 @@ public abstract class WebClientServiceRequest<TResponse>
         }
         else
         {
-            Debug.Log($"WebClientRequest failed: {request.error}");
+            throw new NotImplementedException($"웹 요청 실패 : {request.error}");
         }
 
     }

@@ -24,7 +24,7 @@ WORKDIR /app
 COPY --from=build /app/out .
 
 # Expose the port the app runs on
-EXPOSE 7000
+EXPOSE 7777
 
 # Define the command to run the application
 ENTRYPOINT ["dotnet", "ContainerGameServer.dll"]
