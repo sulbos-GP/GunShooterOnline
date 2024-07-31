@@ -8,6 +8,9 @@ public class ObjectManager
     private readonly Dictionary<int, GameObject> _objects = new();
     public MyPlayerController MyPlayer { get; set; }
 
+
+
+
     public static GameObjectType GetObjectType(int id)
     {
         var type = (id >> 24) & 0x7f;

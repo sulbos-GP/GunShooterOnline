@@ -23,8 +23,8 @@ internal class ObjectManager
             if (gameObjcet.ObjectType == GameObjectType.Player) 
                 _players.Add(gameObjcet.Id, gameObjcet as Player);
 
-            if (gameObjcet.ObjectType == GameObjectType.Player)
-                _players.Add(gameObjcet.Id, gameObjcet as Player);
+            if (gameObjcet.ObjectType == GameObjectType.Item)
+                _items.Add(gameObjcet.Id, gameObjcet as ItemObject);
         }
 
         return gameObjcet;
