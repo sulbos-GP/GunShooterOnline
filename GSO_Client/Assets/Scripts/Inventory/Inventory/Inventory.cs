@@ -106,12 +106,7 @@ public class Inventory : MonoBehaviour
         return true;
     }
 
-    public void S_inventoryLoadHandler(S_LoadInventory packet)
-    {
-        //인게임에서 오브젝트와 상호작용시 서버에게서 받은 패킷으로 인벤토리를 설정
-
-
-    }
+    
 }
 
 /* 플로팅 인벤토리의 인벤토리를 비활성화하는 코드 (플로팅 인벤토리 사용안함)
