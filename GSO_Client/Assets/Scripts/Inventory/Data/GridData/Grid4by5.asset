@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c51dd9f63b13634e9a2f7f88bbbab94, type: 3}
+  m_Script: {fileID: 11500000, guid: cdcab0aae7dbe8143838a59a29d4e6bf, type: 3}
   m_Name: Grid4by5
   m_EditorClassIdentifier: 
+  gridId: 0
   gridSize: {x: 4, y: 5}
-  gridPos: {x: 0, y: 0}
   itemList: []
   createRandomItem: 1
   randomItemAmount: 3
