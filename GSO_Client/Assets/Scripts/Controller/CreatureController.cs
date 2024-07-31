@@ -6,7 +6,6 @@ public class CreatureController : BaseController
 {
     private BaseInfoBar _baseInfoBar; //hp, exp UI manage
     public Action ChangeStat;
-    public float Speed;
 
 
     public override StatInfo Stat
