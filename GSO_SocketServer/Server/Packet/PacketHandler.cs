@@ -35,6 +35,15 @@ class PacketHandler
 
     }
 
+    internal static void C_LoadInventoryHandler(PacketSession session, IMessage message)
+    {
+        C_LoadInventory pakcet = message as C_LoadInventory;
+
+
+
+
+    }
+
     /*public static void C2S_ChatHandler(PacketSession session, IPacket packet)
 	{
         C2S_Chat pkt = packet as C2S_Chat;

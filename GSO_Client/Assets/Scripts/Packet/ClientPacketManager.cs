@@ -27,14 +27,14 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SEnterGame, PacketHandler.S_EnterGameHandler);		
 		_onRecv.Add((ushort)MsgId.SLeaveGame, MakePacket<S_LeaveGame>);
 		_handler.Add((ushort)MsgId.SLeaveGame, PacketHandler.S_LeaveGameHandler);		
-		/*_onRecv.Add((ushort)MsgId.SSpawn, MakePacket<S_Spawn>);
-		_handler.Add((ushort)MsgId.SSpawn, PacketHandler.S_SpawnHandler);	*/	
+		_onRecv.Add((ushort)MsgId.SSpawn, MakePacket<S_Spawn>);
+		_handler.Add((ushort)MsgId.SSpawn, PacketHandler.S_SpawnHandler);	
 		_onRecv.Add((ushort)MsgId.SDespawn, MakePacket<S_Despawn>);
 		_handler.Add((ushort)MsgId.SDespawn, PacketHandler.S_DespawnHandler);		
 		_onRecv.Add((ushort)MsgId.SMove, MakePacket<S_Move>);
 		_handler.Add((ushort)MsgId.SMove, PacketHandler.S_MoveHandler);		
-		/*_onRecv.Add((ushort)MsgId.SConnected, MakePacket<S_Connected>);
-		_handler.Add((ushort)MsgId.SConnected, PacketHandler.S_ConnectedHandler);	*/	
+		_onRecv.Add((ushort)MsgId.SConnected, MakePacket<S_Connected>);
+		_handler.Add((ushort)MsgId.SConnected, PacketHandler.S_ConnectedHandler);
 		_onRecv.Add((ushort)MsgId.SChangeHp, MakePacket<S_ChangeHp>);
 		_handler.Add((ushort)MsgId.SChangeHp, PacketHandler.S_ChangeHpHandler);		
 		_onRecv.Add((ushort)MsgId.SDie, MakePacket<S_Die>);
