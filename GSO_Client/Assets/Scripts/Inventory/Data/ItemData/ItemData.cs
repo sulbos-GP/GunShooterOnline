@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "new ItemData", menuName = "Inventory/ItemData")]
+[CreateAssetMenu(fileName = "new ItemData", menuName = "InvenData/ItemData")]
 public class ItemData : ScriptableObject
 {
     /*

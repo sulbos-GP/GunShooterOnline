@@ -2,6 +2,8 @@
 using Google.Protobuf.Protocol;
 using ServerCore;
 using System;
+using System.Runtime.CompilerServices;
+using UnityEditor;
 using UnityEngine;
 
 internal class PacketHandler
@@ -115,17 +117,99 @@ internal class PacketHandler
 
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        S_LoadInventory packet  = message as S_LoadInventory;
+        if(packet == null)
+        {
+            Debug.Log("패킷이 없음");
+            return;
+        }
+        Debug.Log("S_LoadInventory");
+
+        //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
+        InvenData newInvenData = new InvenData();
+        newInvenData.SetInvenData(packet.InvenData);
+
+        //플레이어의 인벤토리id와 패킷내의 인벤토리id 비교 -> 같으면 플레이어의 인벤토리에 반영 다르면 아더 인벤토리에 반영
+        if (Managers.Object.MyPlayer.myPlayerInven.InvenId == packet.InventoryId)
+        {
+            //플레이어 인벤토리에 패킷의 invenData 적용
+            Managers.Object.MyPlayer.myPlayerInven.invenData = newInvenData;
+        }
+        else
+        {
+            //아더 인벤토리에 패킷의 invenData 적용
+            Managers.Object.MyPlayer.myOtherInven.invenData= newInvenData;
+        }
     }
 
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        S_MoveItem packet = message as S_MoveItem;
+        if (packet == null)
+        {
+            Debug.Log("패킷이 없음");
+            return;
+        }
+        Debug.Log("S_MoveItem");
+
+        //패킷의 id를 아이템 오브젝트의 리스트에서 검색 해당 아이템의 ItemObject 스크립트 불러옴
+        ItemObject moveItemObj;
+        bool searchId = Managers.Object._itemDic.TryGetValue(packet.ItemId,out moveItemObj);
+        if (searchId == false)
+        {
+            Debug.Log("옮기려는 아이템이 존재하지 않음(검색실패)");
+            return;
+        }
+
+        //ItemObject.itemData에 변경된 내용들을 변경하고 ItemObject.Set을 통해 아이템의 위치 변경
+        moveItemObj.curItemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
+        moveItemObj.curItemRotate = packet.ItemRotate;
+        Managers.Object._gridDic.TryGetValue(packet.gridId, out moveItemObj.curItemGrid);
+        moveItemObj.backUpItemPos = new Vector2Int(packet.lastItemPosX, packet.lastItemPosY);
+        moveItemObj.backUpItemRotate = packet.lastItemRotate;
+        Managers.Object._gridDic.TryGetValue(packet.lastGridId, out moveItemObj.backUpItemGrid);
+
+        //lastGridId를 통해 그리드를 검색하여 해당 그리드의 inventoryGrid.CleanItemSlot(item)으로 이전 그리드에서 해당 아이템을 지움
+        moveItemObj.backUpItemGrid.CleanItemSlot(moveItemObj);
+
+        //gridId를 통해 그리드를 검색하여 해당 그리드의 inventoryGrid.PlaceItem(item, item.posX, item.posY)로 현재 그리드에 해당 아이템 배치
+        moveItemObj.curItemGrid.PlaceItem(moveItemObj, moveItemObj.curItemPos.x,moveItemObj.curItemPos.y);
+
+        //클라이언트에서 해당 아이템을 배치 가능한지 체크해서 성공할 경우에만 패킷을 전달하기에 따로 성공 여부 체크는 필요 없을듯.
     }
 
     internal static void S_DeleteItemHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        S_DeleteItem packet = message as S_DeleteItem;
+        if (packet == null)
+        {
+            Debug.Log("패킷이 없음");
+            return;
+        }
+        Debug.Log("S_DeleteItem");
+        //패킷의 ItmeId를 통해 해당 아이템을 검색
+
+        ItemObject deleteItem;
+        bool searchId = Managers.Object._itemDic.TryGetValue(packet.ItemId, out deleteItem);
+
+        if (searchId == false) {
+            Debug.Log("삭제하려는 아이템이 존재하지 않음(검색 실패)");
+            return;
+        }
+        //item.curGrid를 통해 해당 아이템이 존재하는 그리드를 도출해냄
+        InventoryGrid deleteItemGrid = deleteItem.curItemGrid;
+        //item.curGrid.CleanItemSlot(item)으로 해당 그리드의 아이템 슬롯에서 해당 아이템 제거
+        deleteItemGrid.CleanItemSlot(deleteItem);
+
+        //현재 하이라키에 해당 아이디의 게임 오브젝트가 있다면 Destroy(item.gameObject)로 해당 아이템의 프리팹 제거.
+        /*if (deleteItem.gameObject != null)
+        {
+            //이게 필요한가?
+            deleteItem.DestroyItem();
+        }*/
+
+        Managers.Object.RemoveItem(packet.ItemId);
+
     }
 
 

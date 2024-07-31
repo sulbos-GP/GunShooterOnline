@@ -912,11 +912,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 672447935}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7feee413cfa1ee498a9f32903701b48, type: 3}
+  m_Script: {fileID: 11500000, guid: 467009a26142abf499a32470fa826dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   InvenId: 0
-  gridPref: {fileID: 109246022809251751, guid: 383adce80a43e8b42a9f14271db51372, type: 3}
+  gridPref: {fileID: 1982732639263097172, guid: 3d95458f0cf8a18418ea88d89e7dc8ec, type: 3}
   invenData: {fileID: 0}
   gridList: []
   invenWeight: 0
@@ -1167,11 +1167,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43bb79b6f501ce04cb13c71c4736e5ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectId: 0
-  interactType: 0
-  interactRange: 0
-  invenData: {fileID: 0}
-  gameEndUI: {fileID: 0}
 --- !u!50 &803408746
 Rigidbody2D:
   serializedVersion: 4
@@ -1357,12 +1352,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 817470694}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b851847834e64ea4aba9d10775504a26, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d2ff6408676b0c4d91501b44f85d2ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   InvenId: 0
-  gridPref: {fileID: 109246022809251751, guid: 383adce80a43e8b42a9f14271db51372, type: 3}
-  invenData: {fileID: 11400000, guid: 57a7880cab5af6e4f9a4021748d93d12, type: 2}
+  gridPref: {fileID: 1982732639263097172, guid: 3d95458f0cf8a18418ea88d89e7dc8ec, type: 3}
+  invenData: {fileID: 0}
   gridList: []
   invenWeight: 0
   limitWeight: 0
@@ -1399,12 +1394,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32c18677710315244b27553af698b11a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectId: 1
-  interactType: 0
-  interactRange: 3
-  invenData: {fileID: 11400000, guid: 7bc24b90a63af374391a05c35a9e97b8, type: 2}
-  inventoryUI: {fileID: 934051885}
-  otherInvenUI: {fileID: 672447937}
 --- !u!212 &818000868
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1726,20 +1715,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 839514581}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01e8c7bcb309d0549bfd95a1d0f817c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c80b29a92f08fc4a93c3240ee31ff01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerId: 1
-  invenUI: {fileID: 934051885}
-  deleteUI: {fileID: 865657543509723830}
+  invenUI: {fileID: 0}
+  deleteUI: {fileID: 0}
   updateGridPos: {x: 0, y: 0}
-  itemsList:
-  - {fileID: 11400000, guid: f17983c86f0867344bcd66b89cd205f8, type: 2}
-  - {fileID: 11400000, guid: 92d09948365c26f4bb4c31f8b3bc5500, type: 2}
-  - {fileID: 11400000, guid: 5ebb66b8af3a8644592753c21f6e3b3c, type: 2}
-  - {fileID: 11400000, guid: 400a6fafb71446e4291508fb628793ee, type: 2}
-  - {fileID: 11400000, guid: 58308f20eaaefb04ebf2a1565023b55f, type: 2}
-  itemPref: {fileID: 7700662711098545541, guid: 95277de10a78c0f459b6e07d826fb6d4, type: 3}
+  itemsList: []
+  itemPref: {fileID: 0}
   selectedGrid: {fileID: 0}
   isGridSelected: 0
   selectedItem: {fileID: 0}
@@ -1943,7 +1927,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c186b3e6187ac2543be39a172678840f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isActive: 0
 --- !u!1 &959813193
 GameObject:
   m_ObjectHideFlags: 0
@@ -3314,9 +3297,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ed92ea515e43784fbe4c98fd64b8aeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOn: 0
-  onSprite: {fileID: 21300000, guid: ec7c135f157beb649b00bb790379ba7b, type: 3}
-  offSprite: {fileID: 21300000, guid: 0a41e350dd719184982453670c0d5198, type: 3}
 --- !u!224 &6528451621068045769
 RectTransform:
   m_ObjectHideFlags: 0

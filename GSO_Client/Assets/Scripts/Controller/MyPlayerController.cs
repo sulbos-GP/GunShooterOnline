@@ -9,6 +9,10 @@ using UnityEngine.UI;
 
 public partial class MyPlayerController : PlayerController
 {
+    //인벤토리 UI
+    public PlayerInventory myPlayerInven; //canvas -> InventoryUI -> PlayerInvenSector -> PlayerInven 넣기(getchild형식으로 지정하지 말것)
+    public OtherInventory myOtherInven;
+
     [SerializeField] private List<BaseController> _attackableList = new();
 
     private ButtonSkill _butnSkill;
@@ -27,6 +31,7 @@ public partial class MyPlayerController : PlayerController
     //게임
 
     private PlayerInput playerInput;
+
 
 
     public int Attack => Stat.Attack;

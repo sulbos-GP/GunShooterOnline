@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "new InvenData", menuName = "Inventory/InvenData")]
+[CreateAssetMenu(fileName = "new InvenData", menuName = "InvenData/InvenData")]
 public class InvenData : ScriptableObject
 {
     /// <summary>
@@ -11,7 +11,7 @@ public class InvenData : ScriptableObject
     /// </summary>
     public void SetInvenData(InvenDataInfo invenDataInfo)
     {
-        inventoryId = invenDataInfo.inventoryId;
+        inventoryId = invenDataInfo.InventoryId;
         limitWeight = invenDataInfo.LimitWeight;
 
         foreach (GridDataInfo data in invenDataInfo.GridData)
@@ -28,7 +28,7 @@ public class InvenData : ScriptableObject
     public InvenDataInfo GetInvenData()
     {
         InvenDataInfo invenDataInfo = new InvenDataInfo();
-        invenDataInfo.inventoryId = inventoryId;
+        invenDataInfo.InventoryId = inventoryId;
         invenDataInfo.LimitWeight = limitWeight;
 
         foreach (GridData data in gridList)

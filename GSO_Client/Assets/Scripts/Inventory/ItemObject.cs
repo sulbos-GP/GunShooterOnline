@@ -198,4 +198,9 @@ public class ItemObject : MonoBehaviour
         amountText.text = itemAmount.ToString();
         amountText.gameObject.SetActive(true);
     }
+
+    public void DestroyItem()
+    {
+        Destroy(gameObject);
+    }
 }
