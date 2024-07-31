@@ -1,8 +1,8 @@
-﻿using GSO_WebServerLibrary;
+﻿using GSO_WebServerLibrary.Error;
 using GsoWebServer.DTO.Middleware;
-using GsoWebServer.Models.MemoryDB;
-using GsoWebServer.Reposiotry.Interfaces;
-using GsoWebServer.Reposiotry.NoSQL;
+using GSO_WebServerLibrary.Models.MemoryDB;
+using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using GSO_WebServerLibrary.Reposiotry.Define.MemoryDB;
 using GsoWebServer.Servicies.Interfaces;
 using System.Text.Json;
 

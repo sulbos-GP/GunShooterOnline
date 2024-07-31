@@ -1,4 +1,4 @@
-﻿using GSO_WebServerLibrary;
+﻿using GSO_WebServerLibrary.Error;
 using GsoWebServer.DTO.DataLoad;
 using GsoWebServer.Servicies.Interfaces;
 using static Google.Apis.Requests.RequestError;

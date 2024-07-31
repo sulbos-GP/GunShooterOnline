@@ -5,11 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AuthorizeResource;
 
-public enum EHubConnection
-{
-    Matching = 0,
-}
-
 public class WebManager : MonoBehaviour
 {
     private static WebManager instance = null;

@@ -1,5 +1,9 @@
-﻿using GSO_WebServerLibrary;
-using Matchmaker.DTO.GameServerManager;
+﻿using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Models.GameDB;
+using GSO_WebServerLibrary.Models.Match;
+using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
+using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using GSO_WebServerLibrary.Utils;
 using Matchmaker.Hubs;
 using Matchmaker.Models;
 using Matchmaker.Repository.Interface;
@@ -13,11 +17,13 @@ namespace Matchmaker.Service
     public class MatchmakerService : IMatchmakerService
     {
         private readonly IMatchQueue mMatchQueueMDB;
+        private readonly IGameDB mGameDB;
         private readonly IHubContext<MatchmakerHub> mMatchmakerHub;
 
-        public MatchmakerService(IMatchQueue matchQueue, IHubContext<MatchmakerHub> matchmakerHubContext)
+        public MatchmakerService(IMatchQueue matchQueue, IGameDB gameDB, IHubContext<MatchmakerHub> matchmakerHubContext)
         {
             mMatchQueueMDB = matchQueue;
+            mGameDB = gameDB;
             mMatchmakerHub = matchmakerHubContext;
         }
 
@@ -43,11 +49,18 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<WebErrorCode> AddMatchQueue(Int32 uid, Double rating, String world, String region)
+        public async Task<WebErrorCode> AddMatchQueue(Int32 uid, String world, String region)
         {
             try
             {
-                WebErrorCode error = await mMatchQueueMDB.AddMatchRating(uid, rating);
+
+                UserSkillInfo? skill = await mGameDB.GetUserSkillByUid(uid);
+                if(skill == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                WebErrorCode error = await mMatchQueueMDB.AddMatchRating(uid, skill.rating);
                 if (error != WebErrorCode.None)
                 {
                     return WebErrorCode.TEMP_ERROR;
@@ -62,11 +75,11 @@ namespace Matchmaker.Service
                 {
                     ticket.world = world;
                     ticket.region = region;
-                    ticket.match_start_time = DateTime.UtcNow.Second;
+                    ticket.match_start_time = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
                 }
 
                 bool result = await mMatchQueueMDB.UpdateTicket(uid, ticket);
-                if (result == false)
+                if (result == true)
                 {
                     return WebErrorCode.TEMP_ERROR;
                 }
@@ -134,7 +147,7 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<(WebErrorCode, Dictionary<int, PlayerInfo>?)> ScanPlayers()
+        public async Task<(WebErrorCode, Dictionary<int, PlayerInfo>?)> ScanAndLockPlayers()
         {
             try
             {
@@ -154,16 +167,21 @@ namespace Matchmaker.Service
                     double rating = player.Score;
 
                     tickets.TryGetValue(key, out var ticket);
-                    if (ticket != null)
+                    if (ticket == null)
                     {
-                        int uid = KeyUtils.GetUID(key);
-
-                        PlayerInfo playerInfo = new PlayerInfo();
-                        playerInfo.rating = rating;
-                        playerInfo.ticket = ticket;
-
-                        playerInfos.Add(uid, playerInfo);
+                        //티켓이 없는 경우
+                        continue;
                     }
+
+
+                    int uid = KeyUtils.GetUID(key);
+                    string lockKey = KeyUtils.MakeKey(KeyUtils.EKey.MATCHLock, uid);
+
+                    PlayerInfo playerInfo = new PlayerInfo();
+                    playerInfo.rating = rating;
+                    playerInfo.ticket = ticket;
+
+                    playerInfos.Add(uid, playerInfo);
 
                 }
 
@@ -173,6 +191,26 @@ namespace Matchmaker.Service
             catch
             {
                 return (WebErrorCode.TEMP_Exception, null);
+            }
+        }
+
+        public async Task<WebErrorCode> UnLockPlayers(Dictionary<int, PlayerInfo> players)
+        {
+            try
+            {
+                foreach (var player in players)
+                {
+
+                    string key = KeyUtils.MakeKey(KeyUtils.EKey.MATCHLock, player.Key);
+
+
+                }
+
+                return WebErrorCode.None;
+            }
+            catch
+            {
+                return WebErrorCode.TEMP_Exception;
             }
         }
 
@@ -222,7 +260,9 @@ namespace Matchmaker.Service
                     return WebErrorCode.TEMP_ERROR;
                 }
 
-                ticket.latency = latency;
+                {
+                    ticket.latency = latency;
+                }
 
                 var result = await mMatchQueueMDB.UpdateTicket(uid, ticket);
                 if (result == false)
@@ -238,7 +278,7 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<WebErrorCode> NotifyMatchSuccess(String[] keys, MatchInfo match)
+        public async Task<WebErrorCode> NotifyMatchSuccess(String[] keys, MatchProfile profile)
         {
             try
             {
@@ -250,7 +290,7 @@ namespace Matchmaker.Service
 
                 foreach (var ticket in tickets)
                 {
-                    await mMatchmakerHub.Clients.Client(ticket.Value.client_id).SendAsync("S2C_MatchSuccess", match);
+                    await mMatchmakerHub.Clients.Client(ticket.Value.client_id).SendAsync("S2C_MatchComplete", profile);
                 }
 
                 return WebErrorCode.None;

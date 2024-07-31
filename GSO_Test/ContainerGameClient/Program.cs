@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using System.Text;
 
 namespace ContainerGameClient
 {
@@ -8,28 +9,47 @@ namespace ContainerGameClient
 
     {
 
-        static void Main(string[] args)
+        static async Task Main(string[] args)
 
         {
 
-            Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+            UdpClient udpClient = new UdpClient();
+            try
+            {
+                udpClient.Connect("127.0.0.1", 7777);
+                Console.WriteLine("Connect to the server");
 
-            IPEndPoint ep = new IPEndPoint(IPAddress.Loopback, 7000);
-            Console.WriteLine(ep);
+                string? message;
+                while ((message = Console.ReadLine()) != "exit")
+                {
+                    if (message == null)
+                    {
+                        continue;
+                    }
 
-            client.Connect(ep);
-            Console.WriteLine("Connected");
+                    byte[] sendBytes = Encoding.ASCII.GetBytes(message);
+                    await udpClient.SendAsync(sendBytes, sendBytes.Length);
 
-            byte[] buffer = new byte[1024];
-            client.Send(new byte[] { 1, 2, 3, 4 });
+                    UdpReceiveResult result = await udpClient.ReceiveAsync();
+                    string receivedMessage = Encoding.ASCII.GetString(result.Buffer);
 
-            int recvBytes = client.Receive(buffer);
+                    if (receivedMessage == "Quit")
+                    {
+                        break;
+                    }
 
-            Console.WriteLine("Press any key to exit...");
-            Console.ReadLine();
-
-            client.Close();
-
+                    Console.WriteLine("Received from server: " + receivedMessage);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Client Error : {ex.ToString()}");
+            }
+            finally
+            {
+                Console.WriteLine("Client shut down");
+                udpClient.Close();
+            }
         }
 
     }

@@ -1,5 +1,5 @@
 ﻿using GSO_WebServerLibrary;
-using GsoWebServer.DTO.DataLoad;
+using GSO_WebServerLibrary.DTO;
 using System.ComponentModel.DataAnnotations;
 
 namespace GsoWebServer.DTO.Authentication

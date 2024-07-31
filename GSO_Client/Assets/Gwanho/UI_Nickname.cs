@@ -27,11 +27,11 @@ public class UI_Nickname : MonoBehaviour
 
     void Start()
     {
-        nicknameDescription.enabled = false;    
+        nicknameDescription.enabled = false;
 
         string nickname = WebManager.Instance.mUserInfo.UserInfo.nickname;
-
         nicknameWindow.SetActive(nickname == string.Empty);
+
     }
 
     private void Update()

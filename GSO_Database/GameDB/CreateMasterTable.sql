@@ -1,23 +1,15 @@
 USE master_database;
 
 
-DROP TABLE IF EXISTS master_item;
+DROP TABLE IF EXISTS master_item_base;
 
-DROP TABLE IF EXISTS master_game;
+DROP TABLE IF EXISTS version;
 
 #버전
-CREATE TABLE version
+CREATE TABLE IF NOT EXISTS version
 (
     app_version            INT         NOT NULL    COMMENT '앱 버전', 
-    master_data_version    INT         NOT NULL    COMMENT '마스터 데이터 버전', 
-);
-
-#게임 키
-CREATE TABLE master_game
-(
-	game_key   					INT            NOT NULL    COMMENT '게임 키', 
-	game_name  					VARCHAR(50)    NOT NULL    COMMENT '게임 이름', 
-	PRIMARY KEY (game_key)
+    master_data_version    INT         NOT NULL    COMMENT '마스터 데이터 버전'
 );
 
 #아이템 정보

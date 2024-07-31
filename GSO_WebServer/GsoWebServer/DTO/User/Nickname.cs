@@ -1,5 +1,6 @@
 ﻿using GSO_WebServerLibrary;
 using System.ComponentModel.DataAnnotations;
+using GSO_WebServerLibrary.DTO;
 
 namespace GsoWebServer.DTO.User
 {

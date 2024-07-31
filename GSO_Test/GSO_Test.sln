@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.34928.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerGameServer", "ContainerGameServer\ContainerGameServer.csproj", "{A8A133A4-E69D-44BB-80FB-C2A826FCE8B0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContainerGameServer", "ContainerGameServer\ContainerGameServer.csproj", "{A8A133A4-E69D-44BB-80FB-C2A826FCE8B0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContainerGameClient", "ContainerGameClient\ContainerGameClient.csproj", "{21230DAE-14C0-48B1-A4ED-D2FA67448647}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ContainerGameClient", "ContainerGameClient\ContainerGameClient.csproj", "{21230DAE-14C0-48B1-A4ED-D2FA67448647}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameServer", "GameServer\GameServer.csproj", "{949BF3A4-682E-47FB-A4AA-BC12FA23E415}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{21230DAE-14C0-48B1-A4ED-D2FA67448647}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{21230DAE-14C0-48B1-A4ED-D2FA67448647}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{21230DAE-14C0-48B1-A4ED-D2FA67448647}.Release|Any CPU.Build.0 = Release|Any CPU
+		{949BF3A4-682E-47FB-A4AA-BC12FA23E415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{949BF3A4-682E-47FB-A4AA-BC12FA23E415}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{949BF3A4-682E-47FB-A4AA-BC12FA23E415}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{949BF3A4-682E-47FB-A4AA-BC12FA23E415}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

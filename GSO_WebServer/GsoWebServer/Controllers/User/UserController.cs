@@ -1,5 +1,6 @@
-﻿using GSO_WebServerLibrary;
-using GsoWebServer.DTO;
+﻿using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Utils;
+using GSO_WebServerLibrary.DTO;
 using GsoWebServer.DTO.Authentication;
 using GsoWebServer.DTO.User;
 using GsoWebServer.Servicies.Interfaces;

@@ -1,4 +1,4 @@
-﻿using GSO_WebServerLibrary;
+﻿using GSO_WebServerLibrary.DTO;
 
 namespace GsoWebServer.DTO.Middleware
 {

@@ -13,7 +13,10 @@ public class MatchmakerService : WebClientService
 
     public MatchmakerService()
     {
-        this.mBaseUrl = "http://10.0.2.2:5200/api";
+
+        this.mBaseUrl = "http://10.0.2.2:5200/api";        
+        //this.mBaseUrl = "http://localhost:5200/api";
+
         mMatchmakerResource = new MatchmakerResource(this);
     }
 

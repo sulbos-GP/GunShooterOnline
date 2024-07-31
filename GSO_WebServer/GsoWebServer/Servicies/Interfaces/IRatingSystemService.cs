@@ -1,6 +1,6 @@
 ﻿
 
-using GsoWebServer.Models.GameDB;
+using GSO_WebServerLibrary.Models.GameDB;
 
 namespace GsoWebServer.Servicies.Interfaces
 {

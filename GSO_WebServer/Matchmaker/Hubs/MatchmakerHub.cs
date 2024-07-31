@@ -34,7 +34,7 @@ namespace Matchmaker.Hubs
         }
         
         //임시
-        public async Task C2S_VerfiyToken(int uid)
+        public async Task C2S_ConnectMatchHub(int uid)
         {
             string connectionId = Context.ConnectionId;
             await mMatchmakerService.InitMatchQueue(uid, connectionId);
@@ -50,7 +50,7 @@ namespace Matchmaker.Hubs
 
             await mMatchmakerService.UpdateLatency(uid, avgLatency);
 
-            await Clients.Caller.SendAsync("S2C_Pong", timestamp);
+            //await Clients.Caller.SendAsync("S2C_Pong", timestamp);
         }
 
     }

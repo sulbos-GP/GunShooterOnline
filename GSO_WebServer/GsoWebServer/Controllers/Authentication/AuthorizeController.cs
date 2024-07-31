@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GsoWebServer.Servicies.Interfaces;
-using GsoWebServer.Reposiotry.Interfaces;
-using GSO_WebServerLibrary;
 using GsoWebServer.DTO.Authentication;
-using Google.Apis.Games.v1;
-using static Google.Apis.Requests.RequestError;
-using GsoWebServer.Servicies.Game;
-using GsoWebServer.DTO;
-using Google.Apis.Games.v1.Data;
-using System.Numerics;
-using GsoWebServer.Models.MemoryDB;
-using System.Threading;
+using GSO_WebServerLibrary.DTO;
+using GSO_WebServerLibrary.Models.MemoryDB;
+using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Utils;
 
 
 namespace AuthenticationServer.Controllers

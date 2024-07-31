@@ -1,11 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
-using GSO_WebServerLibrary;
 using Matchmaker.Models;
 using Matchmaker.Repository.Interface;
 using Matchmaker.Service.Interfaces;
 using Matchmaker.DTO.Matchmaker;
-using Matchmaker.DTO.GameServerManager;
+using GSO_WebServerLibrary.Error;
+using Humanizer;
+using CloudStructures.Structures;
 
 namespace Matchmaker.Service.Background
 {
@@ -13,19 +14,21 @@ namespace Matchmaker.Service.Background
     {
         private PeriodicTimer?  mTimer = null;
         private const double    mPeriodicSecond = 5;                        //5초마다 매칭 검색
-        private const int       mPlayerCapacity = 10;                       //최대 매치될 인원
+        private const int       mPlayerCapacity = 1;                       //최대 매치될 인원
         private const int       mMaxWaitTimeCount = 120;                    //최대로 기다릴 수 있는 시간 (X초 이상 기다린 플레이어 모두 참여)
-        private const int       mExpandingRatingRangeTimeCount = 10;        //X초마다 레이팅 범위 증가
+        private const long      mExpandingRatingRangeTimeCount = 10;        //X초마다 레이팅 범위 증가
 
         private const double mExpandingRatingRange = 50.0f;
         private const double mMaxRating = 3000.0f;
         private const double mMinRating = 0.0f;
 
         private readonly IMatchmakerService mMatchmakerService;
+        private readonly IGameServerManagerService mGameServerManagerService;
 
-        public MatchmakerBackgroundService(IMatchmakerService matchmakerService)
+        public MatchmakerBackgroundService(IMatchmakerService matchmakerService, IGameServerManagerService gameServerManagerService)
         {
             mMatchmakerService = matchmakerService;
+            mGameServerManagerService = gameServerManagerService;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -36,11 +39,8 @@ namespace Matchmaker.Service.Background
             {
                 stopwatch.Restart();
 
-                //TODO : 방이 있는지 확인한다
-
-
                 //대기열에 있는 모든 플레이어들을 불러온다
-                var (error, players) = await mMatchmakerService.ScanPlayers();
+                var (error, players) = await mMatchmakerService.ScanAndLockPlayers();
                 if (error != WebErrorCode.None)
                 {
                     continue;
@@ -51,7 +51,7 @@ namespace Matchmaker.Service.Background
                     continue;
                 }
 
-                var now = DateTime.UtcNow.Second;
+                var nowTimestamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
                 foreach (var player in players)
                 {
 
@@ -64,8 +64,8 @@ namespace Matchmaker.Service.Background
                     TicketInfo ticketInfo = playerInfo.ticket;
 
                     //현재 시간에서 매치 시작한 시간 나눔
-                    int secondDiff = now - ticketInfo.match_start_time;
-                    int count =  secondDiff / mExpandingRatingRangeTimeCount;
+                    long elapsedSeconds = nowTimestamp - ticketInfo.match_start_time;
+                    long count = elapsedSeconds / mExpandingRatingRangeTimeCount;
 
                     //카운트 만큼 범위를 넓혀줌
                     double expanding = mExpandingRatingRange * count;
@@ -93,14 +93,18 @@ namespace Matchmaker.Service.Background
                     }
 
                     //방 있는지 확인
-                    var match = new MatchInfo();
-                    match.token = "TEST TOEKN";
-                    match.ip = "127.0.0.1";
-                    match.port = 7777;
+                    (error, var profile) = await mGameServerManagerService.FetchMatchInfo();
+                    if(profile == null)
+                    {
+                        continue;
+                    }
 
                     //해당 클라이언트에게 방 정보 전송
-                    error = await mMatchmakerService.NotifyMatchSuccess(keys, match);
-
+                    error = await mMatchmakerService.NotifyMatchSuccess(keys, profile);
+                    if (error != WebErrorCode.None)
+                    {
+                        continue;
+                    }
 
                     //성공적으로 보냈다면 매칭 큐에서 제거 한다
                     error = await mMatchmakerService.RemoveMatchQueue(keys);
