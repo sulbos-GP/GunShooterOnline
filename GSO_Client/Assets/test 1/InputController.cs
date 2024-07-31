@@ -21,7 +21,7 @@ public class InputController : MonoBehaviour
     public BasicFov basicFov;
 
     private bool isFiring;
-    private CreatureState State;
+    //private CreatureState State;
     private Vector3 lastPos;
 
     private void Awake()
@@ -95,11 +95,11 @@ public class InputController : MonoBehaviour
     {
         if(callbackContext.performed)
         {
-            State = CreatureState.Moving;
+            //State = CreatureState.Moving;
         }
         else if(callbackContext.canceled)
         {
-            State = CreatureState.Idle;
+            //State = CreatureState.Idle;
         }
         Vector2 input = callbackContext.ReadValue<Vector2>();
         _direction = new Vector2(input.x,input.y);
@@ -151,7 +151,7 @@ public class InputController : MonoBehaviour
 
     private void UpdateState()
     {
-        switch (State)
+       /* switch (State)
         {
             case CreatureState.Moving:
                 UpdateMove();
@@ -160,7 +160,7 @@ public class InputController : MonoBehaviour
                 break;
             default:
                 break;
-        }
+        }*/
     }
     private void UpdateMove()
     {

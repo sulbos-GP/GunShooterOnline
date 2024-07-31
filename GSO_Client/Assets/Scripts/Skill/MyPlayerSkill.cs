@@ -19,7 +19,7 @@ public partial class MyPlayerController
         }
         //----------------- 검사 ------------------
 
-        var skillpacket = new C_Skill();
+       /* var skillpacket = new C_Skill();
         skillpacket.Info = new SkillInfo { SkillId = number };
 
         if (targets != null) skillpacket.TargetIds.Add(targets);
@@ -30,6 +30,6 @@ public partial class MyPlayerController
             skillpacket.Info.DirY = dir.Value.y;
         }
 
-        Managers.Network.Send(skillpacket);
+        Managers.Network.Send(skillpacket);*/
     }
 }

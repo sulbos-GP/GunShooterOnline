@@ -19,7 +19,7 @@ internal class PacketHandler
         var leaveGamePacket = (S_LeaveGame)packet;
     }
 
-    public static void S_ConnectedHandler(PacketSession session, IMessage packet)
+    /*public static void S_ConnectedHandler(PacketSession session, IMessage packet)
     {
         //게임에 접속이되면
         Debug.Log("S_ConnectedHandler");
@@ -29,14 +29,14 @@ internal class PacketHandler
 
 
         Managers.Network.Send(lobbyInfo);
-    }
+    }*/
 
-    public static void S_SpawnHandler(PacketSession session, IMessage packet)
+    /*public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         var spawnPacket = (S_Spawn)packet;
         foreach (var info in spawnPacket.Objects) Managers.Object.Add(info, false);
         //Debug.Log("S_SpawnHandler");
-    }
+    }*/
 
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
     {
@@ -64,7 +64,7 @@ internal class PacketHandler
             return;
 
         cc.PosInfo = movePacket.PositionInfo;
-        cc.State = CreatureState.Moving;
+        //cc.State = CreatureState.Moving;
     }
 
     public static void S_ChangeHpHandler(PacketSession session, IMessage message)
@@ -92,16 +92,16 @@ internal class PacketHandler
 
     internal static void S_RoomInfoHandler(PacketSession session, IMessage message)
     {
-        var roomPacket = message as S_RoomInfo;
+       /* var roomPacket = message as S_RoomInfo;
 
         if (roomPacket.RoomInfos.Count > 1)
             Managers.Map.MapRoomInfoInit(roomPacket);
         else if (roomPacket.RoomInfos.Count == 1)
-            Managers.Map.MapRoomUpdate(roomPacket);
+            Managers.Map.MapRoomUpdate(roomPacket);*/
     }
 
 
-    internal static void S_SkillHandler(PacketSession session, IMessage message)
+   /* internal static void S_SkillHandler(PacketSession session, IMessage message)
     {
         var skillPacket = message as S_Skill;
         var go = Managers.Object.FindById(skillPacket.ObjectId);
@@ -114,9 +114,9 @@ internal class PacketHandler
         Managers.Skill.UseSkill(cc, skillPacket); //이팩트 생성
 
         Debug.Log("S_SkillHandler");
-    }
+    }*/
 
-    internal static void S_StatChangeHandler(PacketSession session, IMessage message)
+    /*internal static void S_StatChangeHandler(PacketSession session, IMessage message)
     {
         var statpacket = (S_StatChange)message;
         var go = Managers.Object.FindById(statpacket.ObjectId);
@@ -143,13 +143,13 @@ internal class PacketHandler
         
         
         Debug.Log($"Next : S_Stat {statpacket.StatInfo}");
-    }
+    }*/
 
-    internal static void S_LobbyPlayerInfoHandler(PacketSession session, IMessage message)
+    /*internal static void S_LobbyPlayerInfoHandler(PacketSession session, IMessage message)
     {
         //서버에서 로비에관한 정보
         Debug.Log("S_LobbyPlayerInfoHandler");
         var lobbyPlayerInfo = (S_LobbyPlayerInfo)message;
         GameObject.Find("LobbyScene").GetComponent<LobbyScene>().DataUpdate(lobbyPlayerInfo);
-    }
+    }*/
 }

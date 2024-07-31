@@ -6,7 +6,9 @@ public class CreatureController : BaseController
 {
     private BaseInfoBar _baseInfoBar; //hp, exp UI manage
     public Action ChangeStat;
-    
+    public float Speed;
+
+
     public override StatInfo Stat
     {
         get => base.Stat;
@@ -114,12 +116,12 @@ public class CreatureController : BaseController
         var pc = attacker.GetComponent<ProjectileContoller>();
         if (pc != null)
         {
-            var hitPacket = new C_Hit
+            /*var hitPacket = new C_Hit
             {
                 AttackId = pc.Id,
                 HitId = Id
             };
-            Managers.Network.Send(hitPacket);
+            Managers.Network.Send(hitPacket);*/
         }
 
         var cc = attacker.GetComponent<CreatureController>();
@@ -129,14 +131,14 @@ public class CreatureController : BaseController
     }
 
 
-    public virtual void UseSkillTodo(SkillType skillType, float Time)
+    /*public virtual void UseSkillTodo(SkillType skillType, float Time)
     {
-    }
+    }*/
 
 
     public virtual void OnDead(int attackerId = -1)
     {
-        State = CreatureState.Dead;
+        //State = CreatureState.Dead;
 
         Debug.Log(transform.name + "Dead");
         //GameObject effect = Managers.Resource.Instantiate("Effect/DieEffect");

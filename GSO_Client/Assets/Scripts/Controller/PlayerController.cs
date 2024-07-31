@@ -6,7 +6,7 @@ public class PlayerController : CreatureController
 {
     protected Coroutine _coSkill;
     protected bool _rangedSkill = false;
-    private SkillType skillType = SkillType.None; //애니메이션용
+   //private SkillType skillType = SkillType.None; //애니메이션용
 
 
     protected override void Init()
@@ -110,7 +110,7 @@ public class PlayerController : CreatureController
     }
 
 
-    public override void UseSkillTodo(SkillType inSkillType, float Time)
+   /* public override void UseSkillTodo(SkillType inSkillType, float Time)
     {
         //중요
         switch (inSkillType)
@@ -130,7 +130,7 @@ public class PlayerController : CreatureController
             case SkillType.Spawn:
                 break;
         }
-    }
+    }*/
 
 
     protected virtual void CheakUpdatedFlag(bool isForce = false)
@@ -138,7 +138,7 @@ public class PlayerController : CreatureController
     }
 
 
-    protected IEnumerator CoStartRangeSkill(float time)
+   /* protected IEnumerator CoStartRangeSkill(float time)
     {
         this.skillType = SkillType.Range;
         State = CreatureState.Skill;
@@ -161,10 +161,10 @@ public class PlayerController : CreatureController
         this.skillType = SkillType.Buff;
         State = CreatureState.Skill;
         yield return new WaitForSeconds(time);
-        State = CreatureState.Idle;
+        //State = CreatureState.Idle;
         _coSkill = null;
     }
-
+*/
 
     public override void OnDamaged(Transform attacker)
     {
