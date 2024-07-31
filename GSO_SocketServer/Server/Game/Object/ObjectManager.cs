@@ -10,6 +10,7 @@ internal class ObjectManager
     private int _counter = 1;
     private readonly object _lock = new();
     private readonly Dictionary<int, Player> _players = new();
+    private readonly Dictionary<int, ItemObject> _items = new();
     public static ObjectManager Instance { get; } = new();
 
     public T Add<T>() where T : GameObject, new()
@@ -20,6 +21,9 @@ internal class ObjectManager
         {
             gameObjcet.Id = GenerateId(gameObjcet.ObjectType);
             if (gameObjcet.ObjectType == GameObjectType.Player) 
+                _players.Add(gameObjcet.Id, gameObjcet as Player);
+
+            if (gameObjcet.ObjectType == GameObjectType.Player)
                 _players.Add(gameObjcet.Id, gameObjcet as Player);
         }
 

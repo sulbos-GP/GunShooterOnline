@@ -65,19 +65,24 @@ namespace Google.Protobuf.Protocol {
             "CglncmlkU2l6ZVkYAyABKAUSEAoIZ3JpZFBvc1gYBCABKAUSEAoIZ3JpZFBv",
             "c1kYBSABKAUSKAoIaXRlbUxpc3QYBiADKAsyFi5Qcm90b2NvbC5JdGVtRGF0",
             "YUluZm8SGAoQY3JlYXRlUmFuZG9tSXRlbRgHIAEoCBIYChByYW5kb21JdGVt",
-            "QW1vdW50GAggASgFIpYBCgxJdGVtRGF0YUluZm8SDgoGaXRlbUlkGAEgASgF",
+            "QW1vdW50GAggASgFIvUCCgxJdGVtRGF0YUluZm8SDgoGaXRlbUlkGAEgASgF",
             "EhAKCGl0ZW1Db2RlGAIgASgFEhAKCGl0ZW1Qb3NYGAMgASgFEhAKCGl0ZW1Q",
             "b3NZGAQgASgFEhIKCml0ZW1Sb3RhdGUYBSABKAUSEgoKaXRlbUFtb3VudBgG",
-            "IAEoBRIYChBzZWFyY2hlZFBsYXllcklkGAcgAygFKpICCgVNc2dJZBIQCgxT",
-            "X0VOVEVSX0dBTUUQABIQCgxTX0xFQVZFX0dBTUUQARILCgdTX1NQQVdOEAIS",
-            "DQoJU19ERVNQQVdOEAMSCgoGU19NT1ZFEAQSCgoGQ19NT1ZFEAUSDwoLU19D",
-            "T05ORUNURUQQBhIPCgtTX0NIQU5HRV9IUBAHEgkKBVNfRElFEAgSEAoMQ19F",
-            "TlRFUl9HQU1FEAkSFAoQQ19MT0FEX0lOVkVOVE9SWRAKEhQKEFNfTE9BRF9J",
-            "TlZFTlRPUlkQCxIPCgtDX01PVkVfSVRFTRAMEg8KC1NfTU9WRV9JVEVNEA0S",
-            "EQoNQ19ERUxFVEVfSVRFTRAOEhEKDVNfREVMRVRFX0lURU0QDypDCg5HYW1l",
-            "T2JqZWN0VHlwZRIICgROT05FEAASCgoGUExBWUVSEAESCwoHTU9OU1RFUhAC",
-            "Eg4KClBST0pFQ1RJTEUQA0IbqgIYR29vZ2xlLlByb3RvYnVmLlByb3RvY29s",
-            "YgZwcm90bzM="));
+            "IAEoBRIYChBzZWFyY2hlZFBsYXllcklkGAcgAygFEhEKCWl0ZW1fbmFtZRgI",
+            "IAEoCRITCgtpdGVtX3dlaWdodBgJIAEoAhIRCglpdGVtX3R5cGUYCiABKAUS",
+            "GQoRaXRlbV9zdHJpbmdfdmFsdWUYCyABKAUSGwoTaXRlbV9wdXJjaGFzZV9w",
+            "cmljZRgMIAEoBRIXCg9pdGVtX3NlbGxfcHJpY2UYDSABKAUSFwoPaXRlbV9z",
+            "ZWFyY2hUaW1lGA4gASgCEg0KBXdpZHRoGA8gASgFEg4KBmhlaWdodBgQIAEo",
+            "BRIZChFpc0l0ZW1Db25zdW1lYWJsZRgRIAEoCCqSAgoFTXNnSWQSEAoMU19F",
+            "TlRFUl9HQU1FEAASEAoMU19MRUFWRV9HQU1FEAESCwoHU19TUEFXThACEg0K",
+            "CVNfREVTUEFXThADEgoKBlNfTU9WRRAEEgoKBkNfTU9WRRAFEg8KC1NfQ09O",
+            "TkVDVEVEEAYSDwoLU19DSEFOR0VfSFAQBxIJCgVTX0RJRRAIEhAKDENfRU5U",
+            "RVJfR0FNRRAJEhQKEENfTE9BRF9JTlZFTlRPUlkQChIUChBTX0xPQURfSU5W",
+            "RU5UT1JZEAsSDwoLQ19NT1ZFX0lURU0QDBIPCgtTX01PVkVfSVRFTRANEhEK",
+            "DUNfREVMRVRFX0lURU0QDhIRCg1TX0RFTEVURV9JVEVNEA8qQwoOR2FtZU9i",
+            "amVjdFR5cGUSCAoETk9ORRAAEgoKBlBMQVlFUhABEgsKB01PTlNURVIQAhIO",
+            "CgpQUk9KRUNUSUxFEANCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIG",
+            "cHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -102,7 +107,7 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PositionInfo), global::Google.Protobuf.Protocol.PositionInfo.Parser, new[]{ "CurrentRoomId", "DirX", "DirY", "PosX", "PosY", "RotZ" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.InvenDataInfo), global::Google.Protobuf.Protocol.InvenDataInfo.Parser, new[]{ "LimitWeight", "GridData" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.GridDataInfo), global::Google.Protobuf.Protocol.GridDataInfo.Parser, new[]{ "GridId", "GridSizeX", "GridSizeY", "GridPosX", "GridPosY", "ItemList", "CreateRandomItem", "RandomItemAmount" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ItemDataInfo), global::Google.Protobuf.Protocol.ItemDataInfo.Parser, new[]{ "ItemId", "ItemCode", "ItemPosX", "ItemPosY", "ItemRotate", "ItemAmount", "SearchedPlayerId" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ItemDataInfo), global::Google.Protobuf.Protocol.ItemDataInfo.Parser, new[]{ "ItemId", "ItemCode", "ItemPosX", "ItemPosY", "ItemRotate", "ItemAmount", "SearchedPlayerId", "ItemName", "ItemWeight", "ItemType", "ItemStringValue", "ItemPurchasePrice", "ItemSellPrice", "ItemSearchTime", "Width", "Height", "IsItemConsumeable" }, null, null, null, null)
           }));
     }
     #endregion
@@ -6420,6 +6425,16 @@ namespace Google.Protobuf.Protocol {
       itemRotate_ = other.itemRotate_;
       itemAmount_ = other.itemAmount_;
       searchedPlayerId_ = other.searchedPlayerId_.Clone();
+      itemName_ = other.itemName_;
+      itemWeight_ = other.itemWeight_;
+      itemType_ = other.itemType_;
+      itemStringValue_ = other.itemStringValue_;
+      itemPurchasePrice_ = other.itemPurchasePrice_;
+      itemSellPrice_ = other.itemSellPrice_;
+      itemSearchTime_ = other.itemSearchTime_;
+      width_ = other.width_;
+      height_ = other.height_;
+      isItemConsumeable_ = other.isItemConsumeable_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -6533,6 +6548,129 @@ namespace Google.Protobuf.Protocol {
       get { return searchedPlayerId_; }
     }
 
+    /// <summary>Field number for the "item_name" field.</summary>
+    public const int ItemNameFieldNumber = 8;
+    private string itemName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ItemName {
+      get { return itemName_; }
+      set {
+        itemName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "item_weight" field.</summary>
+    public const int ItemWeightFieldNumber = 9;
+    private float itemWeight_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public float ItemWeight {
+      get { return itemWeight_; }
+      set {
+        itemWeight_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "item_type" field.</summary>
+    public const int ItemTypeFieldNumber = 10;
+    private int itemType_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ItemType {
+      get { return itemType_; }
+      set {
+        itemType_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "item_string_value" field.</summary>
+    public const int ItemStringValueFieldNumber = 11;
+    private int itemStringValue_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ItemStringValue {
+      get { return itemStringValue_; }
+      set {
+        itemStringValue_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "item_purchase_price" field.</summary>
+    public const int ItemPurchasePriceFieldNumber = 12;
+    private int itemPurchasePrice_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ItemPurchasePrice {
+      get { return itemPurchasePrice_; }
+      set {
+        itemPurchasePrice_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "item_sell_price" field.</summary>
+    public const int ItemSellPriceFieldNumber = 13;
+    private int itemSellPrice_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ItemSellPrice {
+      get { return itemSellPrice_; }
+      set {
+        itemSellPrice_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "item_searchTime" field.</summary>
+    public const int ItemSearchTimeFieldNumber = 14;
+    private float itemSearchTime_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public float ItemSearchTime {
+      get { return itemSearchTime_; }
+      set {
+        itemSearchTime_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "width" field.</summary>
+    public const int WidthFieldNumber = 15;
+    private int width_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Width {
+      get { return width_; }
+      set {
+        width_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "height" field.</summary>
+    public const int HeightFieldNumber = 16;
+    private int height_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Height {
+      get { return height_; }
+      set {
+        height_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "isItemConsumeable" field.</summary>
+    public const int IsItemConsumeableFieldNumber = 17;
+    private bool isItemConsumeable_;
+    /// <summary>
+    ///Sprite itemSprite; ???
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsItemConsumeable {
+      get { return isItemConsumeable_; }
+      set {
+        isItemConsumeable_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -6555,6 +6693,16 @@ namespace Google.Protobuf.Protocol {
       if (ItemRotate != other.ItemRotate) return false;
       if (ItemAmount != other.ItemAmount) return false;
       if(!searchedPlayerId_.Equals(other.searchedPlayerId_)) return false;
+      if (ItemName != other.ItemName) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ItemWeight, other.ItemWeight)) return false;
+      if (ItemType != other.ItemType) return false;
+      if (ItemStringValue != other.ItemStringValue) return false;
+      if (ItemPurchasePrice != other.ItemPurchasePrice) return false;
+      if (ItemSellPrice != other.ItemSellPrice) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ItemSearchTime, other.ItemSearchTime)) return false;
+      if (Width != other.Width) return false;
+      if (Height != other.Height) return false;
+      if (IsItemConsumeable != other.IsItemConsumeable) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -6569,6 +6717,16 @@ namespace Google.Protobuf.Protocol {
       if (ItemRotate != 0) hash ^= ItemRotate.GetHashCode();
       if (ItemAmount != 0) hash ^= ItemAmount.GetHashCode();
       hash ^= searchedPlayerId_.GetHashCode();
+      if (ItemName.Length != 0) hash ^= ItemName.GetHashCode();
+      if (ItemWeight != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ItemWeight);
+      if (ItemType != 0) hash ^= ItemType.GetHashCode();
+      if (ItemStringValue != 0) hash ^= ItemStringValue.GetHashCode();
+      if (ItemPurchasePrice != 0) hash ^= ItemPurchasePrice.GetHashCode();
+      if (ItemSellPrice != 0) hash ^= ItemSellPrice.GetHashCode();
+      if (ItemSearchTime != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ItemSearchTime);
+      if (Width != 0) hash ^= Width.GetHashCode();
+      if (Height != 0) hash ^= Height.GetHashCode();
+      if (IsItemConsumeable != false) hash ^= IsItemConsumeable.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -6612,6 +6770,46 @@ namespace Google.Protobuf.Protocol {
         output.WriteInt32(ItemAmount);
       }
       searchedPlayerId_.WriteTo(output, _repeated_searchedPlayerId_codec);
+      if (ItemName.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(ItemName);
+      }
+      if (ItemWeight != 0F) {
+        output.WriteRawTag(77);
+        output.WriteFloat(ItemWeight);
+      }
+      if (ItemType != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(ItemType);
+      }
+      if (ItemStringValue != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(ItemStringValue);
+      }
+      if (ItemPurchasePrice != 0) {
+        output.WriteRawTag(96);
+        output.WriteInt32(ItemPurchasePrice);
+      }
+      if (ItemSellPrice != 0) {
+        output.WriteRawTag(104);
+        output.WriteInt32(ItemSellPrice);
+      }
+      if (ItemSearchTime != 0F) {
+        output.WriteRawTag(117);
+        output.WriteFloat(ItemSearchTime);
+      }
+      if (Width != 0) {
+        output.WriteRawTag(120);
+        output.WriteInt32(Width);
+      }
+      if (Height != 0) {
+        output.WriteRawTag(128, 1);
+        output.WriteInt32(Height);
+      }
+      if (IsItemConsumeable != false) {
+        output.WriteRawTag(136, 1);
+        output.WriteBool(IsItemConsumeable);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -6647,6 +6845,46 @@ namespace Google.Protobuf.Protocol {
         output.WriteInt32(ItemAmount);
       }
       searchedPlayerId_.WriteTo(ref output, _repeated_searchedPlayerId_codec);
+      if (ItemName.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(ItemName);
+      }
+      if (ItemWeight != 0F) {
+        output.WriteRawTag(77);
+        output.WriteFloat(ItemWeight);
+      }
+      if (ItemType != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(ItemType);
+      }
+      if (ItemStringValue != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(ItemStringValue);
+      }
+      if (ItemPurchasePrice != 0) {
+        output.WriteRawTag(96);
+        output.WriteInt32(ItemPurchasePrice);
+      }
+      if (ItemSellPrice != 0) {
+        output.WriteRawTag(104);
+        output.WriteInt32(ItemSellPrice);
+      }
+      if (ItemSearchTime != 0F) {
+        output.WriteRawTag(117);
+        output.WriteFloat(ItemSearchTime);
+      }
+      if (Width != 0) {
+        output.WriteRawTag(120);
+        output.WriteInt32(Width);
+      }
+      if (Height != 0) {
+        output.WriteRawTag(128, 1);
+        output.WriteInt32(Height);
+      }
+      if (IsItemConsumeable != false) {
+        output.WriteRawTag(136, 1);
+        output.WriteBool(IsItemConsumeable);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -6676,6 +6914,36 @@ namespace Google.Protobuf.Protocol {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemAmount);
       }
       size += searchedPlayerId_.CalculateSize(_repeated_searchedPlayerId_codec);
+      if (ItemName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ItemName);
+      }
+      if (ItemWeight != 0F) {
+        size += 1 + 4;
+      }
+      if (ItemType != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemType);
+      }
+      if (ItemStringValue != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemStringValue);
+      }
+      if (ItemPurchasePrice != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemPurchasePrice);
+      }
+      if (ItemSellPrice != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemSellPrice);
+      }
+      if (ItemSearchTime != 0F) {
+        size += 1 + 4;
+      }
+      if (Width != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Width);
+      }
+      if (Height != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(Height);
+      }
+      if (IsItemConsumeable != false) {
+        size += 2 + 1;
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -6707,6 +6975,36 @@ namespace Google.Protobuf.Protocol {
         ItemAmount = other.ItemAmount;
       }
       searchedPlayerId_.Add(other.searchedPlayerId_);
+      if (other.ItemName.Length != 0) {
+        ItemName = other.ItemName;
+      }
+      if (other.ItemWeight != 0F) {
+        ItemWeight = other.ItemWeight;
+      }
+      if (other.ItemType != 0) {
+        ItemType = other.ItemType;
+      }
+      if (other.ItemStringValue != 0) {
+        ItemStringValue = other.ItemStringValue;
+      }
+      if (other.ItemPurchasePrice != 0) {
+        ItemPurchasePrice = other.ItemPurchasePrice;
+      }
+      if (other.ItemSellPrice != 0) {
+        ItemSellPrice = other.ItemSellPrice;
+      }
+      if (other.ItemSearchTime != 0F) {
+        ItemSearchTime = other.ItemSearchTime;
+      }
+      if (other.Width != 0) {
+        Width = other.Width;
+      }
+      if (other.Height != 0) {
+        Height = other.Height;
+      }
+      if (other.IsItemConsumeable != false) {
+        IsItemConsumeable = other.IsItemConsumeable;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -6755,6 +7053,46 @@ namespace Google.Protobuf.Protocol {
             searchedPlayerId_.AddEntriesFrom(input, _repeated_searchedPlayerId_codec);
             break;
           }
+          case 66: {
+            ItemName = input.ReadString();
+            break;
+          }
+          case 77: {
+            ItemWeight = input.ReadFloat();
+            break;
+          }
+          case 80: {
+            ItemType = input.ReadInt32();
+            break;
+          }
+          case 88: {
+            ItemStringValue = input.ReadInt32();
+            break;
+          }
+          case 96: {
+            ItemPurchasePrice = input.ReadInt32();
+            break;
+          }
+          case 104: {
+            ItemSellPrice = input.ReadInt32();
+            break;
+          }
+          case 117: {
+            ItemSearchTime = input.ReadFloat();
+            break;
+          }
+          case 120: {
+            Width = input.ReadInt32();
+            break;
+          }
+          case 128: {
+            Height = input.ReadInt32();
+            break;
+          }
+          case 136: {
+            IsItemConsumeable = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -6801,6 +7139,46 @@ namespace Google.Protobuf.Protocol {
           case 58:
           case 56: {
             searchedPlayerId_.AddEntriesFrom(ref input, _repeated_searchedPlayerId_codec);
+            break;
+          }
+          case 66: {
+            ItemName = input.ReadString();
+            break;
+          }
+          case 77: {
+            ItemWeight = input.ReadFloat();
+            break;
+          }
+          case 80: {
+            ItemType = input.ReadInt32();
+            break;
+          }
+          case 88: {
+            ItemStringValue = input.ReadInt32();
+            break;
+          }
+          case 96: {
+            ItemPurchasePrice = input.ReadInt32();
+            break;
+          }
+          case 104: {
+            ItemSellPrice = input.ReadInt32();
+            break;
+          }
+          case 117: {
+            ItemSearchTime = input.ReadFloat();
+            break;
+          }
+          case 120: {
+            Width = input.ReadInt32();
+            break;
+          }
+          case 128: {
+            Height = input.ReadInt32();
+            break;
+          }
+          case 136: {
+            IsItemConsumeable = input.ReadBool();
             break;
           }
         }

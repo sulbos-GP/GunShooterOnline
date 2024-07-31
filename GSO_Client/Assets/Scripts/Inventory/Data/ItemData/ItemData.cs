@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -13,6 +14,9 @@ public class ItemData : ScriptableObject
      * 실제로는 컨트롤러의 리스트에 넣어 컨트롤러에서 생성할때 리스트 안의 데이터중 하나를 
      * 부착시킵니다.
      */
+
+
+    
 
     [Header("아이템 데이터베이스 변수")]
     public int itemId; // 해당 아이템의 고유한 아이디
