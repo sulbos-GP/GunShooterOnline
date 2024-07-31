@@ -19,7 +19,6 @@ public class ItemData : ScriptableObject
     /// <summary>
     /// ItemDataInfo를 해당 스크립트의 변수에 적용
     /// </summary>
-    /// <param name="itemDataInfo"></param>
     public void SetItemData(ItemDataInfo itemDataInfo)
     {
         itemId = itemDataInfo.ItemId;
@@ -50,7 +49,6 @@ public class ItemData : ScriptableObject
     /// <summary>
     /// 현재 스크립트의 변수를 ItemDataInfo로 변환
     /// </summary>
-    /// <returns></returns>
     public ItemDataInfo GetItemData()
     {
         ItemDataInfo itemDataInfo = new ItemDataInfo();

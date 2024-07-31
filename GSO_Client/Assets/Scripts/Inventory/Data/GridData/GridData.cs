@@ -11,6 +11,9 @@ using Vector2 = System.Numerics.Vector2;
 [CreateAssetMenu(fileName = "new GridData", menuName = "Inventory/GridData")]
 public class GridData : ScriptableObject
 {
+    /// <summary>
+    /// GridDataInfo 해당 스크립트의 변수에 적용
+    /// </summary>
     public void SetGridData(GridDataInfo gridDataInfo)
     {
         gridId = gridDataInfo.GridId;
@@ -26,6 +29,9 @@ public class GridData : ScriptableObject
         randomItemAmount = gridDataInfo.RandomItemAmount;
     }
 
+    /// <summary>
+    /// 현재 스크립트의 변수를 GridDataInfo 변환
+    /// </summary>
     public GridDataInfo GetGridData()
     {
         GridDataInfo gridDataInfo = new GridDataInfo();
