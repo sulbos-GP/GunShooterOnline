@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using System;
 using UnityEngine;
 
 internal class PacketHandler
@@ -100,21 +101,33 @@ internal class PacketHandler
             Managers.Map.MapRoomUpdate(roomPacket);*/
     }
 
-
-   /* internal static void S_SkillHandler(PacketSession session, IMessage message)
+    internal static void S_SpawnHandler(PacketSession session, IMessage message)
     {
-        var skillPacket = message as S_Skill;
-        var go = Managers.Object.FindById(skillPacket.ObjectId);
-        if (go == null)
-            return;
+        throw new NotImplementedException();
+    }
 
-        var cc = go.GetComponent<CreatureController>();
-        if (cc == null)
-            return;
-        Managers.Skill.UseSkill(cc, skillPacket); //이팩트 생성
+    internal static void S_ConnectedHandler(PacketSession session, IMessage message)
+    {
+        S_Connected packet= message as S_Connected;
+        Debug.Log("S_ConnectedHandler");
 
-        Debug.Log("S_SkillHandler");
-    }*/
+    }
+
+
+    /* internal static void S_SkillHandler(PacketSession session, IMessage message)
+     {
+         var skillPacket = message as S_Skill;
+         var go = Managers.Object.FindById(skillPacket.ObjectId);
+         if (go == null)
+             return;
+
+         var cc = go.GetComponent<CreatureController>();
+         if (cc == null)
+             return;
+         Managers.Skill.UseSkill(cc, skillPacket); //이팩트 생성
+
+         Debug.Log("S_SkillHandler");
+     }*/
 
     /*internal static void S_StatChangeHandler(PacketSession session, IMessage message)
     {
