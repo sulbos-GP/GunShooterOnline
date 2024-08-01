@@ -1,3 +1,5 @@
+using Google.Protobuf.Protocol;
+using ServerCore;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +19,7 @@ public class InventoryUI : MonoBehaviour
     public void invenUIControl()
     {
         isActive = !isActive;
+        
         gameObject.SetActive(isActive);
     }
 }

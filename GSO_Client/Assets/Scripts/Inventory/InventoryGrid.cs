@@ -1,6 +1,7 @@
 using UnityEngine;
 using Vector2 = System.Numerics.Vector2;
 using Random = UnityEngine.Random;
+using Google.Protobuf.Protocol;
 
 
 public class InventoryGrid : MonoBehaviour
@@ -12,9 +13,9 @@ public class InventoryGrid : MonoBehaviour
      */
 
     //그리드 설정
-    public GridData gridData; // 인벤토리에서 할당된 그리드의 데이터
+    public GridData gridData; //인벤토리에서 할당된 그리드의 데이터
 
-    public int gridId = 0; // 임의 할당. 서버에서 받은 그리드의 아이디.
+    public int gridId = 0; // 임의 할당. 서버에서 받은 그리드 데이터의 id
 
     public ItemObject[,] gridItemArray; //인벤토리 내용이 기록될 배열
     public Inventory invenScr; //해당 그리드를 포함하는 인벤토리의 스크립트
@@ -52,6 +53,12 @@ public class InventoryGrid : MonoBehaviour
     private void Start()
     {
         gridRect = GetComponent<RectTransform>();
+        if(gridData == null)
+        {
+            Debug.Log("해당 그리드 오브젝트에 그리드 데이터가 없음");
+            return;
+        }
+        gridId = gridData.gridId;
         gridSize = gridData.gridSize;
         if (gridSize.x <= 0 || gridSize.y <= 0)
         {
@@ -150,7 +157,7 @@ public class InventoryGrid : MonoBehaviour
         //InventoryController.invenInstance.InsertRandomItem(this);
         
         ItemObject randomItem = Instantiate(itemPref).GetComponent<ItemObject>();
-        InventoryController.invenInstance.SetAllParentsAsLastSibling(transform);
+        InventoryController.invenInstance.SetSelectedObjectToLastSibling(transform);
         int randomId = Random.Range(0, InventoryController.invenInstance.itemsList.Count);
         randomItem.Set(InventoryController.invenInstance.itemsList[randomId]);
 
@@ -323,6 +330,7 @@ public class InventoryGrid : MonoBehaviour
 
         gridWeight += item.itemData.item_weight;
         invenScr.UpdateInvenWeight();
+
         PlaceSprite(item, posX, posY, itemRect);
     }
 

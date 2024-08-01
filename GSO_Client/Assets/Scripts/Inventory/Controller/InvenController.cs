@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -26,22 +27,23 @@ public partial class InventoryController : MonoBehaviour
      * 
      * 3. CreateRandomItem : 새로운 아이템을 생성하여 selectedItem으로 지정합니다
      *    InsertRandomItem : 해당 그리드에 바로 생성한 아이템을 집어넣습니다.
-     *    SetAllParentsAsLastSibling : 선택된 아이템이 다른 아이템에 가려지지 않도록 하기위해
+     *    SetSelectedObjectToLastSibling : 선택된 아이템이 다른 아이템에 가려지지 않도록 하기위해
      *    같은 부모를 가진 자식 객체중 맨 아래로 이동하며 객체의 부모, 객체의 부모의 부모 등 더이상
      *    부모 객체가 없을때까지 재귀로 반복합니다.
      */
 
-    
-    public int playerId = 1; //임시부여. 플레이어의 id
     public static InventoryController invenInstance;
+    private PlayerInput playerInput; //플레이어의 조작 인풋
+ 
     public InventoryUI invenUI; //인벤토리의 UI 조작을 위함
     public Transform deleteUI;
 
-    private PlayerInput playerInput; //플레이어의 조작 인풋
 
+    public int playerId = 1; //임시부여. 플레이어의 id
     [SerializeField] private Vector2 mousePosInput; //마우스의 월드 위치
     [SerializeField] private Vector2Int updateGridPos; //그리드상의 좌표 위치
 
+    //우클릭 아이템 생성 예시
     public List<ItemData> itemsList; //이 그리드에 넣어질 아이템데이터의 리스트(임시)
     [SerializeField] private GameObject itemPref; //생성할 아이템의 프리펩(임시)
 
@@ -53,10 +55,16 @@ public partial class InventoryController : MonoBehaviour
         {
             selectedGrid = value;
             isGridSelected = selectedGrid != null;
-            invenHighlight.SetParent(value);
+            if (isGridSelected)
+            {
+                invenHighlight.SetParent(value);
+            }
+            else
+            {
+                invenHighlight.SetParent(null);
+            }
         }
     }
-
     [SerializeField] private InventoryGrid selectedGrid; //현재 마우스가 위치한 그리드
     public bool isGridSelected; //그리드가 선택되었는지
 
@@ -78,18 +86,16 @@ public partial class InventoryController : MonoBehaviour
             }
         }
     }
-
     [SerializeField] private ItemObject selectedItem; //현재 선택된 아이템
     [SerializeField] private RectTransform selectedRect; //선택된 아이템의 Rect
     public bool isItemSelected; //현재 선택된 상태인지
 
-    [SerializeField] private ItemObject placeOverlapItem; //아이템을 배치할때 체크될 오버랩 아이템 변수
+    private ItemObject placeOverlapItem; //아이템을 배치할때 체크될 오버랩 아이템 변수
     [SerializeField] private ItemObject checkOverlapItem; //매 프레임마다 체크될 오버랩 아이템 변수
 
     //하이라이트 관련 변수
     private InvenHighLight invenHighlight; //하이라이트 객체에 있는 변수
     private Vector2Int HighlightPosition; //하이라이트의 위치
-    public GameObject highlightObj;
 
     //삭제 관련
     public bool isOnDelete;
@@ -103,7 +109,7 @@ public partial class InventoryController : MonoBehaviour
         }
     }
 
-    //백업관련 변수
+    //백업관련 변수(오버랩 아이템 교체가 없어져서 필요 없음)
     //public List<ItemObject> backUpItemList = new List<ItemObject>(); //백업할 아이템들의 리스트
     //public List<InventoryGrid> backUpGridList = new List<InventoryGrid>(); //백업할 그리드들의 리스트
 
@@ -130,8 +136,7 @@ public partial class InventoryController : MonoBehaviour
     */
 
     //기타 변수
-    public const int maxItemMergeAmount = 64;
-
+    
 
     private void Awake()
     {
@@ -144,6 +149,8 @@ public partial class InventoryController : MonoBehaviour
             Destroy(gameObject);
         }
         invenHighlight = GetComponent<InvenHighLight>();
+
+        Managers.Network.ConnectToGame();
     }
 
     private void OnEnable()
@@ -248,7 +255,7 @@ public partial class InventoryController : MonoBehaviour
             Vector2 inventoryCenter = selectedInven.transform.position;
             dragOffset = clickPosition - inventoryCenter;
 
-            SetAllParentsAsLastSibling(draggedInvenRect);
+            SetSelectedObjectToLastSibling(draggedInvenRect);
         }
     }
     */
@@ -280,8 +287,8 @@ public partial class InventoryController : MonoBehaviour
             if (isOnDelete&&isItemSelected)
             {
                 invenHighlight.SetColor(HighlightColor.Yellow);
-                highlightObj.transform.SetParent(deleteUI);
-                highlightObj.transform.position = selectedItem.transform.position;
+                InvenHighLight.highlightObj.transform.SetParent(deleteUI);
+                InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
 
                 invenHighlight.Show(true);
                 return;
@@ -464,12 +471,12 @@ public partial class InventoryController : MonoBehaviour
     {
         SelectedItem = selectedGrid.PickUpItem(pos.x, pos.y);
         if (!isGridSelected) { return; }
+        
+        //AddBackUpList(); 오버랩 교체 안씀
+        
 
-        //AddBackUpList(); 
-        //포인터 핸들러가 이미지에 의해 가려지는 것을 방지
-        //SelectedItem.GetComponent<Image>().raycastTarget = false;
         //아이템이 그리드에 가려지는것을 방지
-        SetAllParentsAsLastSibling(selectedRect);
+        SetSelectedObjectToLastSibling(selectedRect);
     }
 
     /// <summary>
@@ -479,7 +486,12 @@ public partial class InventoryController : MonoBehaviour
     {
         if(isOnDelete)
         {
-            BackUpItem();
+            C_DeleteItem packet = new C_DeleteItem();
+            packet.ItemId = selectedItem.itemId;
+            packet.PlayerId = playerId;
+            Managers.Network.Send(packet);
+            Debug.Log("C_DeleteItem");
+
             BackUpItemArray();
             DestroySelectedItem();
             return;
@@ -505,23 +517,45 @@ public partial class InventoryController : MonoBehaviour
                 //오버랩의 양이 64개 이하일 경우 아이템 합치기
                 if(selectedItem.itemData.isItemConsumeable &&
                     selectedItem.itemData.itemCode == placeOverlapItem.itemData.itemCode&&
-                    placeOverlapItem.itemAmount < maxItemMergeAmount&&
+                    placeOverlapItem.itemAmount < ItemObject.maxItemMergeAmount&&
                     !placeOverlapItem.ishide)
                 {
                     //두 아이템의 합이 64거나 낮으면 overlap아이템의 개수를 선택한 아이템의 양만큼 증가
                     //기존 선택한 아이템은 삭제
-                    if((selectedItem.itemAmount + placeOverlapItem.itemAmount) <= maxItemMergeAmount)
+                    if((selectedItem.itemAmount + placeOverlapItem.itemAmount) <= ItemObject.maxItemMergeAmount)
                     {
                         //아이템 개수에 따라 무게가 가증되기로 하면 코드 추가 할것
                         selectedItem.MergeItem(placeOverlapItem, selectedItem.itemAmount);
                     }
                     else
                     {
-                        int needAmount = maxItemMergeAmount - placeOverlapItem.itemAmount;
+                        int needAmount = ItemObject.maxItemMergeAmount - placeOverlapItem.itemAmount;
                         selectedItem.MergeItem(placeOverlapItem, needAmount);
                     }
-                    
-                    //BackUpItem(); 백업아이템 불필요
+
+                    C_MoveItem packet = new C_MoveItem();
+                    //packet.PlayerId = Managers.Object.MyPlayer.Id;
+                    packet.ItemId = item.itemId;
+                    packet.ItemPosX = pos.x;
+                    packet.ItemPosY = pos.y;
+                    packet.ItemRotate = item.curItemRotate;
+                    //packet.gridId = item.curItemGrid.gridId;
+                    packet.LastItemPosX = item.backUpItemPos.x;
+                    packet.LastItemPosY = item.backUpItemPos.y;
+                    packet.LastItemRotate = item.backUpItemRotate;
+                    //packet.LastGridId = item.backUpItemGrid.gridId;
+                    Managers.Network.Send(packet);
+
+                    Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
+                        $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
+                        $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
+                        $"packet.ItemRotate = {item.curItemRotate}\r\n" +
+                        $"packet.gridId = {item.curItemGrid.gridId}\r\n" +
+                        $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
+                        $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
+                        $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
+                        $"packet.LastGridId = {item.backUpItemGrid.gridId}");
+
                     BackUpItemArray();
                     Destroy(selectedItem.gameObject);
                     SelectedItem = null;
@@ -537,14 +571,32 @@ public partial class InventoryController : MonoBehaviour
             }
             else
             {
-                //겹치는 아이템이 없을경우 백업변수 업데이트
-                
+                C_MoveItem packet = new C_MoveItem();
+                //packet.PlayerId = Managers.Object.MyPlayer.Id;
+                packet.ItemId = item.itemId;
+                packet.ItemPosX = pos.x;
+                packet.ItemPosY = pos.y;
+                packet.ItemRotate = item.curItemRotate;
+                //packet.gridId = item.curItemGrid.gridId;
+                packet.LastItemPosX = item.backUpItemPos.x;
+                packet.LastItemPosY = item.backUpItemPos.y;
+                packet.LastItemRotate = item.backUpItemRotate;
+                //packet.LastGridId = item.backUpItemGrid.gridId;
+                Managers.Network.Send(packet);
+
+                Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
+                        $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
+                        $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
+                        $"packet.ItemRotate = {item.curItemRotate}\r\n" +
+                        $"packet.gridId = {item.curItemGrid.gridId}\r\n" +
+                        $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
+                        $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
+                        $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
+                        $"packet.LastGridId = {item.backUpItemGrid.gridId}");
+
                 BackUpItem();
                 BackUpItemArray();
                 SelectedItem = null;
-
-                //패킷 전송(인벤토리의 내용)
-                //플레이어 아이디, 아이템을 든 인벤토리, 아이템을 놓은 인벤토리 내용
             }
         }
         else
@@ -573,7 +625,7 @@ public partial class InventoryController : MonoBehaviour
 
         SelectedItem.GetComponent<Image>().raycastTarget = false;
         checkOverlapItem = null;
-        SetAllParentsAsLastSibling(selectedRect);
+        SetSelectedObjectToLastSibling(selectedRect);
     }
     */
 
@@ -688,11 +740,13 @@ public partial class InventoryController : MonoBehaviour
             DestroySelectedItem();
             return;
         }
+
+        //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
         selectedItem.curItemGrid = selectedItem.backUpItemGrid;
         selectedItem.curItemPos = selectedItem.backUpItemPos;
         selectedItem.curItemRotate = selectedItem.backUpItemRotate;
 
-        //해당 아이템을 이전상태로 되돌림
+        //바뀐 변수를 적용. 해당 아이템을 이전상태로 되돌림
         selectedItem.Rotate(selectedItem.curItemRotate);
         selectedItem.curItemGrid.PlaceItem(selectedItem, selectedItem.curItemPos.x, selectedItem.curItemPos.y);
         SelectedItem = null;
@@ -715,6 +769,7 @@ public partial class InventoryController : MonoBehaviour
         */
     }
 
+    /* 인벤토리 그리드로 옮김
     /// <summary>
     /// 아이템이 생성된 즉시 인벤토리내에 배치 가능한 자리에 배치됨
     /// </summary>
@@ -728,7 +783,7 @@ public partial class InventoryController : MonoBehaviour
 
         SelectedItem = null;
         InsertItem(itemToInsert);
-    }
+    }*/
 
     /// <summary>
     /// 등록된 아이템중 랜덤으로 생성
@@ -741,16 +796,15 @@ public partial class InventoryController : MonoBehaviour
         SelectedItem = invenItem;
 
         //아이템은 캔버스의 자식(UI니까)
-        SetAllParentsAsLastSibling(selectedRect);
+        SetSelectedObjectToLastSibling(selectedRect);
         //아이템 리스트 중 하나 지정
         int selectedItemId = Random.Range(0, itemsList.Count);
         //지정된 아이템 데이터를 아이템 프리팹에 적용
 
         invenItem.Set(itemsList[selectedItemId]);
-        //SelectedItem.GetComponent<Image>().raycastTarget = false;
     }
 
-
+    /* 인벤토리그리드로 옮김
     /// <summary>
     /// insertRandomItem안에서 지정된 아이템을 가능한 자리에 배치
     /// </summary>
@@ -767,7 +821,9 @@ public partial class InventoryController : MonoBehaviour
         selectedGrid.PlaceItem(itemToInsert, posOnGrid.Value.x, posOnGrid.Value.y);
         SelectedItemGrid = null;
     }
+    */
 
+    //컨트롤러 상에서 삭제 처리(핸들러에서 처리하게되면 삭제)
     private void DestroySelectedItem()
     {
         Destroy(selectedItem.gameObject);
@@ -775,12 +831,13 @@ public partial class InventoryController : MonoBehaviour
     }
 
     /// <summary>
-    /// 모든 부모에게 LastSibling을 적용함. 항상 지정한 인터렉션한 rect을 가장 앞으로.
+    /// 클릭한 오브젝트의 모든 부모에게 LastSibling을 적용함. 항상 지정한 인터렉션한 rect을 가장 앞으로.
     /// </summary>
-    public void SetAllParentsAsLastSibling(Transform child)
+    public void SetSelectedObjectToLastSibling(Transform child)
     {
         if (child == null) return;
-        if(child.gameObject.name == "InventoryUI")
+
+        if(child.gameObject.name == "InventoryUI") //인벤토리 UI의 자식들 까지만 적용함
         {
             return;
         }
@@ -788,7 +845,7 @@ public partial class InventoryController : MonoBehaviour
 
         if (child.parent != null)
         {
-            SetAllParentsAsLastSibling(child.parent);
+            SetSelectedObjectToLastSibling(child.parent);
         }
     }
 }

@@ -17,18 +17,18 @@ public class Inventory : MonoBehaviour
      *   grid2.Init(3, 3); // 그리드 초기화 (3x3)
      *
      *  // 그리드를 인벤토리 매니저에 추가
-     *  inventoryManager.gridList.Add(grid1);
-     *  inventoryManager.gridList.Add(grid2);
+     *  inventoryManager.instantGrid.Add(grid1);
+     *  inventoryManager.instantGrid.Add(grid2);
      *
      *  // 인벤토리 크기 조정
      *   inventoryManager.AdjustInventorySize();
      *   이런식으로 추가해야함
      */
-    public int InvenId; //인벤토리 고유의 id
+    public int InvenId; //인벤토리 고유의 id =. 소유자의 id
     public GameObject gridPref;
     public InvenData invenData; //해당 인벤토리의 위치와 크기 및 소유한 그리드의 데이터
 
-    public List<InventoryGrid> gridList; // 해당 인벤토리의 그리드 목록
+    public List<InventoryGrid> instantGrid; // 생성한 인벤토리의 그리드 목록
 
     private Transform grids; //그리드들의 집합 오브젝트
 
@@ -49,6 +49,7 @@ public class Inventory : MonoBehaviour
         grids = transform.GetChildByName("Grids");
 
         if(invenData == null ) { return; }
+        InvenId = invenData.inventoryId;
         limitWeight = invenData.limitWeight;
 
         //인벤토리 데이터를 기반으로 변수 업데이트
@@ -72,7 +73,7 @@ public class Inventory : MonoBehaviour
         {
             InventoryGrid gridInstance = Instantiate(gridPref, grids).GetComponent<InventoryGrid>();
             gridInstance.gridData = invenData.gridList[i];
-            gridList.Add(gridInstance);
+            instantGrid.Add(gridInstance);
         }
     }
 
@@ -81,9 +82,9 @@ public class Inventory : MonoBehaviour
     public void UpdateInvenWeight()
     {
         InvenWeight = 0;
-        for (int i = 0; i < gridList.Count; i++)
+        for (int i = 0; i < instantGrid.Count; i++)
         {
-            InvenWeight += gridList[i].gridWeight;
+            InvenWeight += instantGrid[i].gridWeight;
         }
     }
 
@@ -121,7 +122,7 @@ public void InventoryClose()
 // 인벤토리의 크기를 조정하는 메서드
 public void AdjustInventorySize()
 {
-    if (gridList.Count == 0)
+    if (instantGrid.Count == 0)
         return;
 
     float minX = float.MaxValue;
@@ -130,7 +131,7 @@ public void AdjustInventorySize()
     float maxY = float.MinValue;
 
     // 각 그리드의 크기와 위치를 기반으로 인벤토리 크기 계산
-    foreach (InventoryGrid grid in gridList)
+    foreach (InventoryGrid grid in instantGrid)
     {
         RectTransform gridRect = grid.GetComponent<RectTransform>();
         Vector3[] corners = new Vector3[4];
