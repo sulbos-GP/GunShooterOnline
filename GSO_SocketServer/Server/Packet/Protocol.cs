@@ -37,53 +37,54 @@ namespace Google.Protobuf.Protocol {
             "ZEludmVudG9yeRIQCghwbGF5ZXJJZBgBIAEoBRITCgtpbnZlbnRvcnlJZBgC",
             "IAEoBSJkCg9TX0xvYWRJbnZlbnRvcnkSEAoIcGxheWVySWQYASABKAUSEwoL",
             "aW52ZW50b3J5SWQYAiABKAUSKgoJSW52ZW5EYXRhGAMgASgLMhcuUHJvdG9j",
-            "b2wuSW52ZW5EYXRhSW5mbyL+AQoKQ19Nb3ZlSXRlbRIQCghwbGF5ZXJJZBgB",
+            "b2wuSW52ZW5EYXRhSW5mbyLjAQoKQ19Nb3ZlSXRlbRIQCghwbGF5ZXJJZBgB",
             "IAEoBRIOCgZpdGVtSWQYAiABKAUSEAoIaXRlbVBvc1gYAyABKAUSEAoIaXRl",
             "bVBvc1kYBCABKAUSEgoKaXRlbVJvdGF0ZRgFIAEoBRITCgtpbnZlbnRvcnlJ",
-            "ZBgGIAEoBRIPCgdncmlkTnVtGAcgASgFEhQKDGxhc3RJdGVtUG9zWBgIIAEo",
-            "BRIUCgxsYXN0SXRlbVBvc1kYCSABKAUSFgoObGFzdEl0ZW1Sb3RhdGUYCiAB",
-            "KAUSFwoPbGFzdEludmVudG9yeUlkGAsgASgFEhMKC2xhc3RHcmlkTnVtGAwg",
-            "ASgFIowBCgpTX01vdmVJdGVtEhAKCHBsYXllcklkGAEgASgFEg4KBml0ZW1J",
-            "ZBgCIAEoBRIQCghpdGVtUG9zWBgDIAEoBRIQCghpdGVtUG9zWRgEIAEoBRIS",
-            "CgppdGVtUm90YXRlGAUgASgFEhMKC2ludmVudG9yeUlkGAYgASgFEg8KB2dy",
-            "aWROdW0YByABKAUiMAoMQ19EZWxldGVJdGVtEhAKCHBsYXllcklkGAEgASgF",
-            "Eg4KBml0ZW1JZBgCIAEoBSJFCgxTX0RlbGV0ZUl0ZW0SEAoIcGxheWVySWQY",
-            "ASABKAUSEwoLaW52ZW50b3J5SWQYAiABKAUSDgoGaXRlbUlkGAMgASgFInwK",
-            "Ck9iamVjdEluZm8SEAoIT2JqZWN0SWQYASABKAUSDwoHb3duZXJJZBgCIAEo",
-            "BRIPCgdza2lsbElkGAMgASgFEgwKBG5hbWUYBCABKAkSLAoMcG9zaXRpb25J",
-            "bmZvGAUgASgLMhYuUHJvdG9jb2wuUG9zaXRpb25JbmZvItgBCghTdGF0SW5m",
-            "bxINCgVjbGFzcxgBIAEoBRINCgVsZXZlbBgCIAEoBRIKCgJocBgDIAEoBRIN",
-            "CgVtYXhIcBgEIAEoBRIKCgJtcBgFIAEoBRINCgVtYXhNcBgGIAEoBRITCgth",
-            "dHRhY2tSYW5nZRgHIAEoAhIOCgZhdHRhY2sYCCABKAUSEwoLYXR0YWNrU3Bl",
-            "ZWQYCSABKAISDwoHZGVmZW5jZRgKIAEoBRIQCghjcml0aWNhbBgLIAEoBRIL",
-            "CgNleHAYDCABKAUSDgoGbWF4RXhwGA0gASgFImsKDFBvc2l0aW9uSW5mbxIV",
-            "Cg1jdXJyZW50Um9vbUlkGAEgASgFEgwKBGRpclgYAiABKAISDAoEZGlyWRgD",
-            "IAEoAhIMCgRwb3NYGAQgASgCEgwKBHBvc1kYBSABKAISDAoEcm90WhgGIAEo",
-            "AiJjCg1JbnZlbkRhdGFJbmZvEhMKC2ludmVudG9yeUlkGAEgASgFEhMKC2xp",
-            "bWl0V2VpZ2h0GAIgASgCEigKCEdyaWREYXRhGAMgAygLMhYuUHJvdG9jb2wu",
-            "R3JpZERhdGFJbmZvIsYBCgxHcmlkRGF0YUluZm8SDgoGZ3JpZElkGAEgASgF",
-            "EhEKCWdyaWRTaXplWBgCIAEoBRIRCglncmlkU2l6ZVkYAyABKAUSEAoIZ3Jp",
-            "ZFBvc1gYBCABKAISEAoIZ3JpZFBvc1kYBSABKAISKAoIaXRlbUxpc3QYBiAD",
-            "KAsyFi5Qcm90b2NvbC5JdGVtRGF0YUluZm8SGAoQY3JlYXRlUmFuZG9tSXRl",
-            "bRgHIAEoCBIYChByYW5kb21JdGVtQW1vdW50GAggASgFIvUCCgxJdGVtRGF0",
-            "YUluZm8SDgoGaXRlbUlkGAEgASgFEhAKCGl0ZW1Db2RlGAIgASgFEhAKCGl0",
-            "ZW1Qb3NYGAMgASgFEhAKCGl0ZW1Qb3NZGAQgASgFEhIKCml0ZW1Sb3RhdGUY",
-            "BSABKAUSEgoKaXRlbUFtb3VudBgGIAEoBRIYChBzZWFyY2hlZFBsYXllcklk",
-            "GAcgAygFEhEKCWl0ZW1fbmFtZRgIIAEoCRITCgtpdGVtX3dlaWdodBgJIAEo",
-            "AhIRCglpdGVtX3R5cGUYCiABKAUSGQoRaXRlbV9zdHJpbmdfdmFsdWUYCyAB",
-            "KAUSGwoTaXRlbV9wdXJjaGFzZV9wcmljZRgMIAEoBRIXCg9pdGVtX3NlbGxf",
-            "cHJpY2UYDSABKAUSFwoPaXRlbV9zZWFyY2hUaW1lGA4gASgCEg0KBXdpZHRo",
-            "GA8gASgFEg4KBmhlaWdodBgQIAEoBRIZChFpc0l0ZW1Db25zdW1lYWJsZRgR",
-            "IAEoCCqSAgoFTXNnSWQSEAoMU19FTlRFUl9HQU1FEAASEAoMU19MRUFWRV9H",
-            "QU1FEAESCwoHU19TUEFXThACEg0KCVNfREVTUEFXThADEgoKBlNfTU9WRRAE",
-            "EgoKBkNfTU9WRRAFEg8KC1NfQ09OTkVDVEVEEAYSDwoLU19DSEFOR0VfSFAQ",
-            "BxIJCgVTX0RJRRAIEhAKDENfRU5URVJfR0FNRRAJEhQKEENfTE9BRF9JTlZF",
-            "TlRPUlkQChIUChBTX0xPQURfSU5WRU5UT1JZEAsSDwoLQ19NT1ZFX0lURU0Q",
-            "DBIPCgtTX01PVkVfSVRFTRANEhEKDUNfREVMRVRFX0lURU0QDhIRCg1TX0RF",
-            "TEVURV9JVEVNEA8qWwoOR2FtZU9iamVjdFR5cGUSCAoETk9ORRAAEgoKBlBM",
-            "QVlFUhABEgsKB01PTlNURVIQAhIOCgpQUk9KRUNUSUxFEAMSDQoJSU5WRU5E",
-            "QVRBEAQSBwoDQk9YEAVCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIG",
-            "cHJvdG8z"));
+            "ZBgGIAEoBRIOCgZncmlkSWQYByABKAUSFAoMbGFzdEl0ZW1Qb3NYGAggASgF",
+            "EhQKDGxhc3RJdGVtUG9zWRgJIAEoBRIWCg5sYXN0SXRlbVJvdGF0ZRgKIAEo",
+            "BRISCgpsYXN0R3JpZElkGAsgASgFIugBCgpTX01vdmVJdGVtEhAKCHBsYXll",
+            "cklkGAEgASgFEg4KBml0ZW1JZBgCIAEoBRIQCghpdGVtUG9zWBgDIAEoBRIQ",
+            "CghpdGVtUG9zWRgEIAEoBRISCgppdGVtUm90YXRlGAUgASgFEg4KBmdyaWRJ",
+            "ZBgGIAEoBRIUCgxsYXN0SXRlbVBvc1gYByABKAUSFAoMbGFzdEl0ZW1Qb3NZ",
+            "GAggASgFEhYKDmxhc3RJdGVtUm90YXRlGAkgASgFEhcKD2xhc3RJbnZlbnRv",
+            "cnlJZBgKIAEoBRITCgtsYXN0R3JpZE51bRgLIAEoBSIwCgxDX0RlbGV0ZUl0",
+            "ZW0SEAoIcGxheWVySWQYASABKAUSDgoGaXRlbUlkGAIgASgFIjAKDFNfRGVs",
+            "ZXRlSXRlbRIQCghwbGF5ZXJJZBgBIAEoBRIOCgZpdGVtSWQYAyABKAUifAoK",
+            "T2JqZWN0SW5mbxIQCghPYmplY3RJZBgBIAEoBRIPCgdvd25lcklkGAIgASgF",
+            "Eg8KB3NraWxsSWQYAyABKAUSDAoEbmFtZRgEIAEoCRIsCgxwb3NpdGlvbklu",
+            "Zm8YBSABKAsyFi5Qcm90b2NvbC5Qb3NpdGlvbkluZm8i2AEKCFN0YXRJbmZv",
+            "Eg0KBWNsYXNzGAEgASgFEg0KBWxldmVsGAIgASgFEgoKAmhwGAMgASgFEg0K",
+            "BW1heEhwGAQgASgFEgoKAm1wGAUgASgFEg0KBW1heE1wGAYgASgFEhMKC2F0",
+            "dGFja1JhbmdlGAcgASgCEg4KBmF0dGFjaxgIIAEoBRITCgthdHRhY2tTcGVl",
+            "ZBgJIAEoAhIPCgdkZWZlbmNlGAogASgFEhAKCGNyaXRpY2FsGAsgASgFEgsK",
+            "A2V4cBgMIAEoBRIOCgZtYXhFeHAYDSABKAUiawoMUG9zaXRpb25JbmZvEhUK",
+            "DWN1cnJlbnRSb29tSWQYASABKAUSDAoEZGlyWBgCIAEoAhIMCgRkaXJZGAMg",
+            "ASgCEgwKBHBvc1gYBCABKAISDAoEcG9zWRgFIAEoAhIMCgRyb3RaGAYgASgC",
+            "ImMKDUludmVuRGF0YUluZm8SEwoLaW52ZW50b3J5SWQYASABKAUSEwoLbGlt",
+            "aXRXZWlnaHQYAiABKAISKAoIR3JpZERhdGEYAyADKAsyFi5Qcm90b2NvbC5H",
+            "cmlkRGF0YUluZm8ixgEKDEdyaWREYXRhSW5mbxIOCgZncmlkSWQYASABKAUS",
+            "EQoJZ3JpZFNpemVYGAIgASgFEhEKCWdyaWRTaXplWRgDIAEoBRIQCghncmlk",
+            "UG9zWBgEIAEoAhIQCghncmlkUG9zWRgFIAEoAhIoCghpdGVtTGlzdBgGIAMo",
+            "CzIWLlByb3RvY29sLkl0ZW1EYXRhSW5mbxIYChBjcmVhdGVSYW5kb21JdGVt",
+            "GAcgASgIEhgKEHJhbmRvbUl0ZW1BbW91bnQYCCABKAUi9QIKDEl0ZW1EYXRh",
+            "SW5mbxIOCgZpdGVtSWQYASABKAUSEAoIaXRlbUNvZGUYAiABKAUSEAoIaXRl",
+            "bVBvc1gYAyABKAUSEAoIaXRlbVBvc1kYBCABKAUSEgoKaXRlbVJvdGF0ZRgF",
+            "IAEoBRISCgppdGVtQW1vdW50GAYgASgFEhgKEHNlYXJjaGVkUGxheWVySWQY",
+            "ByADKAUSEQoJaXRlbV9uYW1lGAggASgJEhMKC2l0ZW1fd2VpZ2h0GAkgASgC",
+            "EhEKCWl0ZW1fdHlwZRgKIAEoBRIZChFpdGVtX3N0cmluZ192YWx1ZRgLIAEo",
+            "BRIbChNpdGVtX3B1cmNoYXNlX3ByaWNlGAwgASgFEhcKD2l0ZW1fc2VsbF9w",
+            "cmljZRgNIAEoBRIXCg9pdGVtX3NlYXJjaFRpbWUYDiABKAISDQoFd2lkdGgY",
+            "DyABKAUSDgoGaGVpZ2h0GBAgASgFEhkKEWlzSXRlbUNvbnN1bWVhYmxlGBEg",
+            "ASgIKpICCgVNc2dJZBIQCgxTX0VOVEVSX0dBTUUQABIQCgxTX0xFQVZFX0dB",
+            "TUUQARILCgdTX1NQQVdOEAISDQoJU19ERVNQQVdOEAMSCgoGU19NT1ZFEAQS",
+            "CgoGQ19NT1ZFEAUSDwoLU19DT05ORUNURUQQBhIPCgtTX0NIQU5HRV9IUBAH",
+            "EgkKBVNfRElFEAgSEAoMQ19FTlRFUl9HQU1FEAkSFAoQQ19MT0FEX0lOVkVO",
+            "VE9SWRAKEhQKEFNfTE9BRF9JTlZFTlRPUlkQCxIPCgtDX01PVkVfSVRFTRAM",
+            "Eg8KC1NfTU9WRV9JVEVNEA0SEQoNQ19ERUxFVEVfSVRFTRAOEhEKDVNfREVM",
+            "RVRFX0lURU0QDypbCg5HYW1lT2JqZWN0VHlwZRIICgROT05FEAASCgoGUExB",
+            "WUVSEAESCwoHTU9OU1RFUhACEg4KClBST0pFQ1RJTEUQAxINCglJTlZFTkRB",
+            "VEEQBBIHCgNCT1gQBUIbqgIYR29vZ2xlLlByb3RvYnVmLlByb3RvY29sYgZw",
+            "cm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -99,10 +100,10 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EnterGame), global::Google.Protobuf.Protocol.C_EnterGame.Parser, new[]{ "Name" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_LoadInventory), global::Google.Protobuf.Protocol.C_LoadInventory.Parser, new[]{ "PlayerId", "InventoryId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadInventory), global::Google.Protobuf.Protocol.S_LoadInventory.Parser, new[]{ "PlayerId", "InventoryId", "InvenData" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_MoveItem), global::Google.Protobuf.Protocol.C_MoveItem.Parser, new[]{ "PlayerId", "ItemId", "ItemPosX", "ItemPosY", "ItemRotate", "InventoryId", "GridNum", "LastItemPosX", "LastItemPosY", "LastItemRotate", "LastInventoryId", "LastGridNum" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_MoveItem), global::Google.Protobuf.Protocol.S_MoveItem.Parser, new[]{ "PlayerId", "ItemId", "ItemPosX", "ItemPosY", "ItemRotate", "InventoryId", "GridNum" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_MoveItem), global::Google.Protobuf.Protocol.C_MoveItem.Parser, new[]{ "PlayerId", "ItemId", "ItemPosX", "ItemPosY", "ItemRotate", "InventoryId", "GridId", "LastItemPosX", "LastItemPosY", "LastItemRotate", "LastGridId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_MoveItem), global::Google.Protobuf.Protocol.S_MoveItem.Parser, new[]{ "PlayerId", "ItemId", "ItemPosX", "ItemPosY", "ItemRotate", "GridId", "LastItemPosX", "LastItemPosY", "LastItemRotate", "LastInventoryId", "LastGridNum" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_DeleteItem), global::Google.Protobuf.Protocol.C_DeleteItem.Parser, new[]{ "PlayerId", "ItemId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_DeleteItem), global::Google.Protobuf.Protocol.S_DeleteItem.Parser, new[]{ "PlayerId", "InventoryId", "ItemId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_DeleteItem), global::Google.Protobuf.Protocol.S_DeleteItem.Parser, new[]{ "PlayerId", "ItemId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ObjectInfo), global::Google.Protobuf.Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "OwnerId", "SkillId", "Name", "PositionInfo" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.StatInfo), global::Google.Protobuf.Protocol.StatInfo.Parser, new[]{ "Class", "Level", "Hp", "MaxHp", "Mp", "MaxMp", "AttackRange", "Attack", "AttackSpeed", "Defence", "Critical", "Exp", "MaxExp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PositionInfo), global::Google.Protobuf.Protocol.PositionInfo.Parser, new[]{ "CurrentRoomId", "DirX", "DirY", "PosX", "PosY", "RotZ" }, null, null, null, null),
@@ -2769,12 +2770,11 @@ namespace Google.Protobuf.Protocol {
       itemPosY_ = other.itemPosY_;
       itemRotate_ = other.itemRotate_;
       inventoryId_ = other.inventoryId_;
-      gridNum_ = other.gridNum_;
+      gridId_ = other.gridId_;
       lastItemPosX_ = other.lastItemPosX_;
       lastItemPosY_ = other.lastItemPosY_;
       lastItemRotate_ = other.lastItemRotate_;
-      lastInventoryId_ = other.lastInventoryId_;
-      lastGridNum_ = other.lastGridNum_;
+      lastGridId_ = other.lastGridId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2871,18 +2871,18 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "gridNum" field.</summary>
-    public const int GridNumFieldNumber = 7;
-    private int gridNum_;
+    /// <summary>Field number for the "gridId" field.</summary>
+    public const int GridIdFieldNumber = 7;
+    private int gridId_;
     /// <summary>
     ///인벤토리의 몇번째 그리드인지(혹은 그리드의 id)
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridNum {
-      get { return gridNum_; }
+    public int GridId {
+      get { return gridId_; }
       set {
-        gridNum_ = value;
+        gridId_ = value;
       }
     }
 
@@ -2928,33 +2928,15 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "lastInventoryId" field.</summary>
-    public const int LastInventoryIdFieldNumber = 11;
-    private int lastInventoryId_;
-    /// <summary>
-    /// 이전 인벤토리의 id
-    /// </summary>
+    /// <summary>Field number for the "lastGridId" field.</summary>
+    public const int LastGridIdFieldNumber = 11;
+    private int lastGridId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastInventoryId {
-      get { return lastInventoryId_; }
+    public int LastGridId {
+      get { return lastGridId_; }
       set {
-        lastInventoryId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastGridNum" field.</summary>
-    public const int LastGridNumFieldNumber = 12;
-    private int lastGridNum_;
-    /// <summary>
-    ///이전 인벤토리의 몇번재 그리드인지
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastGridNum {
-      get { return lastGridNum_; }
-      set {
-        lastGridNum_ = value;
+        lastGridId_ = value;
       }
     }
 
@@ -2979,12 +2961,11 @@ namespace Google.Protobuf.Protocol {
       if (ItemPosY != other.ItemPosY) return false;
       if (ItemRotate != other.ItemRotate) return false;
       if (InventoryId != other.InventoryId) return false;
-      if (GridNum != other.GridNum) return false;
+      if (GridId != other.GridId) return false;
       if (LastItemPosX != other.LastItemPosX) return false;
       if (LastItemPosY != other.LastItemPosY) return false;
       if (LastItemRotate != other.LastItemRotate) return false;
-      if (LastInventoryId != other.LastInventoryId) return false;
-      if (LastGridNum != other.LastGridNum) return false;
+      if (LastGridId != other.LastGridId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2998,12 +2979,11 @@ namespace Google.Protobuf.Protocol {
       if (ItemPosY != 0) hash ^= ItemPosY.GetHashCode();
       if (ItemRotate != 0) hash ^= ItemRotate.GetHashCode();
       if (InventoryId != 0) hash ^= InventoryId.GetHashCode();
-      if (GridNum != 0) hash ^= GridNum.GetHashCode();
+      if (GridId != 0) hash ^= GridId.GetHashCode();
       if (LastItemPosX != 0) hash ^= LastItemPosX.GetHashCode();
       if (LastItemPosY != 0) hash ^= LastItemPosY.GetHashCode();
       if (LastItemRotate != 0) hash ^= LastItemRotate.GetHashCode();
-      if (LastInventoryId != 0) hash ^= LastInventoryId.GetHashCode();
-      if (LastGridNum != 0) hash ^= LastGridNum.GetHashCode();
+      if (LastGridId != 0) hash ^= LastGridId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3046,9 +3026,9 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(48);
         output.WriteInt32(InventoryId);
       }
-      if (GridNum != 0) {
+      if (GridId != 0) {
         output.WriteRawTag(56);
-        output.WriteInt32(GridNum);
+        output.WriteInt32(GridId);
       }
       if (LastItemPosX != 0) {
         output.WriteRawTag(64);
@@ -3062,13 +3042,9 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(80);
         output.WriteInt32(LastItemRotate);
       }
-      if (LastInventoryId != 0) {
+      if (LastGridId != 0) {
         output.WriteRawTag(88);
-        output.WriteInt32(LastInventoryId);
-      }
-      if (LastGridNum != 0) {
-        output.WriteRawTag(96);
-        output.WriteInt32(LastGridNum);
+        output.WriteInt32(LastGridId);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3104,9 +3080,9 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(48);
         output.WriteInt32(InventoryId);
       }
-      if (GridNum != 0) {
+      if (GridId != 0) {
         output.WriteRawTag(56);
-        output.WriteInt32(GridNum);
+        output.WriteInt32(GridId);
       }
       if (LastItemPosX != 0) {
         output.WriteRawTag(64);
@@ -3120,13 +3096,9 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(80);
         output.WriteInt32(LastItemRotate);
       }
-      if (LastInventoryId != 0) {
+      if (LastGridId != 0) {
         output.WriteRawTag(88);
-        output.WriteInt32(LastInventoryId);
-      }
-      if (LastGridNum != 0) {
-        output.WriteRawTag(96);
-        output.WriteInt32(LastGridNum);
+        output.WriteInt32(LastGridId);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3156,8 +3128,8 @@ namespace Google.Protobuf.Protocol {
       if (InventoryId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(InventoryId);
       }
-      if (GridNum != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridNum);
+      if (GridId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridId);
       }
       if (LastItemPosX != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemPosX);
@@ -3168,11 +3140,8 @@ namespace Google.Protobuf.Protocol {
       if (LastItemRotate != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemRotate);
       }
-      if (LastInventoryId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastInventoryId);
-      }
-      if (LastGridNum != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastGridNum);
+      if (LastGridId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastGridId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3204,8 +3173,8 @@ namespace Google.Protobuf.Protocol {
       if (other.InventoryId != 0) {
         InventoryId = other.InventoryId;
       }
-      if (other.GridNum != 0) {
-        GridNum = other.GridNum;
+      if (other.GridId != 0) {
+        GridId = other.GridId;
       }
       if (other.LastItemPosX != 0) {
         LastItemPosX = other.LastItemPosX;
@@ -3216,11 +3185,8 @@ namespace Google.Protobuf.Protocol {
       if (other.LastItemRotate != 0) {
         LastItemRotate = other.LastItemRotate;
       }
-      if (other.LastInventoryId != 0) {
-        LastInventoryId = other.LastInventoryId;
-      }
-      if (other.LastGridNum != 0) {
-        LastGridNum = other.LastGridNum;
+      if (other.LastGridId != 0) {
+        LastGridId = other.LastGridId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3266,7 +3232,7 @@ namespace Google.Protobuf.Protocol {
             break;
           }
           case 56: {
-            GridNum = input.ReadInt32();
+            GridId = input.ReadInt32();
             break;
           }
           case 64: {
@@ -3282,11 +3248,7 @@ namespace Google.Protobuf.Protocol {
             break;
           }
           case 88: {
-            LastInventoryId = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            LastGridNum = input.ReadInt32();
+            LastGridId = input.ReadInt32();
             break;
           }
         }
@@ -3333,7 +3295,7 @@ namespace Google.Protobuf.Protocol {
             break;
           }
           case 56: {
-            GridNum = input.ReadInt32();
+            GridId = input.ReadInt32();
             break;
           }
           case 64: {
@@ -3349,11 +3311,7 @@ namespace Google.Protobuf.Protocol {
             break;
           }
           case 88: {
-            LastInventoryId = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            LastGridNum = input.ReadInt32();
+            LastGridId = input.ReadInt32();
             break;
           }
         }
@@ -3403,8 +3361,12 @@ namespace Google.Protobuf.Protocol {
       itemPosX_ = other.itemPosX_;
       itemPosY_ = other.itemPosY_;
       itemRotate_ = other.itemRotate_;
-      inventoryId_ = other.inventoryId_;
-      gridNum_ = other.gridNum_;
+      gridId_ = other.gridId_;
+      lastItemPosX_ = other.lastItemPosX_;
+      lastItemPosY_ = other.lastItemPosY_;
+      lastItemRotate_ = other.lastItemRotate_;
+      lastInventoryId_ = other.lastInventoryId_;
+      lastGridNum_ = other.lastGridNum_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3486,33 +3448,90 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "inventoryId" field.</summary>
-    public const int InventoryIdFieldNumber = 6;
-    private int inventoryId_;
-    /// <summary>
-    /// 아이템을 옮긴  인벤토리의 id
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int InventoryId {
-      get { return inventoryId_; }
-      set {
-        inventoryId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "gridNum" field.</summary>
-    public const int GridNumFieldNumber = 7;
-    private int gridNum_;
+    /// <summary>Field number for the "gridId" field.</summary>
+    public const int GridIdFieldNumber = 6;
+    private int gridId_;
     /// <summary>
     ///인벤토리의 몇번째 그리드인지(혹은 그리드의 id)
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridNum {
-      get { return gridNum_; }
+    public int GridId {
+      get { return gridId_; }
       set {
-        gridNum_ = value;
+        gridId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "lastItemPosX" field.</summary>
+    public const int LastItemPosXFieldNumber = 7;
+    private int lastItemPosX_;
+    /// <summary>
+    ///문제가 있을시 백업용. 필요하나?
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int LastItemPosX {
+      get { return lastItemPosX_; }
+      set {
+        lastItemPosX_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "lastItemPosY" field.</summary>
+    public const int LastItemPosYFieldNumber = 8;
+    private int lastItemPosY_;
+    /// <summary>
+    ///이전 아이템의 좌표
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int LastItemPosY {
+      get { return lastItemPosY_; }
+      set {
+        lastItemPosY_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "lastItemRotate" field.</summary>
+    public const int LastItemRotateFieldNumber = 9;
+    private int lastItemRotate_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int LastItemRotate {
+      get { return lastItemRotate_; }
+      set {
+        lastItemRotate_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "lastInventoryId" field.</summary>
+    public const int LastInventoryIdFieldNumber = 10;
+    private int lastInventoryId_;
+    /// <summary>
+    /// 이전 인벤토리의 id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int LastInventoryId {
+      get { return lastInventoryId_; }
+      set {
+        lastInventoryId_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "lastGridNum" field.</summary>
+    public const int LastGridNumFieldNumber = 11;
+    private int lastGridNum_;
+    /// <summary>
+    ///이전 인벤토리의 몇번재 그리드인지
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int LastGridNum {
+      get { return lastGridNum_; }
+      set {
+        lastGridNum_ = value;
       }
     }
 
@@ -3536,8 +3555,12 @@ namespace Google.Protobuf.Protocol {
       if (ItemPosX != other.ItemPosX) return false;
       if (ItemPosY != other.ItemPosY) return false;
       if (ItemRotate != other.ItemRotate) return false;
-      if (InventoryId != other.InventoryId) return false;
-      if (GridNum != other.GridNum) return false;
+      if (GridId != other.GridId) return false;
+      if (LastItemPosX != other.LastItemPosX) return false;
+      if (LastItemPosY != other.LastItemPosY) return false;
+      if (LastItemRotate != other.LastItemRotate) return false;
+      if (LastInventoryId != other.LastInventoryId) return false;
+      if (LastGridNum != other.LastGridNum) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3550,8 +3573,12 @@ namespace Google.Protobuf.Protocol {
       if (ItemPosX != 0) hash ^= ItemPosX.GetHashCode();
       if (ItemPosY != 0) hash ^= ItemPosY.GetHashCode();
       if (ItemRotate != 0) hash ^= ItemRotate.GetHashCode();
-      if (InventoryId != 0) hash ^= InventoryId.GetHashCode();
-      if (GridNum != 0) hash ^= GridNum.GetHashCode();
+      if (GridId != 0) hash ^= GridId.GetHashCode();
+      if (LastItemPosX != 0) hash ^= LastItemPosX.GetHashCode();
+      if (LastItemPosY != 0) hash ^= LastItemPosY.GetHashCode();
+      if (LastItemRotate != 0) hash ^= LastItemRotate.GetHashCode();
+      if (LastInventoryId != 0) hash ^= LastInventoryId.GetHashCode();
+      if (LastGridNum != 0) hash ^= LastGridNum.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3590,13 +3617,29 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(40);
         output.WriteInt32(ItemRotate);
       }
-      if (InventoryId != 0) {
+      if (GridId != 0) {
         output.WriteRawTag(48);
-        output.WriteInt32(InventoryId);
+        output.WriteInt32(GridId);
       }
-      if (GridNum != 0) {
+      if (LastItemPosX != 0) {
         output.WriteRawTag(56);
-        output.WriteInt32(GridNum);
+        output.WriteInt32(LastItemPosX);
+      }
+      if (LastItemPosY != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(LastItemPosY);
+      }
+      if (LastItemRotate != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(LastItemRotate);
+      }
+      if (LastInventoryId != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(LastInventoryId);
+      }
+      if (LastGridNum != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(LastGridNum);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3628,13 +3671,29 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(40);
         output.WriteInt32(ItemRotate);
       }
-      if (InventoryId != 0) {
+      if (GridId != 0) {
         output.WriteRawTag(48);
-        output.WriteInt32(InventoryId);
+        output.WriteInt32(GridId);
       }
-      if (GridNum != 0) {
+      if (LastItemPosX != 0) {
         output.WriteRawTag(56);
-        output.WriteInt32(GridNum);
+        output.WriteInt32(LastItemPosX);
+      }
+      if (LastItemPosY != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(LastItemPosY);
+      }
+      if (LastItemRotate != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(LastItemRotate);
+      }
+      if (LastInventoryId != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(LastInventoryId);
+      }
+      if (LastGridNum != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(LastGridNum);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3661,11 +3720,23 @@ namespace Google.Protobuf.Protocol {
       if (ItemRotate != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemRotate);
       }
-      if (InventoryId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InventoryId);
+      if (GridId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridId);
       }
-      if (GridNum != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridNum);
+      if (LastItemPosX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemPosX);
+      }
+      if (LastItemPosY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemPosY);
+      }
+      if (LastItemRotate != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemRotate);
+      }
+      if (LastInventoryId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastInventoryId);
+      }
+      if (LastGridNum != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastGridNum);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3694,11 +3765,23 @@ namespace Google.Protobuf.Protocol {
       if (other.ItemRotate != 0) {
         ItemRotate = other.ItemRotate;
       }
-      if (other.InventoryId != 0) {
-        InventoryId = other.InventoryId;
+      if (other.GridId != 0) {
+        GridId = other.GridId;
       }
-      if (other.GridNum != 0) {
-        GridNum = other.GridNum;
+      if (other.LastItemPosX != 0) {
+        LastItemPosX = other.LastItemPosX;
+      }
+      if (other.LastItemPosY != 0) {
+        LastItemPosY = other.LastItemPosY;
+      }
+      if (other.LastItemRotate != 0) {
+        LastItemRotate = other.LastItemRotate;
+      }
+      if (other.LastInventoryId != 0) {
+        LastInventoryId = other.LastInventoryId;
+      }
+      if (other.LastGridNum != 0) {
+        LastGridNum = other.LastGridNum;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3740,11 +3823,27 @@ namespace Google.Protobuf.Protocol {
             break;
           }
           case 48: {
-            InventoryId = input.ReadInt32();
+            GridId = input.ReadInt32();
             break;
           }
           case 56: {
-            GridNum = input.ReadInt32();
+            LastItemPosX = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            LastItemPosY = input.ReadInt32();
+            break;
+          }
+          case 72: {
+            LastItemRotate = input.ReadInt32();
+            break;
+          }
+          case 80: {
+            LastInventoryId = input.ReadInt32();
+            break;
+          }
+          case 88: {
+            LastGridNum = input.ReadInt32();
             break;
           }
         }
@@ -3787,11 +3886,27 @@ namespace Google.Protobuf.Protocol {
             break;
           }
           case 48: {
-            InventoryId = input.ReadInt32();
+            GridId = input.ReadInt32();
             break;
           }
           case 56: {
-            GridNum = input.ReadInt32();
+            LastItemPosX = input.ReadInt32();
+            break;
+          }
+          case 64: {
+            LastItemPosY = input.ReadInt32();
+            break;
+          }
+          case 72: {
+            LastItemRotate = input.ReadInt32();
+            break;
+          }
+          case 80: {
+            LastInventoryId = input.ReadInt32();
+            break;
+          }
+          case 88: {
+            LastGridNum = input.ReadInt32();
             break;
           }
         }
@@ -4084,7 +4199,6 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public S_DeleteItem(S_DeleteItem other) : this() {
       playerId_ = other.playerId_;
-      inventoryId_ = other.inventoryId_;
       itemId_ = other.itemId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -4107,18 +4221,6 @@ namespace Google.Protobuf.Protocol {
       get { return playerId_; }
       set {
         playerId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "inventoryId" field.</summary>
-    public const int InventoryIdFieldNumber = 2;
-    private int inventoryId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int InventoryId {
-      get { return inventoryId_; }
-      set {
-        inventoryId_ = value;
       }
     }
 
@@ -4153,7 +4255,6 @@ namespace Google.Protobuf.Protocol {
         return true;
       }
       if (PlayerId != other.PlayerId) return false;
-      if (InventoryId != other.InventoryId) return false;
       if (ItemId != other.ItemId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -4163,7 +4264,6 @@ namespace Google.Protobuf.Protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
-      if (InventoryId != 0) hash ^= InventoryId.GetHashCode();
       if (ItemId != 0) hash ^= ItemId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -4187,10 +4287,6 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(8);
         output.WriteInt32(PlayerId);
       }
-      if (InventoryId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(InventoryId);
-      }
       if (ItemId != 0) {
         output.WriteRawTag(24);
         output.WriteInt32(ItemId);
@@ -4209,10 +4305,6 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(8);
         output.WriteInt32(PlayerId);
       }
-      if (InventoryId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(InventoryId);
-      }
       if (ItemId != 0) {
         output.WriteRawTag(24);
         output.WriteInt32(ItemId);
@@ -4229,9 +4321,6 @@ namespace Google.Protobuf.Protocol {
       int size = 0;
       if (PlayerId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
-      }
-      if (InventoryId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InventoryId);
       }
       if (ItemId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemId);
@@ -4250,9 +4339,6 @@ namespace Google.Protobuf.Protocol {
       }
       if (other.PlayerId != 0) {
         PlayerId = other.PlayerId;
-      }
-      if (other.InventoryId != 0) {
-        InventoryId = other.InventoryId;
       }
       if (other.ItemId != 0) {
         ItemId = other.ItemId;
@@ -4280,10 +4366,6 @@ namespace Google.Protobuf.Protocol {
             PlayerId = input.ReadInt32();
             break;
           }
-          case 16: {
-            InventoryId = input.ReadInt32();
-            break;
-          }
           case 24: {
             ItemId = input.ReadInt32();
             break;
@@ -4309,10 +4391,6 @@ namespace Google.Protobuf.Protocol {
             break;
           case 8: {
             PlayerId = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            InventoryId = input.ReadInt32();
             break;
           }
           case 24: {
