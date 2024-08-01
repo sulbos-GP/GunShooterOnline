@@ -23,6 +23,7 @@ public class ItemObject : MonoBehaviour
      * 3. RotateRight, RotateLeft 함수는 컨트롤러에서 회전 명령을 줄때 사용합니다.
      *    rotated변수를 바꾸며 현재 RectTransform에 적용시킵니다.
     */
+    public const int maxItemMergeAmount = 64;
 
     public int itemId;
     public RectTransform itemRect;
