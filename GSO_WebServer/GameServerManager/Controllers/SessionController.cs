@@ -13,7 +13,7 @@ namespace GameServerManager.Controllers
         /// <summary>
         /// 가능한 매칭이 있는지 확인
         /// </summary>
-        [HttpGet]
+        [HttpPost]
         [Route("FetchMatch")]
         public async Task<FetchMatchRes> FetchMatch([FromBody] FetchMatchReq request)
         {

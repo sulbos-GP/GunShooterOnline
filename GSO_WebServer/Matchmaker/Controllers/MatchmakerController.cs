@@ -37,7 +37,7 @@ namespace Matchmaker.Controllers
                 return response;
             }
 
-            var error = await mMatchmakerService.AddMatchQueue(header.uid, request.world, request.region);
+            var error = await mMatchmakerService.PushMatchQueue(header.uid, request.world, request.region);
             if(error != WebErrorCode.None)
             {
                 response.error_code = error;
@@ -64,7 +64,7 @@ namespace Matchmaker.Controllers
                 return response;
             }
 
-            var error = await mMatchmakerService.RemoveMatchQueue(header.uid);
+            var error = await mMatchmakerService.PopMatchQueue(header.uid);
             if (error != WebErrorCode.None)
             {
                 response.error_code = error;

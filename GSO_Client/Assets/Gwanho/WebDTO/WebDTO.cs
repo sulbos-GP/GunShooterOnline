@@ -100,6 +100,8 @@ public class MatchmakerJoinRes : ErrorCodeDTO
 
 public class MatchmakerCancleReq
 {
+    public string world { get; set; } = string.Empty;
+    public string region { get; set; } = string.Empty;
 }
 
 public class MatchmakerCancleRes : ErrorCodeDTO

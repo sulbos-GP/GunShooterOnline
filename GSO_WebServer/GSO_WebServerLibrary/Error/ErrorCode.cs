@@ -14,6 +14,12 @@
         TEMP_ERROR = 1,
         TEMP_Exception = 2,
 
+        //Middleware
+        IncorrectHeaderContext = 500,
+        DiscrepancyAppVersion = 501,
+        DiscrepancyDataVersion = 502,
+
+
         // Common 1000 ~
         UnhandleException = 1001,
         RedisFailException = 1002,

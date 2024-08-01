@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Net.Http;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Profiling;
 using UnityEngine.UI;
 using static AuthorizeResource;
+using static MatchmakerHub;
 using static MatchmakerResource;
 
 public class UI_Match : MonoBehaviour
@@ -114,7 +116,8 @@ public class UI_Match : MonoBehaviour
 
             var packet = new MatchmakerCancleReq
             {
-
+                world = "Forest",
+                region = "asia"
             };
 
             MatchmakerService service = new MatchmakerService();
@@ -165,7 +168,6 @@ public class UI_Match : MonoBehaviour
         }
 
     }
-
     private void UpdateTimerDisplay(int elapsedTime)
     {
         int seconds = elapsedTime;
@@ -174,5 +176,22 @@ public class UI_Match : MonoBehaviour
 
         mMatchTimeText.text = string.Format("{0:D2}:{1:D2}", minutes, seconds);
     }
+
+    /// <summary>
+    /// 매칭 성공
+    /// </summary>
+    public void S2C_MatchComplete(MatchProfile response)
+    {
+
+        mMatchButton.interactable = false;
+        mMatchModeText.text = "매칭 성공";
+
+        mMatchTimeText.transform.parent.gameObject.SetActive(false);
+        StopCoroutine(UpdateTimer());
+
+        SystemLogManager.Instance.LogMessage($"매치가 생성되었습니다 {response.host}:{response.port}");
+    }
+
+
 
 }
