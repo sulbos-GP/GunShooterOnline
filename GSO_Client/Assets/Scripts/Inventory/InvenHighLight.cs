@@ -32,15 +32,23 @@ public class InvenHighLight : MonoBehaviour
      * 5. SetColor함수는 매개변수로 받은 색으로 하이라이트의 이미지 색을 지정합니다.
      * 
      */
+    public static GameObject highlightObj;
+
     private RectTransform highlighter;
     public GameObject highlightPrefab;
+    
 
     private void Awake()
     {
-        if(highlighter == null)
+        InstantHighlighter();
+    }
+
+    public void InstantHighlighter()
+    {
+        if (highlighter == null)
         {
-            GameObject highlightObj = Instantiate(highlightPrefab);
-            InventoryController.invenInstance.highlightObj = highlightObj;
+            GameObject instantObj = Instantiate(highlightPrefab);
+            highlightObj = instantObj;
             highlighter = highlightObj.GetComponent<RectTransform>();
             highlighter.GetComponent<Image>().raycastTarget = false;
         }
@@ -97,6 +105,7 @@ public class InvenHighLight : MonoBehaviour
     {
         if(targetGrid == null)
         {
+            highlighter.SetParent(null);
             return;
         }
         highlighter.SetParent(targetGrid.GetComponent<RectTransform>());
