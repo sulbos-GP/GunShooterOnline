@@ -67,6 +67,25 @@ internal class ObjectManager
                 Player player = null;
                 if (_players.TryGetValue(objectId, out player))
                     return player;
+
+            }
+        }
+
+        return null;
+    }
+
+    public ItemObject Find2(int objectId)
+    {
+        var objectType = GetObjectTypeById(objectId);
+
+        lock (_lock)
+        {
+            if (objectType == GameObjectType.Item)
+            {
+                ItemObject obj = null;
+                if (_items.TryGetValue(objectId, out obj))
+                    return obj;
+
             }
         }
 
