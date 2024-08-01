@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Server.Game
 {
-    internal class Grid
+    public class Grid
     {
         public static int CreateItemId = 1;
 
@@ -46,7 +46,7 @@ namespace Server.Game
 
             foreach (ItemDataInfo items in gridData.ItemList)
             {
-                PushItemIntoSlot(items);
+                PushItemIntoSlot(items,items.ItemPosX, items.ItemPosY);
             }
 
         }
@@ -75,7 +75,7 @@ namespace Server.Game
 
         }
 
-        private bool ItemPushCheck(ItemDataInfo item, int posX, int posY)
+        private bool ItemPushCheck(ItemDataInfo item, int posX, int posY) // -> itemobject
         {
             for (int x = 0; x < item.Width; x++)
             {
@@ -91,7 +91,12 @@ namespace Server.Game
             return true;
         }
 
-        private void PushItemIntoSlot(ItemDataInfo item)
+
+
+
+
+
+        public void PushItemIntoSlot(ItemDataInfo item,int posX, int posY)
         {
             for (int x = 0; x < item.Width; x++)
             {
