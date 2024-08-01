@@ -196,7 +196,7 @@ namespace AuthenticationServer.Controllers
         }
 
         /// <summary>
-        /// 로그아웃 (사용안함)
+        /// 로그아웃
         /// </summary>
         [HttpPost]
         [Route("SignOut")]

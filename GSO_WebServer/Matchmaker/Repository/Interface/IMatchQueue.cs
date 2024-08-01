@@ -32,7 +32,7 @@ namespace Matchmaker.Repository.Interface
         public Task<WebErrorCode> AddMatchTicket(Int32 uid, String clientId);
 
         /// <summary>
-        /// 매칭 티켓에서 유저 삭제
+        /// 매칭 티켓에서 유저 완전 삭제
         /// </summary>
         public Task<WebErrorCode> RemoveMatchTicket(Int32 uid);
 

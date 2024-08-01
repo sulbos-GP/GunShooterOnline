@@ -5,6 +5,7 @@ using GSO_WebServerLibrary.Reposiotry.Interfaces;
 using GSO_WebServerLibrary.Reposiotry.Define.MemoryDB;
 using GsoWebServer.Servicies.Interfaces;
 using System.Text.Json;
+using Newtonsoft.Json.Linq;
 
 namespace GsoWebServer.Middleware
 {
@@ -126,11 +127,11 @@ namespace GsoWebServer.Middleware
 
         private string? GetValueOrNull(string key, HttpContext context)
         {
-            if (context.Request.Headers.TryGetValue(key, out var token) == false)
+            if (context.Request.Headers.TryGetValue(key, out var value) == false)
             {
                 return null;
             }
-            return token;
+            return value;
         }
 
     }

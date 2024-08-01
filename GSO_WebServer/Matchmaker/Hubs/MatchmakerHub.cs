@@ -37,7 +37,13 @@ namespace Matchmaker.Hubs
         public async Task C2S_ConnectMatchHub(int uid)
         {
             string connectionId = Context.ConnectionId;
-            await mMatchmakerService.InitMatchQueue(uid, connectionId);
+            var error = await mMatchmakerService.AddMatchTicket(uid, connectionId);
+        }
+
+        public async Task C2S_DisConnectMatchHub(int uid)
+        {
+            string connectionId = Context.ConnectionId;
+            var error = await mMatchmakerService.RemoveMatchTicket(uid);
         }
 
         //임시

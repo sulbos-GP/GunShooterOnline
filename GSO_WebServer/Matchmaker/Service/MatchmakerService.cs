@@ -31,7 +31,7 @@ namespace Matchmaker.Service
         {
         }
 
-        public async Task<WebErrorCode> InitMatchQueue(Int32 uid, String clientId)
+        public async Task<WebErrorCode> AddMatchTicket(Int32 uid, String clientId)
         {
             try
             {
@@ -49,7 +49,25 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<WebErrorCode> AddMatchQueue(Int32 uid, String world, String region)
+        public async Task<WebErrorCode> RemoveMatchTicket(Int32 uid)
+        {
+            try
+            {
+                WebErrorCode error = await mMatchQueueMDB.RemoveMatchTicket(uid);
+                if (error != WebErrorCode.None)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                return WebErrorCode.None;
+            }
+            catch
+            {
+                return WebErrorCode.TEMP_Exception;
+            }
+        }
+
+        public async Task<WebErrorCode> PushMatchQueue(Int32 uid, String world, String region)
         {
             try
             {
@@ -76,6 +94,42 @@ namespace Matchmaker.Service
                     ticket.world = world;
                     ticket.region = region;
                     ticket.match_start_time = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+                }
+
+                bool result = await mMatchQueueMDB.UpdateTicket(uid, ticket);
+                if (result == true)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                return WebErrorCode.None;
+            }
+            catch
+            {
+                return WebErrorCode.TEMP_Exception;
+            }
+        }
+
+        public async Task<WebErrorCode> PopMatchQueue(Int32 uid)
+        {
+            try
+            {
+                WebErrorCode error = await mMatchQueueMDB.RemoveMatchRating(uid);
+                if (error != WebErrorCode.None)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                var ticket = await mMatchQueueMDB.GetPlayerTicket(uid);
+                if (ticket == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                {
+                    ticket.world = string.Empty;
+                    ticket.region = string.Empty;
+                    ticket.match_start_time = 0;
                 }
 
                 bool result = await mMatchQueueMDB.UpdateTicket(uid, ticket);
@@ -147,7 +201,7 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<(WebErrorCode, Dictionary<int, PlayerInfo>?)> ScanAndLockPlayers()
+        public async Task<(WebErrorCode, Dictionary<int, PlayerInfo>?)> ScanPlayers()
         {
             try
             {

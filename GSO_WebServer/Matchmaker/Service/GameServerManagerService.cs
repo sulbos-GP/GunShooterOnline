@@ -3,7 +3,8 @@ using GSO_WebServerLibrary.Error;
 using GSO_WebServerLibrary.Models.Match;
 using Matchmaker.Models;
 using Matchmaker.Service.Interfaces;
-using System.Net.Http;
+using System.Text.Json;
+using System.Text;
 
 namespace Matchmaker.Service
 {
@@ -37,7 +38,13 @@ namespace Matchmaker.Service
                     return (WebErrorCode.TEMP_ERROR, null);
                 }
 
-                var response = await gameServerManagerClient.GetAsync("FetchMatch");
+                FetchMatchReq packet = new FetchMatchReq
+                {
+
+                };
+                var content = new StringContent(JsonSerializer.Serialize(packet), Encoding.UTF8, "application/json");
+
+                var response = await gameServerManagerClient.PostAsync("api/Session/FetchMatch", content);
                 response.EnsureSuccessStatusCode();
 
                 var fetchMatch = await response.Content.ReadFromJsonAsync<FetchMatchRes>();

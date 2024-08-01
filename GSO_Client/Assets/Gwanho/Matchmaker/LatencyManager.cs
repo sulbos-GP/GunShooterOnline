@@ -33,4 +33,12 @@ public class LatencyManager : MonoBehaviour
         return Convert.ToInt64(sum / mLatencies.Count);
     }
 
+    private void OnDestroy()
+    {
+        if(mLatencies != null)
+        {
+            mLatencies.Clear();
+        }
+    }
+
 }

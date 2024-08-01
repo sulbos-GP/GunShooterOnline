@@ -5,6 +5,7 @@ using Matchmaker.Hubs;
 using Matchmaker.Repository;
 using Matchmaker.Repository.Interface;
 using Matchmaker.Service;
+using Matchmaker.Service.Background;
 using Matchmaker.Service.Interfaces;
 using System;
 
@@ -25,12 +26,12 @@ namespace Matchmaker.Startup
             // Add services to the http client
             services.AddHttpClient("GsoWebServer", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:5200");
+                httpclient.BaseAddress = new Uri("http://localhost:5200/api");
             });
 
             services.AddHttpClient("GameServerManager", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:7000");
+                httpclient.BaseAddress = new Uri("http://localhost:7000/api");
             });
 
             services.AddControllers().AddJsonOptions(options =>
@@ -48,12 +49,12 @@ namespace Matchmaker.Startup
             // Add services to the container.
             //services.AddTransient<IMasterDB, MasterDB>();
             services.AddTransient<IGameDB, GameDB>();
-            
-            //services.AddTransient<IGoogleService, GoogleService>();
-            //services.AddTransient<IAuthenticationService, AuthenticationService>();
-            //services.AddTransient<IDataLoadService, DataLoadService>();
+
+            services.AddHostedService<MatchmakerBackgroundService>();
+
             services.AddTransient<IMatchmakerService, MatchmakerService>();
-            
+            services.AddTransient<IGameServerManagerService, GameServerManagerService>();
+
             services.AddSingleton<IMatchQueue, MatchQueue>();
 
         }

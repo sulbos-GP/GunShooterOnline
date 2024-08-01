@@ -59,7 +59,7 @@ public abstract class ClientHub : MonoBehaviour
         StoptHub();
     }
 
-    protected void StartHub()
+    public void StartHub()
     {
         SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결중...");
         mConnection.StartAsync().Wait();
@@ -76,7 +76,7 @@ public abstract class ClientHub : MonoBehaviour
         }
     }
 
-    protected void StoptHub()
+    public void StoptHub()
     {
         SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결 해제중...");
         mConnection.StopAsync().Wait();
