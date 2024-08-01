@@ -82,6 +82,10 @@ public class Map
         battleRoom = r;
     }
 
+    public void Init()
+    {
+        //렌덤아인템
+    }
 
 
 

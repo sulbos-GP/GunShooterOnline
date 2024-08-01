@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using System.Net.Sockets;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +17,23 @@ namespace Server
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
 
         public void HandleMove(Player player, C_Move packet)
         {
@@ -47,7 +66,47 @@ namespace Server
             BroadCast(player.CurrentRoomId, resMovePacket);
         }
 
+        internal void HandleItemDelete(Player player, int playerId, int itemId)
+        {
+            //TODO : 그리드로 옮기기
+            //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
+            ItemObject info =  ObjectManager.Instance.Find2(itemId);
+
+            for (int x = 0; x < info.width; x++)
+            {
+                for (int y = 0; y < info.height; y++)
+                {
+                    player.inventory.instantGrid[0].gridSlot[info.itemPos.x + x, info.itemPos.y + y] = 0;
+                }
+            }
 
 
+
+        }
+
+        internal void HandleItemLoad(Player player, int playerId, int inventoryId )
+        {
+            S_LoadInventory s_LoadInventory = new S_LoadInventory();
+
+            s_LoadInventory.PlayerId = player.Id;
+            s_LoadInventory.InventoryId = inventoryId;
+
+
+            Player targetPlayer = ObjectManager.Instance.Find(playerId);
+
+
+            s_LoadInventory.InvenData = targetPlayer.inventory.invenData;
+
+            //BroadCast s_LoadInventory
+        }
+
+        internal void HandleItemMove(Player player, int itemId, int itemPosX, int itemPosY)
+        {
+            player.inventory.GetItem(itemId, itemPosX, itemPosY);
+
+            //S_
+
+           // BroadCast()
+        }
     }
 }

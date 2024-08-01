@@ -15,7 +15,14 @@ class PacketHandler
 {
     internal static void C_DeleteItemHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        //인벤토리 열었을떄
+        ClientSession clientSession = session as ClientSession;
+        C_DeleteItem packet = (C_DeleteItem)message;
+        Console.WriteLine($"C_DeleteItemHandler {packet.PlayerId}");
+
+        Player player = clientSession.MyPlayer;
+
+        player.gameRoom.HandleItemDelete(player, packet.PlayerId, packet.ItemId);
     }
 
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
@@ -40,13 +47,15 @@ class PacketHandler
 
     internal static void C_LoadInventoryHandler(PacketSession session, IMessage message)
     {
+        //인벤토리 열었을떄
         ClientSession clientSession = session as ClientSession;
         C_LoadInventory packet = (C_LoadInventory)message;
         Console.WriteLine($"C_LoadInventoryHandler {packet.PlayerId}");
-        C_LoadInventory pakcet = message as C_LoadInventory;
 
+        Player player = clientSession.MyPlayer;
 
-
+        player.gameRoom.HandleItemLoad(player, packet.PlayerId,  packet.InventoryId);
+        
 
     }
 
@@ -74,6 +83,11 @@ class PacketHandler
 
     internal static void C_MoveItemHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        ClientSession clientSession = session as ClientSession;
+        C_MoveItem packet = (C_MoveItem)message;
+        Console.WriteLine($"C_MoveItemHandler {packet.PlayerId}");
+
+        Player player = clientSession.MyPlayer;
+        player.gameRoom.HandleItemMove(player, packet.ItemId, packet.ItemPosX, packet.ItemPosY);
     }
 }

@@ -2,6 +2,7 @@
 using System.Net;
 using System.Threading;
 using QuadTree;
+using Server.Game;
 using ServerCore;
 
 namespace Server
@@ -29,6 +30,7 @@ namespace Server
 
         static void Main(string[] args)
 		{
+
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
 
