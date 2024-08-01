@@ -6,6 +6,7 @@ public class PlayerController : CreatureController
 {
     protected Coroutine _coSkill;
     protected bool _rangedSkill = false;
+
    //private SkillType skillType = SkillType.None; //애니메이션용
 
 
