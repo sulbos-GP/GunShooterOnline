@@ -41,6 +41,9 @@ class PacketHandler
 
     internal static void C_LoadInventoryHandler(PacketSession session, IMessage message)
     {
+        ClientSession clientSession = session as ClientSession;
+        C_LoadInventory packet = (C_LoadInventory)message;
+        Console.WriteLine($"C_LoadInventoryHandler {packet.PlayerId}");
         C_LoadInventory pakcet = message as C_LoadInventory;
 
 

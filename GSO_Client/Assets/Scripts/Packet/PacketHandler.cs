@@ -142,6 +142,7 @@ internal class PacketHandler
         }
     }
 
+    
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
         S_MoveItem packet = message as S_MoveItem;
@@ -152,10 +153,16 @@ internal class PacketHandler
         }
         Debug.Log("S_MoveItem");
 
+        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+        {
+            //옮긴 플레이어를 제외한 다른 플레이어에게 전송됨
+            return;
+        }
+
         //패킷의 id를 아이템 오브젝트의 리스트에서 검색 해당 아이템의 ItemObject 스크립트 불러옴
         ItemObject moveItemObj;
-        bool searchId = Managers.Object._itemDic.TryGetValue(packet.ItemId,out moveItemObj);
-        if (searchId == false)
+        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId,out moveItemObj);
+        if (success == false)
         {
             Debug.Log("옮기려는 아이템이 존재하지 않음(검색실패)");
             return;
@@ -164,6 +171,7 @@ internal class PacketHandler
         //ItemObject.itemData에 변경된 내용들을 변경하고 ItemObject.Set을 통해 아이템의 위치 변경
         moveItemObj.curItemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
         moveItemObj.curItemRotate = packet.ItemRotate;
+        //프로토콜 업데이트 시 주석해제
         Managers.Object._gridDic.TryGetValue(packet.gridId, out moveItemObj.curItemGrid);
         moveItemObj.backUpItemPos = new Vector2Int(packet.lastItemPosX, packet.lastItemPosY);
         moveItemObj.backUpItemRotate = packet.lastItemRotate;
@@ -178,6 +186,7 @@ internal class PacketHandler
         //클라이언트에서 해당 아이템을 배치 가능한지 체크해서 성공할 경우에만 패킷을 전달하기에 따로 성공 여부 체크는 필요 없을듯.
     }
 
+    //아이템을 삭제할때. 플레이어가 아이템을 들었을때 다른 플레이어에게 전송할때도 좋을듯.
     internal static void S_DeleteItemHandler(PacketSession session, IMessage message)
     {
         S_DeleteItem packet = message as S_DeleteItem;
@@ -187,20 +196,33 @@ internal class PacketHandler
             return;
         }
         Debug.Log("S_DeleteItem");
+
+        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+        {
+            //옮긴 플레이어를 제외한 다른 플레이어에게 전송됨
+            return;
+        }
+
         //패킷의 ItmeId를 통해 해당 아이템을 검색
-
         ItemObject deleteItem;
-        bool searchId = Managers.Object._itemDic.TryGetValue(packet.ItemId, out deleteItem);
+        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out deleteItem);
 
-        if (searchId == false) {
+        if (success == false) {
             Debug.Log("삭제하려는 아이템이 존재하지 않음(검색 실패)");
             return;
         }
         //item.curGrid를 통해 해당 아이템이 존재하는 그리드를 도출해냄
         InventoryGrid deleteItemGrid = deleteItem.curItemGrid;
+        if (deleteItemGrid == null)
+        {
+            Debug.Log("아이템이 위치한 그리드가 존재하지 않음");
+            return;
+        }
+
         //item.curGrid.CleanItemSlot(item)으로 해당 그리드의 아이템 슬롯에서 해당 아이템 제거
         deleteItemGrid.CleanItemSlot(deleteItem);
 
+        //해당 오브젝트가 딕셔너리에 존재하면 해당 아이템을 삭제함
         Managers.Object.RemoveItem(packet.ItemId);
 
     }

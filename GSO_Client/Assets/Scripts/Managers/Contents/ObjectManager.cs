@@ -6,7 +6,7 @@ using UnityEngine;
 public class ObjectManager
 {
     private readonly Dictionary<int, GameObject> _objects = new();
-    public readonly Dictionary<int, InvenData> _inventoryDic = new(); //게임 내에 생성된 모든 인벤토리 데이터
+    public readonly Dictionary<int, InvenData> _inventoryDic = new(); //게임 내에 생성된 모든 인벤토리 데이터(id = 소유자의 id)
     public readonly Dictionary<int, InventoryGrid> _gridDic = new(); //현재 UI에 열려있는 그리드 오브젝트
     public readonly Dictionary<int, ItemObject> _itemDic = new(); //현재 UI에 존재하는 아이템 오브젝트
     public MyPlayerController MyPlayer { get; set; }

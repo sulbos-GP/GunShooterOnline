@@ -29,12 +29,12 @@ public class OtherInventory : Inventory
     private void OnDisable()
     {
         invenData = null;
-        foreach(InventoryGrid grids in gridList)
+        foreach(InventoryGrid grids in instantGrid)
         {
             Destroy(grids.gameObject);
         }
 
-        gridList.Clear();
+        instantGrid.Clear();
 
         InvenId = 0;
         invenWeight = 0;
