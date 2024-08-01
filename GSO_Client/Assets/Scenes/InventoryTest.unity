@@ -325,7 +325,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &377673525
 Rigidbody2D:
   serializedVersion: 4
@@ -912,12 +912,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 672447935}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f7feee413cfa1ee498a9f32903701b48, type: 3}
+  m_Script: {fileID: 11500000, guid: 467009a26142abf499a32470fa826dce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   InvenId: 0
-  gridPref: {fileID: 109246022809251751, guid: 383adce80a43e8b42a9f14271db51372, type: 3}
-  invenData: {fileID: 0}
+  gridPref: {fileID: 109246022809251751, guid: 1585a591a85909943bc6907c55f55404, type: 3}
+  invenData: {fileID: 11400000, guid: 0f3d22f506e7e6e4bb25b95a0c2904ba, type: 2}
   gridList: []
   invenWeight: 0
   limitWeight: 0
@@ -1147,31 +1147,14 @@ GameObject:
   - component: {fileID: 803408748}
   - component: {fileID: 803408747}
   - component: {fileID: 803408746}
-  - component: {fileID: 803408745}
+  - component: {fileID: 803408750}
   m_Layer: 0
   m_Name: ExitZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &803408745
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 803408744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43bb79b6f501ce04cb13c71c4736e5ad, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectId: 0
-  interactType: 0
-  interactRange: 0
-  invenData: {fileID: 0}
-  gameEndUI: {fileID: 0}
+  m_IsActive: 0
 --- !u!50 &803408746
 Rigidbody2D:
   serializedVersion: 4
@@ -1311,6 +1294,23 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &803408750
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803408744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14151e0623d5af844a549fa02934fc74, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectId: 0
+  interactType: 2
+  interactRange: 0
+  invenData: {fileID: 0}
+  gameEndUI: {fileID: 0}
 --- !u!1 &817470694
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,12 +1357,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 817470694}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b851847834e64ea4aba9d10775504a26, type: 3}
+  m_Script: {fileID: 11500000, guid: 4d2ff6408676b0c4d91501b44f85d2ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   InvenId: 0
-  gridPref: {fileID: 109246022809251751, guid: 383adce80a43e8b42a9f14271db51372, type: 3}
-  invenData: {fileID: 11400000, guid: 57a7880cab5af6e4f9a4021748d93d12, type: 2}
+  gridPref: {fileID: 109246022809251751, guid: 1585a591a85909943bc6907c55f55404, type: 3}
+  invenData: {fileID: 11400000, guid: a311fe5985d394746b07a031566e87ac, type: 2}
   gridList: []
   invenWeight: 0
   limitWeight: 0
@@ -1378,33 +1378,15 @@ GameObject:
   - component: {fileID: 818000869}
   - component: {fileID: 818000868}
   - component: {fileID: 818000870}
-  - component: {fileID: 818000867}
   - component: {fileID: 818000871}
+  - component: {fileID: 818000872}
   m_Layer: 0
   m_Name: Box
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &818000867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818000866}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 32c18677710315244b27553af698b11a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  objectId: 1
-  interactType: 0
-  interactRange: 3
-  invenData: {fileID: 11400000, guid: 7bc24b90a63af374391a05c35a9e97b8, type: 2}
-  inventoryUI: {fileID: 934051885}
-  otherInvenUI: {fileID: 672447937}
+  m_IsActive: 0
 --- !u!212 &818000868
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -1534,6 +1516,24 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &818000872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 818000866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bc2ab5677e10b7542aac70ff29d88735, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  objectId: 0
+  interactType: 0
+  interactRange: 0
+  invenData: {fileID: 0}
+  inventoryUI: {fileID: 934051885}
+  otherInvenUI: {fileID: 672447937}
 --- !u!1 &827949979
 GameObject:
   m_ObjectHideFlags: 0
@@ -1726,7 +1726,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 839514581}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01e8c7bcb309d0549bfd95a1d0f817c7, type: 3}
+  m_Script: {fileID: 11500000, guid: 5c80b29a92f08fc4a93c3240ee31ff01, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   playerId: 1
@@ -1734,12 +1734,12 @@ MonoBehaviour:
   deleteUI: {fileID: 865657543509723830}
   updateGridPos: {x: 0, y: 0}
   itemsList:
-  - {fileID: 11400000, guid: f17983c86f0867344bcd66b89cd205f8, type: 2}
-  - {fileID: 11400000, guid: 92d09948365c26f4bb4c31f8b3bc5500, type: 2}
-  - {fileID: 11400000, guid: 5ebb66b8af3a8644592753c21f6e3b3c, type: 2}
-  - {fileID: 11400000, guid: 400a6fafb71446e4291508fb628793ee, type: 2}
-  - {fileID: 11400000, guid: 58308f20eaaefb04ebf2a1565023b55f, type: 2}
-  itemPref: {fileID: 7700662711098545541, guid: 95277de10a78c0f459b6e07d826fb6d4, type: 3}
+  - {fileID: 11400000, guid: 4a85d7cb2f3a02d4b96fc9a8cf6d9724, type: 2}
+  - {fileID: 11400000, guid: a608d7f637e8b7e4aa95573f0c069dc6, type: 2}
+  - {fileID: 11400000, guid: 782a2da45ed4d5041aa43629ac9142b1, type: 2}
+  - {fileID: 11400000, guid: c6f91494ae60ca4439926553489a9fde, type: 2}
+  - {fileID: 11400000, guid: f96b562c51611db4585f1925b746a74f, type: 2}
+  itemPref: {fileID: 7700662711098545541, guid: 77d0ce21f175ecd4aaf7b2c4ef2f0281, type: 3}
   selectedGrid: {fileID: 0}
   isGridSelected: 0
   selectedItem: {fileID: 0}
@@ -1776,7 +1776,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba89f3a595185d34ab51c0a64f3218d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  highlightPrefab: {fileID: 2127881490284484680, guid: e5e5ca569c8fc164b82a20589f190cab, type: 3}
+  highlightPrefab: {fileID: 2127881490284484680, guid: cdbd06236c685b847b21b44b02d3c749, type: 3}
 --- !u!1 &864555246
 GameObject:
   m_ObjectHideFlags: 0
@@ -1870,7 +1870,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &934051882
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1940,7 +1940,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 934051881}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c186b3e6187ac2543be39a172678840f, type: 3}
+  m_Script: {fileID: 11500000, guid: 97dae2bb56e39fd458b2c7aae66efa64, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isActive: 0
@@ -2777,7 +2777,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &1509921478
 Rigidbody2D:
   serializedVersion: 4
@@ -3299,9 +3299,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 3934422360723293287}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5ac77c6acf08dde4786601df78634dc1, type: 3}
+  m_Script: {fileID: 11500000, guid: c151f4932ea1bd84a99b2a0f7bbb8917, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isOn: 0
+  onSprite: {fileID: 21300000, guid: ec7c135f157beb649b00bb790379ba7b, type: 3}
+  offSprite: {fileID: 21300000, guid: 0a41e350dd719184982453670c0d5198, type: 3}
 --- !u!114 &6326068109228969827
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3311,12 +3314,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3934422360723293287}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ed92ea515e43784fbe4c98fd64b8aeb, type: 3}
+  m_Script: {fileID: 11500000, guid: fc51b2973510fba489c20339b51eef9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isOn: 0
-  onSprite: {fileID: 21300000, guid: ec7c135f157beb649b00bb790379ba7b, type: 3}
-  offSprite: {fileID: 21300000, guid: 0a41e350dd719184982453670c0d5198, type: 3}
 --- !u!224 &6528451621068045769
 RectTransform:
   m_ObjectHideFlags: 0

@@ -9,23 +9,23 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 85b55483ba3af3648b942ab62b71f60d, type: 3}
+  m_Script: {fileID: 11500000, guid: 5f45af3a8a8237e47a78332e9dc5bed2, type: 3}
   m_Name: Pistol01
   m_EditorClassIdentifier: 
-  itemId: 0
-  itemCode: 102
+  itemId: 1
+  itemCode: 1
   itemPos: {x: 0, y: 0}
-  itemRotate: 1
+  itemRotate: 0
   itemAmount: 1
   searchedPlayerId: 
-  item_name: pistol01
+  item_name: 
   item_weight: 2
-  item_type: 1
+  item_type: 0
   item_string_value: 101
-  item_purchase_price: 400
-  item_sell_price: 100
-  item_searchTime: 3
+  item_purchase_price: 0
+  item_sell_price: 0
+  item_searchTime: 2
   width: 2
-  height: 1
+  height: 2
   isItemConsumeable: 0
-  itemSprite: {fileID: 21300000, guid: bf5db74d0decc384da835e73707eddb1, type: 3}
+  itemSprite: {fileID: 21300000, guid: f223ac2f704b94f49b6182494b32a2c8, type: 3}

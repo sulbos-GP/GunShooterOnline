@@ -159,6 +159,6 @@ public void AdjustInventorySize()
 
     inventoryRect.sizeDelta = new Vector2(width, height);
 
-    Debug.Log($"Inventory Size - Width: {width}, Height: {height}");
+    Debug.Log($"InvenData Size - Width: {width}, Height: {height}");
 }*/
 

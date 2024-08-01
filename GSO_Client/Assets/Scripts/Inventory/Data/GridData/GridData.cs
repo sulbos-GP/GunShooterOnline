@@ -8,7 +8,7 @@ using UnityEngine;
 using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
-[CreateAssetMenu(fileName = "new GridData", menuName = "Inventory/GridData")]
+[CreateAssetMenu(fileName = "new GridData", menuName = "InvenData/GridData")]
 public class GridData : ScriptableObject
 {
     /// <summary>
