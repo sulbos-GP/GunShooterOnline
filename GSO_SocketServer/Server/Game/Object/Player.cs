@@ -8,6 +8,8 @@ namespace Server.Game;
 public class Player : CreatureObj
 {
     public SkillCoolDown SkillCoolDown = new();
+    public Inventory inventory = new Inventory();
+
 
     public Player()
     {
