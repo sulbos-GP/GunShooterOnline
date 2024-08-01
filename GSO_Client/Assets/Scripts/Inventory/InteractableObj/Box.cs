@@ -4,7 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InvenObj : InteractableObject
+public class Box : InteractableObject
 {
     public InvenData invenData;
     public InventoryUI inventoryUI;
@@ -13,7 +13,7 @@ public class InvenObj : InteractableObject
     private void Awake()
     {
         Init();
-        Interact();
+
     }
     protected override void Init()
     {

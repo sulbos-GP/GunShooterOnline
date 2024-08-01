@@ -184,7 +184,6 @@ public class InventoryGrid : MonoBehaviour
         }
 
         PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
-        
     }
 
     private void CreateItemObj(ItemData item)

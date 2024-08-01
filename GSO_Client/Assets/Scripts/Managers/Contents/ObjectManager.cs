@@ -117,7 +117,7 @@ public class ObjectManager
             var go = Managers.Resource.Instantiate($"Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
             _objects.Add(info.ObjectId, go); //오브젝트 딕션너리에 추가
-            InvenObj invenObj = go.GetComponent<InvenObj>();
+            Box invenObj = go.GetComponent<Box>();
             //invenObj.objectId에 해당 오브젝트의 아이디 추가할것
            
 
@@ -125,12 +125,13 @@ public class ObjectManager
             //(플레이어가 해당 오브젝트와 인터렉트시 이 데이터를 플레이어의 otherInven의 인벤데이터로 불러옴)
             
         }
-        else if (type == GameObjectType.InvenData)
+
+        /*else if (type == GameObjectType.InvenData)
         {
            //인벤토리를 가지는 오브젝트가 생성될때 (박스 혹은 플레이어) 인벤데이터를 생성하고 해당 인벤데이터를 딕셔너리에 추가
 
             //인벤데이터를 생성할때 그리드데이터가 생성되고 그리드 데이터가 생성될때 아이템 데이터까지 모두 생성됨.
-        }
+        */
     }
 
     public void AddGridDic(int gridId, InventoryGrid grid)

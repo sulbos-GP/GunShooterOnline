@@ -81,7 +81,6 @@ public class ItemData : ScriptableObject
         return itemDataInfo;
     }
 
-
     [Header("아이템 데이터베이스 변수")]
     public int itemId; // 해당 아이템의 고유한 아이디
     public int itemCode; //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)

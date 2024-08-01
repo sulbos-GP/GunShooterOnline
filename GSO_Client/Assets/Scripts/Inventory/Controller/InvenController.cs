@@ -486,6 +486,8 @@ public partial class InventoryController : MonoBehaviour
     {
         if(isOnDelete)
         {
+            //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
+
             C_DeleteItem packet = new C_DeleteItem();
             packet.ItemId = selectedItem.itemId;
             packet.PlayerId = playerId;
@@ -526,38 +528,69 @@ public partial class InventoryController : MonoBehaviour
                     {
                         //아이템 개수에 따라 무게가 가증되기로 하면 코드 추가 할것
                         selectedItem.MergeItem(placeOverlapItem, selectedItem.itemAmount);
+
+                        C_MoveItem packet = new C_MoveItem();
+                        //packet.PlayerId = Managers.Object.MyPlayer.Id;
+                        packet.ItemId = item.itemId;
+                        packet.ItemPosX = pos.x;
+                        packet.ItemPosY = pos.y;
+                        packet.ItemRotate = item.curItemRotate;
+                        //packet.gridId = item.curItemGrid.gridId;
+                        packet.LastItemPosX = item.backUpItemPos.x;
+                        packet.LastItemPosY = item.backUpItemPos.y;
+                        packet.LastItemRotate = item.backUpItemRotate;
+                        //packet.LastGridId = item.backUpItemGrid.gridId;
+                        Managers.Network.Send(packet);
+
+                        /*
+                   Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
+                           $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
+                           $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
+                           $"packet.ItemRotate = {item.curItemRotate}\r\n" +
+                           $"packet.gridId = {item.curItemGrid.gridId}\r\n" +
+                           $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
+                           $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
+                           $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
+                           $"packet.LastGridId = {item.backUpItemGrid.gridId}");*/
+
+                        BackUpItemArray();
+                        Destroy(selectedItem.gameObject);
                     }
                     else
                     {
                         int needAmount = ItemObject.maxItemMergeAmount - placeOverlapItem.itemAmount;
                         selectedItem.MergeItem(placeOverlapItem, needAmount);
+
+                        C_MoveItem packet = new C_MoveItem();
+                        //packet.PlayerId = Managers.Object.MyPlayer.Id;
+                        packet.ItemId = item.itemId;
+                        packet.ItemPosX = pos.x;
+                        packet.ItemPosY = pos.y;
+                        packet.ItemRotate = item.curItemRotate;
+                        //packet.gridId = item.curItemGrid.gridId;
+                        packet.LastItemPosX = item.backUpItemPos.x;
+                        packet.LastItemPosY = item.backUpItemPos.y;
+                        packet.LastItemRotate = item.backUpItemRotate;
+                        //packet.LastGridId = item.backUpItemGrid.gridId;
+                        Managers.Network.Send(packet);
+
+                        /*
+                        Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
+                           $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
+                           $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
+                           $"packet.ItemRotate = {item.curItemRotate}\r\n" +
+                           $"packet.gridId = {item.curItemGrid.gridId}\r\n" +
+                           $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
+                           $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
+                           $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
+                           $"packet.LastGridId = {item.backUpItemGrid.gridId}");*/
+                        
+                        
+                        UndoItemArray();
+                        UndoItem();
                     }
 
-                    C_MoveItem packet = new C_MoveItem();
-                    //packet.PlayerId = Managers.Object.MyPlayer.Id;
-                    packet.ItemId = item.itemId;
-                    packet.ItemPosX = pos.x;
-                    packet.ItemPosY = pos.y;
-                    packet.ItemRotate = item.curItemRotate;
-                    //packet.gridId = item.curItemGrid.gridId;
-                    packet.LastItemPosX = item.backUpItemPos.x;
-                    packet.LastItemPosY = item.backUpItemPos.y;
-                    packet.LastItemRotate = item.backUpItemRotate;
-                    //packet.LastGridId = item.backUpItemGrid.gridId;
-                    Managers.Network.Send(packet);
-
-                    Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
-                        $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
-                        $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
-                        $"packet.ItemRotate = {item.curItemRotate}\r\n" +
-                        $"packet.gridId = {item.curItemGrid.gridId}\r\n" +
-                        $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
-                        $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
-                        $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
-                        $"packet.LastGridId = {item.backUpItemGrid.gridId}");
-
-                    BackUpItemArray();
-                    Destroy(selectedItem.gameObject);
+                    
                     SelectedItem = null;
                     placeOverlapItem = null;
                     return;
@@ -583,7 +616,7 @@ public partial class InventoryController : MonoBehaviour
                 packet.LastItemRotate = item.backUpItemRotate;
                 //packet.LastGridId = item.backUpItemGrid.gridId;
                 Managers.Network.Send(packet);
-
+                /*
                 Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
                         $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
                         $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
@@ -592,7 +625,7 @@ public partial class InventoryController : MonoBehaviour
                         $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
                         $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
                         $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
-                        $"packet.LastGridId = {item.backUpItemGrid.gridId}");
+                        $"packet.LastGridId = {item.backUpItemGrid.gridId}");*/
 
                 BackUpItem();
                 BackUpItemArray();
@@ -617,11 +650,11 @@ public partial class InventoryController : MonoBehaviour
         selectedGrid.CleanItemSlot(checkOverlapItem);
         selectedGrid.PlaceItem(selectedItem, checkOverlapItem.curItemPos.x, checkOverlapItem.curItemPos.y);
         
-        selectedGrid.GridWeight += SelectedItem.itemData.item_weight;
+        selectedGrid.GridWeight += SelectedItem.itemDataInfo.item_weight;
         SelectedItem = checkOverlapItem;
 
         AddBackUpList();
-        selectedGrid.GridWeight -= SelectedItem.itemData.item_weight;
+        selectedGrid.GridWeight -= SelectedItem.itemDataInfo.item_weight;
 
         SelectedItem.GetComponent<Image>().raycastTarget = false;
         checkOverlapItem = null;
