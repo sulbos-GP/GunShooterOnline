@@ -81,10 +81,10 @@ namespace Google.Protobuf.Protocol {
             "CQoFU19ESUUQCBIQCgxDX0VOVEVSX0dBTUUQCRIUChBDX0xPQURfSU5WRU5U",
             "T1JZEAoSFAoQU19MT0FEX0lOVkVOVE9SWRALEg8KC0NfTU9WRV9JVEVNEAwS",
             "DwoLU19NT1ZFX0lURU0QDRIRCg1DX0RFTEVURV9JVEVNEA4SEQoNU19ERUxF",
-            "VEVfSVRFTRAPKlsKDkdhbWVPYmplY3RUeXBlEggKBE5PTkUQABIKCgZQTEFZ",
+            "VEVfSVRFTRAPKmUKDkdhbWVPYmplY3RUeXBlEggKBE5PTkUQABIKCgZQTEFZ",
             "RVIQARILCgdNT05TVEVSEAISDgoKUFJPSkVDVElMRRADEg0KCUlOVkVOREFU",
-            "QRAEEgcKA0JPWBAFQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnBy",
-            "b3RvMw=="));
+            "QRAEEgcKA0JPWBAFEggKBElURU0QBkIbqgIYR29vZ2xlLlByb3RvYnVmLlBy",
+            "b3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -145,6 +145,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("PROJECTILE")] Projectile = 3,
     [pbr::OriginalName("INVENDATA")] Invendata = 4,
     [pbr::OriginalName("BOX")] Box = 5,
+    [pbr::OriginalName("ITEM")] Item = 6,
   }
 
   #endregion

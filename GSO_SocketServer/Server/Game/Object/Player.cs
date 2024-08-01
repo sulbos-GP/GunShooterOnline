@@ -8,12 +8,14 @@ namespace Server.Game;
 public class Player : CreatureObj
 {
     public SkillCoolDown SkillCoolDown = new();
-    public Inventory inventory = new Inventory();
+    public Inventory inventory;
 
 
     public Player()
     {
         ObjectType = GameObjectType.Player;
+
+        inventory = new Inventory(Id);
         Vision = new VisionRegion(this);
     }
 
