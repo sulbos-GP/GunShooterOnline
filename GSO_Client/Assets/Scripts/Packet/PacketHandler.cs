@@ -172,10 +172,10 @@ internal class PacketHandler
         moveItemObj.curItemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
         moveItemObj.curItemRotate = packet.ItemRotate;
         //프로토콜 업데이트 시 주석해제
-        Managers.Object._gridDic.TryGetValue(packet.gridId, out moveItemObj.curItemGrid);
-        moveItemObj.backUpItemPos = new Vector2Int(packet.lastItemPosX, packet.lastItemPosY);
-        moveItemObj.backUpItemRotate = packet.lastItemRotate;
-        Managers.Object._gridDic.TryGetValue(packet.lastGridId, out moveItemObj.backUpItemGrid);
+        Managers.Object._gridDic.TryGetValue(packet.GridId, out moveItemObj.curItemGrid);
+        moveItemObj.backUpItemPos = new Vector2Int(packet.LastItemPosX, packet.LastItemPosY);
+        moveItemObj.backUpItemRotate = packet.LastItemRotate;
+        Managers.Object._gridDic.TryGetValue(packet.LastGridId, out moveItemObj.backUpItemGrid);
 
         //lastGridId를 통해 그리드를 검색하여 해당 그리드의 inventoryGrid.CleanItemSlot(item)으로 이전 그리드에서 해당 아이템을 지움
         moveItemObj.backUpItemGrid.CleanItemSlot(moveItemObj);
