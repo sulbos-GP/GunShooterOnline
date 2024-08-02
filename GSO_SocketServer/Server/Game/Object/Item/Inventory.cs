@@ -2,6 +2,7 @@
 using Server.Game;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
@@ -74,6 +75,12 @@ namespace Server.Game
                     }
                 }
 
+                if(canInsertlist.Count <= 0)
+                {
+                    //넣을수 있는 아이템이 없다면 브레이크
+                    break;
+                }
+                
                 System.Random rnd = new System.Random();
                 int random = rnd.Next(0, canInsertlist.Count);
                 ItemDataInfo newItemData = canInsertlist[random];

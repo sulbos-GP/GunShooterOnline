@@ -39,7 +39,7 @@ public class PlayerInventory : Inventory
         C_LoadInventory packet = new C_LoadInventory();
         //packet.PlayerId = Managers.Object.MyPlayer.Id; //플레이어가 없는 상태라 플레이어 아이디를 못불러옴
         //packet.InventoryId = packet.PlayerId;
-        packet.PlayerId = packet.InventoryId = Managers.Object.MyPlayer.Id;
+        packet.PlayerId = packet.InventoryId = 1;//Managers.Object.MyPlayer.Id;
         Managers.Network.Send(packet);
         Debug.Log("C_LoadInventory전송");
     }
