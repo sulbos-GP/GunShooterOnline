@@ -24,9 +24,7 @@ namespace Server.Game
 
         public Inventory ownerInventory; //그리드를 소유한 인벤토리 (그냥 인벤토리 아이디로 바꿔도 괜춘)
         public List<ItemObject> itemObjectList = new List<ItemObject>(); //해당 그리드에 존재하는 아이템리스트
-
         public ItemObject[,] gridSlot; //그리드에 채워진 아이템의 아이디(아이템이 그리드 어느위치에 있는지 보여주기 위함).
-
 
         public float GridWeight
         {
@@ -68,7 +66,6 @@ namespace Server.Game
 
             //아이템 오브젝트의 아이템 데이터가 모두 설정이 완료됨.
             itemObjectList.Add(newItemObj);
-
         }
 
         private void FindPlaceableSlot(ItemObject item)

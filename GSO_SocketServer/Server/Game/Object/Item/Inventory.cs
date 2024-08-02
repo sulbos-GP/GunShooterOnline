@@ -123,5 +123,7 @@ namespace Server.Game
 
             target.OwnerGrid.PrintInvenContents();
         }
+
+
     }
 }

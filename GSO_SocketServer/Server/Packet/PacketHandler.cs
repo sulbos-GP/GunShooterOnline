@@ -85,9 +85,6 @@ class PacketHandler
 
         room.Push(room.HandleMove , clientSession.MyPlayer, move);
 
-
-        
-
     }
 
     internal static void C_MoveItemHandler(PacketSession session, IMessage message)
