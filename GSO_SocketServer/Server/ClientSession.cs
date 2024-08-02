@@ -48,7 +48,7 @@ namespace Server
         }
 
         //실제 network IO 처리하는 부분
-        public void FlushSend()
+        public override void FlushSend()
         {
             List<(ArraySegment<byte> Segment, DeliveryMethod reliableSequenced)> sendList = null;
             lock (_lock)

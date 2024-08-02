@@ -1,5 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
-using Server.Game.Object.Item;
+using Server.Game;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

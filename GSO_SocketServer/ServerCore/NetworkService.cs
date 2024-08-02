@@ -79,6 +79,7 @@ namespace ServerCore
             {
                 mManager.PollEvents();
                 mGameLogicTimer.Update();
+                
             }
         }
 
@@ -153,6 +154,7 @@ namespace ServerCore
         {
             if (mManager.IsRunning)
             {
+                mSessionManager.FlushSend();
                 gameRoom.LogicUpdate();
                 //QuadTreeManmager Update()
             }
