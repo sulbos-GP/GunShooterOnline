@@ -8,6 +8,8 @@ using UnityEngine.UIElements;
 public class InputController : MonoBehaviour
 {
     public static InputController instance;
+    public float distance;
+    public GameObject testBox;
 
     private Rigidbody2D rig;
 
@@ -39,6 +41,8 @@ public class InputController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        distance = Vector2.Distance(gameObject.transform.position, testBox.transform.position);
+
         UpdateState();
 
         if(isFiring)
@@ -78,6 +82,7 @@ public class InputController : MonoBehaviour
         playerInput.Player.Move.started += OnMove; ;
         playerInput.Player.Move.performed += OnMove;
         playerInput.Player.Move.canceled += OnMove;
+        playerInput.Player.Interaction.started += OnInteraction;
     }
 
     private void OnDisable()
@@ -91,7 +96,16 @@ public class InputController : MonoBehaviour
         playerInput.Player.Move.started -= OnMove;
         playerInput.Player.Move.performed -= OnMove;
         playerInput.Player.Move.canceled -= OnMove;
+        playerInput.Player.Interaction.started -= OnInteraction;
         playerInput.Player.Disable();
+    }
+
+    private void OnInteraction(InputAction.CallbackContext callbackContext)
+    {
+        if (distance <= 2.0f)
+        {
+            testBox.GetComponent<Box>().Interact();
+        }
     }
 
     private void OnMove(InputAction.CallbackContext callbackContext)
@@ -154,6 +168,7 @@ public class InputController : MonoBehaviour
 
     private void UpdateState()
     {
+        UpdateMove();
         //switch (State)
         //{
         //    case CreatureState.Moving:
@@ -170,7 +185,7 @@ public class InputController : MonoBehaviour
         //Move Logic
         Vector2 newVec2 = _direction * 5.0f * Time.fixedDeltaTime;
         rig.MovePosition(rig.position + newVec2);
-        UpdateServer();
+        //UpdateServer();
     }
 
     private void UpdateServer()
