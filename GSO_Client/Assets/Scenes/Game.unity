@@ -354,9 +354,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 112652215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 573d4babd4b57c049a347bed17d335fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 4be053e5b070a93478d001e42b2eb04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectId: 0
+  interactType: 0
+  interactRange: 0
+  invenData: {fileID: 0}
+  inventoryUI: {fileID: 2540222797644243601}
+  otherInvenUI: {fileID: 8662937874587401163}
 --- !u!58 &112652217
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1644,9 +1650,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1209415305}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 573d4babd4b57c049a347bed17d335fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 4be053e5b070a93478d001e42b2eb04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectId: 0
+  interactType: 0
+  interactRange: 0
+  invenData: {fileID: 0}
+  inventoryUI: {fileID: 2540222797644243601}
+  otherInvenUI: {fileID: 8662937874587401163}
 --- !u!58 &1209415307
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1836,9 +1848,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 1627093407}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 573d4babd4b57c049a347bed17d335fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 4be053e5b070a93478d001e42b2eb04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectId: 0
+  interactType: 0
+  interactRange: 0
+  invenData: {fileID: 0}
+  inventoryUI: {fileID: 2540222797644243601}
+  otherInvenUI: {fileID: 8662937874587401163}
 --- !u!58 &1627093409
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -4097,9 +4115,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 743735116645617635}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 573d4babd4b57c049a347bed17d335fb, type: 3}
+  m_Script: {fileID: 11500000, guid: 4be053e5b070a93478d001e42b2eb04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  objectId: 0
+  interactType: 0
+  interactRange: 0
+  invenData: {fileID: 0}
+  inventoryUI: {fileID: 2540222797644243601}
+  otherInvenUI: {fileID: 8662937874587401163}
 --- !u!222 &2954813876308138638
 CanvasRenderer:
   m_ObjectHideFlags: 0
