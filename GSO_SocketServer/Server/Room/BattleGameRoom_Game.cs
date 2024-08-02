@@ -84,33 +84,78 @@ namespace Server
 
         }
 
-        internal void HandleItemLoad(Player player, int playerId, int inventoryId )
+        internal void HandleItemLoad(Player player, int objectId, int inventoryId )
         {
-            S_LoadInventory s_LoadInventory = new S_LoadInventory();
 
-            s_LoadInventory.PlayerId = player.Id;
-            s_LoadInventory.InventoryId = inventoryId;
+            Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
+
+            S_LoadInventory s_LoadInventory = new S_LoadInventory()
+            {
+                ObjectId = objectId,
+                InventoryId = inventoryId,
+                InvenData = targetPlayer.inventory.invenData,
+            };
+
+           
+
+            BroadCast(RoomId, s_LoadInventory);
 
 
-            Player targetPlayer = ObjectManager.Instance.Find<Player>(playerId);
-
-
-            s_LoadInventory.InvenData = targetPlayer.inventory.invenData;
-
-            //BroadCast s_LoadInventory
         }
 
-        internal void HandleItemMove(Player player, int itemId, int itemPosX, int itemPosY)
+        /*internal void HandleItemMove(Player player, int itemId, int itemPosX, int itemPosY)
         {
             player.inventory.MoveItem(itemId, itemPosX, itemPosY);
 
             //S_
+            S_MoveItem s_MoveItem = new S_MoveItem()
+            {
+                PlayerId = player.Id,
+                ItemId = itemId,
+                ItemPosX = itemPosX,
+                ItemPosY = itemPosY,
+
+            };
 
 
+            BroadCast(RoomId, );
+
+            // BroadCast()
+        }*/
+        internal void HandleItemMove(Player player, object  _packet)
+        {
+            //player.inventory.MoveItem(itemId, itemPosX, itemPosY);
+            C_MoveItem packet = (C_MoveItem)_packet;
+            //S_
+            S_MoveItem s_MoveItem = new S_MoveItem()
+            {
+                PlayerId = player.Id,
+                ItemId = packet.ItemId,
+                ItemPosX = packet.ItemPosX,
+                ItemPosY = packet.ItemPosY,
+                ItemRotate = packet.ItemRotate,
+                GridId = packet.GridId,
+
+                LastItemPosX = packet.LastItemPosX,
+                LastItemPosY = packet.LastItemPosY,
+                LastItemRotate = packet.LastItemRotate,
+                //TODO : MoveItem 결과
+                //LastInventoryId = packet.in
+                LastGridId = packet.LastGridId,
+            };
+
+
+            BroadCast(RoomId, s_MoveItem);
 
             // BroadCast()
         }
-    
+
+
+
+
+
+
+
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
             RaycastHit2D hit = RaycastManager.Raycast(pos,dir, length);

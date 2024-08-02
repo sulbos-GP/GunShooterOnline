@@ -95,7 +95,8 @@ namespace Collision.Shapes
 
         /** Helper generate a square at x,y with a given width/height with given centered state.
             Centered by default. Returns a ready made `Polygon` collision `Shape` */
-        public static Polygon square(float x, float y, float width) {
+        public static Polygon square(float 
+            x, float y, float width) {
             return new Rectangle(x, y, width, width);
         }
 

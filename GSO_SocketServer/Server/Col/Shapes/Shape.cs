@@ -17,6 +17,8 @@ namespace Collision.Shapes
     {
         public GameObject Parent { get; set; }
 
+        
+
 
         /** The state of this shape, if inactive can be ignored in results */
         public bool active = true;

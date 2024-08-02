@@ -34,8 +34,8 @@ namespace Google.Protobuf.Protocol {
             "bmVjdGVkIioKClNfQ2hhbmdlSHASEAoIb2JqZWN0SWQYASABKAUSCgoCaHAY",
             "AiABKAUiLQoFU19EaWUSEAoIb2JqZWN0SWQYASABKAUSEgoKYXR0YWNrZXJJ",
             "ZBgCIAEoBSIbCgtDX0VudGVyR2FtZRIMCgRuYW1lGAEgASgJIjgKD0NfTG9h",
-            "ZEludmVudG9yeRIQCghwbGF5ZXJJZBgBIAEoBRITCgtpbnZlbnRvcnlJZBgC",
-            "IAEoBSJkCg9TX0xvYWRJbnZlbnRvcnkSEAoIcGxheWVySWQYASABKAUSEwoL",
+            "ZEludmVudG9yeRIQCghvYmplY3RJZBgBIAEoBRITCgtpbnZlbnRvcnlJZBgC",
+            "IAEoBSJkCg9TX0xvYWRJbnZlbnRvcnkSEAoIb2JqZWN0SWQYASABKAUSEwoL",
             "aW52ZW50b3J5SWQYAiABKAUSKgoJSW52ZW5EYXRhGAMgASgLMhcuUHJvdG9j",
             "b2wuSW52ZW5EYXRhSW5mbyLjAQoKQ19Nb3ZlSXRlbRIQCghwbGF5ZXJJZBgB",
             "IAEoBRIOCgZpdGVtSWQYAiABKAUSEAoIaXRlbVBvc1gYAyABKAUSEAoIaXRl",
@@ -103,8 +103,8 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ChangeHp), global::Google.Protobuf.Protocol.S_ChangeHp.Parser, new[]{ "ObjectId", "Hp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Die), global::Google.Protobuf.Protocol.S_Die.Parser, new[]{ "ObjectId", "AttackerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EnterGame), global::Google.Protobuf.Protocol.C_EnterGame.Parser, new[]{ "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_LoadInventory), global::Google.Protobuf.Protocol.C_LoadInventory.Parser, new[]{ "PlayerId", "InventoryId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadInventory), global::Google.Protobuf.Protocol.S_LoadInventory.Parser, new[]{ "PlayerId", "InventoryId", "InvenData" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_LoadInventory), global::Google.Protobuf.Protocol.C_LoadInventory.Parser, new[]{ "ObjectId", "InventoryId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadInventory), global::Google.Protobuf.Protocol.S_LoadInventory.Parser, new[]{ "ObjectId", "InventoryId", "InvenData" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_MoveItem), global::Google.Protobuf.Protocol.C_MoveItem.Parser, new[]{ "PlayerId", "ItemId", "ItemPosX", "ItemPosY", "ItemRotate", "InventoryId", "GridId", "LastItemPosX", "LastItemPosY", "LastItemRotate", "LastGridId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_MoveItem), global::Google.Protobuf.Protocol.S_MoveItem.Parser, new[]{ "PlayerId", "ItemId", "ItemPosX", "ItemPosY", "ItemRotate", "GridId", "LastItemPosX", "LastItemPosY", "LastItemRotate", "LastInventoryId", "LastGridId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_DeleteItem), global::Google.Protobuf.Protocol.C_DeleteItem.Parser, new[]{ "PlayerId", "ItemId" }, null, null, null, null),
@@ -2255,7 +2255,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public C_LoadInventory(C_LoadInventory other) : this() {
-      playerId_ = other.playerId_;
+      objectId_ = other.objectId_;
       inventoryId_ = other.inventoryId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -2266,15 +2266,15 @@ namespace Google.Protobuf.Protocol {
       return new C_LoadInventory(this);
     }
 
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private int playerId_;
+    /// <summary>Field number for the "objectId" field.</summary>
+    public const int ObjectIdFieldNumber = 1;
+    private int objectId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerId {
-      get { return playerId_; }
+    public int ObjectId {
+      get { return objectId_; }
       set {
-        playerId_ = value;
+        objectId_ = value;
       }
     }
 
@@ -2305,7 +2305,7 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
+      if (ObjectId != other.ObjectId) return false;
       if (InventoryId != other.InventoryId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -2314,7 +2314,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
+      if (ObjectId != 0) hash ^= ObjectId.GetHashCode();
       if (InventoryId != 0) hash ^= InventoryId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -2334,9 +2334,9 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId != 0) {
+      if (ObjectId != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteInt32(ObjectId);
       }
       if (InventoryId != 0) {
         output.WriteRawTag(16);
@@ -2352,9 +2352,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId != 0) {
+      if (ObjectId != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteInt32(ObjectId);
       }
       if (InventoryId != 0) {
         output.WriteRawTag(16);
@@ -2370,8 +2370,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
+      if (ObjectId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ObjectId);
       }
       if (InventoryId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(InventoryId);
@@ -2388,8 +2388,8 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.PlayerId != 0) {
-        PlayerId = other.PlayerId;
+      if (other.ObjectId != 0) {
+        ObjectId = other.ObjectId;
       }
       if (other.InventoryId != 0) {
         InventoryId = other.InventoryId;
@@ -2414,7 +2414,7 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            ObjectId = input.ReadInt32();
             break;
           }
           case 16: {
@@ -2441,7 +2441,7 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            ObjectId = input.ReadInt32();
             break;
           }
           case 16: {
@@ -2493,7 +2493,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public S_LoadInventory(S_LoadInventory other) : this() {
-      playerId_ = other.playerId_;
+      objectId_ = other.objectId_;
       inventoryId_ = other.inventoryId_;
       invenData_ = other.invenData_ != null ? other.invenData_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -2505,15 +2505,15 @@ namespace Google.Protobuf.Protocol {
       return new S_LoadInventory(this);
     }
 
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private int playerId_;
+    /// <summary>Field number for the "objectId" field.</summary>
+    public const int ObjectIdFieldNumber = 1;
+    private int objectId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerId {
-      get { return playerId_; }
+    public int ObjectId {
+      get { return objectId_; }
       set {
-        playerId_ = value;
+        objectId_ = value;
       }
     }
 
@@ -2556,7 +2556,7 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
+      if (ObjectId != other.ObjectId) return false;
       if (InventoryId != other.InventoryId) return false;
       if (!object.Equals(InvenData, other.InvenData)) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -2566,7 +2566,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
+      if (ObjectId != 0) hash ^= ObjectId.GetHashCode();
       if (InventoryId != 0) hash ^= InventoryId.GetHashCode();
       if (invenData_ != null) hash ^= InvenData.GetHashCode();
       if (_unknownFields != null) {
@@ -2587,9 +2587,9 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId != 0) {
+      if (ObjectId != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteInt32(ObjectId);
       }
       if (InventoryId != 0) {
         output.WriteRawTag(16);
@@ -2609,9 +2609,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId != 0) {
+      if (ObjectId != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteInt32(ObjectId);
       }
       if (InventoryId != 0) {
         output.WriteRawTag(16);
@@ -2631,8 +2631,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
+      if (ObjectId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ObjectId);
       }
       if (InventoryId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(InventoryId);
@@ -2652,8 +2652,8 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.PlayerId != 0) {
-        PlayerId = other.PlayerId;
+      if (other.ObjectId != 0) {
+        ObjectId = other.ObjectId;
       }
       if (other.InventoryId != 0) {
         InventoryId = other.InventoryId;
@@ -2684,7 +2684,7 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            ObjectId = input.ReadInt32();
             break;
           }
           case 16: {
@@ -2718,7 +2718,7 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            ObjectId = input.ReadInt32();
             break;
           }
           case 16: {
