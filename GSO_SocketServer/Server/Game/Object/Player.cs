@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Collision.Shapes;
 using Google.Protobuf.Protocol;
 
 namespace Server.Game;
@@ -26,6 +27,15 @@ public class Player : CreatureObj
             
 
         });
+
+        float width = 2;
+        float left = 2;
+        float top = 2;
+
+        Polygon rectangle = ShapeManager.CreateCenterSquare(left, top, width);
+        rectangle.Parent = this;
+
+        currentShape = rectangle;
     }
 
     public ClientSession Session { get; set; }

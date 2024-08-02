@@ -107,6 +107,7 @@ public class Map
         _rootableObjects.Add(rootableObject2);
         _rootableObjects.Add(rootableObject3);
 
+        SetRandomItem();
     }
 
     #region item
