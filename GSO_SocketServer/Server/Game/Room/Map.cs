@@ -97,21 +97,21 @@ public class Map
     public void Init()
     {
         //렌덤아인템
-        RootableObject rootableObject0 = new RootableObject();
-        rootableObject0.CellPos = new Vector2(10, 7);
-        RootableObject rootableObject1 = new RootableObject();
-        rootableObject1.CellPos = new Vector2(12, 7);
-        RootableObject rootableObject2 = new RootableObject();
-        rootableObject2.CellPos = new Vector2(5, 4);
-        RootableObject rootableObject3 = new RootableObject();
-        rootableObject3.CellPos = new Vector2(11, 4);
+        RootableObject rootableObject0 = ObjectManager.Instance.Add<RootableObject>();
+        rootableObject0.CellPos = new Vector2(-4, -4);
+        RootableObject rootableObject1 = ObjectManager.Instance.Add<RootableObject>();
+        rootableObject1.CellPos = new Vector2(-2, -4);
+        RootableObject rootableObject2 = ObjectManager.Instance.Add<RootableObject>();
+        rootableObject2.CellPos = new Vector2(4, 7);
+        RootableObject rootableObject3 = ObjectManager.Instance.Add<RootableObject>();
+        rootableObject3.CellPos = new Vector2(2, 7);
 
         _rootableObjects.Add(rootableObject0);
         _rootableObjects.Add(rootableObject1);
         _rootableObjects.Add(rootableObject2);
         _rootableObjects.Add(rootableObject3);
 
-        SetRandomItem();
+        //SetRandomItem();
     }
 
     #region item

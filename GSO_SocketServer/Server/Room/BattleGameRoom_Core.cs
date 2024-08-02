@@ -21,6 +21,7 @@ namespace Server
         public BattleGameRoom()
         {
             mMap = new Map(r: this);
+            mMap.Init();
         }
 
         public override void Init()
