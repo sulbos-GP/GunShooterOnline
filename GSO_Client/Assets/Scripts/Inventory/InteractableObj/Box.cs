@@ -37,8 +37,8 @@ public class Box : InteractableObject
         //서버에 해당 오브젝트의 id를 패킷으로 전송
         //그래서 받은 인벤토리의 데이터로 인벤토리 형성
         C_LoadInventory packet = new C_LoadInventory();
-        packet.PlayerId = Managers.Object.MyPlayer.Id;
-        packet.InventoryId = objectId;
+        packet.PlayerId = 1;
+        packet.InventoryId = 1;
         Managers.Network.Send(packet);
         Debug.Log("C_LoadInventory");
 
