@@ -7,20 +7,24 @@ public class Unit : MonoBehaviour
     public GunStat[] _guns = new GunStat[2];
     public int CurGun = 0;
 
-    public int _health { get; private set; }
+    public int InstanceID { get;private set; }
 
+
+    public UnitStat unitStat;
     public void Init()
     {
-        _health = 100;
+        InstanceID = gameObject.GetInstanceID();
+        unitStat = new UnitStat();
+        unitStat.Init();
     }
 
-    //TO-DO : 추후에 스텟 클래스 제작 예정.
-    public void SetHealth(int var)
-    {
-        _health += var;
-    }
-
+    //TO-DO : Awake -> Spawn
     public void Awake()
+    {
+
+    }
+
+    public void Spawn()
     {
         Init();
     }
