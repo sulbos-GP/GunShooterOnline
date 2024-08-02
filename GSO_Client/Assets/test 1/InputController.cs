@@ -7,18 +7,20 @@ using UnityEngine.UIElements;
 
 public class InputController : MonoBehaviour
 {
-    static InputController instance;
-    [SerializeField]
+    public static InputController instance;
+
+    private Rigidbody2D rig;
+
+    
     private Vector2 _direction;
-    public Rigidbody2D rig;
-    private Unit localUnit;
-    public GameObject LeftJoystick;
-
-
     private Vector2 lookInput;
-    private Camera mainCamera;
+
+    private Unit localUnit => UnitManager.Instance.CurrentPlayer;
     public AimFov aimFov;
     public BasicFov basicFov;
+
+
+
 
     private bool isFiring;
     //private CreatureState State;
@@ -27,13 +29,12 @@ public class InputController : MonoBehaviour
     private void Awake()
     {
         instance = this;
-        mainCamera = Camera.main;
     }
 
     public void Start()
     {
-        rig= GetComponent<Rigidbody2D>();
-        localUnit = GetComponent<Unit>(); // TO-DO : 추후에 instance에서 긁거나 localplayer[0]식으로 할 예정.
+        Managers.Network.ConnectToGame();
+        rig = GetComponent<Rigidbody2D>();
     }
 
     public void FixedUpdate()
@@ -58,6 +59,8 @@ public class InputController : MonoBehaviour
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle-90f));
 
         //Fov Logic
+        aimFov = GameObject.Find("AimView").GetComponent<AimFov>();
+        basicFov = GameObject.Find("BasicView").GetComponent<BasicFov>();
         aimFov.SetAimDirection(lookInput);
         aimFov.SetOrigin(transform.position);
         basicFov.SetOrigin(transform.position);
@@ -93,14 +96,14 @@ public class InputController : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext callbackContext)
     {
-        if(callbackContext.performed)
-        {
-            //State = CreatureState.Moving;
-        }
-        else if(callbackContext.canceled)
-        {
-            //State = CreatureState.Idle;
-        }
+        //if(callbackContext.performed)
+        //{
+        //    State = CreatureState.Moving;
+        //}
+        //else if(callbackContext.canceled)
+        //{
+        //    State = CreatureState.Idle;
+        //}
         Vector2 input = callbackContext.ReadValue<Vector2>();
         _direction = new Vector2(input.x,input.y);
     }
@@ -151,16 +154,16 @@ public class InputController : MonoBehaviour
 
     private void UpdateState()
     {
-       /* switch (State)
-        {
-            case CreatureState.Moving:
-                UpdateMove();
-                break;
-            case CreatureState.Idle:
-                break;
-            default:
-                break;
-        }*/
+        //switch (State)
+        //{
+        //    case CreatureState.Moving:
+        //        UpdateMove();
+        //        break;
+        //    case CreatureState.Idle:
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
     private void UpdateMove()
     {
@@ -172,8 +175,6 @@ public class InputController : MonoBehaviour
 
     private void UpdateServer()
     {
-
-        Debug.Log("UpdateServer");
         if (lastPos == null || Vector3.Distance(lastPos, transform.position)>0.05f)
         {
             lastPos = transform.position;
