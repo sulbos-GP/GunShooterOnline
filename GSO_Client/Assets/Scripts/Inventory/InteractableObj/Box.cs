@@ -43,7 +43,7 @@ public class Box : InteractableObject
         Debug.Log("C_LoadInventory");
 
         //임시로 여기에서 데이터를 전달
-        otherInvenUI.invenData = invenData;
+        //otherInvenUI.invenData = invenData;
         inventoryUI.invenUIControl();
     }
 }
