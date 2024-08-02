@@ -6,6 +6,8 @@ using System.Numerics;
 using Google.Protobuf.Protocol;
 using QuadTree;
 using Server.Data;
+using Server.Game.Object;
+using Server.Game.Object.Item;
 using ServerCore;
 
 namespace Server.Game;
@@ -76,7 +78,13 @@ public class Map
     public Vector2Int Tright { get; private set; }
 
     BattleGameRoom battleRoom;
-     
+
+
+    #region Item
+    ItemDB itemDB = new ItemDB();
+    List<RootableObject> _rootableObjects = new List<RootableObject>();
+    #endregion
+
     public Map(BattleGameRoom r)
     {
         battleRoom = r;
@@ -85,9 +93,41 @@ public class Map
     public void Init()
     {
         //렌덤아인템
+        RootableObject rootableObject0 = new RootableObject();
+        rootableObject0.CellPos = new Vector2(10, 7);
+        RootableObject rootableObject1 = new RootableObject();
+        rootableObject1.CellPos = new Vector2(12, 7);
+        RootableObject rootableObject2 = new RootableObject();
+        rootableObject2.CellPos = new Vector2(5, 4);
+        RootableObject rootableObject3 = new RootableObject();
+        rootableObject3.CellPos = new Vector2(11, 4);
+
+        _rootableObjects.Add(rootableObject0);
+        _rootableObjects.Add(rootableObject1);
+        _rootableObjects.Add(rootableObject2);
+        _rootableObjects.Add(rootableObject3);
+
     }
 
+    #region item
+    //TODO : 나중에 아이템 메니져로?
 
+    private void SetRandomItem()
+    {
+        var db = itemDB.items.Values.ToArray(); 
+
+        //ItemObject item = ObjectManager.Instance.Add<ItemObject>();
+        ItemObject item = new ItemObject();
+
+        item.itemDataInfo = db[new Random().Next(0, db.Length)];
+
+        foreach (var r in _rootableObjects)
+        {
+            r.FindPlaceableSlot(item);
+        }
+    }
+
+    #endregion
 
 
 

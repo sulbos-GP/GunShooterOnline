@@ -30,14 +30,19 @@ class PacketHandler
         Console.WriteLine("C_EnterGameHandler");
         ClientSession clientSession = session as ClientSession;
         C_EnterGame enterGamePacket = (C_EnterGame)message;
-        clientSession.MyPlayer = ObjectManager.Instance.Add<Player>();
+        Player p = ObjectManager.Instance.Add<Player>();
+
         {
-            clientSession.MyPlayer.Session = clientSession;
-            clientSession.MyPlayer.info.Name = enterGamePacket.Name + clientSession.SessionId;
-            clientSession.MyPlayer.info.PositionInfo.PosX = 0;
-            clientSession.MyPlayer.info.PositionInfo.PosY = 0;
+            p.Session = clientSession;
+            p.info.Name = enterGamePacket.Name + clientSession.SessionId;
+            p.info.PositionInfo.PosX = 0;
+            p.info.PositionInfo.PosY = 0;
         }
-        
+
+        clientSession.MyPlayer = p;
+
+
+
         
         BattleGameRoom room = (BattleGameRoom)Program.mNetworkService.gameRoom; //나중에 null로 바꿔도 참조가능
 
@@ -79,6 +84,10 @@ class PacketHandler
         BattleGameRoom room = clientSession.Room; //나중에 null로 바꿔도 참조가능
 
         room.Push(room.HandleMove , clientSession.MyPlayer, move);
+
+
+        
+
     }
 
     internal static void C_MoveItemHandler(PacketSession session, IMessage message)

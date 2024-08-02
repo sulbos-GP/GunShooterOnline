@@ -23,12 +23,33 @@ internal class ObjectManager
             if (gameObjcet.ObjectType == GameObjectType.Player) 
                 _players.Add(gameObjcet.Id, gameObjcet as Player);
 
-            if (gameObjcet.ObjectType == GameObjectType.Item)
+            else if (gameObjcet.ObjectType == GameObjectType.Item)
                 _items.Add(gameObjcet.Id, gameObjcet as ItemObject);
         }
 
         return gameObjcet;
     }
+
+
+    public GameObject Add(GameObject obj)
+    {
+        lock (_lock)
+        {
+            obj.Id = GenerateId(obj.ObjectType);
+
+            if (obj.ObjectType == GameObjectType.Player)
+                _players.Add(obj.Id, obj as Player);
+
+            else if (obj.ObjectType == GameObjectType.Item)
+                _items.Add(obj.Id, obj as ItemObject);
+        }
+
+        return obj;
+    }
+
+
+
+
 
     private int GenerateId(GameObjectType type) //[unused(1)] [type(7)] [Id(24)]
     {
@@ -56,7 +77,7 @@ internal class ObjectManager
         return false;
     }
 
-    public Player Find(int objectId)
+   /* public Player Find(int objectId)
     {
         var objectType = GetObjectTypeById(objectId);
 
@@ -72,9 +93,9 @@ internal class ObjectManager
         }
 
         return null;
-    }
+    }*/
 
-    public ItemObject Find2(int objectId)
+    public T Find<T>(int objectId) where T : GameObject
     {
         var objectType = GetObjectTypeById(objectId);
 
@@ -84,13 +105,25 @@ internal class ObjectManager
             {
                 ItemObject obj = null;
                 if (_items.TryGetValue(objectId, out obj))
-                    return obj;
+                    return obj as T;
 
             }
+            else if(objectType == GameObjectType.Player)
+            {
+                Player obj = null;
+                if (_players.TryGetValue(objectId, out obj))
+                    return obj as T;
+
+            }
+
+            
         }
 
-        return null;
+       
+            return null;
     }
+
+
 
 
     public Shape[] GetValue()
