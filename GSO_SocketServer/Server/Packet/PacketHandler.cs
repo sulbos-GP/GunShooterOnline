@@ -56,14 +56,12 @@ class PacketHandler
         //인벤토리 열었을떄
         ClientSession clientSession = session as ClientSession;
         C_LoadInventory packet = (C_LoadInventory)message;
-        Console.WriteLine($"C_LoadInventoryHandler {packet.ObjectId}");
+        Console.WriteLine($"C_LoadInventoryHandler {packet.PlayerId}");
 
         Player player = clientSession.MyPlayer;
 
         //player.gameRoom.HandleItemLoad(player, packet.PlayerId,  packet.InventoryId);
-        player.gameRoom.Push (player.gameRoom.HandleItemLoad, player, packet.ObjectId,  packet.InventoryId);
-        
-
+        player.gameRoom.Push (player.gameRoom.HandleItemLoad, player, packet.PlayerId,  packet.InventoryId);
     }
 
     /*public static void C2S_ChatHandler(PacketSession session, IPacket packet)
