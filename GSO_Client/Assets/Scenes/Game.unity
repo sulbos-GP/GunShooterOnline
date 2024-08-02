@@ -3936,6 +3936,8 @@ MonoBehaviour:
   instantGrid: []
   invenWeight: 0
   limitWeight: 0
+  weightText: {fileID: 8733269518139981497}
+  moneyText: {fileID: 2872410453382822661}
   bagLv: 0
 --- !u!114 &3852999661484353581
 MonoBehaviour:
