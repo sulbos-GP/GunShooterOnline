@@ -5,8 +5,6 @@ namespace Collision.Shapes
 {
     public class Circle : Shape
     {
-        
-        public Vector2 Position;
         private float _radius;
         public float radius { get { return _radius; } set { _radius = value; name = "circle " + radius; } }
         
@@ -44,10 +42,10 @@ namespace Collision.Shapes
         // For insertion
         public bool ContainedBy(Rectangle rect)
         {
-            return rect.Left <= Position.X - radius &&
-                   rect.Top <= Position.Y - radius &&
-                   rect.Left + rect.Width >= Position.X + radius &&
-                   rect.Top + rect.Height >= Position.Y + radius;
+            return rect.Left <= position.x - radius &&
+                   rect.Top <= position.y - radius &&
+                   rect.Left + rect.Width >= position.x+ radius &&
+                   rect.Top + rect.Height >= position.y + radius;
         }
 
         // The rest is for query 
@@ -55,23 +53,23 @@ namespace Collision.Shapes
         {
             // The distance to the furthest corner is less than the radius 
             return new Vector2(
-                Math.Max(Math.Abs(Position.X - rect.Left), Math.Abs(Position.X - (rect.Left + rect.Width))),
-                Math.Max(Math.Abs(Position.Y - rect.Top), Math.Abs(Position.Y - (rect.Top + rect.Height)))
+                Math.Max(Math.Abs(position.x - rect.Left), Math.Abs(position.x - (rect.Left + rect.Width))),
+                Math.Max(Math.Abs(position.y - rect.Top), Math.Abs(position.y - (rect.Top + rect.Height)))
             ).LengthSquared() < radius * radius;
         }
 
         // https://stackoverflow.com/questions/401847/circle-rectangle-collision-detection-intersection/1879223#1879223
         public bool IntersectsWith(Rectangle rect)
         {
-            return Vector2.DistanceSquared(Position, new Vector2(
-                Math.Clamp(Position.X, rect.Left, rect.Left + rect.Width),
-                Math.Clamp(Position.Y, rect.Top, rect.Top + rect.Height)
+            return Vector2.DistanceSquared(position, new Vector2(
+                Math.Clamp(position.x, rect.Left, rect.Left + rect.Width),
+                Math.Clamp(position.y, rect.Top, rect.Top + rect.Height)
             )) < radius * radius;
         }
 
         public bool IntersectsWith(Circle circle)
         {
-            return Vector2.DistanceSquared(Position, circle.Position) <
+            return Vector2.DistanceSquared(position, circle.position) <
                    (radius + circle.radius) * (radius + circle.radius);
         }
     }
