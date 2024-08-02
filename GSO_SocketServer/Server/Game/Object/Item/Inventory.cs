@@ -13,15 +13,17 @@ namespace Server.Game
 {
     public class Inventory
     {
-        public int InvenId;
         public InvenDataInfo invenData = new InvenDataInfo();
+        /*int32 inventoryId = 1;
+        float limitWeight = 2;
+        repeated GridDataInfo GridData = 3;*/
         public List<Grid> instantGrid = new List<Grid>(); //해당 인벤토리가 소유한 그리드
 
 
         //인벤토리가 처음 생성될때?
-        public Inventory(int id)
+        public Inventory(int ownerId)
         {
-            invenData.InventoryId = id;
+            invenData.InventoryId = ownerId;
             Grid newGrid = new Grid();
             newGrid.gridData = MakeNewGridData();
             newGrid.ownerInventory = this;
@@ -118,6 +120,8 @@ namespace Server.Game
 
             target.OwnerGrid.DeleteItemFromSlot(target);
             target.OwnerGrid.PushItemIntoSlot(target,posX,posY);
+
+            target.OwnerGrid.PrintInvenContents();
         }
     }
 }

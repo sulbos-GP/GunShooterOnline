@@ -51,12 +51,12 @@ namespace Server.Game
                 foreach (ItemDataInfo item in sortDataList)
                 {
                     //가장 큰것부터 넣음
-                    RandomPushInstantObject(item);
+                    PushInstantObject(item);
                 }
             }
         }
 
-        public void RandomPushInstantObject(ItemDataInfo itemData)
+        public void PushInstantObject(ItemDataInfo itemData)
         {
             //새로운 데이터 오브젝트 생성및 아이템 데이터 할당
             ItemObject newItemObj = new ItemObject();
