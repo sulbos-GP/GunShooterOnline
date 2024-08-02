@@ -63,6 +63,8 @@ namespace ServerCore
 		public abstract int  OnRecv(ArraySegment<byte> buffer, byte channelNumber);
         public abstract void OnSend(int numOfBytes);
 		public abstract void OnDisconnected(EndPoint endPoint);
+		public abstract void FlushSend();
+
 
 		void Clear()
 		{

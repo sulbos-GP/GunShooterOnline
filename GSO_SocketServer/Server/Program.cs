@@ -2,6 +2,8 @@
 using System.Net;
 using System.Threading;
 using QuadTree;
+using Server.Game;
+
 using ServerCore;
 
 namespace Server
@@ -29,6 +31,7 @@ namespace Server
 
         static void Main(string[] args)
 		{
+
             string host = Dns.GetHostName();
             IPHostEntry ipHost = Dns.GetHostEntry(host);
 
@@ -45,6 +48,10 @@ namespace Server
            // mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
             //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
             mNetworkService.Start();
+            mNetworkService.SetChannel(true, room,0);
+
+
+            ItemDB itemDB = new ItemDB();
 
             Console.WriteLine("q: Quit Server.");
             while (true)

@@ -14,6 +14,19 @@ namespace ServerCore
 
         object _lock = new object();
 
+
+
+        public void FlushSend()
+        {
+            lock (_lock)
+            {
+                foreach (var session in mSessions.Values)
+                {
+                    session.FlushSend();
+                }
+            }
+        }
+
         public int GetSessionCount()
         {
             lock (_lock)

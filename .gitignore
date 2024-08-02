@@ -270,3 +270,24 @@ GSO_Client/Assets/FR2_Cache.asset
 ~$*.xlsx
 
 # End of https://www.toptal.com/developers/gitignore/api/csharp,aspnetcore,unity
+*.meta
+GSO_Client/Assets/Scenes/InventoryTest.unity.meta
+GSO_Client/Assets/Scripts/Inventory.meta
+*.meta
+GSO_Client/Assets/Scenes/InventoryTest.unity.meta
+GSO_Client/Assets/Scripts/Inventory.meta
+GSO_Client/Assets/Scripts/Inventory/InvenHighLight.cs.meta
+GSO_Client/Assets/Sprite/HideTile.png.meta
+GSO_Client/Assets/Sprite/highlighjt.png.meta
+GSO_Client/Assets/Sprite/Tile.png.meta
+GSO_Client/Assets/Scenes/InventoryTest.unity.meta
+GSO_Client/Assets/Scripts/Inventory.meta
+GSO_Client/Assets/Scripts/Inventory/InvenHighLight.cs.meta
+GSO_Client/Assets/Sprite/HideTile.png.meta
+GSO_Client/Assets/Sprite/highlighjt.png.meta
+GSO_Client/Assets/Sprite/Tile.png.meta
+GSO_Client/Assets/Scripts/Inventory.meta
+GSO_Client/Assets/Scripts/Inventory/InvenHighLight.cs.meta
+GSO_Client/Assets/Sprite/HideTile.png.meta
+GSO_Client/Assets/Sprite/highlighjt.png.meta
+GSO_Client/Assets/Sprite/Tile.png.meta

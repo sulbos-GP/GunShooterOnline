@@ -22,8 +22,8 @@ namespace ServerCore
         {
             for(int number = 1; number <= mNetworkService.mMaxChannelNumber; number++)
             {
-                GameRoom room = mNetworkService.mGameRoomFactory.Invoke();
-                room.mGameRoomNumber = Convert.ToByte(number);
+                //GameRoom room = mNetworkService.mGameRoomFactory.Invoke();
+                //room.mGameRoomNumber = Convert.ToByte(number);
                 //room.mGameRoomManager = this;
             }
         }

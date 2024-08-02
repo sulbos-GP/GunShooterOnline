@@ -39,19 +39,6 @@ public class RewardController : MonoBehaviour
 
     }
 
-    public void OnChoseReward(int enumIndex) //선택했음
-    {
-        RewardsType rewards = (RewardsType)enumIndex;
-        
-        C_RewardInfo rewardInfo = new C_RewardInfo()
-        {
-            RewardsType = enumIndex
-        };
-        
-        Debug.Log(rewards);
-        Managers.Network.Send(rewardInfo);
-        Managers.Resource.Destroy(transform.gameObject);
-    }
     
 
 

@@ -39,14 +39,14 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SChangeHp, PacketHandler.S_ChangeHpHandler);		
 		_onRecv.Add((ushort)MsgId.SDie, MakePacket<S_Die>);
 		_handler.Add((ushort)MsgId.SDie, PacketHandler.S_DieHandler);		
-		_onRecv.Add((ushort)MsgId.SLobbyPlayerInfo, MakePacket<S_LobbyPlayerInfo>);
-		_handler.Add((ushort)MsgId.SLobbyPlayerInfo, PacketHandler.S_LobbyPlayerInfoHandler);		
-		_onRecv.Add((ushort)MsgId.SSkill, MakePacket<S_Skill>);
-		_handler.Add((ushort)MsgId.SSkill, PacketHandler.S_SkillHandler);		
-		_onRecv.Add((ushort)MsgId.SStatChange, MakePacket<S_StatChange>);
-		_handler.Add((ushort)MsgId.SStatChange, PacketHandler.S_StatChangeHandler);		
-		_onRecv.Add((ushort)MsgId.SRoomInfo, MakePacket<S_RoomInfo>);
-		_handler.Add((ushort)MsgId.SRoomInfo, PacketHandler.S_RoomInfoHandler);
+		_onRecv.Add((ushort)MsgId.SLoadInventory, MakePacket<S_LoadInventory>);
+		_handler.Add((ushort)MsgId.SLoadInventory, PacketHandler.S_LoadInventoryHandler);		
+		_onRecv.Add((ushort)MsgId.SMoveItem, MakePacket<S_MoveItem>);
+		_handler.Add((ushort)MsgId.SMoveItem, PacketHandler.S_MoveItemHandler);		
+		_onRecv.Add((ushort)MsgId.SDeleteItem, MakePacket<S_DeleteItem>);
+		_handler.Add((ushort)MsgId.SDeleteItem, PacketHandler.S_DeleteItemHandler);		
+		_onRecv.Add((ushort)MsgId.SRaycastHit, MakePacket<S_RaycastHit>);
+		_handler.Add((ushort)MsgId.SRaycastHit, PacketHandler.S_RaycastHitHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

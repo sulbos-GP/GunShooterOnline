@@ -7,7 +7,7 @@ public class ProjectileContoller : BaseController
 
     protected override void Init()
     {
-        State = CreatureState.Moving;
+        //State = CreatureState.Moving;
 
         base.Init();
     }
