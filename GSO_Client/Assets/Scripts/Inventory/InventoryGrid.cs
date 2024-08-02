@@ -99,6 +99,16 @@ public class InventoryGrid : MonoBehaviour
 
     private void GridItemSet()
     {
+
+        if (gridData.itemList.Count != 0)
+        {
+            foreach (ItemData item in gridData.itemList)
+            {
+                CreateItemObj(item);
+            }
+        }
+
+        UpdateBackupSlot();
         //서버에서 받은 리스트를 gridItemArray에 할당하고
         //아이템 프리팹을 생성후 해당 아이템의 데이터를 넣어주기
         /*if(gridData.itemList.Count == 0)
@@ -131,15 +141,6 @@ public class InventoryGrid : MonoBehaviour
             }
         }*/
 
-        if(gridData.itemList.Count != 0)
-        {
-            foreach (ItemData item in gridData.itemList)
-            {
-                CreateItemObj(item);
-            }
-        }
-
-        UpdateBackupSlot();
     }
 
     private void CreateItemObj(ItemData itemData)
@@ -153,8 +154,6 @@ public class InventoryGrid : MonoBehaviour
         itemObj.backUpItemRotate = itemObj.curItemRotate; //현재 회전
         itemObj.backUpItemGrid = itemObj.curItemGrid; //현재 그리드
     }
-
-    
 
     /// <summary>
     /// 마우스의 현 위치를 그리드의 타일 위치로 변환
