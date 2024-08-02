@@ -7,20 +7,18 @@ using UnityEngine.UIElements;
 
 public class InputController : MonoBehaviour
 {
-    public static InputController instance;
-
-    private Rigidbody2D rig;
-
-    
+    static InputController instance;
+    [SerializeField]
     private Vector2 _direction;
-    private Vector2 lookInput;
+    public Rigidbody2D rig;
+    private Unit localUnit;
+    public GameObject LeftJoystick;
 
-    private Unit localUnit => UnitManager.Instance.CurrentPlayer;
+
+    private Vector2 lookInput;
+    private Camera mainCamera;
     public AimFov aimFov;
     public BasicFov basicFov;
-
-
-
 
     private bool isFiring;
     private CreatureState State;
@@ -29,12 +27,13 @@ public class InputController : MonoBehaviour
     private void Awake()
     {
         instance = this;
+        mainCamera = Camera.main;
     }
 
     public void Start()
     {
-        Managers.Network.ConnectToGame();
-        rig = GetComponent<Rigidbody2D>();
+        rig= GetComponent<Rigidbody2D>();
+        localUnit = GetComponent<Unit>(); // TO-DO : 추후에 instance에서 긁거나 localplayer[0]식으로 할 예정.
     }
 
     public void FixedUpdate()
@@ -59,8 +58,6 @@ public class InputController : MonoBehaviour
         transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle-90f));
 
         //Fov Logic
-        aimFov = GameObject.Find("AimView").GetComponent<AimFov>();
-        basicFov = GameObject.Find("BasicView").GetComponent<BasicFov>();
         aimFov.SetAimDirection(lookInput);
         aimFov.SetOrigin(transform.position);
         basicFov.SetOrigin(transform.position);

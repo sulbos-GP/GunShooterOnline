@@ -127,9 +127,6 @@ public class Gun : MonoBehaviour
             {
                 //패킷 전송
                 Debug.Log("Hit: " + hit.collider.name);
-                Unit reciveUnit = hit.collider.gameObject.GetComponent<Unit>();
-                Unit ownerUnit = gameObject.GetComponentInParent<Unit>();
-                DamageLogic.DamageApply(ownerUnit, reciveUnit);
             }
             Debug.DrawRay(fireStartPos.position, direction * _gunStat.range, Color.yellow, 0.5f);
 

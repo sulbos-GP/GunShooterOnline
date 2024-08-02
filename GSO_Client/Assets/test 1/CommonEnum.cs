@@ -7,10 +7,3 @@ public enum eTABLE_TYPE
     None,
     TestItem
 }
-
-public enum eStat
-{
-    None,
-    Health,
-    Armor
-}
