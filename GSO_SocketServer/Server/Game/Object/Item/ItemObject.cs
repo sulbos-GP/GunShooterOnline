@@ -9,7 +9,6 @@ namespace Server.Game
 {
     public class ItemObject : GameObject
     {
-        public static int lastItemId = 0;
         public const int maxItemMergeAmount = 64;
         /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
@@ -122,7 +121,7 @@ namespace Server.Game
         public void DestroyItem()
         {
             //해당 아이템 오브젝트 삭제
-
+            ObjectManager.Instance.Remove(Id);
         }
 
 

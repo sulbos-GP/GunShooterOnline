@@ -68,6 +68,8 @@ public class ServerSession : PacketSession
         Managers.Network.Send(c_EnterGame);
         Debug.Log("Send c_EnterGame");
 
+
+        _reserveQueue = new();
         //C2S_Chat chat = new C2S_Chat();
         //chat.chat = "Hello";
         //this.Send(chat.Write(), DeliveryMethod.ReliableOrdered);

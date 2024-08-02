@@ -81,8 +81,12 @@ public class Map
 
 
     #region Item
-    ItemDB itemDB = new ItemDB();
     List<RootableObject> _rootableObjects = new List<RootableObject>();
+    #endregion
+
+    #region EscapeObj
+    //List<RootableObject> _rootableObjects = new List<RootableObject>();
+
     #endregion
 
     public Map(BattleGameRoom r)
@@ -115,7 +119,8 @@ public class Map
 
     private void SetRandomItem()
     {
-        var db = itemDB.items.Values.ToArray(); 
+        /*
+        var db = ItemDB.items.Values.ToArray(); 
 
         //ItemObject item = ObjectManager.Instance.Add<ItemObject>();
         ItemObject item = new ItemObject();
@@ -124,8 +129,8 @@ public class Map
 
         foreach (var r in _rootableObjects)
         {
-            r.FindPlaceableSlot(item);
-        }
+            r.Inventory.instantGrid[0].p
+        }*/
     }
 
     #endregion

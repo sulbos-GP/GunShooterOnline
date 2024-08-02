@@ -72,14 +72,8 @@ namespace Server
             //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
             ItemObject item =  ObjectManager.Instance.Find<ItemObject>(itemId);
 
-            for (int x = 0; x < item.Width; x++)
-            {
-                for (int y = 0; y < item.Height; y++)
-                {
-                    player.inventory.instantGrid[0].gridSlot[item.itemDataInfo.ItemPosX + x, item.itemDataInfo.ItemPosY + y] = 0;
-                }
-            }
 
+            player.inventory.instantGrid[0].DeleteItemFromSlot(item);
 
 
         }
@@ -91,7 +85,7 @@ namespace Server
 
             S_LoadInventory s_LoadInventory = new S_LoadInventory()
             {
-                ObjectId = objectId,
+                PlayerId = objectId,
                 InventoryId = inventoryId,
                 InvenData = targetPlayer.inventory.invenData,
             };
