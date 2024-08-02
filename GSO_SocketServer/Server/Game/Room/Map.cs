@@ -7,7 +7,7 @@ using Google.Protobuf.Protocol;
 using QuadTree;
 using Server.Data;
 using Server.Game.Object;
-using Server.Game.Object.Item;
+using Server.Game;
 using ServerCore;
 
 namespace Server.Game;

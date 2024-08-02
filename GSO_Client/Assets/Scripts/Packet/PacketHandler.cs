@@ -34,12 +34,12 @@ internal class PacketHandler
         Managers.Network.Send(lobbyInfo);
     }*/
 
-    /*public static void S_SpawnHandler(PacketSession session, IMessage packet)
+    public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         var spawnPacket = (S_Spawn)packet;
         foreach (var info in spawnPacket.Objects) Managers.Object.Add(info, false);
         //Debug.Log("S_SpawnHandler");
-    }*/
+    }
 
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
     {
@@ -103,10 +103,7 @@ internal class PacketHandler
              Managers.Map.MapRoomUpdate(roomPacket);*/
     }
 
-    internal static void S_SpawnHandler(PacketSession session, IMessage message)
-    {
-        throw new NotImplementedException();
-    }
+ 
 
     internal static void S_ConnectedHandler(PacketSession session, IMessage message)
     {

@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading;
 using QuadTree;
 using Server.Game;
+
 using ServerCore;
 
 namespace Server
@@ -48,6 +49,9 @@ namespace Server
             //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
             mNetworkService.Start();
             mNetworkService.SetChannel(true, room,0);
+
+
+            ItemDB itemDB = new ItemDB();
 
             Console.WriteLine("q: Quit Server.");
             while (true)
