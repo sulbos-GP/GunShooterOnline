@@ -456,7 +456,6 @@ public class InventoryGrid : MonoBehaviour
                 }
             }
         }
-        
         return null;
     }
 

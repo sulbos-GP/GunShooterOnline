@@ -10,8 +10,7 @@ namespace Server.Game.Object.Item
     internal class ItemDB
     {
 
-        public Dictionary<int, ItemDataInfo> items = new Dictionary<int, ItemDataInfo>();
-
+        public static Dictionary<int, ItemDataInfo> items = new Dictionary<int, ItemDataInfo>();
 
         public ItemDB()
         {
@@ -21,7 +20,7 @@ namespace Server.Game.Object.Item
         private void Init()
         {
 
-
+            //아이템 코드 임시. 나중에 정상화 해야함
             ItemDataInfo pistol = new ItemDataInfo();
             pistol.ItemId           = 0;
             pistol.ItemPosX         = 0;
@@ -60,7 +59,7 @@ namespace Server.Game.Object.Item
             recoveryKit.ItemPosY = 0;
             recoveryKit.ItemRotate = 0;
             recoveryKit.ItemAmount = 1;
-            recoveryKit.ItemCode = 7;
+            recoveryKit.ItemCode = 3;
             recoveryKit.ItemName   = "Recovery kit";
             recoveryKit.ItemWeight         = 1.0f;
             recoveryKit.ItemType         = 2;
@@ -76,7 +75,7 @@ namespace Server.Game.Object.Item
             bandage.ItemPosY = 0;
             bandage.ItemRotate = 0;
             bandage.ItemAmount = 1;
-            bandage.ItemCode = 8;
+            bandage.ItemCode = 4;
             bandage.ItemName = "Bandage";
             bandage.ItemWeight       = 0.0f;
             bandage.ItemType              = 2;
@@ -93,7 +92,7 @@ namespace Server.Game.Object.Item
             pill.ItemPosY = 0;
             pill.ItemRotate = 0;
             pill.ItemAmount = 1;
-            pill.ItemCode = 10;
+            pill.ItemCode = 5;
             pill.ItemName = "Pill";
             pill.ItemWeight                = 0.0f;
             pill.ItemType                =  3;
