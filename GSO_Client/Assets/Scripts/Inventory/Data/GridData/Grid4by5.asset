@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cdcab0aae7dbe8143838a59a29d4e6bf, type: 3}
   m_Name: Grid4by5
   m_EditorClassIdentifier: 
-  gridId: 0
+  gridId: 4
   gridSize: {x: 4, y: 5}
   itemList: []
   createRandomItem: 1
