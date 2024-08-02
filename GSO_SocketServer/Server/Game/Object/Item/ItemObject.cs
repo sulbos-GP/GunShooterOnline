@@ -9,8 +9,34 @@ namespace Server.Game
 {
     public class ItemObject : GameObject
     {
+        public static int lastItemId = 0;
         public const int maxItemMergeAmount = 64;
-        public ItemDataInfo itemDataInfo; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
+        /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+
+        public Grid OwnerGrid;
+        public ItemDataInfo itemDataInfo;
+        /*소유한 데이터
+        int32 itemId = 1;        // 해당 아이템의 고유한 아이디
+        int32 itemCode = 2;        //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
+        int32 itemPosX = 3;        // 아이템의 그리드 안 좌표상의 위치
+        int32 itemPosY = 4;        // 아이템의 그리드 안 좌표상의 위치
+        int32 itemRotate = 5;        // 아이템의 회전코드(rotate * 90)
+        int32 itemAmount = 6;      // 아이템의 개수(소모품만 64개까지)
+        repeated int32 searchedPlayerId     = 7;            // 이 아이템을 조회한 플레이어의 아이디
+
+         //임시
+        string item_name = 8;
+        float item_weight = 9;
+        int32 item_type = 10;
+        int32 item_string_value = 11;
+        int32 item_purchase_price = 12;
+        int32 item_sell_price = 13;
+        float item_searchTime = 14;
+        int32 width = 15;
+        int32 height = 16;
+        bool isItemConsumeable = 17;
+        */
+
 
         public ItemObject()
         {
@@ -52,11 +78,12 @@ namespace Server.Game
             }
         }
 
+        //첫 생성시
         private void Init()
         {
             if (itemDataInfo == null)
             {
-                //해당 오브젝트에는 아이템 데이터 info가 있어야함
+                //해당 오브젝트에는 반드시 아이템 데이터 info가 있어야함
                 return;
             }
         }
@@ -97,7 +124,6 @@ namespace Server.Game
         public void DestroyItem()
         {
             //해당 아이템 오브젝트 삭제
-
         }
 
 
