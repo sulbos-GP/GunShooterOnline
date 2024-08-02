@@ -34,8 +34,8 @@ namespace Google.Protobuf.Protocol {
             "bmVjdGVkIioKClNfQ2hhbmdlSHASEAoIb2JqZWN0SWQYASABKAUSCgoCaHAY",
             "AiABKAUiLQoFU19EaWUSEAoIb2JqZWN0SWQYASABKAUSEgoKYXR0YWNrZXJJ",
             "ZBgCIAEoBSIbCgtDX0VudGVyR2FtZRIMCgRuYW1lGAEgASgJIjgKD0NfTG9h",
-            "ZEludmVudG9yeRIQCghQbGF5ZXJJZBgBIAEoBRITCgtpbnZlbnRvcnlJZBgC",
-            "IAEoBSJkCg9TX0xvYWRJbnZlbnRvcnkSEAoIUGxheWVySWQYASABKAUSEwoL",
+            "ZEludmVudG9yeRIQCghwbGF5ZXJJZBgBIAEoBRITCgtpbnZlbnRvcnlJZBgC",
+            "IAEoBSJkCg9TX0xvYWRJbnZlbnRvcnkSEAoIcGxheWVySWQYASABKAUSEwoL",
             "aW52ZW50b3J5SWQYAiABKAUSKgoJSW52ZW5EYXRhGAMgASgLMhcuUHJvdG9j",
             "b2wuSW52ZW5EYXRhSW5mbyLjAQoKQ19Nb3ZlSXRlbRIQCghwbGF5ZXJJZBgB",
             "IAEoBRIOCgZpdGVtSWQYAiABKAUSEAoIaXRlbVBvc1gYAyABKAUSEAoIaXRl",
@@ -2271,7 +2271,7 @@ namespace Google.Protobuf.Protocol {
       return new C_LoadInventory(this);
     }
 
-    /// <summary>Field number for the "PlayerId" field.</summary>
+    /// <summary>Field number for the "playerId" field.</summary>
     public const int PlayerIdFieldNumber = 1;
     private int playerId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2510,7 +2510,7 @@ namespace Google.Protobuf.Protocol {
       return new S_LoadInventory(this);
     }
 
-    /// <summary>Field number for the "PlayerId" field.</summary>
+    /// <summary>Field number for the "playerId" field.</summary>
     public const int PlayerIdFieldNumber = 1;
     private int playerId_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
