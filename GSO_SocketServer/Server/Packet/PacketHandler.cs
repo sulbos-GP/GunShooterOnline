@@ -22,7 +22,8 @@ class PacketHandler
 
         Player player = clientSession.MyPlayer;
 
-        player.gameRoom.HandleItemDelete(player, packet.PlayerId, packet.ItemId);
+        //player.gameRoom.HandleItemDelete(player, packet.PlayerId, packet.ItemId);
+        player.gameRoom.Push(player.gameRoom.HandleItemDelete, player, packet.PlayerId, packet.ItemId);
     }
 
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
@@ -55,11 +56,12 @@ class PacketHandler
         //인벤토리 열었을떄
         ClientSession clientSession = session as ClientSession;
         C_LoadInventory packet = (C_LoadInventory)message;
-        Console.WriteLine($"C_LoadInventoryHandler {packet.PlayerId}");
+        Console.WriteLine($"C_LoadInventoryHandler {packet.ObjectId}");
 
         Player player = clientSession.MyPlayer;
 
-        player.gameRoom.HandleItemLoad(player, packet.PlayerId,  packet.InventoryId);
+        //player.gameRoom.HandleItemLoad(player, packet.PlayerId,  packet.InventoryId);
+        player.gameRoom.Push (player.gameRoom.HandleItemLoad, player, packet.ObjectId,  packet.InventoryId);
         
 
     }
@@ -97,7 +99,7 @@ class PacketHandler
         Console.WriteLine($"C_MoveItemHandler {packet.PlayerId}");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.HandleItemMove(player, packet.ItemId, packet.ItemPosX, packet.ItemPosY);
+        player.gameRoom.Push(player.gameRoom.HandleItemMove, player, message);
     }
 
     internal static void C_RaycastShootHandler(PacketSession session, IMessage message)
