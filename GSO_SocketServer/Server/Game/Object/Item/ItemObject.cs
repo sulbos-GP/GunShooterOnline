@@ -96,12 +96,9 @@ namespace Server.Game
         /// </summary>
         public void MergeItem(ItemObject itemObj)
         {
-            //현재 오브젝트와 합치려는 오브젝트와 같으면
-            if (itemDataInfo.ItemCode != itemObj.itemDataInfo.ItemCode)
-            {
-                return;
-            }
+            //놓으려는 위치에 아이템이 있는데 배치에 성공했다면 이것은 아이템을 머지해야한다는 것(애초에 배치 실패였으면 패킷도 안옴)
 
+            //두개의 아이템을 합친값이 최댓값보다 큰경우 -> 타겟의 아이템은 맥스가 되고 배치 아이템은 개수가 감소한뒤 원래 위치로 돌아감
             if (itemDataInfo.ItemAmount + itemObj.itemDataInfo.ItemAmount > maxItemMergeAmount)
             {
                 //두개의 아이템을 합친 개수가 64개보다 클경우 타겟 아이템은 64개로 만들고 기존 아이템은 남은 개수를 가지고 원래 위치로 귀환
