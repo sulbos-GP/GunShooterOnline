@@ -38,7 +38,7 @@ public class Inventory : MonoBehaviour
 
     public float invenWeight = 0; //그리드의 무게 총 결산.
     public float limitWeight; //인벤토리의 한계 무게
-    public float InvenWeight
+    protected virtual float InvenWeight
     {
         get { return invenWeight; }
         set { invenWeight = value; }
@@ -71,9 +71,11 @@ public class Inventory : MonoBehaviour
         //그리드 생성
         for(int i =0; i < invenData.gridList.Count; i++)
         {
-            InventoryGrid gridInstance = Instantiate(gridPref, grids).GetComponent<InventoryGrid>();
-            gridInstance.gridData = invenData.gridList[i];
-            instantGrid.Add(gridInstance);
+            InventoryGrid grid = Instantiate(gridPref, grids).GetComponent<InventoryGrid>();
+            grid.gridData = invenData.gridList[i];
+            grid.GridDataSet();
+            grid.invenScr = this;
+            instantGrid.Add(grid);
         }
     }
 
