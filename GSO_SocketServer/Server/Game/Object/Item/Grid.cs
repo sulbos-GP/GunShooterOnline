@@ -59,7 +59,7 @@ namespace Server.Game
         public void PushInstantObject(ItemDataInfo itemData)
         {
             //새로운 데이터 오브젝트 생성및 아이템 데이터 할당
-            ItemObject newItemObj = new ItemObject();
+            ItemObject newItemObj = ObjectManager.Instance.Find<ItemObject>(itemData.ItemId);
 
             newItemObj.itemDataInfo = itemData;
             newItemObj.OwnerGrid = this;

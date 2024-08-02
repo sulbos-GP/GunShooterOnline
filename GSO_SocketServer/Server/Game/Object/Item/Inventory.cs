@@ -77,7 +77,7 @@ namespace Server.Game
                 System.Random rnd = new System.Random();
                 int random = rnd.Next(0, canInsertlist.Count);
                 ItemDataInfo newItemData = canInsertlist[random];
-                newItemData.ItemId = ++ItemObject.lastItemId;
+                newItemData.ItemId = ObjectManager.Instance.Add<ItemObject>().Id;
 
 
                 //아이템의 위치, 회전을 제외한 아이디+데이터베이스 데이터를 그리드에 넣어줌
