@@ -70,13 +70,13 @@ namespace Server
         {
             //TODO : 그리드로 옮기기
             //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
-            ItemObject info =  ObjectManager.Instance.Find2(itemId);
+            ItemObject item =  ObjectManager.Instance.Find<ItemObject>(itemId);
 
-            for (int x = 0; x < info.width; x++)
+            for (int x = 0; x < item.Width; x++)
             {
-                for (int y = 0; y < info.height; y++)
+                for (int y = 0; y < item.Height; y++)
                 {
-                    player.inventory.instantGrid[0].gridSlot[info.itemPos.x + x, info.itemPos.y + y] = 0;
+                    player.inventory.instantGrid[0].gridSlot[item.itemDataInfo.ItemPosX + x, item.itemDataInfo.ItemPosY + y] = 0;
                 }
             }
 
@@ -92,7 +92,7 @@ namespace Server
             s_LoadInventory.InventoryId = inventoryId;
 
 
-            Player targetPlayer = ObjectManager.Instance.Find(playerId);
+            Player targetPlayer = ObjectManager.Instance.Find<Player>(playerId);
 
 
             s_LoadInventory.InvenData = targetPlayer.inventory.invenData;
@@ -102,11 +102,19 @@ namespace Server
 
         internal void HandleItemMove(Player player, int itemId, int itemPosX, int itemPosY)
         {
-            player.inventory.GetItem(itemId, itemPosX, itemPosY);
+            player.inventory.MoveItem(itemId, itemPosX, itemPosY);
 
             //S_
 
-           // BroadCast()
+
+
+       
+
+
+
+
+
+            // BroadCast()
         }
     }
 }

@@ -75,7 +75,7 @@ namespace Server.Game
 
         }
 
-        private bool ItemPushCheck(ItemDataInfo item, int posX, int posY) // -> itemobject
+        public bool ItemPushCheck(ItemDataInfo item, int posX, int posY) // -> itemobject
         {
             for (int x = 0; x < item.Width; x++)
             {

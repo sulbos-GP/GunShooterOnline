@@ -10,25 +10,33 @@ namespace Server.Game.Object.Item
     internal class ItemDB
     {
 
-        Dictionary<int, ItemDataInfo> items = new Dictionary<int, ItemDataInfo>();
+        public Dictionary<int, ItemDataInfo> items = new Dictionary<int, ItemDataInfo>();
 
-        public void Init()
+
+        public ItemDB()
         {
+            Init();
+        }
+
+        private void Init()
+        {
+
+
             ItemDataInfo pistol = new ItemDataInfo();
-            pistol.ItemId = 0;
-            pistol.ItemPosX = 0;
-            pistol.ItemPosY = 0;
-            pistol.ItemRotate = 0;
-            pistol.ItemAmount = 1;
-            pistol.ItemCode = 1;
+            pistol.ItemId           = 0;
+            pistol.ItemPosX         = 0;
+            pistol.ItemPosY         = 0;
+            pistol.ItemRotate       = 0;
+            pistol.ItemAmount       = 1;
+            pistol.ItemCode         = 1;
             pistol.ItemName         = "Pistol01";
             pistol.ItemWeight       = 2.0f;
             pistol.ItemType         = 0;
             pistol.ItemStringValue   = 101;
             pistol.ItemPurchasePrice = 400;
             pistol.ItemSellPrice     = 100;
-            pistol.Width            = 2;
-            pistol.Height           = 2;
+            pistol.Width             = 2;
+            pistol.Height            = 2;
 
             ItemDataInfo ak47 = new ItemDataInfo();
             ak47.ItemId = 0;
