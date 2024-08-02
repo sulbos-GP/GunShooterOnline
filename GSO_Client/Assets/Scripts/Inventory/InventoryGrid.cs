@@ -2,14 +2,15 @@ using UnityEngine;
 using Vector2 = System.Numerics.Vector2;
 using Random = UnityEngine.Random;
 using Google.Protobuf.Protocol;
+using UnityEngine.Rendering;
 
 
 public class InventoryGrid : MonoBehaviour
 {
     /*
-     * 그리드에 대한 조작을 관리함
+     * 인벤토리에 의해 UI에서 생성된 그리드
      * 
-     * 
+     * 그리드의 사이즈와 위치를 설정하고 내부에 들어있는 아이템들에 대해 아이템 오브젝트를 생성하여 그리드데이터.아이템 데이터를 할당하여 배치
      */
 
     //그리드 설정
@@ -48,41 +49,40 @@ public class InventoryGrid : MonoBehaviour
 
     //아이템 생성
     public GameObject itemPref; //아이템의 prefab
-    private bool createRandomItem;
+    //private bool createRandomItem;
 
-    private void Start()
+    private void Awake()
     {
         gridRect = GetComponent<RectTransform>();
-        if(gridData == null)
+    }
+
+    public void GridDataSet()
+    {
+        if (gridData == null)
         {
             Debug.Log("해당 그리드 오브젝트에 그리드 데이터가 없음");
             return;
         }
+
         gridId = gridData.gridId;
         gridSize = gridData.gridSize;
+
         if (gridSize.x <= 0 || gridSize.y <= 0)
         {
             //그리드 사이즈를 설정하지 않으면 기본값으로 5,5 할당
             gridSize = new Vector2Int(5, 5);
         }
-        
-        Init(gridSize.x, gridSize.y);
-    }
 
-    /// <summary>
-    /// 해당 그리드의 인벤토리 아이템 배열 생성 및 사이즈 할당
-    /// </summary>
-    /// <param name="width">그리드의 폭</param>
-    /// <param name="height">그리드의 높이</param>
-    private void Init(int width, int height)
-    {
-        invenScr = transform.parent.parent.GetComponent<Inventory>();
+        int width = gridSize.x;
+        int height = gridSize.y;  
+
         gridItemArray = new ItemObject[width, height];
         gridBackupArray = new ItemObject[width, height];
+
+        Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
+        gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
         
-        Vector2 size = new Vector2(width * WidthOfTile, height * HeightOfTile);
-        gridRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
-        createRandomItem = gridData.createRandomItem;
+        //createRandomItem = gridData.createRandomItem; 클라에서 만들필요 없음
 
         GridSet();
     }
@@ -101,9 +101,10 @@ public class InventoryGrid : MonoBehaviour
     {
         //서버에서 받은 리스트를 gridItemArray에 할당하고
         //아이템 프리팹을 생성후 해당 아이템의 데이터를 넣어주기
-        if(gridData.itemList.Count == 0)
+        /*if(gridData.itemList.Count == 0)
         {
             //이 그리드에 아이템 데이터가 없을경우 조건에 따라 랜덤한 아이템 배치
+            
             if (createRandomItem)
             {
                 for(int i =0; i< gridData.randomItemAmount; i++)
@@ -120,11 +121,19 @@ public class InventoryGrid : MonoBehaviour
             {
                 Debug.Log("비어있는 그리드");
             }
-        }
+    }
         else
         {
             //그리드에 아이템 리스트가 있는 경우
-            foreach(ItemData item in gridData.itemList)
+            foreach(ItemData itemData in gridData.itemList)
+            {
+                CreateItemObj(itemData);
+            }
+        }*/
+
+        if(gridData.itemList.Count != 0)
+        {
+            foreach (ItemData item in gridData.itemList)
             {
                 CreateItemObj(item);
             }
@@ -133,70 +142,19 @@ public class InventoryGrid : MonoBehaviour
         UpdateBackupSlot();
     }
 
-    private int RestSlotCheck()
-    {
-        int restSlot = 0;
-        for (int x = 0; x < gridData.gridSize.x; x++)
-        {
-            for (int y = 0; y < gridData.gridSize.y; y++)
-            {
-                if (gridItemArray[x, y] == null)
-                {
-                    restSlot++;
-                }
-            }
-        }
-
-        return restSlot;
-    }
-
-    private void InstantRandomItem()
-    {
-        //임시(데이터베이스 연동시 수정)
-        Debug.Log($"랜덤 삽입 {transform.name}");
-        //InventoryController.invenInstance.InsertRandomItem(this);
-        
-        ItemObject randomItem = Instantiate(itemPref).GetComponent<ItemObject>();
-        InventoryController.invenInstance.SetSelectedObjectToLastSibling(transform);
-        int randomId = Random.Range(0, InventoryController.invenInstance.itemsList.Count);
-        randomItem.Set(InventoryController.invenInstance.itemsList[randomId]);
-
-        FindPlaceableSlot(randomItem);
-        randomItem.curItemGrid = this;
-
-        randomItem.backUpItemPos = randomItem.curItemPos; //현재 위치
-        randomItem.backUpItemRotate = randomItem.curItemRotate; //현재 회전
-        randomItem.backUpItemGrid = randomItem.curItemGrid; //현재 그리드
-    }
-
-    private void FindPlaceableSlot(ItemObject item)
-    {
-        Vector2Int? posOnGrid = FindSpaceForObject(item);
-        
-        if (posOnGrid == null)
-        {
-            item.RotateRight();
-            posOnGrid = FindSpaceForObject(item);
-            if (posOnGrid == null)
-            {
-                return;
-            }
-        }
-
-        PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
-    }
-
-    private void CreateItemObj(ItemData item)
+    private void CreateItemObj(ItemData itemData)
     {
         ItemObject itemObj = Instantiate(itemPref, transform).GetComponent<ItemObject>();
-        itemObj.Set(item);
-        PlaceItem(itemObj , item.itemPos.x, item.itemPos.y);
+        itemObj.Set(itemData);
+        PlaceItem(itemObj, itemData.itemPos.x, itemData.itemPos.y);
         itemObj.curItemGrid = this;
 
         itemObj.backUpItemPos = itemObj.curItemPos; //현재 위치
         itemObj.backUpItemRotate = itemObj.curItemRotate; //현재 회전
         itemObj.backUpItemGrid = itemObj.curItemGrid; //현재 그리드
     }
+
+    
 
     /// <summary>
     /// 마우스의 현 위치를 그리드의 타일 위치로 변환
@@ -437,27 +395,7 @@ public class InventoryGrid : MonoBehaviour
         Debug.Log(content);
     }
 
-    /// <summary>
-    /// 아이템의 크기만큼 들어갈 장소를 찾음
-    /// ?를 쓴 이유는 마지막 리턴값에 널값을 허용하기 위함
-    /// </summary>
-    public Vector2Int? FindSpaceForObject(ItemObject itemToInsert)
-    {
-        int width = gridSize.x - (itemToInsert.Width - 1);
-        int height = gridSize.y - (itemToInsert.Height - 1);
-
-        for (int y = 0; y < height; y++)
-        {
-            for (int x = 0; x < width; x++)
-            {
-                if (CheckAvailableSpace(x, y, itemToInsert.Width, itemToInsert.Height) == true)
-                {
-                    return new Vector2Int(x, y);
-                }
-            }
-        }
-        return null;
-    }
+   
 
     /// <summary>
     /// 해당 위치가 grid의 안인지 체크
@@ -556,4 +494,84 @@ public class InventoryGrid : MonoBehaviour
         }
         return HighlightColor.Green;
     }
+
+
+    /*
+    private int RestSlotCheck()
+    {
+        int restSlot = 0;
+        for (int x = 0; x < gridData.gridSize.x; x++)
+        {
+            for (int y = 0; y < gridData.gridSize.y; y++)
+            {
+                if (gridItemArray[x, y] == null)
+                {
+                    restSlot++;
+                }
+            }
+        }
+
+        return restSlot;
+    }
+    */
+
+    /*
+    private void InstantRandomItem()
+    {
+        //임시(데이터베이스 연동시 수정)
+        Debug.Log($"랜덤 삽입 {transform.name}");
+        //InventoryController.invenInstance.InsertRandomItem(this);
+        
+        ItemObject randomItem = Instantiate(itemPref).GetComponent<ItemObject>();
+        InventoryController.invenInstance.SetSelectedObjectToLastSibling(transform);
+        int randomId = Random.Range(0, InventoryController.invenInstance.itemsList.Count);
+        randomItem.Set(InventoryController.invenInstance.itemsList[randomId]);
+
+        FindPlaceableSlot(randomItem);
+        randomItem.curItemGrid = this;
+
+        randomItem.backUpItemPos = randomItem.curItemPos; //현재 위치
+        randomItem.backUpItemRotate = randomItem.curItemRotate; //현재 회전
+        randomItem.backUpItemGrid = randomItem.curItemGrid; //현재 그리드
+    }*/
+
+    /*
+    private void FindPlaceableSlot(ItemObject item)
+    {
+        Vector2Int? posOnGrid = FindSpaceForObject(item);
+        
+        if (posOnGrid == null)
+        {
+            item.RotateRight();
+            posOnGrid = FindSpaceForObject(item);
+            if (posOnGrid == null)
+            {
+                return;
+            }
+        }
+
+        PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
+    }*/
+    /*
+   /// <summary>
+   /// 아이템의 크기만큼 들어갈 장소를 찾음
+   /// ?를 쓴 이유는 마지막 리턴값에 널값을 허용하기 위함
+   /// </summary>
+   public Vector2Int? FindSpaceForObject(ItemObject itemToInsert)
+   {
+       int width = gridSize.x - (itemToInsert.Width - 1);
+       int height = gridSize.y - (itemToInsert.Height - 1);
+
+       for (int y = 0; y < height; y++)
+       {
+           for (int x = 0; x < width; x++)
+           {
+               if (CheckAvailableSpace(x, y, itemToInsert.Width, itemToInsert.Height) == true)
+               {
+                   return new Vector2Int(x, y);
+               }
+           }
+       }
+       return null;
+   }*/
 }

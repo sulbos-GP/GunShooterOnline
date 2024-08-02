@@ -27,6 +27,7 @@ public class ItemObject : MonoBehaviour
 
     public int itemId;
     public RectTransform itemRect;
+
     public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
     public Sprite hideSprite; //조회 전에 보여질 스프라이트
 
