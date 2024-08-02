@@ -26,7 +26,7 @@ namespace Server
         }
 
 
-
+        //RaycastHit2D hit = RaycastManager.Raycast(new Vector2(transform.position.x, transform.position.y), dir, 100);
         public static RaycastHit2D Raycast(Vector2 StartPos, Vector2 Dir, float Length)
         {
 

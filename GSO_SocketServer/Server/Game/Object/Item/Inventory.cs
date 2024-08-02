@@ -30,7 +30,7 @@ namespace Server.Game
 
 
             // 지승현 -> 박성훈 
-            instantGrid[0].ItemPushCheck(target, posX, posY);
+            /*instantGrid[0].ItemPushCheck(target, posX, posY);
 
             if(target != null )
             {
@@ -42,7 +42,7 @@ namespace Server.Game
                     instantGrid[0].
                 }
             }
-
+*/
            
 
             /*

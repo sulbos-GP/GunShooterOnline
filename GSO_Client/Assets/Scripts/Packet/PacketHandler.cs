@@ -95,12 +95,12 @@ internal class PacketHandler
 
     internal static void S_RoomInfoHandler(PacketSession session, IMessage message)
     {
-       /* var roomPacket = message as S_RoomInfo;
+        /* var roomPacket = message as S_RoomInfo;
 
-        if (roomPacket.RoomInfos.Count > 1)
-            Managers.Map.MapRoomInfoInit(roomPacket);
-        else if (roomPacket.RoomInfos.Count == 1)
-            Managers.Map.MapRoomUpdate(roomPacket);*/
+         if (roomPacket.RoomInfos.Count > 1)
+             Managers.Map.MapRoomInfoInit(roomPacket);
+         else if (roomPacket.RoomInfos.Count == 1)
+             Managers.Map.MapRoomUpdate(roomPacket);*/
     }
 
     internal static void S_SpawnHandler(PacketSession session, IMessage message)
@@ -110,15 +110,15 @@ internal class PacketHandler
 
     internal static void S_ConnectedHandler(PacketSession session, IMessage message)
     {
-        S_Connected packet= message as S_Connected;
+        S_Connected packet = message as S_Connected;
         Debug.Log("S_ConnectedHandler");
 
     }
 
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
-        S_LoadInventory packet  = message as S_LoadInventory;
-        if(packet == null)
+        S_LoadInventory packet = message as S_LoadInventory;
+        if (packet == null)
         {
             Debug.Log("패킷이 없음");
             return;
@@ -138,11 +138,11 @@ internal class PacketHandler
         else
         {
             //아더 인벤토리에 패킷의 invenData 적용
-            Managers.Object.MyPlayer.myOtherInven.invenData= newInvenData;
+            Managers.Object.MyPlayer.myOtherInven.invenData = newInvenData;
         }
     }
 
-    
+
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
         S_MoveItem packet = message as S_MoveItem;
@@ -161,7 +161,7 @@ internal class PacketHandler
 
         //패킷의 id를 아이템 오브젝트의 리스트에서 검색 해당 아이템의 ItemObject 스크립트 불러옴
         ItemObject moveItemObj;
-        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId,out moveItemObj);
+        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out moveItemObj);
         if (success == false)
         {
             Debug.Log("옮기려는 아이템이 존재하지 않음(검색실패)");
@@ -181,7 +181,7 @@ internal class PacketHandler
         moveItemObj.backUpItemGrid.CleanItemSlot(moveItemObj);
 
         //gridId를 통해 그리드를 검색하여 해당 그리드의 inventoryGrid.PlaceItem(item, item.posX, item.posY)로 현재 그리드에 해당 아이템 배치
-        moveItemObj.curItemGrid.PlaceItem(moveItemObj, moveItemObj.curItemPos.x,moveItemObj.curItemPos.y);
+        moveItemObj.curItemGrid.PlaceItem(moveItemObj, moveItemObj.curItemPos.x, moveItemObj.curItemPos.y);
 
         //클라이언트에서 해당 아이템을 배치 가능한지 체크해서 성공할 경우에만 패킷을 전달하기에 따로 성공 여부 체크는 필요 없을듯.
     }
@@ -207,7 +207,8 @@ internal class PacketHandler
         ItemObject deleteItem;
         bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out deleteItem);
 
-        if (success == false) {
+        if (success == false)
+        {
             Debug.Log("삭제하려는 아이템이 존재하지 않음(검색 실패)");
             return;
         }
@@ -224,6 +225,32 @@ internal class PacketHandler
 
         //해당 오브젝트가 딕셔너리에 존재하면 해당 아이템을 삭제함
         Managers.Object.RemoveItem(packet.ItemId);
+
+    }
+
+    internal static void S_RaycastHitHandler(PacketSession session, IMessage message)
+    {
+        S_RaycastHit packet = message as S_RaycastHit;
+        if (packet == null)
+        {
+            Debug.Log("패킷이 없음");
+            return;
+        }
+        Debug.Log("S_RaycastHit");
+
+
+        GameObject go = Managers.Object.FindById(packet.HitObjectId);
+        if (go == null)
+            return;
+
+        var cc = go.GetComponent<BaseController>();
+        if (cc == null)
+            return;
+
+        //cc에서 피격 표시?
+
+        //hit ID가 없으면 벽 맞는 거라         packet.HitPointX , Y이용하여 렌더링 및 이펙트 표시!! 
+
 
     }
 
