@@ -48,7 +48,7 @@ namespace Server
         }
 
         //실제 network IO 처리하는 부분
-        public void FlushSend()
+        public override void FlushSend()
         {
             List<(ArraySegment<byte> Segment, DeliveryMethod reliableSequenced)> sendList = null;
             lock (_lock)
@@ -73,11 +73,14 @@ namespace Server
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected  123: {endPoint}");
+
             //Program.Room.Push(() => Program.Room.Enter(this));
         }
 
         public override void OnRecvPacket(ArraySegment<byte> buffer, byte channelNumber)
         {
+            //Console.WriteLine($"OnRecvPacket  buffer: {buffer} ,channelNumber {channelNumber} ");
+
             PacketManager.Instance.OnRecvPacket(this, buffer);
         }
 

@@ -21,6 +21,7 @@ namespace Server
         public BattleGameRoom()
         {
             mMap = new Map(r: this);
+            mMap.Init();
         }
 
         public override void Init()
@@ -144,6 +145,9 @@ namespace Server
             }
         }
 
+
+
+        
 
         public override void LeaveGame(int id)
         {

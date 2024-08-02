@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using Google.Protobuf;
 using ServerCore;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 
 
 
@@ -12,6 +13,8 @@ public class NetworkManager
     private readonly ServerSession _session = new();
 
     public static ClientNetworkService mNetworkService = new ClientNetworkService();
+    
+    private IPAddress ipAddr;
 
     public int AccountId { get; set; }
     public int Token { get; set; }
@@ -21,6 +24,22 @@ public class NetworkManager
     {
         _session.Send(packet);
     }
+
+
+    public void SettingConnection(string ip, int port, string token)
+    {
+        var ipHost = Dns.GetHostEntry(ip);
+        ipAddr = ipHost.AddressList[0];
+
+        var endPoint = new IPEndPoint(ipAddr, port);
+
+        Func<Session> session = () => { return _session; };
+
+        mNetworkService.Init(endPoint, session, "SomeConnectionKey");
+        mNetworkService.Start();
+    }
+   
+
 
     public void ConnectToGame(string ip = "")
     {
@@ -34,7 +53,6 @@ public class NetworkManager
             host = ip;
         var ipHost = Dns.GetHostEntry(host);
 
-        IPAddress ipAddr;
         if (istest)
         {
             ipAddr = IPAddress.Loopback;
@@ -58,7 +76,7 @@ public class NetworkManager
 
         Debug.Log($"tryConnection to {ipAddr}");
         var endPoint = new IPEndPoint(ipAddr, 7777);
-        Func<Session> session = () => { return new ServerSession(); };
+        Func<Session> session = () => { return _session; };
 
         mNetworkService.Init(endPoint, session, "SomeConnectionKey");
         mNetworkService.Start();
@@ -66,7 +84,9 @@ public class NetworkManager
 
     public void Update()
     {
-        var list = PacketQueue.Instance.PopAll();
+        _session.FlushSend();
+
+         var list = PacketQueue.Instance.PopAll();
         foreach (var packet in list)
         {
             var handler = PacketManager.Instance.GetPacketHandler(packet.Id);

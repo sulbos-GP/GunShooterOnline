@@ -31,10 +31,11 @@ public class BaseController : MonoBehaviour
         set => Stat.Hp = value;
     }
 
+    float _speed = 0; //TODO : 임시 작업 서버랑 연결
     public float Speed
     {
-        get => _stat.Speed;
-        set => Stat.Speed = value;
+        get => _speed;
+        set => _speed = value;
     }
 
     public float AttackRange
@@ -60,7 +61,7 @@ public class BaseController : MonoBehaviour
             _positionInfo = value;
 
             CellPos = new Vector3(value.PosX, value.PosY, 0);
-            State = value.State;
+            //State = value.State;
             Dir = new Vector2(value.DirX, value.DirY);
             CurrentPlanetId = value.CurrentRoomId;
             RotationZ = value.RotZ;
@@ -92,12 +93,12 @@ public class BaseController : MonoBehaviour
     }
 
 
-    public virtual CreatureState State
+    /*public virtual CreatureState State
     {
         get => PosInfo.State;
         set => PosInfo.State = value;
         //UpdateAnimation();
-    }
+    }*/
 
     public Vector2 Dir
     {
@@ -145,8 +146,8 @@ public class BaseController : MonoBehaviour
         //Vector3 pos = Managers.Map.CurrentGrid.CellToWorld(CellPos) + new Vector3(0.5f, 0.5f);
         //transform.position = CellPos;
 
-        if (Speed == 0)
-            Speed = 3;
+      /*  if (Speed == 0)
+            Speed = 3;*/
 
         AttackRange = 5;
         //UpdateAnimation();
@@ -154,7 +155,7 @@ public class BaseController : MonoBehaviour
 
     protected virtual void UpdateController()
     {
-        switch (State)
+        /*switch (State)
         {
             case CreatureState.Idle:
                 UpdateIdle();
@@ -168,7 +169,7 @@ public class BaseController : MonoBehaviour
             case CreatureState.Dead:
                 UpdateDead();
                 break;
-        }
+        }*/
     }
 
     protected virtual void UpdateIdle()

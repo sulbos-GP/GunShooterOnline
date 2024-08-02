@@ -10,6 +10,7 @@ internal class ObjectManager
     private int _counter = 1;
     private readonly object _lock = new();
     private readonly Dictionary<int, Player> _players = new();
+    private readonly Dictionary<int, ItemObject> _items = new();
     public static ObjectManager Instance { get; } = new();
 
     public T Add<T>() where T : GameObject, new()
@@ -21,10 +22,34 @@ internal class ObjectManager
             gameObjcet.Id = GenerateId(gameObjcet.ObjectType);
             if (gameObjcet.ObjectType == GameObjectType.Player) 
                 _players.Add(gameObjcet.Id, gameObjcet as Player);
+
+            else if (gameObjcet.ObjectType == GameObjectType.Item)
+                _items.Add(gameObjcet.Id, gameObjcet as ItemObject);
         }
 
         return gameObjcet;
     }
+
+
+    public GameObject Add(GameObject obj)
+    {
+        lock (_lock)
+        {
+            obj.Id = GenerateId(obj.ObjectType);
+
+            if (obj.ObjectType == GameObjectType.Player)
+                _players.Add(obj.Id, obj as Player);
+
+            else if (obj.ObjectType == GameObjectType.Item)
+                _items.Add(obj.Id, obj as ItemObject);
+        }
+
+        return obj;
+    }
+
+
+
+
 
     private int GenerateId(GameObjectType type) //[unused(1)] [type(7)] [Id(24)]
     {
@@ -52,7 +77,7 @@ internal class ObjectManager
         return false;
     }
 
-    public Player Find(int objectId)
+   /* public Player Find(int objectId)
     {
         var objectType = GetObjectTypeById(objectId);
 
@@ -63,11 +88,42 @@ internal class ObjectManager
                 Player player = null;
                 if (_players.TryGetValue(objectId, out player))
                     return player;
+
             }
         }
 
         return null;
+    }*/
+
+    public T Find<T>(int objectId) where T : GameObject
+    {
+        var objectType = GetObjectTypeById(objectId);
+
+        lock (_lock)
+        {
+            if (objectType == GameObjectType.Item)
+            {
+                ItemObject obj = null;
+                if (_items.TryGetValue(objectId, out obj))
+                    return obj as T;
+
+            }
+            else if(objectType == GameObjectType.Player)
+            {
+                Player obj = null;
+                if (_players.TryGetValue(objectId, out obj))
+                    return obj as T;
+
+            }
+
+            
+        }
+
+       
+            return null;
     }
+
+
 
 
     public Shape[] GetValue()

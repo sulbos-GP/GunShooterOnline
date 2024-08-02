@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Numerics;
+using Collision.Shapes;
 using Google.Protobuf.Protocol;
 
 namespace Server.Game;
@@ -8,11 +9,33 @@ namespace Server.Game;
 public class Player : CreatureObj
 {
     public SkillCoolDown SkillCoolDown = new();
+    public Inventory inventory;
+
 
     public Player()
     {
         ObjectType = GameObjectType.Player;
+
+        inventory = new Inventory(Id);
         Vision = new VisionRegion(this);
+
+        stat.MergeFrom(new StatInfo()
+        {
+            Attack = 3,
+            Hp = 10,
+            MaxHp = 20,
+            
+
+        });
+
+        float width = 2;
+        float left = 2;
+        float top = 2;
+
+        Polygon rectangle = ShapeManager.CreateCenterSquare(left, top, width);
+        rectangle.Parent = this;
+
+        currentShape = rectangle;
     }
 
     public ClientSession Session { get; set; }

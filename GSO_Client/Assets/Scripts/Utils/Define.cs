@@ -6,7 +6,8 @@ public class Define
         Login,
         Lobby,
         loading,
-        Game
+        Game,
+        FieldOfViewTest,
     }
 
     public enum Sound

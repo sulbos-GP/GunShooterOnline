@@ -47,7 +47,7 @@ public class MapManager : MonoBehaviour
     }
 
 
-    public bool MapRoomInfoInit(S_RoomInfo roomPacket)
+    /*public bool MapRoomInfoInit(S_RoomInfo roomPacket)
     {
         var map = Managers.Map.CurrentMap;
         var first = true;
@@ -100,34 +100,7 @@ public class MapManager : MonoBehaviour
 
         Debug.LogError("�� ����");
         return false;
-    }
+    }*/
 
-    public bool MapRoomUpdate(S_RoomInfo roomPacket)
-    {
-        if (roomPacket.RoomInfos.Count > 1)
-            Debug.LogError("MapRoomUpdate Error");
-        var Map = Managers.Map.CurrentMap;
-
-
-        var info = roomPacket.RoomInfos[0];
-        if (Map != null)
-        {
-            var _room = RoomController.Rooms.First(r => r.GetComponent<Room>().RoomId == info.RoomId).GetComponent<Room>();
-            
-            if (_room != null & _room.RoomId != 0)
-            {
-                _room.OwnerPlayer = Managers.Object.FindById(info.OwnerId);
-                _room.TryOwnerPlayer = Managers.Object.FindById(info.TryOwnerId);
-                _room.TryOwnerProgress = info.TryOwnerValue;
-
-                return true;
-            }
-
-            Debug.Log("�� ã�� ����");
-            return false;
-        }
-
-        Debug.LogError("�� ����");
-        return false;
-    }
+    
 }

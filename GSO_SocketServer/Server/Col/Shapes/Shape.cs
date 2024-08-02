@@ -1,3 +1,4 @@
+using Server.Game;
 using System;
 using System.Collections.Generic;
 using Utils;
@@ -14,6 +15,11 @@ namespace Collision.Shapes
     }
     public class Shape
     {
+        public GameObject Parent { get; set; }
+
+        
+
+
         /** The state of this shape, if inactive can be ignored in results */
         public bool active = true;
 

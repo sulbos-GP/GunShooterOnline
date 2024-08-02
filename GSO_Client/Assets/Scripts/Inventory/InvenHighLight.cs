@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Vector2 = System.Numerics.Vector2;
+
 public struct HighlightColor
 {
     public static Color32 Green = new Color32(127, 255, 127, 125);
@@ -30,15 +32,25 @@ public class InvenHighLight : MonoBehaviour
      * 5. SetColor함수는 매개변수로 받은 색으로 하이라이트의 이미지 색을 지정합니다.
      * 
      */
+    public static GameObject highlightObj;
+
     private RectTransform highlighter;
     public GameObject highlightPrefab;
+    
 
     private void Awake()
     {
-        if(highlighter == null)
+        InstantHighlighter();
+    }
+
+    public void InstantHighlighter()
+    {
+        if (highlighter == null)
         {
-            GameObject highlightObj = Instantiate(highlightPrefab);
+            GameObject instantObj = Instantiate(highlightPrefab);
+            highlightObj = instantObj;
             highlighter = highlightObj.GetComponent<RectTransform>();
+            highlighter.GetComponent<Image>().raycastTarget = false;
         }
     }
 
@@ -55,48 +67,45 @@ public class InvenHighLight : MonoBehaviour
     /// 하이라이트의 사이즈를 해당 아이템의 크기로
     /// </summary>
     /// <param name="targetItem">기준아이템</param>
-    public void SetSize(InventoryItem targetItem)
+    public void SetSize(ItemObject targetItem)
     {
         Vector2 size = new Vector2();
-        size.x = targetItem.Width * ItemGrid.tilesizeWidth;
-        size.y = targetItem.Height* ItemGrid.tilesizeHeight;
-        highlighter.sizeDelta = size;
+        size.X = targetItem.Width * InventoryGrid.WidthOfTile;
+        size.Y = targetItem.Height* InventoryGrid.HeightOfTile;
+        highlighter.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
     }
 
     /// <summary>
     /// 하이라이트의 위치를 해당 아이템의 위치로
     /// </summary>
-    /// <param name="targetGrid">기준 그리드</param>
-    /// <param name="target">기준 아이템</param>
-    public void SetPosition(ItemGrid targetGrid, InventoryItem targetItem)
+    public void SetPositionOnGrid(InventoryGrid targetGrid, ItemObject targetItem)
     {
         SetParent(targetGrid);
 
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem,
             targetItem.curItemPos.x, targetItem.curItemPos.y);
-        highlighter.localPosition = pos;
+        highlighter.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
     }
 
     /// <summary>
     /// 기존 setPosition에서 위치를 직접 지정
     /// </summary>
-    /// <param name="posX">x좌표</param>
-    /// <param name="posY">y좌표</param>
-    public void SetPositionByPos(ItemGrid targetGrid, InventoryItem targetItem, int posX, int posY)
+    public void SetPositionOnGridByPos(InventoryGrid targetGrid, ItemObject targetItem, int posX, int posY)
     {
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem, posX, posY);
 
-        highlighter.localPosition = pos;
+        highlighter.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
     }
 
     /// <summary>
     /// 하이라이트의 부모UI 지정.
     /// </summary>
     /// <param name="targetGrid"></param>
-    public void SetParent(ItemGrid targetGrid)
+    public void SetParent(InventoryGrid targetGrid)
     {
         if(targetGrid == null)
         {
+            highlighter.SetParent(null);
             return;
         }
         highlighter.SetParent(targetGrid.GetComponent<RectTransform>());

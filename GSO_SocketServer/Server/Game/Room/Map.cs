@@ -6,6 +6,8 @@ using System.Numerics;
 using Google.Protobuf.Protocol;
 using QuadTree;
 using Server.Data;
+using Server.Game.Object;
+using Server.Game;
 using ServerCore;
 
 namespace Server.Game;
@@ -76,14 +78,62 @@ public class Map
     public Vector2Int Tright { get; private set; }
 
     BattleGameRoom battleRoom;
-     
+
+
+    #region Item
+    List<RootableObject> _rootableObjects = new List<RootableObject>();
+    #endregion
+
+    #region EscapeObj
+    //List<RootableObject> _rootableObjects = new List<RootableObject>();
+
+    #endregion
+
     public Map(BattleGameRoom r)
     {
         battleRoom = r;
     }
 
+    public void Init()
+    {
+        //렌덤아인템
+        RootableObject rootableObject0 = ObjectManager.Instance.Add<RootableObject>();
+        rootableObject0.CellPos = new Vector2(-4, -4);
+        RootableObject rootableObject1 = ObjectManager.Instance.Add<RootableObject>();
+        rootableObject1.CellPos = new Vector2(-2, -4);
+        RootableObject rootableObject2 = ObjectManager.Instance.Add<RootableObject>();
+        rootableObject2.CellPos = new Vector2(4, 7);
+        RootableObject rootableObject3 = ObjectManager.Instance.Add<RootableObject>();
+        rootableObject3.CellPos = new Vector2(2, 7);
 
+        _rootableObjects.Add(rootableObject0);
+        _rootableObjects.Add(rootableObject1);
+        _rootableObjects.Add(rootableObject2);
+        _rootableObjects.Add(rootableObject3);
 
+        //SetRandomItem();
+    }
+
+    #region item
+    //TODO : 나중에 아이템 메니져로?
+
+    private void SetRandomItem()
+    {
+        /*
+        var db = ItemDB.items.Values.ToArray(); 
+
+        //ItemObject item = ObjectManager.Instance.Add<ItemObject>();
+        ItemObject item = new ItemObject();
+
+        item.itemDataInfo = db[new Random().Next(0, db.Length)];
+
+        foreach (var r in _rootableObjects)
+        {
+            r.Inventory.instantGrid[0].p
+        }*/
+    }
+
+    #endregion
 
 
 

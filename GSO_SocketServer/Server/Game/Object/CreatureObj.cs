@@ -39,9 +39,15 @@ public class CreatureObj : GameObject
         GameObject rootAttacker = attacker;
 
         if (attacker.ObjectType == GameObjectType.Monster || attacker.ObjectType == GameObjectType.Player)
+        {
+
+        }
+        else
+        {
             rootAttacker = attacker.GetOwner();
+        }
         //할일 TODO : 만약 주인이 또 스킬이거나 하는 경우!!
-        
+
         damage = Math.Max(damage, 0);
         stat.Hp = Math.Max(stat.Hp - damage, 0);
 

@@ -45,6 +45,8 @@ namespace ServerCore
             mWorkThread.Start();
             mLogicTimer.Start();
 
+            
+
         }
 
         public void Stop()

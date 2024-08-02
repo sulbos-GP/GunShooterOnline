@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
 using System.Linq;
+using System.Net.Sockets;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,6 +18,23 @@ namespace Server
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+
         public void HandleMove(Player player, C_Move packet)
         {
             if (player == null)
@@ -23,6 +42,7 @@ namespace Server
 
             //검사--------------------
 
+            Console.WriteLine("HandleMove" + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
 
             var movePosInfo = packet.PositionInfo; //C요청
 
@@ -46,7 +66,122 @@ namespace Server
             BroadCast(player.CurrentRoomId, resMovePacket);
         }
 
+        internal void HandleItemDelete(Player player, int playerId, int itemId)
+        {
+            //TODO : 그리드로 옮기기
+            //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
+            ItemObject item =  ObjectManager.Instance.Find<ItemObject>(itemId);
 
 
+            player.inventory.instantGrid[0].DeleteItemFromSlot(item);
+
+
+        }
+
+        internal void HandleItemLoad(Player player, int objectId, int inventoryId )
+        {
+
+            Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
+
+            S_LoadInventory s_LoadInventory = new S_LoadInventory()
+            {
+                PlayerId = objectId,
+                InventoryId = inventoryId,
+                InvenData = targetPlayer.inventory.invenData,
+            };
+
+           
+
+            BroadCast(RoomId, s_LoadInventory);
+
+
+        }
+
+        /*internal void HandleItemMove(Player player, int itemId, int itemPosX, int itemPosY)
+        {
+            player.inventory.MoveItem(itemId, itemPosX, itemPosY);
+
+            //S_
+            S_MoveItem s_MoveItem = new S_MoveItem()
+            {
+                PlayerId = player.Id,
+                ItemId = itemId,
+                ItemPosX = itemPosX,
+                ItemPosY = itemPosY,
+
+            };
+
+
+            BroadCast(RoomId, );
+
+            // BroadCast()
+        }*/
+        internal void HandleItemMove(Player player, object  _packet)
+        {
+            //player.inventory.MoveItem(itemId, itemPosX, itemPosY);
+            C_MoveItem packet = (C_MoveItem)_packet;
+            //S_
+            S_MoveItem s_MoveItem = new S_MoveItem()
+            {
+                PlayerId = player.Id,
+                ItemId = packet.ItemId,
+                ItemPosX = packet.ItemPosX,
+                ItemPosY = packet.ItemPosY,
+                ItemRotate = packet.ItemRotate,
+                GridId = packet.GridId,
+
+                LastItemPosX = packet.LastItemPosX,
+                LastItemPosY = packet.LastItemPosY,
+                LastItemRotate = packet.LastItemRotate,
+                //TODO : MoveItem 결과
+                //LastInventoryId = packet.in
+                LastGridId = packet.LastGridId,
+            };
+
+
+            BroadCast(RoomId, s_MoveItem);
+
+            // BroadCast()
+        }
+
+
+
+
+
+
+
+        internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
+        {
+            RaycastHit2D hit = RaycastManager.Raycast(pos,dir, length);
+
+
+            GameObject go = hit.Collider.Parent;
+            if (go == null)
+            {
+                Console.WriteLine("HandleRayCast null");
+                return;
+            }
+
+
+            if(go.ObjectType == GameObjectType.Player || go.ObjectType == GameObjectType.Monster)
+            {
+                CreatureObj creatureObj = go as CreatureObj;
+
+                creatureObj.OnDamaged(attacker, attacker.Attack);
+
+            }
+
+            S_RaycastHit packet = new S_RaycastHit();
+            packet.HitObjectId = hit.Id;
+            packet.Distance = hit.distance;
+            packet.HitPointX = hit.hitPoint.Value.X;
+            packet.HitPointY = hit.hitPoint.Value.Y;
+
+            
+            BroadCast(RoomId, packet);
+
+        }
     }
+    
+    
 }

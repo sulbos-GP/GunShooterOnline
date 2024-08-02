@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 namespace Utils
 {
@@ -125,5 +126,11 @@ namespace Utils
 		    float distance = (float)Math.Sqrt(dx * dx + dy * dy);
 		    return distance;
 	    }
-	}
+
+
+        public static implicit operator Vector2(Vector v)
+        {
+            return new Vector2(v.x,v.y);
+        }
+    }
 }

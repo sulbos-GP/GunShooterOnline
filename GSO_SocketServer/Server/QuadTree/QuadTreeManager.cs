@@ -20,8 +20,12 @@ namespace QuadTree
         {
             get
             {
-                _players.AddRange(_objects);
-                return _players;
+                var total = new List<GameObject>((_players == null ? 0 : _players.Count)  + (_objects == null ? 0 : _objects.Count));
+                if (_players != null)
+                    total.AddRange(_players);
+                if (_objects != null)
+                    total.AddRange(_objects);
+                return total;
             }
         }
         
