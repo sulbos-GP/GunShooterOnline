@@ -108,13 +108,41 @@ namespace Server
 
 
 
-       
-
-
-
-
-
             // BroadCast()
         }
+    
+        internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
+        {
+            RaycastHit2D hit = RaycastManager.Raycast(pos,dir, length);
+
+
+            GameObject go = hit.Collider.Parent;
+            if (go == null)
+            {
+                Console.WriteLine("HandleRayCast null");
+                return;
+            }
+
+
+            if(go.ObjectType == GameObjectType.Player || go.ObjectType == GameObjectType.Monster)
+            {
+                CreatureObj creatureObj = go as CreatureObj;
+
+                creatureObj.OnDamaged(attacker, attacker.Attack);
+
+            }
+
+            S_RaycastHit packet = new S_RaycastHit();
+            packet.HitObjectId = hit.Id;
+            packet.Distance = hit.distance;
+            packet.HitPointX = hit.hitPoint.Value.X;
+            packet.HitPointY = hit.hitPoint.Value.Y;
+
+            
+            BroadCast(RoomId, packet);
+
+        }
     }
+    
+    
 }

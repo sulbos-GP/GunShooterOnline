@@ -17,6 +17,15 @@ public class Player : CreatureObj
 
         inventory = new Inventory(Id);
         Vision = new VisionRegion(this);
+
+        stat.MergeFrom(new StatInfo()
+        {
+            Attack = 3,
+            Hp = 10,
+            MaxHp = 20,
+            
+
+        });
     }
 
     public ClientSession Session { get; set; }
