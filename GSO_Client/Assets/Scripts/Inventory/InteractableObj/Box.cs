@@ -7,7 +7,6 @@ using UnityEngine;
 public class Box : InteractableObject
 {
     public InvenData invenData;
-    public OtherInventory otherInvenUI;
 
     private void Awake()
     {
@@ -41,8 +40,6 @@ public class Box : InteractableObject
         Managers.Network.Send(packet);
         Debug.Log("C_LoadInventory");
 
-        //임시로 여기에서 데이터를 전달
-        //otherInvenUI.invenData = invenData;
         InventoryController.invenInstance.invenUIControl();
     }
 }

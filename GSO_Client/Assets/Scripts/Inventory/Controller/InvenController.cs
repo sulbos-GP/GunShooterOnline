@@ -38,16 +38,17 @@ public partial class InventoryController : MonoBehaviour
     public static InventoryController invenInstance;
     private PlayerInput playerInput; //플레이어의 조작 인풋
 
+    [Header("수동지정")]
     public Transform deleteUI;
     public Button rotateBtn;
     public List<ItemData> itemDB;
-
-    public int playerId = 1; //임시부여. 플레이어의 id
-    [SerializeField] private Vector2 mousePosInput; //마우스의 월드 위치
-    [SerializeField] private Vector2Int updateGridPos; //그리드상의 좌표 위치
-
     //우클릭 아이템 생성 예시
     [SerializeField] private GameObject itemPref; //생성할 아이템의 프리펩(임시)
+    public int playerId = 1; //임시부여. 플레이어의 id
+
+    [Header("디버그용")]
+    [SerializeField] private Vector2 mousePosInput; //마우스의 월드 위치
+    [SerializeField] private Vector2Int updateGridPos; //그리드상의 좌표 위치
 
     //그리드의 입력 변화에 따라 아래 변수 업데이트 및 하이라이트 객체의 부모객체로 설정
     public InventoryGrid SelectedItemGrid
@@ -883,7 +884,9 @@ public partial class InventoryController : MonoBehaviour
     }
     */
 
-    //컨트롤러 상에서 삭제 처리(핸들러에서 처리하게되면 삭제)
+    /// <summary>
+    /// 컨트롤러 상에서 삭제 처리
+    /// </summary>
     private void DestroySelectedItem()
     {
         Destroy(selectedItem.gameObject);
@@ -893,7 +896,7 @@ public partial class InventoryController : MonoBehaviour
     /// <summary>
     /// 클릭한 오브젝트의 모든 부모에게 LastSibling을 적용함. 항상 지정한 인터렉션한 rect을 가장 앞으로.
     /// </summary>
-    public void SetSelectedObjectToLastSibling(Transform child)
+    public static void SetSelectedObjectToLastSibling(Transform child)
     {
         if (child == null) return;
 
@@ -909,6 +912,8 @@ public partial class InventoryController : MonoBehaviour
         }
     }
     
+
+    //버튼 전용
     public void RotateBtn()
     {
         RotateItemRight();
