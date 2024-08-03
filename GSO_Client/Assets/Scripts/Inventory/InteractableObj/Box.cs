@@ -7,7 +7,6 @@ using UnityEngine;
 public class Box : InteractableObject
 {
     public InvenData invenData;
-    public InventoryUI inventoryUI;
     public OtherInventory otherInvenUI;
 
     private void Awake()
@@ -44,6 +43,6 @@ public class Box : InteractableObject
 
         //임시로 여기에서 데이터를 전달
         //otherInvenUI.invenData = invenData;
-        inventoryUI.invenUIControl();
+        InventoryController.invenInstance.invenUIControl();
     }
 }

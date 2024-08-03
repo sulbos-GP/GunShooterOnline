@@ -28,6 +28,7 @@ public class ItemObject : MonoBehaviour
     public RectTransform itemRect;
     public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
     public Sprite hideSprite; //조회 전에 보여질 스프라이트
+    public List<Sprite> spriteList;
 
     //옵저버(변수 값의 변경을 즉각 탐지하여 함수실행)
     public int Width
@@ -73,6 +74,7 @@ public class ItemObject : MonoBehaviour
     public InventoryGrid backUpItemGrid; //아이템이 원래 보관된 그리드
     public Vector2Int backUpItemPos; //아이템의 원래 위치
     public int backUpItemRotate; //아이템의 원래 회전도
+    private Sprite itemSprite;
 
     private void Awake()
     {
@@ -107,7 +109,8 @@ public class ItemObject : MonoBehaviour
         }
         else
         {
-            transform.GetComponent<Image>().sprite = itemData.itemSprite;
+            itemSprite = spriteList[itemData.itemCode-1];
+            transform.GetComponent<Image>().sprite = itemSprite;
             ishide = false;
             isOnSearching = true;
         }

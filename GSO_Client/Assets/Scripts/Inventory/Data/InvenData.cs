@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-public class InvenData : MonoBehaviour
+[CreateAssetMenu(fileName = "InvenData", menuName = "Inventory/InvenData")]
+public class InvenData : ScriptableObject
 {
     /// <summary>
     /// InvenDataInfo 해당 스크립트의 변수에 적용
