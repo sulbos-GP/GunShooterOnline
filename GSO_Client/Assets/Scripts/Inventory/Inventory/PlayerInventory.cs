@@ -13,7 +13,8 @@ public class PlayerInventory : Inventory
     protected override float InvenWeight
     {
         get { return invenWeight; }
-        set { 
+        set 
+        { 
             invenWeight = value;
             WeightTextSet();
         }
@@ -21,7 +22,7 @@ public class PlayerInventory : Inventory
 
     private void WeightTextSet()
     {
-        weightText.text = $"WEIGHT \n {InvenWeight} / {limitWeight}";
+        weightText.text = $"WEIGHT \n {InvenWeight} / {invenData.limitWeight}";
     }
 
     //슬롯이 나오면 그때 개발
@@ -29,12 +30,12 @@ public class PlayerInventory : Inventory
 
     private void Awake()
     {
-        Init();
+        InventorySet();
     }
 
-    protected override void Init()
+    protected override void InventorySet()
     {
-        base.Init();
+        base.InventorySet();
 
         C_LoadInventory packet = new C_LoadInventory();
         //packet.PlayerId = Managers.Object.MyPlayer.Id; //플레이어가 없는 상태라 플레이어 아이디를 못불러옴

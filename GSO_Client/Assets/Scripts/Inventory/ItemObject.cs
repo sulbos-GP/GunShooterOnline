@@ -13,10 +13,10 @@ public class ItemObject : MonoBehaviour
      * 이 코드는 item프리팹에 부착되며 아이템의 객체를 정의합니다. 
      * 아이템의 정보와 이 아이템의 현재 상태(위치? ,회전?, 가려짐? 등)
      * 
-     * 1. Set 함수는 컨트롤러에서 생성과 동시에 불려지며 등록된 데이터를 현재 변수에 적용시키고
+     * 1. ItemDataSet 함수는 컨트롤러에서 생성과 동시에 불려지며 등록된 데이터를 현재 변수에 적용시키고
      *    회전과 숨김여부를 초기화합니다.
      *    
-     * 2. SearchingItem 함수는 컨트롤러에서 해당 아이템 오브젝트를 클릭했을때 isHide가 true라면
+     * 2. UnhideItem 함수는 컨트롤러에서 해당 아이템 오브젝트를 클릭했을때 isHide가 true라면
      *    이 함수를 실행시킵니다. 코루틴을 사용하여 조회시간 후 isHide를 해제하고 아이템의 이미지
      *    를 바꾸게 됩니다.
      *    
@@ -25,9 +25,7 @@ public class ItemObject : MonoBehaviour
     */
     public const int maxItemMergeAmount = 64;
 
-    public int itemId;
     public RectTransform itemRect;
-
     public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
     public Sprite hideSprite; //조회 전에 보여질 스프라이트
 
@@ -36,7 +34,7 @@ public class ItemObject : MonoBehaviour
     {
         get
         {
-            if (curItemRotate % 2 == 0)
+            if (itemData.itemRotate % 2 == 0)
             {
                 return itemData.width;
             }
@@ -47,77 +45,61 @@ public class ItemObject : MonoBehaviour
     {
         get
         {
-            if (curItemRotate % 2 == 0)
+            if (itemData.itemRotate % 2 == 0)
             {
                 return itemData.height;
             }
             return itemData.width;
         }
     }
-    
     public int ItemAmount
     {
-        get { return itemAmount; }
+        get { return itemData.itemAmount; }
         set
         {
-            itemAmount = value;
+            itemData.itemAmount = value;
             TextControl();
         }
     }
 
     public bool ishide; //아이템 정보 숨겨짐
     private bool isOnSearching; //아이템 조회중
-    public List<int> searchedPlayerList = new List<int>(); //이 리스트에 포함된 플레이어에겐 아이템이 보여짐
-    public int itemAmount;
+
 
     //현재 아이템의 위치, 회전도, 그리드
     public InventoryGrid curItemGrid;
-    public Vector2Int curItemPos; //아이템의 기본위치
-    public int curItemRotate = 0; // 0 : 0 or 360, 1: 90, 2 : 180, 3 : 270
-
     
     //백업 변수
     public InventoryGrid backUpItemGrid; //아이템이 원래 보관된 그리드
     public Vector2Int backUpItemPos; //아이템의 원래 위치
     public int backUpItemRotate; //아이템의 원래 회전도
-    
 
-    /// <summary>
-    /// 아이템의 데이터를 적용
-    /// </summary>
-    public void Set(ItemData itemData)
+    private void Awake()
     {
         transform.GetComponent<Image>().raycastTarget = false;
         itemRect = GetComponent<RectTransform>();
+    }
+    /// <summary>
+    /// 아이템의 데이터를 적용
+    /// </summary>
+    public void ItemDataSet(ItemData itemData)
+    {
         //아이템 데이터 업데이트
         this.itemData = itemData;
 
-        //아이템 사이즈 업데이트
+        //오브젝트의 렉트의 사이즈 업데이트
         Vector2 size = new Vector2();
         size.X = Width * InventoryGrid.WidthOfTile;
         size.Y = Height * InventoryGrid.HeightOfTile;
         transform.GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
 
-        if (transform.parent != null)
-        {
-            curItemGrid = transform.parent.GetComponent<InventoryGrid>();
-        }
-        
-        curItemPos = itemData.itemPos;
+        //아이템의 크기및 회전 설정
         itemRect.localPosition = new UnityEngine.Vector2(itemData.itemPos.x * InventoryGrid.WidthOfTile+50, itemData.itemPos.y* InventoryGrid.HeightOfTile-50);
-
-        curItemRotate= itemData.itemRotate;
-        Rotate(curItemRotate);
-
+        Rotate(itemData.itemRotate);
         ItemAmount = itemData.itemAmount;
 
-        foreach(int i in itemData.searchedPlayerId)
-        {
-            searchedPlayerList[i] = itemData.searchedPlayerId[i];
-        }
-
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
-        if (searchedPlayerList.Contains(InventoryController.invenInstance.playerId) == false)
+        if (itemData.searchedPlayerId.Contains(InventoryController.invenInstance.playerId) == false)
         {
             transform.GetComponent<Image>().sprite = hideSprite;
             ishide = true;
@@ -134,7 +116,7 @@ public class ItemObject : MonoBehaviour
     /// <summary>
     /// 가려진 아이템을 클릭한 경우 아이템 조회
     /// </summary>
-    public void SearchingItem()
+    public void UnhideItem()
     {
         if(isOnSearching == true) { return; }
         isOnSearching = true;
@@ -148,7 +130,7 @@ public class ItemObject : MonoBehaviour
         yield return new WaitForSeconds(duration);
         ishide = false;
         transform.GetComponent<Image>().sprite = itemData.itemSprite;
-        searchedPlayerList.Add(InventoryController.invenInstance.playerId);
+        itemData.searchedPlayerId.Add(InventoryController.invenInstance.playerId);
         TextControl();
     }
 
@@ -157,8 +139,8 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void RotateRight()
     {
-        curItemRotate = (curItemRotate+1) % 4;
-        Rotate(curItemRotate);
+        itemData.itemRotate = (itemData.itemRotate + 1) % 4;
+        Rotate(itemData.itemRotate);
     }
 
     /// <summary>
@@ -166,8 +148,8 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void RotateLeft()
     {
-        curItemRotate = (curItemRotate-1) % 4;
-        Rotate(curItemRotate);
+        itemData.itemRotate = (itemData.itemRotate - 1) % 4;
+        Rotate(itemData.itemRotate);
     }
 
     /// <summary>
@@ -191,13 +173,13 @@ public class ItemObject : MonoBehaviour
     {
         TextMeshProUGUI amountText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
         amountText.raycastTarget = false;
-        if (itemAmount <= 1 || ishide) 
+        if (itemData.itemAmount <= 1 || ishide) 
         {
             amountText.gameObject.SetActive(false);
             return; 
         }
 
-        amountText.text = itemAmount.ToString();
+        amountText.text = itemData.itemAmount.ToString();
         amountText.gameObject.SetActive(true);
     }
 

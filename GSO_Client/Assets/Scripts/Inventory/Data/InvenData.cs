@@ -3,8 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "new InvenData", menuName = "InvenData/InvenData")]
-public class InvenData : ScriptableObject
+
+public class InvenData : MonoBehaviour
 {
     /// <summary>
     /// InvenDataInfo 해당 스크립트의 변수에 적용
@@ -38,8 +38,6 @@ public class InvenData : ScriptableObject
         }
         return invenDataInfo;
     }
-
-
 
     public int inventoryId;
     public float limitWeight; //해당 인벤토리의 한계무게

@@ -52,7 +52,7 @@ public class WorldGenerator
 
 
         GameObject go = GameObject.FindGameObjectWithTag("World");
-        //go.GetComponent<World>().Init();
+        //go.GetComponent<World>().InventorySet();
 
 
 
@@ -113,7 +113,7 @@ public class WorldGenerator
 
     private void Init()
     {
-        Debug.Log("Init");
+        Debug.Log("InventorySet");
     }
 
     private static void MapInit(Tuple<Transform, Vector2Int> _room)
