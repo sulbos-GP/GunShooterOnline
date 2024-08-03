@@ -18,7 +18,7 @@ MonoBehaviour:
   itemRotate: 0
   itemAmount: 1
   searchedPlayerId: 
-  item_name: 
+  item_name: recoveryKit
   item_weight: 1
   item_type: 2
   item_string_value: 301

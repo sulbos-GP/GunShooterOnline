@@ -840,7 +840,7 @@ public partial class InventoryController : MonoBehaviour
         SetSelectedObjectToLastSibling(selectedRect);
         //아이템 리스트 중 하나 지정
         
-        int randomId = Random.Range(1, 5);
+        int randomId = Random.Range(0, itemDB.Count);
         //지정된 아이템 데이터를 아이템 프리팹에 적용
         ItemData randomData = new ItemData();
         randomData.itemId = itemDB[randomId].itemId;
@@ -848,10 +848,7 @@ public partial class InventoryController : MonoBehaviour
         randomData.itemPos = itemDB[randomId].itemPos;
         randomData.itemRotate = itemDB[randomId].itemRotate;
         randomData.itemAmount = itemDB[randomId].itemAmount;
-        foreach(int id in itemDB[randomId].searchedPlayerId)
-        {
-            randomData.searchedPlayerId.Add(id);
-        }
+        randomData.searchedPlayerId = new List<int>();
         randomData.item_name = itemDB[randomId].item_name;
         randomData.item_weight = itemDB[randomId].item_weight;
         randomData.item_type = itemDB[randomId].item_type;
