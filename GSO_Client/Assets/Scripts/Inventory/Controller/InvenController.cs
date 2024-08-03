@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
@@ -37,6 +38,7 @@ public partial class InventoryController : MonoBehaviour
  
     public InventoryUI invenUI; //인벤토리의 UI 조작을 위함
     public Transform deleteUI;
+    public Button rotateBtn;
 
 
     public int playerId = 1; //임시부여. 플레이어의 id
@@ -79,10 +81,12 @@ public partial class InventoryController : MonoBehaviour
             if (isItemSelected)
             {
                 selectedRect = value.GetComponent<RectTransform>();
+                rotateBtn.interactable = true;
             }
             else
             {
                 selectedRect = null;
+                rotateBtn.interactable = false;
             }
         }
     }
@@ -269,6 +273,7 @@ public partial class InventoryController : MonoBehaviour
         }
         else
         {
+            //컴퓨터로 조작시 사용
             RotateItemRight();
         }
     }
@@ -420,6 +425,7 @@ public partial class InventoryController : MonoBehaviour
         selectedItem.RotateRight();
     }
 
+    /*
     /// <summary>
     /// 컨트롤러에서 아이템 좌회전 명령 (사용 안함)
     /// </summary>
@@ -427,7 +433,7 @@ public partial class InventoryController : MonoBehaviour
     {
         if (!isItemSelected) { return; }
         selectedItem.RotateLeft();
-    }
+    }*/
 
     /// <summary>
     /// 좌클릭시 아이템을 집거나 내려 놓기
@@ -880,6 +886,11 @@ public partial class InventoryController : MonoBehaviour
         {
             SetSelectedObjectToLastSibling(child.parent);
         }
+    }
+
+    public void RotateBtn()
+    {
+        RotateItemRight();
     }
 }
 
