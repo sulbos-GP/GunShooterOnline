@@ -8,8 +8,8 @@ using UnityEngine;
 using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
-
-public class GridData : MonoBehaviour
+[CreateAssetMenu(fileName = "gridData", menuName = "Inventory/gridData")]
+public class GridData : ScriptableObject
 {
     /// <summary>
     /// GridDataInfo 해당 스크립트의 변수에 적용

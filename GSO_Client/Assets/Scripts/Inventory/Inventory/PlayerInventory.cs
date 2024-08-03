@@ -36,6 +36,7 @@ public class PlayerInventory : Inventory
     protected override void InventorySet()
     {
         base.InventorySet();
+        //임시 생성
 
         C_LoadInventory packet = new C_LoadInventory();
         //packet.PlayerId = Managers.Object.MyPlayer.Id; //플레이어가 없는 상태라 플레이어 아이디를 못불러옴

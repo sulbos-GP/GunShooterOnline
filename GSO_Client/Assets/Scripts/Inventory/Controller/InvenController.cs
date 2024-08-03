@@ -37,10 +37,10 @@ public partial class InventoryController : MonoBehaviour
 
     public static InventoryController invenInstance;
     private PlayerInput playerInput; //플레이어의 조작 인풋
- 
-    public InventoryUI invenUI; //인벤토리의 UI 조작을 위함
+
     public Transform deleteUI;
     public Button rotateBtn;
+    public List<ItemData> itemDB;
 
     public int playerId = 1; //임시부여. 플레이어의 id
     [SerializeField] private Vector2 mousePosInput; //마우스의 월드 위치
@@ -113,6 +113,9 @@ public partial class InventoryController : MonoBehaviour
         }
     }
 
+    //UI액티브 관련
+    public bool isActive = false;
+
     //백업관련 변수(오버랩 아이템 교체가 없어져서 필요 없음)
     //public List<ItemObject> backUpItemList = new List<ItemObject>(); //백업할 아이템들의 리스트
     //public List<InventoryGrid> backUpGridList = new List<InventoryGrid>(); //백업할 그리드들의 리스트
@@ -140,13 +143,14 @@ public partial class InventoryController : MonoBehaviour
     */
 
     //기타 변수
-    
+
 
     private void Awake()
     {
         if (invenInstance == null)
         {
             invenInstance = this;
+            
         }
         else
         {
@@ -210,7 +214,7 @@ public partial class InventoryController : MonoBehaviour
     }
     private void InvenUIControlInput(InputAction.CallbackContext context)
     {
-        invenUI.invenUIControl();
+        invenUIControl();
     }
     
 
@@ -280,10 +284,11 @@ public partial class InventoryController : MonoBehaviour
 
     private void Update()
     {
-        if (!invenUI.isActive)
+        if (!isActive)
         {
             return;
         }
+
         DragObject();
 
         if (!isGridSelected)
@@ -830,16 +835,36 @@ public partial class InventoryController : MonoBehaviour
     {
         //아이템 프리팹을 생성하고 스크립트 로드
         ItemObject invenItem = Instantiate(itemPref).GetComponent<ItemObject>();
-        //현재 선택된 아이템과 렉트트랜스폼을 이것으로 지정함
-        SelectedItem = invenItem;
-
+        
         //아이템은 캔버스의 자식(UI니까)
         SetSelectedObjectToLastSibling(selectedRect);
         //아이템 리스트 중 하나 지정
-        int selectedItemId = Random.Range(1, ItemDB.items.Count+1);
+        
+        int randomId = Random.Range(1, 5);
         //지정된 아이템 데이터를 아이템 프리팹에 적용
         ItemData randomData = new ItemData();
-        invenItem.ItemDataSet(randomData);
+        randomData.itemId = itemDB[randomId].itemId;
+        randomData.itemCode = itemDB[randomId].itemCode;
+        randomData.itemPos = itemDB[randomId].itemPos;
+        randomData.itemRotate = itemDB[randomId].itemRotate;
+        randomData.itemAmount = itemDB[randomId].itemAmount;
+        foreach(int id in itemDB[randomId].searchedPlayerId)
+        {
+            randomData.searchedPlayerId.Add(id);
+        }
+        randomData.item_name = itemDB[randomId].item_name;
+        randomData.item_weight = itemDB[randomId].item_weight;
+        randomData.item_type = itemDB[randomId].item_type;
+        randomData.item_searchTime = itemDB[randomId].item_searchTime;
+        randomData.width = itemDB[randomId].width;
+        randomData.height = itemDB[randomId].height;
+        randomData.isItemConsumeable = itemDB[randomId].isItemConsumeable;
+        randomData.itemSprite = itemDB[randomId].itemSprite;
+
+
+        invenItem.itemData = randomData;
+        invenItem.ItemDataSet(invenItem.itemData);
+        SelectedItem = invenItem;
     }
 
     /* 인벤토리그리드로 옮김
@@ -890,6 +915,14 @@ public partial class InventoryController : MonoBehaviour
     public void RotateBtn()
     {
         RotateItemRight();
+    }
+
+    public void invenUIControl()
+    {
+        isActive = !isActive;
+        
+
+        gameObject.SetActive(isActive);
     }
 }
 

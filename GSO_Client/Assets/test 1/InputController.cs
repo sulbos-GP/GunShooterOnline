@@ -21,9 +21,6 @@ public class InputController : MonoBehaviour
     public AimFov aimFov;
     public BasicFov basicFov;
 
-
-
-
     private bool isFiring;
     //private CreatureState State;
     private Vector3 lastPos;

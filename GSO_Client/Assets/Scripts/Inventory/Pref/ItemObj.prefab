@@ -223,16 +223,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cae5837d0dd4ba244bca98b6614dbfdf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemId: 0
   itemRect: {fileID: 0}
   itemData: {fileID: 0}
   hideSprite: {fileID: 21300000, guid: 15a2dd2bf5cb15747be8d9ee2ab098b8, type: 3}
+  spriteList:
+  - {fileID: 21300000, guid: f223ac2f704b94f49b6182494b32a2c8, type: 3}
+  - {fileID: 21300000, guid: 6c18fae691b12c841aca31694b0d47f5, type: 3}
+  - {fileID: 21300000, guid: 19ef7a93844862b4f847a893d9310e35, type: 3}
+  - {fileID: 21300000, guid: 3027e086b176da54d829553903763a13, type: 3}
+  - {fileID: 21300000, guid: 6d0c4bfba1d6d72419d260435b7b5dd1, type: 3}
   ishide: 1
-  searchedPlayerList: 
-  itemAmount: 0
   curItemGrid: {fileID: 0}
-  curItemPos: {x: 0, y: 0}
-  curItemRotate: 0
   backUpItemGrid: {fileID: 0}
   backUpItemPos: {x: 0, y: 0}
   backUpItemRotate: 0

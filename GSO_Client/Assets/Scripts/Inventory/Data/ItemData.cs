@@ -1,10 +1,12 @@
 using Google.Protobuf.Protocol;
+using NPOI.HPSF;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
 
-public class ItemData : MonoBehaviour
+[CreateAssetMenu(fileName = "itemdata", menuName = "Inventory/ItemData")]
+public class ItemData : ScriptableObject
 {
     /*
      * 스크립터블 오브젝트로 아이템의 데이터를 정의합니다.
