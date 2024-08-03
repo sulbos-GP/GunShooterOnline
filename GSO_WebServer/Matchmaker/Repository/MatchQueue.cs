@@ -29,6 +29,10 @@ namespace Matchmaker.Repository
 
         public void Dispose()
         {
+            if (mRedisConn != null)
+            {
+                mRedisConn.GetConnection().Close();
+            }
         }
 
         public async Task<WebErrorCode> AddMatchRating(Int32 uid, Double rating)

@@ -1,12 +1,11 @@
 ﻿
-using GameServerManager.Repository;
-using GameServerManager.Repository.Interfaces;
-using GameServerManager.Servicies;
-using GameServerManager.Servicies.Interfaces;
+using Authorization.Servicies;
+using Authorization.Servicies.Interfaces;
 using GSO_WebServerLibrary.Config;
-using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Reposiotry.Define.MasterDB;
+using GSO_WebServerLibrary.Reposiotry.Interfaces;
 
-namespace GameServerManager.Startup
+namespace Authorization.Startup
 {
     public class Startup
     {
@@ -21,15 +20,15 @@ namespace GameServerManager.Startup
         public void ConfigureServices(IServiceCollection services)
         {
             // Add services to the http client
-            services.AddHttpClient("GSO_Matchmaker", httpclient =>
-            {
-                httpclient.BaseAddress = new Uri("http://localhost:5200");
-            });
+            //services.AddHttpClient("GSO_Matchmaker", httpclient =>
+            //{
+            //    httpclient.BaseAddress = new Uri("http://localhost:5200");
+            //});
 
-            services.AddHttpClient("GSO_WebServer", httpclient =>
-            {
-                httpclient.BaseAddress = new Uri("http://localhost:6900");
-            });
+            //services.AddHttpClient("GSO_WebServer", httpclient =>
+            //{
+            //    httpclient.BaseAddress = new Uri("http://localhost:6900");
+            //});
 
             services.AddControllers().AddJsonOptions(options =>
             {
@@ -39,34 +38,33 @@ namespace GameServerManager.Startup
 
             // Add services to the config
             services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(DatabaseConfig)));
-            services.Configure<DockerConfig>(Configuration.GetSection(nameof(DockerConfig)));
+            //services.Configure<GoogleConfig>(Configuration.GetSection(nameof(GoogleConfig)));
 
             // Add services to the container.
-            services.AddTransient<ISessionService, SessionService>();
+            services.AddTransient<IVersionServicie, VersionService>();
 
-            services.AddSingleton<IDockerService, DockerService>();
-            services.AddSingleton<ISessionMemory, SessionMemory>();
+            services.AddTransient<IMasterDB, MasterDB>();
 
-            services.AddHostedService<SessionBackgroundService>();
+            //services.AddSingleton<IMemoryDB, MemoryDB>();
 
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
-            ISessionService session = app.ApplicationServices.GetRequiredService<ISessionService>();
-            if(WebErrorCode.None != await session.InitMatch(1))
-            {
-                return;
-            }
+            IMasterDB masterDB = app.ApplicationServices.GetRequiredService<IMasterDB>();
+            //if (!await masterDB.())
+            //{
+            //    return;
+            //}
 
             // Add middleware to the container.
-            //app.UseMiddleware<GsoWebServer.Middleware.VersionCheck>();
+            app.UseMiddleware<Middleware.VersionCheck>();
             //app.UseMiddleware<GsoWebServer.Middleware.CheckUserAuth>();
 
             app.UseHttpsRedirection();

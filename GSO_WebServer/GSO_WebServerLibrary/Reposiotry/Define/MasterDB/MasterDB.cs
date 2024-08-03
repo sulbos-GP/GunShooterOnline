@@ -38,9 +38,5 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
             mDbConn?.Close();
         }
 
-        public async Task<bool> LoadMasterData()
-        {
-            return true;
-        }
     }
 }

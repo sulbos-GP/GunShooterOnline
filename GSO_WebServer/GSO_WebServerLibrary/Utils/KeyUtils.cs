@@ -15,6 +15,8 @@ namespace GSO_WebServerLibrary.Utils
             REFRESH,
             MATCH,
             MATCHLock,
+            SESSION,
+            SESSIONLock,
         }
 
         public static int GetUID(string key)

@@ -1,3 +1,4 @@
+using GameServerManager.Servicies.Interfaces;
 using GameServerManager.Startup;
 
 public class Program
