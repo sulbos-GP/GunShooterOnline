@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemId: 1
   itemCode: 1
-  itemPos: {x: 0, y: 0}
+  itemPos: {x: 4, y: 3}
   itemRotate: 0
   itemAmount: 1
   searchedPlayerId: 
-  item_name: 
+  item_name: pistol
   item_weight: 2
   item_type: 0
   item_string_value: 101

@@ -388,7 +388,7 @@ public class InventoryGrid : MonoBehaviour
                 ItemObject item = ItemSlot[j, i];
                 if (item != null)
                 {
-                    content += $"| {item.itemData.name} |";
+                    content += $"| {item.itemData.item_name} |";
                 }
                 else
                 {

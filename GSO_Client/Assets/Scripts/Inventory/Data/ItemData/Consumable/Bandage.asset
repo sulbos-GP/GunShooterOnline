@@ -18,7 +18,7 @@ MonoBehaviour:
   itemRotate: 0
   itemAmount: 1
   searchedPlayerId: 
-  item_name: 
+  item_name: bandage
   item_weight: 0
   item_type: 2
   item_string_value: 302
