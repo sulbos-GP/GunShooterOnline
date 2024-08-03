@@ -16,8 +16,9 @@
 
         //Middleware
         IncorrectHeaderContext = 500,
-        DiscrepancyAppVersion = 501,
-        DiscrepancyDataVersion = 502,
+        InvalidVersion = 501,
+        DiscrepancyAppVersion = 502,
+        DiscrepancyDataVersion = 503,
 
 
         // Common 1000 ~

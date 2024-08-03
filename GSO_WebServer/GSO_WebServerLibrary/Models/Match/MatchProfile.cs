@@ -8,8 +8,10 @@ namespace GSO_WebServerLibrary.Models.Match
 {
     public class MatchProfile
     {
-        public string match_id { get; set; } = string.Empty;
-        public string host { get; set; } = string.Empty;
-        public short port { get; set; } = 0;
+        public string   container_id { get; set; } = string.Empty;
+        public string   world { get; set; } = string.Empty;
+        public string   host_ip { get; set; } = string.Empty;
+        public int      container_port { get; set; } = 0;
+        public int      host_port { get; set; } = 0;
     }
 }

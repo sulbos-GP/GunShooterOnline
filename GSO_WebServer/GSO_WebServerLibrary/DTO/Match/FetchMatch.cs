@@ -16,4 +16,22 @@ namespace GSO_WebServerLibrary.DTO.Match
     {
         public MatchProfile? match_profile { get; set; } = null;
     }
+
+    public class RequestReadyMatchhReq
+    {
+        public string container_id { get; set; } = string.Empty;
+    }
+
+    public class RequestReadyMatchhRes : ErrorCodeDTO
+    {
+    }
+
+    public class ShutdownMatchReq
+    {
+        public string container_id { get; set; } = string.Empty;
+    }
+
+    public class ShutdownMatchRes : ErrorCodeDTO
+    {
+    }
 }

@@ -61,11 +61,11 @@ namespace GsoWebServer.Startup
             }
 
             // 마스터 DB가 등록이 안되어 있다면 없으면 반드시 에러
-            IMasterDB masterDB = app.ApplicationServices.GetRequiredService<IMasterDB>();
-            if(!await masterDB.LoadMasterData())
-            {
-                return;
-            }
+            //IMasterDB masterDB = app.ApplicationServices.GetRequiredService<IMasterDB>();
+            //if(!await masterDB.LoadMasterData())
+            //{
+            //    return;
+            //}
 
             // Add middleware to the container.
             //app.UseMiddleware<GsoWebServer.Middleware.VersionCheck>();

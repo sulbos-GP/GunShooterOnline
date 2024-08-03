@@ -1,27 +1,29 @@
-﻿using GSO_WebServerLibrary.DTO.Middleware;
+﻿using Authorization.Servicies;
+using Authorization.Servicies.Interfaces;
+using GSO_WebServerLibrary.DTO.Middleware;
 using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Reposiotry.Define.MasterDB;
+using GSO_WebServerLibrary.Reposiotry.Interfaces;
 using System.Text.Json;
 
 namespace Authorization.Middleware
 {
     public class VersionCheck
     {
-        readonly RequestDelegate _next;
-        readonly ILogger<VersionCheck> _logger;
-        readonly IMasterDb _masterDb;
+        readonly RequestDelegate mNext;
+        readonly IVersionServicie mVersionService;
 
-        public VersionCheck(RequestDelegate next, ILogger<VersionCheck> logger, IMasterDb masterDb)
+        public VersionCheck(RequestDelegate next, IVersionServicie versionService)
         {
-            _next = next;
-            _logger = logger;
-            _masterDb = masterDb;
+            mNext = next;
+            mVersionService = versionService;
         }
 
         public async Task Invoke(HttpContext context)
         {
             
-            var appVersion = GetValueOrNull("AppVersion", context);
-            var masterDataVersion = GetValueOrNull("MasterDataVersion", context);
+            var appVersion = GetValueOrNull("app_version", context);
+            var masterDataVersion = GetValueOrNull("data_version", context);
 
             if (appVersion == null || masterDataVersion == null)
             {
@@ -34,18 +36,35 @@ namespace Authorization.Middleware
                 return;
             }
 
-            await _next(context);
+            await mNext(context);
         }
 
         async Task<bool> VersionCompare(string appVersion, string masterDataVersion, HttpContext context)
         {
-            if (!appVersion.Equals(_masterDb._version!.app_version))
+
+            var clientAppVersion = new Version(appVersion);
+            var serverAppVersion = await mVersionService.GetLatestAppVersion();
+            if (serverAppVersion == null)
+            {
+                await SendMiddlewareResponse(context, StatusCodes.Status400BadRequest, WebErrorCode.InvalidVersion);
+                return false;
+            }
+
+            if(0 != serverAppVersion.CompareTo(clientAppVersion))
             {
                 await SendMiddlewareResponse(context, StatusCodes.Status426UpgradeRequired, WebErrorCode.DiscrepancyAppVersion);
                 return false;
             }
 
-            if (!masterDataVersion.Equals(_masterDb._version!.master_data_version))
+            var clientDataVersion = new Version(masterDataVersion);
+            var serverDataVersion = await mVersionService.GetLatestDataVersion();
+            if (serverDataVersion == null)
+            {
+                await SendMiddlewareResponse(context, StatusCodes.Status400BadRequest, WebErrorCode.InvalidVersion);
+                return false;
+            }
+
+            if (0 != serverDataVersion.CompareTo(clientDataVersion))
             {
                 await SendMiddlewareResponse(context, StatusCodes.Status426UpgradeRequired, WebErrorCode.DiscrepancyDataVersion);
                 return false;
