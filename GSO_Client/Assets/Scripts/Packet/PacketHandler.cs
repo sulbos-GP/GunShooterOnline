@@ -127,7 +127,7 @@ internal class PacketHandler
         newInvenData.SetInvenData(packet.InvenData);
 
         //플레이어의 인벤토리id와 패킷내의 인벤토리id 비교 -> 같으면 플레이어의 인벤토리에 반영 다르면 아더 인벤토리에 반영
-        if (Managers.Object.MyPlayer.myPlayerInven.InvenId == packet.InventoryId)
+        if (Managers.Object.MyPlayer.myPlayerInven.invenData.inventoryId == packet.InventoryId)
         {
             //플레이어 인벤토리에 패킷의 invenData 적용
             Managers.Object.MyPlayer.myPlayerInven.invenData = newInvenData;
@@ -166,8 +166,8 @@ internal class PacketHandler
         }
 
         //ItemObject.itemData에 변경된 내용들을 변경하고 ItemObject.Set을 통해 아이템의 위치 변경
-        moveItemObj.curItemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
-        moveItemObj.curItemRotate = packet.ItemRotate;
+        moveItemObj.itemData.itemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
+        moveItemObj.itemData.itemRotate = packet.ItemRotate;
         //프로토콜 업데이트 시 주석해제
         Managers.Object._gridDic.TryGetValue(packet.GridId, out moveItemObj.curItemGrid);
         moveItemObj.backUpItemPos = new Vector2Int(packet.LastItemPosX, packet.LastItemPosY);
@@ -178,7 +178,7 @@ internal class PacketHandler
         moveItemObj.backUpItemGrid.CleanItemSlot(moveItemObj);
 
         //gridId를 통해 그리드를 검색하여 해당 그리드의 inventoryGrid.PlaceItem(item, item.posX, item.posY)로 현재 그리드에 해당 아이템 배치
-        moveItemObj.curItemGrid.PlaceItem(moveItemObj, moveItemObj.curItemPos.x, moveItemObj.curItemPos.y);
+        moveItemObj.curItemGrid.PlaceItem(moveItemObj, moveItemObj.itemData.itemPos.x, moveItemObj.itemData.itemPos.y);
 
         //클라이언트에서 해당 아이템을 배치 가능한지 체크해서 성공할 경우에만 패킷을 전달하기에 따로 성공 여부 체크는 필요 없을듯.
     }

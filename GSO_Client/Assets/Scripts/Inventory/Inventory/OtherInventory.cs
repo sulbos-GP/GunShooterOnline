@@ -12,12 +12,12 @@ public class OtherInventory : Inventory
     */
     private void Awake()
     {
-        Init();
+        InventorySet();
     }
 
-    protected override void Init()
+    protected override void InventorySet()
     {
-        base.Init();
+        base.InventorySet();
     }
 
     private void OnEnable()
@@ -29,15 +29,13 @@ public class OtherInventory : Inventory
     private void OnDisable()
     {
         invenData = null;
-        foreach(InventoryGrid grids in instantGrid)
+        foreach(InventoryGrid grids in instantGridList)
         {
             Destroy(grids.gameObject);
         }
 
-        instantGrid.Clear();
+        instantGridList.Clear();
 
-        InvenId = 0;
         invenWeight = 0;
-        limitWeight = 0;
     }
 }
