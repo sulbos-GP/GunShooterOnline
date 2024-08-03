@@ -1,3 +1,5 @@
+using Google.Protobuf.Protocol;
+using NPOI.OpenXmlFormats.Dml;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -31,5 +33,13 @@ public class ExitZone : InteractableObject
     {
         //인게임 종료 및 플레이어를 로비씬으로 이동.(인벤토리 보존)
         //서버에 탈출한 플레이어의 ID, 탈출구 ID를 전송
+
+        //C_LeaveGame packet = new C_LeaveGame();
+        
+        //Managers.Network.Send(packet);
+        Debug.Log("C_LeaveGame");
+
+        //게임씬을 로비로
+        Managers.Scene.LoadScene(Define.Scene.Lobby);
     }
 }
