@@ -106,9 +106,7 @@ namespace Server.Game
 
                 itemObj.itemDataInfo.ItemAmount += indexAmount;
                 itemDataInfo.ItemAmount -= indexAmount;
-
                 OwnerGrid.PushItemIntoSlot(this, itemDataInfo.ItemPosX, itemDataInfo.ItemPosY);
-                return;
             }
             else
             {
