@@ -23,7 +23,7 @@ namespace Server.Game.Object
 
         public void Init()
         {
-            //Inventory = new Inventory(Id);
+            Inventory = new Inventory(Id);
         }
 
 

@@ -40,6 +40,7 @@ namespace Server.Game
             pistol.ItemRotate = 0;
             pistol.ItemAmount = 1;
             pistol.ItemCode = 1;
+            pistol.IsItemConsumeable = false;
             pistol.ItemName = "Pistol01";
             pistol.ItemWeight = 2.0f;
             pistol.ItemType = 0;
@@ -56,6 +57,7 @@ namespace Server.Game
             ak47.ItemRotate = 0;
             ak47.ItemAmount = 1;
             ak47.ItemCode = 2;
+            ak47.IsItemConsumeable = false;
             ak47.ItemName = "Ak47";
             ak47.ItemWeight = 7.0f;
             ak47.ItemType = 0;
@@ -72,6 +74,7 @@ namespace Server.Game
             recoveryKit.ItemRotate = 0;
             recoveryKit.ItemAmount = 1;
             recoveryKit.ItemCode = 3;
+            recoveryKit.IsItemConsumeable = true;
             recoveryKit.ItemName = "Recovery kit";
             recoveryKit.ItemWeight = 1.0f;
             recoveryKit.ItemType = 2;
@@ -88,6 +91,7 @@ namespace Server.Game
             bandage.ItemRotate = 0;
             bandage.ItemAmount = 1;
             bandage.ItemCode = 4;
+            bandage.IsItemConsumeable = true;
             bandage.ItemName = "Bandage";
             bandage.ItemWeight = 0.0f;
             bandage.ItemType = 2;
@@ -105,6 +109,7 @@ namespace Server.Game
             pill.ItemRotate = 0;
             pill.ItemAmount = 1;
             pill.ItemCode = 5;
+            pill.IsItemConsumeable = true;
             pill.ItemName = "Pill";
             pill.ItemWeight = 0.0f;
             pill.ItemType = 3;
