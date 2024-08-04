@@ -29,7 +29,9 @@ namespace Server.Game
             newGrid.gridData = MakeNewGridData();
             newGrid.ownerInventory = this;
             newGrid.SetGrid();
-            instantGrid.Add(new Grid());
+            instantGrid.Add(newGrid);
+        
+            Console.WriteLine(ownerId +": "+ newGrid.itemObjectList.Count);
         }
 
         private GridDataInfo MakeNewGridData()
@@ -54,7 +56,7 @@ namespace Server.Game
         {
             int restSize = gridData.GridSizeX * gridData.GridSizeY;
             List<ItemDataInfo> canInsertlist = new List<ItemDataInfo>();
-            foreach (ItemDataInfo data in ItemDB.items.Values)
+            foreach (ItemDataInfo data in ItemDB.Instance.items.Values)
             {
                 if (data.Width * data.Height < restSize)
                 {

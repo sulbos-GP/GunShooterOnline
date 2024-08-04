@@ -18,9 +18,13 @@ namespace Server.Game.Object
         public RootableObject()
         {
             ObjectType = GameObjectType.Item;
-            Inventory = new Inventory(Id);
+            
         }
 
+        public void Init()
+        {
+            Inventory = new Inventory(Id);
+        }
 
 
 
