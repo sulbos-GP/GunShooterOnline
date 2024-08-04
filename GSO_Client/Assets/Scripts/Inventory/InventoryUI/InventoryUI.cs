@@ -5,6 +5,7 @@ using UnityEngine;
 public class InventoryUI : MonoBehaviour
 {
     /*
+     * 인벤토리 UI의 자식객체의 컴포넌트
      * 서버로부터 받은 인벤토리 데이터를 통해 인벤토리를 생성함
      */
     public GameObject gridPref; //그리드의 프리팹
@@ -27,7 +28,7 @@ public class InventoryUI : MonoBehaviour
         set { invenWeight = value; }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
         instantGridList = new List<InventoryGrid>();
         instantItemList = new List<ItemObject>();
@@ -37,7 +38,11 @@ public class InventoryUI : MonoBehaviour
     {
         grids = transform.GetChildByName("Grids");
         
-        if (invenData == null ) { return; }
+        if (invenData == null ) 
+        {
+            Debug.Log("인벤토리 설정과정에서 인벤데이터가 없음");
+            return; 
+        }
 
         //인벤토리 데이터를 기반으로 변수 업데이트
         InvenDataSet();

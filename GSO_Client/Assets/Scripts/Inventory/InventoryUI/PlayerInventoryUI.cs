@@ -8,9 +8,9 @@ using UnityEngine;
 public class PlayerInventoryUI : InventoryUI
 {
     public TextMeshProUGUI weightText;
-    public TextMeshProUGUI moneyText; //돈에 대한 정보가 나올시 추가
-                                      
+    public TextMeshProUGUI moneyText; //돈에 대한 정보가 나올시 추가      
     public int bagLv = 0;
+    private bool isInventorySet;
 
     protected override float InvenWeight
     {
@@ -27,14 +27,23 @@ public class PlayerInventoryUI : InventoryUI
         weightText.text = $"WEIGHT \n {InvenWeight} / {invenData.limitWeight}";
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        InventorySet();
+        base.Awake();
+        isInventorySet = false;
+    }
+
+    private void OnEnable()
+    {
+        if (!isInventorySet)
+        {
+            InventorySet();
+            isInventorySet = true;
+        }
     }
 
     public override void InventorySet()
     {
-        Debug.Log(Managers.Object.MyPlayer.gameObject.name);
         invenData = Managers.Object.MyPlayer.GetComponent<PlayerInventory>().InputInvenData;
         base.InventorySet();
     }

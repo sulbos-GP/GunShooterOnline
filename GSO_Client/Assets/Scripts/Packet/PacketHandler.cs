@@ -111,6 +111,8 @@ internal class PacketHandler
         Debug.Log("S_ConnectedHandler");
 
     }
+    
+    
 
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
@@ -129,7 +131,7 @@ internal class PacketHandler
         }
 
         //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
-        InvenData newInvenData = new InvenData();
+        InvenData newInvenData = null;
         newInvenData.SetInvenData(packet.InvenData);
         GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색
 
