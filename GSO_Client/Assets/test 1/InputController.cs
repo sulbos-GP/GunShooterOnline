@@ -9,7 +9,7 @@ public class InputController : MonoBehaviour
 {
     public static InputController instance;
     public float distance;
-    public GameObject testBox;
+    //public GameObject testBox;
 
     private Rigidbody2D rig;
 
@@ -38,7 +38,7 @@ public class InputController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        distance = Vector2.Distance(gameObject.transform.position, testBox.transform.position);
+        //distance = Vector2.Distance(gameObject.transform.position, testBox.transform.position);
 
         UpdateState();
 
@@ -101,7 +101,7 @@ public class InputController : MonoBehaviour
     {
         if (distance <= 2.0f)
         {
-            testBox.GetComponent<Box>().Interact();
+            //testBox.GetComponent<Box>().Interact();
         }
     }
 

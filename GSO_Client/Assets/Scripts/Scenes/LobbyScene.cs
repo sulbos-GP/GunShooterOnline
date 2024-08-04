@@ -55,5 +55,14 @@ public class LobbyScene : BaseScene
     public void GamePlay()
     {
         Managers.Scene.LoadScene(Define.Scene.Game);
+
+
+
+        C_EnterGame c_EnterGame = new C_EnterGame();
+        c_EnterGame.Name = "jish";
+
+        Managers.Network.Send(c_EnterGame);
+        Debug.Log("Send c_EnterGame");
+
     }
 }

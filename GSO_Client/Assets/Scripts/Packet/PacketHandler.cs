@@ -127,7 +127,7 @@ internal class PacketHandler
         newInvenData.SetInvenData(packet.InvenData);
 
         //플레이어의 인벤토리id와 패킷내의 인벤토리id 비교 -> 같으면 플레이어의 인벤토리에 반영 다르면 아더 인벤토리에 반영
-        if (Managers.Object.MyPlayer.myPlayerInven.invenData.inventoryId == packet.InventoryId)
+        if (Managers.Object.MyPlayer.Id == packet.InventoryId)
         {
             //플레이어 인벤토리에 패킷의 invenData 적용
             Managers.Object.MyPlayer.myPlayerInven.invenData = newInvenData;

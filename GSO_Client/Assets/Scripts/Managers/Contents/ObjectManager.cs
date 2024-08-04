@@ -33,6 +33,7 @@ public class ObjectManager
             if (myPlayer)
             {
                 var go = Managers.Resource.Instantiate("Creature/Player/MyPlayer");
+                //var go = Managers.Resource.Instantiate("UnitModel");
                 go.name = info.Name;
                 _objects.Add(info.ObjectId, go);
 
