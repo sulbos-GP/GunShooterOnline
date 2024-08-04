@@ -41,7 +41,7 @@ public partial class InventoryController : MonoBehaviour
     [Header("수동지정")]
     public Transform deleteUI;
     public Button rotateBtn;
-    public List<ItemData> itemDB;
+    //public List<ItemData> itemDB;
     //우클릭 아이템 생성 예시
     [SerializeField] private GameObject itemPref; //생성할 아이템의 프리펩(임시)
 
@@ -831,6 +831,7 @@ public partial class InventoryController : MonoBehaviour
         InsertItem(itemToInsert);
     }*/
 
+    /*
     /// <summary>
     /// 등록된 아이템중 랜덤으로 생성
     /// </summary>
@@ -866,7 +867,7 @@ public partial class InventoryController : MonoBehaviour
         invenItem.ItemDataSet(invenItem.itemData);
         SelectedItem = invenItem;
     }
-
+    */
     /* 인벤토리그리드로 옮김
     /// <summary>
     /// insertRandomItem안에서 지정된 아이템을 가능한 자리에 배치

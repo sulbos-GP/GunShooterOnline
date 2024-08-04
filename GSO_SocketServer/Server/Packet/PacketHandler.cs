@@ -27,7 +27,7 @@ class PacketHandler
             p.info.PositionInfo.PosY = 0;
 
             //바꾼 부분
-            p.inventory = new Inventory(p.Id);
+            p.inventory = new Inventory(p.Id,6,7);
         }
 
         clientSession.MyPlayer = p;
@@ -84,7 +84,8 @@ class PacketHandler
         Console.WriteLine($"C_MoveItemHandler {packet.PlayerId}");
 
         ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
-        target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY);
+        
+        target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY , packet.ItemRotate);
 
         Player player = clientSession.MyPlayer;
         player.gameRoom.Push(player.gameRoom.HandleItemMove, player, message);
