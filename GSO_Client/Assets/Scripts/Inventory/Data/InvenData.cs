@@ -15,7 +15,7 @@ public class InvenData : MonoBehaviour
 
         foreach (GridDataInfo data in invenDataInfo.GridData)
         {
-            GridData newGridData = new GridData();
+            GridData newGridData = null;
             newGridData.SetGridData(data);
             gridList.Add(newGridData);
         }

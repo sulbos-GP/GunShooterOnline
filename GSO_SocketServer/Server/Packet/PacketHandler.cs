@@ -38,6 +38,9 @@ class PacketHandler
             p.info.Name = enterGamePacket.Name + clientSession.SessionId;
             p.info.PositionInfo.PosX = 0;
             p.info.PositionInfo.PosY = 0;
+
+            //바꾼 부분
+            p.inventory = new Inventory(p.Id);
         }
 
         clientSession.MyPlayer = p;

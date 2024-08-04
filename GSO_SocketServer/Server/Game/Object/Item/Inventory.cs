@@ -26,12 +26,14 @@ namespace Server.Game
         public Inventory(int ownerId)
         {
             invenData.InventoryId = ownerId;
+            invenData.LimitWeight = 20; //임시
             Grid newGrid = new Grid();
             newGrid.gridData = MakeNewGridData();
             newGrid.ownerInventory = this;
             newGrid.SetGrid();
             instantGrid.Add(newGrid);
-            Console.WriteLine($"ownerId : {ownerId} \n itemAmount : {newGrid.itemObjectList.Count} \n");
+            invenData.GridData.Add(newGrid.gridData);
+            Console.WriteLine($"ownerId : {ownerId} \n instantGridAmt : {instantGrid.Count} \nitemAmount : {newGrid.itemObjectList.Count} \n");
         }
 
         private GridDataInfo MakeNewGridData()
