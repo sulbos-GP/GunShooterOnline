@@ -2,6 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 using Google.Protobuf;
+using Google.Protobuf.Protocol;
 using ServerCore;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
@@ -80,6 +81,9 @@ public class NetworkManager
 
         mNetworkService.Init(endPoint, session, "SomeConnectionKey");
         mNetworkService.Start();
+
+
+
     }
 
     public void Update()

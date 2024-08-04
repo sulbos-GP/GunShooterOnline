@@ -45,7 +45,14 @@ namespace Server.Game
                 RandomItemAmount = 3 //임시. 소유자의 조건에 따라 달라짐
             };
 
-            int restSize = newData.GridSizeX * newData.GridSizeY;
+            CreateRandomItemDataIntoGridData(newData);
+
+            return newData;
+        }
+
+        private void CreateRandomItemDataIntoGridData(GridDataInfo gridData)
+        {
+            int restSize = gridData.GridSizeX * gridData.GridSizeY;
             List<ItemDataInfo> canInsertlist = new List<ItemDataInfo>();
             foreach (ItemDataInfo data in ItemDB.items.Values)
             {
@@ -56,7 +63,7 @@ namespace Server.Game
             }
 
             //생성해야하는 아이템의 수만큼 반복
-            for (int i = 0; i < newData.RandomItemAmount; i++)
+            for (int i = 0; i < gridData.RandomItemAmount; i++)
             {
                 if (restSize <= 0)
                 {
@@ -66,21 +73,22 @@ namespace Server.Game
                 //두번째 순서부터 
                 if (i != 0)
                 {
-                    foreach (ItemDataInfo data in canInsertlist)
+                    for (int j = canInsertlist.Count - 1; j >= 0; j--)
                     {
+                        ItemDataInfo data = canInsertlist[j];
                         if (data.Width * data.Height > restSize)
                         {
-                            canInsertlist.Remove(data);
+                            canInsertlist.RemoveAt(j);
                         }
                     }
                 }
 
-                if(canInsertlist.Count <= 0)
+                if (canInsertlist.Count <= 0)
                 {
                     //넣을수 있는 아이템이 없다면 브레이크
                     break;
                 }
-                
+
                 System.Random rnd = new System.Random();
                 int random = rnd.Next(0, canInsertlist.Count);
                 ItemDataInfo newItemData = canInsertlist[random];
@@ -89,16 +97,14 @@ namespace Server.Game
 
                 //아이템의 위치, 회전을 제외한 아이디+데이터베이스 데이터를 그리드에 넣어줌
                 //그리드에서 이 아이템 리스트를 기반으로 그리드 슬롯에 넣고 아이템 데이터 업데이트예정
-                newData.ItemList.Add(newItemData);
+                gridData.ItemList.Add(newItemData);
 
                 restSize -= canInsertlist[random].Width * canInsertlist[random].Height;
             }
-
-            return newData;
         }
 
 
-        
+
         public void MoveItem(int id, int posX, int posY)
         {
             //아이템 가져오기

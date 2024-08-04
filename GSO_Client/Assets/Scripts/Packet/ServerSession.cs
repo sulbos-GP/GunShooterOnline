@@ -62,12 +62,7 @@ public class ServerSession : PacketSession
         //onsole.WriteLine($"OnConnected : {endPoint}");
         Debug.Log("OnConnected");
 
-        C_EnterGame c_EnterGame = new C_EnterGame();
-        c_EnterGame.Name = "jish";
-
-        Managers.Network.Send(c_EnterGame);
-        Debug.Log("Send c_EnterGame");
-
+        PacketManager.Instance.CustomHandler = (s, m, i) => { PacketQueue.Instance.Push(i, m); };
 
         _reserveQueue = new();
         //C2S_Chat chat = new C2S_Chat();

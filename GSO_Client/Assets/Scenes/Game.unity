@@ -361,7 +361,6 @@ MonoBehaviour:
   interactType: 0
   interactRange: 0
   invenData: {fileID: 0}
-  otherInvenUI: {fileID: 8662937874587401163}
 --- !u!58 &112652217
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -830,6 +829,10 @@ PrefabInstance:
     - target: {fileID: 191436082380664689, guid: b2a9acc7b9c482642897e55e32d8ddb0, type: 3}
       propertyPath: m_Name
       value: UnitModel
+      objectReference: {fileID: 0}
+    - target: {fileID: 191436082380664689, guid: b2a9acc7b9c482642897e55e32d8ddb0, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2151735185809450313, guid: b2a9acc7b9c482642897e55e32d8ddb0, type: 3}
       propertyPath: testBox
@@ -1525,7 +1528,6 @@ MonoBehaviour:
   interactType: 0
   interactRange: 0
   invenData: {fileID: 0}
-  otherInvenUI: {fileID: 8662937874587401163}
 --- !u!58 &1209415307
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1733,7 +1735,6 @@ MonoBehaviour:
   interactType: 0
   interactRange: 0
   invenData: {fileID: 0}
-  otherInvenUI: {fileID: 8662937874587401163}
 --- !u!58 &1627093409
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1979,7 +1980,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1790032444}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f47f60c593c019544ba112ef44dced77, type: 3}
   m_Name: 
@@ -2994,7 +2995,11 @@ PrefabInstance:
     - target: {fileID: 956973815594711906, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: invenData
       value: 
-      objectReference: {fileID: 11400000, guid: a311fe5985d394746b07a031566e87ac, type: 2}
+      objectReference: {fileID: 0}
+    - target: {fileID: 1560948436342102467, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
+      propertyPath: invenData
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3405526672393247066, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: invenUI
       value: 
@@ -3345,7 +3350,6 @@ MonoBehaviour:
   interactType: 0
   interactRange: 0
   invenData: {fileID: 0}
-  otherInvenUI: {fileID: 8662937874587401163}
 --- !u!224 &3385603023062608331 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6208164503028263793, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
@@ -3480,8 +3484,7 @@ MonoBehaviour:
   objectId: 0
   interactType: 2
   interactRange: 0
-  invenData: {fileID: 0}
-  gameEndUI: {fileID: 0}
+  ExitTime: 0
 --- !u!4 &5789374404065326914
 Transform:
   m_ObjectHideFlags: 0
@@ -3582,7 +3585,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!50 &7685229238656349945
 Rigidbody2D:
   serializedVersion: 4
@@ -3629,17 +3632,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &8662937874587401163 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1560948436342102467, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-  m_PrefabInstance: {fileID: 1095908246791057076}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 467009a26142abf499a32470fa826dce, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8678826294474907974
 GameObject:
   m_ObjectHideFlags: 0

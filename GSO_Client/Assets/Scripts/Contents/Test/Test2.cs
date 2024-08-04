@@ -9,7 +9,7 @@ public class Test : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        timer += Time.deltaTime;
+       /* timer += Time.deltaTime;
         if (timer >= 1f)
         {
             timer = 0f;
@@ -19,7 +19,7 @@ public class Test : MonoBehaviour
 
             Managers.Network.Send(c_EnterGame);
             Debug.Log("Send jish");
-        }
+        }*/
        
     }
 }
