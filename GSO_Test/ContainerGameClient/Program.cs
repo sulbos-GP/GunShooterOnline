@@ -6,50 +6,63 @@ namespace ContainerGameClient
 {
 
     internal class Program
-
     {
+        static Socket client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
 
-        static async Task Main(string[] args)
-
+        public static void RecvAsync(IAsyncResult result)
         {
 
-            UdpClient udpClient = new UdpClient();
-            try
-            {
-                udpClient.Connect("127.0.0.1", 7777);
-                Console.WriteLine("Connect to the server");
+            int size = client.EndReceive(result);
 
-                string? message;
-                while ((message = Console.ReadLine()) != "exit")
+            if (size > 0)
+            {
+
+                if (result.AsyncState == null)
                 {
-                    if (message == null)
-                    {
-                        continue;
-                    }
-
-                    byte[] sendBytes = Encoding.ASCII.GetBytes(message);
-                    await udpClient.SendAsync(sendBytes, sendBytes.Length);
-
-                    UdpReceiveResult result = await udpClient.ReceiveAsync();
-                    string receivedMessage = Encoding.ASCII.GetString(result.Buffer);
-
-                    if (receivedMessage == "Quit")
-                    {
-                        break;
-                    }
-
-                    Console.WriteLine("Received from server: " + receivedMessage);
+                    return;
                 }
+
+                byte[] recv = new byte[1024];
+                recv = (byte[])result.AsyncState;
+
+                string message = Encoding.UTF8.GetString(recv, 0, size);
+                Console.WriteLine(message);
+
             }
-            catch (Exception ex)
+        }
+
+        static void Main(string[] args)
+        {
+            int port = 7002;
+
+            IPEndPoint mRemoteIpEndPoint = new IPEndPoint(IPAddress.Loopback, port);
+
+            client.Connect(mRemoteIpEndPoint);
+
+            byte[] buffer = new byte[1024];
+
+            client.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(RecvAsync), buffer);
+
+            while (true)
             {
-                Console.WriteLine($"Client Error : {ex.ToString()}");
+                Console.Write("message : ");
+                string? message = Console.ReadLine();
+                if (message == null)
+                {
+                    break;
+                }
+                byte[] send = Encoding.UTF8.GetBytes(message);
+
+                client.SendTo(send, send.Length, SocketFlags.None, mRemoteIpEndPoint);
+
+                if(message == "exit")
+                {
+                    break;
+                }
+
             }
-            finally
-            {
-                Console.WriteLine("Client shut down");
-                udpClient.Close();
-            }
+
+            client.Close();
         }
 
     }

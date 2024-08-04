@@ -1,109 +1,245 @@
-﻿using System.Net;
+﻿using System;
+using System.ComponentModel;
+using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using System.Text.Unicode;
 
 
 namespace ContainerGameServer
 {
-
-
-    internal class Program
+    public class ErrorCodeDTO
     {
-        private static readonly int port = 7777;
-        private static UdpClient server = new UdpClient(port);
-        private static SortedSet<IPEndPoint> endPoints = new SortedSet<IPEndPoint>();
+        public ushort error_code { get; set; } = 0;
+
+        public string error_description { get; set; } = string.Empty;
+    }
+
+    public class RequestReadyMatchReq
+    {
+        public string container_id { get; set; } = string.Empty;
+    }
+
+    public class RequestReadyMatchRes : ErrorCodeDTO
+    {
+    }
+
+    public class ShutdownMatchReq
+    {
+        public string container_id { get; set; } = string.Empty;
+    }
+
+    public class ShutdownMatchRes : ErrorCodeDTO
+    {
+    }
+
+    public class Program
+    {
+        private static Socket server;
+        private static IPEndPoint mLocalIpEndPoint;
+        private static SortedSet<IPEndPoint> mEndPoints = new SortedSet<IPEndPoint>();
+
+        public static void RecvAsync(IAsyncResult result)
+        {
+
+            int size = server.EndReceive(result);
+
+            if (size > 0)
+            {
+
+                if (result.AsyncState == null)
+                {
+                    return;
+                }
+
+                byte[] recv = new byte[1024];
+                recv = (byte[])result.AsyncState;
+
+                string message = Encoding.UTF8.GetString(recv, 0, size);
+                Console.WriteLine(message);
+            }
+
+            byte[] buffer = new byte[1024];
+            server.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(RecvAsync), buffer);
+        }
+        public static async Task<bool> ServerAsync(CancellationToken cancellationToken)
+        {
+
+            long shutdownTimeStamp = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds() + 60;
+            PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromMilliseconds(1000));
+
+            while (await timer.WaitForNextTickAsync(cancellationToken))
+            {
+                long now = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+                long elapsedSeconds = shutdownTimeStamp - now;
+                Console.WriteLine("Shutting down the server after {0} seconds.", elapsedSeconds);
+
+                if (elapsedSeconds <= 0)
+                {
+                    break;
+                }
+
+            }
+
+            return true;
+        }
+        public static int GetEnvPort()
+        {
+            string? portEnv = Environment.GetEnvironmentVariable("PORT");
+            if (portEnv == null)
+            {
+                return 0;
+            }
+            return int.Parse(portEnv);
+        }
+
+        public static string GetEnvIp()
+        {
+            string? ip = Environment.GetEnvironmentVariable("HOST_IP");
+            if (ip == null)
+            {
+                return string.Empty;
+            }
+            return ip;
+        }
+
+        public static string GetContainerId()
+        {
+            string[] cgroupLines = File.ReadAllLines("/proc/self/cgroup");
+            string? cgroupLine = cgroupLines.FirstOrDefault(line => line.Contains("cpu:"));
+
+            if (cgroupLine != null)
+            {
+                return cgroupLine.Split('/').Last();
+            }
+
+            return string.Empty;
+        }
+
+        public static async Task<HttpResponseMessage?> SendGameServerManager(object? request)
+        {
+            string host = GetEnvIp();
+            if (host == string.Empty)
+            {
+                return null;
+            }
+
+            HttpClient client = new HttpClient();
+            StringContent content = new(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
+            return await client.PostAsync($"http://{host}:7000/api/Session/RequestReady", content);
+
+        }
 
         static async Task Main(string[] args)
         {
-            DateTime start = DateTime.Now;
-            PeriodicTimer timer = new PeriodicTimer(TimeSpan.FromMilliseconds(1000));
-            const int shutdown = 20;
 
-
-
+            //게임 서버 열기
             try
             {
 
-                Console.WriteLine($"UDP Server is listening on port {port}");
-
-                CancellationTokenSource cancleToken = new CancellationTokenSource();
-                var cancellationToken = cancleToken.Token;
-
-                //Recive
-                var receiveTask = Task.Run(() => ReceiveMessagesAsync(cancellationToken), cancellationToken);
-
-                //1초 마다 동작
-                while (await timer.WaitForNextTickAsync(cancellationToken))
+                int port = GetEnvPort();
+                if (port == 0)
                 {
-
-                    Console.WriteLine("Shutting down the server after {0} seconds.", shutdown - (DateTime.Now - start).TotalSeconds);
-
-                    if ((DateTime.Now - start).TotalSeconds > shutdown)
-                    {
-                        foreach (var endpoint in endPoints)
-                        {
-                            string responseData = "Quit";
-                            byte[] sendBytes = Encoding.ASCII.GetBytes(responseData);
-                            server.Send(sendBytes, sendBytes.Length, endpoint);
-                        }
-                        break;
-                    }
+                    return;
                 }
 
-                cancleToken.Cancel();
+                server = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+                mLocalIpEndPoint = new IPEndPoint(IPAddress.Any, port);
+
+                server.Bind(mLocalIpEndPoint);
+
+                byte[] buffer = new byte[1024];
+
+                server.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(RecvAsync), buffer);
+
+                Console.WriteLine($"UDP Server is listening on port {port}");
+
+
+                //게임 준비상태 완료 요청
+                {
+                    RequestReadyMatchReq request = new RequestReadyMatchReq
+                    {
+                        container_id = GetContainerId()
+                    };
+
+                    var response = await SendGameServerManager(request);
+                    if (response == null)
+                    {
+                        return;
+                    }
+
+                    response.EnsureSuccessStatusCode();
+
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    if (jsonResponse == null)
+                    {
+                        return;
+                    }
+
+                    var message = JsonSerializer.Deserialize<RequestReadyMatchRes>(jsonResponse);
+                    if (message == null)
+                    {
+                        return;
+                    }
+
+                    Console.WriteLine($"response = {message.error_code}\n");
+                }
+
+                var cts = new CancellationTokenSource();
+                await ServerAsync(cts.Token);
+                cts.Cancel();
+
+
+                //셧다운 요청
+                {
+                    ShutdownMatchReq request = new ShutdownMatchReq
+                    {
+                        container_id = GetContainerId()
+                    };
+
+                    var response = await SendGameServerManager(request);
+                    if (response == null)
+                    {
+                        return;
+                    }
+
+                    response.EnsureSuccessStatusCode();
+
+                    var jsonResponse = await response.Content.ReadAsStringAsync();
+                    if (jsonResponse == null)
+                    {
+                        return;
+                    }
+
+                    var message = JsonSerializer.Deserialize<RequestReadyMatchRes>(jsonResponse);
+                    if (message == null)
+                    {
+                        return;
+                    }
+
+                    Console.WriteLine($"response = {message.error_code}\n");
+
+                }
 
             }
-            catch (Exception ex)
+            catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
             {
-                Console.WriteLine($"Server Error : {ex.Message}");
+                Console.WriteLine("The requested resource was not found.");
+            }
+            catch (HttpRequestException ex)
+            {
+                Console.WriteLine($"Request error: {ex.Message}");
             }
             finally
             {
-                Console.WriteLine("Server shut down");
-                server.Close();
-            }
-        }
-
-        private static async Task ReceiveMessagesAsync(CancellationToken cancellationToken)
-        {
-
-                while (!cancellationToken.IsCancellationRequested)
+                if (server != null)
                 {
-                    try
-                    {
-                        var result = await Task.Run(() => server.ReceiveAsync(), cancellationToken).ConfigureAwait(false);
-
-                        byte[] receiveBytes = result.Buffer;
-                        IPEndPoint clientEndPoint = result.RemoteEndPoint;
-
-                        endPoints.Add(clientEndPoint);
-
-                        string receiveData = Encoding.ASCII.GetString(receiveBytes);
-                        Console.WriteLine("packet: {0} from {1}", receiveData, clientEndPoint.ToString());
-
-                        //죽거나 탈출한 경우
-                        if (receiveData == "Death" || receiveData == "Escape")
-                        {
-
-                            endPoints.Remove(clientEndPoint);
-
-                            string responseData = "Quit";
-                            byte[] sendBytes = Encoding.ASCII.GetBytes(responseData);
-                            await server.SendAsync(sendBytes, sendBytes.Length, clientEndPoint);
-                        }
-                        else
-                        {
-                            string responseData = "Data received: " + receiveData;
-                            byte[] sendBytes = Encoding.ASCII.GetBytes(responseData);
-                            await server.SendAsync(sendBytes, sendBytes.Length, clientEndPoint);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Server Reviced Error : {ex.Message}");
-                    }
+                    server.Close();
                 }
             }
-
         }
+
     }
+}

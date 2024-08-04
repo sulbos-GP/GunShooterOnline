@@ -17,12 +17,12 @@ namespace GSO_WebServerLibrary.DTO.Match
         public MatchProfile? match_profile { get; set; } = null;
     }
 
-    public class RequestReadyMatchhReq
+    public class RequestReadyMatchReq
     {
         public string container_id { get; set; } = string.Empty;
     }
 
-    public class RequestReadyMatchhRes : ErrorCodeDTO
+    public class RequestReadyMatchRes : ErrorCodeDTO
     {
     }
 

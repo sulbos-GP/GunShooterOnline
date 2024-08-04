@@ -2,8 +2,10 @@
 using Docker.DotNet.Models;
 using GameServerManager.Servicies.Interfaces;
 using GSO_WebServerLibrary.Config;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System;
+using System.Net;
 using System.Threading;
 
 namespace GameServerManager.Servicies
@@ -14,9 +16,9 @@ namespace GameServerManager.Servicies
 
         private readonly DockerClient mDockerClient;
         private CancellationTokenSource mCancellationTokenSource;
-
+        
         private int mContainerCount = 1;
-        private readonly long mContainerCapacity = 1;
+        private PortManager mPortManager;
 
         public DockerService(IOptions<DockerConfig> config)
         {
@@ -25,7 +27,7 @@ namespace GameServerManager.Servicies
             mDockerClient = new DockerClientConfiguration().CreateClient();
             //mDockerClient = new DockerClientConfiguration(new Uri(mDockerConfig.Value.EndPoint)).CreateClient();
             mCancellationTokenSource = new CancellationTokenSource();
-
+            mPortManager = new PortManager(7001, 8000);
         }
 
         public async void Dispose()
@@ -131,15 +133,34 @@ namespace GameServerManager.Servicies
         /// </summary>
         public async Task<CreateContainerResponse> CreateContainer()
         {
+
+            string port = mPortManager.PopPort().ToString();
             string name = mDockerConfig.Value.Tag + mContainerCount++;
             string image = mDockerConfig.Value.Image + ":" + mDockerConfig.Value.Tag;
             return await mDockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
             {
                 Name = name,
                 Image = image,
-                HostConfig = new HostConfig()
+                Env = new List<string>
                 {
-                    DNS = new[] { "8.8.8.8", "8.8.4.4" }
+                    $"PORT={port}",
+                    $"HOST_IP=host.docker.internal"
+                },
+                HostConfig = new HostConfig
+                {
+                    PortBindings = new Dictionary<string, IList<PortBinding>>
+                    {
+                        { $"{port}/udp", new List<PortBinding> { new PortBinding { HostIP = "0.0.0.0" ,HostPort = $"{port}" } } }
+                    }
+                },
+                ExposedPorts = new Dictionary<string, EmptyStruct>
+                {
+                    { $"{port}/udp", new EmptyStruct() }
+                },
+                Healthcheck = new HealthConfig
+                {
+                    Interval = new TimeSpan(0, 0, 5),
+                    Timeout = new TimeSpan(0, 0, 3)
                 }
             });
         }
@@ -151,12 +172,19 @@ namespace GameServerManager.Servicies
         {
             await mDockerClient.Containers.StartContainerAsync(
                 containerId,
-                new ContainerStartParameters()
+                new ContainerStartParameters
+                {
+
+                }
                 );
         }
 
         public async Task<bool> StopContainer(String containerId)
         {
+
+            var info = await GetContainerInfo(containerId);
+            mPortManager.PushPort(Convert.ToInt32(info.NetworkSettings.Ports.ElementAt(0).Value.ElementAt(0).HostPort));
+
             return await mDockerClient.Containers.StopContainerAsync(
                 containerId,
                 new ContainerStopParameters
@@ -169,9 +197,27 @@ namespace GameServerManager.Servicies
 
         public async Task KillContainer(String containerId)
         {
+
+            var info = await GetContainerInfo(containerId);
+            mPortManager.PushPort(Convert.ToInt32(info.NetworkSettings.Ports.ElementAt(0).Value.ElementAt(0).HostPort));
+
             await mDockerClient.Containers.KillContainerAsync(
                 containerId,
-                new ContainerKillParameters(),
+                new ContainerKillParameters
+                {
+
+                },
+                mCancellationTokenSource.Token);
+        }
+
+        public async Task RemoveContainer(String containerId)
+        {
+            await mDockerClient.Containers.RemoveContainerAsync(
+                containerId,
+                new ContainerRemoveParameters
+                {
+
+                },
                 mCancellationTokenSource.Token);
         }
 
@@ -235,7 +281,33 @@ namespace GameServerManager.Servicies
                 return false;
             }
 
-            return info.State.Health.Status == "healthy";
+            if(info.State == null)
+            {
+                return false;
+            }
+
+            if(info.State.Health == null)
+            {
+                return false;
+            }
+
+            string health = info.State.Health.Status;
+            if(health == "starting")
+            {
+                return true;
+            }
+            else if(health == "healthy")
+            {
+                return true;
+            }
+            else if(health == "unhealthy")
+            {
+                return false;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

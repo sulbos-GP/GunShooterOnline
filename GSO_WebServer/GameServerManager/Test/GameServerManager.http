@@ -1,6 +1,10 @@
-@GameServerManager_HostAddress = http://localhost:5216
+@GameServerManager_HostAddress = http://localhost:7000/api
 
-GET {{GameServerManager_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{GameServerManager_HostAddress}}/Session/FetchMatch
+Content-Type: application/json
+
+{
+
+}
 
 ###

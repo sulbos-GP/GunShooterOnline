@@ -6,9 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
 	
-	<!-- Container Tools build properties -->
-	<DockerfileRunArguments>-p 7000:7000</DockerfileRunArguments>
-	
   </PropertyGroup>
 
   <ItemGroup>
