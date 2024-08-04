@@ -96,7 +96,6 @@ namespace Server.Game
         /// <param name="posY"></param>
         public void PushItemIntoSlot(ItemObject item, int posX, int posY)
         {
-            DeleteItemFromSlot(item);
             // 아이템의 위치를 갱신하고 슬롯에 배치
             item.itemDataInfo.ItemPosX = posX;
             item.itemDataInfo.ItemPosY = posY;
@@ -117,7 +116,6 @@ namespace Server.Game
                     gridSlot[targetX, targetY] = item;
                 }
             }
-            PrintInvenContents();
         }
 
         /// <summary>
@@ -133,7 +131,6 @@ namespace Server.Game
                     gridSlot[deleteItem.itemDataInfo.Width + x, deleteItem.itemDataInfo.Height + y] = null;
                 }
             }
-            PrintInvenContents();
         }
 
         public Vector2Int? FindSpaceForObject(ItemObject insertItem)
@@ -205,7 +202,7 @@ namespace Server.Game
                 content += "\n";
             }
 
-            Console.WriteLine(content);
+            Debug.Print(content);
         }
     }
 }

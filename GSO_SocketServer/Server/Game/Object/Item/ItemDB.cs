@@ -50,7 +50,6 @@ namespace Server.Game
             pistol.ItemSellPrice = 100;
             pistol.Width = 2;
             pistol.Height = 2;
-            pistol.ItemSearchTime = 2;
 
             ItemDataInfo ak47 = new ItemDataInfo();
             ak47.ItemId = 0;
@@ -68,7 +67,7 @@ namespace Server.Game
             ak47.ItemSellPrice = 500;
             ak47.Width = 4;
             ak47.Height = 3;
-            ak47.ItemSearchTime = 4;
+            
 
             ItemDataInfo recoveryKit = new ItemDataInfo();
             recoveryKit.ItemId = 0;
@@ -86,7 +85,6 @@ namespace Server.Game
             recoveryKit.ItemSellPrice = 120;
             recoveryKit.Width = 2;
             recoveryKit.Height = 2;
-            recoveryKit.ItemSearchTime = 1;
 
             ItemDataInfo bandage = new ItemDataInfo();
             bandage.ItemId = 0;
@@ -104,7 +102,6 @@ namespace Server.Game
             bandage.ItemSellPrice = 20;
             bandage.Width = 1;
             bandage.Height = 1;
-            bandage.ItemSearchTime = 1;
 
 
             ItemDataInfo pill = new ItemDataInfo();
@@ -123,7 +120,6 @@ namespace Server.Game
             pill.ItemSellPrice = 40;
             pill.Width = 1;
             pill.Height = 1;
-            pill.ItemSearchTime = 1;
 
             items.Add(pistol.ItemCode, pistol);
             items.Add(ak47.ItemCode, ak47);
