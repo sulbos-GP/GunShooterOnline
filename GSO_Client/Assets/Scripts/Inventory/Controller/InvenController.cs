@@ -922,8 +922,6 @@ public partial class InventoryController : MonoBehaviour
     public void invenUIControl()
     {
         isActive = !isActive;
-        
-
         gameObject.SetActive(isActive);
     }
 }

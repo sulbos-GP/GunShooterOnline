@@ -42,6 +42,8 @@ public class ObjectManager
                 MyPlayer.PosInfo = info.PositionInfo;
                 //MyPlayer.Stat.MergeFrom(info.StatInfo);
                 MyPlayer.SyncPos();
+
+                go.GetComponent<PlayerInventory>().LoadPacketSend();
             }
             else
             {
@@ -63,6 +65,8 @@ public class ObjectManager
                     //}
                 }
             }
+            
+            
         }
         else if (type == GameObjectType.Monster)
         {

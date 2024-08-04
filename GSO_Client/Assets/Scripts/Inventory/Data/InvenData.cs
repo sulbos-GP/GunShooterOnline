@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "InvenData", menuName = "Inventory/InvenData")]
-public class InvenData : ScriptableObject
+
+[System.Serializable]
+public class InvenData
 {
     /// <summary>
     /// InvenDataInfo 해당 스크립트의 변수에 적용

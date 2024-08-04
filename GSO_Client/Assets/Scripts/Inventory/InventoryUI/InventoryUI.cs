@@ -2,7 +2,7 @@ using Doozy.Runtime.Common.Extensions;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class InventoryUI : MonoBehaviour
 {
     /*
      * 서버로부터 받은 인벤토리 데이터를 통해 인벤토리를 생성함
@@ -33,14 +33,14 @@ public class Inventory : MonoBehaviour
         instantItemList = new List<ItemObject>();
     }
 
-    protected virtual void InventorySet()
+    public virtual void InventorySet()
     {
         grids = transform.GetChildByName("Grids");
-
-        if(invenData == null ) { return; }
+        
+        if (invenData == null ) { return; }
 
         //인벤토리 데이터를 기반으로 변수 업데이트
-        SetInvenData();
+        InvenDataSet();
 
         //플로팅 인벤토리는 삭제.
         //if (invenData.isFloatInven)
@@ -52,7 +52,7 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// 인벤토리의 그리드데이터들로 그리드를 생성
     /// </summary>
-    private void SetInvenData()
+    private void InvenDataSet()
     {
         foreach (GridData data in invenData.gridList) 
         {

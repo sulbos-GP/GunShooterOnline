@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class OtherInventory : Inventory
+public class OtherInventoryUI : InventoryUI
 {
     /*other은 매번 UI가 켜질때마다 내용이 달라질수 있다.
      * 받은 패킷이 없으면 해당 인벤토리는 비어있음.
@@ -10,15 +10,6 @@ public class OtherInventory : Inventory
      * 
      * 또한 플레이어 인벤토리와 다르게 위에 어떤 인벤토리인지 이름을 표기하는 부분이 있으니 적용
     */
-    private void Awake()
-    {
-        InventorySet();
-    }
-
-    protected override void InventorySet()
-    {
-        base.InventorySet();
-    }
 
     private void OnEnable()
     {
