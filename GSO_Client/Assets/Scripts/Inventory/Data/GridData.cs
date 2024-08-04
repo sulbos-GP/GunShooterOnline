@@ -8,9 +8,9 @@ using UnityEngine;
 using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
-[System.Serializable]
+
 //[CreateAssetMenu(fileName = "gridData", menuName = "InventoryUI/gridData")]
-public class GridData// : ScriptableObject
+public class GridData : MonoBehaviour
 {
     /// <summary>
     /// GridDataInfo 해당 스크립트의 변수에 적용
@@ -22,7 +22,7 @@ public class GridData// : ScriptableObject
         gridPos = new Vector2(gridDataInfo.GridPosX, gridDataInfo.GridPosY);
         foreach(ItemDataInfo data in gridDataInfo.ItemList)
         {
-            ItemData newItemData = new ItemData();
+            ItemData newItemData = null;
             newItemData.SetItemData(data);
             itemList.Add(newItemData);
         }

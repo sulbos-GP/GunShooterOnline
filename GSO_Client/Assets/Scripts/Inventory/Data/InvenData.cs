@@ -3,9 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[System.Serializable]
-public class InvenData
+public class InvenData : MonoBehaviour
 {
     /// <summary>
     /// InvenDataInfo 해당 스크립트의 변수에 적용
@@ -28,7 +26,7 @@ public class InvenData
     /// </summary>
     public InvenDataInfo GetInvenData()
     {
-        InvenDataInfo invenDataInfo = new InvenDataInfo();
+        InvenDataInfo invenDataInfo = null;
         invenDataInfo.InventoryId = inventoryId;
         invenDataInfo.LimitWeight = limitWeight;
 

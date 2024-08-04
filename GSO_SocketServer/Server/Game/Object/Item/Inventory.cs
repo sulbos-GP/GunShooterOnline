@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
+using Pipelines.Sockets.Unofficial.Buffers;
 using Server.Game;
 using System;
 using System.Collections.Generic;
@@ -30,8 +31,7 @@ namespace Server.Game
             newGrid.ownerInventory = this;
             newGrid.SetGrid();
             instantGrid.Add(newGrid);
-        
-            Console.WriteLine(ownerId +": "+ newGrid.itemObjectList.Count);
+            Console.WriteLine($"ownerId : {ownerId} \n itemAmount : {newGrid.itemObjectList.Count} \n");
         }
 
         private GridDataInfo MakeNewGridData()
@@ -46,6 +46,9 @@ namespace Server.Game
                 GridPosY = 0, //지금은 1개뿐이라 0,0 나중에 인벤토리가 어떻게 생겼는지에 대한 데이터를 추가해야할듯
                 RandomItemAmount = 3 //임시. 소유자의 조건에 따라 달라짐
             };
+
+            Console.WriteLine($"GridId : {newData.GridId} \nGridSize : {newData.GridSizeX},{newData.GridSizeY}\n" +
+                $"gridPos ={newData.GridPosX},{newData.GridPosY}\n");
 
             CreateRandomItemDataIntoGridData(newData);
 
@@ -100,6 +103,8 @@ namespace Server.Game
                 //아이템의 위치, 회전을 제외한 아이디+데이터베이스 데이터를 그리드에 넣어줌
                 //그리드에서 이 아이템 리스트를 기반으로 그리드 슬롯에 넣고 아이템 데이터 업데이트예정
                 gridData.ItemList.Add(newItemData);
+                Console.WriteLine($"item  : {newItemData.ItemName} \nItemId : {newItemData.ItemId} \nItemCode : {newItemData.ItemCode}\n" +
+                $"ItemRotate ={newItemData.ItemRotate}\n");
 
                 restSize -= canInsertlist[random].Width * canInsertlist[random].Height;
             }
