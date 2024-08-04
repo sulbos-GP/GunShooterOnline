@@ -99,12 +99,17 @@ public class Map
         //렌덤아인템
         RootableObject rootableObject0 = ObjectManager.Instance.Add<RootableObject>();
         rootableObject0.CellPos = new Vector2(-4, -4);
+        rootableObject0.Init();
+
         RootableObject rootableObject1 = ObjectManager.Instance.Add<RootableObject>();
         rootableObject1.CellPos = new Vector2(-2, -4);
+        rootableObject1.Init();
         RootableObject rootableObject2 = ObjectManager.Instance.Add<RootableObject>();
         rootableObject2.CellPos = new Vector2(4, 7);
+        rootableObject2.Init();
         RootableObject rootableObject3 = ObjectManager.Instance.Add<RootableObject>();
         rootableObject3.CellPos = new Vector2(2, 7);
+        rootableObject3.Init();
 
         _rootableObjects.Add(rootableObject0);
         _rootableObjects.Add(rootableObject1);

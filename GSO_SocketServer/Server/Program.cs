@@ -51,7 +51,6 @@ namespace Server
             mNetworkService.SetChannel(true, room,0);
 
 
-            ItemDB itemDB = new ItemDB();
 
             Console.WriteLine("q: Quit Server.");
             while (true)
