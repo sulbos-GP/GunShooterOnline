@@ -30,6 +30,11 @@ namespace GameServerManager.Servicies.Interfaces
         public Task KillContainer(String containerId);
 
         /// <summary>
+        /// 도커 컨테이너 제거
+        /// </summary>
+        public Task RemoveContainer(String containerId);
+
+        /// <summary>
         /// 도커 컨테이너 재시작
         /// </summary>
         public Task RestartContainer(String containerId);

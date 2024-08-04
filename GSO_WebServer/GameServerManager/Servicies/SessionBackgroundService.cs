@@ -30,6 +30,10 @@ namespace GameServerManager.Servicies
             Stopwatch stopwatch = new Stopwatch();
             mTimer = new PeriodicTimer(TimeSpan.FromSeconds(mPeriodSecond));
 
+            {
+                
+            }
+
             while (await mTimer.WaitForNextTickAsync(stoppingToken))
             {
                 stopwatch.Restart();
@@ -43,7 +47,7 @@ namespace GameServerManager.Servicies
 
                 //현재 Allocate 상태만 따로 빼기
                 var allocateMatchs = matchStatus
-                    .Where(status => status.Value.state == Models.EMatchState.Allocated)
+                    .Where(status => status.Value.state == Models.EMatchState.Ready)
                     .ToDictionary(status => status.Key, status => status.Value);
 
                 if (allocateMatchs == null)
@@ -85,7 +89,7 @@ namespace GameServerManager.Servicies
                     }
 
                     //MAX를 넘기면 재시작 해버린다
-                    await mDockerService.RestartContainer(match.Key);
+                    //await mDockerService.RestartContainer(match.Key);
 
                 }
 

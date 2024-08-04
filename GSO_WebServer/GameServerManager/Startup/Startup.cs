@@ -59,12 +59,6 @@ namespace GameServerManager.Startup
                 app.UseDeveloperExceptionPage();
             }
 
-            ISessionService session = app.ApplicationServices.GetRequiredService<ISessionService>();
-            if(WebErrorCode.None != await session.InitMatch(1))
-            {
-                return;
-            }
-
             // Add middleware to the container.
             //app.UseMiddleware<GsoWebServer.Middleware.VersionCheck>();
             //app.UseMiddleware<GsoWebServer.Middleware.CheckUserAuth>();
@@ -79,6 +73,13 @@ namespace GameServerManager.Startup
             {
                 endpoints.MapControllers();
             });
+
+            //초기화
+            ISessionService session = app.ApplicationServices.GetRequiredService<ISessionService>();
+            if (WebErrorCode.None != await session.InitMatch(1))
+            {
+                return;
+            }
 
         }
     }

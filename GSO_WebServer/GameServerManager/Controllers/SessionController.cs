@@ -52,10 +52,13 @@ namespace GameServerManager.Controllers
         }
 
         [HttpPost]
-        [Route("RequestReadyMatch")]
-        public async Task<RequestReadyMatchhRes> RequestReadyMatch([FromBody] RequestReadyMatchhReq request)
+        [Route("RequestReady")]
+        public async Task<RequestReadyMatchRes> RequestReady([FromBody] RequestReadyMatchReq request)
         {
-            var response = new RequestReadyMatchhRes();
+
+            Console.WriteLine($"[RequestReady] : ContainerId : {request.container_id}");
+
+            var response = new RequestReadyMatchRes();
             try
             {
 
@@ -78,9 +81,12 @@ namespace GameServerManager.Controllers
         }
 
         [HttpPost]
-        [Route("ShutdownMatch")]
-        public async Task<ShutdownMatchRes> ShutdownMatch([FromBody] ShutdownMatchReq request)
+        [Route("Shutdown")]
+        public async Task<ShutdownMatchRes> Shutdown([FromBody] ShutdownMatchReq request)
         {
+
+            Console.WriteLine($"[Shutdown] : ContainerId : {request.container_id}");
+
             var response = new ShutdownMatchRes();
             try
             {

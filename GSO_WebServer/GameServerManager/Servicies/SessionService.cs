@@ -74,7 +74,7 @@ namespace GameServerManager.Servicies
                         continue;
                     }
 
-                    Console.WriteLine($"\tNew container id : {match.ID}");
+                    Console.WriteLine($"\tNew container id : {match.ID}\n");
                 }
                 Console.WriteLine("}");
 
@@ -149,8 +149,8 @@ namespace GameServerManager.Servicies
                 }
 
                 status.host_ip = newContainerInfo.NetworkSettings.IPAddress;
-                //status.host_port = Convert.ToInt32(newContainerInfo.NetworkSettings.Ports.ElementAt(0).Key.Substring(newContainerInfo.NetworkSettings.Ports.ElementAt(0).Key.IndexOf("/") + 1));
-                //status.container_port = Convert.ToInt32(newContainerInfo.NetworkSettings.Ports.ElementAt(0).Value.ElementAt(0).HostPort);
+                status.host_port = Convert.ToInt32(newContainerInfo.NetworkSettings.Ports.ElementAt(0).Value.ElementAt(0).HostPort);
+                status.container_port = Convert.ToInt32(newContainerInfo.NetworkSettings.Ports.ElementAt(0).Value.ElementAt(0).HostPort);
                 status.state = EMatchState.Scheduled;
                 await mSessionMemory.UpdateMatchStatus(newContainerInfo.ID, status);
 
@@ -209,10 +209,16 @@ namespace GameServerManager.Servicies
                 }
                 matchStatus.state = EMatchState.Shutdown;
 
+                await mSessionMemory.UpdateMatchStatus(containerId, matchStatus);
+
                 if(false == await mDockerService.StopContainer(containerId))
                 {
                     return WebErrorCode.TEMP_ERROR;
                 }
+
+                await mDockerService.RemoveContainer(containerId);
+
+                await mSessionMemory.RemoveMatchStatus(containerId);
 
                 return WebErrorCode.None;
             }
