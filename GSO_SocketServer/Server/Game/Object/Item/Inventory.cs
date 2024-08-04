@@ -103,8 +103,7 @@ namespace Server.Game
                 //아이템의 위치, 회전을 제외한 아이디+데이터베이스 데이터를 그리드에 넣어줌
                 //그리드에서 이 아이템 리스트를 기반으로 그리드 슬롯에 넣고 아이템 데이터 업데이트예정
                 gridData.ItemList.Add(newItemData);
-                Console.WriteLine($"item  : {newItemData.ItemName} \nItemId : {newItemData.ItemId} \nItemCode : {newItemData.ItemCode}\n" +
-                $"ItemRotate ={newItemData.ItemRotate}\n");
+                
 
                 restSize -= canInsertlist[random].Width * canInsertlist[random].Height;
             }

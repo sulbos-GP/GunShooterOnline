@@ -50,6 +50,8 @@ namespace Server.Game
                 {
                     //가장 큰것부터 넣음
                     PushInstantObject(item);
+                    Console.WriteLine($"item  : {item.ItemName} \nItemId : {item.ItemId} \nItemCode : {item.ItemCode}\nItemConsume? : {item.IsItemConsumeable}\n" +
+                    $"ItemAmount ={item.ItemAmount}\nitemPos = {item.ItemPosX},{item.ItemPosY}\n");
                 }
             }
         }
@@ -94,24 +96,24 @@ namespace Server.Game
         /// <param name="posY"></param>
         public void PushItemIntoSlot(ItemObject item, int posX, int posY)
         {
+            // 아이템의 위치를 갱신하고 슬롯에 배치
+            item.itemDataInfo.ItemPosX = posX;
+            item.itemDataInfo.ItemPosY = posY;
 
             for (int x = 0; x < item.Width; x++)
             {
                 for (int y = 0; y < item.Height; y++)
                 {
-                    if (gridSlot[x,y] == null)
-                    {
-                        gridSlot[item.itemDataInfo.ItemPosX + x, item.itemDataInfo.ItemPosX + y] = item;
-                        item.itemDataInfo.ItemPosX = posX;
-                        item.itemDataInfo.ItemPosY = posY;
-                    }
-                    else
-                    {
-                        item.MergeItem(gridSlot[x, y]);
-                    }
 
-                    //아이템의 위치에 아이템의 크기 만큼 슬롯에 아이템 코드로 채움 -> 어떤 슬롯에 들어있는 아이템을 검색하기 위해 아이디로 변경
-                    gridSlot[item.itemDataInfo.ItemPosX + x, item.itemDataInfo.ItemPosY + y] = item;
+                    int targetX = posX + x;
+                    int targetY = posY + y;
+                    if (gridSlot[targetX, targetY] != null)
+                    {
+                        // 현재 슬롯에 다른 아이템이 있는 경우 병합 시도
+                        item.MergeItem(gridSlot[targetX, targetY]);
+                        return;
+                    }
+                    gridSlot[targetX, targetY] = item;
                 }
             }
         }
@@ -149,9 +151,7 @@ namespace Server.Game
                 {
                     if (ItemPushCheck(insertItem.itemDataInfo, x,y) == true)
                     {
-
                         //해당 위치를 반환
-
                         return new Vector2Int(x, y);
                     }
                 }
@@ -168,6 +168,10 @@ namespace Server.Game
                     //아이템이 해당 자리에 들어갈수 있는지 체크. 비어있지 않으면 배치 불가니 즉시 false 반환
                     if (gridSlot[posX + x, posY + y] != null)
                     {
+                        if (gridSlot[posX + x, posY + y].itemDataInfo.IsItemConsumeable && gridSlot[posX + x, posY + y].itemDataInfo.ItemCode == item.ItemCode)
+                        {
+                            return true;
+                        }
                         return false;
                     }
                 }
