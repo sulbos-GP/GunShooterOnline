@@ -139,27 +139,26 @@ namespace Server.Game
             {
                 return;
             }
-            //TODO : instantGrid[0].ItemPushCheck
+            
+            target.ownerGrid.DeleteItemFromSlot(target);
+            target.ownerGrid.PushItemIntoSlot(target,posX,posY);
 
+            target.ownerGrid.PrintInvenContents();
+        }
 
-            /* 지승현 -> 박성훈 
-            instantGrid[0].ItemPushCheck(target, posX, posY);
+        public void DeleteItem(int id)
+        {
+            //아이템 가져오기
+            ItemObject target = ObjectManager.Instance.Find<ItemObject>(id);
 
-            if (target != null)
+            if (target == null)
             {
-                if (target.itemDataInfo.ItemCode == instantGrid[0].gridSlot[posX, posY])
-                {
-                    Console.WriteLine("Merge");
+                return;
+            }
 
+            target.ownerGrid.DeleteItemFromSlot(target);
 
-                    instantGrid[0].
-                }
-            }*/
-
-            target.OwnerGrid.DeleteItemFromSlot(target);
-            target.OwnerGrid.PushItemIntoSlot(target,posX,posY);
-
-            target.OwnerGrid.PrintInvenContents();
+            target.ownerGrid.PrintInvenContents();
         }
 
         public ItemDataInfo DuplicateItemData(ItemDataInfo targetData)

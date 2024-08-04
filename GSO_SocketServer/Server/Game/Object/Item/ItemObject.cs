@@ -12,7 +12,7 @@ namespace Server.Game
         public const int maxItemMergeAmount = 64;
         /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
-        public Grid OwnerGrid;
+        public Grid ownerGrid;
         public ItemDataInfo itemDataInfo;
         /*소유한 데이터
         int32 itemId = 1;        // 해당 아이템의 고유한 아이디
@@ -107,7 +107,7 @@ namespace Server.Game
                 itemObj.itemDataInfo.ItemAmount += indexAmount;
                 itemDataInfo.ItemAmount -= indexAmount;
 
-                OwnerGrid.PushItemIntoSlot(this, itemDataInfo.ItemPosX, itemDataInfo.ItemPosY);
+                ownerGrid.PushItemIntoSlot(this, itemDataInfo.ItemPosX, itemDataInfo.ItemPosY);
                 return;
             }
             else
@@ -121,8 +121,8 @@ namespace Server.Game
         public void DestroyItem()
         {
             //해당 아이템 오브젝트 삭제
-            OwnerGrid.itemObjectList.Remove(this);
-            OwnerGrid.gridData.ItemList.Remove(itemDataInfo);
+            ownerGrid.itemObjectList.Remove(this);
+            ownerGrid.gridData.ItemList.Remove(itemDataInfo);
             ObjectManager.Instance.Remove(Id);
         }
 

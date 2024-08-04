@@ -44,7 +44,6 @@ public partial class InventoryController : MonoBehaviour
     public List<ItemData> itemDB;
     //우클릭 아이템 생성 예시
     [SerializeField] private GameObject itemPref; //생성할 아이템의 프리펩(임시)
-    public int playerId = 1; //임시부여. 플레이어의 id
 
     [Header("디버그용")]
     [SerializeField] private Vector2 mousePosInput; //마우스의 월드 위치
@@ -270,7 +269,7 @@ public partial class InventoryController : MonoBehaviour
 
     private void RightClickEvent()
     {
-        //아이템을 들고있다면 회전, 없다면 임시로 새로운 아이템 생성
+        /*//아이템을 들고있다면 회전, 없다면 임시로 새로운 아이템 생성
         if (!isItemSelected)
         {
             CreateRandomItem();
@@ -279,7 +278,8 @@ public partial class InventoryController : MonoBehaviour
         {
             //컴퓨터로 조작시 사용
             RotateItemRight();
-        }
+        }*/
+        RotateItemRight();
     }
     #endregion
 
@@ -501,7 +501,7 @@ public partial class InventoryController : MonoBehaviour
 
             C_DeleteItem packet = new C_DeleteItem();
             packet.ItemId = selectedItem.itemData.itemId;
-            packet.PlayerId = playerId;
+            packet.PlayerId = Managers.Object.MyPlayer.Id;
             Managers.Network.Send(packet);
             Debug.Log("C_DeleteItem");
 
@@ -541,30 +541,31 @@ public partial class InventoryController : MonoBehaviour
                         selectedItem.MergeItem(placeOverlapItem, selectedItem.itemData.itemAmount);
 
                         C_MoveItem packet = new C_MoveItem();
-                        //packet.PlayerId = Managers.Object.MyPlayer.Id;
+                        packet.PlayerId = Managers.Object.MyPlayer.Id;
                         packet.ItemId = item.itemData.itemId;
                         packet.ItemPosX = pos.x;
                         packet.ItemPosY = pos.y;
                         packet.ItemRotate = item.itemData.itemRotate;
-                        //packet.gridId = item.curItemGrid.gridId;
+                        packet.GridId = item.curItemGrid.gridData.gridId;
                         packet.LastItemPosX = item.backUpItemPos.x;
                         packet.LastItemPosY = item.backUpItemPos.y;
                         packet.LastItemRotate = item.backUpItemRotate;
-                        //packet.LastGridId = item.backUpItemGrid.gridId;
+                        packet.LastGridId = item.backUpItemGrid.gridData.gridId;
                         Managers.Network.Send(packet);
 
-                        /*
-                   Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
-                           $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
-                           $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
-                           $"packet.ItemRotate = {item.curItemRotate}\r\n" +
-                           $"packet.gridId = {item.curItemGrid.gridId}\r\n" +
-                           $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
-                           $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
-                           $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
-                           $"packet.LastGridId = {item.backUpItemGrid.gridId}");*/
+                        
+                   Debug.Log($"packet.ItemId = {packet.ItemId}\r\n" +
+                           $"packet.ItemPosX = {packet.ItemPosX}\r\n" +
+                           $"packet.ItemPosY = {packet.ItemPosY}\r\n" +
+                           $"packet.ItemRotate = {packet.ItemRotate}\r\n" +
+                           $"packet.GridId = {packet.GridId}\r\n" +
+                           $"packet.LastItemPosX = {packet.LastItemPosX}\r\n" +
+                           $"packet.LastItemPosY = {packet.LastItemPosY}\r\n" +
+                           $"packet.LastItemRotate = {packet.LastItemRotate}\r\n" +
+                           $"packet.LastGridId = {packet.LastGridId}");
 
                         BackUpItemArray();
+
                         Destroy(selectedItem.gameObject);
                     }
                     else
@@ -573,30 +574,30 @@ public partial class InventoryController : MonoBehaviour
                         selectedItem.MergeItem(placeOverlapItem, needAmount);
 
                         C_MoveItem packet = new C_MoveItem();
-                        //packet.PlayerId = Managers.Object.MyPlayer.Id;
+                        packet.PlayerId = Managers.Object.MyPlayer.Id;
                         packet.ItemId = item.itemData.itemId;
                         packet.ItemPosX = pos.x;
                         packet.ItemPosY = pos.y;
                         packet.ItemRotate = item.itemData.itemRotate;
-                        //packet.gridId = item.curItemGrid.gridId;
+                        packet.GridId = item.curItemGrid.gridData.gridId;
                         packet.LastItemPosX = item.backUpItemPos.x;
                         packet.LastItemPosY = item.backUpItemPos.y;
                         packet.LastItemRotate = item.backUpItemRotate;
-                        //packet.LastGridId = item.backUpItemGrid.gridId;
+                        packet.LastGridId = item.backUpItemGrid.gridData.gridId;
                         Managers.Network.Send(packet);
 
-                        /*
-                        Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
-                           $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
-                           $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
-                           $"packet.ItemRotate = {item.curItemRotate}\r\n" +
-                           $"packet.gridId = {item.curItemGrid.gridId}\r\n" +
-                           $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
-                           $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
-                           $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
-                           $"packet.LastGridId = {item.backUpItemGrid.gridId}");*/
-                        
-                        
+
+                        Debug.Log($"packet.ItemId = {packet.ItemId}\r\n" +
+                                $"packet.ItemPosX = {packet.ItemPosX}\r\n" +
+                                $"packet.ItemPosY = {packet.ItemPosY}\r\n" +
+                                $"packet.ItemRotate = {packet.ItemRotate}\r\n" +
+                                $"packet.GridId = {packet.GridId}\r\n" +
+                                $"packet.LastItemPosX = {packet.LastItemPosX}\r\n" +
+                                $"packet.LastItemPosY = {packet.LastItemPosY}\r\n" +
+                                $"packet.LastItemRotate = {packet.LastItemRotate}\r\n" +
+                                $"packet.LastGridId = {packet.LastGridId}");
+
+
                         UndoItemArray();
                         UndoItem();
                     }
@@ -616,27 +617,28 @@ public partial class InventoryController : MonoBehaviour
             else
             {
                 C_MoveItem packet = new C_MoveItem();
-                //packet.PlayerId = Managers.Object.MyPlayer.Id;
+                packet.PlayerId = Managers.Object.MyPlayer.Id;
                 packet.ItemId = item.itemData.itemId;
                 packet.ItemPosX = pos.x;
                 packet.ItemPosY = pos.y;
                 packet.ItemRotate = item.itemData.itemRotate;
-                //packet.gridId = item.curItemGrid.gridId;
+                packet.GridId = item.curItemGrid.gridData.gridId;
                 packet.LastItemPosX = item.backUpItemPos.x;
                 packet.LastItemPosY = item.backUpItemPos.y;
                 packet.LastItemRotate = item.backUpItemRotate;
-                //packet.LastGridId = item.backUpItemGrid.gridId;
+                packet.LastGridId = item.backUpItemGrid.gridData.gridId;
                 Managers.Network.Send(packet);
-                /*
-                Debug.Log($"packet.ItemId = {item.itemId}\r\n" +
-                        $"packet.ItemPosX = {item.curItemPos.x}\r\n" +
-                        $"packet.ItemPosY = {item.curItemPos.y}\r\n" +
-                        $"packet.ItemRotate = {item.curItemRotate}\r\n" +
-                        $"packet.gridId = {item.curItemGrid.gridId}\r\n" +
-                        $"packet.LastItemPosX = {item.backUpItemPos.x}\r\n" +
-                        $"packet.LastItemPosY = {item.backUpItemPos.y}\r\n" +
-                        $"packet.LastItemRotate = {item.backUpItemRotate}\r\n" +
-                        $"packet.LastGridId = {item.backUpItemGrid.gridId}");*/
+
+
+                Debug.Log($"packet.ItemId = {packet.ItemId}\r\n" +
+                        $"packet.ItemPosX = {packet.ItemPosX}\r\n" +
+                        $"packet.ItemPosY = {packet.ItemPosY}\r\n" +
+                        $"packet.ItemRotate = {packet.ItemRotate}\r\n" +
+                        $"packet.GridId = {packet.GridId}\r\n" +
+                        $"packet.LastItemPosX = {packet.LastItemPosX}\r\n" +
+                        $"packet.LastItemPosY = {packet.LastItemPosY}\r\n" +
+                        $"packet.LastItemRotate = {packet.LastItemRotate}\r\n" +
+                        $"packet.LastGridId = {packet.LastGridId}");
 
                 BackUpItem();
                 BackUpItemArray();
