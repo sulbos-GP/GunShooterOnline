@@ -8,9 +8,9 @@ using UnityEngine;
 using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
-
+[System.Serializable]
 //[CreateAssetMenu(fileName = "gridData", menuName = "InventoryUI/gridData")]
-public class GridData : MonoBehaviour
+public class GridData// : MonoBehaviour
 {
     /// <summary>
     /// GridDataInfo 해당 스크립트의 변수에 적용
@@ -20,11 +20,14 @@ public class GridData : MonoBehaviour
         gridId = gridDataInfo.GridId;
         gridSize = new Vector2Int(gridDataInfo.GridSizeX, gridDataInfo.GridSizeY);
         gridPos = new Vector2(gridDataInfo.GridPosX, gridDataInfo.GridPosY);
-        foreach(ItemDataInfo data in gridDataInfo.ItemList)
+
+        itemList = new List<ItemData>();
+        foreach (ItemDataInfo data in gridDataInfo.ItemList)
         {
-            ItemData newItemData = null;
+            ItemData newItemData = new ItemData();
             newItemData.SetItemData(data);
             itemList.Add(newItemData);
+            
         }
         createRandomItem = gridDataInfo.CreateRandomItem;
         randomItemAmount = gridDataInfo.RandomItemAmount;
@@ -42,6 +45,7 @@ public class GridData : MonoBehaviour
         gridDataInfo.GridSizeY = gridSize.y;
         gridDataInfo.GridPosX = gridPos.X;
         gridDataInfo.GridPosY = gridPos.Y;
+        
         foreach (ItemData data in itemList)
         {
             ItemDataInfo newItemDataInfo = data.GetItemData();

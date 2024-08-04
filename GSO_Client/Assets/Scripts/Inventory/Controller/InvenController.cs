@@ -857,7 +857,7 @@ public partial class InventoryController : MonoBehaviour
         randomData.width = itemDB[randomId].width;
         randomData.height = itemDB[randomId].height;
         randomData.isItemConsumeable = itemDB[randomId].isItemConsumeable;
-        randomData.itemSprite = itemDB[randomId].itemSprite;
+        //randomData.itemSprite = itemDB[randomId].itemSprite;
 
 
         invenItem.itemData = randomData;

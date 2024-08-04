@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class InvenData : MonoBehaviour
+[System.Serializable]
+public class InvenData// : MonoBehaviour
 {
     /// <summary>
     /// InvenDataInfo 해당 스크립트의 변수에 적용
@@ -13,9 +14,10 @@ public class InvenData : MonoBehaviour
         inventoryId = invenDataInfo.InventoryId;
         limitWeight = invenDataInfo.LimitWeight;
 
+        gridList = new List<GridData>();
         foreach (GridDataInfo data in invenDataInfo.GridData)
         {
-            GridData newGridData = null;
+            GridData newGridData = new GridData();
             newGridData.SetGridData(data);
             gridList.Add(newGridData);
         }
@@ -29,7 +31,7 @@ public class InvenData : MonoBehaviour
         InvenDataInfo invenDataInfo = null;
         invenDataInfo.InventoryId = inventoryId;
         invenDataInfo.LimitWeight = limitWeight;
-
+        
         foreach (GridData data in gridList)
         {
             GridDataInfo newGridData = data.GetGridData();
