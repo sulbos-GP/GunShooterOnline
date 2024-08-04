@@ -16,7 +16,7 @@ public class InventoryGrid : MonoBehaviour
 
     //그리드 설정
     public GridData gridData; //인벤토리에서 할당된 그리드의 데이터
-    public Inventory ownInven; //해당 그리드를 포함하는 인벤토리
+    public InventoryUI ownInven; //해당 그리드를 포함하는 인벤토리
     public ItemObject[,] ItemSlot; //컨트롤러에서 아이템을 저장할 슬롯
     
     //gridWeight 옵저버. 호출시 gridWeight 업데이트 및 인벤토리의 무게도 업데이트
@@ -92,7 +92,7 @@ public class InventoryGrid : MonoBehaviour
     private void GridRectPosSet()
     {
         //그리드가 벽에 딱 붙지 않게 약간의 오프셋을 둠
-        Vector2 offsetGridPosition = new Vector2(gridData.gridPos.X + Inventory.offsetX, gridData.gridPos.Y - Inventory.offsetY);
+        Vector2 offsetGridPosition = new Vector2(gridData.gridPos.X + InventoryUI.offsetX, gridData.gridPos.Y - InventoryUI.offsetY);
         transform.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector2(offsetGridPosition.X, offsetGridPosition.Y);
     
         //그리드의 배치가 완료되면 그리드의 아이템슬롯을 설정하고 아이템 프리팹 또한 배치

@@ -8,8 +8,9 @@ using UnityEngine;
 using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
-[CreateAssetMenu(fileName = "gridData", menuName = "Inventory/gridData")]
-public class GridData : ScriptableObject
+[System.Serializable]
+//[CreateAssetMenu(fileName = "gridData", menuName = "InventoryUI/gridData")]
+public class GridData// : ScriptableObject
 {
     /// <summary>
     /// GridDataInfo 해당 스크립트의 변수에 적용

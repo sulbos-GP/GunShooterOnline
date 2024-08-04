@@ -338,6 +338,7 @@ GameObject:
   - component: {fileID: 112652218}
   - component: {fileID: 112652217}
   - component: {fileID: 112652216}
+  - component: {fileID: 112652221}
   m_Layer: 0
   m_Name: Box (2)
   m_TagString: Untagged
@@ -360,7 +361,6 @@ MonoBehaviour:
   objectId: 0
   interactType: 0
   interactRange: 0
-  invenData: {fileID: 0}
 --- !u!58 &112652217
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -490,6 +490,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &112652221
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 112652215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0f7619911dc7be409ca8a9473d8f31e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherInventoryData: {fileID: 0}
 --- !u!1 &188158323
 GameObject:
   m_ObjectHideFlags: 0
@@ -830,14 +843,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: UnitModel
       objectReference: {fileID: 0}
-    - target: {fileID: 191436082380664689, guid: b2a9acc7b9c482642897e55e32d8ddb0, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2151735185809450313, guid: b2a9acc7b9c482642897e55e32d8ddb0, type: 3}
-      propertyPath: testBox
-      value: 
-      objectReference: {fileID: 743735116645617635}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1505,6 +1510,7 @@ GameObject:
   - component: {fileID: 1209415308}
   - component: {fileID: 1209415307}
   - component: {fileID: 1209415306}
+  - component: {fileID: 1209415311}
   m_Layer: 0
   m_Name: Box (1)
   m_TagString: Untagged
@@ -1527,7 +1533,6 @@ MonoBehaviour:
   objectId: 0
   interactType: 0
   interactRange: 0
-  invenData: {fileID: 0}
 --- !u!58 &1209415307
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1657,6 +1662,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1209415311
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1209415305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0f7619911dc7be409ca8a9473d8f31e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherInventoryData: {fileID: 0}
 --- !u!114 &1222683154 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3034584280118069898, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
@@ -1712,6 +1730,7 @@ GameObject:
   - component: {fileID: 1627093410}
   - component: {fileID: 1627093409}
   - component: {fileID: 1627093408}
+  - component: {fileID: 1627093413}
   m_Layer: 0
   m_Name: Box (3)
   m_TagString: Untagged
@@ -1734,7 +1753,6 @@ MonoBehaviour:
   objectId: 0
   interactType: 0
   interactRange: 0
-  invenData: {fileID: 0}
 --- !u!58 &1627093409
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -1864,6 +1882,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1627093413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1627093407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0f7619911dc7be409ca8a9473d8f31e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherInventoryData: {fileID: 0}
 --- !u!1 &1790032444
 GameObject:
   m_ObjectHideFlags: 0
@@ -2977,6 +3008,7 @@ GameObject:
   - component: {fileID: 250150504004134419}
   - component: {fileID: 282133678866782491}
   - component: {fileID: 2951309256666520460}
+  - component: {fileID: 6614711651256143585}
   m_Layer: 0
   m_Name: Box
   m_TagString: Untagged
@@ -3349,7 +3381,6 @@ MonoBehaviour:
   objectId: 0
   interactType: 0
   interactRange: 0
-  invenData: {fileID: 0}
 --- !u!224 &3385603023062608331 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6208164503028263793, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
@@ -3557,6 +3588,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &6614711651256143585
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 743735116645617635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0f7619911dc7be409ca8a9473d8f31e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  otherInventoryData: {fileID: 0}
 --- !u!114 &7301232076896106591
 MonoBehaviour:
   m_ObjectHideFlags: 0

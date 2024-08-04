@@ -122,20 +122,38 @@ internal class PacketHandler
         }
         Debug.Log("S_LoadInventory");
 
+        if(packet.InvenData == null)
+        {
+            Debug.Log("인벤데이터가 비어있음");
+
+        }
+
         //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
         InvenData newInvenData = new InvenData();
         newInvenData.SetInvenData(packet.InvenData);
+        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색
 
         //플레이어의 인벤토리id와 패킷내의 인벤토리id 비교 -> 같으면 플레이어의 인벤토리에 반영 다르면 아더 인벤토리에 반영
         if (Managers.Object.MyPlayer.Id == packet.InventoryId)
         {
             //플레이어 인벤토리에 패킷의 invenData 적용
-            Managers.Object.MyPlayer.myPlayerInven.invenData = newInvenData;
+            if(invenObj.GetComponent<PlayerInventory>() == null)
+            {
+                Debug.Log("적용할 오브젝트에 해당 스크립트가 없음(Player)");
+            }
+            
+            invenObj.GetComponent<PlayerInventory>().InputInvenData = newInvenData;
         }
         else
         {
             //아더 인벤토리에 패킷의 invenData 적용
-            Managers.Object.MyPlayer.myOtherInven.invenData = newInvenData;
+            if (invenObj.GetComponent<OtherInventory>() == null)
+            {
+                Debug.Log("적용할 오브젝트에 해당 스크립트가 없음(Other)");
+            }
+            
+            invenObj.GetComponent<OtherInventory>().InputInvenData = newInvenData;
+
         }
     }
 

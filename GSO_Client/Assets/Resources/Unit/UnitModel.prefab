@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 18236110065076002}
   - component: {fileID: 8942202889006704819}
   - component: {fileID: 5961796555876116867}
+  - component: {fileID: 4976538378545139341}
   - component: {fileID: 4951753452970910547}
   - component: {fileID: 2151735185809450313}
   - component: {fileID: 5589048240770995353}
@@ -22,7 +23,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &18236110065076002
 Transform:
   m_ObjectHideFlags: 0
@@ -106,6 +107,19 @@ MonoBehaviour:
   aimFov: {fileID: 0}
   basicFov: {fileID: 0}
   playerGun: {fileID: 0}
+--- !u!114 &4976538378545139341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191436082380664689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c478664e2a2e9b4dbab28f0e5927627, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerInvenData: {fileID: 0}
 --- !u!114 &4951753452970910547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -148,6 +162,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff4ab98d084aec64293c6f8e56616e6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  distance: 0
   aimFov: {fileID: 0}
   basicFov: {fileID: 0}
 --- !u!114 &5589048240770995353
@@ -166,7 +181,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: f272da6bfc5ce3a4da45f529413ad926, type: 2}
   - {fileID: 11400000, guid: 34d6c693aec7dd54aa9c6f39c1c3bc4b, type: 2}
   CurGun: 0
-  unitStat: {fileID: 0}
 --- !u!50 &3562629690575237209
 Rigidbody2D:
   serializedVersion: 4

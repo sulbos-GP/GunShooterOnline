@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class PlayerInventory : Inventory
+public class PlayerInventoryUI : InventoryUI
 {
     public TextMeshProUGUI weightText;
     public TextMeshProUGUI moneyText; //돈에 대한 정보가 나올시 추가
+                                      
+    public int bagLv = 0;
 
     protected override float InvenWeight
     {
@@ -25,32 +27,16 @@ public class PlayerInventory : Inventory
         weightText.text = $"WEIGHT \n {InvenWeight} / {invenData.limitWeight}";
     }
 
-    //슬롯이 나오면 그때 개발
-    public int bagLv = 0;
-
     private void Awake()
-    {
-        Init();
-    }
-
-
-    public void Init()
     {
         InventorySet();
     }
 
-    protected override void InventorySet()
+    public override void InventorySet()
     {
+        Debug.Log(Managers.Object.MyPlayer.gameObject.name);
+        invenData = Managers.Object.MyPlayer.GetComponent<PlayerInventory>().InputInvenData;
         base.InventorySet();
-        //임시 생성
-
-        C_LoadInventory packet = new C_LoadInventory();
-        packet.PlayerId = Managers.Object.MyPlayer.Id; //플레이어가 없는 상태라 플레이어 아이디를 못불러옴
-        packet.InventoryId = Managers.Object.MyPlayer.Id; //플레이어가 없는 상태라 플레이어 아이디를 못불러옴
-        //packet.InventoryId = 1; //임시로 1 지정 //Managers.Object.MyPlayer.Id;
-        //packet.PlayerId = 1;//Managers.Object.MyPlayer.Id;
-        Managers.Network.Send(packet);
-        Debug.Log("C_LoadInventory전송");
     }
 
     public void ChangeInventory()
