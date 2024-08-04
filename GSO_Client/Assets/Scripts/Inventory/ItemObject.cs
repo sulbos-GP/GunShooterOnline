@@ -132,7 +132,8 @@ public class ItemObject : MonoBehaviour
     {
         yield return new WaitForSeconds(duration);
         ishide = false;
-        transform.GetComponent<Image>().sprite = itemData.itemSprite;
+
+        transform.GetComponent<Image>().sprite = itemSprite;
         itemData.searchedPlayerId.Add(InventoryController.invenInstance.playerId);
         TextControl();
     }

@@ -18,19 +18,20 @@ public class InventoryGrid : MonoBehaviour
     public GridData gridData; //인벤토리에서 할당된 그리드의 데이터
     public InventoryUI ownInven; //해당 그리드를 포함하는 인벤토리
     public ItemObject[,] ItemSlot; //컨트롤러에서 아이템을 저장할 슬롯
-    
+
     //gridWeight 옵저버. 호출시 gridWeight 업데이트 및 인벤토리의 무게도 업데이트
+
     public float GridWeight
     {
         get => gridWeight;
-        set 
-        { 
+        set
+        {
             gridWeight = value;
+            
             ownInven.UpdateInvenWeight(); //인벤토리의 무게 변경
         }
     }
-
-    [SerializeField]private float gridWeight = 0; //그리드안의 아이템의 무게
+    [SerializeField]protected float gridWeight = 0; //그리드안의 아이템의 무게
 
     //타일의 크기 offset
     public const float WidthOfTile = 100;

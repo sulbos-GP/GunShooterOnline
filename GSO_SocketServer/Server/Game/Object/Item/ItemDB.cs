@@ -1,4 +1,5 @@
-﻿using Google.Protobuf.Protocol;
+﻿using Google.Protobuf.Collections;
+using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +67,7 @@ namespace Server.Game
             ak47.ItemSellPrice = 500;
             ak47.Width = 4;
             ak47.Height = 3;
+            
 
             ItemDataInfo recoveryKit = new ItemDataInfo();
             recoveryKit.ItemId = 0;

@@ -64,8 +64,8 @@ public class InventoryUI : MonoBehaviour
             //그리드를 생성하여 Grids객체의 자식으로 생성
             InventoryGrid newGrid = Instantiate(gridPref, grids).GetComponent<InventoryGrid>();
             newGrid.gridData = data;
-            newGrid.GridDataSet();
             newGrid.ownInven = this;
+            newGrid.GridDataSet();
             instantGridList.Add(newGrid);
         }
         

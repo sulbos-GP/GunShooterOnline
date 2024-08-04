@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
 
+[System.Serializable]
 //[CreateAssetMenu(fileName = "itemdata", menuName = "InventoryUI/ItemData")]
-public class ItemData :MonoBehaviour
+public class ItemData// :MonoBehaviour
 {
     /*
      * 스크립터블 오브젝트로 아이템의 데이터를 정의합니다.
@@ -28,11 +29,20 @@ public class ItemData :MonoBehaviour
         itemRotate = itemDataInfo.ItemRotate;
         itemAmount = itemDataInfo.ItemAmount;
 
-        foreach(int id in itemDataInfo.SearchedPlayerId)
+        
+        if(itemDataInfo.SearchedPlayerId.Count == 0)
         {
-            searchedPlayerId.Add(id);
+            searchedPlayerId = new List<int>();
         }
-
+        else
+        {
+            foreach (int id in itemDataInfo.SearchedPlayerId)
+            {
+                searchedPlayerId.Add(id);
+            }
+        }
+        
+        
         //임시
         item_name = itemDataInfo.ItemName;
         item_weight = itemDataInfo.ItemWeight; //아이템의 무게
@@ -87,7 +97,7 @@ public class ItemData :MonoBehaviour
     public int itemCode; //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
     public Vector2Int itemPos; // 아이템의 그리드 안 좌표상의 위치
     public int itemRotate; // 아이템의 회전코드(rotate * 90)
-    public int itemAmount = 1; // 아이템의 개수(소모품만 64개까지)
+    public int itemAmount; // 아이템의 개수(소모품만 64개까지)
     public List<int> searchedPlayerId; // 이 아이템을 조회한 플레이어의 아이디
 
     [Header("임시 사용변수")]
@@ -99,8 +109,8 @@ public class ItemData :MonoBehaviour
     public int item_purchase_price;
     public int item_sell_price;
     public float item_searchTime;
-    public int width = 1;
-    public int height = 1;
+    public int width;
+    public int height;
     public bool isItemConsumeable; //임시(아이템 타입으로 유추가능, 아이템 머지에 소모품인지 판단함. 이후 코드를 통해 조회로 변경)
-    public Sprite itemSprite;
+    //public Sprite itemSprite;
 }
