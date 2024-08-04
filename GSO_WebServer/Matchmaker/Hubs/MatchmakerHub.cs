@@ -1,0 +1,63 @@
+﻿using Matchmaker.DTO.Matchmaker;
+using Matchmaker.Service;
+using Matchmaker.Service.Interfaces;
+using Microsoft.AspNetCore.SignalR;
+
+namespace Matchmaker.Hubs
+{
+    public class MatchmakerHub : Hub
+    {
+        private readonly IMatchmakerService mMatchmakerService;
+
+        public MatchmakerHub(IMatchmakerService matchmakerService)
+        {
+            mMatchmakerService = matchmakerService;
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+
+            string connectionId = Context.ConnectionId;
+            Console.WriteLine($"Client connected: {connectionId}");
+
+            await base.OnConnectedAsync();
+
+        }
+
+        public override async Task OnDisconnectedAsync(Exception? exception)
+        {
+
+            string connectionId = Context.ConnectionId;
+            Console.WriteLine($"Client disconnected: {connectionId}");
+
+            await base.OnDisconnectedAsync(exception);
+        }
+        
+        //임시
+        public async Task C2S_ConnectMatchHub(int uid)
+        {
+            string connectionId = Context.ConnectionId;
+            var error = await mMatchmakerService.AddMatchTicket(uid, connectionId);
+        }
+
+        public async Task C2S_DisConnectMatchHub(int uid)
+        {
+            string connectionId = Context.ConnectionId;
+            var error = await mMatchmakerService.RemoveMatchTicket(uid);
+        }
+
+        //임시
+        public async Task C2S_Ping(int uid, long timestamp, long avgLatency)
+        {
+            long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            long latency = now - timestamp;
+
+            string connectionId = Context.ConnectionId;
+
+            await mMatchmakerService.UpdateLatency(uid, avgLatency);
+
+            //await Clients.Caller.SendAsync("S2C_Pong", timestamp);
+        }
+
+    }
+}
