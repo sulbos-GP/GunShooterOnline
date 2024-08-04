@@ -99,6 +99,7 @@ public class ItemObject : MonoBehaviour
         itemRect.localPosition = new UnityEngine.Vector2(itemData.itemPos.x * InventoryGrid.WidthOfTile+50, itemData.itemPos.y* InventoryGrid.HeightOfTile-50);
         Rotate(itemData.itemRotate);
         ItemAmount = itemData.itemAmount;
+        itemSprite = spriteList[itemData.itemCode - 1];
 
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
         if (itemData.searchedPlayerId.Contains(InventoryController.invenInstance.playerId) == false)
@@ -109,7 +110,7 @@ public class ItemObject : MonoBehaviour
         }
         else
         {
-            itemSprite = spriteList[itemData.itemCode-1];
+            
             transform.GetComponent<Image>().sprite = itemSprite;
             ishide = false;
             isOnSearching = true;
