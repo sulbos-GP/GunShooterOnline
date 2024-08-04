@@ -126,6 +126,6 @@ namespace Server.Game
             ObjectManager.Instance.Remove(Id);
         }
 
-
+        
     }
 }

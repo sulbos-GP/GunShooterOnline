@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -98,18 +99,36 @@ namespace Server.Game
 
                 System.Random rnd = new System.Random();
                 int random = rnd.Next(0, canInsertlist.Count);
-                ItemDataInfo newItemData = canInsertlist[random];
-                newItemData.ItemId = ObjectManager.Instance.Add<ItemObject>().Id; 
+                ItemDataInfo newItemData = DuplicateItemData(canInsertlist[random]);
+
+                bool itemExists = false;
                 //아이템의 위치, 회전을 제외한 아이디+데이터베이스 데이터를 그리드에 넣어줌
                 //그리드에서 이 아이템 리스트를 기반으로 그리드 슬롯에 넣고 아이템 데이터 업데이트예정
-                gridData.ItemList.Add(newItemData);
-                
+                if (newItemData.IsItemConsumeable)
+                {
+                    foreach (ItemDataInfo data in gridData.ItemList)
+                    {
+                        if (data.ItemCode == newItemData.ItemCode)
+                        {
+                            data.ItemAmount += 1;
+                            itemExists = true;
+                            break;
+                        }
+                    }
+                }
 
-                restSize -= canInsertlist[random].Width * canInsertlist[random].Height;
+                // 중복이 아닌 경우에만 새 아이템 추가
+                if (!itemExists)
+                {
+                    newItemData.ItemId = ObjectManager.Instance.Add<ItemObject>().Id;
+                    gridData.ItemList.Add(newItemData);
+
+                    restSize -= canInsertlist[random].Width * canInsertlist[random].Height;
+                }
             }
         }
 
-
+        
 
         public void MoveItem(int id, int posX, int posY)
         {
@@ -143,6 +162,26 @@ namespace Server.Game
             target.OwnerGrid.PrintInvenContents();
         }
 
-
+        public ItemDataInfo DuplicateItemData(ItemDataInfo targetData)
+        {
+            ItemDataInfo newItemData = new ItemDataInfo();
+            newItemData.ItemId = targetData.ItemId;
+            newItemData.ItemPosX = targetData.ItemPosX;
+            newItemData.ItemPosY = targetData.ItemPosY;
+            newItemData.ItemRotate = targetData.ItemRotate;
+            newItemData.ItemAmount = targetData.ItemAmount;
+            newItemData.ItemCode = targetData.ItemCode;
+            newItemData.IsItemConsumeable = targetData.IsItemConsumeable;
+            newItemData.ItemName = targetData.ItemName;
+            newItemData.ItemWeight = targetData.ItemWeight;
+            newItemData.ItemType = targetData.ItemType;
+            newItemData.ItemStringValue = targetData.ItemStringValue;
+            newItemData.ItemPurchasePrice = targetData.ItemPurchasePrice;
+            newItemData.ItemSellPrice = targetData.ItemSellPrice;
+            newItemData.Width = targetData.Width;
+            newItemData.Height = targetData.Height;
+            newItemData.ItemSearchTime = targetData.ItemSearchTime;
+            return newItemData;
+        }
     }
 }

@@ -116,6 +116,7 @@ namespace Server.Game
                     gridSlot[targetX, targetY] = item;
                 }
             }
+            PrintInvenContents();
         }
 
         /// <summary>
@@ -131,6 +132,7 @@ namespace Server.Game
                     gridSlot[deleteItem.itemDataInfo.Width + x, deleteItem.itemDataInfo.Height + y] = null;
                 }
             }
+            PrintInvenContents();
         }
 
         public Vector2Int? FindSpaceForObject(ItemObject insertItem)
