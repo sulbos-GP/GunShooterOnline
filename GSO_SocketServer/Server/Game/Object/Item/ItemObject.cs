@@ -121,7 +121,8 @@ namespace Server.Game
         public void DestroyItem()
         {
             //해당 아이템 오브젝트 삭제
-            
+            OwnerGrid.itemObjectList.Remove(this);
+            OwnerGrid.gridData.ItemList.Remove(itemDataInfo);
             ObjectManager.Instance.Remove(Id);
         }
 

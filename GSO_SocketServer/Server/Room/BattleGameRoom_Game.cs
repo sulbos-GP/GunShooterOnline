@@ -88,9 +88,11 @@ namespace Server
                 PlayerId = objectId,
                 InventoryId = inventoryId,
                 InvenData = targetPlayer.inventory.invenData,
+                
             };
 
-           
+            Console.WriteLine(s_LoadInventory.InvenData.GridData.Count);
+
 
             BroadCast(RoomId, s_LoadInventory);
 
