@@ -14,9 +14,9 @@ public enum ERequestMethod
     POST
 }
 
-public class WebClientCredential
+public class WebClientCredential : MonoBehaviour
 {
-    public string uid { get; set; } = string.Empty;
+    public int uid { get; set; } = 0;
 
     public string access_token { get; set; } = string.Empty;
 
@@ -27,15 +27,15 @@ public class WebClientCredential
     public string token_type { get; set; } = string.Empty;
 }
 
-public abstract class WebClientService
+public abstract class WebClientService : MonoBehaviour
 {
     public string mBaseUrl { get; set; }
+
 }
 
 public abstract class WebClientServiceRequest<TResponse>
 {
-    protected HeaderDTO mFromHeader = null;
-    protected object mFromBody = null;
+    protected object mFrom = null;
     protected string mEndPoint = null;
     protected ERequestMethod mMethod = ERequestMethod.None;
 
@@ -43,7 +43,7 @@ public abstract class WebClientServiceRequest<TResponse>
     {
         Misc.CheckNotNull(callback);
 
-        Misc.CheckNotNull(mFromBody);
+        Misc.CheckNotNull(mFrom);
 
         Misc.CheckNotNull(mEndPoint);
 
@@ -54,19 +54,13 @@ public abstract class WebClientServiceRequest<TResponse>
 
     private IEnumerator CoExecuteAsync(Action<TResponse> callback)
     {
-        string jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(mFromBody);
+        string jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(mFrom);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStr);
 
         UnityWebRequest request = new UnityWebRequest(mEndPoint, mMethod.ToString());
         request.uploadHandler = new UploadHandlerRaw(bodyRaw);
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
-
-        if(mFromHeader != null)
-        {
-            request.SetRequestHeader("uid", mFromHeader.uid);
-            request.SetRequestHeader("access_token", mFromHeader.access_token);
-        }
 
         yield return request.SendWebRequest();
 
@@ -77,7 +71,7 @@ public abstract class WebClientServiceRequest<TResponse>
         }
         else
         {
-            throw new NotImplementedException($"웹 요청 실패 : {request.error}");
+            Debug.Log($"WebClientRequest failed: {request.error}");
         }
 
     }

@@ -1,4 +1,4 @@
-﻿using GSO_WebServerLibrary.Models.GameDB;
+﻿using GsoWebServer.Models.GameDB;
 using GsoWebServer.Servicies.Interfaces;
 
 namespace GsoWebServer.Servicies.Matching
@@ -68,12 +68,12 @@ namespace GsoWebServer.Servicies.Matching
             return 1.0 / (1.0 + Math.Exp(-G(opponentRD) * (rating - opponentRating)));
         }
 
-        private double CalculateVariance(Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches, double rating)
+        private double CalculateVariance(Dictionary<long, Tuple<SkillInfo, MatchOutcomeInfo>> matches, double rating)
         {
             double varianceInverseSum = 0.0;
             foreach (var match in matches)
             {
-                UserSkillInfo skill = match.Value.Item1;
+                SkillInfo skill = match.Value.Item1;
 
                 double e = E(rating, skill.rating, skill.deviation);
                 varianceInverseSum += Math.Pow(G(skill.deviation), 2) * e * (1.0 - e);
@@ -81,12 +81,12 @@ namespace GsoWebServer.Servicies.Matching
             return 1.0 / varianceInverseSum;
         }
 
-        private double CalculateDelta(Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches, double rating, double variance)
+        private double CalculateDelta(Dictionary<long, Tuple<SkillInfo, MatchOutcomeInfo>> matches, double rating, double variance)
         {
             double deltaSum = 0.0;
             foreach (var match in matches)
             {
-                UserSkillInfo skill = match.Value.Item1;
+                SkillInfo skill = match.Value.Item1;
                 MatchOutcomeInfo outcome = match.Value.Item2;
 
                 double g = G(skill.deviation);
@@ -105,16 +105,36 @@ namespace GsoWebServer.Servicies.Matching
         /// <summary>
         /// 플레이어의 스킬에 관한 업데이트
         /// </summary>
+        public Dictionary<long, SkillInfo> UpdatePlayerRatings(List<long> uids, List<SkillInfo> skills, List<MatchOutcomeInfo> outcomes)
+        {
+            var matches = uids.Zip(skills, (uid, skill) => new { uid, skill })
+                          .Zip(outcomes, (us, outcome) => new { us.uid, us.skill, outcome })
+                          .ToDictionary(x => x.uid, x => Tuple.Create(x.skill, x.outcome));
+
+            Dictionary<long, SkillInfo> updateSkills = new Dictionary<long, SkillInfo>();
+            for (int i = 0; i < uids.Count; i++)
+            {
+                SkillInfo refSkill = new SkillInfo();
+                UpdatePlayerRating(skills[i], matches, ref refSkill);
+                updateSkills.Add(uids[i], refSkill);
+            }
+
+            return updateSkills;
+        }
+
+        /// <summary>
+        /// 플레이어의 스킬에 관한 업데이트
+        /// </summary>
         /// <param name="player">  업데이트할 플레이어</param>
         /// <param name="matches"> 게임에 참여한 플레이어들의 실력과 결과 </param>
-        public UserSkillInfo UpdatePlayerRating(UserSkillInfo skill, Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches)
+        private void UpdatePlayerRating(SkillInfo skill, Dictionary<long, Tuple<SkillInfo, MatchOutcomeInfo>> matches, ref SkillInfo newSkill)
         {
-            double rating = skill.rating;                                       // r
-            double deviation = skill.deviation;                                 // φ
-            double volatility = skill.volatility;                               // σ
+            double rating = skill.rating;                                 // r
+            double deviation = skill.deviation;                              // φ
+            double volatility = skill.volatility;                             // σ
 
-            double variance = CalculateVariance(matches, rating);               // v
-            double delta = CalculateDelta(matches, rating, variance);           // ∆
+            double variance = CalculateVariance(matches, rating);           // v
+            double delta = CalculateDelta(matches, rating, variance);    // ∆
 
             double a = Math.Log(Math.Pow(volatility, 2));                       // ln(σ^2)
             double tau = mGlickoSystemConst;                                    // τ
@@ -164,14 +184,9 @@ namespace GsoWebServer.Servicies.Matching
 
             double newRating = rating + Math.Pow(newRD, 2) * delta;
 
-            var newSkillInfo = new UserSkillInfo
-            {
-                rating = GetRatingGlicko2Scale(newRating),
-                deviation = GetRatingDeviationGlicko2Scale(newRD),
-                volatility = newVolatility,
-            };
-
-            return newSkillInfo;
+            newSkill.rating = GetRatingGlicko2Scale(newRating);
+            newSkill.deviation = GetRatingDeviationGlicko2Scale(newRD);
+            newSkill.volatility = newVolatility;
         }
 
         public void Dispose()

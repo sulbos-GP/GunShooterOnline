@@ -1,4 +1,4 @@
-﻿using GSO_WebServerLibrary.Error;
+﻿using GSO_WebServerLibrary;
 using System.ComponentModel.DataAnnotations;
 
 namespace GsoWebServer.DTO.Authentication

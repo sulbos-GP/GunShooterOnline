@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <Folder Include="Controllers\Game\" />
+    <Folder Include="Middleware\" />
+    <Folder Include="Models\MasterDB\" />
   </ItemGroup>
 
   <ItemGroup>
