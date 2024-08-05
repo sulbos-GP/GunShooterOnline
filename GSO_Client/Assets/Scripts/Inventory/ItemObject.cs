@@ -102,7 +102,7 @@ public class ItemObject : MonoBehaviour
         itemSprite = spriteList[itemData.itemCode - 1];
 
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
-        if (itemData.searchedPlayerId.Contains(InventoryController.invenInstance.playerId) == false)
+        if (itemData.searchedPlayerId.Contains(Managers.Object.MyPlayer.Id) == false)
         {
             transform.GetComponent<Image>().sprite = hideSprite;
             ishide = true;
@@ -135,7 +135,7 @@ public class ItemObject : MonoBehaviour
         ishide = false;
 
         transform.GetComponent<Image>().sprite = itemSprite;
-        itemData.searchedPlayerId.Add(InventoryController.invenInstance.playerId);
+        itemData.searchedPlayerId.Add(Managers.Object.MyPlayer.Id);
         TextControl();
     }
 

@@ -62,7 +62,7 @@ namespace Server.Game
             ItemObject newItemObj = ObjectManager.Instance.Find<ItemObject>(itemData.ItemId);
 
             newItemObj.itemDataInfo = itemData;
-            newItemObj.OwnerGrid = this;
+            newItemObj.ownerGrid = this;
 
             FindPlaceableSlot(newItemObj);
 
@@ -116,7 +116,6 @@ namespace Server.Game
                     gridSlot[targetX, targetY] = item;
                 }
             }
-            PrintInvenContents();
         }
 
         /// <summary>
@@ -125,14 +124,13 @@ namespace Server.Game
         /// <param name="deleteItem"></param>
         public void DeleteItemFromSlot(ItemObject deleteItem)
         {
-            for (int x = 0; x < deleteItem.itemDataInfo.ItemPosX; x++)
+            for (int x = 0; x < deleteItem.itemDataInfo.Width; x++)
             {
-                for (int y = 0; y < deleteItem.itemDataInfo.ItemPosY; y++)
+                for (int y = 0; y < deleteItem.itemDataInfo.Height; y++)
                 {
-                    gridSlot[deleteItem.itemDataInfo.Width + x, deleteItem.itemDataInfo.Height + y] = null;
+                    gridSlot[deleteItem.itemDataInfo.ItemPosX + x, deleteItem.itemDataInfo.ItemPosY + y] = null;
                 }
             }
-            PrintInvenContents();
         }
 
         public Vector2Int? FindSpaceForObject(ItemObject insertItem)
@@ -204,7 +202,7 @@ namespace Server.Game
                 content += "\n";
             }
 
-            Debug.Print(content);
+            Console.WriteLine(content);
         }
     }
 }
