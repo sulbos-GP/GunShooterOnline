@@ -30,7 +30,7 @@ public class ItemData
         itemRotate = itemDataInfo.ItemRotate;
         itemAmount = itemDataInfo.ItemAmount;
 
-        
+
         if(itemDataInfo.SearchedPlayerId.Count == 0)
         {
             searchedPlayerId = new List<int>();
@@ -55,6 +55,41 @@ public class ItemData
         width = itemDataInfo.Width;
         height = itemDataInfo.Height;
         isItemConsumeable = itemDataInfo.IsItemConsumeable; //임시(아이템 타입으로 유추가능, 아이템 머지에 소모품인지 판단함. 이후 코드를 통해 조회로 변경)
+        //itemSprite = itemDataInfo.ItemSprite;
+    }
+
+    public void DuplicateItemData(ItemData target)
+    {
+        itemId = target.itemId;
+        itemCode = target.itemCode;
+        itemPos = target.itemPos;
+        itemRotate = target.itemRotate;
+        itemAmount = target.itemAmount;
+
+
+        if (target.searchedPlayerId.Count == 0)
+        {
+            searchedPlayerId = new List<int>();
+        }
+        else
+        {
+            foreach (int id in target.searchedPlayerId)
+            {
+                searchedPlayerId.Add(id);
+            }
+        }
+
+        //임시
+        item_name = target.item_name;
+        item_weight = target.item_weight; //아이템의 무게
+        item_type = target.item_type;
+        item_string_value = target.item_string_value;
+        item_purchase_price = target.item_purchase_price;
+        item_sell_price = target.item_sell_price;
+        item_searchTime = target.item_searchTime;
+        width = target.width;
+        height = target.height;
+        isItemConsumeable = target.isItemConsumeable; //임시(아이템 타입으로 유추가능, 아이템 머지에 소모품인지 판단함. 이후 코드를 통해 조회로 변경)
         //itemSprite = itemDataInfo.ItemSprite;
     }
 

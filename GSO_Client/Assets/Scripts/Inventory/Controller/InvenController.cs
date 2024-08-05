@@ -37,11 +37,13 @@ public partial class InventoryController : MonoBehaviour
 
     public static InventoryController invenInstance;
     private PlayerInput playerInput; //플레이어의 조작 인풋
+    //public ItemDB itemdb;
+    //public List<ItemData> itemList;
 
     [Header("수동지정")]
     public Transform deleteUI;
     public Button rotateBtn;
-    //public List<ItemData> itemDB;
+
     //우클릭 아이템 생성 예시
     [SerializeField] private GameObject itemPref; //생성할 아이템의 프리펩(임시)
 
@@ -147,15 +149,24 @@ public partial class InventoryController : MonoBehaviour
 
     private void Awake()
     {
+        
         if (invenInstance == null)
         {
             invenInstance = this;
-            
         }
         else
         {
             Destroy(gameObject);
         }
+
+        /*itemdb = new ItemDB();
+        foreach (ItemDataInfo data in itemdb.items)
+        {
+            ItemData newData = new ItemData();
+            newData.SetItemData(data);
+            itemList.Add(newData);
+        }*/
+
         invenHighlight = GetComponent<InvenHighLight>();
         Managers.Network.ConnectToGame();
     }
@@ -279,6 +290,7 @@ public partial class InventoryController : MonoBehaviour
             //컴퓨터로 조작시 사용
             RotateItemRight();
         }*/
+
         RotateItemRight();
     }
     #endregion
@@ -844,30 +856,17 @@ public partial class InventoryController : MonoBehaviour
         SetSelectedObjectToLastSibling(selectedRect);
         //아이템 리스트 중 하나 지정
         
-        int randomId = Random.Range(0, itemDB.Count);
+        int randomId = Random.Range(0, itemList.Count);
         //지정된 아이템 데이터를 아이템 프리팹에 적용
         ItemData randomData = new ItemData();
-        randomData.itemId = itemDB[randomId].itemId;
-        randomData.itemCode = itemDB[randomId].itemCode;
-        randomData.itemPos = itemDB[randomId].itemPos;
-        randomData.itemRotate = itemDB[randomId].itemRotate;
-        randomData.itemAmount = itemDB[randomId].itemAmount;
-        randomData.searchedPlayerId = new List<int>();
-        randomData.item_name = itemDB[randomId].item_name;
-        randomData.item_weight = itemDB[randomId].item_weight;
-        randomData.item_type = itemDB[randomId].item_type;
-        randomData.item_searchTime = itemDB[randomId].item_searchTime;
-        randomData.width = itemDB[randomId].width;
-        randomData.height = itemDB[randomId].height;
-        randomData.isItemConsumeable = itemDB[randomId].isItemConsumeable;
-        //randomData.itemSprite = itemDB[randomId].itemSprite;
-
-
+        randomData.DuplicateItemData(itemList[randomId]);
         invenItem.itemData = randomData;
         invenItem.ItemDataSet(invenItem.itemData);
+
         SelectedItem = invenItem;
     }
     */
+
     /* 인벤토리그리드로 옮김
     /// <summary>
     /// insertRandomItem안에서 지정된 아이템을 가능한 자리에 배치

@@ -17,8 +17,7 @@ namespace Server.Game.Object
 
         public RootableObject()
         {
-            ObjectType = GameObjectType.Item;
-            
+            ObjectType = GameObjectType.Box;
         }
 
         public void Init()
