@@ -80,14 +80,23 @@ namespace Server
 
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )
         {
-
+            if(player.Id == objectId) 
+            {
+                //플레이어의 인벤토리
+                player.inventory
+            }
+            else
+            {
+                //루터블 오브젝트의 인벤토리
+            }
+            
             Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
 
             S_LoadInventory s_LoadInventory = new S_LoadInventory()
             {
                 PlayerId = objectId,
                 InventoryId = inventoryId,
-                InvenData = targetPlayer.inventory.invenData,
+                InvenData =  //targetPlayer.inventory.invenData,
                 
             };
 
