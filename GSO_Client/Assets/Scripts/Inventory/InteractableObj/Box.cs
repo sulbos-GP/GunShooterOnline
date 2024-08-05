@@ -1,4 +1,5 @@
 using Google.Protobuf.Protocol;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -44,6 +45,7 @@ public class Box : InteractableObject
         }
 
         
+
         InventoryController.invenInstance.invenUIControl();
     }
 }

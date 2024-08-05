@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using NPOI.SS.Formula.Functions;
 using ServerCore;
 using System;
 using System.Runtime.CompilerServices;
@@ -132,7 +133,8 @@ internal class PacketHandler
         //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
         InvenData newInvenData = new InvenData();
         newInvenData.SetInvenData(packet.InvenData);
-        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색
+        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색'
+        
 
         //플레이어의 인벤토리id와 패킷내의 인벤토리id 비교 -> 같으면 플레이어의 인벤토리에 반영 다르면 아더 인벤토리에 반영
         if (Managers.Object.MyPlayer.Id == packet.InventoryId)

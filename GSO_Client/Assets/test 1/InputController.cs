@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
 using UnityEngine.UIElements;
+using UnityEngine.Rendering;
 
 public class InputController : MonoBehaviour
 {
@@ -109,6 +110,9 @@ public class InputController : MonoBehaviour
                 if (distance <= 2.0f)
                 {
                     col.gameObject.GetComponent<Box>().Interact();
+                    OtherInventoryUI otherUI = FindObjectOfType<OtherInventoryUI>();
+                    otherUI.invenData = col.gameObject.GetComponent<OtherInventory>().InputInvenData;
+                    otherUI.InventorySet();
                 }
             }
         }
