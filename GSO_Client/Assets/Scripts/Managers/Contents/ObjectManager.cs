@@ -43,7 +43,7 @@ public class ObjectManager
                 //MyPlayer.Stat.MergeFrom(info.StatInfo);
                 MyPlayer.SyncPos();
 
-                //go.GetComponent<PlayerInventory>().SendPlayerInvenLoadPacket();
+                go.GetComponent<PlayerInventory>().SendPlayerInvenLoadPacket();
             }
             else
             {

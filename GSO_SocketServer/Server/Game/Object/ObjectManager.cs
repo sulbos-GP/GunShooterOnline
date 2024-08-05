@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.Object;
@@ -11,7 +13,7 @@ internal class ObjectManager
     private int _counter = 1;
     private readonly object _lock = new();
     private readonly Dictionary<int, Player> _players = new();
-    private readonly Dictionary<int, RootableObject> _rootable = new();
+    public readonly Dictionary<int, RootableObject> _rootable = new();
     private readonly Dictionary<int, ItemObject> _items = new();
     public static ObjectManager Instance { get; } = new();
 
@@ -31,7 +33,6 @@ internal class ObjectManager
             else if (gameObjcet.ObjectType == GameObjectType.Box)
                 _rootable.Add(gameObjcet.Id, gameObjcet as RootableObject);
         }
-
         return gameObjcet;
     }
 
@@ -44,7 +45,6 @@ internal class ObjectManager
 
             if (obj.ObjectType == GameObjectType.Player)
                 _players.Add(obj.Id, obj as Player);
-
             else if (obj.ObjectType == GameObjectType.Item)
                 _items.Add(obj.Id, obj as ItemObject);
             else if (obj.ObjectType == GameObjectType.Box)

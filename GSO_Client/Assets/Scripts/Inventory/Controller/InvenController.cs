@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
+using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
@@ -146,13 +147,15 @@ public partial class InventoryController : MonoBehaviour
 
     //기타 변수
 
+    
 
     private void Awake()
     {
-        
+        Debug.Log("invenInstance");
         if (invenInstance == null)
         {
             invenInstance = this;
+            
         }
         else
         {
