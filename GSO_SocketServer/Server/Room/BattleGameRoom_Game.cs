@@ -82,7 +82,7 @@ namespace Server
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )
         {
             InvenDataInfo targetData = null;
-            if(player.Id == objectId) 
+            if(player.Id == inventoryId) 
             {
                 //플레이어의 인벤토리
                 Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
@@ -91,7 +91,8 @@ namespace Server
             else
             {
                 //루터블 오브젝트의 인벤토리
-                RootableObject box = ObjectManager.Instance.Find<RootableObject>(objectId);
+                RootableObject box = ObjectManager.Instance.Find<RootableObject>(inventoryId);
+                Console.WriteLine($"handle box id : {box.Id}");
                 targetData = box.Inventory.invenData;
             }
             

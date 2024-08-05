@@ -116,6 +116,10 @@ public class Map
         _rootableObjects.Add(rootableObject2);
         _rootableObjects.Add(rootableObject3);
 
+        foreach (RootableObject box in ObjectManager.Instance._rootable.Values)
+        {
+            Console.WriteLine($"box id : {box.Id}");
+        }
         //SetRandomItem();
     }
 
