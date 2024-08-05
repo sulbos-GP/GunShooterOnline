@@ -259,11 +259,20 @@ internal class PacketHandler
 
         GameObject go = Managers.Object.FindById(packet.HitObjectId);
         if (go == null)
+        {
+            Debug.Log("Wall Hit bullet");
             return;
-
+        }
+        Debug.Log(go.GetInstanceID());
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
+        {
+            //TO - DO : 맞는지 모르겠음.
+            Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
+            Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
             return;
+        }
+            
 
         //cc에서 피격 표시?
 

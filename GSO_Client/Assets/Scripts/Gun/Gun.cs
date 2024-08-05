@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Google.Protobuf.Protocol;
+using System.Collections;
 using System.IO.Pipes;
 using UnityEngine;
 using UnityEngine.AI;
@@ -127,6 +128,15 @@ public class Gun : MonoBehaviour
             {
                 //패킷 전송
                 Debug.Log("Hit: " + hit.collider.name);
+                var cRay = new C_RaycastShoot
+                {
+                    StartPosX = fireStartPos.position.x,
+                    StartPosY = fireStartPos.position.y,
+                    DirX = direction.x,
+                    DirY = direction.y,
+                    Length = _gunStat.range
+                };
+                Managers.Network.Send(cRay);
             }
             Debug.DrawRay(fireStartPos.position, direction * _gunStat.range, Color.yellow, 0.5f);
 
