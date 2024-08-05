@@ -9,7 +9,6 @@ public class InputController : MonoBehaviour
 {
     public static InputController instance;
     public float distance;
-    //public GameObject testBox;
 
     private Rigidbody2D rig;
 
@@ -25,6 +24,8 @@ public class InputController : MonoBehaviour
     //private CreatureState State;
     private Vector3 lastPos;
 
+    private bool _isRooting;
+
     private void Awake()
     {
         instance = this;
@@ -38,8 +39,6 @@ public class InputController : MonoBehaviour
 
     public void FixedUpdate()
     {
-        //distance = Vector2.Distance(gameObject.transform.position, testBox.transform.position);
-
         UpdateState();
 
         if(isFiring)
@@ -99,9 +98,19 @@ public class InputController : MonoBehaviour
 
     private void OnInteraction(InputAction.CallbackContext callbackContext)
     {
-        if (distance <= 2.0f)
+        if(!_isRooting)
+            return;
+        Collider2D[] cols = Physics2D.OverlapCircleAll(gameObject.transform.position, 1.5f);
+        foreach(var col in cols)
         {
-            //testBox.GetComponent<Box>().Interact();
+            if(col.gameObject.GetComponent<Box>() != null)
+            {
+                distance = Vector2.Distance(gameObject.transform.position,col.gameObject.transform.position);
+                if (distance <= 2.0f)
+                {
+                    col.gameObject.GetComponent<Box>().Interact();
+                }
+            }
         }
     }
 
@@ -182,7 +191,7 @@ public class InputController : MonoBehaviour
         //Move Logic
         Vector2 newVec2 = _direction * 5.0f * Time.fixedDeltaTime;
         rig.MovePosition(rig.position + newVec2);
-        //UpdateServer();
+        UpdateServer();
     }
 
     private void UpdateServer()
@@ -202,5 +211,15 @@ public class InputController : MonoBehaviour
             };
             Managers.Network.Send(movePack);
         }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        _isRooting = true;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        _isRooting=false;
     }
 }
