@@ -147,9 +147,10 @@ namespace Server.Game
             {
                 return;
             }
-            target.itemDataInfo.ItemRotate = rotate;
-            
+
+
             target.ownerGrid.DeleteItemFromSlot(target);
+            target.itemDataInfo.ItemRotate = rotate;
             target.ownerGrid.PushItemIntoSlot(target,posX,posY);
 
             target.ownerGrid.PrintInvenContents();
