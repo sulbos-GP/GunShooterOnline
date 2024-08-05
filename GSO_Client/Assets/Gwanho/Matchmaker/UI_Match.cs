@@ -16,7 +16,7 @@ public class UI_Match : MonoBehaviour
     private Button mMatchButton;
 
     [SerializeField]
-    private TextMeshProUGUI mMatchModeText;
+    private TextMeshProUGUI mMatchStateText;
 
     [SerializeField]
     private TextMeshProUGUI mMatchTimeText;
@@ -29,7 +29,7 @@ public class UI_Match : MonoBehaviour
     private void Awake()
     {
         mMatchButton.onClick.AddListener(OnClickMatch);
-        mMatchModeText.text = "매칭 참여";
+        mMatchStateText.text = "매칭 상태";
         mMatchTimeText.transform.parent.gameObject.SetActive(false);
     }
 
@@ -62,6 +62,7 @@ public class UI_Match : MonoBehaviour
     {
         try
         {
+            mMatchStateText.text = "매칭 참여 중...";
             SystemLogManager.Instance.LogMessage("매칭 참여 요청...");
             mIsProcessMatch = true;
 
@@ -77,6 +78,7 @@ public class UI_Match : MonoBehaviour
         }
         catch (HttpRequestException error)
         {
+            mMatchStateText.text = "매칭 참여 실패";
             SystemLogManager.Instance.LogMessage($"매칭 참여 실패 : {error}");
         }
 
@@ -92,7 +94,7 @@ public class UI_Match : MonoBehaviour
         {
             SystemLogManager.Instance.LogMessage("매칭 참여 요청 성공");
 
-            mMatchModeText.text = "매칭 취소";
+            mMatchStateText.text = "게임 매칭 중...";
             mIsJoin = false;
 
             mMatchTimeText.transform.parent.gameObject.SetActive(true);
@@ -111,6 +113,7 @@ public class UI_Match : MonoBehaviour
     {
         try
         {
+            mMatchStateText.text = "매칭 취소 중...";
             SystemLogManager.Instance.LogMessage("매칭 취소 요청...");
             mIsProcessMatch = true;
 
@@ -126,6 +129,7 @@ public class UI_Match : MonoBehaviour
         }
         catch (HttpRequestException error)
         {
+            mMatchStateText.text = "매칭 취소 실패";
             SystemLogManager.Instance.LogMessage($"매칭 취소 실패 : {error}");
         }
     }
@@ -140,7 +144,6 @@ public class UI_Match : MonoBehaviour
         {
             SystemLogManager.Instance.LogMessage("매칭 취소 요청 성공");
 
-            mMatchModeText.text = "매칭 참여";
             mIsJoin = true;
 
             mMatchTimeText.transform.parent.gameObject.SetActive(false);
@@ -184,12 +187,18 @@ public class UI_Match : MonoBehaviour
     {
 
         mMatchButton.interactable = false;
-        mMatchModeText.text = "매칭 성공";
+        mMatchStateText.text = "매칭 완료";
 
         mMatchTimeText.transform.parent.gameObject.SetActive(false);
         StopCoroutine(UpdateTimer());
 
-        SystemLogManager.Instance.LogMessage($"매치가 생성되었습니다 {response.host}:{response.port}");
+        SystemLogManager.Instance.LogMessage($"매치가 생성되었습니다 {response.host_ip}:{response.host_port}");
+
+        //로컬
+        response.host_ip = "127.0.0.1";
+
+
+
     }
 
 
