@@ -151,6 +151,7 @@ public partial class InventoryController : MonoBehaviour
 
     private void Awake()
     {
+        /*
         Debug.Log("invenInstance");
         if (invenInstance == null)
         {
@@ -161,6 +162,7 @@ public partial class InventoryController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+        */
 
         /*itemdb = new ItemDB();
         foreach (ItemDataInfo data in itemdb.items)
@@ -171,7 +173,7 @@ public partial class InventoryController : MonoBehaviour
         }*/
 
         invenHighlight = GetComponent<InvenHighLight>();
-        Managers.Network.ConnectToGame();
+        //Managers.Network.ConnectToGame();
     }
 
     private void OnEnable()
