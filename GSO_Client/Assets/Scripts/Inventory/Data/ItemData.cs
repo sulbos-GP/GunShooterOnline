@@ -5,9 +5,10 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
 
+
+
 [System.Serializable]
-//[CreateAssetMenu(fileName = "itemdata", menuName = "InventoryUI/ItemData")]
-public class ItemData// :MonoBehaviour
+public class ItemData
 {
     /*
      * 스크립터블 오브젝트로 아이템의 데이터를 정의합니다.

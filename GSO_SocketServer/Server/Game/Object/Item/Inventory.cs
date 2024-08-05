@@ -24,12 +24,20 @@ namespace Server.Game
 
 
         //인벤토리가 처음 생성될때?
-        public Inventory(int ownerId)
+        public Inventory(int ownerId, int x = 0, int y = 0)
         {
             invenData.InventoryId = ownerId;
             invenData.LimitWeight = 20; //임시
             Grid newGrid = new Grid();
-            newGrid.gridData = MakeNewGridData();
+            if (x == 0)
+            {
+                x = 4;
+            }
+            if (y == 0)
+            {
+                y = 5;
+            }
+            newGrid.gridData = MakeNewGridData(x,y);
             newGrid.ownerInventory = this;
             newGrid.SetGrid();
             instantGrid.Add(newGrid);
@@ -37,14 +45,14 @@ namespace Server.Game
             Console.WriteLine($"ownerId : {ownerId} \n instantGridAmt : {instantGrid.Count} \nitemAmount : {newGrid.itemObjectList.Count} \n");
         }
 
-        private GridDataInfo MakeNewGridData()
+        private GridDataInfo MakeNewGridData(int x, int y)
         {
             //그리드의 데이터를 생성함과 동시에 그리드 데이터의 아이템데이터 리스트에 넣을 아이템의 데이터 또한 생성
             GridDataInfo newData = new GridDataInfo
             {
                 GridId = ++Grid.lastGridId,
-                GridSizeX = 4, //임시
-                GridSizeY = 5, //임시
+                GridSizeX = x, //임시
+                GridSizeY = y, //임시
                 GridPosX = 0,
                 GridPosY = 0, //지금은 1개뿐이라 0,0 나중에 인벤토리가 어떻게 생겼는지에 대한 데이터를 추가해야할듯
                 RandomItemAmount = 3 //임시. 소유자의 조건에 따라 달라짐
@@ -130,7 +138,7 @@ namespace Server.Game
 
         
 
-        public void MoveItem(int id, int posX, int posY)
+        public void MoveItem(int id, int posX, int posY, int rotate)
         {
             //아이템 가져오기
             ItemObject target = ObjectManager.Instance.Find<ItemObject>(id);
@@ -139,27 +147,27 @@ namespace Server.Game
             {
                 return;
             }
-            //TODO : instantGrid[0].ItemPushCheck
+            target.itemDataInfo.ItemRotate = rotate;
+            
+            target.ownerGrid.DeleteItemFromSlot(target);
+            target.ownerGrid.PushItemIntoSlot(target,posX,posY);
 
+            target.ownerGrid.PrintInvenContents();
+        }
 
-            /* 지승현 -> 박성훈 
-            instantGrid[0].ItemPushCheck(target, posX, posY);
+        public void DeleteItem(int id)
+        {
+            //아이템 가져오기
+            ItemObject target = ObjectManager.Instance.Find<ItemObject>(id);
 
-            if (target != null)
+            if (target == null)
             {
-                if (target.itemDataInfo.ItemCode == instantGrid[0].gridSlot[posX, posY])
-                {
-                    Console.WriteLine("Merge");
+                return;
+            }
 
+            target.ownerGrid.DeleteItemFromSlot(target);
 
-                    instantGrid[0].
-                }
-            }*/
-
-            target.OwnerGrid.DeleteItemFromSlot(target);
-            target.OwnerGrid.PushItemIntoSlot(target,posX,posY);
-
-            target.OwnerGrid.PrintInvenContents();
+            target.ownerGrid.PrintInvenContents();
         }
 
         public ItemDataInfo DuplicateItemData(ItemDataInfo targetData)
