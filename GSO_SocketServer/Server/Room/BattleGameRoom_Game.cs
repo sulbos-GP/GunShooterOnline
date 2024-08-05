@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using Server.Game;
+using Server.Game.Object;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -80,31 +81,33 @@ namespace Server
 
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )
         {
+            InvenDataInfo targetData = null;
             if(player.Id == objectId) 
             {
                 //플레이어의 인벤토리
-                player.inventory
+                Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
+                targetData = targetPlayer.inventory.invenData;
             }
             else
             {
                 //루터블 오브젝트의 인벤토리
+                RootableObject box = ObjectManager.Instance.Find<RootableObject>(objectId);
+                targetData = box.Inventory.invenData;
             }
             
-            Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
+            //Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
 
             S_LoadInventory s_LoadInventory = new S_LoadInventory()
             {
                 PlayerId = objectId,
                 InventoryId = inventoryId,
-                InvenData =  //targetPlayer.inventory.invenData,
-                
+                InvenData = targetData //targetPlayer.inventory.invenData,
+
             };
 
             Console.WriteLine(s_LoadInventory.InvenData.GridData.Count);
 
-
             BroadCast(RoomId, s_LoadInventory);
-
 
         }
 
