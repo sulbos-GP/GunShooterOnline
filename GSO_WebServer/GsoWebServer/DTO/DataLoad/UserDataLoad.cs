@@ -1,4 +1,5 @@
-﻿using GsoWebServer.Models.GameDB;
+﻿using GSO_WebServerLibrary.Models.GameDB;
+using GSO_WebServerLibrary.DTO;
 
 namespace GsoWebServer.DTO.DataLoad
 {
@@ -10,7 +11,7 @@ namespace GsoWebServer.DTO.DataLoad
     public class DataLoadUserInfo
     {
         public UserInfo? UserInfo { get; set; } = null;
-        public SkillInfo? SkillInfo { get; set; } = null;
-        public MetadataInfo? MetadataInfo { get; set; } = null;
+        public UserSkillInfo? SkillInfo { get; set; } = null;
+        public UserMetadataInfo? MetadataInfo { get; set; } = null;
     }
 }
