@@ -7,10 +7,10 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 0
     path: Assets/Scenes/DoozyUIScenes/Lobby.unity
-    guid: 58ea4839f07a5984d8044c81abca8474
-  - enabled: 0
+    guid: 207b83c182f407744926ea7f6e2419aa
+  - enabled: 1
     path: Assets/Scenes/Game.unity
-    guid: 0ffbe78491173c3499bb3e85ceb358cf
+    guid: 23e2da40052b8674499c192cb80c6826
   - enabled: 1
     path: Assets/Gwanho/SignInScene.unity
     guid: 7dc67c1e45386744f8ab802e41c1bedf
