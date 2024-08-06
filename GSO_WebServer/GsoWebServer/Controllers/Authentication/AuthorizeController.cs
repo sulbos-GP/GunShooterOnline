@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GsoWebServer.Servicies.Interfaces;
+using GsoWebServer.Reposiotry.Interfaces;
+using GSO_WebServerLibrary;
 using GsoWebServer.DTO.Authentication;
-using GSO_WebServerLibrary.DTO;
-using GSO_WebServerLibrary.Models.MemoryDB;
-using GSO_WebServerLibrary.Error;
-using GSO_WebServerLibrary.Utils;
+using Google.Apis.Games.v1;
+using static Google.Apis.Requests.RequestError;
+using GsoWebServer.Servicies.Game;
 
 
 namespace AuthenticationServer.Controllers
@@ -25,56 +26,6 @@ namespace AuthenticationServer.Controllers
         }
 
         /// <summary>
-        /// 기존 유저인지 인증
-        /// </summary>
-        [HttpPost]
-        [Route("Authentication")]
-        public async Task<AuthenticationRes> Authentication([FromBody] AuthenticationReq request)
-        {
-            Console.WriteLine($"[Authentication] user:{request.user_id} service:{request.service}");
-
-            var response = new AuthenticationRes();
-
-            if (!WebUtils.IsValidModelState(request))
-            {
-                response.error_code = WebErrorCode.IsNotValidModelState;
-                response.error_description = "";
-                return response;
-            }
-
-            //해당 유저(플레이어)가 있는지 확인
-            var (errorCode, uid) = await mAuthenticationService.VerifyUser(request.user_id, request.service);
-            if (errorCode == WebErrorCode.SignInFailUserNotExist)
-            {
-                response.error_code = WebErrorCode.TEMP_ERROR;
-                response.error_description = "";
-                return response;
-            }
-
-            //유저의 정보 얻어오기
-            (errorCode, var user) = await mGameService.GetUserInfo(uid);
-            if (errorCode != WebErrorCode.None || user == null)
-            {
-                response.error_code = WebErrorCode.TEMP_ERROR;
-                response.error_description = "";
-                return response;
-            }
-
-            //마지막 로그인한 날짜로부터 6개월 이상이 지났다면 다시 갱신토큰 받을 수 있도록 하기
-            var now = DateTime.Now;
-            int monthsDifference = (now.Year - user.recent_login_dt.Year) * 12 + now.Month - user.recent_login_dt.Month;
-            if(monthsDifference > 6)
-            {
-                response.error_code = WebErrorCode.TEMP_ERROR;
-                response.error_description = "";
-                return response;
-            }
-
-            response.error_code = WebErrorCode.None;
-            return response;
-        }
-
-        /// <summary>
         /// 로그인
         /// </summary>
         [HttpPost]
@@ -89,8 +40,7 @@ namespace AuthenticationServer.Controllers
 
             if (!WebUtils.IsValidModelState(request))
             {
-                response.error_code = WebErrorCode.IsNotValidModelState;
-                response.error_description = "";
+                response.error = WebErrorCode.IsNotValidModelState;
                 return response;
             }
 
@@ -101,8 +51,7 @@ namespace AuthenticationServer.Controllers
                 (errorCode, var token) = await mAuthenticationService.ExchangeToken(request.user_id, request.server_code);
                 if (token is null)
                 {
-                    response.error_code = errorCode;
-                    response.error_description = "";
+                    response.error = errorCode;
                     return response;
                 }
 
@@ -110,8 +59,7 @@ namespace AuthenticationServer.Controllers
                 (errorCode, var player) = await mAuthenticationService.GetMyPlayer(request.user_id, token.AccessToken);
                 if (player is null)
                 {
-                    response.error_code = errorCode;
-                    response.error_description = "";
+                    response.error = errorCode;
                     return response;
                 }
 
@@ -119,42 +67,30 @@ namespace AuthenticationServer.Controllers
                 (errorCode, var uid) = await mAuthenticationService.VerifyUser(player.GamePlayerId, request.service);
                 if (errorCode == WebErrorCode.SignInFailUserNotExist)
                 {
-                    (errorCode, uid) = await mGameService.SingUpWithNewUserGameData(player.GamePlayerId, request.service, token.RefreshToken);
+                    (errorCode, uid) = await mGameService.SingUpWithNewUserGameData(player.GamePlayerId, request.service);
                 }
                 
                 if (errorCode != WebErrorCode.None || uid == 0)
                 {
-                    response.error_code = errorCode;
-                    response.error_description = "";
+                    response.error = errorCode;
                     return response;
                 }
 
-                //갱신 토큰 유지하기
-                if (token.RefreshToken is null)
+                if (token.ExpiresInSeconds == null)
                 {
-                    (errorCode, var user) = await mGameService.GetUserInfo(uid);
-                    if (errorCode != WebErrorCode.None || user == null)
-                    {
-                        response.error_code = WebErrorCode.TEMP_ERROR;
-                        response.error_description = "";
-                        return response;
-                    }
-                    token.RefreshToken = user.refresh_token;
-                }
-
-                if (token.ExpiresInSeconds is null)
-                {
-                    response.error_code = errorCode;
-                    response.error_description = "";
+                    response.error = errorCode;
                     return response;
                 }
 
                 //Redis에 토큰 저장
-                errorCode = await mAuthenticationService.RegisterToken(uid, player.GamePlayerId, token.AccessToken, token.RefreshToken, token.ExpiresInSeconds.Value);
+                errorCode = await mAuthenticationService.RegisterToken(uid, token.ExpiresInSeconds.Value, token.AccessToken, token.RefreshToken);
+
+                //이미 저장되어 있다면 중복 로그인으로 생각
+                //TODO : 나중에 처리
+
                 if (errorCode != WebErrorCode.None)
                 {
-                    response.error_code = errorCode;
-                    response.error_description = "";
+                    response.error = errorCode;
                     return response;
                 }
 
@@ -162,8 +98,7 @@ namespace AuthenticationServer.Controllers
                 errorCode = await mAuthenticationService.UpdateLastSignInTime(uid);
                 if (errorCode != WebErrorCode.None)
                 {
-                    response.error_code = errorCode;
-                    response.error_description = "";
+                    response.error = errorCode;
                     return response;
                 }
 
@@ -171,12 +106,11 @@ namespace AuthenticationServer.Controllers
                 (errorCode, response.userData) = await mDataLoadService.LoadUserData(uid);
                 if (errorCode != WebErrorCode.None)
                 {
-                    response.error_code = errorCode;
-                    response.error_description = "";
+                    response.error = errorCode;
                     return response;
                 }
 
-                response.error_code     = WebErrorCode.None;
+                response.error          = WebErrorCode.None;
                 response.uid            = uid;
                 response.access_token   = token.AccessToken;
                 response.expires_in     = token.ExpiresInSeconds.Value;
@@ -186,77 +120,11 @@ namespace AuthenticationServer.Controllers
             }
             catch (Exception ex)
             {
-                string message = ($"[SignIn] error:{ex.ToString()}");
-                Console.WriteLine(message);
-                response.error_code = WebErrorCode.IsNotValidateServerCode;
-                response.error_description = message;
+                Console.WriteLine($"[ExchangeToken] error:{ex.ToString()}");
+                response.error = WebErrorCode.IsNotValidateServerCode;
                 return response;
             }
 
-        }
-
-        /// <summary>
-        /// 로그아웃
-        /// </summary>
-        [HttpPost]
-        [Route("SignOut")]
-        public async Task<SignOutRes> SignOut([FromHeader] HeaderDTO header, [FromBody] SignOutReq request)
-        {
-            Console.WriteLine($"[SignOut] uid:{header.uid} access:{header.access_token} cause:{request.cause}");
-
-            var response = new SignOutRes();
-            if (!WebUtils.IsValidModelState(request))
-            {
-                response.error_code = WebErrorCode.IsNotValidModelState;
-                response.error_description = "";
-                return response;
-            }
-
-            try
-            {
-
-
-                this.HttpContext.Items.TryGetValue(nameof(AuthUserDataInfo), out var userDataInfo);
-                var user = userDataInfo as AuthUserDataInfo;
-                if (user == null)
-                {
-                    response.error_code = WebErrorCode.TEMP_ERROR;
-                    response.error_description = "";
-                    return response;
-                }
-
-                //본 상태의 uid 얻어주기
-                int uid = KeyUtils.GetUID(user.uid);
-
-                //Redis의 Access Token과 Refresh Token 삭제
-                var errorCode = await mAuthenticationService.RemoveToken(uid);
-                if (errorCode != WebErrorCode.None)
-                {
-                    response.error_code = errorCode;
-                    response.error_description = "";
-                    return response;
-                }
-
-                //구글에서 토큰 Revoke하여 삭제하기
-                errorCode = await mAuthenticationService.RevokeToken(user.user_id, user.access_token);
-                if (errorCode != WebErrorCode.None)
-                {
-                    response.error_code = errorCode;
-                    response.error_description = "";
-                    return response;
-                }
-
-                response.error_code = WebErrorCode.None;
-                return response;
-            }
-            catch (Exception ex)
-            {
-                string message = ($"[SignOut] error:{ex.ToString()}");
-                Console.WriteLine(message);
-                response.error_code = WebErrorCode.IsNotValidateServerCode;
-                response.error_description = message;
-                return response;
-            }
         }
 
         //[HttpPost]

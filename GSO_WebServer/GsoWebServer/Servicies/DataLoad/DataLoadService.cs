@@ -1,4 +1,4 @@
-﻿using GSO_WebServerLibrary.Error;
+﻿using GSO_WebServerLibrary;
 using GsoWebServer.DTO.DataLoad;
 using GsoWebServer.Servicies.Interfaces;
 using static Google.Apis.Requests.RequestError;
@@ -12,11 +12,6 @@ namespace GsoWebServer.Servicies.DataLoad
         public DataLoadService(IGameService gameService)
         {
             mGameService = gameService;
-        }
-
-        public void Dispose()
-        {
-
         }
 
         public async Task<(WebErrorCode, DataLoadUserInfo?)> LoadUserData(int uid)
