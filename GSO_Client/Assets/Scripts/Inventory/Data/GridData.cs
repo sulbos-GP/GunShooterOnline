@@ -3,14 +3,12 @@ using JetBrains.Annotations;
 using NPOI.POIFS.Storage;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Build;
 using UnityEngine;
-using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
 [System.Serializable]
 //[CreateAssetMenu(fileName = "gridData", menuName = "InventoryUI/gridData")]
-public class GridData// : MonoBehaviour
+public class GridData //: MonoBehaviour
 {
     /// <summary>
     /// GridDataInfo 해당 스크립트의 변수에 적용

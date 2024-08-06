@@ -16,26 +16,6 @@ namespace Server
     {
         public List<object> Escapes = new List<object>();
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
         public void HandleMove(Player player, C_Move packet)
         {
             if (player == null)
@@ -75,8 +55,6 @@ namespace Server
 
 
             player.inventory.instantGrid[0].DeleteItemFromSlot(item);
-
-
         }
 
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )

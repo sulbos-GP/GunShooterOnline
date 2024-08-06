@@ -124,10 +124,10 @@ namespace Server.Game
         /// <param name="deleteItem"></param>
         public void DeleteItemFromSlot(ItemObject deleteItem)
         {
-            Console.WriteLine($"width : {deleteItem.Width}, height : {deleteItem.Height}");
-            for (int x = 0; x < deleteItem.itemDataInfo.Width; x++)
+            Console.WriteLine($"width : {deleteItem.Width}, height : {deleteItem.Height}, rotate : {deleteItem.ItemRotate} ");
+            for (int x = 0; x < deleteItem.Width; x++)
             {
-                for (int y = 0; y < deleteItem.itemDataInfo.Height; y++)
+                for (int y = 0; y < deleteItem.Height; y++)
                 {
                     gridSlot[deleteItem.itemDataInfo.ItemPosX + x, deleteItem.itemDataInfo.ItemPosY + y] = null;
                     Console.WriteLine($"X  : {deleteItem.itemDataInfo.ItemPosX + x}, Y : {deleteItem.itemDataInfo.ItemPosY + y}");

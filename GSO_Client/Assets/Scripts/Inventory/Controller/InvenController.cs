@@ -1,12 +1,7 @@
 using Google.Protobuf.Protocol;
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
-using static UnityEditor.ShaderGraph.Internal.KeywordDependentCollection;
 using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 

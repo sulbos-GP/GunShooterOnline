@@ -49,10 +49,10 @@ namespace Server.Game
             set
             {
                 itemDataInfo.ItemRotate = value;
-                itemDataInfo.Width = Width;
-                itemDataInfo.Height = Height;
             }
         }
+       
+
         //회전상태에 따른 너비와 높이를 보려면 이걸로
         public int Width
         {
