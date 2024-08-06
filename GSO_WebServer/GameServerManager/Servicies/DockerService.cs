@@ -142,6 +142,10 @@ namespace GameServerManager.Servicies
         {
 
             string port = mPortManager.PopPort().ToString();
+            string ip = "host.docker.internal";
+            string register = "10";
+            string backLog = "10";
+
             string name = mDockerConfig.Value.Tag + mContainerCount++;
             string image = mDockerConfig.Value.Image + ":" + mDockerConfig.Value.Tag;
             return await mDockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
@@ -150,8 +154,10 @@ namespace GameServerManager.Servicies
                 Image = image,
                 Env = new List<string>
                 {
-                    $"PORT={port}",
-                    $"HOST_IP=host.docker.internal"
+                    $"HOST_PORT={port}",
+                    $"HOST_IP={ip}",
+                    $"REGISTER={register}",
+                    $"BACKLOG={backLog}"
                 },
                 HostConfig = new HostConfig
                 {
