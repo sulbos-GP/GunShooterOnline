@@ -1701,7 +1701,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1397189865}
-  - component: {fileID: 1397189864}
+  - component: {fileID: 1397189868}
+  - component: {fileID: 1397189867}
+  - component: {fileID: 1397189866}
   m_Layer: 0
   m_Name: InvenManager
   m_TagString: Untagged
@@ -1709,19 +1711,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1397189864
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1397189863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c1f28f2d032fc254e8f491ca517e174a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryController: {fileID: 4133662079883581560}
 --- !u!4 &1397189865
 Transform:
   m_ObjectHideFlags: 0
@@ -1737,6 +1726,74 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1397189866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397189863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c80b29a92f08fc4a93c3240ee31ff01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryUI: {fileID: 1095908246791057077}
+  deleteUI: {fileID: 3385603023062608331}
+  rotateBtn: {fileID: 1222683154}
+  itemPref: {fileID: 7700662711098545541, guid: 77d0ce21f175ecd4aaf7b2c4ef2f0281, type: 3}
+  updateGridPos: {x: 0, y: 0}
+  selectedGrid: {fileID: 0}
+  isGridSelected: 0
+  selectedItem: {fileID: 0}
+  selectedRect: {fileID: 0}
+  isItemSelected: 0
+  checkOverlapItem: {fileID: 0}
+  isOnDelete: 0
+  isActive: 0
+--- !u!114 &1397189867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397189863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a2db43b54bdded43b59488972c1a6b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  highlightPrefab: {fileID: 2127881490284484680, guid: cdbd06236c685b847b21b44b02d3c749, type: 3}
+--- !u!114 &1397189868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397189863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: acd93e9616b2f544d867b91218adaf47, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: UI
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1505057932
 GameObject:
   m_ObjectHideFlags: 0
@@ -3078,58 +3135,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1790032448}
     m_Modifications:
-    - target: {fileID: 956973815594711906, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: invenData
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 1560948436342102467, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: invenData
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 3405526672393247066, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: invenUI
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 5753915715544317874, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: invenController
       value: 
-      objectReference: {fileID: 4133662079883581560}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: deleteUI
-      value: 
-      objectReference: {fileID: 3385603023062608331}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: itemPref
-      value: 
-      objectReference: {fileID: 7700662711098545541, guid: 77d0ce21f175ecd4aaf7b2c4ef2f0281, type: 3}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: rotateBtn
-      value: 
-      objectReference: {fileID: 1222683154}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: itemDB.Array.size
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: itemDB.Array.data[0]
-      value: 
-      objectReference: {fileID: 11400000, guid: 4a85d7cb2f3a02d4b96fc9a8cf6d9724, type: 2}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: itemDB.Array.data[1]
-      value: 
-      objectReference: {fileID: 11400000, guid: a608d7f637e8b7e4aa95573f0c069dc6, type: 2}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: itemDB.Array.data[2]
-      value: 
-      objectReference: {fileID: 11400000, guid: 782a2da45ed4d5041aa43629ac9142b1, type: 2}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: itemDB.Array.data[3]
-      value: 
-      objectReference: {fileID: 11400000, guid: c6f91494ae60ca4439926553489a9fde, type: 2}
-    - target: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: itemDB.Array.data[4]
-      value: 
-      objectReference: {fileID: 11400000, guid: f96b562c51611db4585f1925b746a74f, type: 2}
+      objectReference: {fileID: 1397189866}
     - target: {fileID: 8170518926862303354, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3219,6 +3228,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
+--- !u!1 &1095908246791057077 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8434712141049084716, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
+  m_PrefabInstance: {fileID: 1095908246791057076}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &1618003086188201748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3247,7 +3261,7 @@ PrefabInstance:
     - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 4133662079883581560}
+      objectReference: {fileID: 1397189866}
     - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: invenUIControl
@@ -3483,17 +3497,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 8170518926862303354, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
   m_PrefabInstance: {fileID: 1095908246791057076}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4133662079883581560 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5998750377658755360, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-  m_PrefabInstance: {fileID: 1095908246791057076}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c80b29a92f08fc4a93c3240ee31ff01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!61 &4390435953339516539
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -3777,6 +3780,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 5789374404065326914}
+  - {fileID: 1397189865}
   - {fileID: 1070464336}
   - {fileID: 1996094874}
   - {fileID: 2137543324}
@@ -3792,4 +3796,3 @@ SceneRoots:
   - {fileID: 8341284210894052191}
   - {fileID: 1505057933}
   - {fileID: 221551086}
-  - {fileID: 1397189865}

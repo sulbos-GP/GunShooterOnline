@@ -33,6 +33,7 @@ public partial class InventoryController : MonoBehaviour
 
     public static InventoryController invenInstance;
     private PlayerInput playerInput; //플레이어의 조작 인풋
+    public GameObject inventoryUI;
     //public ItemDB itemdb;
     //public List<ItemData> itemList;
 
@@ -146,7 +147,7 @@ public partial class InventoryController : MonoBehaviour
 
     private void Awake()
     {
-        /*
+        
         Debug.Log("invenInstance");
         if (invenInstance == null)
         {
@@ -157,7 +158,7 @@ public partial class InventoryController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        */
+        
 
         /*itemdb = new ItemDB();
         foreach (ItemDataInfo data in itemdb.items)
@@ -169,30 +170,6 @@ public partial class InventoryController : MonoBehaviour
 
         invenHighlight = GetComponent<InvenHighLight>();
         //Managers.Network.ConnectToGame();
-    }
-
-    private void OnEnable()
-    {
-        playerInput = new PlayerInput();
-        playerInput.UI.Enable();
-        playerInput.UI.MouseMove.performed += OnMousePosInput;
-        playerInput.UI.MouseLeftClick.started += OnMouseLeftClickStartInput;
-        playerInput.UI.MouseLeftClick.canceled += OnMouseLeftClickCancelInput;
-        playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
-        playerInput.UI.InventoryControl.performed += InvenUIControlInput;
-        //playerInput.UI.OverlapChangeAction.performed += OverlapExchangeInput;
-    }
-
-    private void OnDisable()
-    {
-        playerInput = new PlayerInput();
-        playerInput.UI.MouseMove.performed -= OnMousePosInput;
-        playerInput.UI.MouseLeftClick.performed -= OnMouseLeftClickStartInput;
-        playerInput.UI.MouseLeftClick.canceled -= OnMouseLeftClickCancelInput;
-        playerInput.UI.MouseRightClick.performed -= OnMouseRightClickInput;
-        playerInput.UI.InventoryControl.performed -= InvenUIControlInput;
-        //playerInput.UI.OverlapChangeAction.performed -= OverlapExchangeInput;
-        playerInput.UI.Disable();
     }
 
     #region PlayerInput 액션
@@ -924,7 +901,31 @@ public partial class InventoryController : MonoBehaviour
     public void invenUIControl()
     {
         isActive = !isActive;
-        gameObject.SetActive(isActive);
+
+        if (isActive)
+        {
+            playerInput = new PlayerInput();
+            playerInput.UI.Enable();
+            playerInput.UI.MouseMove.performed += OnMousePosInput;
+            playerInput.UI.MouseLeftClick.started += OnMouseLeftClickStartInput;
+            playerInput.UI.MouseLeftClick.canceled += OnMouseLeftClickCancelInput;
+            playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
+            playerInput.UI.InventoryControl.performed += InvenUIControlInput;
+            //playerInput.UI.OverlapChangeAction.performed += OverlapExchangeInput;
+        }
+        else
+        {
+            playerInput = new PlayerInput();
+            playerInput.UI.MouseMove.performed -= OnMousePosInput;
+            playerInput.UI.MouseLeftClick.performed -= OnMouseLeftClickStartInput;
+            playerInput.UI.MouseLeftClick.canceled -= OnMouseLeftClickCancelInput;
+            playerInput.UI.MouseRightClick.performed -= OnMouseRightClickInput;
+            playerInput.UI.InventoryControl.performed -= InvenUIControlInput;
+            //playerInput.UI.OverlapChangeAction.performed -= OverlapExchangeInput;
+            playerInput.UI.Disable();
+        }
+
+        inventoryUI.SetActive(isActive);
     }
 }
 

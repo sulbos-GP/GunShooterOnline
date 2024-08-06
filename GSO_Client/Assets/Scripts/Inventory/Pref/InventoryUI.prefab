@@ -552,7 +552,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridPref: {fileID: 109246022809251751, guid: 1585a591a85909943bc6907c55f55404, type: 3}
-  invenData: {fileID: 11400000, guid: 0f3d22f506e7e6e4bb25b95a0c2904ba, type: 2}
+  invenData:
+    inventoryId: 0
+    limitWeight: 0
+    gridList: []
   instantGridList: []
   instantItemList: []
   invenWeight: 0
@@ -1152,7 +1155,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gridPref: {fileID: 109246022809251751, guid: 1585a591a85909943bc6907c55f55404, type: 3}
-  invenData: {fileID: 11400000, guid: a311fe5985d394746b07a031566e87ac, type: 2}
+  invenData:
+    inventoryId: 0
+    limitWeight: 0
+    gridList: []
   instantGridList: []
   instantItemList: []
   invenWeight: 0
@@ -1566,6 +1572,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc51b2973510fba489c20339b51eef9f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  invenController: {fileID: 0}
 --- !u!1 &7577468247496011066
 GameObject:
   m_ObjectHideFlags: 0
@@ -1997,8 +2004,6 @@ GameObject:
   - component: {fileID: 4557703449979311420}
   - component: {fileID: 4180838544670555563}
   - component: {fileID: 1848261873602186467}
-  - component: {fileID: 6654110756174198709}
-  - component: {fileID: 5998750377658755360}
   m_Layer: 5
   m_Name: InventoryUI
   m_TagString: Untagged
@@ -2096,44 +2101,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &6654110756174198709
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8434712141049084716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3a2db43b54bdded43b59488972c1a6b5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  highlightPrefab: {fileID: 2127881490284484680, guid: cdbd06236c685b847b21b44b02d3c749, type: 3}
---- !u!114 &5998750377658755360
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8434712141049084716}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c80b29a92f08fc4a93c3240ee31ff01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  invenUI: {fileID: 0}
-  deleteUI: {fileID: 0}
-  rotateBtn: {fileID: 0}
-  playerId: 1
-  updateGridPos: {x: 0, y: 0}
-  itemPref: {fileID: 0}
-  selectedGrid: {fileID: 0}
-  isGridSelected: 0
-  selectedItem: {fileID: 0}
-  selectedRect: {fileID: 0}
-  isItemSelected: 0
-  checkOverlapItem: {fileID: 0}
-  isOnDelete: 0
 --- !u!1 &9004544533713642200
 GameObject:
   m_ObjectHideFlags: 0
