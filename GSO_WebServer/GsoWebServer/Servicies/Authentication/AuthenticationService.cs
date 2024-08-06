@@ -2,12 +2,11 @@
 using Google.Apis.Games.v1.Data;
 using Google.Apis.Games.v1;
 using Google.Apis.Services;
-using GSO_WebServerLibrary;
-using GsoWebServer.Reposiotry.Interfaces;
+using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using GSO_WebServerLibrary.Servicies.Interfaces;
 using GsoWebServer.Servicies.Interfaces;
-using Microsoft.Extensions.Options;
 using Google.Apis.Auth.OAuth2.Responses;
-using static Google.Apis.Requests.RequestError;
+using GSO_WebServerLibrary.Error;
 
 namespace GsoWebServer.Servicies.Authentication
 {
@@ -33,9 +32,9 @@ namespace GsoWebServer.Servicies.Authentication
             return await mGoogleService.ExchangeToken(userId, serverCode);
         }
 
-        public async Task<(WebErrorCode, TokenResponse?)> RefreshToken(String userId, String serverCode)
+        public async Task<(WebErrorCode, TokenResponse?)> RefreshToken(String userId, String refreshToken)
         {
-            return await mGoogleService.RefreshToken(userId, serverCode);
+            return await mGoogleService.RefreshToken(userId, refreshToken);
         }
 
         public async Task<WebErrorCode> RevokeToken(String userId, String accessToken)
@@ -87,7 +86,7 @@ namespace GsoWebServer.Servicies.Authentication
 
                 if (userInfo.nickname == string.Empty)
                 {
-                    return (WebErrorCode.SetNicknameInitNickname);
+                    return (WebErrorCode.None);
                 }
 
                 if(userInfo.nickname == nickname)
@@ -103,9 +102,40 @@ namespace GsoWebServer.Servicies.Authentication
             }
         }
 
-        public async Task<WebErrorCode> RegisterToken(int uid, long expires, String accessToken, String refreshToken)
+        public async Task<WebErrorCode> RegisterToken(Int32 uid, String user_id, String accessToken, String refreshToken, Int64 expires)
         {
-            return await mSharedDB.RegisterToken(uid, expires, accessToken, refreshToken);
+
+            var error = await mSharedDB.RegisterAuthUserData(uid, user_id, accessToken, expires);
+            if (error != WebErrorCode.None)
+            {
+                return WebErrorCode.TEMP_ERROR;
+            }
+
+            //error = await mSharedDB.RegisterRefreshToken(uid, user_id, refreshToken);
+            //if (error != WebErrorCode.None)
+            //{
+            //    return WebErrorCode.TEMP_ERROR;
+            //}
+
+            return WebErrorCode.None;
+
+        }
+
+        public async Task<WebErrorCode> RemoveToken(Int32 uid)
+        {
+            var error = await mSharedDB.RemoveAuthUserData(uid);
+            if (error != WebErrorCode.None)
+            {
+                return WebErrorCode.TEMP_ERROR;
+            }
+
+            error = await mSharedDB.RemoveRefreshToken(uid);
+            if (error != WebErrorCode.None)
+            {
+                return WebErrorCode.TEMP_ERROR;
+            }
+
+            return WebErrorCode.None;
         }
 
         public async Task<WebErrorCode> UpdateLastSignInTime(int uid)
