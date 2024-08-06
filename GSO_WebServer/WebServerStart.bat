@@ -1,26 +1,26 @@
 @echo off
 
-REM ÁÖÀÇ
-REM GSO_StartUp.batÀ» ½ÇÇà½ÃÄÑÁÖ¼¼¿ä
-REM Á÷Á¢ÀûÀ¸·Î ¸ÕÀú ½ÇÇàÀÌ ºÒ°¡´ÉÇÕ´Ï´Ù
+REM ï¿½ï¿½ï¿½ï¿½
+REM GSO_StartUp.batï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½
+REM ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½
 
 echo WebServer batch file is running.
 
 if %Configuration%==Debug (
 	set SolutionPath="%~dp0GSO_WebServer.sln"
 	set GsoWebServerPath="%~dp0GsoWebServer\bin\Debug\net8.0\"
-	set MatchmakingPath="%~dp0MatchmakingServer\bin\Debug\net8.0\"
-	set GameSessionPath="%~dp0GameSessionServer\bin\Debug\net8.0\"
+	set MatchmakerPath="%~dp0MatchmakerPath\bin\Debug\net8.0\"
+	set GameServerManagerPath="%~dp0GameServerManager\bin\Debug\net8.0\"
 ) else if %Configuration%==Release (
 	set SolutionPath="%~dp0GSO_WebServer.sln"
 	set GsoWebServerPath="%~dp0GsoWebServer\bin\Release\net8.0\"
-	set MatchmakingPath="%~dp0MatchmakingServer\bin\Release\net8.0\"
-	set GameSessionPath="%~dp0GameSessionServer\bin\Release\net8.0\"
+	set MatchmakerPath="%~dp0atchmakerPath\bin\Release\net8.0\"
+	set GameServerManagerPath="%~dp0GameServerManager\bin\Release\net8.0\"
 )
 
 if %START_CALL%==true (
 
-	REM GSO_WebServer ¼Ö·ç¼Ç ºôµå ½ÃÀÛ
+	REM GSO_WebServer ï¿½Ö·ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	echo build to GSO_WebServer solution.
 	%MSBuildPath% %SolutionPath% /p:Configuration=%Configuration%
 	
@@ -30,17 +30,17 @@ if %START_CALL%==true (
 		exit /b %ERRORLEVEL%
 	)
 
-	REM ÀÎÁõ ¼­¹ö ½ÃÀÛ
+	REM ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 	echo start to GsoWebServer.
 	start /d %GsoWebServerPath% GsoWebServer.exe
 
-	REM ¸ÅÄª ¼­¹ö
-	REM echo start to MatchmakingServer.
-	REM start /d %GsoWebServerPath% MatchmakingServer.exe
+	REM ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½
+	echo start to MatchmakingServer.
+	start /d %MatchmakerPath% MatchmakingServer.exe
 	
-	REM °ÔÀÓ ¼¼¼Ç ¼­¹ö
-	REM echo start to GameSessionServer.
-	REM start /d %GameSessionPath% GameSessionServer.exe
+	REM ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+	echo start to GameSessionServer.
+	start /d %GameServerManagerPath% GameSessionServer.exe
 	
 ) else (
 	echo This batch file cannot be run directly.
