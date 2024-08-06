@@ -147,9 +147,10 @@ namespace Server.Game
             {
                 return;
             }
-            Console.WriteLine($"MoveItem Method\n Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
+            Console.WriteLine($"MoveItem Method\n" +
+                $"Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
                 $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosX}) -> ({posX},{posY})\n" +
-                $"rotate : {target.itemDataInfo.ItemRotate} -> {rotate}");
+                $"rotate : {target.itemDataInfo.ItemRotate} -> {rotate}\n");
             target.ownerGrid.DeleteItemFromSlot(target);
             target.ItemRotate = rotate;
             target.ownerGrid.PushItemIntoSlot(target,posX,posY);
@@ -166,6 +167,10 @@ namespace Server.Game
                 return;
             }
 
+            Console.WriteLine($"DeleteItem Method\n" +
+                $"Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
+                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosX} -> X)\n" +
+                $"rotate : {target.itemDataInfo.ItemRotate} -> X\n");
             target.ownerGrid.DeleteItemFromSlot(target);
 
             target.ownerGrid.PrintInvenContents();

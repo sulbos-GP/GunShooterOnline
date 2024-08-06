@@ -192,6 +192,8 @@ public class ItemObject : MonoBehaviour
 
     public void DestroyItem()
     {
+        curItemGrid.gridData.itemList.Remove(itemData);
+        curItemGrid.ownInven.instantItemList.Remove(this);
         Destroy(gameObject);
     }
 }
