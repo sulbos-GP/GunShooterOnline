@@ -99,6 +99,15 @@ namespace Matchmaker.Service.Background
                         continue;
                     }
 
+                    Console.WriteLine("MatchInfo");
+                    Console.WriteLine("{");
+                    Console.WriteLine($"ID      : {profile.container_id}");
+                    Console.WriteLine($"WORLD   : {profile.world}");
+                    Console.WriteLine($"H_IP    : {profile.host_ip}");
+                    Console.WriteLine($"H_PORT  : {profile.host_port}");
+                    Console.WriteLine($"C_PORT  : {profile.container_port}");
+                    Console.WriteLine("}");
+
                     //해당 클라이언트에게 방 정보 전송
                     error = await mMatchmakerService.NotifyMatchSuccess(keys, profile);
                     if (error != WebErrorCode.None)

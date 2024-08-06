@@ -26,6 +26,9 @@ namespace GameServerManager.Controllers
         [Route("FetchMatch")]
         public async Task<FetchMatchRes> FetchMatch([FromBody] FetchMatchReq request)
         {
+
+            Console.WriteLine($"[FetchMatch] Requset");
+
             var response = new FetchMatchRes();
             try
             {
