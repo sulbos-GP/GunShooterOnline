@@ -26,12 +26,12 @@ namespace Matchmaker.Startup
             // Add services to the http client
             services.AddHttpClient("GsoWebServer", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:5000/api");
+                httpclient.BaseAddress = new Uri("http://localhost:5000");
             });
 
             services.AddHttpClient("GameServerManager", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:7000/api");
+                httpclient.BaseAddress = new Uri("http://localhost:7000");
             });
 
             services.AddControllers().AddJsonOptions(options =>

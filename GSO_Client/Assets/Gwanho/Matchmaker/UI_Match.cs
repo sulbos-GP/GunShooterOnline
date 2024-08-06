@@ -197,7 +197,9 @@ public class UI_Match : MonoBehaviour
         //╥ндц
         response.host_ip = "127.0.0.1";
 
+        Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
 
+        Managers.Network.ConnectToGame(response.host_ip);
 
     }
 
