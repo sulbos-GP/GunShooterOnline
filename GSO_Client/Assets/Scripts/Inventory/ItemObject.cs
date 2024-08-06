@@ -24,7 +24,7 @@ public class ItemObject : MonoBehaviour
      *    rotated변수를 바꾸며 현재 RectTransform에 적용시킵니다.
     */
     public const int maxItemMergeAmount = 64;
-
+    public Image imageUI;
     public RectTransform itemRect;
     public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
     public Sprite hideSprite; //조회 전에 보여질 스프라이트
@@ -78,8 +78,9 @@ public class ItemObject : MonoBehaviour
 
     private void Awake()
     {
-        transform.GetComponent<Image>().raycastTarget = false;
         itemRect = GetComponent<RectTransform>();
+        imageUI = transform.GetChild(0).GetComponent<Image>();
+        imageUI.raycastTarget = false;
     }
     /// <summary>
     /// 아이템의 데이터를 적용
@@ -104,14 +105,14 @@ public class ItemObject : MonoBehaviour
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
         if (itemData.searchedPlayerId.Contains(Managers.Object.MyPlayer.Id) == false)
         {
-            transform.GetComponent<Image>().sprite = hideSprite;
+            imageUI.sprite = hideSprite;
             ishide = true;
             isOnSearching = false;
         }
         else
         {
-            
-            transform.GetComponent<Image>().sprite = itemSprite;
+
+            imageUI.sprite = itemSprite;
             ishide = false;
             isOnSearching = true;
         }
@@ -134,7 +135,7 @@ public class ItemObject : MonoBehaviour
         yield return new WaitForSeconds(duration);
         ishide = false;
 
-        transform.GetComponent<Image>().sprite = itemSprite;
+        imageUI.sprite = itemSprite;
         itemData.searchedPlayerId.Add(Managers.Object.MyPlayer.Id);
         TextControl();
     }
@@ -162,7 +163,8 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void Rotate(int rotateInt)
     {
-        itemRect.rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
+        //itemRect.rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
+        imageUI.GetComponent< RectTransform >().rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
     }
 
     public void MergeItem(ItemObject targetItem, int mergeAmount)
@@ -176,7 +178,7 @@ public class ItemObject : MonoBehaviour
 
     public void TextControl()
     {
-        TextMeshProUGUI amountText = transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        TextMeshProUGUI amountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         amountText.raycastTarget = false;
         if (itemData.itemAmount <= 1 || ishide) 
         {
