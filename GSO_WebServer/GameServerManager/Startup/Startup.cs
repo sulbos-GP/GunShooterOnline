@@ -21,14 +21,14 @@ namespace GameServerManager.Startup
         public void ConfigureServices(IServiceCollection services)
         {
             // Add services to the http client
-            services.AddHttpClient("GSO_Matchmaker", httpclient =>
+            services.AddHttpClient("GsoWebServer", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:5200");
+                httpclient.BaseAddress = new Uri("http://localhost:5000/api");
             });
 
-            services.AddHttpClient("GSO_WebServer", httpclient =>
+            services.AddHttpClient("Matchmaker", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:6900");
+                httpclient.BaseAddress = new Uri("http://localhost:5200/api");
             });
 
             services.AddControllers().AddJsonOptions(options =>

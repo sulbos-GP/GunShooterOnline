@@ -67,9 +67,11 @@ public class MatchmakerHub : ClientHub
     //임시 나중에 DLL로 모델 가져올 예정
     public class MatchProfile
     {
-        public string match_id { get; set; } = string.Empty;
-        public string host { get; set; } = string.Empty;
-        public short port { get; set; } = 0;
+        public string container_id { get; set; } = string.Empty;    //매칭 아이디
+        public string world { get; set; } = string.Empty;           //맵 이름
+        public string host_ip { get; set; } = string.Empty;         //ip
+        public int container_port { get; set; } = 0;                //컨테이너 포트
+        public int host_port { get; set; } = 0;                     //호스트 포트
     }
 
 }

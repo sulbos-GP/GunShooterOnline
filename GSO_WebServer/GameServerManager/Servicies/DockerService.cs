@@ -113,6 +113,13 @@ namespace GameServerManager.Servicies
 
         private async Task CreateImageFromRegistry()
         {
+            //await mDockerClient.Images.DeleteImageAsync(
+            //    mDockerConfig.Value.Image + ":" + mDockerConfig.Value.Tag,
+            //    new ImageDeleteParameters
+            //    {
+
+            //    });
+
             await mDockerClient.Images.CreateImageAsync(
                 new ImagesCreateParameters
                 {
