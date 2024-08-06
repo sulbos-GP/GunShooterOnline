@@ -2,6 +2,8 @@
 using Server.Game;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -124,13 +126,11 @@ namespace Server.Game
         /// <param name="deleteItem"></param>
         public void DeleteItemFromSlot(ItemObject deleteItem)
         {
-            Console.WriteLine($"width : {deleteItem.Width}, height : {deleteItem.Height}, rotate : {deleteItem.ItemRotate} ");
             for (int x = 0; x < deleteItem.Width; x++)
             {
                 for (int y = 0; y < deleteItem.Height; y++)
                 {
                     gridSlot[deleteItem.itemDataInfo.ItemPosX + x, deleteItem.itemDataInfo.ItemPosY + y] = null;
-                    Console.WriteLine($"X  : {deleteItem.itemDataInfo.ItemPosX + x}, Y : {deleteItem.itemDataInfo.ItemPosY + y}");
                 }
             }
         }
@@ -184,7 +184,8 @@ namespace Server.Game
 
         public void PrintInvenContents()
         {
-            string content = gridData.GridId + "의 슬롯 \n";
+            
+            string content = gridData.GridId + "번 그리드의 슬롯 \n";
 
             for (int i = 0; i < gridSlot.GetLength(1); i++)
             {
@@ -193,7 +194,7 @@ namespace Server.Game
                     ItemObject item = gridSlot[j, i];
                     if (item != null)
                     {
-                        content += $"| {item.itemDataInfo.ItemId},{item.itemDataInfo.ItemCode} |";
+                        content += $"| {item.itemDataInfo.ItemId},{item.itemDataInfo.ItemName} |";
 
                     }
                     else
@@ -205,6 +206,7 @@ namespace Server.Game
             }
 
             Console.WriteLine(content);
+
         }
     }
 }

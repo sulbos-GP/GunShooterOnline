@@ -147,13 +147,12 @@ namespace Server.Game
             {
                 return;
             }
-
+            Console.WriteLine($"MoveItem Method\n Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
+                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosX}) -> ({posX},{posY})\n" +
+                $"rotate : {target.itemDataInfo.ItemRotate} -> {rotate}");
             target.ownerGrid.DeleteItemFromSlot(target);
-
             target.ItemRotate = rotate;
-
             target.ownerGrid.PushItemIntoSlot(target,posX,posY);
-
             target.ownerGrid.PrintInvenContents();
         }
 
