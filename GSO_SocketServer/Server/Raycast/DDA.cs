@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using System.Numerics;
 using Vector2 = System.Numerics.Vector2;
 using Differ;
