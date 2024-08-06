@@ -146,8 +146,7 @@ public partial class InventoryController : MonoBehaviour
     
 
     private void Awake()
-    {
-        
+    { 
         Debug.Log("invenInstance");
         if (invenInstance == null)
         {
@@ -543,7 +542,7 @@ public partial class InventoryController : MonoBehaviour
                         Managers.Network.Send(packet);
 
                         
-                   Debug.Log($"packet.ItemId = {packet.ItemId}\r\n" +
+                        Debug.Log($"packet.ItemId = {packet.ItemId}\r\n" +
                            $"packet.ItemPosX = {packet.ItemPosX}\r\n" +
                            $"packet.ItemPosY = {packet.ItemPosY}\r\n" +
                            $"packet.ItemRotate = {packet.ItemRotate}\r\n" +
@@ -555,7 +554,7 @@ public partial class InventoryController : MonoBehaviour
 
                         BackUpItemArray();
 
-                        Destroy(selectedItem.gameObject);
+                        DestroySelectedItem();
                     }
                     else
                     {
@@ -768,14 +767,6 @@ public partial class InventoryController : MonoBehaviour
     {
         if(!isItemSelected){ return; }
 
-        //(임시) 우클릭으로 생성한 아이템의 경우
-        if (selectedItem.curItemGrid == null)
-        {
-            Debug.Log("아이템 파괴");
-            DestroySelectedItem();
-            return;
-        }
-
         //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
         selectedItem.curItemGrid = selectedItem.backUpItemGrid;
         selectedItem.itemData.itemPos = selectedItem.backUpItemPos;
@@ -868,7 +859,7 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void DestroySelectedItem()
     {
-        Destroy(selectedItem.gameObject);
+        selectedItem.DestroyItem();
         SelectedItem = null;
     }
 
