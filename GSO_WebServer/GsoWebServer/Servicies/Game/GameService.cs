@@ -1,4 +1,4 @@
-﻿using GSO_WebServerLibrary.Reposiotry.Interfaces;
+﻿using GsoWebServer.Reposiotry.Interfaces;
 using GsoWebServer.Servicies.Interfaces;
 
 namespace GsoWebServer.Servicies.Game

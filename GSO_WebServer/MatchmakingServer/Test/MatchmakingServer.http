@@ -1,0 +1,21 @@
+@MatchmakingServer_HostAddress = http://localhost:5200/api
+
+POST {{MatchmakingServer_HostAddress}}/Matchmaking/Join
+Content-Type: application/json
+
+{
+    "user_id":"a_1",
+    "access_token":"a0983694-050c-4230-c576-bf863afc066c"
+}
+
+###
+
+POST {{MatchmakingServer_HostAddress}}/Matchmaking/Cancle
+Content-Type: application/json
+
+{
+    "user_id":"a_1",
+    "access_token":"a0983694-050c-4230-c576-bf863afc066c"
+}
+
+###
