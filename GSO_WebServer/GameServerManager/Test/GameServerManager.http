@@ -1,0 +1,10 @@
+@GameServerManager_HostAddress = http://localhost:7000/api
+
+POST {{GameServerManager_HostAddress}}/Session/FetchMatch
+Content-Type: application/json
+
+{
+
+}
+
+###
