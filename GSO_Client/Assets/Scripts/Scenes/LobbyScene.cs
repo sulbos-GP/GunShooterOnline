@@ -17,7 +17,7 @@ public class LobbyScene : BaseScene
     protected override void Init()
     {
         base.Init();
-        SceneType = Define.Scene.Game;
+        SceneType = Define.Scene.Forest;
         Screen.SetResolution(1920, 1080, false);
         Debug.Log("신 초기화 로비");
         //Managers.Network.ConnectToGame("ec2-3-36-85-125.ap-northeast-2.compute.amazonaws.com");
@@ -54,7 +54,7 @@ public class LobbyScene : BaseScene
 
     public void GamePlay()
     {
-        Managers.Scene.LoadScene(Define.Scene.Game);
+        Managers.Scene.LoadScene(Define.Scene.Forest);
 
 
 

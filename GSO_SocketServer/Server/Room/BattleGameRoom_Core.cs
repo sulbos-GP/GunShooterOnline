@@ -3,6 +3,7 @@ using Google.Protobuf.Protocol;
 using LiteNetLib;
 using QuadTree;
 using Server.Game;
+using Server.Game.Object;
 using ServerCore;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,11 @@ namespace Server
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
 
-        public Map mMap { get; } 
+        public Map map { get; } 
         public BattleGameRoom()
         {
-            mMap = new Map(r: this);
-            mMap.Init();
+            map = new Map(r: this);
+            map.Init();
         }
 
         public override void Init()
@@ -113,6 +114,29 @@ namespace Server
                     //--------------------------------------------
                    // mMap.SendMapInfo(player);
                 }
+
+                {
+                    S_Spawn inventorySpawn = new S_Spawn();
+
+                    //생성끝
+                    foreach (RootableObject box in map.rootableObjects)
+                    {
+                        Console.WriteLine($"box id : {box.Id}");
+
+                        inventorySpawn.Objects.Add(box.info);
+                    }
+
+                    player.Session.Send(inventorySpawn);
+
+                    //TODO : 지승현 24 8월 7일 클라에서 타입에 따라 box는 그냥 무시하고 아이디만 머지
+                }
+
+
+
+
+
+
+
             }
             else if (type == GameObjectType.Monster)
             {

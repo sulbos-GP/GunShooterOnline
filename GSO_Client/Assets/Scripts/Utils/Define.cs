@@ -6,7 +6,7 @@ public class Define
         Login,
         Lobby,
         loading,
-        Game,
+        Forest,
         FieldOfViewTest,
     }
 

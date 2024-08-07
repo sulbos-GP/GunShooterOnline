@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/DoozyUIScenes/Lobby.unity
     guid: 207b83c182f407744926ea7f6e2419aa
   - enabled: 1
-    path: Assets/Scenes/Game.unity
+    path: Assets/Scenes/Forest.unity
     guid: 23e2da40052b8674499c192cb80c6826
   - enabled: 1
     path: Assets/Gwanho/SignInScene.unity
