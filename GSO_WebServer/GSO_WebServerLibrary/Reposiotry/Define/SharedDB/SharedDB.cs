@@ -159,7 +159,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MemoryDB
             try
             {
 
-                string key = KeyUtils.MakeKey(KeyUtils.EKey.UidLock, Convert.ToInt32(uid));
+                string key = KeyUtils.MakeKey(KeyUtils.EKey.UIDLock, Convert.ToInt32(uid));
 
                 AuthUserDataInfo user = new AuthUserDataInfo();
 
@@ -182,7 +182,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MemoryDB
         {
             try
             {
-                string key = KeyUtils.MakeKey(KeyUtils.EKey.UidLock, Convert.ToInt32(uid));
+                string key = KeyUtils.MakeKey(KeyUtils.EKey.UIDLock, Convert.ToInt32(uid));
 
                 RedisString<AuthUserDataInfo> redis = new(mRedisConn, key, null);
                 if (await redis.DeleteAsync() == false)

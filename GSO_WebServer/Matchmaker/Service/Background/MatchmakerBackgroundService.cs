@@ -101,11 +101,11 @@ namespace Matchmaker.Service.Background
 
                     Console.WriteLine("MatchInfo");
                     Console.WriteLine("{");
-                    Console.WriteLine($"ID      : {profile.container_id}");
-                    Console.WriteLine($"WORLD   : {profile.world}");
-                    Console.WriteLine($"H_IP    : {profile.host_ip}");
-                    Console.WriteLine($"H_PORT  : {profile.host_port}");
-                    Console.WriteLine($"C_PORT  : {profile.container_port}");
+                    Console.WriteLine($"\tID      : {profile.container_id}");
+                    Console.WriteLine($"\tWORLD   : {profile.world}");
+                    Console.WriteLine($"\tH_IP    : {profile.host_ip}");
+                    Console.WriteLine($"\tH_PORT  : {profile.host_port}");
+                    Console.WriteLine($"\tC_PORT  : {profile.container_port}");
                     Console.WriteLine("}");
 
                     //해당 클라이언트에게 방 정보 전송

@@ -36,14 +36,19 @@ namespace Matchmaker.Service.Interfaces
         public Task<WebErrorCode> RemoveMatchQueue(String[] keys);
 
         /// <summary>
-        /// 모든 플레이어 조회 및 잠금
+        /// 모든 플레이어 조회
         /// </summary>
         public Task<(WebErrorCode, Dictionary<int, PlayerInfo>?)> ScanPlayers();
 
         /// <summary>
-        /// 모든 플레이어 잠금 해제
+        /// 플레이어 잠금
         /// </summary>
-        public Task<WebErrorCode> UnLockPlayers(Dictionary<int, PlayerInfo> players);
+        public Task<WebErrorCode> LockPlayers(String id);
+
+        /// <summary>
+        /// 플레이어 잠금 해제
+        /// </summary>
+        public Task<WebErrorCode> UnLockPlayers(String id);
 
         /// <summary>
         /// 플레이어 레이팅에 따른 매칭 찾아주고 key 리턴
