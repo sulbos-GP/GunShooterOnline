@@ -10,7 +10,7 @@ public class GameScene : BaseScene
     {
         base.Init();
 
-        SceneType = Define.Scene.Game;
+        SceneType = Define.Scene.Forest;
         Canvas = FindObjectOfType<Canvas>();
         Managers.Map.LoadMap(9);
 

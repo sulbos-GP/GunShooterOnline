@@ -41,7 +41,7 @@ namespace Server
             resMovePacket.PositionInfo = packet.PositionInfo;
 
 
-            mMap.ApplyMove(player,
+            map.ApplyMove(player,
                 new Vector2Int((int)Math.Round(packet.PositionInfo.PosX), (int)Math.Round(packet.PositionInfo.PosY)));
 
             BroadCast(player.CurrentRoomId, resMovePacket);

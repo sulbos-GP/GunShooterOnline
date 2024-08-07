@@ -263,7 +263,7 @@ internal class PacketHandler
             Debug.Log("Wall Hit bullet");
             return;
         }
-        Debug.Log(go.GetInstanceID());
+        Debug.Log(go.GetComponent<MyPlayerController>().Id);
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
         {

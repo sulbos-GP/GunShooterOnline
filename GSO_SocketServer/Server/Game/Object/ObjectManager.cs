@@ -13,7 +13,7 @@ internal class ObjectManager
     private int _counter = 1;
     private readonly object _lock = new();
     private readonly Dictionary<int, Player> _players = new();
-    public readonly Dictionary<int, RootableObject> _rootable = new();
+    private readonly Dictionary<int, RootableObject> _rootable = new();
     private readonly Dictionary<int, ItemObject> _items = new();
     public static ObjectManager Instance { get; } = new();
 

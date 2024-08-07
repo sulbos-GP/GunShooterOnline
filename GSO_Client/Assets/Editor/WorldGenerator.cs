@@ -24,7 +24,7 @@ public class WorldGenerator
     static string serverPath = "";
     static string clinetPath = "";
     static int[,] map;
-    static float distance; // -55.5 -55.5 -> -55 -55   = result = 0.5f
+    static float calculateOffset; // -55.5 -55.5 -> -55 -55   = result = 0.5f
     static Vector2 startPosTopLeft = Vector2.zero;
 
     static Vector2 min = new Vector2(99999, 99999);
@@ -47,12 +47,12 @@ public class WorldGenerator
         Debug.Log("시작");
 
         map = null;
-        distance = 0;
+        calculateOffset = 0;
         //MapStr = "";
 
 
         GameObject go = GameObject.FindGameObjectWithTag("World");
-        //go.GetComponent<World>().InventorySet();
+        //go.GetComponent<World>().Init();
 
 
 
@@ -107,13 +107,13 @@ public class WorldGenerator
 
         Debug.Log($"끝{total.Length}");
         //File.WriteAllText(serverPath + $"Map_2.txt", total);
-        File.WriteAllText(clinetPath + $"/Map_2.txt", total);
+        File.WriteAllText(clinetPath + $"/Forest.txt", total);
 
     }
 
     private void Init()
     {
-        Debug.Log("InventorySet");
+        Debug.Log("Init");
     }
 
     private static void MapInit(Tuple<Transform, Vector2Int> _room)
@@ -143,7 +143,7 @@ public class WorldGenerator
 
         Vector2 tempVector = (Vector2)_base.CellToWorld(_base.cellBounds.position);       // ------------distance----------------
 
-        distance = Math.Abs(Mathf.CeilToInt(tempVector.x)) - Math.Abs(tempVector.x) + 1;
+        calculateOffset = Math.Abs(Mathf.CeilToInt(tempVector.x)) - Math.Abs(tempVector.x) + 1;
 
         //Debug.Log(_room.Item2 + " ," + tempVector); //------------------------------ 디버그 ----------------------------
 
@@ -187,17 +187,20 @@ public class WorldGenerator
 
         Tilemap _base = null;
         Tilemap _wall = null;
+        Tilemap _box = null;
         foreach (Transform _tr in tr)
         {
             if (_tr.name.Contains("base") == true)
             {
                 _base = _tr.GetComponent<Tilemap>();
-                continue;
             }
             else if (_tr.name.Contains("Wall") == true)
             {
                 _wall = _tr.GetComponent<Tilemap>();
-                continue;
+            } 
+            else if (_tr.name.Contains("Box") == true)
+            {
+                _box = _tr.GetComponent<Tilemap>();
             }
         }
 
@@ -212,7 +215,7 @@ public class WorldGenerator
         }
 
         Vector2 _min = _base.CellToWorld(new Vector3Int(_base.cellBounds.xMin, _base.cellBounds.yMin));
-        Vector2Int min = new Vector2Int(Mathf.RoundToInt(_min.x + distance) + HalfLength, Mathf.RoundToInt(_min.y + distance) + HalfLength);
+        Vector2Int min = new Vector2Int(Mathf.RoundToInt(_min.x + calculateOffset) + HalfLength, Mathf.RoundToInt(_min.y + calculateOffset) + HalfLength);
 
         //Vector2 _max = _base.CellToWorld(new Vector3Int(_base.cellBounds.xMax, _base.cellBounds.yMax));
         //Vector2Int max = new Vector2Int(Mathf.RoundToInt(_max.x + distance) + HalfLength, Mathf.RoundToInt(_max.y + distance) + HalfLength);
@@ -228,12 +231,11 @@ public class WorldGenerator
             {
                 //Debug.Log(currnet);
 
-                TileBase tile = _wall.GetTile(new Vector3Int(x, y, 0));
+                TileBase wallTile = _wall.GetTile(new Vector3Int(x, y, 0));
+                TileBase boxTile = _box.GetTile(new Vector3Int(x, y, 0));
 
-                if (tile != null)
+                if (wallTile != null)
                 {
-
-
                     //Debug.Log($"x = {currnet.x} y= {currnet.y}");
 
                    /* if (map[currnet.y, currnet.x] == 0)
@@ -242,6 +244,11 @@ public class WorldGenerator
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 1;
 
+                }
+                else if (boxTile != null)
+                {
+                    if (map[currnet.x, currnet.y] == 0)
+                        map[currnet.x, currnet.y] = 2;
                 }
                 else
                 {
