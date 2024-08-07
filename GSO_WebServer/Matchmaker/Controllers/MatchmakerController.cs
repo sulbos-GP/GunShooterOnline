@@ -29,6 +29,8 @@ namespace Matchmaker.Controllers
         public async Task<JoinMatchRes> Join([FromHeader] HeaderDTO header, [FromBody] JoinMatchReq request)
         {
 
+            Console.WriteLine($"[Join] uid:{header.uid} world:{request.world} region:{request.region}");
+
             var response = new JoinMatchRes();
 
             if (!WebUtils.IsValidModelState(request))
@@ -56,6 +58,7 @@ namespace Matchmaker.Controllers
         public async Task<CancleMatchRes> Cancle([FromHeader] HeaderDTO header, [FromBody] CancleMatchReq request)
         {
 
+            Console.WriteLine($"[Join] uid:{header.uid} world:{request.world} region:{request.region}");
             var response = new CancleMatchRes();
 
             if (!WebUtils.IsValidModelState(request))

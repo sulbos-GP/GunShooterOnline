@@ -7,6 +7,7 @@ using Matchmaker.Repository.Interface;
 using Matchmaker.Service;
 using Matchmaker.Service.Background;
 using Matchmaker.Service.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace Matchmaker.Startup
@@ -23,15 +24,35 @@ namespace Matchmaker.Startup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+
+            IConfigurationSection databaseConfig;
+            IConfigurationSection endPointConfig;
+#if AWS
+            databaseConfig = Configuration.GetSection(nameof(AwsConfig)).GetSection(nameof(DatabaseConfig));
+            endPointConfig = Configuration.GetSection(nameof(AwsConfig)).GetSection(nameof(EndPointConfig));
+#else
+            databaseConfig = Configuration.GetSection(nameof(LocalConfig)).GetSection(nameof(DatabaseConfig));
+            endPointConfig = Configuration.GetSection(nameof(LocalConfig)).GetSection(nameof(EndPointConfig));
+#endif
+            // Add services to the config
+            services.Configure<DatabaseConfig>(databaseConfig);
+            services.Configure<EndPointConfig>(endPointConfig);
+
             // Add services to the http client
+            EndPointConfig? endPoint = endPointConfig.Get<EndPointConfig>();
+            if(endPoint == null)
+            {
+                return;
+            }
+
             services.AddHttpClient("GsoWebServer", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:5000");
+                httpclient.BaseAddress = new Uri(endPoint.Center);
             });
 
             services.AddHttpClient("GameServerManager", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:7000");
+                httpclient.BaseAddress = new Uri(endPoint.GameServerManager);
             });
 
             services.AddControllers().AddJsonOptions(options =>
@@ -42,8 +63,8 @@ namespace Matchmaker.Startup
 
             services.AddSignalR();
 
-            // Add services to the config
-            services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(DatabaseConfig)));
+
+
             //services.Configure<GoogleConfig>(Configuration.GetSection(nameof(GoogleConfig)));
 
             // Add services to the container.

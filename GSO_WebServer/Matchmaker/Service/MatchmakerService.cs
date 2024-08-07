@@ -248,17 +248,23 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<WebErrorCode> UnLockPlayers(Dictionary<int, PlayerInfo> players)
+        public async Task<WebErrorCode> LockPlayers(String clientId)
         {
             try
             {
-                foreach (var player in players)
-                {
 
-                    string key = KeyUtils.MakeKey(KeyUtils.EKey.MATCHLock, player.Key);
+                return WebErrorCode.None;
+            }
+            catch
+            {
+                return WebErrorCode.TEMP_Exception;
+            }
+        }
 
-
-                }
+        public async Task<WebErrorCode> UnLockPlayers(String clientId)
+        {
+            try
+            {
 
                 return WebErrorCode.None;
             }

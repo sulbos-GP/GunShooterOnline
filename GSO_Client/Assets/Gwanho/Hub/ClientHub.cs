@@ -12,9 +12,10 @@ using System.Threading.Tasks;
 public abstract class ClientHub : MonoBehaviour
 {
     protected HubConnection mConnection;
-
     protected abstract string mConnectionUrl { get; set; }
     protected abstract string mConnectionName { get; set; }
+
+    private readonly Queue<Action> mExecutionQueue = new Queue<Action>();
 
     protected void Start()
     {
@@ -25,6 +26,14 @@ public abstract class ClientHub : MonoBehaviour
 
         StartHub();
 
+    }
+
+    protected void Update()
+    {
+        if (mExecutionQueue.Count > 0)
+        {
+            mExecutionQueue.Dequeue().Invoke();
+        }
     }
 
     private void CreateHubConnectionHandler()
@@ -90,11 +99,18 @@ public abstract class ClientHub : MonoBehaviour
         {
             SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결이 해제에 실패하였습니다.");
         }
+
     }
     private async void C2S_VerfiyCredential()
     {
         var credential = WebManager.Instance.mCredential;
         await mConnection.InvokeAsync("VerfiyCredential", credential);
+    }
+
+    public void EnqueueDispatch(Action action)
+    {
+        if (action == null) throw new ArgumentNullException(nameof(action));
+        mExecutionQueue.Enqueue(action);
     }
 
     protected abstract void SetOnRecivedFunc();

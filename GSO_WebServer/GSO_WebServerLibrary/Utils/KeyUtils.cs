@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,10 +9,13 @@ namespace GSO_WebServerLibrary.Utils
 {
     public static class KeyUtils
     {
+
+        private static string mSeparator = "-";
+
         public enum EKey
         {
             UID,
-            UidLock,
+            UIDLock,
             REFRESH,
             MATCH,
             MATCHLock,
@@ -19,29 +23,25 @@ namespace GSO_WebServerLibrary.Utils
             SESSIONLock,
         }
 
+        public static string GetValue(string key)
+        {
+            return key.Substring(key.IndexOf(mSeparator) + 1);
+        }
+
+        //임시
         public static int GetUID(string key)
         {
-            string[] parts = key.Split('_');
-            if (parts.Length > 1)
-            {
-                string valueAfterUnderscore = parts[1];
-                if (int.TryParse(valueAfterUnderscore, out int uid))
-                {
-                    return uid;
-                }
-            }
-
-            return 0;
+            return Convert.ToInt32(key.Substring(key.IndexOf(mSeparator) + 1));
         }
 
-        public static string MakeKey(EKey key, int uid)
+        public static string MakeKey(EKey type, int value)
         {
-            return key.ToString() + "_" + uid.ToString();
+            return type.ToString() + mSeparator + value.ToString();
         }
 
-        public static string MakeKey(EKey key, string uid)
+        public static string MakeKey(EKey type, string value)
         {
-            return key.ToString() + "_" + GetUID(uid).ToString();
+            return type.ToString() + mSeparator + value;
         }
 
     }
