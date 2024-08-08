@@ -4,6 +4,7 @@ using LiteNetLib;
 using Server;
 using Server.Data;
 using Server.Game;
+using Server.Game.Object;
 using Server.Game.Utils;
 using ServerCore;
 using System;
@@ -84,8 +85,24 @@ class PacketHandler
         Console.WriteLine($"C_MoveItemHandler {packet.PlayerId}");
 
         ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
-        
-        target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY , packet.ItemRotate);
+        Grid targetGrid = null;
+        if(packet.PlayerId == packet.InventoryId)
+        {
+            //플레이어의 그리드로 옮김
+            ObjectManager.Instance.Find<Player>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+        }
+        else
+        {
+            ObjectManager.Instance.Find<RootableObject>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+        }
+
+        if(targetGrid == null)
+        {
+            Console.WriteLine("해당 그리드가 존재하지 않음");
+            return;
+        }
+
+        target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY , packet.ItemRotate, targetGrid);
 
         Player player = clientSession.MyPlayer;
         player.gameRoom.Push(player.gameRoom.HandleItemMove, player, message);

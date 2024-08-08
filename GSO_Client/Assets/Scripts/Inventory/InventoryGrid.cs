@@ -306,6 +306,47 @@ public class InventoryGrid : MonoBehaviour
     }
 
     /// <summary>
+    /// 아이템 이동시 그리드 데이터 수정
+    /// </summary>
+    /// <param name="item"></param>
+    public void UpdateItemInGridData(ItemObject item)
+    {
+        // 아이템 데이터에서 현재 위치를 가져옵니다.
+        Vector2Int oldPos = item.backUpItemPos;
+        Vector2Int newPos = item.itemData.itemPos;
+
+        // 이전 위치의 아이템 리스트에서 아이템을 제거합니다.
+        RemoveItemFromItemList(item);
+
+        // 새로운 위치에 아이템을 추가합니다.
+        AddItemToItemList(newPos, item);
+    }
+
+    public void AddItemToItemList(Vector2Int pos, ItemObject item)
+    {
+        // gridData의 itemList에서 아이템을 추가합니다.
+        ItemData itemData = item.itemData;
+        if (itemData == null) return;
+
+        // 아이템의 새 위치를 itemData에 설정합니다.
+        itemData.itemPos = pos;
+
+        // itemList에서 아이템을 추가합니다.
+        gridData.itemList.Add(itemData);
+    }
+
+    public void RemoveItemFromItemList(ItemObject item)
+    {
+        // gridData의 itemList에서 아이템을 제거합니다.
+        ItemData itemData = item.itemData;
+        if (itemData == null) return;
+
+        // itemList에서 해당 아이템을 제거합니다.
+        gridData.itemList.Remove(itemData);
+    }
+
+
+    /// <summary>
     /// 그리드 내의 월드위치 계산. 아이템을 해당 위치에 고정시키기 위함
     /// </summary>
     /// <param name="inventoryItem">해당 아이템</param>

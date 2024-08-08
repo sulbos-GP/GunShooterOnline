@@ -82,6 +82,7 @@ namespace Server.Game
                 posOnGrid = FindSpaceForObject(item);
                 if (posOnGrid == null)
                 {
+                    gridData.ItemList.Remove(item.itemDataInfo);
                     return;
                 }
             }
@@ -133,6 +134,15 @@ namespace Server.Game
                     gridSlot[deleteItem.itemDataInfo.ItemPosX + x, deleteItem.itemDataInfo.ItemPosY + y] = null;
                 }
             }
+        }
+        public void InsertItemDataInGridData(ItemObject target)
+        {
+            gridData.ItemList.Add(target.itemDataInfo);
+        }
+
+        public void RemoveItemDataInGridData(ItemObject target)
+        {
+            gridData.ItemList.Remove(target.itemDataInfo);
         }
 
         public Vector2Int? FindSpaceForObject(ItemObject insertItem)

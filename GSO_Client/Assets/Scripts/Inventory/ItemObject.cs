@@ -101,20 +101,18 @@ public class ItemObject : MonoBehaviour
         Rotate(itemData.itemRotate);
         ItemAmount = itemData.itemAmount;
         itemSprite = spriteList[itemData.itemCode - 1];
-
+        isOnSearching = false;
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
         if (itemData.searchedPlayerId.Contains(Managers.Object.MyPlayer.Id) == false)
         {
             imageUI.sprite = hideSprite;
             ishide = true;
-            isOnSearching = false;
         }
         else
         {
 
             imageUI.sprite = itemSprite;
             ishide = false;
-            isOnSearching = true;
         }
     }
 
@@ -169,11 +167,13 @@ public class ItemObject : MonoBehaviour
 
     public void MergeItem(ItemObject targetItem, int mergeAmount)
     {
-        if(itemData.itemCode == targetItem.itemData.itemCode)
+        if (itemData.itemCode == targetItem.itemData.itemCode)
         {
             targetItem.ItemAmount += mergeAmount;
             ItemAmount -= mergeAmount;
         }
+        itemData.itemAmount = ItemAmount;
+        targetItem.itemData.itemAmount = targetItem.ItemAmount;
     }
 
     public void TextControl()

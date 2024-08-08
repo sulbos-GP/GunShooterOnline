@@ -1,4 +1,5 @@
 using Google.Protobuf.Protocol;
+using NPOI.OpenXmlFormats.Dml.Diagram;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -34,6 +35,8 @@ public partial class InventoryController : MonoBehaviour
     public static InventoryController invenInstance;
     private PlayerInput playerInput; //플레이어의 조작 인풋
     public GameObject inventoryUI;
+    public PlayerInventoryUI playerInvenUI;
+    public OtherInventoryUI otherInvenUI;
     //public ItemDB itemdb;
     //public List<ItemData> itemList;
 
@@ -157,7 +160,7 @@ public partial class InventoryController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        
+
 
         /*itemdb = new ItemDB();
         foreach (ItemDataInfo data in itemdb.items)
@@ -486,21 +489,20 @@ public partial class InventoryController : MonoBehaviour
         if(isOnDelete)
         {
             //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
+            BackUpGridSlot();
+            DestroySelectedItem();
 
             C_DeleteItem packet = new C_DeleteItem();
             packet.ItemId = selectedItem.itemData.itemId;
             packet.PlayerId = Managers.Object.MyPlayer.Id;
             Managers.Network.Send(packet);
             Debug.Log("C_DeleteItem");
-
-            BackUpItemArray();
-            DestroySelectedItem();
             return;
         }
         if (!isGridSelected)
         {
             //아이템 그리드가 아닌 잘못된 위치에 놓을경우 되돌림
-            UndoItemArray();
+            UndoGridSlot();
             UndoItem();
             return;
         }
@@ -527,13 +529,14 @@ public partial class InventoryController : MonoBehaviour
                     {
                         //아이템 개수에 따라 무게가 가증되기로 하면 코드 추가 할것
                         selectedItem.MergeItem(placeOverlapItem, selectedItem.itemData.itemAmount);
-
+                        
                         C_MoveItem packet = new C_MoveItem();
                         packet.PlayerId = Managers.Object.MyPlayer.Id;
                         packet.ItemId = item.itemData.itemId;
                         packet.ItemPosX = pos.x;
                         packet.ItemPosY = pos.y;
                         packet.ItemRotate = item.itemData.itemRotate;
+                        packet.InventoryId = item.curItemGrid.ownInven.invenData.inventoryId;
                         packet.GridId = item.curItemGrid.gridData.gridId;
                         packet.LastItemPosX = item.backUpItemPos.x;
                         packet.LastItemPosY = item.backUpItemPos.y;
@@ -541,19 +544,7 @@ public partial class InventoryController : MonoBehaviour
                         packet.LastGridId = item.backUpItemGrid.gridData.gridId;
                         Managers.Network.Send(packet);
 
-                        
-                        Debug.Log($"packet.ItemId = {packet.ItemId}\r\n" +
-                           $"packet.ItemPosX = {packet.ItemPosX}\r\n" +
-                           $"packet.ItemPosY = {packet.ItemPosY}\r\n" +
-                           $"packet.ItemRotate = {packet.ItemRotate}\r\n" +
-                           $"packet.GridId = {packet.GridId}\r\n" +
-                           $"packet.LastItemPosX = {packet.LastItemPosX}\r\n" +
-                           $"packet.LastItemPosY = {packet.LastItemPosY}\r\n" +
-                           $"packet.LastItemRotate = {packet.LastItemRotate}\r\n" +
-                           $"packet.LastGridId = {packet.LastGridId}");
-
-                        BackUpItemArray();
-
+                        BackUpGridSlot();
                         DestroySelectedItem();
                     }
                     else
@@ -567,6 +558,7 @@ public partial class InventoryController : MonoBehaviour
                         packet.ItemPosX = pos.x;
                         packet.ItemPosY = pos.y;
                         packet.ItemRotate = item.itemData.itemRotate;
+                        packet.InventoryId = item.curItemGrid.ownInven.invenData.inventoryId;
                         packet.GridId = item.curItemGrid.gridData.gridId;
                         packet.LastItemPosX = item.backUpItemPos.x;
                         packet.LastItemPosY = item.backUpItemPos.y;
@@ -574,19 +566,7 @@ public partial class InventoryController : MonoBehaviour
                         packet.LastGridId = item.backUpItemGrid.gridData.gridId;
                         Managers.Network.Send(packet);
 
-
-                        Debug.Log($"packet.ItemId = {packet.ItemId}\r\n" +
-                                $"packet.ItemPosX = {packet.ItemPosX}\r\n" +
-                                $"packet.ItemPosY = {packet.ItemPosY}\r\n" +
-                                $"packet.ItemRotate = {packet.ItemRotate}\r\n" +
-                                $"packet.GridId = {packet.GridId}\r\n" +
-                                $"packet.LastItemPosX = {packet.LastItemPosX}\r\n" +
-                                $"packet.LastItemPosY = {packet.LastItemPosY}\r\n" +
-                                $"packet.LastItemRotate = {packet.LastItemRotate}\r\n" +
-                                $"packet.LastGridId = {packet.LastGridId}");
-
-
-                        UndoItemArray();
+                        UndoGridSlot();
                         UndoItem();
                     }
 
@@ -598,9 +578,8 @@ public partial class InventoryController : MonoBehaviour
 
                 //병합하는 경우가 아니라면 실패. 아이템과 어레이를 원래 위치로
                 placeOverlapItem = null;
-                UndoItemArray();
+                UndoGridSlot();
                 UndoItem();
-                
             }
             else
             {
@@ -610,6 +589,7 @@ public partial class InventoryController : MonoBehaviour
                 packet.ItemPosX = pos.x;
                 packet.ItemPosY = pos.y;
                 packet.ItemRotate = item.itemData.itemRotate;
+                packet.InventoryId = item.curItemGrid.ownInven.invenData.inventoryId;
                 packet.GridId = item.curItemGrid.gridData.gridId;
                 packet.LastItemPosX = item.backUpItemPos.x;
                 packet.LastItemPosY = item.backUpItemPos.y;
@@ -617,26 +597,17 @@ public partial class InventoryController : MonoBehaviour
                 packet.LastGridId = item.backUpItemGrid.gridData.gridId;
                 Managers.Network.Send(packet);
 
-
-                Debug.Log($"packet.ItemId = {packet.ItemId}\r\n" +
-                        $"packet.ItemPosX = {packet.ItemPosX}\r\n" +
-                        $"packet.ItemPosY = {packet.ItemPosY}\r\n" +
-                        $"packet.ItemRotate = {packet.ItemRotate}\r\n" +
-                        $"packet.GridId = {packet.GridId}\r\n" +
-                        $"packet.LastItemPosX = {packet.LastItemPosX}\r\n" +
-                        $"packet.LastItemPosY = {packet.LastItemPosY}\r\n" +
-                        $"packet.LastItemRotate = {packet.LastItemRotate}\r\n" +
-                        $"packet.LastGridId = {packet.LastGridId}");
-
+                selectedItem.curItemGrid.UpdateItemInGridData(selectedItem);
+                
                 BackUpItem();
-                BackUpItemArray();
+                BackUpGridSlot();
                 SelectedItem = null;
             }
         }
         else
         {
             //아이템 배치 실패시
-            UndoItemArray(); //인벤그리드의 내용을 되돌림
+            UndoGridSlot(); //인벤그리드의 내용을 되돌림
             UndoItem(); //현재 들고있는 아이템을 원래 위치로 되돌림
 
             placeOverlapItem = null;
@@ -684,7 +655,7 @@ public partial class InventoryController : MonoBehaviour
     /// <summary>
     /// 아이템 슬롯을 백업함(아이템을 들때 슬롯이 업데이트되기에 백업 필요)
     /// </summary>
-    private void BackUpItemArray()
+    private void BackUpGridSlot()
     {
         selectedItem.curItemGrid.UpdateBackUpSlot();
         selectedItem.curItemGrid.backupWeight = selectedItem.curItemGrid.GridWeight;
@@ -738,7 +709,7 @@ public partial class InventoryController : MonoBehaviour
     /// <summary>
     /// 아이템 배열을 이전 배열로 되돌림.
     /// </summary>
-    private void UndoItemArray()
+    private void UndoGridSlot()
     {
         if(selectedItem.curItemGrid == null) { return; }
         if(!isItemSelected) { return; }
@@ -859,6 +830,7 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void DestroySelectedItem()
     {
+        selectedItem.curItemGrid.RemoveItemFromItemList(selectedItem);
         selectedItem.DestroyItem();
         SelectedItem = null;
     }
@@ -895,24 +867,24 @@ public partial class InventoryController : MonoBehaviour
 
         if (isActive)
         {
-            playerInput = new PlayerInput();
-            playerInput.UI.Enable();
-            playerInput.UI.MouseMove.performed += OnMousePosInput;
-            playerInput.UI.MouseLeftClick.started += OnMouseLeftClickStartInput;
-            playerInput.UI.MouseLeftClick.canceled += OnMouseLeftClickCancelInput;
-            playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
-            playerInput.UI.InventoryControl.performed += InvenUIControlInput;
-            //playerInput.UI.OverlapChangeAction.performed += OverlapExchangeInput;
+            if (playerInput == null)
+            {
+                playerInput = new PlayerInput();
+                playerInput.UI.Enable();
+                playerInput.UI.MouseMove.performed += OnMousePosInput;
+                playerInput.UI.MouseLeftClick.started += OnMouseLeftClickStartInput;
+                playerInput.UI.MouseLeftClick.canceled += OnMouseLeftClickCancelInput;
+                playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
+                playerInput.UI.InventoryControl.performed += InvenUIControlInput;
+                //playerInput.UI.OverlapChangeAction.performed += OverlapExchangeInput;
+            }
+            else
+            {
+                playerInput.UI.Enable();
+            }
         }
         else
         {
-            playerInput = new PlayerInput();
-            playerInput.UI.MouseMove.performed -= OnMousePosInput;
-            playerInput.UI.MouseLeftClick.performed -= OnMouseLeftClickStartInput;
-            playerInput.UI.MouseLeftClick.canceled -= OnMouseLeftClickCancelInput;
-            playerInput.UI.MouseRightClick.performed -= OnMouseRightClickInput;
-            playerInput.UI.InventoryControl.performed -= InvenUIControlInput;
-            //playerInput.UI.OverlapChangeAction.performed -= OverlapExchangeInput;
             playerInput.UI.Disable();
         }
 

@@ -71,7 +71,7 @@ namespace Server
                 //루터블 오브젝트의 인벤토리
                 RootableObject box = ObjectManager.Instance.Find<RootableObject>(inventoryId);
                 Console.WriteLine($"handle box id : {box.Id}");
-                targetData = box.Inventory.invenData;
+                targetData = box.inventory.invenData;
             }
             
             //Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);

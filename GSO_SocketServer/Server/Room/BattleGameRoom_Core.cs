@@ -117,7 +117,7 @@ namespace Server
 
                 {
                     S_Spawn inventorySpawn = new S_Spawn();
-
+                    
                     //생성끝
                     foreach (RootableObject box in map.rootableObjects)
                     {
