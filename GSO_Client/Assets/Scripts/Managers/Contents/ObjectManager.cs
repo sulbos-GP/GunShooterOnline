@@ -123,8 +123,9 @@ public class ObjectManager
             go.name = $"{info.Name}"; //이름설정
             _objects.Add(info.ObjectId, go); //오브젝트 딕션너리에 추가
             Box invenObj = go.GetComponent<Box>();
-            //invenObj.objectId에 해당 오브젝트의 아이디 추가할것
-           
+            invenObj.objectId = info.ObjectId;
+            invenObj.interactType = InteractType.InventoryObj;
+            //invenObj.interactRange = 나중에 필요시 추가(박스의 종류를 나눌경우)
 
             //Add로 인벤 데이터를 생성하여 invenObj.invenData에 넣기
             //(플레이어가 해당 오브젝트와 인터렉트시 이 데이터를 플레이어의 otherInven의 인벤데이터로 불러옴)
