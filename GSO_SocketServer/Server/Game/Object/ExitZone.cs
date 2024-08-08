@@ -1,4 +1,5 @@
 ﻿using Collision.Shapes;
+using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +14,7 @@ namespace Server.Game
         
         public ExitZone()
         {
-
+            ObjectType = GameObjectType.Exitzone;
             float width = 2;
             float left = 2;
             float top = 2;
