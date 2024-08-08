@@ -130,6 +130,7 @@ internal class PacketHandler
             Debug.Log("인벤데이터가 비어있음");
 
         }
+
         //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
         InvenData newInvenData = new InvenData();
         newInvenData.SetInvenData(packet.InvenData);
