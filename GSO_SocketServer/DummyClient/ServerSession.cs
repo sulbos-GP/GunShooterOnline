@@ -32,5 +32,10 @@ namespace DummyClient
 		{
 			//Console.WriteLine($"Transferred bytes: {numOfBytes}");
 		}
+
+		public override void FlushSend()
+		{
+
+		}
 	}
 }

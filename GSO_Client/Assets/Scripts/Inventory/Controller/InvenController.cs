@@ -543,7 +543,7 @@ public partial class InventoryController : MonoBehaviour
                         packet.LastItemRotate = item.backUpItemRotate;
                         packet.LastGridId = item.backUpItemGrid.gridData.gridId;
                         Managers.Network.Send(packet);
-
+                        
                         BackUpGridSlot();
                         DestroySelectedItem();
                     }
@@ -596,11 +596,11 @@ public partial class InventoryController : MonoBehaviour
                 packet.LastItemRotate = item.backUpItemRotate;
                 packet.LastGridId = item.backUpItemGrid.gridData.gridId;
                 Managers.Network.Send(packet);
-
-                selectedItem.curItemGrid.UpdateItemInGridData(selectedItem);
+                selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+                selectedItem.curItemGrid.AddItemToItemList(selectedItem.itemData.itemPos,selectedItem);
                 
-                BackUpItem();
-                BackUpGridSlot();
+                BackUpItem(); //백업한 아이템의 위치를 현재의 위치로 백업
+                BackUpGridSlot(); //그리드의 슬롯을 현재의 슬롯으로 백업
                 SelectedItem = null;
             }
         }
