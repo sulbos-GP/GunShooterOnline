@@ -52,8 +52,8 @@ namespace Server.Game
                 {
                     //가장 큰것부터 넣음
                     PushInstantObject(item);
-                    Console.WriteLine($"item  : {item.ItemName} \nItemId : {item.ItemId} \nItemCode : {item.ItemCode}\nItemConsume? : {item.IsItemConsumeable}\n" +
-                    $"ItemAmount ={item.ItemAmount}\nitemPos = {item.ItemPosX},{item.ItemPosY}\n");
+                    /*Console.WriteLine($"item  : {item.ItemName} \nItemId : {item.ItemId} \nItemCode : {item.ItemCode}\nItemConsume? : {item.IsItemConsumeable}\n" +
+                    $"ItemAmount ={item.ItemAmount}\nitemPos = {item.ItemPosX},{item.ItemPosY}\n");*/
                 }
             }
         }

@@ -46,7 +46,9 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SDeleteItem, MakePacket<S_DeleteItem>);
 		_handler.Add((ushort)MsgId.SDeleteItem, PacketHandler.S_DeleteItemHandler);		
 		_onRecv.Add((ushort)MsgId.SRaycastHit, MakePacket<S_RaycastHit>);
-		_handler.Add((ushort)MsgId.SRaycastHit, PacketHandler.S_RaycastHitHandler);
+		_handler.Add((ushort)MsgId.SRaycastHit, PacketHandler.S_RaycastHitHandler);		
+		_onRecv.Add((ushort)MsgId.SExitGame, MakePacket<S_ExitGame>);
+		_handler.Add((ushort)MsgId.SExitGame, PacketHandler.S_ExitGameHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

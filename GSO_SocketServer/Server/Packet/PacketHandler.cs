@@ -134,7 +134,8 @@ class PacketHandler
         player.gameRoom.Push(player.gameRoom.HandleRayCast, player, new Vector2(packet.StartPosX, packet.StartPosY), new Vector2(packet.DirX, packet.DirY), packet.Length);
     }
 
-
-
-   
+    internal static void C_ExitGameHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
 }

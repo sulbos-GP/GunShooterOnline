@@ -116,17 +116,28 @@ namespace Server
                 }
 
                 {
-                    S_Spawn inventorySpawn = new S_Spawn();
+                    S_Spawn spawnPacket = new S_Spawn();
                     
                     //생성끝
                     foreach (RootableObject box in map.rootableObjects)
                     {
                         Console.WriteLine($"box id : {box.Id}");
 
-                        inventorySpawn.Objects.Add(box.info);
+                        spawnPacket.Objects.Add(box.info);
                     }
 
-                    player.Session.Send(inventorySpawn);
+
+
+                    foreach (ExitZone exit in map.exitZones)
+                    {
+                        Console.WriteLine($"exit id : {exit.Id}");
+
+                        spawnPacket.Objects.Add(exit.info);
+                    }
+
+
+                    player.Session.Send(spawnPacket);
+
 
                     //TODO : 지승현 24 8월 7일 클라에서 타입에 따라 box는 그냥 무시하고 아이디만 머지
                 }

@@ -283,6 +283,13 @@ internal class PacketHandler
 
     }
 
+    internal static void S_ExitGameHandler(PacketSession session, IMessage message)
+    {
+
+        //8월8일 지승현 -> 박성훈 : 탈출시 
+        throw new NotImplementedException();
+    }
+
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
