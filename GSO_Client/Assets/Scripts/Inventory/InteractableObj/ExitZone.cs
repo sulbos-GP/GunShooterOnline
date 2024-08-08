@@ -8,7 +8,8 @@ public class ExitZone : InteractableObject
 {
     // public GameObject gameEndUI;아직없음
     public float ExitTime;  //나가는데 걸리는 시간
-
+    private float remainingTime; // 남은 시간
+    private bool isExiting; // 현재 탈출 중인지 여부
     private void Awake()
     {
         Init();
@@ -17,7 +18,11 @@ public class ExitZone : InteractableObject
     {
         base.Init();
         interactRange = 1;
-
+        if (ExitTime == 0)
+        {
+            ExitTime = 4;
+        }
+        remainingTime = ExitTime;
         SetTriggerSize();
     }
 
@@ -28,31 +33,58 @@ public class ExitZone : InteractableObject
         Collider.size = new Vector2(interactRange, interactRange);
     }
 
+    [ContextMenu("ExitZone interact")]
     public override void Interact()
     {
+        Debug.Log("interact");
         StartCoroutine(ExitCoroutine(ExitTime));
-        
-    }
 
+    }
+    [ContextMenu("ExitZone interrupt")]
     public void InterruptExit()
     {
-        StopCoroutine(ExitCoroutine(ExitTime));
+        //피격되거나 움직일 경우
+        if (isExiting)
+        {
+            Debug.Log("interrupted");
+            remainingTime = ExitTime; // 남은 시간 초기화
+            isExiting = false;
+            StopAllCoroutines(); // 코루틴 중지
+        }
+
     }
 
     public IEnumerator ExitCoroutine(float exitTime)
     {
-        yield return new WaitForSeconds(exitTime);
+        Debug.Log("Exit");
 
-        //인게임 종료 및 플레이어를 로비씬으로 이동.(인벤토리 보존)
-        //서버에 탈출한 플레이어의 ID
+        isExiting = true;
+        remainingTime = exitTime;
 
-        //C_LeaveGame packet = new C_LeaveGame();
+        while (remainingTime > 0)
+        {
+            yield return new WaitForSeconds(0.1f); // 1초마다 업데이트
+            remainingTime -= 0.1f;
+            UpdateTimerUI(remainingTime); // UI 업데이트
+        }
 
-        //Managers.Network.Send(packet);
+        // 탈출 성공 시 처리
+        C_ExitGame packet = new C_ExitGame()
+        {
+            PlayerId = Managers.Object.MyPlayer.Id,
+            ExitId = objectId
+        };
+        Managers.Network.Send(packet);
         Debug.Log("C_LeaveGame");
 
-        //게임씬을 로비로
+        // 게임 씬을 로비로
         Managers.Scene.LoadScene(Define.Scene.Lobby);
 
+        isExiting = false; // 탈출 종료
+    }
+
+    private void UpdateTimerUI(float time)
+    {
+        Debug.Log($"남은 시간: {time}초");
     }
 }

@@ -84,27 +84,8 @@ class PacketHandler
         C_MoveItem packet = (C_MoveItem)message;
         Console.WriteLine($"C_MoveItemHandler {packet.PlayerId}");
 
-        ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
-        Grid targetGrid = null;
-        if(packet.PlayerId == packet.InventoryId)
-        {
-            //플레이어의 그리드로 옮김
-            ObjectManager.Instance.Find<Player>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
-        }
-        else
-        {
-            ObjectManager.Instance.Find<RootableObject>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
-        }
-
-        if(targetGrid == null)
-        {
-            Console.WriteLine("해당 그리드가 존재하지 않음");
-            return;
-        }
-
-        target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY , packet.ItemRotate, targetGrid);
-
         Player player = clientSession.MyPlayer;
+
         player.gameRoom.Push(player.gameRoom.HandleItemMove, player, message);
     }
 
@@ -136,6 +117,13 @@ class PacketHandler
 
     internal static void C_ExitGameHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        ClientSession clientSession = session as ClientSession;
+        C_ExitGame packet = (C_ExitGame)message;
+        Console.WriteLine($"C_ExitPacketHandler");
+
+        Player player = clientSession.MyPlayer;
+
+
+        player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
     }
 }

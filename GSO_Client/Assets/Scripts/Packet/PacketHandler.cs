@@ -305,9 +305,16 @@ internal class PacketHandler
 
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)
     {
+        S_ExitGame packet = message as S_ExitGame;
+        //8월8일 지승현 -> 박성훈 : 탈출시
 
-        //8월8일 지승현 -> 박성훈 : 탈출시 
-        throw new NotImplementedException();
+        //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
+        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+        {
+            return;
+        }
+
+        Managers.Object.Remove(packet.PlayerId);
     }
 
 
