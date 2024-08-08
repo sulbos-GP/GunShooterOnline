@@ -44,7 +44,7 @@ namespace Server.Game
 
             instantGrid.Add(newGrid.gridData.GridId, newGrid);
             invenData.GridData.Add(newGrid.gridData);
-            Console.WriteLine($"ownerId : {ownerId} \n instantGridAmt : {instantGrid.Count} \nitemAmount : {newGrid.itemObjectList.Count} \n");
+            //Console.WriteLine($"ownerId : {ownerId} \n instantGridAmt : {instantGrid.Count} \nitemAmount : {newGrid.itemObjectList.Count} \n");
         }
 
         private GridDataInfo MakeNewGridData(int x, int y)
@@ -60,8 +60,8 @@ namespace Server.Game
                 RandomItemAmount = 3 //임시. 소유자의 조건에 따라 달라짐
             };
 
-            Console.WriteLine($"GridId : {newData.GridId} \nGridSize : {newData.GridSizeX},{newData.GridSizeY}\n" +
-                $"gridPos ={newData.GridPosX},{newData.GridPosY}\n");
+            //Console.WriteLine($"GridId : {newData.GridId} \nGridSize : {newData.GridSizeX},{newData.GridSizeY}\n" +
+            //    $"gridPos ={newData.GridPosX},{newData.GridPosY}\n");
 
             CreateRandomItemDataIntoGridData(newData);
 

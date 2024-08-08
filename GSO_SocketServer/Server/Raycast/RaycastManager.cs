@@ -39,7 +39,7 @@ namespace Server
             //Debug.Log(_index);
 
             Ray raycast = new Ray(_index, StartPos, Dir, Length);
-            Shape[] shapes = ObjectManager.Instance.GetValue();
+            Shape[] shapes = ObjectManager.Instance.GetShapeValue();
 
 
             RaycastHit2D rayRes = null;

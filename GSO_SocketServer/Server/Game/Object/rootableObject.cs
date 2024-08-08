@@ -12,7 +12,6 @@ namespace Server.Game.Object
     {
         protected bool destroyed = false;
         protected bool active = true;
-        public Shape  _shape;
         public Inventory inventory;
 
         public RootableObject()

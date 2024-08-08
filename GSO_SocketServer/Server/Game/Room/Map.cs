@@ -83,12 +83,13 @@ public class Map
     BattleGameRoom battleRoom;
 
 
-    #region Item
+    #region rootableObjects
     public readonly List<RootableObject> rootableObjects = new List<RootableObject>();
     #endregion
 
     #region EscapeObj
     //List<RootableObject> _rootableObjects = new List<RootableObject>();
+    public readonly List<ExitZone> exitZones = new List<ExitZone>();
 
     #endregion
 
@@ -176,12 +177,21 @@ public class Map
                     rb.info.Name = "Box";
                     rootableObjects.Add(rb);
                 }
+                else if (_collisions[i, j] == 3) //탈출구
+                {
+                    ExitZone exit = ObjectManager.Instance.Add<ExitZone>();
+                    exit.CellPos = new Vector2(i - Bleft.x, j - Bleft.y);
+                    exit.info.Name = "ExitZone";
+                    exitZones.Add(exit);
+                }
+
+
             }
         }
 
     
 
-        Console.WriteLine("InitMap End");
+        Console.WriteLine("InitMap End"+ $"rootableObjects Count : {rootableObjects.Count}  , exitZones count : {exitZones.Count}");
 
 
 

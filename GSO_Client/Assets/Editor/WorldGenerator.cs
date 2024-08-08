@@ -188,6 +188,7 @@ public class WorldGenerator
         Tilemap _base = null;
         Tilemap _wall = null;
         Tilemap _box = null;
+        Tilemap _exit = null;
         foreach (Transform _tr in tr)
         {
             if (_tr.name.Contains("base") == true)
@@ -201,6 +202,10 @@ public class WorldGenerator
             else if (_tr.name.Contains("Box") == true)
             {
                 _box = _tr.GetComponent<Tilemap>();
+            }
+            else if (_tr.name.Contains("ExitZone") == true)
+            {
+                _exit = _tr.GetComponent<Tilemap>();
             }
         }
 
@@ -233,6 +238,7 @@ public class WorldGenerator
 
                 TileBase wallTile = _wall.GetTile(new Vector3Int(x, y, 0));
                 TileBase boxTile = _box.GetTile(new Vector3Int(x, y, 0));
+                TileBase exitTile = _exit.GetTile(new Vector3Int(x, y, 0));
 
                 if (wallTile != null)
                 {
@@ -249,6 +255,11 @@ public class WorldGenerator
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 2;
+                } 
+                else if (exitTile != null)
+                {
+                    if (map[currnet.x, currnet.y] == 0)
+                        map[currnet.x, currnet.y] = 3;
                 }
                 else
                 {

@@ -92,10 +92,10 @@ namespace Google.Protobuf.Protocol {
             "VE9SWRALEg8KC0NfTU9WRV9JVEVNEAwSDwoLU19NT1ZFX0lURU0QDRIRCg1D",
             "X0RFTEVURV9JVEVNEA4SEQoNU19ERUxFVEVfSVRFTRAPEhMKD0NfUkFZQ0FT",
             "VF9TSE9PVBAQEhEKDVNfUkFZQ0FTVF9ISVQQERIPCgtTX0VYSVRfR0FNRRAS",
-            "Eg8KC0NfRVhJVF9HQU1FEBMqZQoOR2FtZU9iamVjdFR5cGUSCAoETk9ORRAA",
+            "Eg8KC0NfRVhJVF9HQU1FEBMqcwoOR2FtZU9iamVjdFR5cGUSCAoETk9ORRAA",
             "EgoKBlBMQVlFUhABEgsKB01PTlNURVIQAhIOCgpQUk9KRUNUSUxFEAMSDQoJ",
-            "SU5WRU5EQVRBEAQSBwoDQk9YEAUSCAoESVRFTRAGQhuqAhhHb29nbGUuUHJv",
-            "dG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
+            "SU5WRU5EQVRBEAQSBwoDQk9YEAUSCAoESVRFTRAGEgwKCEVYSVRaT05FEAdC",
+            "G6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -166,6 +166,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("INVENDATA")] Invendata = 4,
     [pbr::OriginalName("BOX")] Box = 5,
     [pbr::OriginalName("ITEM")] Item = 6,
+    [pbr::OriginalName("EXITZONE")] Exitzone = 7,
   }
 
   #endregion
