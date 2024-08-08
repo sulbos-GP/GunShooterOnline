@@ -11,7 +11,7 @@ public class CreatureObj : GameObject
     {
         if (other.ObjectType == GameObjectType.Projectile)
         {
-            OnDamaged(other,other.Attack);
+            //OnDamaged(other,other.Attack);
             other.OnCollisionFeedback(this);
         }
        /* else if (other.ObjectType == GameObjectType.Scopeskill)

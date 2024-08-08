@@ -44,7 +44,7 @@ public class GameObject
     //public virtual int TotalDefence { get { return 0; } }
 
 
-    public int Exp => stat.Exp;
+    //public int Exp => stat.Exp;
 
 
     public Vector2 Dir
@@ -63,11 +63,12 @@ public class GameObject
         set => PosInfo.State = value;
     }*/
 
+    /*
     public int Attack
     {
         get => stat.Attack;
         set => stat.Attack = value;
-    }
+    }*/
 
     public float AttackRange
     {

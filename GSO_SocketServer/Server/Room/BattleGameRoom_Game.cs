@@ -160,7 +160,7 @@ namespace Server
             {
                 CreatureObj creatureObj = go as CreatureObj;
 
-                creatureObj.OnDamaged(attacker, attacker.Attack);
+                //creatureObj.OnDamaged(attacker, attacker.Attack);
 
             }
 

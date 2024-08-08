@@ -39,10 +39,10 @@ public class StatData : ILoader<int, StatInfo>
         foreach (var stat in stats)
         {
             stat.Hp = stat.MaxHp;
-            stat.Mp = stat.MaxMp;
+            //stat.Mp = stat.MaxMp;
             //stat.Speed = 3; //속도
-            stat.Exp = 0;
-            dict.Add(100 * stat.Class + stat.Level, stat); //101
+            //stat.Exp = 0;
+            //dict.Add(100 * stat.Class + stat.Level, stat); //101
         }
 
         return dict;
@@ -254,15 +254,15 @@ public class MonsterLoader : ILoader<int, MonsterData>
             monster.stat = new StatInfo();
 
             monster.stat.Class = mStat.Class;
-            monster.stat.Level = mStat.level;
+            //monster.stat.Level = mStat.level;
             monster.stat.MaxHp = mStat.maxHp;
-            monster.stat.MaxMp = mStat.maxMp;
+            //monster.stat.MaxMp = mStat.maxMp;
             monster.stat.AttackRange = mStat.attackRange;
-            monster.stat.Attack = mStat.attack;
+            //monster.stat.Attack = mStat.attack;
             monster.stat.AttackSpeed = mStat.attackSpeed;
-            monster.stat.Defence = mStat.defence;
-            monster.stat.Critical = mStat.critical;
-            monster.stat.Exp = mStat.exp * 10; //Todo: 삭제
+            //monster.stat.Defence = mStat.defence;
+            //monster.stat.Critical = mStat.critical;
+            //monster.stat.Exp = mStat.exp * 10; //Todo: 삭제
 
            /* monster.stat.Faith = mStat.faith;
             monster.stat.Will = mStat.will;
@@ -277,7 +277,7 @@ public class MonsterLoader : ILoader<int, MonsterData>
             //---------------------------------
 
             monster.stat.Hp = monster.stat.MaxHp;
-            monster.stat.Mp = monster.stat.MaxMp;
+           // monster.stat.Mp = monster.stat.MaxMp;
 
             dict.Add(monster.id, monster);
         }
