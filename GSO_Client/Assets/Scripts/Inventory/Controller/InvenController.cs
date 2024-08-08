@@ -489,14 +489,14 @@ public partial class InventoryController : MonoBehaviour
         if(isOnDelete)
         {
             //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
-            BackUpGridSlot();
-            DestroySelectedItem();
-
             C_DeleteItem packet = new C_DeleteItem();
             packet.ItemId = selectedItem.itemData.itemId;
             packet.PlayerId = Managers.Object.MyPlayer.Id;
             Managers.Network.Send(packet);
             Debug.Log("C_DeleteItem");
+
+            BackUpGridSlot();
+            DestroySelectedItem();
             return;
         }
         if (!isGridSelected)

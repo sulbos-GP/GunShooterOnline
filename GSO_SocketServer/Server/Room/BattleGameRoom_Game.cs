@@ -53,8 +53,14 @@ namespace Server
             //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
             ItemObject item =  ObjectManager.Instance.Find<ItemObject>(itemId);
 
+            item.ownerGrid.DeleteItemFromSlot(item);
+            ObjectManager.Instance.Remove(itemId);
 
-            player.inventory.instantGrid[0].DeleteItemFromSlot(item);
+            S_DeleteItem s_DeleteItem = new S_DeleteItem();
+            s_DeleteItem.ItemId = itemId;
+            s_DeleteItem.PlayerId = playerId;
+
+            BroadCast(RoomId, s_DeleteItem);
         }
 
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )

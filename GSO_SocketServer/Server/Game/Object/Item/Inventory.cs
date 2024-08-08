@@ -44,7 +44,9 @@ namespace Server.Game
 
             instantGrid.Add(newGrid.gridData.GridId, newGrid);
             invenData.GridData.Add(newGrid.gridData);
+
             //Console.WriteLine($"ownerId : {ownerId} \n instantGridAmt : {instantGrid.Count} \nitemAmount : {newGrid.itemObjectList.Count} \n");
+
         }
 
         private GridDataInfo MakeNewGridData(int x, int y)

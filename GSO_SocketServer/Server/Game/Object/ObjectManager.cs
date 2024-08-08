@@ -91,6 +91,7 @@ internal class ObjectManager
                 return _rootable.Remove(objectId);
             else if (objectType == GameObjectType.Exitzone)
                 return _exit.Remove(objectId);
+
         }
 
         return false;

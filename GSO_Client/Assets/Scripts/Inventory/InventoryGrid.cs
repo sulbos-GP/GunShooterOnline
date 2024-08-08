@@ -157,7 +157,6 @@ public class InventoryGrid : MonoBehaviour
         itemObj.backUpItemRotate = itemObj.itemData.itemRotate; //현재 회전
         itemObj.backUpItemGrid = itemObj.curItemGrid; //현재 그리드
 
-        ownInven.instantItemList.Add(itemObj);
     }
 
     /// <summary>
