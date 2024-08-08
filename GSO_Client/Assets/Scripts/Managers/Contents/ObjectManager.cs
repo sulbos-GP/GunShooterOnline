@@ -6,9 +6,10 @@ using static UnityEditor.Progress;
 
 public class ObjectManager
 {
+    //게임 내의 플레이어, 상자 , 탈출구 등 모든 오브젝트
     private readonly Dictionary<int, GameObject> _objects = new();
 
-    //게임룸 안에 존재하는 데이터들
+    //게임룸 안에 존재하는 인벤토리에 관련된 데이터들
     //추가 : 핸들러에서 InventorySet을 할경우 각 데이터들이 추가됨
     //삭제 : 인벤토리와 그리드는 해당 객체가 사라질때, 아이템은 합쳐지거나 삭제될때
     public readonly Dictionary<int, InvenData> _inventoryDic = new(); 
@@ -70,8 +71,8 @@ public class ObjectManager
                     //}
                 }
             }
-            
-            
+
+
         }
         else if (type == GameObjectType.Monster)
         {
@@ -126,6 +127,7 @@ public class ObjectManager
         {
             var go = Managers.Resource.Instantiate($"Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
+            go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
             _objects.Add(info.ObjectId, go); //오브젝트 딕션너리에 추가
 
             Box boxScr = go.GetComponent<Box>();
@@ -137,15 +139,20 @@ public class ObjectManager
             boxInven.SendOtherInventoryPacket();
             //Add로 인벤 데이터를 생성하여 boxScr.invenData에 넣기
             //(플레이어가 해당 오브젝트와 인터렉트시 이 데이터를 플레이어의 otherInven의 인벤데이터로 불러옴)
-            
+
         }
-
-        /*else if (type == GameObjectType.InvenData)
+        else if (type == GameObjectType.Exitzone)
         {
-           //인벤토리를 가지는 오브젝트가 생성될때 (박스 혹은 플레이어) 인벤데이터를 생성하고 해당 인벤데이터를 딕셔너리에 추가
+            var go = Managers.Resource.Instantiate($"Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
+            go.name = $"{info.Name}"; //이름설정
+            go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
+            _objects.Add(info.ObjectId, go);
 
-            //인벤데이터를 생성할때 그리드데이터가 생성되고 그리드 데이터가 생성될때 아이템 데이터까지 모두 생성됨.
-        */
+            ExitZone exitZone = go.GetComponent<ExitZone>();
+            exitZone.objectId = info.ObjectId;
+            exitZone.interactType = InteractType.Exit;
+            exitZone.ExitTime = 5; //임시추가
+        }
     }
 
     public void AddGridDic(int gridId, GridData grid)

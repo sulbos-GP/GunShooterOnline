@@ -119,7 +119,27 @@ namespace Server
         {
             //player.inventory.MoveItem(itemId, itemPosX, itemPosY);
             C_MoveItem packet = (C_MoveItem)_packet;
-            //S_
+
+            ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
+            Grid targetGrid = null;
+            if (packet.PlayerId == packet.InventoryId)
+            {
+                //플레이어의 그리드로 옮김
+                ObjectManager.Instance.Find<Player>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+            }
+            else
+            {
+                ObjectManager.Instance.Find<RootableObject>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+            }
+
+            if (targetGrid == null)
+            {
+                Console.WriteLine("해당 그리드가 존재하지 않음");
+                return;
+            }
+
+            target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY, packet.ItemRotate, targetGrid);
+
             S_MoveItem s_MoveItem = new S_MoveItem()
             {
                 PlayerId = player.Id,
@@ -142,11 +162,6 @@ namespace Server
 
             // BroadCast()
         }
-
-
-
-
-
 
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
@@ -180,7 +195,27 @@ namespace Server
             BroadCast(RoomId, packet);
 
         }
+
+        internal void HandleExitGame(Player player, int exitId)
+        {
+
+            //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
+            foreach (GridDataInfo grid in player.inventory.invenData.GridData)
+            {
+                foreach (ItemDataInfo itemData in grid.ItemList)
+                {
+                    ObjectManager.Instance.Remove(itemData.ItemId);
+                }
+            }
+            ObjectManager.Instance.Remove(player.Id);
+
+            S_ExitGame packet = new S_ExitGame()
+            {
+                PlayerId = player.Id,
+                ExitId = exitId
+            };
+
+            BroadCast(RoomId, packet);
+        }
     }
-    
-    
 }

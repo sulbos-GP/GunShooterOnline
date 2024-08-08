@@ -20,5 +20,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Gwanho/TempGameScene.unity
     guid: 79a24153e3ab2be429e0fe749e66aa05
+  - enabled: 1
+    path: Assets/Scenes/Lobby.unity
+    guid: a6c1ef6c23ead324e9e1214518c72531
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 6ae272c81aa1d45999670f9634ff8736, type: 2}
