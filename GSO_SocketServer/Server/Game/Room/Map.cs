@@ -117,7 +117,7 @@ public class Map
 
         foreach (var r in _rootableObjects)
         {
-            r.Inventory.instantGrid[0].p
+            r.inventory.instantGrid[0].p
         }*/
     }
 

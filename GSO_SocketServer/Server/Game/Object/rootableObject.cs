@@ -13,7 +13,7 @@ namespace Server.Game.Object
         protected bool destroyed = false;
         protected bool active = true;
         public Shape  _shape;
-        public Inventory Inventory;
+        public Inventory inventory;
 
         public RootableObject()
         {
@@ -22,7 +22,7 @@ namespace Server.Game.Object
 
         public void Init()
         {
-            Inventory = new Inventory(Id);
+            inventory = new Inventory(Id);
         }
 
 

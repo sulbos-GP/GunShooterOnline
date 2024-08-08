@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -18,4 +19,17 @@ public class OtherInventory : MonoBehaviour
     [SerializeField]
     private InvenData otherInventoryData;
     private OtherInventoryUI otherInvenUI;
+
+
+    public void SendOtherInventoryPacket()
+    {
+        if (GetComponent<OtherInventory>().InputInvenData.inventoryId == 0)
+        {
+            C_LoadInventory packet = new C_LoadInventory();
+            packet.PlayerId = Managers.Object.MyPlayer.Id;
+            packet.InventoryId = GetComponent<Box>().objectId;
+            Managers.Network.Send(packet);
+            Debug.Log($"C_LoadInventory, player : {packet.PlayerId}, inventory: {packet.InventoryId} ");
+        }
+    }
 }
