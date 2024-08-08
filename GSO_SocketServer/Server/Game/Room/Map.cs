@@ -173,7 +173,7 @@ public class Map
                     RootableObject rb = ObjectManager.Instance.Add<RootableObject>();
                     rb.CellPos = new Vector2(i- Bleft.x, j- Bleft.y);
                     rb.Init();
-
+                    rb.info.Name = "Box";
                     rootableObjects.Add(rb);
                 }
             }
