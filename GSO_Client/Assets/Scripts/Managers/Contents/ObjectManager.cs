@@ -43,7 +43,7 @@ public class ObjectManager
                 //MyPlayer.Stat.MergeFrom(info.StatInfo);
                 MyPlayer.SyncPos();
 
-                go.GetComponent<PlayerInventory>().SendPlayerInvenLoadPacket();
+                //go.GetComponent<PlayerInventory>().SendPlayerInvenLoadPacket();
             }
             else
             {
@@ -119,7 +119,7 @@ public class ObjectManager
         }
         else if (type == GameObjectType.Box)
         {
-            var go = Managers.Resource.Instantiate($"Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
+            var go = Managers.Resource.Instantiate($"Prefabs/Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
             _objects.Add(info.ObjectId, go); //오브젝트 딕션너리에 추가
             Box invenObj = go.GetComponent<Box>();
