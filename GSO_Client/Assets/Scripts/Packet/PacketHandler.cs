@@ -129,12 +129,23 @@ internal class PacketHandler
         if(packet.InvenData == null)
         {
             Debug.Log("인벤데이터가 비어있음");
-
         }
 
         //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
         InvenData newInvenData = new InvenData();
         newInvenData.SetInvenData(packet.InvenData);
+
+        //생성된 인벤토리와 그리드, 아이템 데이터를 오브젝트 매니저의 딕셔너리들에 추가
+        Managers.Object._inventoryDic.Add(packet.InventoryId, newInvenData);
+        foreach(GridData grid in newInvenData.gridList)
+        {
+            Managers.Object._gridDic.Add(grid.gridId, grid);
+            foreach(ItemData item in grid.itemList)
+            {
+                Managers.Object._itemDic.Add(item.itemId, item);
+            }
+        }
+
         GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색'
         
 
@@ -162,7 +173,6 @@ internal class PacketHandler
         }
     }
 
-
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
         S_MoveItem packet = message as S_MoveItem;
@@ -175,35 +185,45 @@ internal class PacketHandler
 
         if (packet.PlayerId == Managers.Object.MyPlayer.Id)
         {
-            //옮긴 플레이어를 제외한 다른 플레이어에게 전송됨
+            //옮긴 플레이어를 제외한 다른 플레이어에게 적용되는 핸들러
             return;
         }
 
-        //패킷의 id를 아이템 오브젝트의 리스트에서 검색 해당 아이템의 ItemObject 스크립트 불러옴
-        ItemObject moveItemObj;
-        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out moveItemObj);
+
+        ItemData moveItemData;
+        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out moveItemData);
         if (success == false)
         {
             Debug.Log("옮기려는 아이템이 존재하지 않음(검색실패)");
             return;
         }
 
-        //ItemObject.itemData에 변경된 내용들을 변경하고 ItemObject.Set을 통해 아이템의 위치 변경
-        moveItemObj.itemData.itemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
-        moveItemObj.itemData.itemRotate = packet.ItemRotate;
+        moveItemData.itemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
+        moveItemData.itemRotate = packet.ItemRotate;
+
+        GridData curItemGrid;
+        success = Managers.Object._gridDic.TryGetValue(packet.GridId, out curItemGrid);
+        if (success == false)
+        {
+            Debug.Log("옮긴 후 그리드가 존재하지 않음(검색실패)");
+            return;
+        }
+        curItemGrid.itemList.Add(moveItemData);
+
+        GridData backUpItemGrid;
+        success = Managers.Object._gridDic.TryGetValue(packet.LastGridId, out backUpItemGrid);
+        if (success == false)
+        {
+            Debug.Log("옮기기전 그리드가 존재하지 않음(검색실패)");
+            return;
+        }
+        backUpItemGrid.itemList.Remove(moveItemData);
+
+
         //프로토콜 업데이트 시 주석해제
-        Managers.Object._gridDic.TryGetValue(packet.GridId, out moveItemObj.curItemGrid);
-        moveItemObj.backUpItemPos = new Vector2Int(packet.LastItemPosX, packet.LastItemPosY);
-        moveItemObj.backUpItemRotate = packet.LastItemRotate;
-        Managers.Object._gridDic.TryGetValue(packet.LastGridId, out moveItemObj.backUpItemGrid);
-
-        //lastGridId를 통해 그리드를 검색하여 해당 그리드의 inventoryGrid.CleanItemSlot(item)으로 이전 그리드에서 해당 아이템을 지움
-        moveItemObj.backUpItemGrid.CleanItemSlot(moveItemObj);
-
-        //gridId를 통해 그리드를 검색하여 해당 그리드의 inventoryGrid.PlaceItem(item, item.posX, item.posY)로 현재 그리드에 해당 아이템 배치
-        moveItemObj.curItemGrid.PlaceItem(moveItemObj, moveItemObj.itemData.itemPos.x, moveItemObj.itemData.itemPos.y);
 
         //클라이언트에서 해당 아이템을 배치 가능한지 체크해서 성공할 경우에만 패킷을 전달하기에 따로 성공 여부 체크는 필요 없을듯.
+
     }
 
     //아이템을 삭제할때. 플레이어가 아이템을 들었을때 다른 플레이어에게 전송할때도 좋을듯.
@@ -222,7 +242,7 @@ internal class PacketHandler
             //옮긴 플레이어를 제외한 다른 플레이어에게 전송됨
             return;
         }
-
+        /*
         //패킷의 ItmeId를 통해 해당 아이템을 검색
         ItemObject deleteItem;
         bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out deleteItem);
@@ -245,7 +265,7 @@ internal class PacketHandler
 
         //해당 오브젝트가 딕셔너리에 존재하면 해당 아이템을 삭제함
         Managers.Object.RemoveItem(packet.ItemId);
-
+        */
     }
 
     internal static void S_RaycastHitHandler(PacketSession session, IMessage message)

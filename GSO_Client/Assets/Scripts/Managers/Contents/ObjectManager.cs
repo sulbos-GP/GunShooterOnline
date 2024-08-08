@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class ObjectManager
 {
     private readonly Dictionary<int, GameObject> _objects = new();
-    public readonly Dictionary<int, InvenData> _inventoryDic = new(); //게임 내에 생성된 모든 인벤토리 데이터(id = 소유자의 id)
-    public readonly Dictionary<int, InventoryGrid> _gridDic = new(); //현재 UI에 열려있는 그리드 오브젝트
-    public readonly Dictionary<int, ItemObject> _itemDic = new(); //현재 UI에 존재하는 아이템 오브젝트
+
+    //게임룸 안에 존재하는 데이터들
+    //추가 : 핸들러에서 InventorySet을 할경우 각 데이터들이 추가됨
+    //삭제 : 인벤토리와 그리드는 해당 객체가 사라질때, 아이템은 합쳐지거나 삭제될때
+    public readonly Dictionary<int, InvenData> _inventoryDic = new(); 
+    public readonly Dictionary<int, GridData> _gridDic = new();
+    public readonly Dictionary<int, ItemData> _itemDic = new(); 
     public MyPlayerController MyPlayer { get; set; }
 
 
@@ -143,30 +148,28 @@ public class ObjectManager
         */
     }
 
-    public void AddGridDic(int gridId, InventoryGrid grid)
+    public void AddGridDic(int gridId, GridData grid)
     {
         //그리드가 생성될때(즉 인벤토리UI를 열때 혹은 박스와 인터렉트 할때)
         //생성된 그리드를 그리드 딕셔너리에 추가
         _gridDic.Add(gridId, grid);
     }
 
-    public void RemoveGridDic()
+    public void RemoveGridDic(int id)
     {
-        //플레이어가 UI를 닫으면 모두 삭제
-        _gridDic.Clear();
+        _gridDic.Remove(id);
     }
 
-    public void AddItemDic(int itemId, ItemObject item)
+    public void AddItemDic(int itemId, ItemData item)
     {
         //아이템이 생성될때(즉 인벤토리UI를 열때 혹은 박스와 인터렉트 할때)
         //생성된 아이템을 아이템 딕셔너리에 추가
         _itemDic.Add(itemId, item);
     }
 
-    public void RemoveItemDic()
+    public void RemoveItemDic(int itemId)
     {
-        //플레이어가 UI를 닫으면 모두 삭제
-        _itemDic.Clear();
+        _itemDic.Remove(itemId);
     }
 
 
@@ -185,29 +188,7 @@ public class ObjectManager
         Managers.Resource.Destroy(go);
     }
 
-    public void RemoveItem(int id)
-    {
-        if (MyPlayer != null && MyPlayer.Id == id)
-            return;
-        if (_itemDic.ContainsKey(id) == false)
-            return;
 
-        var go = FindItemDicById(id);
-        if (go == null)
-            return;
-
-        _itemDic.Remove(id);
-        Managers.Resource.Destroy(go);
-    }
-
-    private GameObject FindItemDicById(int id)
-    {
-        ItemObject go = null;
-        _itemDic.TryGetValue(id, out go);
-
-
-        return go.gameObject;
-    }
 
     public GameObject FindById(int id)
     {

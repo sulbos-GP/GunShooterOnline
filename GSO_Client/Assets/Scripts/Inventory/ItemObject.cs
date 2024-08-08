@@ -172,8 +172,12 @@ public class ItemObject : MonoBehaviour
             targetItem.ItemAmount += mergeAmount;
             ItemAmount -= mergeAmount;
         }
-        itemData.itemAmount = ItemAmount;
-        targetItem.itemData.itemAmount = targetItem.ItemAmount;
+
+        if(itemData.itemAmount <= 0)
+        {
+            backUpItemGrid.gridData.itemList.Remove(itemData);
+            Managers.Object.RemoveItemDic(itemData.itemId);
+        }
     }
 
     public void TextControl()
@@ -193,7 +197,7 @@ public class ItemObject : MonoBehaviour
     public void DestroyItem()
     {
         curItemGrid.gridData.itemList.Remove(itemData);
-        curItemGrid.ownInven.instantItemList.Remove(this);
+        Managers.Object.RemoveItemDic(itemData.itemId);
         Destroy(gameObject);
     }
 }
