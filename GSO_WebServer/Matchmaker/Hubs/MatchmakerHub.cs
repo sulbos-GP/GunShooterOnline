@@ -2,6 +2,7 @@
 using Matchmaker.Service;
 using Matchmaker.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;
+using ZLogger;
 
 namespace Matchmaker.Hubs
 {
@@ -34,10 +35,11 @@ namespace Matchmaker.Hubs
         }
         
         //임시
-        public async Task C2S_ConnectMatchHub(int uid)
+        public async Task C2S_VerfiyUser(int uid, string accessToken)
         {
             string connectionId = Context.ConnectionId;
             var error = await mMatchmakerService.AddMatchTicket(uid, connectionId);
+            await Clients.Caller.SendAsync("S2C_VerfiyUser", error);
         }
 
         public async Task C2S_DisConnectMatchHub(int uid)

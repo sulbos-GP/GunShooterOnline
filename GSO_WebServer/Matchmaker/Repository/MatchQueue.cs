@@ -16,11 +16,11 @@ namespace Matchmaker.Repository
         private RedisSortedSet<string> mMatchRating;                    //플레이어 레이팅 나열
         private RedisDictionary<string, TicketInfo> mMatchTickets;      //플레이어 정보(티켓)
 
-        public MatchQueue(IOptions<DatabaseConfig> dbConfig)
+        public MatchQueue(IOptions<DatabaseConfig> envConfig)
         {
-            if(dbConfig.Value.Redis != null)
+            if(envConfig.Value.Redis != null)
             {
-                RedisConfig config = new("MatchQueue", dbConfig.Value.Redis);
+                RedisConfig config = new("MatchQueue", envConfig.Value.Redis);
                 mRedisConn = new RedisConnection(config);
                 mMatchRating = new RedisSortedSet<string>(mRedisConn, "Ratings", null);
                 mMatchTickets = new RedisDictionary<string, TicketInfo>(mRedisConn, "Tickets", null);

@@ -79,7 +79,7 @@ public class UI_Match : MonoBehaviour
         catch (HttpRequestException error)
         {
             mMatchStateText.text = "매칭 참여 실패";
-            SystemLogManager.Instance.LogMessage($"매칭 참여 실패 : {error}");
+            SystemLogManager.Instance.LogMessage($"매칭 참여 실패 : {error.Message}");
         }
 
     }
@@ -130,7 +130,7 @@ public class UI_Match : MonoBehaviour
         catch (HttpRequestException error)
         {
             mMatchStateText.text = "매칭 취소 실패";
-            SystemLogManager.Instance.LogMessage($"매칭 취소 실패 : {error}");
+            SystemLogManager.Instance.LogMessage($"매칭 취소 실패 : {error.Message}");
         }
     }
 
@@ -183,26 +183,14 @@ public class UI_Match : MonoBehaviour
     /// <summary>
     /// 매칭 성공
     /// </summary>
-    public void S2C_MatchComplete(MatchProfile response)
+    public void OnMatchComplete()
     {
-
         mMatchButton.interactable = false;
         mMatchStateText.text = "매칭 완료";
 
-        mMatchTimeText.transform.parent.gameObject.SetActive(false);
+        mMatchTimeText.gameObject.SetActive(false);
+        mMatchButton.gameObject.SetActive(false);
         StopCoroutine(UpdateTimer());
-
-        SystemLogManager.Instance.LogMessage($"매치가 생성되었습니다 {response.host_ip}:{response.host_port}");
-
-        //로컬
-        response.host_ip = "127.0.0.1";
-
-        Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
-
-        Managers.Network.ConnectToGame(response.host_ip);
-
     }
-
-
 
 }

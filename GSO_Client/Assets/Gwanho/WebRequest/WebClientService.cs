@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Networking;
 using static System.Net.WebRequestMethods;
@@ -77,6 +78,7 @@ public abstract class WebClientServiceRequest<TResponse>
         }
         else
         {
+            SystemLogManager.Instance.LogMessage($"웹 요청 실패 : {request.error}");
             throw new NotImplementedException($"웹 요청 실패 : {request.error}");
         }
 
