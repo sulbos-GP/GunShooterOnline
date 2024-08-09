@@ -7,6 +7,7 @@ using UnityEngine;
 public class MatchmakerHub : ClientHub
 {
     protected override string mConnectionUrl { get; set; } = "http://10.0.2.2:5200/MatchmakerHub";
+    //protected override string mConnectionUrl { get; set; } = "http://127.0.0.1:5200/MatchmakerHub";
     protected override string mConnectionName { get; set; } = "매치메이커";
     
     protected LatencyManager mLatencyManager;
@@ -21,12 +22,13 @@ public class MatchmakerHub : ClientHub
     protected override void SetOnRecivedFunc()
     {
         mConnection.On<long>("S2C_Pong", S2C_Pong);
-        mConnection.On<MatchProfile>("S2C_MatchComplete", mMatchUI.S2C_MatchComplete);
+        mConnection.On<int>("S2C_VerfiyUser", S2C_VerfiyUser);
+        mConnection.On<MatchProfile>("S2C_MatchComplete", S2C_MatchComplete);
     }
 
     protected override void OnConnection()
     {
-        C2S_ConnectMatchHub();
+        C2S_VerfiyUser();
         StartCoroutine(UpdateLatency());
     }
 
@@ -44,10 +46,44 @@ public class MatchmakerHub : ClientHub
         }
     }
 
-    private async void C2S_ConnectMatchHub()
+    public async void C2S_VerfiyUser()
     {
-        int uid = int.Parse(WebManager.Instance.mCredential.uid);
-        await mConnection.InvokeAsync("C2S_ConnectMatchHub", uid);
+        var credential = WebManager.Instance.mCredential;
+        int uid = int.Parse(credential.uid);
+        string token = credential.access_token;
+        await mConnection.InvokeAsync("C2S_VerfiyUser", uid, token);
+    }
+
+    public void S2C_MatchComplete(MatchProfile response)
+    {
+        EnqueueDispatch(() =>
+        {
+            SystemLogManager.Instance.LogMessage($"매치가 생성되었습니다 {response.host_ip}:{response.host_port}");
+
+            mMatchUI.OnMatchComplete();
+
+            //로컬
+            response.host_ip = "127.0.0.1";
+
+            Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
+
+            Managers.Network.ConnectToGame(response.host_ip);
+        });
+    }
+
+    public void S2C_VerfiyUser(int error)
+    {
+        EnqueueDispatch(() =>
+        {
+            if (error == 0)
+            {
+                SystemLogManager.Instance.LogMessage($"매치메이커 인증에 성공하였습니다.");
+            }
+            else
+            {
+                SystemLogManager.Instance.LogMessage($"매치메이커 인증에 실패하였습니다.");
+            }
+        });
     }
 
     private async void C2S_Ping()
@@ -62,16 +98,6 @@ public class MatchmakerHub : ClientHub
         long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         long latency = now - timestamp;
         mLatencyManager.AddLatency(latency);
-    }
-
-    //임시 나중에 DLL로 모델 가져올 예정
-    public class MatchProfile
-    {
-        public string container_id { get; set; } = string.Empty;    //매칭 아이디
-        public string world { get; set; } = string.Empty;           //맵 이름
-        public string host_ip { get; set; } = string.Empty;         //ip
-        public int container_port { get; set; } = 0;                //컨테이너 포트
-        public int host_port { get; set; } = 0;                     //호스트 포트
     }
 
 }

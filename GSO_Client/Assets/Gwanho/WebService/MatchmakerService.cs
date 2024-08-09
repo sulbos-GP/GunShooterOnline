@@ -14,8 +14,8 @@ public class MatchmakerService : WebClientService
     public MatchmakerService()
     {
 
-        this.mBaseUrl = "http://10.0.2.2:5200/api";        
-        //this.mBaseUrl = "http://localhost:5200/api";
+        this.mBaseUrl = "http://10.0.2.2:5200";        
+        //this.mBaseUrl = "http://127.0.0.1:5200";
 
         mMatchmakerResource = new MatchmakerResource(this);
     }
@@ -61,11 +61,11 @@ public class MatchmakerResource
             this.mFromHeader = new HeaderDTO
             {
                 uid = WebManager.Instance.mCredential.uid,
-                access_token = WebManager.Instance.mCredential.access_token,
+                access_token =WebManager.Instance.mCredential.access_token,
             };
 
             this.mFromBody = request;
-            this.mEndPoint = service.mBaseUrl + "/Matchmaker/Join";
+            this.mEndPoint = service.mBaseUrl + "/api/Matchmaker/Join";
             this.mMethod = ERequestMethod.POST;
         }
     }
@@ -82,7 +82,7 @@ public class MatchmakerResource
             };
 
             this.mFromBody = request;
-            this.mEndPoint = service.mBaseUrl + "/Matchmaker/Cancle";
+            this.mEndPoint = service.mBaseUrl + "/api/Matchmaker/Cancle";
             this.mMethod = ERequestMethod.POST;
         }
     }
