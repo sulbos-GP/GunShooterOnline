@@ -216,6 +216,7 @@ namespace Server
             };
 
             BroadCast(RoomId, packet);
+            ObjectManager.Instance.DebugObjectDics();
         }
     }
 }

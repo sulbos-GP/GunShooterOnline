@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using ServerCore;
 using System;
@@ -134,21 +135,27 @@ internal class PacketHandler
         //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
         InvenData newInvenData = new InvenData();
         newInvenData.SetInvenData(packet.InvenData);
-
-        //생성된 인벤토리와 그리드, 아이템 데이터를 오브젝트 매니저의 딕셔너리들에 추가
-        Managers.Object._inventoryDic.Add(packet.InventoryId, newInvenData);
-        foreach(GridData grid in newInvenData.gridList)
-        {
-            Managers.Object._gridDic.Add(grid.gridId, grid);
-            foreach(ItemData item in grid.itemList)
-            {
-                Managers.Object._itemDic.Add(item.itemId, item);
-            }
-        }
-
-        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색'
         
 
+        /*
+        //생성된 인벤토리와 그리드, 아이템 데이터를 오브젝트 매니저의 딕셔너리들에 추가
+        Managers.Object._inventoryDic.Add(packet.InventoryId, newInvenData);*/
+
+        
+        foreach(GridData grid in newInvenData.gridList)
+        {
+            if(Managers.Object._gridDic.ContainsKey(grid.gridId) == true) { continue; }
+            Managers.Object.AddGridDic(grid.gridId, grid);
+            foreach(ItemData item in grid.itemList)
+            {
+                if (Managers.Object._itemDic.ContainsKey(item.itemId) == true) { continue; }
+                Managers.Object.AddItemDic(item.itemId, item);
+            }
+        }
+        
+        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색'
+
+        Managers.Object.DebugDics();
         //플레이어의 인벤토리id와 패킷내의 인벤토리id 비교 -> 같으면 플레이어의 인벤토리에 반영 다르면 아더 인벤토리에 반영
         if (Managers.Object.MyPlayer.Id == packet.InventoryId)
         {
@@ -169,7 +176,6 @@ internal class PacketHandler
             }
             
             invenObj.GetComponent<OtherInventory>().InputInvenData = newInvenData;
-
         }
     }
 
@@ -306,15 +312,34 @@ internal class PacketHandler
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)
     {
         S_ExitGame packet = message as S_ExitGame;
-        //8월8일 지승현 -> 박성훈 : 탈출시
 
+        if(Managers.Object.MyPlayer == null)
+        {
+            return;
+        }
         //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
         if (packet.PlayerId == Managers.Object.MyPlayer.Id)
         {
             return;
         }
+        //플레이어와 해당 플레이어 가진 아이템 그리드 데이터 삭제할것\
+        var player = Managers.Object.FindById(packet.PlayerId);
+        InvenData targetInvenData = player.GetComponent<PlayerInventory>().InputInvenData;
+        if (targetInvenData == null) {
+            Debug.Log("인벤데이터를 찾지 못함");
+        }
+
+        //해당 플레이어의 인벤토리의 그리드와 아이템을 오브젝트 매니저의 딕셔너리에서 제거
+        foreach (GridData grid in targetInvenData.gridList) {
+            Managers.Object.RemoveGridDic(grid.gridId);
+            foreach (ItemData item in grid.itemList)
+            {
+                Managers.Object.RemoveItemDic(item.itemId);
+            }
+        }
 
         Managers.Object.Remove(packet.PlayerId);
+        Managers.Object.DebugDics();
     }
 
 
