@@ -61,7 +61,31 @@ internal class ObjectManager
     }
 
 
-
+    public void DebugObjectDics()
+    {
+        Console.WriteLine($"player : ");
+        foreach (Player player in _players.Values){
+            Console.WriteLine($"{player.Id} ");
+        }
+        Console.WriteLine($"\n");
+        Console.WriteLine($"rootable : ");
+        foreach (RootableObject root in _rootable.Values)
+        {
+            Console.WriteLine($"{root.Id} ");
+        }
+        Console.WriteLine($"\n");
+        Console.WriteLine($"Item : ");
+        foreach (ItemObject item in _items.Values)
+        {
+            Console.WriteLine($"{item.Id} ");
+        }
+        Console.WriteLine($"\n");
+        Console.WriteLine($"exitZone : ");
+        foreach (ExitZone exit in _exit.Values)
+        {
+            Console.WriteLine($"{exit.Id} ");
+        }
+    }
 
 
     private int GenerateId(GameObjectType type) //[unused(1)] [type(7)] [Id(24)]

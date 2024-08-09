@@ -75,7 +75,12 @@ public class ExitZone : InteractableObject
             ExitId = objectId
         };
         Managers.Network.Send(packet);
+
         Debug.Log("C_LeaveGame");
+
+        //클라이언트의 모든 오브젝트의 내용 클리어
+        Managers.Object.Clear();
+        Managers.Object.DebugDics();
 
         // 게임 씬을 로비로
         Managers.Scene.LoadScene(Define.Scene.Lobby);
