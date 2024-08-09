@@ -46,10 +46,10 @@ public class VisionRegion
 
         return null;
     }
-
+  
     public void Update()
     {
-        if (Owner == null || Owner.gameRoom == null || Owner.CurrentRoomId == -1)
+        if (Owner == null || Owner.gameRoom == null)// || Owner.CurrentRoomId == -1)
             return;
 
         throw new Exception("Still working..");

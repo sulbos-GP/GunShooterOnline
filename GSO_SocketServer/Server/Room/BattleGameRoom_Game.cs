@@ -44,7 +44,7 @@ namespace Server
             map.ApplyMove(player,
                 new Vector2Int((int)Math.Round(packet.PositionInfo.PosX), (int)Math.Round(packet.PositionInfo.PosY)));
 
-            BroadCast(player.CurrentRoomId, resMovePacket);
+            BroadCast(resMovePacket);
         }
 
         internal void HandleItemDelete(Player player, int playerId, int itemId)
@@ -60,7 +60,7 @@ namespace Server
             s_DeleteItem.ItemId = itemId;
             s_DeleteItem.PlayerId = playerId;
 
-            BroadCast(RoomId, s_DeleteItem);
+            BroadCast(s_DeleteItem);
         }
 
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )
@@ -92,7 +92,7 @@ namespace Server
 
             Console.WriteLine(s_LoadInventory.InvenData.GridData.Count);
 
-            BroadCast(RoomId, s_LoadInventory);
+            BroadCast(s_LoadInventory);
 
         }
 
@@ -158,7 +158,7 @@ namespace Server
             };
 
 
-            BroadCast(RoomId, s_MoveItem);
+            BroadCast(s_MoveItem);
 
             // BroadCast()
         }
@@ -192,7 +192,7 @@ namespace Server
             packet.HitPointY = hit.hitPoint.Value.Y;
 
             
-            BroadCast(RoomId, packet);
+            BroadCast(packet);
 
         }
 
@@ -215,7 +215,7 @@ namespace Server
                 ExitId = exitId
             };
 
-            BroadCast(RoomId, packet);
+            BroadCast(packet);
         }
     }
 }

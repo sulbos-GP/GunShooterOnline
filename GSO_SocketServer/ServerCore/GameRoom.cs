@@ -27,7 +27,7 @@ namespace ServerCore
         public abstract void Clear();
 
 
-        public abstract void BroadCast(int id, IMessage message);
+        public abstract void BroadCast(IMessage message);
 
         public abstract void EnterGame(object gameObject);
 

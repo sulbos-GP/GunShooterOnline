@@ -143,13 +143,13 @@ public class Map
         var minIndex = reader.ReadLine().Split('/');
 
 
-        var Bleft = new Vector2Int(int.Parse(minIndex[0]), int.Parse(minIndex[1]));
-        var roomSize = int.Parse(reader.ReadLine());
+        Bleft = new Vector2Int(int.Parse(minIndex[0]), int.Parse(minIndex[1]));
+        roomSize = int.Parse(reader.ReadLine());
 
         Width = roomSize;
         Height = roomSize;
 
-        var Tright = new Vector2Int(Bleft.x + (roomSize - 1), Bleft.y + (roomSize - 1));
+        Tright = new Vector2Int(Bleft.x + (roomSize - 1), Bleft.y + (roomSize - 1));
 
 
         _collisions = new int[roomSize, roomSize];
@@ -172,7 +172,7 @@ public class Map
                 if (_collisions[i,j]  == 2) // 박스
                 {
                     RootableObject rb = ObjectManager.Instance.Add<RootableObject>();
-                    rb.CellPos = new Vector2(i- Bleft.x, j- Bleft.y);
+                    rb.CellPos = new Vector2(i + Bleft.x, j + Bleft.y);
                     rb.Init();
                     rb.info.Name = "Box";
                     rootableObjects.Add(rb);
@@ -180,7 +180,7 @@ public class Map
                 else if (_collisions[i, j] == 3) //탈출구
                 {
                     ExitZone exit = ObjectManager.Instance.Add<ExitZone>();
-                    exit.CellPos = new Vector2(i - Bleft.x, j - Bleft.y);
+                    exit.CellPos = new Vector2(i + Bleft.x, j + Bleft.y);
                     exit.info.Name = "ExitZone";
                     exitZones.Add(exit);
                 }

@@ -26,7 +26,7 @@ class PacketHandler
             p.info.Name = enterGamePacket.Name + clientSession.SessionId;
             p.info.PositionInfo.PosX = 0;
             p.info.PositionInfo.PosY = 0;
-
+            p.gameRoom = Program.mNetworkService.gameRoom as BattleGameRoom;
             //바꾼 부분
             p.inventory = new Inventory(p.Id,6,7);
         }
