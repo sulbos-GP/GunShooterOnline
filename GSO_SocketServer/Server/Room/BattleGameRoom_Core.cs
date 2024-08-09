@@ -60,7 +60,7 @@ namespace Server
       
 
 
-        public override void BroadCast(int id, IMessage message)
+        public override void BroadCast(IMessage message)
         {
             foreach (Player player in _playerDic.Values) 
                 player.Session.Send(message,DeliveryMethod.ReliableSequenced);
@@ -171,12 +171,12 @@ namespace Server
             {
                 var spawnpacket = new S_Spawn();
                 spawnpacket.Objects.Add(gameObject.info);
-                BroadCast(gameObject.CurrentRoomId, spawnpacket);
+                BroadCast(spawnpacket);
 
                 var ChangePacket = new S_ChangeHp();
                 ChangePacket.ObjectId = gameObject.Id;
                 ChangePacket.Hp = gameObject.Hp;
-                BroadCast(gameObject.CurrentRoomId, ChangePacket);
+                BroadCast(ChangePacket);
             }
         }
 

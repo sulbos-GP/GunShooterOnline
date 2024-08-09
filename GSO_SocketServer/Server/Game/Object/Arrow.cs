@@ -56,7 +56,7 @@ public class Arrow : Projectile
             PositionInfo = PosInfo
         };
 
-        gameRoom.BroadCast(CurrentRoomId, movePacket);
+        gameRoom.BroadCast(movePacket);
     }
 
 

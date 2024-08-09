@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+
 public class PlayerInventory : MonoBehaviour
 {
     //Object매니저에서 플레이어가 생성되면 패킷을 서버에 전송하고 응답패킷을 받으면 핸들러에서 해당 변수에 인벤데이터 할당

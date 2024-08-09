@@ -64,7 +64,7 @@ public class Player : CreatureObj
         diePacket.ObjectId = Id;
         diePacket.AttackerId = attacker.Id;
 
-        gameRoom.BroadCast(CurrentRoomId, diePacket);
+        gameRoom.BroadCast(diePacket);
 
         var room = gameRoom;
         room.Push(room.LeaveGame, Id);

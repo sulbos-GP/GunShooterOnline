@@ -11,7 +11,7 @@ public class GameObject
 {
     public Shape currentShape { get; set; } = null; // 충돌때만 하면 
 
-    public int CurrentRoomId = 0;
+
 
     public GameObject()
     {
@@ -148,7 +148,7 @@ public class GameObject
         diePacket.ObjectId = Id;
         diePacket.AttackerId = attacker.Id;
 
-        gameRoom.BroadCast(CurrentRoomId, diePacket);
+        gameRoom.BroadCast(diePacket);
 
         var room = gameRoom;
         room.Push(room.LeaveGame, Id);

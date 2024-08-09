@@ -56,7 +56,7 @@ public class CreatureObj : GameObject
         var ChangePacket = new S_ChangeHp();
         ChangePacket.ObjectId = Id;
         ChangePacket.Hp = stat.Hp;
-        gameRoom.BroadCast(CurrentRoomId, ChangePacket);
+        gameRoom.BroadCast(ChangePacket);
 
         if (stat.Hp <= 0)
         {

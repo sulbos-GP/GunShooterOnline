@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 3562629690575237209}
   - component: {fileID: 4282537680480379708}
   - component: {fileID: -5452985717935214419}
-  - component: {fileID: -8128780237681664993}
+  - component: {fileID: -1893516375260961763}
   m_Layer: 0
   m_Name: MyPlayer
   m_TagString: Player
@@ -254,7 +254,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackableList: []
---- !u!114 &-8128780237681664993
+--- !u!114 &-1893516375260961763
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -266,7 +266,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c478664e2a2e9b4dbab28f0e5927627, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerInvenData: {fileID: 0}
+  InputInvenData:
+    inventoryId: 0
+    limitWeight: 0
+    gridList: []
 --- !u!1 &355922946167704334
 GameObject:
   m_ObjectHideFlags: 0
