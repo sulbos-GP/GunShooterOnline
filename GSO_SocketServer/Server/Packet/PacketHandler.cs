@@ -39,7 +39,7 @@ class PacketHandler
         BattleGameRoom room = (BattleGameRoom)Program.mNetworkService.gameRoom; //나중에 null로 바꿔도 참조가능
 
         room.Push(room.EnterGame, clientSession.MyPlayer);
-
+        ObjectManager.Instance.DebugObjectDics();
     }
 
     internal static void C_LoadInventoryHandler(PacketSession session, IMessage message)
