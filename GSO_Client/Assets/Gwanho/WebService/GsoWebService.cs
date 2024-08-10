@@ -44,9 +44,9 @@ public class AuthorizeResource
         return new AuthenticationRequest(this.mService, packet);
     }
 
-    public SingInRequest GetSignInRequest(HeaderVerfiyPlayer header, SignInReq body)
+    public SingInRequest GetSignInRequest(SignInReq body)
     {
-        return new SingInRequest(this.mService, header, body);
+        return new SingInRequest(this.mService, body);
     }
 
     public SignOutRequest GetSignOutRequest(HeaderVerfiyPlayer header, SignOutReq body)
@@ -72,7 +72,7 @@ public class AuthorizeResource
     //로그인 요청
     public class SingInRequest : WebClientServiceRequest<SignInRes>
     {
-        public SingInRequest(GsoWebService service, HeaderVerfiyPlayer header, SignInReq body)
+        public SingInRequest(GsoWebService service, SignInReq body)
         {
             this.mFromBody = body;
             this.mEndPoint = service.mBaseUrl + "/api/Authorize/SignIn";
