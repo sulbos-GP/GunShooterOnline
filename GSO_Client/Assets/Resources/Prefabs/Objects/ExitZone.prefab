@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1924458770678976376}
   - component: {fileID: 2727242320668123128}
   - component: {fileID: 6429560206301231585}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ExitZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}

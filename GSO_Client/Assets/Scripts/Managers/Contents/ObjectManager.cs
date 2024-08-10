@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Google.Protobuf.Protocol;
 using NPOI.OpenXmlFormats.Spreadsheet;
 using UnityEngine;
-using static UnityEditor.Progress;
+
 
 public class ObjectManager
 {
@@ -15,7 +15,9 @@ public class ObjectManager
     //삭제 : 인벤토리와 그리드는 해당 객체가 사라질때, 아이템은 합쳐지거나 삭제될때
     //public readonly Dictionary<int, InvenData> _inventoryDic = new();  //써보니 인벤토리는 오브젝트로 검색이 가능하니 필요없다
     public readonly Dictionary<int, GridData> _gridDic = new();
-    public readonly Dictionary<int, ItemData> _itemDic = new(); 
+    public readonly Dictionary<int, ItemData> _itemDic = new();
+
+    public readonly Dictionary<int, S_RaycastHit> _rayDic = new();
     public MyPlayerController MyPlayer { get; set; }
 
 
