@@ -30,7 +30,7 @@ public class UI_UserInfo : MonoBehaviour
 
     void Update()
     {
-        UserInfo info = WebManager.Instance.mUserInfo.UserInfo;
+        UserInfo info = Managers.Web.mUserInfo.UserInfo;
         uid.text = info.uid.ToString();
         player_id.text = info.player_id;
         nickname.text = info.nickname;

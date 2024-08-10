@@ -66,14 +66,20 @@ public class UI_Match : MonoBehaviour
             SystemLogManager.Instance.LogMessage("매칭 참여 요청...");
             mIsProcessMatch = true;
 
-            var packet = new MatchmakerJoinReq
+            var header = new HeaderVerfiyPlayer
+            {
+                uid = Managers.Web.mCredential.uid,
+                access_token = Managers.Web.mCredential.access_token,
+            };
+
+            var body = new MatchmakerJoinReq
             {
                 world = "Forest",
                 region = "asia"
             };
 
             MatchmakerService service = new MatchmakerService();
-            MatchJoinRequest request = service.mMatchmakerResource.GetMatchJoinRequest(packet);
+            MatchJoinRequest request = service.mMatchmakerResource.GetMatchJoinRequest(header, body);
             request.ExecuteAsync(OnProcessMatchJoin);
         }
         catch (HttpRequestException error)
@@ -117,14 +123,20 @@ public class UI_Match : MonoBehaviour
             SystemLogManager.Instance.LogMessage("매칭 취소 요청...");
             mIsProcessMatch = true;
 
-            var packet = new MatchmakerCancleReq
+            var header = new HeaderVerfiyPlayer
+            {
+                uid = Managers.Web.mCredential.uid,
+                access_token = Managers.Web.mCredential.access_token,
+            };
+
+            var body = new MatchmakerCancleReq
             {
                 world = "Forest",
                 region = "asia"
             };
 
             MatchmakerService service = new MatchmakerService();
-            MatchCancleRequest request = service.mMatchmakerResource.GetMatchCancleRequest(packet);
+            MatchCancleRequest request = service.mMatchmakerResource.GetMatchCancleRequest(header, body);
             request.ExecuteAsync(OnProcessMatchCancle);
         }
         catch (HttpRequestException error)

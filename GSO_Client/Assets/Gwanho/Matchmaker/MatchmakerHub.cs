@@ -48,7 +48,7 @@ public class MatchmakerHub : ClientHub
 
     public async void C2S_VerfiyUser()
     {
-        var credential = WebManager.Instance.mCredential;
+        var credential = Managers.Web.mCredential;
         int uid = int.Parse(credential.uid);
         string token = credential.access_token;
         await mConnection.InvokeAsync("C2S_VerfiyUser", uid, token);
@@ -88,7 +88,7 @@ public class MatchmakerHub : ClientHub
 
     private async void C2S_Ping()
     {
-        int uid = int.Parse(WebManager.Instance.mCredential.uid);
+        int uid = int.Parse(Managers.Web.mCredential.uid);
         long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         await mConnection.InvokeAsync("C2S_Ping", uid, timestamp, mLatencyManager.GetAverageLatency());
     }

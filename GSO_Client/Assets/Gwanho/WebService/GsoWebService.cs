@@ -15,7 +15,7 @@ public class GsoWebService : WebClientService
 
     public GsoWebService()
     {
-        this.mBaseUrl = "http://10.0.2.2:5000/api";
+        this.mBaseUrl = "http://10.0.2.2:5000";
         mAuthorizeResource = new AuthorizeResource(this);
         mUserResource = new UserResource(this);
     }
@@ -44,14 +44,14 @@ public class AuthorizeResource
         return new AuthenticationRequest(this.mService, packet);
     }
 
-    public SingInRequest GetSignInRequest(SignInReq packet)
+    public SingInRequest GetSignInRequest(HeaderVerfiyPlayer header, SignInReq body)
     {
-        return new SingInRequest(this.mService, packet);
+        return new SingInRequest(this.mService, header, body);
     }
 
-    public SignOutRequest GetSignOutRequest(SignOutReq packet)
+    public SignOutRequest GetSignOutRequest(HeaderVerfiyPlayer header, SignOutReq body)
     {
-        return new SignOutRequest(this.mService, packet);
+        return new SignOutRequest(this.mService, header, body);
     }
 
     /// <summary>
@@ -64,7 +64,7 @@ public class AuthorizeResource
         public AuthenticationRequest(GsoWebService service, AuthenticationReq request)
         {
             this.mFromBody = request;
-            this.mEndPoint = service.mBaseUrl + "/Authorize/Authentication";
+            this.mEndPoint = service.mBaseUrl + "/api/Authorize/Authentication";
             this.mMethod = ERequestMethod.POST;
         }
     }
@@ -72,10 +72,10 @@ public class AuthorizeResource
     //로그인 요청
     public class SingInRequest : WebClientServiceRequest<SignInRes>
     {
-        public SingInRequest(GsoWebService service, SignInReq request)
+        public SingInRequest(GsoWebService service, HeaderVerfiyPlayer header, SignInReq body)
         {
-            this.mFromBody = request;
-            this.mEndPoint = service.mBaseUrl + "/Authorize/SignIn";
+            this.mFromBody = body;
+            this.mEndPoint = service.mBaseUrl + "/api/Authorize/SignIn";
             this.mMethod = ERequestMethod.POST;
         }
     }
@@ -83,16 +83,11 @@ public class AuthorizeResource
     //로그아웃 요청
     public class SignOutRequest : WebClientServiceRequest<SignOutRes>
     {
-        public SignOutRequest(GsoWebService service, SignOutReq request)
+        public SignOutRequest(GsoWebService service, HeaderVerfiyPlayer header, SignOutReq request)
         {
-            this.mFromHeader = new HeaderDTO
-            {
-                uid = WebManager.Instance.mCredential.uid,
-                access_token = WebManager.Instance.mCredential.access_token,
-            };
-
+            this.mFromBody = header.ToDictionary();
             this.mFromBody = request;
-            this.mEndPoint = service.mBaseUrl + "/Authorize/SignOut";
+            this.mEndPoint = service.mBaseUrl + "/api/Authorize/SignOut";
             this.mMethod = ERequestMethod.POST;
         }
     }
@@ -114,24 +109,19 @@ public class UserResource
     /// <summary>
     /// 닉네임 변경 요청
     /// </summary>
-    public SetNicknameRequest GetSetNicknameRequest(SetNicknameReq packet)
+    public SetNicknameRequest GetSetNicknameRequest(HeaderVerfiyPlayer header, SetNicknameReq body)
     {
-        return new SetNicknameRequest(this.mService, packet);
+        return new SetNicknameRequest(this.mService, header, body);
     }
 
 
     public class SetNicknameRequest : WebClientServiceRequest<SetNicknameRes>
     {
-        public SetNicknameRequest(GsoWebService service, SetNicknameReq request)
+        public SetNicknameRequest(GsoWebService service, HeaderVerfiyPlayer header, SetNicknameReq request)
         {
-            this.mFromHeader = new HeaderDTO
-            {
-                uid = WebManager.Instance.mCredential.uid,
-                access_token = WebManager.Instance.mCredential.access_token,
-            };
-
+            this.mFromBody = header.ToDictionary();
             this.mFromBody = request;
-            this.mEndPoint = service.mBaseUrl + "/User/SetNickname";
+            this.mEndPoint = service.mBaseUrl + "/api/User/SetNickname";
             this.mMethod = ERequestMethod.POST;
         }
     }

@@ -46,7 +46,7 @@ public abstract class ClientHub : MonoBehaviour
             .WithUrl(mConnectionUrl, options =>
             {
 
-                options.AccessTokenProvider = () => Task.FromResult(WebManager.Instance.mCredential.access_token);
+                options.AccessTokenProvider = () => Task.FromResult(Managers.Web.mCredential.access_token);
                 options.SkipNegotiation = true;
                 options.Transports = HttpTransportType.WebSockets;
 
@@ -103,7 +103,7 @@ public abstract class ClientHub : MonoBehaviour
     }
     private async void C2S_VerfiyCredential()
     {
-        var credential = WebManager.Instance.mCredential;
+        var credential = Managers.Web.mCredential;
         await mConnection.InvokeAsync("VerfiyCredential", credential);
     }
 
