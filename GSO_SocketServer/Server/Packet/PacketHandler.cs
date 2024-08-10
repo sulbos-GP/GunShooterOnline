@@ -31,6 +31,7 @@ class PacketHandler
             p.inventory = new Inventory(p.Id,6,7);
         }
 
+        clientSession.Room = Program.mNetworkService.gameRoom as BattleGameRoom;
         clientSession.MyPlayer = p;
 
 

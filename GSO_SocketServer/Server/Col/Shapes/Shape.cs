@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using Server.Game;
 using System;
 using System.Collections.Generic;
@@ -5,19 +6,20 @@ using Utils;
 
 namespace Collision.Shapes
 {
+
     public enum ShapeType
     {
         SHAPE = 0,
         CIRCLE = 1,
         RECTANGLE = 2,
         POLYGON = 3,
-        ARCPOLY,
+        ARCPOLY = 4,
     }
     public class Shape
     {
         public GameObject Parent { get; set; }
 
-        
+        public ShapeType ShapeType;
 
 
         /** The state of this shape, if inactive can be ignored in results */

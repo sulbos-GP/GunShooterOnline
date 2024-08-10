@@ -43,9 +43,9 @@ namespace Collision.Shapes
         public bool ContainedBy(Rectangle rect)
         {
             return rect.Left <= position.x - radius &&
-                   rect.Top <= position.y - radius &&
+                   rect.Bottom <= position.y - radius &&
                    rect.Left + rect.Width >= position.x+ radius &&
-                   rect.Top + rect.Height >= position.y + radius;
+                   rect.Bottom + rect.Height >= position.y + radius;
         }
 
         // The rest is for query 
@@ -54,7 +54,7 @@ namespace Collision.Shapes
             // The distance to the furthest corner is less than the radius 
             return new Vector2(
                 Math.Max(Math.Abs(position.x - rect.Left), Math.Abs(position.x - (rect.Left + rect.Width))),
-                Math.Max(Math.Abs(position.y - rect.Top), Math.Abs(position.y - (rect.Top + rect.Height)))
+                Math.Max(Math.Abs(position.y - rect.Bottom), Math.Abs(position.y - (rect.Bottom + rect.Height)))
             ).LengthSquared() < radius * radius;
         }
 
@@ -63,7 +63,7 @@ namespace Collision.Shapes
         {
             return Vector2.DistanceSquared(position, new Vector2(
                 Math.Clamp(position.x, rect.Left, rect.Left + rect.Width),
-                Math.Clamp(position.y, rect.Top, rect.Top + rect.Height)
+                Math.Clamp(position.y, rect.Bottom, rect.Bottom + rect.Height)
             )) < radius * radius;
         }
 

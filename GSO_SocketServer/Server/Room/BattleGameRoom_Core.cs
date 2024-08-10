@@ -7,6 +7,7 @@ using Server.Game.Object;
 using ServerCore;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace Server
@@ -115,37 +116,7 @@ namespace Server
                    // mMap.SendMapInfo(player);
                 }
 
-                {
-                    S_Spawn spawnPacket = new S_Spawn();
-                    
-                    //생성끝
-                    foreach (RootableObject box in map.rootableObjects)
-                    {
-                        Console.WriteLine($"box id : {box.Id}");
-
-                        spawnPacket.Objects.Add(box.info);
-                    }
-
-
-
-                    foreach (ExitZone exit in map.exitZones)
-                    {
-                        Console.WriteLine($"exit id : {exit.Id}");
-
-                        spawnPacket.Objects.Add(exit.info);
-                    }
-
-
-                    player.Session.Send(spawnPacket);
-
-
-                    //TODO : 지승현 24 8월 7일 클라에서 타입에 따라 box는 그냥 무시하고 아이디만 머지
-                }
-
-
-
-
-
+                NewEnterSpawnData(player);
 
 
             }
@@ -181,7 +152,30 @@ namespace Server
         }
 
 
+        private void NewEnterSpawnData(Player enterPlayer)
+        {
+            S_Spawn spawnPacket = new S_Spawn();
 
+            //생성끝
+            foreach (RootableObject box in map.rootableObjects)
+            {
+                Console.WriteLine($"box id : {box.Id}");
+
+                spawnPacket.Objects.Add(box.info);
+            }
+
+
+
+            foreach (ExitZone exit in map.exitZones)
+            {
+                Console.WriteLine($"exit id : {exit.Id}");
+
+                spawnPacket.Objects.Add(exit.info);
+            }
+
+
+            enterPlayer.Session.Send(spawnPacket);
+        }
         
 
         public override void LeaveGame(int id)
