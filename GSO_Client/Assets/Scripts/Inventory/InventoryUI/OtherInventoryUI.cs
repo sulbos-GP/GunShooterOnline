@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class OtherInventoryUI : InventoryUI
@@ -10,6 +11,9 @@ public class OtherInventoryUI : InventoryUI
      * 
      * 또한 플레이어 인벤토리와 다르게 위에 어떤 인벤토리인지 이름을 표기하는 부분이 있으니 적용
     */
+
+    public TextMeshProUGUI invenNameUI;
+
     private void OnEnable()
     {
         //UI가 켜졌을때 패킷으로 받아온 인벤토리의 id가 같을경우에는 이전의 내용 그대로
@@ -18,7 +22,7 @@ public class OtherInventoryUI : InventoryUI
 
         //other인벤을 가진 객체를 리퍼런스 하기 위해 플레이어 인풋에 인터렉트할 객체를 받아야함
         //해당 인터렉트할 객체의 OtherInventory의 인벤데이터를 이 스크립트의 인벤데이터에 할당하고 인벤토리 Set할것
-        
+        //invenNameUI.text = 
     }
 
     private void OnDisable()

@@ -13,7 +13,7 @@ public class InventoryUI : MonoBehaviour
     public InvenData invenData; //서버로 부터 받은 해당 인벤토리의 위치와 크기 및 소유한 그리드의 데이터
 
     public List<InventoryGrid> instantGridList; // 생성한 인벤토리의 그리드 목록
-    public List<ItemObject> instantItemList;
+
     private Transform grids; //그리드들의 부모 오브젝트
 
     //그리드와 배경사이의 오프셋
@@ -31,7 +31,7 @@ public class InventoryUI : MonoBehaviour
     protected virtual void Awake()
     {
         instantGridList = new List<InventoryGrid>();
-        instantItemList = new List<ItemObject>();
+
     }
 
     public virtual void InventorySet()

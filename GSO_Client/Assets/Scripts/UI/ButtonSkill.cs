@@ -21,7 +21,7 @@ public class ButtonSkill : MonoBehaviour
     public void Init(StatInfo stat)
     {
         var _class = stat.Class;
-        var _level = stat.Level;
+        //var _level = stat.Level;
 
 
         for (var i = 0; i < 10; i++) //기본적인 스킬 범위
@@ -53,7 +53,7 @@ public class ButtonSkill : MonoBehaviour
             //Todo : 개수에 맞게 추가
         }
 
-        UpdateBtn(_level);
+        //UpdateBtn(_level);
 
     }
 

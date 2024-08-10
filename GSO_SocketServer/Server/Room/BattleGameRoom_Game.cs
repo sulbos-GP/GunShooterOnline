@@ -41,10 +41,10 @@ namespace Server
             resMovePacket.PositionInfo = packet.PositionInfo;
 
 
-            mMap.ApplyMove(player,
+            map.ApplyMove(player,
                 new Vector2Int((int)Math.Round(packet.PositionInfo.PosX), (int)Math.Round(packet.PositionInfo.PosY)));
 
-            BroadCast(player.CurrentRoomId, resMovePacket);
+            BroadCast(resMovePacket);
         }
 
         internal void HandleItemDelete(Player player, int playerId, int itemId)
@@ -53,8 +53,14 @@ namespace Server
             //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
             ItemObject item =  ObjectManager.Instance.Find<ItemObject>(itemId);
 
+            item.ownerGrid.DeleteItemFromSlot(item);
+            ObjectManager.Instance.Remove(itemId);
 
-            player.inventory.instantGrid[0].DeleteItemFromSlot(item);
+            S_DeleteItem s_DeleteItem = new S_DeleteItem();
+            s_DeleteItem.ItemId = itemId;
+            s_DeleteItem.PlayerId = playerId;
+
+            BroadCast(s_DeleteItem);
         }
 
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )
@@ -71,7 +77,7 @@ namespace Server
                 //루터블 오브젝트의 인벤토리
                 RootableObject box = ObjectManager.Instance.Find<RootableObject>(inventoryId);
                 Console.WriteLine($"handle box id : {box.Id}");
-                targetData = box.Inventory.invenData;
+                targetData = box.inventory.invenData;
             }
             
             //Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
@@ -86,7 +92,7 @@ namespace Server
 
             Console.WriteLine(s_LoadInventory.InvenData.GridData.Count);
 
-            BroadCast(RoomId, s_LoadInventory);
+            BroadCast(s_LoadInventory);
 
         }
 
@@ -113,7 +119,27 @@ namespace Server
         {
             //player.inventory.MoveItem(itemId, itemPosX, itemPosY);
             C_MoveItem packet = (C_MoveItem)_packet;
-            //S_
+
+            ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
+            Grid targetGrid = null;
+            if (packet.PlayerId == packet.InventoryId)
+            {
+                //플레이어의 그리드로 옮김
+                ObjectManager.Instance.Find<Player>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+            }
+            else
+            {
+                ObjectManager.Instance.Find<RootableObject>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+            }
+
+            if (targetGrid == null)
+            {
+                Console.WriteLine("해당 그리드가 존재하지 않음");
+                return;
+            }
+
+            target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY, packet.ItemRotate, targetGrid);
+
             S_MoveItem s_MoveItem = new S_MoveItem()
             {
                 PlayerId = player.Id,
@@ -132,15 +158,10 @@ namespace Server
             };
 
 
-            BroadCast(RoomId, s_MoveItem);
+            BroadCast(s_MoveItem);
 
             // BroadCast()
         }
-
-
-
-
-
 
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
@@ -160,7 +181,7 @@ namespace Server
             {
                 CreatureObj creatureObj = go as CreatureObj;
 
-                creatureObj.OnDamaged(attacker, attacker.Attack);
+                //creatureObj.OnDamaged(attacker, attacker.Attack);
 
             }
 
@@ -171,10 +192,30 @@ namespace Server
             packet.HitPointY = hit.hitPoint.Value.Y;
 
             
-            BroadCast(RoomId, packet);
+            BroadCast(packet);
 
         }
+
+        internal void HandleExitGame(Player player, int exitId)
+        {
+
+            //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
+            foreach (GridDataInfo grid in player.inventory.invenData.GridData)
+            {
+                foreach (ItemDataInfo itemData in grid.ItemList)
+                {
+                    ObjectManager.Instance.Remove(itemData.ItemId);
+                }
+            }
+            ObjectManager.Instance.Remove(player.Id);
+
+            S_ExitGame packet = new S_ExitGame()
+            {
+                PlayerId = player.Id,
+                ExitId = exitId
+            };
+
+            BroadCast(packet);
+        }
     }
-    
-    
 }

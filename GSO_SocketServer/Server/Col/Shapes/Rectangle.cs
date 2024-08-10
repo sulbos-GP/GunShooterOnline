@@ -5,16 +5,16 @@ namespace Collision.Shapes;
 
 public class Rectangle : Polygon
 {
-    public float Top;
+    public float Bottom;
     public float Left;
     public float Width;
     public float Height;
 
     //Todo base 고치기!!!!!!
-    public Rectangle(float left, float top, float width, float height) : base(left+width/2,top+height/2,null)
+    public Rectangle(float left, float bottom, float width, float height) : base(left+width/2,bottom+height/2,null)
     {
         Left = left;
-        Top = top;
+        Bottom = bottom;
         Width = width;
         Height = height;
 

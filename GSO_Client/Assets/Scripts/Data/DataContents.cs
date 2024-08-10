@@ -17,8 +17,8 @@ namespace Server.Data
             foreach (var stat in stats)
             {
                 stat.Hp = stat.MaxHp;
-                stat.Mp = stat.MaxMp;
-                dict.Add(stat.Class * 100 + stat.Level, stat);
+                //stat.Mp = stat.MaxMp;
+                //dict.Add(stat.Class * 100 + stat.Level, stat);
                 //101 = 성기사 1레벨
             }
 

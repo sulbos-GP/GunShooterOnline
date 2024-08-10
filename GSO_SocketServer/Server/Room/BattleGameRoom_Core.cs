@@ -3,9 +3,11 @@ using Google.Protobuf.Protocol;
 using LiteNetLib;
 using QuadTree;
 using Server.Game;
+using Server.Game.Object;
 using ServerCore;
 using System;
 using System.Collections.Generic;
+using System.Numerics;
 using System.Text;
 
 namespace Server
@@ -17,11 +19,11 @@ namespace Server
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
 
-        public Map mMap { get; } 
+        public Map map { get; } 
         public BattleGameRoom()
         {
-            mMap = new Map(r: this);
-            mMap.Init();
+            map = new Map(r: this);
+            map.Init();
         }
 
         public override void Init()
@@ -59,7 +61,7 @@ namespace Server
       
 
 
-        public override void BroadCast(int id, IMessage message)
+        public override void BroadCast(IMessage message)
         {
             foreach (Player player in _playerDic.Values) 
                 player.Session.Send(message,DeliveryMethod.ReliableSequenced);
@@ -113,6 +115,10 @@ namespace Server
                     //--------------------------------------------
                    // mMap.SendMapInfo(player);
                 }
+
+                NewEnterSpawnData(player);
+
+
             }
             else if (type == GameObjectType.Monster)
             {
@@ -136,17 +142,40 @@ namespace Server
             {
                 var spawnpacket = new S_Spawn();
                 spawnpacket.Objects.Add(gameObject.info);
-                BroadCast(gameObject.CurrentRoomId, spawnpacket);
+                BroadCast(spawnpacket);
 
                 var ChangePacket = new S_ChangeHp();
                 ChangePacket.ObjectId = gameObject.Id;
                 ChangePacket.Hp = gameObject.Hp;
-                BroadCast(gameObject.CurrentRoomId, ChangePacket);
+                BroadCast(ChangePacket);
             }
         }
 
 
+        private void NewEnterSpawnData(Player enterPlayer)
+        {
+            S_Spawn spawnPacket = new S_Spawn();
 
+            //생성끝
+            foreach (RootableObject box in map.rootableObjects)
+            {
+                Console.WriteLine($"box id : {box.Id}");
+
+                spawnPacket.Objects.Add(box.info);
+            }
+
+
+
+            foreach (ExitZone exit in map.exitZones)
+            {
+                Console.WriteLine($"exit id : {exit.Id}");
+
+                spawnPacket.Objects.Add(exit.info);
+            }
+
+
+            enterPlayer.Session.Send(spawnPacket);
+        }
         
 
         public override void LeaveGame(int id)

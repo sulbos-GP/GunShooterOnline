@@ -1,14 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using Google.Protobuf.Protocol;
+using NPOI.OpenXmlFormats.Spreadsheet;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 public class ObjectManager
 {
+    //게임 내의 플레이어, 상자 , 탈출구 등 모든 오브젝트
     private readonly Dictionary<int, GameObject> _objects = new();
-    public readonly Dictionary<int, InvenData> _inventoryDic = new(); //게임 내에 생성된 모든 인벤토리 데이터(id = 소유자의 id)
-    public readonly Dictionary<int, InventoryGrid> _gridDic = new(); //현재 UI에 열려있는 그리드 오브젝트
-    public readonly Dictionary<int, ItemObject> _itemDic = new(); //현재 UI에 존재하는 아이템 오브젝트
+
+    //게임룸 안에 존재하는 인벤토리에 관련된 데이터들
+    //추가 : 핸들러에서 InventorySet을 할경우 각 데이터들이 추가됨
+    //삭제 : 인벤토리와 그리드는 해당 객체가 사라질때, 아이템은 합쳐지거나 삭제될때
+    //public readonly Dictionary<int, InvenData> _inventoryDic = new();  //써보니 인벤토리는 오브젝트로 검색이 가능하니 필요없다
+    public readonly Dictionary<int, GridData> _gridDic = new();
+    public readonly Dictionary<int, ItemData> _itemDic = new(); 
     public MyPlayerController MyPlayer { get; set; }
 
 
@@ -65,8 +72,8 @@ public class ObjectManager
                     //}
                 }
             }
-            
-            
+
+
         }
         else if (type == GameObjectType.Monster)
         {
@@ -121,48 +128,56 @@ public class ObjectManager
         {
             var go = Managers.Resource.Instantiate($"Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
+            go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
             _objects.Add(info.ObjectId, go); //오브젝트 딕션너리에 추가
-            Box invenObj = go.GetComponent<Box>();
-            //invenObj.objectId에 해당 오브젝트의 아이디 추가할것
-           
 
-            //Add로 인벤 데이터를 생성하여 invenObj.invenData에 넣기
+            Box boxScr = go.GetComponent<Box>();
+            boxScr.objectId = info.ObjectId;
+            boxScr.interactType = InteractType.InventoryObj;
+            //boxScr.interactRange = 나중에 필요시 추가(박스의 종류를 나눌경우)
+
+            OtherInventory boxInven = go.GetComponent<OtherInventory>();
+            boxInven.SendOtherInventoryPacket();
+            //Add로 인벤 데이터를 생성하여 boxScr.invenData에 넣기
             //(플레이어가 해당 오브젝트와 인터렉트시 이 데이터를 플레이어의 otherInven의 인벤데이터로 불러옴)
-            
+
         }
-
-        /*else if (type == GameObjectType.InvenData)
+        else if (type == GameObjectType.Exitzone)
         {
-           //인벤토리를 가지는 오브젝트가 생성될때 (박스 혹은 플레이어) 인벤데이터를 생성하고 해당 인벤데이터를 딕셔너리에 추가
+            var go = Managers.Resource.Instantiate($"Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
+            go.name = $"{info.Name}"; //이름설정
+            go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
+            _objects.Add(info.ObjectId, go);
 
-            //인벤데이터를 생성할때 그리드데이터가 생성되고 그리드 데이터가 생성될때 아이템 데이터까지 모두 생성됨.
-        */
+            ExitZone exitZone = go.GetComponent<ExitZone>();
+            exitZone.objectId = info.ObjectId;
+            exitZone.interactType = InteractType.Exit;
+            exitZone.ExitTime = 5; //임시추가
+        }
     }
 
-    public void AddGridDic(int gridId, InventoryGrid grid)
+    public void AddGridDic(int gridId, GridData grid)
     {
-        //그리드가 생성될때(즉 인벤토리UI를 열때 혹은 박스와 인터렉트 할때)
+        //서버에서 받은 인벤데이터로 인벤토리를 생성하는 과정에서
         //생성된 그리드를 그리드 딕셔너리에 추가
         _gridDic.Add(gridId, grid);
     }
 
-    public void RemoveGridDic()
+    public void RemoveGridDic(int id)
     {
-        //플레이어가 UI를 닫으면 모두 삭제
-        _gridDic.Clear();
+        _gridDic.Remove(id);
     }
 
-    public void AddItemDic(int itemId, ItemObject item)
+    public void AddItemDic(int itemId, ItemData item)
     {
-        //아이템이 생성될때(즉 인벤토리UI를 열때 혹은 박스와 인터렉트 할때)
+        //아이템이 생성될때
         //생성된 아이템을 아이템 딕셔너리에 추가
         _itemDic.Add(itemId, item);
     }
 
-    public void RemoveItemDic()
+    public void RemoveItemDic(int itemId)
     {
-        //플레이어가 UI를 닫으면 모두 삭제
-        _itemDic.Clear();
+        _itemDic.Remove(itemId);
     }
 
 
@@ -176,34 +191,13 @@ public class ObjectManager
         var go = FindById(id);
         if (go == null)
             return;
+        
 
         _objects.Remove(id);
         Managers.Resource.Destroy(go);
     }
 
-    public void RemoveItem(int id)
-    {
-        if (MyPlayer != null && MyPlayer.Id == id)
-            return;
-        if (_itemDic.ContainsKey(id) == false)
-            return;
 
-        var go = FindItemDicById(id);
-        if (go == null)
-            return;
-
-        _itemDic.Remove(id);
-        Managers.Resource.Destroy(go);
-    }
-
-    private GameObject FindItemDicById(int id)
-    {
-        ItemObject go = null;
-        _itemDic.TryGetValue(id, out go);
-
-
-        return go.gameObject;
-    }
 
     public GameObject FindById(int id)
     {
@@ -239,12 +233,36 @@ public class ObjectManager
         return null;
     }
 
+    public void DebugDics()
+    {
+        Debug.Log($"Object : ");
+        foreach (GameObject obj in _objects.Values)
+        {
+            Debug.Log($"{obj.name} ");
+        }
+        Debug.Log($"gridDic : ");
+        foreach (GridData grid in _gridDic.Values)
+        {
+            Debug.Log($"{grid.gridId} ");
+        }
+        Debug.Log($"Item : ");
+        foreach (ItemData item in _itemDic.Values)
+        {
+            Debug.Log($"{item.itemId} ");
+        }
+    }
+
     public void Clear()
     {
         foreach (var obj in _objects.Values)
             Managers.Resource.Destroy(obj);
-
+        
+        //_inventoryDic.Clear();
+        _gridDic.Clear();
+        _itemDic.Clear();
         _objects.Clear();
         MyPlayer = null;
     }
+
+    
 }
