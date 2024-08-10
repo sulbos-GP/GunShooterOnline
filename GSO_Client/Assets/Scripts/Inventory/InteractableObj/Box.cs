@@ -8,6 +8,8 @@ using UnityEngine;
 public class Box : InteractableObject
 {
     private InventoryController invenController;
+    private OtherInventoryUI invenUI;
+
     private void Awake()
     {
         Init();
@@ -17,13 +19,13 @@ public class Box : InteractableObject
     {
         base.Init();
         interactRange = 2;
-
+        invenUI = InventoryController.invenInstance.otherInvenUI;
         SetTriggerSize();
     }
 
     protected override void SetTriggerSize()
     {
-        CircleCollider2D Collider = transform.GetComponent<CircleCollider2D>();
+        CircleCollider2D Collider = GetComponent<CircleCollider2D>();
         Collider.radius = interactRange;
     }
 
@@ -33,19 +35,9 @@ public class Box : InteractableObject
     [ContextMenu("box interact")]
     public override void Interact()
     {
-        //서버에 해당 오브젝트의 id를 패킷으로 전송
-        //그래서 받은 인벤토리의 데이터로 인벤토리 형성
-        if (GetComponent<OtherInventory>().InputInvenData.inventoryId == 0)
-        {
-            C_LoadInventory packet = new C_LoadInventory();
-            packet.PlayerId = Managers.Object.MyPlayer.Id;
-            packet.InventoryId = objectId;
-            Managers.Network.Send(packet);
-            Debug.Log($"C_LoadInventory, player : {packet.PlayerId}, inventory: {packet.InventoryId} ");
-        }
-
-        
-
         InventoryController.invenInstance.invenUIControl();
+        invenUI.invenData = GetComponent<OtherInventory>().InputInvenData;
+        invenUI.InventorySet();
+        
     }
 }

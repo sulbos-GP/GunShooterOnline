@@ -2,6 +2,8 @@
 using Server.Game;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
@@ -23,7 +25,6 @@ namespace Server.Game
         repeated ItemDataInfo  itemList     = 6;*/
 
         public Inventory ownerInventory; //그리드를 소유한 인벤토리 (그냥 인벤토리 아이디로 바꿔도 괜춘)
-        public List<ItemObject> itemObjectList = new List<ItemObject>(); //해당 그리드에 존재하는 아이템리스트
         public ItemObject[,] gridSlot; //그리드에 채워진 아이템의 아이디(아이템이 그리드 어느위치에 있는지 보여주기 위함).
 
         public float GridWeight
@@ -50,8 +51,10 @@ namespace Server.Game
                 {
                     //가장 큰것부터 넣음
                     PushInstantObject(item);
-                    Console.WriteLine($"item  : {item.ItemName} \nItemId : {item.ItemId} \nItemCode : {item.ItemCode}\nItemConsume? : {item.IsItemConsumeable}\n" +
-                    $"ItemAmount ={item.ItemAmount}\nitemPos = {item.ItemPosX},{item.ItemPosY}\n");
+
+                    /*Console.WriteLine($"item  : {item.ItemName} \nItemId : {item.ItemId} \nItemCode : {item.ItemCode}\nItemConsume? : {item.IsItemConsumeable}\n" +
+                    $"ItemAmount ={item.ItemAmount}\nitemPos = {item.ItemPosX},{item.ItemPosY}\n");*/
+
                 }
             }
         }
@@ -66,8 +69,6 @@ namespace Server.Game
 
             FindPlaceableSlot(newItemObj);
 
-            //아이템 오브젝트의 아이템 데이터가 모두 설정이 완료됨.
-            itemObjectList.Add(newItemObj);
         }
 
         private void FindPlaceableSlot(ItemObject item)
@@ -80,6 +81,7 @@ namespace Server.Game
                 posOnGrid = FindSpaceForObject(item);
                 if (posOnGrid == null)
                 {
+                    gridData.ItemList.Remove(item.itemDataInfo);
                     return;
                 }
             }
@@ -124,15 +126,23 @@ namespace Server.Game
         /// <param name="deleteItem"></param>
         public void DeleteItemFromSlot(ItemObject deleteItem)
         {
-            Console.WriteLine($"width : {deleteItem.Width}, height : {deleteItem.Height}, rotate : {deleteItem.ItemRotate} ");
             for (int x = 0; x < deleteItem.Width; x++)
             {
                 for (int y = 0; y < deleteItem.Height; y++)
                 {
                     gridSlot[deleteItem.itemDataInfo.ItemPosX + x, deleteItem.itemDataInfo.ItemPosY + y] = null;
-                    Console.WriteLine($"X  : {deleteItem.itemDataInfo.ItemPosX + x}, Y : {deleteItem.itemDataInfo.ItemPosY + y}");
                 }
             }
+        }
+
+        public void InsertItemDataInGridData(ItemObject target)
+        {
+            gridData.ItemList.Add(target.itemDataInfo);
+        }
+
+        public void RemoveItemDataInGridData(ItemObject target)
+        {
+            gridData.ItemList.Remove(target.itemDataInfo);
         }
 
         public Vector2Int? FindSpaceForObject(ItemObject insertItem)
@@ -184,7 +194,8 @@ namespace Server.Game
 
         public void PrintInvenContents()
         {
-            string content = gridData.GridId + "의 슬롯 \n";
+            
+            string content = gridData.GridId + "번 그리드의 슬롯 \n";
 
             for (int i = 0; i < gridSlot.GetLength(1); i++)
             {
@@ -193,7 +204,7 @@ namespace Server.Game
                     ItemObject item = gridSlot[j, i];
                     if (item != null)
                     {
-                        content += $"| {item.itemDataInfo.ItemId},{item.itemDataInfo.ItemCode} |";
+                        content += $"| {item.itemDataInfo.ItemId},{item.itemDataInfo.ItemName} |";
 
                     }
                     else
@@ -205,6 +216,7 @@ namespace Server.Game
             }
 
             Console.WriteLine(content);
+
         }
     }
 }

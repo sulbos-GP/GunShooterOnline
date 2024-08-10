@@ -69,7 +69,10 @@ public struct PQNode : IComparable<PQNode>
 public class Map
 {
     private int[,] _collisions;
-    private GameObject[,] _objects;
+    //private GameObject[,] _objects;
+
+    public int Width;
+    public int Height;
 
     private int roomSize;
 
@@ -80,12 +83,13 @@ public class Map
     BattleGameRoom battleRoom;
 
 
-    #region Item
-    List<RootableObject> _rootableObjects = new List<RootableObject>();
+    #region rootableObjects
+    public readonly List<RootableObject> rootableObjects = new List<RootableObject>();
     #endregion
 
     #region EscapeObj
     //List<RootableObject> _rootableObjects = new List<RootableObject>();
+    public readonly List<ExitZone> exitZones = new List<ExitZone>();
 
     #endregion
 
@@ -96,31 +100,7 @@ public class Map
 
     public void Init()
     {
-        //렌덤아인템
-        RootableObject rootableObject0 = ObjectManager.Instance.Add<RootableObject>();
-        rootableObject0.CellPos = new Vector2(-4, -4);
-        rootableObject0.Init();
-
-        RootableObject rootableObject1 = ObjectManager.Instance.Add<RootableObject>();
-        rootableObject1.CellPos = new Vector2(-2, -4);
-        rootableObject1.Init();
-        RootableObject rootableObject2 = ObjectManager.Instance.Add<RootableObject>();
-        rootableObject2.CellPos = new Vector2(4, 7);
-        rootableObject2.Init();
-        RootableObject rootableObject3 = ObjectManager.Instance.Add<RootableObject>();
-        rootableObject3.CellPos = new Vector2(2, 7);
-        rootableObject3.Init();
-
-        _rootableObjects.Add(rootableObject0);
-        _rootableObjects.Add(rootableObject1);
-        _rootableObjects.Add(rootableObject2);
-        _rootableObjects.Add(rootableObject3);
-
-        foreach (RootableObject box in ObjectManager.Instance._rootable.Values)
-        {
-            Console.WriteLine($"box id : {box.Id}");
-        }
-        //SetRandomItem();
+        loadMap(2);
     }
 
     #region item
@@ -138,7 +118,7 @@ public class Map
 
         foreach (var r in _rootableObjects)
         {
-            r.Inventory.instantGrid[0].p
+            r.inventory.instantGrid[0].p
         }*/
     }
 
@@ -146,121 +126,73 @@ public class Map
 
 
 
-    public void LoadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
+    public void loadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
     {
-       /* var Distance = 22;
+
+        var Distance = 22;
 
         //----------------------------------------
-        var mapName = "Map_" + mapId.ToString("000");
+        var mapName = "Forest";
 
         // Collision 관련 파일
-        var text = File.ReadAllText($"{pathPrefix}/{mapName}.txt");
+        var text = File.ReadAllText(" ./../../../../../../GSO_Client/Assets/Data/" + $"{mapName}.txt");
         var reader = new StringReader(text);
 
-        var roomCount = int.Parse(reader.ReadLine());
-
-        for (var i = 0; i < roomCount; i++)
-        {
-            var rInfo = reader.ReadLine().Split('/'); //x,y,roomtype,roomtempletType  roomttype 1:스폰2:통로3:일반 
-            //roomtempletType 1:1번형태의 방 2:2번형태
-
-            if (rInfo.Length == 5)
-            {
-                Room room = new Room();
-
-                room.PosX = int.Parse(rInfo[0]);
-                room.PosY = int.Parse(rInfo[1]);
-
-                if (int.Parse(rInfo[2]) == 1)
-                	room.isSpawnPoint = true;
-                room.RoomTypeId = int.Parse(rInfo[2]); // 1,2 방 3 길
-                room.RoomskinId = int.Parse(rInfo[3]); //1 기본 2 특수
-                room.Id = int.Parse(rInfo[4]);
-                Rooms.Add(room);   
-            }
-            else if (rInfo.Length == 4)
-            {
-                var room = new Room();
-
-                room.PosX = float.Parse(rInfo[0]);
-                room.PosY = float.Parse(rInfo[1]);
-                room.RoomType = (RoomType)Enum.Parse(typeof(RoomType), rInfo[2]);
-                room.Id = int.Parse(rInfo[3]);
-
-                Rooms.Add(room);
-            }
-            else
-            {
-                Console.WriteLine("맵 로드 실패  : 인자의 길이가 맞지 않음");
-            }
-        } // 방끝
-
+        var _ = reader.ReadLine();
 
         var minIndex = reader.ReadLine().Split('/');
 
-        roomSize = int.Parse(reader.ReadLine());
 
         Bleft = new Vector2Int(int.Parse(minIndex[0]), int.Parse(minIndex[1]));
+        roomSize = int.Parse(reader.ReadLine());
+
+        Width = roomSize;
+        Height = roomSize;
+
         Tright = new Vector2Int(Bleft.x + (roomSize - 1), Bleft.y + (roomSize - 1));
 
 
         _collisions = new int[roomSize, roomSize];
-        _objects = new GameObject[roomSize, roomSize];
+       // _objects = new GameObject[roomSize, roomSize];
 
 
-        for (var x = roomSize - 1; x >= 0; x--)
+        //for (var x = roomSize - 1; x >= 0; x--)
+        for (var x = 0; x < roomSize; x++)
             Buffer.BlockCopy(
                 Array.ConvertAll(reader.ReadLine().Split(','), s => int.Parse(s)),
                 0, _collisions, x * roomSize * sizeof(int), roomSize * sizeof(int));
 
-        //for (int i = 0; i < roomSize; i++) //디버깅
-        //{
-        //    for (int j = 0; j < roomSize; j++)
-        //    {
-        //        Console.Write(_collisions[i, j]);
-        //    }
-        //    Console.WriteLine();
-        //}
-
-
-        foreach (var r in Rooms)
+        //동적 생성
+        for (int i = 0; i < roomSize; i++)
         {
-            var main = new Vector2(r.PosX, r.PosY);
-            foreach (var next in Rooms)
+
+            for (int j = 0; j < roomSize; j++)
             {
-                if (r == next)
-                    continue;
-                if (r.RoomType == next.RoomType)
-                    continue;
 
-                var sub = new Vector2(next.PosX, next.PosY);
-                if (Vector2.Distance(main, sub) < Distance + 1) r.TouarableRooms.Add(next);
+                if (_collisions[i,j]  == 2) // 박스
+                {
+                    RootableObject rb = ObjectManager.Instance.Add<RootableObject>();
+                    rb.CellPos = new Vector2(i + Bleft.x, j + Bleft.y);
+                    rb.Init();
+                    rb.info.Name = "Box";
+                    rootableObjects.Add(rb);
+                }
+                else if (_collisions[i, j] == 3) //탈출구
+                {
+                    ExitZone exit = ObjectManager.Instance.Add<ExitZone>();
+                    exit.CellPos = new Vector2(i + Bleft.x, j + Bleft.y);
+                    exit.info.Name = "ExitZone";
+                    exitZones.Add(exit);
+                }
+
+
             }
-        } //투어 끝
+        }
 
+    
 
-        //for (int i = 0; i < childCount; i++)
-        //{
-        //    int MinX = int.Parse(reader.ReadLine());
-        //    int MaxX = int.Parse(reader.ReadLine());
-        //    int MinY = int.Parse(reader.ReadLine());
-        //    int MaxY = int.Parse(reader.ReadLine());
+        Console.WriteLine("InitMap End"+ $"rootableObjects Count : {rootableObjects.Count}  , exitZones count : {exitZones.Count}");
 
-        //    int xCount = MaxX - MinX + 1;
-        //    int yCount = MaxY - MinY + 1;
-        //    Rooms[i].Collisions = new bool[yCount, xCount];
-
-        //    for (int y = 0; y < yCount; y++)
-        //    {
-        //        string line = reader.ReadLine();
-        //        for (int x = 0; x < xCount; x++)
-        //        {
-        //            Rooms[i].Collisions[y, x] = (line[x] - '0') > 0;
-        //            //Console.Write(Rooms[i].Collisions[y, x] ? '1' :'0');
-        //        }
-        //    }
-
-        //}
 
 
         //         while (true)
@@ -269,8 +201,8 @@ public class Map
         //	int y = int.Parse(Console.ReadLine());
         //	bool k = CanGo(new Vector2Int(x, y), false);
         //             Console.WriteLine(k);
-        //}*/
-    } //LoadMap
+        //}
+    }
 
     public void UpdateMap()
     {
@@ -298,8 +230,8 @@ public class Map
 
         {
             var pos = Cell2Pos(posInfo.PosX, posInfo.PosY);
-            if (_objects[pos.X, pos.Y] == gameObject)
-                _objects[pos.X, pos.Y] = null;
+            //if (_objects[pos.X, pos.Y] == gameObject)
+            //    _objects[pos.X, pos.Y] = null;
         }
 
         return true;
@@ -310,20 +242,29 @@ public class Map
         ApplyLeave(gameObject);
 
         if (gameObject.gameRoom == null)
+        {
+            Console.WriteLine($"{dest.x}, {dest.y} 이동불가능");
             return false;
+        }
+
+        var posInfo = gameObject.PosInfo;
+
         /*if (gameObject.gameRoom.Map != this)
             return false;*/
 
-        var posInfo = gameObject.PosInfo;
-        if (CanGo(dest, false)) return true;
+        if (CanGo(dest, false))
+        {
+            // 이동 성공
+            return true;
+        }
 
 
         {
-            var pos = Cell2Pos(posInfo.PosX, posInfo.PosY);
-            _objects[pos.X, pos.Y] = gameObject;
+            //var pos = Cell2Pos(posInfo.PosX, posInfo.PosY);
+            //_objects[pos.X, pos.Y] = gameObject;
         }
 
-        Console.WriteLine($"{dest.x}{dest.y} 이동불가능");
+       
 
         return false;
     }
@@ -340,7 +281,7 @@ public class Map
 
         //Console.WriteLine($"{cellPos.x}, {cellPos.y}and {x}, {y}");
 
-        return _collisions[x, y] > 0 && (!cheakObjects || _objects[x, y] == null);
+        return _collisions[x, y] == 0; // && (!cheakObjects || _objects[x, y] == null)
     }
 
     public void SetMonster(GameRoom room, int monsterCount)

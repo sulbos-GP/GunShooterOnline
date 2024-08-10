@@ -17,23 +17,22 @@ public class Player : CreatureObj
         ObjectType = GameObjectType.Player;
 
         //바꾼 부분(패킷핸들러의 C_EnterGameHandler에서 플레이어 설정
-        //inventory = new Inventory(Id);
+        //inventory = new inventory(Id);
         Vision = new VisionRegion(this);
 
         stat.MergeFrom(new StatInfo()
         {
-            Attack = 3,
+            //Attack = 3,
             Hp = 10,
             MaxHp = 20,
             
 
         });
 
-        float width = 2;
-        float left = 2;
-        float top = 2;
-
-        Polygon rectangle = ShapeManager.CreateCenterSquare(left, top, width);
+        float width = 1;
+        float left = -0.5f;
+        float bottom = -0.5f;
+        Polygon rectangle = ShapeManager.CreateCenterSquare(left, bottom, width);
         rectangle.Parent = this;
 
         currentShape = rectangle;
@@ -64,7 +63,7 @@ public class Player : CreatureObj
         diePacket.ObjectId = Id;
         diePacket.AttackerId = attacker.Id;
 
-        gameRoom.BroadCast(CurrentRoomId, diePacket);
+        gameRoom.BroadCast(diePacket);
 
         var room = gameRoom;
         room.Push(room.LeaveGame, Id);

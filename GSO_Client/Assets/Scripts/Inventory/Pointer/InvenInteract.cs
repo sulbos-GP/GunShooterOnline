@@ -5,6 +5,7 @@ using UnityEngine.EventSystems;
 
 public class InvenInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
+    //현재 사용하지 않음
     //플로팅 인벤토리에 부착하며 인벤토리에 마우스 포인터가 위치하면 해당 변수에 부착된 UI를 반환
     public InventoryController invenController;
     private InventoryUI inven;

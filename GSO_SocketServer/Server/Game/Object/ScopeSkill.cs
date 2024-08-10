@@ -60,7 +60,7 @@ public class ScopeSkill : SkillObj
             if (_hitList.Contains(other) == false) // 적합하고 충돌에 없다면
             {
                 _hitList.Add(other);
-                other.OnDamaged(this.GetOwner() ,this.Attack);
+                //other.OnDamaged(this.GetOwner() ,this.Attack);
                 _pq.Push(new HitActor(
                     (ushort)(Program.ServerTickCount + Time.Millis2ServerTick((Data.cooldown * 1000))), other));
             }

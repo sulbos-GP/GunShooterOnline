@@ -13,7 +13,8 @@ internal class ObjectManager
     private int _counter = 1;
     private readonly object _lock = new();
     private readonly Dictionary<int, Player> _players = new();
-    public readonly Dictionary<int, RootableObject> _rootable = new();
+    private readonly Dictionary<int, RootableObject> _rootable = new();
+    private readonly Dictionary<int, ExitZone> _exit = new();
     private readonly Dictionary<int, ItemObject> _items = new();
     public static ObjectManager Instance { get; } = new();
 
@@ -31,7 +32,10 @@ internal class ObjectManager
                 _items.Add(gameObjcet.Id, gameObjcet as ItemObject);
 
             else if (gameObjcet.ObjectType == GameObjectType.Box)
-                _rootable.Add(gameObjcet.Id, gameObjcet as RootableObject);
+                _rootable.Add(gameObjcet.Id, gameObjcet as RootableObject);   
+            
+            else if (gameObjcet.ObjectType == GameObjectType.Exitzone)
+                _exit.Add(gameObjcet.Id, gameObjcet as ExitZone);
         }
         return gameObjcet;
     }
@@ -49,13 +53,39 @@ internal class ObjectManager
                 _items.Add(obj.Id, obj as ItemObject);
             else if (obj.ObjectType == GameObjectType.Box)
                 _rootable.Add(obj.Id, obj as RootableObject);
+            else if (obj.ObjectType == GameObjectType.Exitzone)
+                _exit.Add(obj.Id, obj as ExitZone);
         }
 
         return obj;
     }
 
 
-
+    public void DebugObjectDics()
+    {
+        Console.WriteLine($"player : ");
+        foreach (Player player in _players.Values){
+            Console.WriteLine($"{player.Id} ");
+        }
+        Console.WriteLine($"\n");
+        Console.WriteLine($"rootable : ");
+        foreach (RootableObject root in _rootable.Values)
+        {
+            Console.WriteLine($"{root.Id} ");
+        }
+        Console.WriteLine($"\n");
+        Console.WriteLine($"Item : ");
+        foreach (ItemObject item in _items.Values)
+        {
+            Console.WriteLine($"{item.Id} ");
+        }
+        Console.WriteLine($"\n");
+        Console.WriteLine($"exitZone : ");
+        foreach (ExitZone exit in _exit.Values)
+        {
+            Console.WriteLine($"{exit.Id} ");
+        }
+    }
 
 
     private int GenerateId(GameObjectType type) //[unused(1)] [type(7)] [Id(24)]
@@ -79,6 +109,13 @@ internal class ObjectManager
         {
             if (objectType == GameObjectType.Player)
                 return _players.Remove(objectId);
+            else if (objectType == GameObjectType.Item)
+                return _items.Remove(objectId);
+            else if (objectType == GameObjectType.Box)
+                return _rootable.Remove(objectId);
+            else if (objectType == GameObjectType.Exitzone)
+                return _exit.Remove(objectId);
+
         }
 
         return false;
@@ -129,8 +166,14 @@ internal class ObjectManager
                     return obj as T;
 
             }
+            else if (objectType == GameObjectType.Exitzone)
+            {
+                ExitZone obj = null;
+                if (_exit.TryGetValue(objectId, out obj))
+                    return obj as T;
 
-            
+            }
+
         }
 
        
@@ -140,10 +183,17 @@ internal class ObjectManager
 
 
 
-    public Shape[] GetValue()
+    public Shape[] GetShapeValue()
     {
 
         List<Shape> shape = new ();
+
+        //The box doesn't use a lock because it doesn't allow for dynamic generation
+
+        foreach (RootableObject r in _rootable.Values)
+        {
+            shape.Add(r.currentShape);
+        }
 
         lock (_lock)
         {
@@ -151,6 +201,7 @@ internal class ObjectManager
             {
                 shape.Add(p.currentShape);
             }
+
         }
 
         return shape.ToArray();

@@ -4,6 +4,7 @@ using LiteNetLib;
 using Server;
 using Server.Data;
 using Server.Game;
+using Server.Game.Object;
 using Server.Game.Utils;
 using ServerCore;
 using System;
@@ -25,11 +26,12 @@ class PacketHandler
             p.info.Name = enterGamePacket.Name + clientSession.SessionId;
             p.info.PositionInfo.PosX = 0;
             p.info.PositionInfo.PosY = 0;
-
+            p.gameRoom = Program.mNetworkService.gameRoom as BattleGameRoom;
             //바꾼 부분
             p.inventory = new Inventory(p.Id,6,7);
         }
 
+        clientSession.Room = Program.mNetworkService.gameRoom as BattleGameRoom;
         clientSession.MyPlayer = p;
 
 
@@ -38,7 +40,7 @@ class PacketHandler
         BattleGameRoom room = (BattleGameRoom)Program.mNetworkService.gameRoom; //나중에 null로 바꿔도 참조가능
 
         room.Push(room.EnterGame, clientSession.MyPlayer);
-
+        ObjectManager.Instance.DebugObjectDics();
     }
 
     internal static void C_LoadInventoryHandler(PacketSession session, IMessage message)
@@ -83,11 +85,8 @@ class PacketHandler
         C_MoveItem packet = (C_MoveItem)message;
         Console.WriteLine($"C_MoveItemHandler {packet.PlayerId}");
 
-        ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
-        
-        target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY , packet.ItemRotate);
-
         Player player = clientSession.MyPlayer;
+
         player.gameRoom.Push(player.gameRoom.HandleItemMove, player, message);
     }
 
@@ -117,7 +116,15 @@ class PacketHandler
         player.gameRoom.Push(player.gameRoom.HandleRayCast, player, new Vector2(packet.StartPosX, packet.StartPosY), new Vector2(packet.DirX, packet.DirY), packet.Length);
     }
 
+    internal static void C_ExitGameHandler(PacketSession session, IMessage message)
+    {
+        ClientSession clientSession = session as ClientSession;
+        C_ExitGame packet = (C_ExitGame)message;
+        Console.WriteLine($"C_ExitPacketHandler");
+
+        Player player = clientSession.MyPlayer;
 
 
-   
+        player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
+    }
 }

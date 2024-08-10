@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using Pipelines.Sockets.Unofficial.Buffers;
 using Server.Game;
+using Server.Game.Object;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,7 +21,7 @@ namespace Server.Game
         /*int32 inventoryId = 1;
         float limitWeight = 2;
         repeated GridDataInfo GridData = 3;*/
-        public List<Grid> instantGrid = new List<Grid>(); //해당 인벤토리가 소유한 그리드
+        public Dictionary<int,Grid> instantGrid = new Dictionary<int,Grid>(); //해당 인벤토리가 소유한 그리드
 
 
         //인벤토리가 처음 생성될때?
@@ -39,10 +40,13 @@ namespace Server.Game
             }
             newGrid.gridData = MakeNewGridData(x,y);
             newGrid.ownerInventory = this;
-            newGrid.SetGrid();
-            instantGrid.Add(newGrid);
+            newGrid.SetGrid(); 
+
+            instantGrid.Add(newGrid.gridData.GridId, newGrid);
             invenData.GridData.Add(newGrid.gridData);
-            Console.WriteLine($"ownerId : {ownerId} \n instantGridAmt : {instantGrid.Count} \nitemAmount : {newGrid.itemObjectList.Count} \n");
+
+            //Console.WriteLine($"ownerId : {ownerId} \n instantGridAmt : {instantGrid.Count} \nitemAmount : {newGrid.itemObjectList.Count} \n");
+
         }
 
         private GridDataInfo MakeNewGridData(int x, int y)
@@ -58,8 +62,8 @@ namespace Server.Game
                 RandomItemAmount = 3 //임시. 소유자의 조건에 따라 달라짐
             };
 
-            Console.WriteLine($"GridId : {newData.GridId} \nGridSize : {newData.GridSizeX},{newData.GridSizeY}\n" +
-                $"gridPos ={newData.GridPosX},{newData.GridPosY}\n");
+            //Console.WriteLine($"GridId : {newData.GridId} \nGridSize : {newData.GridSizeX},{newData.GridSizeY}\n" +
+            //    $"gridPos ={newData.GridPosX},{newData.GridPosY}\n");
 
             CreateRandomItemDataIntoGridData(newData);
 
@@ -138,7 +142,7 @@ namespace Server.Game
 
         
 
-        public void MoveItem(int id, int posX, int posY, int rotate)
+        public void MoveItem(int id, int posX, int posY, int rotate, Grid targetGrid)
         {
             //아이템 가져오기
             ItemObject target = ObjectManager.Instance.Find<ItemObject>(id);
@@ -147,13 +151,21 @@ namespace Server.Game
             {
                 return;
             }
+            Console.WriteLine($"MoveItem Method\n" +
+                $"Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
+                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosX}) -> ({posX},{posY})\n" +
+                $"rotate : {target.itemDataInfo.ItemRotate} -> {rotate}\n" +
+                $"grid : {target.ownerGrid.gridData.GridId} -> {targetGrid.gridData.GridId}");
 
+            //그리드에서 아이템 및 아이템 데이터 삭제
             target.ownerGrid.DeleteItemFromSlot(target);
-
+            target.ownerGrid.RemoveItemDataInGridData(target);
+            //아이템의 소유그리드와 회전도 업데이트
+            target.ownerGrid = targetGrid;
             target.ItemRotate = rotate;
-
-            target.ownerGrid.PushItemIntoSlot(target,posX,posY);
-
+            //그리드에 아이템 및 아이템 데이터 삽입
+            target.ownerGrid.PushItemIntoSlot(target, posX, posY);
+            target.ownerGrid.InsertItemDataInGridData(target);
             target.ownerGrid.PrintInvenContents();
         }
 
@@ -167,6 +179,11 @@ namespace Server.Game
                 return;
             }
 
+            Console.WriteLine($"DeleteItem Method\n" +
+                $"Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
+                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosX} -> X)\n" +
+                $"rotate : {target.itemDataInfo.ItemRotate} -> X\n" +
+                $"grid : {target.ownerGrid.gridData.GridId} -> X");
             target.ownerGrid.DeleteItemFromSlot(target);
 
             target.ownerGrid.PrintInvenContents();

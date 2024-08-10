@@ -28,6 +28,7 @@ public class CreatureController : BaseController
         }
     }
 
+    /*
     public int Exp
     {
         get
@@ -39,7 +40,7 @@ public class CreatureController : BaseController
             Stat.Exp = value;
             ChangeStat?.Invoke();
         }
-    }
+    }*/
     
     protected override void Init()
     {
@@ -100,7 +101,7 @@ public class CreatureController : BaseController
         {
             var ratio = 0f;
             
-            ratio = Mathf.Max(0, (float)Exp / Stat.MaxExp);
+            //ratio = Mathf.Max(0, (float)Exp / Stat.MaxExp);
             //Debug.Log($"updateHp {transform.name} : new Exp = {Exp} ,ratio = {ratio}");
             
             _baseInfoBar.SetExpBar(ratio);

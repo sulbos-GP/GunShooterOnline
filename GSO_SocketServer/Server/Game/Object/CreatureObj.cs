@@ -11,7 +11,7 @@ public class CreatureObj : GameObject
     {
         if (other.ObjectType == GameObjectType.Projectile)
         {
-            OnDamaged(other,other.Attack);
+            //OnDamaged(other,other.Attack);
             other.OnCollisionFeedback(this);
         }
        /* else if (other.ObjectType == GameObjectType.Scopeskill)
@@ -56,7 +56,7 @@ public class CreatureObj : GameObject
         var ChangePacket = new S_ChangeHp();
         ChangePacket.ObjectId = Id;
         ChangePacket.Hp = stat.Hp;
-        gameRoom.BroadCast(CurrentRoomId, ChangePacket);
+        gameRoom.BroadCast(ChangePacket);
 
         if (stat.Hp <= 0)
         {

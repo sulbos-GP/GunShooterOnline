@@ -30,7 +30,7 @@ public partial class MyPlayerController : PlayerController
 
 
 
-    public int Attack => Stat.Attack;
+    //public int Attack => Stat.Attack;
 
 
     private void LateUpdate()
@@ -73,7 +73,7 @@ public partial class MyPlayerController : PlayerController
         float _expratio = 0f;
         if (Stat.MaxHp > 0)
         {
-            _expratio = Mathf.Max(0, (float)Stat.Exp / Stat.MaxExp);
+           // _expratio = Mathf.Max(0, (float)Stat.Exp / Stat.MaxExp);
             _gameInfoBar.PlayerExpBarHandle.GetComponent<Image>().fillAmount = _expratio;
         }
         
@@ -136,13 +136,14 @@ public partial class MyPlayerController : PlayerController
     private int leastLevel = 0;
     public void CheakUpdateLevel()
     {
+        /*
         if (leastLevel < Stat.Level) //레벨이 오르면
         {
             Debug.Log(($"Level Up : {leastLevel} -> {Stat.Level} "));
              _butnSkill.UpdateBtn(Stat.Level);
         }
 
-        leastLevel = Stat.Level;
+        leastLevel = Stat.Level;*/
     }
     
     
