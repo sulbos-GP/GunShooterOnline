@@ -134,7 +134,7 @@ GameObject:
   - component: {fileID: 38637585}
   - component: {fileID: 38637584}
   m_Layer: 5
-  m_Name: SignInText
+  m_Name: GameTitleText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Gun Shooter Online
+  m_text: Survival Horizon
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8161efe7b36bf4c9bbd0a4c81775f22a, type: 2}
   m_sharedMaterial: {fileID: 8716284603229008159, guid: 8161efe7b36bf4c9bbd0a4c81775f22a, type: 2}
