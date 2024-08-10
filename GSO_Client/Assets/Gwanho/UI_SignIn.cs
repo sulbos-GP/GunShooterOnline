@@ -138,7 +138,13 @@ public class SignInUI : MonoBehaviour
         {
             ResultMessage("로그인 요청 시도...");
 
-            SignInReq packet = new SignInReq()
+            var header = new HeaderVerfiyPlayer
+            {
+                uid = Managers.Web.mCredential.uid,
+                access_token = Managers.Web.mCredential.access_token,
+            };
+
+            var body = new SignInReq()
             {
                 user_id = PlayGamesPlatform.Instance.GetUserId(),
                 server_code = code,
@@ -146,7 +152,7 @@ public class SignInUI : MonoBehaviour
             };
 
             GsoWebService service = new GsoWebService();
-            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(packet);
+            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(header, body);
             request.ExecuteAsync(ProcessAccessToken);
         }
         catch (HttpRequestException error)
@@ -173,7 +179,7 @@ public class SignInUI : MonoBehaviour
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
         {
-            WebManager.Instance.mCredential = new WebClientCredential
+            Managers.Web.mCredential = new WebClientCredential
             {
                 uid = response.uid.ToString(),
                 access_token = response.access_token,
@@ -182,7 +188,7 @@ public class SignInUI : MonoBehaviour
                 token_type = response.token_type
             };
 
-            WebManager.Instance.mUserInfo = response.userData;
+            Managers.Web.mUserInfo = response.userData;
         }
 
         //로비로 이동

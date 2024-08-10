@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using static AuthorizeResource;
 
-public class WebManager : MonoBehaviour
+public class WebManager
 {
     private static WebManager instance = null;
 
@@ -16,30 +16,8 @@ public class WebManager : MonoBehaviour
 
     private void Awake()
     {
-        if (null == instance)
-        {
-            instance = this;
-            DontDestroyOnLoad(this.gameObject);
-        }
-        else
-        {
-            Destroy(this.gameObject);
-        }
-
         mUserInfo = new DataLoadUserInfo();
         mCredential = new WebClientCredential();
-    }
-
-    public static WebManager Instance
-    {
-        get
-        {
-            if (null == instance)
-            {
-                return null;
-            }
-            return instance;
-        }
     }
 
     private void Start()
@@ -78,14 +56,21 @@ public class WebManager : MonoBehaviour
     /// </summary>
     private void OnApplicationQuit()
     {
-        SignOutReq packet = new SignOutReq()
+
+        var header = new HeaderVerfiyPlayer
+        {
+            uid = mCredential.uid,
+            access_token = mCredential.access_token,
+        };
+
+        var body = new SignOutReq()
         {
             //TODO : 마지막에 일어난 작업을 적음
             cause = "Player OnApplicationQuit"
         };
 
         GsoWebService service = new GsoWebService();
-        SignOutRequest request = service.mAuthorizeResource.GetSignOutRequest(packet);
+        SignOutRequest request = service.mAuthorizeResource.GetSignOutRequest(header, body);
         request.ExecuteAsync(ProcessSignOut);
     }
 

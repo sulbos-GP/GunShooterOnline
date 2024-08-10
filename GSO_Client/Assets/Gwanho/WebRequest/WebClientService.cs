@@ -2,7 +2,9 @@ using GooglePlayGames.OurUtils;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -35,22 +37,22 @@ public abstract class WebClientService
 
 public abstract class WebClientServiceRequest<TResponse>
 {
-    protected HeaderDTO mFromHeader = null;
+    protected Dictionary<string, string> mFromHeader = null;
     protected object mFromBody = null;
     protected string mEndPoint = null;
     protected ERequestMethod mMethod = ERequestMethod.None;
 
     public void ExecuteAsync(Action<TResponse> callback)
     {
-        Misc.CheckNotNull(callback);
+        CheckNotNull(callback);
 
-        Misc.CheckNotNull(mFromBody);
+        CheckNotNull(mFromBody);
 
-        Misc.CheckNotNull(mEndPoint);
+        CheckNotNull(mEndPoint);
 
         CheckMethodNotNone(mMethod);
 
-        WebManager.Instance.StartCoroutine(CoExecuteAsync(callback));
+        Managers.Instance.StartCoroutine(CoExecuteAsync(callback));
     }
 
     private IEnumerator CoExecuteAsync(Action<TResponse> callback)
@@ -65,8 +67,10 @@ public abstract class WebClientServiceRequest<TResponse>
 
         if(mFromHeader != null)
         {
-            request.SetRequestHeader("uid", mFromHeader.uid);
-            request.SetRequestHeader("access_token", mFromHeader.access_token);
+            foreach(var (key, value) in mFromHeader)
+            {
+                request.SetRequestHeader(key, value);
+            }
         }
 
         yield return request.SendWebRequest();
@@ -82,6 +86,14 @@ public abstract class WebClientServiceRequest<TResponse>
             throw new NotImplementedException($"웹 요청 실패 : {request.error}");
         }
 
+    }
+
+    public void CheckNotNull<T>(T value)
+    {
+        if (value == null)
+        {
+            throw new ArgumentNullException("Request method is none");
+        }
     }
 
     private void CheckMethodNotNone(ERequestMethod method)
