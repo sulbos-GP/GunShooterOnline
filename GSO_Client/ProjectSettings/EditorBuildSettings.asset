@@ -6,9 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 0
-    path: Assets/Scenes/DoozyUIScenes/Lobby.unity
-    guid: 207b83c182f407744926ea7f6e2419aa
-  - enabled: 1
     path: Assets/Scenes/Game.unity
     guid: 23e2da40052b8674499c192cb80c6826
   - enabled: 1
@@ -17,8 +14,5 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Gwanho/LobbyScene.unity
     guid: d4549d549b8179b42a49b449bab4a8e6
-  - enabled: 1
-    path: Assets/Gwanho/TempGameScene.unity
-    guid: 79a24153e3ab2be429e0fe749e66aa05
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 6ae272c81aa1d45999670f9634ff8736, type: 2}

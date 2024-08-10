@@ -38,9 +38,16 @@ public class SignInUI : MonoBehaviour
     /// </summary>
     private void AutoSignIn()
     {
-        ResultMessage("구글 플레이 서비스 자동 인증 시도...");
-        SetActiveLoading(true);
-        PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+        try
+        {
+            ResultMessage("구글 플레이 서비스 자동 인증 시도...");
+            SetActiveLoading(true);
+            PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+        }
+        catch (Exception error)
+        {
+            ResultMessage($"자동 인증 실패 : {error.Message}");
+        }
     }
 
     /// <summary>
@@ -49,7 +56,16 @@ public class SignInUI : MonoBehaviour
     /// </summary>
     public void OnClickSignIn()
     {
-        PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
+        try
+        {
+            ResultMessage("구글 플레이 서비스 수동 인증 시도...");
+            SetActiveLoading(true);
+            PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
+        }
+        catch (Exception error)
+        {
+            ResultMessage($"수동 인증 실패 : {error.Message}");
+        }
     }
 
     /// <summary>
@@ -87,7 +103,7 @@ public class SignInUI : MonoBehaviour
             }
             catch (HttpRequestException error)
             {
-                ResultMessage($"유저 확인 실패 : {error}");
+                ResultMessage($"유저 확인 실패 : {error.Message}");
             }
 
         }
@@ -112,14 +128,21 @@ public class SignInUI : MonoBehaviour
     private void OnProcessAuthentication(AuthenticationRes response)
     {
 
-        ResultMessage("구글 플레이 서버 코드 요청...");
+        try
+        {
+            ResultMessage("구글 플레이 서버 코드 요청...");
 
-        //기존에 있던 유저라면 False
-        //새로운 유저라면 True
-        bool forceRefreshToken = (response.error_code != 0);
+            //기존에 있던 유저라면 False
+            //새로운 유저라면 True
+            bool forceRefreshToken = (response.error_code != 0);
 
-        //토큰을 얻기위한 일회용 Code받아오기
-        PlayGamesPlatform.Instance.RequestServerSideAccess(forceRefreshToken, ProcessServerAuthCode);
+            //토큰을 얻기위한 일회용 Code받아오기
+            PlayGamesPlatform.Instance.RequestServerSideAccess(forceRefreshToken, ProcessServerAuthCode);
+        }
+        catch (Exception error)
+        {
+            ResultMessage($"서버 코드 요청 실패 : {error.Message}");
+        }
     }
 
     /// <summary>
@@ -138,12 +161,6 @@ public class SignInUI : MonoBehaviour
         {
             ResultMessage("로그인 요청 시도...");
 
-            var header = new HeaderVerfiyPlayer
-            {
-                uid = Managers.Web.mCredential.uid,
-                access_token = Managers.Web.mCredential.access_token,
-            };
-
             var body = new SignInReq()
             {
                 user_id = PlayGamesPlatform.Instance.GetUserId(),
@@ -152,12 +169,12 @@ public class SignInUI : MonoBehaviour
             };
 
             GsoWebService service = new GsoWebService();
-            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(header, body);
+            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(body);
             request.ExecuteAsync(ProcessAccessToken);
         }
         catch (HttpRequestException error)
         {
-            ResultMessage($"르그인 요청 실패 : {error}");
+            ResultMessage($"로그인 요청 실패 : {error.Message}");
         }
 
     }
@@ -174,7 +191,10 @@ public class SignInUI : MonoBehaviour
             SetActiveLoading(false);
             return;
         }
-        ResultMessage("로그인 요청 성공");
+        else
+        {
+            ResultMessage("로그인 요청 성공");
+        }
 
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
