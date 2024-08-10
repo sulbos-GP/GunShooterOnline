@@ -34,7 +34,7 @@ public class UI_UserMetadata : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UserMetadataInfo info = WebManager.Instance.mUserInfo.MetadataInfo;
+        UserMetadataInfo info = Managers.Web.mUserInfo.MetadataInfo;
         total_games.text = info.total_games.ToString();
         kills.text = info.kills.ToString();
         deaths.text = info.deaths.ToString();

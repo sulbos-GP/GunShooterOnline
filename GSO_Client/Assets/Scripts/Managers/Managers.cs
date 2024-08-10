@@ -74,6 +74,8 @@ internal class Managers : MonoBehaviour
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
 
+            s_instance._environment.InitEnviromentSetting(EEnvironmentState.Emulator);
+
             //s_instance._data.InventorySet();
 
             s_instance._pool.Init();
@@ -90,15 +92,24 @@ internal class Managers : MonoBehaviour
         Pool.Clear();
     }
 
+    #region Config
+
+    private readonly EnvironmentSetting _environment = new();
+
+    public static EnvironmentSetting Environment => Instance._environment;
+
+    #endregion
 
     #region Contents
 
     private readonly NetworkManager _network = new();
+    private readonly WebManager _web = new();
     private readonly MapManager _map = new();
     private readonly DataManager _Data = new();
     private readonly SkillManager _skill = new();
 
     public static NetworkManager Network => Instance._network;
+    public static WebManager Web => Instance._web;
     public static MapManager Map => Instance._map;
     public static DataManager Data => Instance._Data;
     public static SkillManager Skill => Instance._skill;

@@ -39,14 +39,14 @@ public class MatchmakerResource
     /// </summary>
     /// 
 
-    public MatchJoinRequest GetMatchJoinRequest(MatchmakerJoinReq packet)
+    public MatchJoinRequest GetMatchJoinRequest(HeaderVerfiyPlayer header, MatchmakerJoinReq body)
     {
-        return new MatchJoinRequest(this.mService, packet);
+        return new MatchJoinRequest(this.mService, header, body);
     }
 
-    public MatchCancleRequest GetMatchCancleRequest(MatchmakerCancleReq packet)
+    public MatchCancleRequest GetMatchCancleRequest(HeaderVerfiyPlayer header, MatchmakerCancleReq packet)
     {
-        return new MatchCancleRequest(this.mService, packet);
+        return new MatchCancleRequest(this.mService, header, packet);
     }
 
     /// <summary>
@@ -56,14 +56,9 @@ public class MatchmakerResource
     //¸ÅÄª Âü¿©
     public class MatchJoinRequest : WebClientServiceRequest<MatchmakerJoinRes>
     {
-        public MatchJoinRequest(MatchmakerService service, MatchmakerJoinReq request)
+        public MatchJoinRequest(MatchmakerService service, HeaderVerfiyPlayer header, MatchmakerJoinReq request)
         {
-            this.mFromHeader = new HeaderDTO
-            {
-                uid = WebManager.Instance.mCredential.uid,
-                access_token =WebManager.Instance.mCredential.access_token,
-            };
-
+            this.mFromHeader = header.ToDictionary();
             this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/api/Matchmaker/Join";
             this.mMethod = ERequestMethod.POST;
@@ -73,14 +68,9 @@ public class MatchmakerResource
     //¸ÅÄª Ãë¼Ò
     public class MatchCancleRequest : WebClientServiceRequest<MatchmakerCancleRes>
     {
-        public MatchCancleRequest(MatchmakerService service, MatchmakerCancleReq request)
+        public MatchCancleRequest(MatchmakerService service, HeaderVerfiyPlayer header, MatchmakerCancleReq request)
         {
-            this.mFromHeader = new HeaderDTO
-            {
-                uid = WebManager.Instance.mCredential.uid,
-                access_token = WebManager.Instance.mCredential.access_token,
-            };
-
+            this.mFromHeader = header.ToDictionary();
             this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/api/Matchmaker/Cancle";
             this.mMethod = ERequestMethod.POST;
