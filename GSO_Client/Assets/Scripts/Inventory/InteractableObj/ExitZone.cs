@@ -92,4 +92,14 @@ public class ExitZone : InteractableObject
     {
         Debug.Log($"남은 시간: {time}초");
     }
+
+    protected override void OnTriggerEnter2D(Collider2D collision)
+    {
+        base.OnTriggerEnter2D(collision);
+    }
+
+    protected override void OnTriggerExit2D(Collider2D collision)
+    {
+        base.OnTriggerExit2D(collision);
+    }
 }
