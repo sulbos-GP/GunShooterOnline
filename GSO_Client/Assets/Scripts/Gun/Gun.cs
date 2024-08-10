@@ -124,6 +124,8 @@ public class Gun : MonoBehaviour
 
             //레이캐스트를 사용한 방법
             RaycastHit2D hit = Physics2D.Raycast(fireStartPos.position, direction, _gunStat.range);
+            Debug.DrawRay(fireStartPos.position, direction, Color.red, 2f);
+
             if (hit.collider != null)
             {
                 //패킷 전송

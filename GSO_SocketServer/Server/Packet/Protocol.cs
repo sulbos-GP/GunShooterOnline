@@ -65,40 +65,42 @@ namespace Google.Protobuf.Protocol {
             "DQoFbWF4SHAYAyABKAUSEwoLYXR0YWNrUmFuZ2UYBCABKAISEwoLYXR0YWNr",
             "U3BlZWQYBSABKAIiawoMUG9zaXRpb25JbmZvEhUKDWN1cnJlbnRSb29tSWQY",
             "ASABKAUSDAoEZGlyWBgCIAEoAhIMCgRkaXJZGAMgASgCEgwKBHBvc1gYBCAB",
-            "KAISDAoEcG9zWRgFIAEoAhIMCgRyb3RaGAYgASgCIqoBCglTaGFwZUluZm8S",
-            "EAoIb2JqY2V0SWQYASABKAUSEgoKU2hwYXBlVHlwZRgCIAEoBRIMCgRwb3NY",
-            "GAMgASgCEgwKBHBvc1kYBCABKAISEQoJcm9hdGF0aW9uGAUgASgCEg4KBnJh",
-            "ZGl1cxgGIAEoAhILCgNUb3AYByABKAISDAoETGVmdBgIIAEoAhINCgVXaWR0",
-            "aBgJIAEoAhIOCgZIZWlnaHQYCiABKAIiYwoNSW52ZW5EYXRhSW5mbxITCgtp",
-            "bnZlbnRvcnlJZBgBIAEoBRITCgtsaW1pdFdlaWdodBgCIAEoAhIoCghHcmlk",
-            "RGF0YRgDIAMoCzIWLlByb3RvY29sLkdyaWREYXRhSW5mbyLGAQoMR3JpZERh",
-            "dGFJbmZvEg4KBmdyaWRJZBgBIAEoBRIRCglncmlkU2l6ZVgYAiABKAUSEQoJ",
-            "Z3JpZFNpemVZGAMgASgFEhAKCGdyaWRQb3NYGAQgASgCEhAKCGdyaWRQb3NZ",
-            "GAUgASgCEigKCGl0ZW1MaXN0GAYgAygLMhYuUHJvdG9jb2wuSXRlbURhdGFJ",
-            "bmZvEhgKEGNyZWF0ZVJhbmRvbUl0ZW0YByABKAgSGAoQcmFuZG9tSXRlbUFt",
-            "b3VudBgIIAEoBSL1AgoMSXRlbURhdGFJbmZvEg4KBml0ZW1JZBgBIAEoBRIQ",
-            "CghpdGVtQ29kZRgCIAEoBRIQCghpdGVtUG9zWBgDIAEoBRIQCghpdGVtUG9z",
-            "WRgEIAEoBRISCgppdGVtUm90YXRlGAUgASgFEhIKCml0ZW1BbW91bnQYBiAB",
-            "KAUSGAoQc2VhcmNoZWRQbGF5ZXJJZBgHIAMoBRIRCglpdGVtX25hbWUYCCAB",
-            "KAkSEwoLaXRlbV93ZWlnaHQYCSABKAISEQoJaXRlbV90eXBlGAogASgFEhkK",
-            "EWl0ZW1fc3RyaW5nX3ZhbHVlGAsgASgFEhsKE2l0ZW1fcHVyY2hhc2VfcHJp",
-            "Y2UYDCABKAUSFwoPaXRlbV9zZWxsX3ByaWNlGA0gASgFEhcKD2l0ZW1fc2Vh",
-            "cmNoVGltZRgOIAEoAhINCgV3aWR0aBgPIAEoBRIOCgZoZWlnaHQYECABKAUS",
-            "GQoRaXNJdGVtQ29uc3VtZWFibGUYESABKAgq3AIKBU1zZ0lkEhAKDFNfRU5U",
-            "RVJfR0FNRRAAEhAKDFNfTEVBVkVfR0FNRRABEgsKB1NfU1BBV04QAhINCglT",
-            "X0RFU1BBV04QAxIKCgZTX01PVkUQBBIKCgZDX01PVkUQBRIPCgtTX0NPTk5F",
-            "Q1RFRBAGEg8KC1NfQ0hBTkdFX0hQEAcSCQoFU19ESUUQCBIQCgxDX0VOVEVS",
-            "X0dBTUUQCRIUChBDX0xPQURfSU5WRU5UT1JZEAoSFAoQU19MT0FEX0lOVkVO",
-            "VE9SWRALEg8KC0NfTU9WRV9JVEVNEAwSDwoLU19NT1ZFX0lURU0QDRIRCg1D",
-            "X0RFTEVURV9JVEVNEA4SEQoNU19ERUxFVEVfSVRFTRAPEhMKD0NfUkFZQ0FT",
-            "VF9TSE9PVBAQEhEKDVNfUkFZQ0FTVF9ISVQQERIPCgtTX0VYSVRfR0FNRRAS",
-            "Eg8KC0NfRVhJVF9HQU1FEBMqcwoOR2FtZU9iamVjdFR5cGUSCAoETk9ORRAA",
-            "EgoKBlBMQVlFUhABEgsKB01PTlNURVIQAhIOCgpQUk9KRUNUSUxFEAMSDQoJ",
-            "SU5WRU5EQVRBEAQSBwoDQk9YEAUSCAoESVRFTRAGEgwKCEVYSVRaT05FEAdC",
-            "G6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
+            "KAISDAoEcG9zWRgFIAEoAhIMCgRyb3RaGAYgASgCIrABCglTaGFwZUluZm8S",
+            "JwoKU2hwYXBlVHlwZRgBIAEoDjITLlByb3RvY29sLlNoYXBlVHlwZRIMCgRQ",
+            "b3NYGAIgASgCEgwKBFBvc1kYAyABKAISEQoJUm9hdGF0aW9uGAQgASgCEg4K",
+            "BlJhZGl1cxgFIAEoAhIMCgRMZWZ0GAYgASgCEg4KBkJvdHRvbRgHIAEoAhIN",
+            "CgVXaWR0aBgIIAEoAhIOCgZIZWlnaHQYCSABKAIiYwoNSW52ZW5EYXRhSW5m",
+            "bxITCgtpbnZlbnRvcnlJZBgBIAEoBRITCgtsaW1pdFdlaWdodBgCIAEoAhIo",
+            "CghHcmlkRGF0YRgDIAMoCzIWLlByb3RvY29sLkdyaWREYXRhSW5mbyLGAQoM",
+            "R3JpZERhdGFJbmZvEg4KBmdyaWRJZBgBIAEoBRIRCglncmlkU2l6ZVgYAiAB",
+            "KAUSEQoJZ3JpZFNpemVZGAMgASgFEhAKCGdyaWRQb3NYGAQgASgCEhAKCGdy",
+            "aWRQb3NZGAUgASgCEigKCGl0ZW1MaXN0GAYgAygLMhYuUHJvdG9jb2wuSXRl",
+            "bURhdGFJbmZvEhgKEGNyZWF0ZVJhbmRvbUl0ZW0YByABKAgSGAoQcmFuZG9t",
+            "SXRlbUFtb3VudBgIIAEoBSL1AgoMSXRlbURhdGFJbmZvEg4KBml0ZW1JZBgB",
+            "IAEoBRIQCghpdGVtQ29kZRgCIAEoBRIQCghpdGVtUG9zWBgDIAEoBRIQCghp",
+            "dGVtUG9zWRgEIAEoBRISCgppdGVtUm90YXRlGAUgASgFEhIKCml0ZW1BbW91",
+            "bnQYBiABKAUSGAoQc2VhcmNoZWRQbGF5ZXJJZBgHIAMoBRIRCglpdGVtX25h",
+            "bWUYCCABKAkSEwoLaXRlbV93ZWlnaHQYCSABKAISEQoJaXRlbV90eXBlGAog",
+            "ASgFEhkKEWl0ZW1fc3RyaW5nX3ZhbHVlGAsgASgFEhsKE2l0ZW1fcHVyY2hh",
+            "c2VfcHJpY2UYDCABKAUSFwoPaXRlbV9zZWxsX3ByaWNlGA0gASgFEhcKD2l0",
+            "ZW1fc2VhcmNoVGltZRgOIAEoAhINCgV3aWR0aBgPIAEoBRIOCgZoZWlnaHQY",
+            "ECABKAUSGQoRaXNJdGVtQ29uc3VtZWFibGUYESABKAgq3AIKBU1zZ0lkEhAK",
+            "DFNfRU5URVJfR0FNRRAAEhAKDFNfTEVBVkVfR0FNRRABEgsKB1NfU1BBV04Q",
+            "AhINCglTX0RFU1BBV04QAxIKCgZTX01PVkUQBBIKCgZDX01PVkUQBRIPCgtT",
+            "X0NPTk5FQ1RFRBAGEg8KC1NfQ0hBTkdFX0hQEAcSCQoFU19ESUUQCBIQCgxD",
+            "X0VOVEVSX0dBTUUQCRIUChBDX0xPQURfSU5WRU5UT1JZEAoSFAoQU19MT0FE",
+            "X0lOVkVOVE9SWRALEg8KC0NfTU9WRV9JVEVNEAwSDwoLU19NT1ZFX0lURU0Q",
+            "DRIRCg1DX0RFTEVURV9JVEVNEA4SEQoNU19ERUxFVEVfSVRFTRAPEhMKD0Nf",
+            "UkFZQ0FTVF9TSE9PVBAQEhEKDVNfUkFZQ0FTVF9ISVQQERIPCgtTX0VYSVRf",
+            "R0FNRRASEg8KC0NfRVhJVF9HQU1FEBMqcwoOR2FtZU9iamVjdFR5cGUSCAoE",
+            "Tk9ORRAAEgoKBlBMQVlFUhABEgsKB01PTlNURVIQAhIOCgpQUk9KRUNUSUxF",
+            "EAMSDQoJSU5WRU5EQVRBEAQSBwoDQk9YEAUSCAoESVRFTRAGEgwKCEVYSVRa",
+            "T05FEAcqSwoJU2hhcGVUeXBlEgkKBVNIQVBFEAASCgoGQ0lSQ0xFEAESDQoJ",
+            "UkVDVEFOR0xFEAISCwoHUE9MWUdPThADEgsKB0FSQ1BPTFkQBEIbqgIYR29v",
+            "Z2xlLlByb3RvYnVmLlByb3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_EnterGame), global::Google.Protobuf.Protocol.S_EnterGame.Parser, new[]{ "Player" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LeaveGame), global::Google.Protobuf.Protocol.S_LeaveGame.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Spawn), global::Google.Protobuf.Protocol.S_Spawn.Parser, new[]{ "Objects" }, null, null, null, null),
@@ -122,7 +124,7 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ObjectInfo), global::Google.Protobuf.Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "OwnerId", "SkillId", "Name", "PositionInfo", "StatInfo", "Shape" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.StatInfo), global::Google.Protobuf.Protocol.StatInfo.Parser, new[]{ "Class", "Hp", "MaxHp", "AttackRange", "AttackSpeed" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PositionInfo), global::Google.Protobuf.Protocol.PositionInfo.Parser, new[]{ "CurrentRoomId", "DirX", "DirY", "PosX", "PosY", "RotZ" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ShapeInfo), global::Google.Protobuf.Protocol.ShapeInfo.Parser, new[]{ "ObjcetId", "ShpapeType", "PosX", "PosY", "Roatation", "Radius", "Top", "Left", "Width", "Height" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ShapeInfo), global::Google.Protobuf.Protocol.ShapeInfo.Parser, new[]{ "ShpapeType", "PosX", "PosY", "Roatation", "Radius", "Left", "Bottom", "Width", "Height" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.InvenDataInfo), global::Google.Protobuf.Protocol.InvenDataInfo.Parser, new[]{ "InventoryId", "LimitWeight", "GridData" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.GridDataInfo), global::Google.Protobuf.Protocol.GridDataInfo.Parser, new[]{ "GridId", "GridSizeX", "GridSizeY", "GridPosX", "GridPosY", "ItemList", "CreateRandomItem", "RandomItemAmount" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ItemDataInfo), global::Google.Protobuf.Protocol.ItemDataInfo.Parser, new[]{ "ItemId", "ItemCode", "ItemPosX", "ItemPosY", "ItemRotate", "ItemAmount", "SearchedPlayerId", "ItemName", "ItemWeight", "ItemType", "ItemStringValue", "ItemPurchasePrice", "ItemSellPrice", "ItemSearchTime", "Width", "Height", "IsItemConsumeable" }, null, null, null, null)
@@ -167,6 +169,14 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("BOX")] Box = 5,
     [pbr::OriginalName("ITEM")] Item = 6,
     [pbr::OriginalName("EXITZONE")] Exitzone = 7,
+  }
+
+  public enum ShapeType {
+    [pbr::OriginalName("SHAPE")] Shape = 0,
+    [pbr::OriginalName("CIRCLE")] Circle = 1,
+    [pbr::OriginalName("RECTANGLE")] Rectangle = 2,
+    [pbr::OriginalName("POLYGON")] Polygon = 3,
+    [pbr::OriginalName("ARCPOLY")] Arcpoly = 4,
   }
 
   #endregion
@@ -6824,14 +6834,13 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public ShapeInfo(ShapeInfo other) : this() {
-      objcetId_ = other.objcetId_;
       shpapeType_ = other.shpapeType_;
       posX_ = other.posX_;
       posY_ = other.posY_;
       roatation_ = other.roatation_;
       radius_ = other.radius_;
-      top_ = other.top_;
       left_ = other.left_;
+      bottom_ = other.bottom_;
       width_ = other.width_;
       height_ = other.height_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -6843,32 +6852,20 @@ namespace Google.Protobuf.Protocol {
       return new ShapeInfo(this);
     }
 
-    /// <summary>Field number for the "objcetId" field.</summary>
-    public const int ObjcetIdFieldNumber = 1;
-    private int objcetId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ObjcetId {
-      get { return objcetId_; }
-      set {
-        objcetId_ = value;
-      }
-    }
-
     /// <summary>Field number for the "ShpapeType" field.</summary>
-    public const int ShpapeTypeFieldNumber = 2;
-    private int shpapeType_;
+    public const int ShpapeTypeFieldNumber = 1;
+    private global::Google.Protobuf.Protocol.ShapeType shpapeType_ = global::Google.Protobuf.Protocol.ShapeType.Shape;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ShpapeType {
+    public global::Google.Protobuf.Protocol.ShapeType ShpapeType {
       get { return shpapeType_; }
       set {
         shpapeType_ = value;
       }
     }
 
-    /// <summary>Field number for the "posX" field.</summary>
-    public const int PosXFieldNumber = 3;
+    /// <summary>Field number for the "PosX" field.</summary>
+    public const int PosXFieldNumber = 2;
     private float posX_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6879,8 +6876,8 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "posY" field.</summary>
-    public const int PosYFieldNumber = 4;
+    /// <summary>Field number for the "PosY" field.</summary>
+    public const int PosYFieldNumber = 3;
     private float posY_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6891,8 +6888,8 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "roatation" field.</summary>
-    public const int RoatationFieldNumber = 5;
+    /// <summary>Field number for the "Roatation" field.</summary>
+    public const int RoatationFieldNumber = 4;
     private float roatation_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -6903,8 +6900,8 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "radius" field.</summary>
-    public const int RadiusFieldNumber = 6;
+    /// <summary>Field number for the "Radius" field.</summary>
+    public const int RadiusFieldNumber = 5;
     private float radius_;
     /// <summary>
     /// circle;
@@ -6918,23 +6915,8 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "Top" field.</summary>
-    public const int TopFieldNumber = 7;
-    private float top_;
-    /// <summary>
-    ///Rectangle
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float Top {
-      get { return top_; }
-      set {
-        top_ = value;
-      }
-    }
-
     /// <summary>Field number for the "Left" field.</summary>
-    public const int LeftFieldNumber = 8;
+    public const int LeftFieldNumber = 6;
     private float left_;
     /// <summary>
     ///Rectangle
@@ -6948,8 +6930,23 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
+    /// <summary>Field number for the "Bottom" field.</summary>
+    public const int BottomFieldNumber = 7;
+    private float bottom_;
+    /// <summary>
+    ///Rectangle
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public float Bottom {
+      get { return bottom_; }
+      set {
+        bottom_ = value;
+      }
+    }
+
     /// <summary>Field number for the "Width" field.</summary>
-    public const int WidthFieldNumber = 9;
+    public const int WidthFieldNumber = 8;
     private float width_;
     /// <summary>
     ///Rectangle
@@ -6964,7 +6961,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "Height" field.</summary>
-    public const int HeightFieldNumber = 10;
+    public const int HeightFieldNumber = 9;
     private float height_;
     /// <summary>
     ///Rectangle
@@ -6993,14 +6990,13 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (ObjcetId != other.ObjcetId) return false;
       if (ShpapeType != other.ShpapeType) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(PosX, other.PosX)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(PosY, other.PosY)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Roatation, other.Roatation)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Radius, other.Radius)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Top, other.Top)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Left, other.Left)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Bottom, other.Bottom)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Width, other.Width)) return false;
       if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(Height, other.Height)) return false;
       return Equals(_unknownFields, other._unknownFields);
@@ -7010,14 +7006,13 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (ObjcetId != 0) hash ^= ObjcetId.GetHashCode();
-      if (ShpapeType != 0) hash ^= ShpapeType.GetHashCode();
+      if (ShpapeType != global::Google.Protobuf.Protocol.ShapeType.Shape) hash ^= ShpapeType.GetHashCode();
       if (PosX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(PosX);
       if (PosY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(PosY);
       if (Roatation != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Roatation);
       if (Radius != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Radius);
-      if (Top != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Top);
       if (Left != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Left);
+      if (Bottom != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Bottom);
       if (Width != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Width);
       if (Height != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(Height);
       if (_unknownFields != null) {
@@ -7038,44 +7033,40 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (ObjcetId != 0) {
+      if (ShpapeType != global::Google.Protobuf.Protocol.ShapeType.Shape) {
         output.WriteRawTag(8);
-        output.WriteInt32(ObjcetId);
-      }
-      if (ShpapeType != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(ShpapeType);
+        output.WriteEnum((int) ShpapeType);
       }
       if (PosX != 0F) {
-        output.WriteRawTag(29);
+        output.WriteRawTag(21);
         output.WriteFloat(PosX);
       }
       if (PosY != 0F) {
-        output.WriteRawTag(37);
+        output.WriteRawTag(29);
         output.WriteFloat(PosY);
       }
       if (Roatation != 0F) {
-        output.WriteRawTag(45);
+        output.WriteRawTag(37);
         output.WriteFloat(Roatation);
       }
       if (Radius != 0F) {
-        output.WriteRawTag(53);
+        output.WriteRawTag(45);
         output.WriteFloat(Radius);
       }
-      if (Top != 0F) {
-        output.WriteRawTag(61);
-        output.WriteFloat(Top);
-      }
       if (Left != 0F) {
-        output.WriteRawTag(69);
+        output.WriteRawTag(53);
         output.WriteFloat(Left);
       }
+      if (Bottom != 0F) {
+        output.WriteRawTag(61);
+        output.WriteFloat(Bottom);
+      }
       if (Width != 0F) {
-        output.WriteRawTag(77);
+        output.WriteRawTag(69);
         output.WriteFloat(Width);
       }
       if (Height != 0F) {
-        output.WriteRawTag(85);
+        output.WriteRawTag(77);
         output.WriteFloat(Height);
       }
       if (_unknownFields != null) {
@@ -7088,44 +7079,40 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (ObjcetId != 0) {
+      if (ShpapeType != global::Google.Protobuf.Protocol.ShapeType.Shape) {
         output.WriteRawTag(8);
-        output.WriteInt32(ObjcetId);
-      }
-      if (ShpapeType != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(ShpapeType);
+        output.WriteEnum((int) ShpapeType);
       }
       if (PosX != 0F) {
-        output.WriteRawTag(29);
+        output.WriteRawTag(21);
         output.WriteFloat(PosX);
       }
       if (PosY != 0F) {
-        output.WriteRawTag(37);
+        output.WriteRawTag(29);
         output.WriteFloat(PosY);
       }
       if (Roatation != 0F) {
-        output.WriteRawTag(45);
+        output.WriteRawTag(37);
         output.WriteFloat(Roatation);
       }
       if (Radius != 0F) {
-        output.WriteRawTag(53);
+        output.WriteRawTag(45);
         output.WriteFloat(Radius);
       }
-      if (Top != 0F) {
-        output.WriteRawTag(61);
-        output.WriteFloat(Top);
-      }
       if (Left != 0F) {
-        output.WriteRawTag(69);
+        output.WriteRawTag(53);
         output.WriteFloat(Left);
       }
+      if (Bottom != 0F) {
+        output.WriteRawTag(61);
+        output.WriteFloat(Bottom);
+      }
       if (Width != 0F) {
-        output.WriteRawTag(77);
+        output.WriteRawTag(69);
         output.WriteFloat(Width);
       }
       if (Height != 0F) {
-        output.WriteRawTag(85);
+        output.WriteRawTag(77);
         output.WriteFloat(Height);
       }
       if (_unknownFields != null) {
@@ -7138,11 +7125,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (ObjcetId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ObjcetId);
-      }
-      if (ShpapeType != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ShpapeType);
+      if (ShpapeType != global::Google.Protobuf.Protocol.ShapeType.Shape) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ShpapeType);
       }
       if (PosX != 0F) {
         size += 1 + 4;
@@ -7156,10 +7140,10 @@ namespace Google.Protobuf.Protocol {
       if (Radius != 0F) {
         size += 1 + 4;
       }
-      if (Top != 0F) {
+      if (Left != 0F) {
         size += 1 + 4;
       }
-      if (Left != 0F) {
+      if (Bottom != 0F) {
         size += 1 + 4;
       }
       if (Width != 0F) {
@@ -7180,10 +7164,7 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.ObjcetId != 0) {
-        ObjcetId = other.ObjcetId;
-      }
-      if (other.ShpapeType != 0) {
+      if (other.ShpapeType != global::Google.Protobuf.Protocol.ShapeType.Shape) {
         ShpapeType = other.ShpapeType;
       }
       if (other.PosX != 0F) {
@@ -7198,11 +7179,11 @@ namespace Google.Protobuf.Protocol {
       if (other.Radius != 0F) {
         Radius = other.Radius;
       }
-      if (other.Top != 0F) {
-        Top = other.Top;
-      }
       if (other.Left != 0F) {
         Left = other.Left;
+      }
+      if (other.Bottom != 0F) {
+        Bottom = other.Bottom;
       }
       if (other.Width != 0F) {
         Width = other.Width;
@@ -7230,42 +7211,38 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            ObjcetId = input.ReadInt32();
+            ShpapeType = (global::Google.Protobuf.Protocol.ShapeType) input.ReadEnum();
             break;
           }
-          case 16: {
-            ShpapeType = input.ReadInt32();
-            break;
-          }
-          case 29: {
+          case 21: {
             PosX = input.ReadFloat();
             break;
           }
-          case 37: {
+          case 29: {
             PosY = input.ReadFloat();
             break;
           }
-          case 45: {
+          case 37: {
             Roatation = input.ReadFloat();
             break;
           }
-          case 53: {
+          case 45: {
             Radius = input.ReadFloat();
             break;
           }
-          case 61: {
-            Top = input.ReadFloat();
-            break;
-          }
-          case 69: {
+          case 53: {
             Left = input.ReadFloat();
             break;
           }
-          case 77: {
+          case 61: {
+            Bottom = input.ReadFloat();
+            break;
+          }
+          case 69: {
             Width = input.ReadFloat();
             break;
           }
-          case 85: {
+          case 77: {
             Height = input.ReadFloat();
             break;
           }
@@ -7289,42 +7266,38 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            ObjcetId = input.ReadInt32();
+            ShpapeType = (global::Google.Protobuf.Protocol.ShapeType) input.ReadEnum();
             break;
           }
-          case 16: {
-            ShpapeType = input.ReadInt32();
-            break;
-          }
-          case 29: {
+          case 21: {
             PosX = input.ReadFloat();
             break;
           }
-          case 37: {
+          case 29: {
             PosY = input.ReadFloat();
             break;
           }
-          case 45: {
+          case 37: {
             Roatation = input.ReadFloat();
             break;
           }
-          case 53: {
+          case 45: {
             Radius = input.ReadFloat();
             break;
           }
-          case 61: {
-            Top = input.ReadFloat();
-            break;
-          }
-          case 69: {
+          case 53: {
             Left = input.ReadFloat();
             break;
           }
-          case 77: {
+          case 61: {
+            Bottom = input.ReadFloat();
+            break;
+          }
+          case 69: {
             Width = input.ReadFloat();
             break;
           }
-          case 85: {
+          case 77: {
             Height = input.ReadFloat();
             break;
           }

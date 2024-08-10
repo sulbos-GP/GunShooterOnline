@@ -236,10 +236,10 @@ namespace QuadTree
                     // assumption that the Rect struct is almost as fast as doing the operations
                     // manually since Rect is a value type.
 
-                    var topLeft = new Rectangle(toInsert.bounds.Left, toInsert.bounds.Top, w, h);
-                    var topRight = new Rectangle(toInsert.bounds.Left + w, toInsert.bounds.Top, w, h);
-                    var bottomLeft = new Rectangle(toInsert.bounds.Left, toInsert.bounds.Top + h, w, h);
-                    var bottomRight = new Rectangle(toInsert.bounds.Left + w, toInsert.bounds.Top + h, w, h);
+                    var topLeft = new Rectangle(toInsert.bounds.Left, toInsert.bounds.Bottom, w, h);
+                    var topRight = new Rectangle(toInsert.bounds.Left + w, toInsert.bounds.Bottom, w, h);
+                    var bottomLeft = new Rectangle(toInsert.bounds.Left, toInsert.bounds.Bottom + h, w, h);
+                    var bottomRight = new Rectangle(toInsert.bounds.Left + w, toInsert.bounds.Bottom + h, w, h);
 
                     Quadrant child = null;
 
@@ -310,19 +310,19 @@ namespace QuadTree
                 // assumption that the Rect struct is almost as fast as doing the operations manually since Rect is a value type.
 
                 // See if any child quadrants completely contain this node.
-                if ((doNotCheck || bounds.IntersectsWith(new Rectangle(this.bounds.Left, this.bounds.Top, w, h))) &&
+                if ((doNotCheck || bounds.IntersectsWith(new Rectangle(this.bounds.Left, this.bounds.Bottom, w, h))) &&
                     topLeft != null)
                     topLeft.GetIntersectingNodes(nodes, bounds, doNotCheck);
 
-                if ((doNotCheck || bounds.IntersectsWith(new Rectangle(this.bounds.Left + w, this.bounds.Top, w, h))) &&
+                if ((doNotCheck || bounds.IntersectsWith(new Rectangle(this.bounds.Left + w, this.bounds.Bottom, w, h))) &&
                     topRight != null)
                     topRight.GetIntersectingNodes(nodes, bounds, doNotCheck);
 
-                if ((doNotCheck || bounds.IntersectsWith(new Rectangle(this.bounds.Left, this.bounds.Top + h, w, h))) &&
+                if ((doNotCheck || bounds.IntersectsWith(new Rectangle(this.bounds.Left, this.bounds.Bottom + h, w, h))) &&
                     bottomLeft != null)
                     bottomLeft.GetIntersectingNodes(nodes, bounds, doNotCheck);
 
-                if ((doNotCheck || bounds.IntersectsWith(new Rectangle(this.bounds.Left + w, this.bounds.Top + h, w, h))) &&
+                if ((doNotCheck || bounds.IntersectsWith(new Rectangle(this.bounds.Left + w, this.bounds.Bottom + h, w, h))) &&
                     bottomRight != null)
                     bottomRight.GetIntersectingNodes(nodes, bounds, doNotCheck);
 

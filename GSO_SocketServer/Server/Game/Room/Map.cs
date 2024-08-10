@@ -69,7 +69,7 @@ public struct PQNode : IComparable<PQNode>
 public class Map
 {
     private int[,] _collisions;
-    private GameObject[,] _objects;
+    //private GameObject[,] _objects;
 
     public int Width;
     public int Height;
@@ -153,7 +153,7 @@ public class Map
 
 
         _collisions = new int[roomSize, roomSize];
-        //_objects = new GameObject[roomSize, roomSize];
+       // _objects = new GameObject[roomSize, roomSize];
 
 
         //for (var x = roomSize - 1; x >= 0; x--)
@@ -230,8 +230,8 @@ public class Map
 
         {
             var pos = Cell2Pos(posInfo.PosX, posInfo.PosY);
-            if (_objects[pos.X, pos.Y] == gameObject)
-                _objects[pos.X, pos.Y] = null;
+            //if (_objects[pos.X, pos.Y] == gameObject)
+            //    _objects[pos.X, pos.Y] = null;
         }
 
         return true;
@@ -242,20 +242,29 @@ public class Map
         ApplyLeave(gameObject);
 
         if (gameObject.gameRoom == null)
+        {
+            Console.WriteLine($"{dest.x}, {dest.y} 이동불가능");
             return false;
+        }
+
+        var posInfo = gameObject.PosInfo;
+
         /*if (gameObject.gameRoom.Map != this)
             return false;*/
 
-        var posInfo = gameObject.PosInfo;
-        if (CanGo(dest, false)) return true;
+        if (CanGo(dest, false))
+        {
+            // 이동 성공
+            return true;
+        }
 
 
         {
-            var pos = Cell2Pos(posInfo.PosX, posInfo.PosY);
-            _objects[pos.X, pos.Y] = gameObject;
+            //var pos = Cell2Pos(posInfo.PosX, posInfo.PosY);
+            //_objects[pos.X, pos.Y] = gameObject;
         }
 
-        Console.WriteLine($"{dest.x}{dest.y} 이동불가능");
+       
 
         return false;
     }
@@ -272,7 +281,7 @@ public class Map
 
         //Console.WriteLine($"{cellPos.x}, {cellPos.y}and {x}, {y}");
 
-        return _collisions[x, y] > 0 && (!cheakObjects || _objects[x, y] == null);
+        return _collisions[x, y] == 0; // && (!cheakObjects || _objects[x, y] == null)
     }
 
     public void SetMonster(GameRoom room, int monsterCount)

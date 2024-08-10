@@ -9,9 +9,6 @@ namespace Server.Game;
 
 public class GameObject
 {
-    public Shape currentShape { get; set; } = null; // 충돌때만 하면 
-
-
 
     public GameObject()
     {
@@ -20,7 +17,40 @@ public class GameObject
     }
 
     public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;
-    public ObjectInfo info { get; set; } = new() { OwnerId = -1 };
+    public ObjectInfo info { get; set; } = new() { OwnerId = -1, Shape = new ShapeInfo() };
+
+
+    private Shape _shape;
+    public Shape currentShape {
+        get
+        {
+            return _shape;
+        }
+        set { 
+            _shape = value;
+            info.Shape.ShpapeType = (Google.Protobuf.Protocol.ShapeType)value.Type;
+            info.Shape.PosX      = value.position.x;
+            info.Shape.PosY      = value.position.y;
+            info.Shape.Roatation = value.rotation;
+          
+            if (value.Type == Collision.Shapes.ShapeType.CIRCLE)
+            {
+                info.Shape.Radius = ((Circle)value).radius;
+            }
+            else if(value.Type == Collision.Shapes.ShapeType.RECTANGLE)
+            {
+                info.Shape.Left = ((Rectangle)value).Left;
+                info.Shape.Bottom = ((Rectangle)value).Bottom;
+                info.Shape.Width = ((Rectangle)value).Width;
+                info.Shape.Height = ((Rectangle)value).Height;
+            }
+            else if(value.Type == Collision.Shapes.ShapeType.ARCPOLY)
+            {
+                //TODO : 
+            }
+
+        }
+    } // 충돌때만 하면 
 
 
     public int Id

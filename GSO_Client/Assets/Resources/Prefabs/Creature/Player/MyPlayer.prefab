@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 4282537680480379708}
   - component: {fileID: -5452985717935214419}
   - component: {fileID: -1893516375260961763}
+  - component: {fileID: 6612892889420825590}
   m_Layer: 0
   m_Name: MyPlayer
   m_TagString: Player
@@ -270,6 +271,19 @@ MonoBehaviour:
     inventoryId: 0
     limitWeight: 0
     gridList: []
+--- !u!114 &6612892889420825590
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191436082380664689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c97721cba81475544ab2fcd3173f3c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  time: 0
 --- !u!1 &355922946167704334
 GameObject:
   m_ObjectHideFlags: 0

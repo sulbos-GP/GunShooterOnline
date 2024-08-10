@@ -32,9 +32,9 @@ public class ShapeManager
     }
 
 
-    public static Polygon CreateSquare(float left, float top, float width)
+    public static Polygon CreateSquare(float left, float bottom, float width)
     {
-        return new Rectangle(left, top, width, width);
+        return new Rectangle(left, bottom, width, width);
     }
     public static Polygon CreateCenterSquare(float x, float y, float width)
     {
