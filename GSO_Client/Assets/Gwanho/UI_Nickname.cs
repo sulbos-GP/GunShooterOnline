@@ -29,7 +29,7 @@ public class UI_Nickname : MonoBehaviour
     {
         nicknameDescription.enabled = false;
 
-        string nickname = WebManager.Instance.mUserInfo.UserInfo.nickname;
+        string nickname = Managers.Web.mUserInfo.UserInfo.nickname;
         nicknameWindow.SetActive(nickname == string.Empty);
 
     }
@@ -60,14 +60,19 @@ public class UI_Nickname : MonoBehaviour
             return;
         }
 
-        //보내기
-        SetNicknameReq packet = new SetNicknameReq
+        var header = new HeaderVerfiyPlayer
+        {
+            uid = Managers.Web.mCredential.uid,
+            access_token = Managers.Web.mCredential.access_token,
+        };
+
+        var body = new SetNicknameReq
         {
             new_nickname = inputText,
         };
 
         GsoWebService service = new GsoWebService();
-        SetNicknameRequest request = service.mUserResource.GetSetNicknameRequest(packet);
+        SetNicknameRequest request = service.mUserResource.GetSetNicknameRequest(header, body);
         request.ExecuteAsync(OnProcessSetNickname);
 
         ShowDescription("닉네임 요청 확인중");
@@ -77,7 +82,7 @@ public class UI_Nickname : MonoBehaviour
     {
         if(response.error_code == 0)
         {
-            WebManager.Instance.mUserInfo.UserInfo.nickname = response.nickname;
+            Managers.Web.mUserInfo.UserInfo.nickname = response.nickname;
             nicknameWindow.SetActive(false);
         }
         else

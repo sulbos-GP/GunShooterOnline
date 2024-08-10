@@ -9,10 +9,35 @@ using UnityEngine;
 ///           °øÅë DTO          ///
 ///                             ///
 ///////////////////////////////////
-public class HeaderDTO
+
+public abstract class HeaderDTO
+{
+    public abstract Dictionary<string, string> ToDictionary();
+}
+
+public class HeaderCheackVersion : HeaderDTO
+{
+    public Version app { get; set; } = null;
+    public Version data { get; set; } = null;
+
+    public override Dictionary<string, string> ToDictionary()
+    {
+        return new Dictionary<string, string>();
+    }
+}
+
+public class HeaderVerfiyPlayer : HeaderDTO
 {
     public string uid { get; set; } = string.Empty;
     public string access_token { get; set; } = string.Empty;
+
+    public override Dictionary<string, string> ToDictionary()
+    {
+        var header = new Dictionary<string, string>();
+        header["uid"] = uid;
+        header["access_token"] = access_token;
+        return header;
+    }
 }
 
 public class ErrorCodeDTO
