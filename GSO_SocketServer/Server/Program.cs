@@ -43,6 +43,8 @@ namespace Server
             acceptKey   = DockerUtil.GetContainerId();
             register    = DockerUtil.GetRegister();
             backLog     = DockerUtil.GetBacklog();
+
+            InitWebClientService();
 #else
 
             iPAddress = IPAddress.Loopback;
@@ -51,8 +53,6 @@ namespace Server
             register = 100;
             backLog = 100;
 #endif
-
-            InitWebClientService();
 
             Func<Session> session = () => { return new ClientSession(); };
 
@@ -67,9 +67,10 @@ namespace Server
             mNetworkService.Start();
             mNetworkService.SetChannel(true, room,0);
 
+#if DOCKER
+
             RequestReady().Wait();
 
-#if DOCKER
             int minutes = 20;
             Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
 
@@ -86,9 +87,6 @@ namespace Server
                 if (input.Equals("q"))
                 {
                     mNetworkService.Stop();
-
-                    Shutdown().Wait();
-
                     break;
                 }
             }
