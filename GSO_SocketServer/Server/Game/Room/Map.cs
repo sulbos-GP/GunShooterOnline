@@ -128,6 +128,9 @@ public class Map
 
     public void loadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
     {
+      
+
+        return;  //TODO : 삭제
 
         var Distance = 22;
 
