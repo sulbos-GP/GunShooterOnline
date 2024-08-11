@@ -167,7 +167,11 @@ namespace Server
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
             RaycastHit2D hit = RaycastManager.Raycast(pos,dir, length);
-
+            
+            if(hit.Collider == null)
+            {
+                return;
+            }
 
             GameObject go = hit.Collider.Parent;
             if (go == null)

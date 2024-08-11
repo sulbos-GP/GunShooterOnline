@@ -5,6 +5,8 @@ using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
 using UnityEngine.UIElements;
 using UnityEngine.Rendering;
+using NPOI.SS.Formula.Functions;
+using System;
 
 public class InputController : MonoBehaviour
 {
@@ -17,19 +19,22 @@ public class InputController : MonoBehaviour
     private Vector2 _direction;
     private Vector2 lookInput;
 
-    private Unit localUnit => UnitManager.Instance.CurrentPlayer;
+    //private Unit localUnit => UnitManager.Instance.CurrentPlayer;
     public AimFov aimFov;
     public BasicFov basicFov;
 
-    private bool isFiring;
     //private CreatureState State;
     private Vector3 lastPos;
 
-    private bool _isRooting;
+    private bool _isFiring; 
+    private bool _isRooting; 
 
+    public List<GameObject> interactList;
+    public GameObject interactTarget;
     private void Awake()
     {
         instance = this;
+        interactList = new List<GameObject>();
     }
 
     public void Start()
@@ -41,8 +46,16 @@ public class InputController : MonoBehaviour
     public void FixedUpdate()
     {
         UpdateState();
+        if(interactList.Count != 0)
+        {
+            ChooseInteractObj();
+        }
+        else
+        {
+            interactTarget = null;
+        }
 
-        if(isFiring)
+        if(_isFiring)
         {
             StartCoroutine(FireContinuously());
         }
@@ -67,6 +80,30 @@ public class InputController : MonoBehaviour
         basicFov.SetOrigin(transform.position);
 
     }
+
+    private void ChooseInteractObj()
+    {
+        float nearestDistance = 0;
+
+        for (int i = 0; i < interactList.Count; i++)
+        {
+            float distance = Vector2.Distance(gameObject.transform.position, interactList[i].gameObject.transform.position);
+
+            if (i == 0)
+            {
+                interactTarget = interactList[i].gameObject;
+                nearestDistance = distance;
+                continue;
+            }
+
+            if (nearestDistance < distance)
+            {
+                interactTarget = interactList[i].gameObject;
+                nearestDistance = distance;
+            }
+        }
+    }
+
     private void OnEnable()
     {
         var playerInput = new PlayerInput();
@@ -99,23 +136,26 @@ public class InputController : MonoBehaviour
 
     private void OnInteraction(InputAction.CallbackContext callbackContext)
     {
-        if(!_isRooting)
-            return;
-        Collider2D[] cols = Physics2D.OverlapCircleAll(gameObject.transform.position, 1.5f);
-        foreach(var col in cols)
+        //if(!_isRooting)
+            //return;
+        
+        if(interactTarget == null)
         {
-            if(col.gameObject.GetComponent<Box>() != null)
-            {
-                distance = Vector2.Distance(gameObject.transform.position,col.gameObject.transform.position);
-                if (distance <= 2.0f)
-                {
-                    col.gameObject.GetComponent<Box>().Interact();
-                    OtherInventoryUI otherUI = FindObjectOfType<OtherInventoryUI>();
-                    otherUI.invenData = col.gameObject.GetComponent<OtherInventory>().InputInvenData;
-                    otherUI.InventorySet();
-                }
-            }
+            return;
         }
+
+        if (interactTarget.gameObject.GetComponent<Box>() != null)
+        {
+            interactTarget.gameObject.GetComponent<Box>().Interact();
+            OtherInventoryUI otherUI = FindObjectOfType<OtherInventoryUI>();
+            otherUI.invenData = interactTarget.gameObject.GetComponent<OtherInventory>().InputInvenData;
+            otherUI.InventorySet();
+        }
+        else if (interactTarget.gameObject.GetComponent<ExitZone>() != null)
+        {
+            interactTarget.gameObject.GetComponent<ExitZone>().Interact();
+        }
+
     }
 
     private void OnMove(InputAction.CallbackContext callbackContext)
@@ -143,28 +183,28 @@ public class InputController : MonoBehaviour
         {
             lookInput = context.ReadValue<Vector2>();
             if (Mathf.Abs(lookInput.x) + Mathf.Abs(lookInput.y) > 1.0f)
-                isFiring = true;
+                _isFiring = true;
         }
         if(context.canceled)
-            isFiring = false;
+            _isFiring = false;
     }
     private void OnStartFireInput(InputAction.CallbackContext context)
     {
-        isFiring = true;
+        _isFiring = true;
         StartCoroutine(FireContinuously());
     }
 
     private void OnStopFireInput(InputAction.CallbackContext context)
     {
-        isFiring = false;
+        _isFiring = false;
     }
 
     private IEnumerator FireContinuously()
     {
-        while (isFiring)
+        while (_isFiring)
         {
-            Debug.Log(isFiring);
-            Gun playerGun = localUnit.GetComponentInChildren<Gun>();
+            Debug.Log(_isFiring);
+            Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
             playerGun.Fire(); // 발사 메서드 호출
             yield return new WaitForSeconds(1 / playerGun.GetFireRate()); // 발사 속도에 따라 대기
         }
@@ -172,7 +212,7 @@ public class InputController : MonoBehaviour
     private void OnReloadInput(InputAction.CallbackContext context)
     {
         Debug.Log("RightClicked");
-        Gun playerGun = localUnit.GetComponentInChildren<Gun>();
+        Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
         playerGun.Reload();
     }
 
