@@ -12,6 +12,7 @@ public class FovPlayer : MonoBehaviour
     public BasicFov basicFov;
 
     public Gun playerGun;
+    [SerializeField]
     private bool isFiring;
 
     private void Awake()

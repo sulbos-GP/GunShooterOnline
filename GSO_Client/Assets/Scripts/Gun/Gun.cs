@@ -14,11 +14,9 @@ public class Gun : MonoBehaviour
         Reloading
     }
     public GunState gunState { get; private set; }
-    public LineRenderer lineRenderer;
 
     [SerializeField]
     private GunStat _gunStat;
-
     [SerializeField]
     private int _shooterId; //쏘는 캐릭터의 id 혹은 플레이어의 id
     [SerializeField]
@@ -28,9 +26,14 @@ public class Gun : MonoBehaviour
 
     private bool _isAmmoEmpty; //현재 장탄이 비었는지.
     private float _lastFireTime;
-    private Transform fireStartPos;
 
     public bool isBulletPrefShoot = false;
+
+    //총알궤적 라인 렌더러 (디버깅 라인을 라인렌더러로 표현)
+    public LineRenderer bulletLine;
+    public LineRenderer rangeLine;
+    private Transform _fireStartPos;
+    private Vector3 _direction;      // Ray가 향하는 방향
 
 
 
@@ -51,12 +54,12 @@ public class Gun : MonoBehaviour
         _shooterId = 1; //임의 지정. 캐릭터나 플레이어 id 설정하기
         _curAmmo = _gunStat.ammo; 
         gunState = GunState.Shootable;
-        fireStartPos = transform.GetChild(0);
-        lineRenderer = GetComponent<LineRenderer>();
-        if(lineRenderer != null )
-        {
-            lineRenderer.positionCount = 5;
-        }
+        _fireStartPos = transform.GetChild(0);
+
+        bulletLine = GetComponent<LineRenderer>();
+        rangeLine = transform.GetChild(0).GetComponent<LineRenderer>();
+        bulletLine.positionCount = 2;
+        rangeLine.positionCount = 5;
     }
 
     private void Update()
@@ -67,33 +70,32 @@ public class Gun : MonoBehaviour
     private void SetFireLine()
     {
         //발사범위 선 2개 긋기
-        if (fireStartPos == null) return;
+        if (_fireStartPos == null) return;
 
         float halfAngle = _gunStat.accuracy * 0.5f;
 
-        Vector3 direction1 = Quaternion.Euler(0, 0, halfAngle) * fireStartPos.up;
-        //RaycastHit2D hit1 = Physics2D.Raycast(fireStartPos.position, direction1, _gunStat.range);
-        Vector3 endPoint1 = fireStartPos.position + direction1 * _gunStat.range;
+        Vector3 direction1 = Quaternion.Euler(0, 0, halfAngle) * _fireStartPos.up;
+        //RaycastHit2D hit1 = Physics2D.Raycast(_fireStartPos.position, direction1, _gunStat.range);
+        Vector3 endPoint1 = _fireStartPos.position + direction1 * _gunStat.range;
 
         /*if (hit1.collider != null) //총 조준선이 벽에 막히나?
         {
             endPoint1 = hit1.point;
         }*/
 
-        Vector3 direction2 = Quaternion.Euler(0, 0, -halfAngle) * fireStartPos.up;
-        //RaycastHit2D hit2 = Physics2D.Raycast(fireStartPos.position, direction2, _gunStat.range);
-        Vector3 endPoint2 = fireStartPos.position + direction2 * _gunStat.range;
+        Vector3 direction2 = Quaternion.Euler(0, 0, -halfAngle) * _fireStartPos.up;
+        //RaycastHit2D hit2 = Physics2D.Raycast(_fireStartPos.position, direction2, _gunStat.range);
+        Vector3 endPoint2 = _fireStartPos.position + direction2 * _gunStat.range;
         /*if (hit2.collider != null)
         {
             endPoint2 = hit2.point;
         }*/
 
-        lineRenderer.SetPosition(0, fireStartPos.position);
-        lineRenderer.SetPosition(1, endPoint1);
-        lineRenderer.SetPosition(2, fireStartPos.position);
-        lineRenderer.SetPosition(3, endPoint2);
-        lineRenderer.SetPosition(4, fireStartPos.position);
-
+        rangeLine.SetPosition(0, _fireStartPos.position);
+        rangeLine.SetPosition(1, endPoint1);
+        rangeLine.SetPosition(2, _fireStartPos.position);
+        rangeLine.SetPosition(3, endPoint2);
+        rangeLine.SetPosition(4, _fireStartPos.position);
     }
 
     //발사버튼 누를시
@@ -111,7 +113,7 @@ public class Gun : MonoBehaviour
             /* 그냥 랜덤으로 발사
             float halfAngle = _gunStat.accuracy * 0.5f;
             float randomAngle = Random.Range(-halfAngle, halfAngle); // accuracy 범위 내 랜덤 각도
-            Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * fireStartPos.up;
+            Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * _fireStartPos.up;
             */
 
             //정규분포를 사용한 발사
@@ -120,27 +122,38 @@ public class Gun : MonoBehaviour
             float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
             float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
             float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
-            Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * fireStartPos.up;
+            Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * _fireStartPos.up;
 
             //레이캐스트를 사용한 방법
-            RaycastHit2D hit = Physics2D.Raycast(fireStartPos.position, direction, _gunStat.range);
-            Debug.DrawRay(fireStartPos.position, direction, Color.red, 2f);
+            RaycastHit2D hit = Physics2D.Raycast(_fireStartPos.position, direction, _gunStat.range);
 
             if (hit.collider != null)
             {
-                //패킷 전송
+                // 충돌 위치까지 LineRenderer 설정
+                bulletLine.SetPosition(0, _fireStartPos.position);
+                bulletLine.SetPosition(1, hit.point);
+                Debug.Log(hit.collider.name);
+
+                // 패킷 전송
                 Debug.Log("Hit: " + hit.collider.name);
                 var cRay = new C_RaycastShoot
                 {
-                    StartPosX = fireStartPos.position.x,
-                    StartPosY = fireStartPos.position.y,
+                    StartPosX = _fireStartPos.position.x,
+                    StartPosY = _fireStartPos.position.y,
                     DirX = direction.x,
                     DirY = direction.y,
-                    Length = _gunStat.range
+                    Length = Vector3.Distance(_fireStartPos.position, hit.point)  // 실제 충돌 위치까지의 거리
                 };
-                Managers.Network.Send(cRay);
+                //Managers.Network.Send(cRay);
             }
-            Debug.DrawRay(fireStartPos.position, direction * _gunStat.range, Color.yellow, 0.5f);
+            else
+            {
+                // 충돌이 없으면 최대 사거리까지 LineRenderer 설정
+                Vector3 endPos = _fireStartPos.position + direction * _gunStat.range;
+                bulletLine.SetPosition(0, _fireStartPos.position);
+                bulletLine.SetPosition(1, endPos);
+            }
+
 
             if (isBulletPrefShoot)
             {
@@ -150,7 +163,7 @@ public class Gun : MonoBehaviour
                 bullet._damage = _gunStat.damage;
                 bullet._range = _gunStat.range;
                 bullet._dir = direction;
-                Instantiate(bullet, fireStartPos.position, fireStartPos.rotation);
+                Instantiate(bullet, _fireStartPos.position, _fireStartPos.rotation);
 
             }
 
