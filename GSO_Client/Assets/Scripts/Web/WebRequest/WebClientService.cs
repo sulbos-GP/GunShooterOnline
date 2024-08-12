@@ -1,7 +1,10 @@
+using GooglePlayGames;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 using UnityEngine.Networking;
 
 public enum ERequestMethod
@@ -35,10 +38,12 @@ public abstract class WebClientServiceRequest<TResponse>
     protected object mFromBody = null;
     protected string mEndPoint = null;
     protected ERequestMethod mMethod = ERequestMethod.None;
+    protected Action<TResponse> mAction = null;
 
     public void ExecuteAsync(Action<TResponse> callback)
     {
         CheckNotNull(callback);
+        mAction = callback;
 
         CheckNotNull(mFromBody);
 
@@ -49,8 +54,14 @@ public abstract class WebClientServiceRequest<TResponse>
         Managers.Instance.StartCoroutine(CoExecuteAsync(callback));
     }
 
+    private void ReExecuteAsync()
+    {
+        Managers.Instance.StartCoroutine(CoExecuteAsync(mAction));
+    }
+
     private IEnumerator CoExecuteAsync(Action<TResponse> callback)
     {
+
         string jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(mFromBody);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStr);
 
@@ -59,9 +70,9 @@ public abstract class WebClientServiceRequest<TResponse>
         request.downloadHandler = new DownloadHandlerBuffer();
         request.SetRequestHeader("Content-Type", "application/json");
 
-        if(mFromHeader != null)
+        if (mFromHeader != null)
         {
-            foreach(var (key, value) in mFromHeader)
+            foreach (var (key, value) in mFromHeader)
             {
                 request.SetRequestHeader(key, value);
             }
@@ -74,12 +85,41 @@ public abstract class WebClientServiceRequest<TResponse>
             TResponse response = Newtonsoft.Json.JsonConvert.DeserializeObject<TResponse>(request.downloadHandler.text);
             callback.Invoke(response);
         }
+        else if (request.responseCode == 401)
+        {
+            RequestRefreshToken();
+        }
         else
         {
             SystemLogManager.Instance.LogMessage($"웹 요청 실패 : {request.error}");
             throw new NotImplementedException($"웹 요청 실패 : {request.error}");
         }
 
+    }
+
+    public void RequestRefreshToken()
+    {
+        var body = new RefreshTokenReq()
+        {
+            uid = Convert.ToInt32(Managers.Web.mCredential.uid),
+        };
+
+        GsoWebService service = new GsoWebService();
+        var request = service.mAuthorizeResource.GetRefreshTokenRequest(body);
+        request.ExecuteAsync(OnProcessRefreshToken);
+    }
+
+    public void OnProcessRefreshToken(RefreshTokenRes response)
+    {
+        if(response.error_code == 0)
+        {
+            Managers.Web.mCredential.access_token = response.access_token;
+
+            ReExecuteAsync();
+        }else
+        {
+            throw new NotImplementedException($"토큰 재인증 실패");
+        }
     }
 
     public void CheckNotNull<T>(T value)

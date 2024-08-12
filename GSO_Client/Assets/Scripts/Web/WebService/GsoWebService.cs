@@ -54,6 +54,11 @@ public class AuthorizeResource
         return new SignOutRequest(this.mService, header, body);
     }
 
+    public RefreshTokenRequest GetRefreshTokenRequest(RefreshTokenReq body)
+    {
+        return new RefreshTokenRequest(this.mService, body);
+    }
+
     /// <summary>
     /// Requset
     /// </summary>
@@ -88,6 +93,18 @@ public class AuthorizeResource
             this.mFromBody = header.ToDictionary();
             this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/api/Authorize/SignOut";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
+
+    //로그아웃 요청
+    public class RefreshTokenRequest : WebClientServiceRequest<RefreshTokenRes>
+    {
+        public RefreshTokenRequest(GsoWebService service, RefreshTokenReq request)
+        {
+            this.mFromBody = null;
+            this.mFromBody = request;
+            this.mEndPoint = service.mBaseUrl + "/api/Authorize/RefreshToken";
             this.mMethod = ERequestMethod.POST;
         }
     }

@@ -130,4 +130,12 @@ internal class Managers : MonoBehaviour
     public static SceneManagerEx Scene => Instance._scene;
 
     #endregion
+
+    #region Logger
+
+    //private readonly SystemLogManager _systemLog = new();
+    
+    //public static SystemLogManager SystemLog => Instance._systemLog;
+
+    #endregion
 }

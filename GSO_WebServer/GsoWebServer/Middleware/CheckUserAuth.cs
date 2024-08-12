@@ -6,6 +6,9 @@ using GSO_WebServerLibrary.Reposiotry.Define.MemoryDB;
 using GsoWebServer.Servicies.Interfaces;
 using System.Text.Json;
 using Newtonsoft.Json.Linq;
+using GsoWebServer.DTO.Authentication;
+using GSO_WebServerLibrary.DTO.Match;
+using System.Text;
 
 namespace GsoWebServer.Middleware
 {
@@ -124,6 +127,32 @@ namespace GsoWebServer.Middleware
             });
             await context.Response.WriteAsync(errorJsonResponse);
         }
+
+        //async Task SendRefreshTokenResponse(HttpContext context, int uid, WebErrorCode error)
+        //{
+
+        //    HttpClient client = mHttpClientFactory.CreateClient("Authorization");
+
+        //    RefreshTokenReq body = new RefreshTokenReq
+        //    {
+        //        uid = uid
+        //    };
+        //    var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+
+        //    var response = await client.PostAsync("api/Authorize/RefreshToken", content);
+        //    response.EnsureSuccessStatusCode();
+
+        //    var newToken = await response.Content.ReadFromJsonAsync<RefreshTokenRes>();
+        //    if (newToken == null)
+        //    {
+        //        await SendMiddlewareResponse(context, StatusCodes.Status403Forbidden, WebErrorCode.FailedRefreshToken);
+        //    }else
+        //    {
+        //        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        //        var errorJsonResponse = JsonSerializer.Serialize(newToken);
+        //        await context.Response.WriteAsync(errorJsonResponse);
+        //    }
+        //}
 
         private string? GetValueOrNull(string key, HttpContext context)
         {

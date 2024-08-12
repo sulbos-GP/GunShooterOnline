@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd6660fd6b61bb141ba0e22f8cfce448, type: 3}
-  m_Name: Producation
+  m_Name: Release
   m_EditorClassIdentifier: 
   GameServerIp: 
   GameServerPort: 
