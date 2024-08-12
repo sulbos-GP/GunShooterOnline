@@ -27,6 +27,7 @@ public class SystemLogManager : MonoBehaviour
         else
         {
             Destroy(this.gameObject);
+            
         }
 
     }

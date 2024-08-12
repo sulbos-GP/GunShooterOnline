@@ -2,6 +2,7 @@ using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using UnityEngine;
 
 ///////////////////////////////////
@@ -91,6 +92,23 @@ public class SignOutReq
 public class SignOutRes : ErrorCodeDTO
 {
 
+}
+
+public class RefreshTokenReq
+{
+    public int uid { get; set; } = 0;
+}
+
+public class RefreshTokenRes : ErrorCodeDTO
+{
+    public int uid { get; set; } = 0;
+    public string access_token { get; set; } = string.Empty;
+
+    public long expires_in { get; set; } = 0;
+
+    public string scope { get; set; } = string.Empty;
+
+    public string token_type { get; set; } = string.Empty;
 }
 
 ///////////////////////////////////

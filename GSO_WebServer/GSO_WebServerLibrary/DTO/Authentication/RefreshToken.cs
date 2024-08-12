@@ -1,4 +1,5 @@
-﻿using GSO_WebServerLibrary.Error;
+﻿using GSO_WebServerLibrary.DTO;
+using GSO_WebServerLibrary.Error;
 using System.ComponentModel.DataAnnotations;
 
 namespace GsoWebServer.DTO.Authentication
@@ -6,24 +7,12 @@ namespace GsoWebServer.DTO.Authentication
     public class RefreshTokenReq
     {
         [Required]
-        public long uid { get; set; } = 0;
-
-        [Required]
-        public string access_token { get; set; } = string.Empty;
-
-        [Required]
-        public string refresh_token { get; set; } = string.Empty;
+        public int uid { get; set; } = 0;
     }
 
-    public class RefreshTokenRes
+    public class RefreshTokenRes : ErrorCodeDTO
     {
-        [Required]
-        public WebErrorCode error { get; set; } = WebErrorCode.None;
-
-        [Required]
         public int uid { get; set; } = 0;
-
-        [Required]
         public string access_token { get; set; } = string.Empty;
 
         public long expires_in { get; set; } = 0;

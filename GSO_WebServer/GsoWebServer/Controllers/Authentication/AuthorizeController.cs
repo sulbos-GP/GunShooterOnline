@@ -5,6 +5,7 @@ using GSO_WebServerLibrary.DTO;
 using GSO_WebServerLibrary.Models.MemoryDB;
 using GSO_WebServerLibrary.Error;
 using GSO_WebServerLibrary.Utils;
+using static Google.Apis.Requests.RequestError;
 
 
 namespace AuthenticationServer.Controllers
@@ -259,73 +260,56 @@ namespace AuthenticationServer.Controllers
             }
         }
 
-        //[HttpPost]
-        //[Route("RefreshToken")]
-        //public async Task<RefreshTokenRes> RefreshToken([FromBody] RefreshTokenReq request)
-        //{
+        [HttpPost]
+        [Route("RefreshToken")]
+        public async Task<RefreshTokenRes> RefreshToken([FromBody] RefreshTokenReq request)
+        {
 
-        //    Console.WriteLine($"[RefreshToken] uid:{request.uid} access:{request.access_token} refesh:{request.refresh_token}");
+            Console.WriteLine($"[RefreshToken] uid:{request.uid}");
 
-        //    var response = new RefreshTokenRes();
-        //    if (!WebUtils.IsValidModelState(request))
-        //    {
-        //        response.error = WebErrorCode.IsNotValidModelState;
-        //        return response;
-        //    }
+            var response = new RefreshTokenRes();
+            if (!WebUtils.IsValidModelState(request))
+            {
+                response.error_code = WebErrorCode.IsNotValidModelState;
+                return response;
+            }
 
-        //    try
-        //    {
-        //        //유저아이디를 통해 UID가져오기
-        //        var uid = await mAuthenticationService.(request.user_id);
-        //        if (uid.Item1 != WebErrorCode.None || uid.Item2 == 0)
-        //        {
-        //            return response;
-        //        }
+            try
+            {
 
-        //        //토큰이 만료 되었는지 확인 및 유저의 정보 가져오기
-        //        var user = await mMemoryDB.GetRegistUserAsync(uid.Item2);
-        //        if (user.Item1 != WebErrorCode.None || user.Item2.user == null)
-        //        {
-        //            return response;
-        //        }
+                //유저의 정보 가져오기
+                var (error, user) = await mGameService.GetUserInfo(request.uid);
+                if (error != WebErrorCode.None || user == null)
+                {
+                    response.error_code = WebErrorCode.TEMP_ERROR;
+                    response.error_description = "";
+                    return response;
+                }
 
-        //        if (string.IsNullOrEmpty(user.Item2.user.refresh_token))
-        //        {
-        //            return response;
-        //        }
 
-        //        //유저의 새로운 토큰 생성
-        //        var token = await mAuthenticationService.RefreshToken(request.user_id, user.Item2.user.refresh_token);
-        //        if (token == null)
-        //        {
-        //            return response;
-        //        }
+                //유저의 새로운 토큰 생성
+                (error, var token) = await mAuthenticationService.RefreshToken(user.player_id, user.refresh_token);
+                if (error != WebErrorCode.None || token == null || token.ExpiresInSeconds == null)
+                {
+                    return response;
+                }
 
-        //        //재생성된 새로운 토큰 저장
-        //        if (token.ExpiresInSeconds != null)
-        //        {
-        //            var result = await mMemoryDB.RegistUserAsync(uid.Item2, token.ExpiresInSeconds.Value, token.AccessToken, token.RefreshToken);
-        //            if (result != WebErrorCode.None)
-        //            {
-        //                return response;
-        //            }
-        //        }
-        //        else
-        //        {
-        //            return response;
-        //        }
+                response.error_code     = WebErrorCode.None;
+                response.uid            = response.uid;
+                response.access_token   = token.AccessToken;
+                response.expires_in     = token.ExpiresInSeconds.Value;
+                response.scope          = token.Scope;
+                response.token_type     = token.TokenType;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[RefreshToken] error:{ex.ToString()}");
+                response.error_code = WebErrorCode.IsNotValidateServerCode;
+                response.error_description = ex.Message;
+                return response;
+            }
 
-        //        response.error = WebErrorCode.None;
-        //        response.new_access_token = token.AccessToken;
-        //        return response;
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.WriteLine($"[RefreshToken] error:{ex.ToString()}");
-        //        response.error = WebErrorCode.IsNotValidateServerCode;
-        //        return response;
-        //    }
-
-        //}
+        }
     }
 }

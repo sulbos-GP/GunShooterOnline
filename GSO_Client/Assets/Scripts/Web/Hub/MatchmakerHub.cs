@@ -7,21 +7,17 @@ using UnityEngine;
 public class MatchmakerHub : ClientHub
 {
     protected override string mConnectionUrl { get; set; } = "http://10.0.2.2:5200/MatchmakerHub";
-    //protected override string mConnectionUrl { get; set; } = "http://127.0.0.1:5200/MatchmakerHub";
     protected override string mConnectionName { get; set; } = "매치메이커";
     
-    protected LatencyManager mLatencyManager;
     protected UI_Match mMatchUI;
 
     private void Awake()
     {
-        mLatencyManager = GetComponent<LatencyManager>();
         mMatchUI        = GetComponent<UI_Match>();
     }
 
     protected override void SetOnRecivedFunc()
     {
-        mConnection.On<long>("S2C_Pong", S2C_Pong);
         mConnection.On<int>("S2C_VerfiyUser", S2C_VerfiyUser);
         mConnection.On<MatchProfile>("S2C_MatchComplete", S2C_MatchComplete);
     }
@@ -85,19 +81,4 @@ public class MatchmakerHub : ClientHub
             }
         });
     }
-
-    private async void C2S_Ping()
-    {
-        int uid = int.Parse(Managers.Web.mCredential.uid);
-        long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        await mConnection.InvokeAsync("C2S_Ping", uid, timestamp, mLatencyManager.GetAverageLatency());
-    }
-
-    private void S2C_Pong(long timestamp)
-    {
-        long now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        long latency = now - timestamp;
-        mLatencyManager.AddLatency(latency);
-    }
-
 }

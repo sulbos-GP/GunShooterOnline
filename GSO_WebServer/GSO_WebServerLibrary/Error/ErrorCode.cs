@@ -19,6 +19,8 @@
         InvalidVersion = 501,
         DiscrepancyAppVersion = 502,
         DiscrepancyDataVersion = 503,
+        RefreshTokenIsExpries = 504,
+        FailedRefreshToken = 505,
 
 
         // Common 1000 ~

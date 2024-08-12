@@ -5,6 +5,7 @@ using GameServerManager.Repository.Interfaces;
 using GameServerManager.Servicies.Interfaces;
 using GSO_WebServerLibrary.Error;
 using GSO_WebServerLibrary.Models.Match;
+using System.Net.NetworkInformation;
 
 namespace GameServerManager.Servicies
 {
@@ -36,17 +37,22 @@ namespace GameServerManager.Servicies
                     return (WebErrorCode.TEMP_ERROR, null);
                 }
 
-                var readyMatch = matchStatus.FirstOrDefault(status => status.Value.state == Models.EMatchState.Ready);
-                if(readyMatch.Key == null)
+                var match = matchStatus.FirstOrDefault(status => status.Value.state == EMatchState.Ready);
+                if(match.Key == null)
                 {
                     return (WebErrorCode.TEMP_ERROR, null);
                 }
+                string key = match.Key;
+                MatchStatus status = match.Value;
 
-                matchProfile.container_id = readyMatch.Key;
-                matchProfile.world = readyMatch.Value.world;
-                matchProfile.host_ip = readyMatch.Value.host_ip;
-                matchProfile.container_port = readyMatch.Value.container_port;
-                matchProfile.host_port = readyMatch.Value.host_port;
+                status.state = EMatchState.Allocated;
+                await mSessionMemory.UpdateMatchStatus(key, status);
+
+                matchProfile.container_id = key;
+                matchProfile.world = status.world;
+                matchProfile.host_ip = status.host_ip;
+                matchProfile.container_port = status.container_port;
+                matchProfile.host_port = status.host_port;
                 return (WebErrorCode.None, matchProfile);
             }
             catch (Exception ex)
