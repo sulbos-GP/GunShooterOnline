@@ -34,8 +34,12 @@ public class WorldGenerator
     private static void GenerateMap()
     {
 
-        //serverPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../GSO_SocketServer/Data"));
+        serverPath = Path.GetFullPath(Path.Combine(Application.dataPath, "../../GSO_SocketServer/MapData"));
         clinetPath = Application.dataPath + "/Data";
+
+
+
+
         MakeMap();
     }
 
@@ -57,7 +61,7 @@ public class WorldGenerator
 
 
 
-        Vector2 t = go.transform.Find("Pos").position;
+        Vector2 t = go.transform.Find("W_Pos").position;
 
         Room = new Tuple<Transform, Vector2Int>(go.transform, new Vector2Int(Mathf.RoundToInt(t.x), Mathf.RoundToInt(t.y)));
         //Vector2 t = tr.transform.Find("Pos").transform.Find("Center").position;
@@ -108,6 +112,7 @@ public class WorldGenerator
         Debug.Log($"³¡{total.Length}");
         //File.WriteAllText(serverPath + $"Map_2.txt", total);
         File.WriteAllText(clinetPath + $"/Forest.txt", total);
+        File.WriteAllText(serverPath + $"/Forest.txt", total);
 
     }
 

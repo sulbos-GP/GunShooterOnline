@@ -27,6 +27,6 @@ public class Login : MonoBehaviour
     public void LoginBtn()
     {
         Debug.Log("Requstskill");
-        Managers.Network.ConnectToGame(ip: textPro.text);
+        //Managers.Network.ConnectToGame(ip: textPro.text);
     }
 }

@@ -2,7 +2,7 @@ using System.Linq;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
-public class MapManager : MonoBehaviour
+public class MapManager 
 {
     private int size;
     public GameObject CurrentMap { get; private set; }
@@ -31,7 +31,7 @@ public class MapManager : MonoBehaviour
         var map = GameObject.Find("Map");
         if (map != null)
         {
-            Destroy(map);
+            //Destroy(map);
             CurrentMap = null;
         }
     }
