@@ -26,7 +26,7 @@ public class InputController : MonoBehaviour
     //private CreatureState State;
     private Vector3 lastPos;
 
-    private bool _isFiring; 
+    public bool _isFiring; 
     private bool _isRooting; 
 
     public List<GameObject> interactList;

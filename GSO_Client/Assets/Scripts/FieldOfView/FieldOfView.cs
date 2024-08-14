@@ -93,7 +93,7 @@ public class FieldOfView : MonoBehaviour
 
     public void SetOrigin(Vector3 origin) //원점의 위치 -> 플레이어의 위치
     {
-        this.origin = origin;
+        this.origin = transform.position + origin;
     }
 
     public void SetAimDirection(Vector3 aimDirection) //플레이어가 바라보는 방향으로 시작지점 설정

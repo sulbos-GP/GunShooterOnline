@@ -155,6 +155,8 @@ MonoBehaviour:
   distance: 0
   aimFov: {fileID: 0}
   basicFov: {fileID: 0}
+  interactList: []
+  interactTarget: {fileID: 0}
 --- !u!114 &5589048240770995353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,7 +281,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 191436082380664689}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c97721cba81475544ab2fcd3173f3c56, type: 3}
   m_Name: 
@@ -631,5 +633,5 @@ MonoBehaviour:
   _shooterId: 0
   _reloadTime: 3
   isBulletPrefShoot: 0
-  rangeLine: {fileID: 0}
   bulletLine: {fileID: 0}
+  rangeLine: {fileID: 0}

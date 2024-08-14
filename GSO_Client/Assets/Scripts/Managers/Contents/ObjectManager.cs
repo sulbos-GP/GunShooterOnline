@@ -154,7 +154,7 @@ public class ObjectManager
             ExitZone exitZone = go.GetComponent<ExitZone>();
             exitZone.objectId = info.ObjectId;
             exitZone.interactType = InteractType.Exit;
-            exitZone.ExitTime = 5; //임시추가
+            exitZone.exitTime = 5; //임시추가
         }
     }
 
