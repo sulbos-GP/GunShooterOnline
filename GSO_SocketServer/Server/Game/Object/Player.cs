@@ -23,7 +23,7 @@ public class Player : CreatureObj
         stat.MergeFrom(new StatInfo()
         {
             //Attack = 3,
-            Hp = 10,
+            Hp = 20,
             MaxHp = 20,
             
 
