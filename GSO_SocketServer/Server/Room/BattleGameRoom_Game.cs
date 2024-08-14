@@ -185,7 +185,17 @@ namespace Server
             {
                 CreatureObj creatureObj = go as CreatureObj;
 
-                //creatureObj.OnDamaged(attacker, attacker.Attack);
+
+                //TODO : 공격력  attacker 밑에 넣기 240814지승현
+                creatureObj.OnDamaged(attacker, 3);
+
+                S_ChangeHp ChangeHpPacket = new S_ChangeHp();
+                ChangeHpPacket.ObjectId = hit.Id;
+                ChangeHpPacket.Hp = creatureObj.Hp;
+
+                
+                BroadCast(ChangeHpPacket);
+
 
             }
 
@@ -195,7 +205,7 @@ namespace Server
             packet.HitPointX = hit.hitPoint.Value.X;
             packet.HitPointY = hit.hitPoint.Value.Y;
 
-            
+           
             BroadCast(packet);
 
         }
