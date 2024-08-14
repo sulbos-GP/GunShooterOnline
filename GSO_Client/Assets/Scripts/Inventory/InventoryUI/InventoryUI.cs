@@ -31,7 +31,6 @@ public class InventoryUI : MonoBehaviour
     protected virtual void Awake()
     {
         instantGridList = new List<InventoryGrid>();
-
     }
 
     public virtual void InventorySet()

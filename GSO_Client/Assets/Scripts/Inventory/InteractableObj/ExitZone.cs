@@ -4,6 +4,7 @@ using NPOI.OpenXmlFormats.Dml;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class ExitZone : InteractableObject
@@ -18,6 +19,7 @@ public class ExitZone : InteractableObject
 
     Coroutine exitCoroutine;
 
+
     private void Awake()
     {
         Init();
@@ -30,7 +32,7 @@ public class ExitZone : InteractableObject
         interactRange = 1;
         if (exitTime == 0)
         {
-            exitTime = 4;
+            exitTime = 8;
         }
         remainingTime = exitTime;
         hpIndex = 0;
@@ -74,7 +76,7 @@ public class ExitZone : InteractableObject
         remainingTime = exitTime;
         hpIndex = Managers.Object.MyPlayer.Hp;
         posIndex = Managers.Object.MyPlayer.transform.position;
-
+        
         while (remainingTime > 0)
         {
             if (ExitCheck() == false)
@@ -109,7 +111,7 @@ public class ExitZone : InteractableObject
 
     private bool ExitCheck()
     {
-        //hp에 변화가 생길경우
+        //hp에 변화가 생길경우 -> 플레이어가 피격당한 상태가 추가될경우 피격으로 바꿀것
         if(hpIndex != Managers.Object.MyPlayer.Hp)
         {
             return false;
@@ -121,18 +123,15 @@ public class ExitZone : InteractableObject
             return false;
         }
 
-        //총을 쏠경우
-        if (Managers.Object.MyPlayer.GetComponent<InputController>()._isFiring)
-        {
-            return false;
-        }
-
         return true;
     }
 
     private void UpdateTimerUI(float time)
     {
-        Debug.Log($"남은 시간: {time}초");
+        int seconds = Mathf.FloorToInt(time);
+        int milliseconds = Mathf.FloorToInt((time - seconds) * 10);
+
+        Debug.Log(string.Format("{0}:{1}", seconds, milliseconds));
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)

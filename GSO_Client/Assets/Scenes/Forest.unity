@@ -2986,8 +2986,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: InventoryUI
       objectReference: {fileID: 0}
+    - target: {fileID: 8434712141049084716, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2374186824132401138, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
