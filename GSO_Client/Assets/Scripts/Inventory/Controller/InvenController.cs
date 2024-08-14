@@ -177,7 +177,7 @@ public partial class InventoryController : MonoBehaviour
     private void OnDisable()
     {
         SelectedItem = null;
-        selectedGrid = null;
+        SelectedItemGrid = null;
     }
 
 
@@ -294,11 +294,10 @@ public partial class InventoryController : MonoBehaviour
         {
             if (isOnDelete&&isItemSelected)
             {
+                invenHighlight.Show(true);
                 invenHighlight.SetColor(HighlightColor.Yellow);
                 InvenHighLight.highlightObj.transform.SetParent(deleteUI);
                 InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
-
-                invenHighlight.Show(true);
                 return;
             }
             invenHighlight.Show(false);

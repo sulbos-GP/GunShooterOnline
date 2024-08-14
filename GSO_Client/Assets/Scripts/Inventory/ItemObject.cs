@@ -114,7 +114,6 @@ public class ItemObject : MonoBehaviour
         //아이템의 크기및 회전 설정
         itemRect.localPosition = new UnityEngine.Vector2(itemData.itemPos.x * InventoryGrid.WidthOfTile+50, itemData.itemPos.y* InventoryGrid.HeightOfTile-50);
         Rotate(itemData.itemRotate);
-        ItemAmount = itemData.itemAmount;
         itemSprite = spriteList[itemData.itemCode - 1];
         isOnSearching = false;
 
@@ -129,6 +128,8 @@ public class ItemObject : MonoBehaviour
             imageUI.sprite = itemSprite;
             isHide = false;
         }
+
+        ItemAmount = itemData.itemAmount;
     }
 
     /// <summary>
