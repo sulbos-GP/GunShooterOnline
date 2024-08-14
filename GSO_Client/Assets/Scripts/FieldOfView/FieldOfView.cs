@@ -65,15 +65,18 @@ public class FieldOfView : MonoBehaviour
                 triangles[triangleIndex + 2] = vertexIndex;
                 triangleIndex += 3;
             }
-            vertexIndex++;
 
+            vertexIndex++;
             angle -= angleIncrease; //반시계방향으로 진행시 +=로. 시계방향으로 진행시 -=
         }
 
         //mesh 생성 및 각 프로퍼티 연결
+        //8월 14일 변경. clear와 recalculateNormal을 통해 이전 데이터를 지워 카메라의 특정위치에서 안보이는 문제 해결
+        mesh.Clear();
         mesh.vertices = vertices;
         mesh.uv = uv;
         mesh.triangles = triangles;
+        mesh.RecalculateNormals();
     }
     
     public Vector3 GetVectorFromAngle(float angle)
@@ -93,7 +96,7 @@ public class FieldOfView : MonoBehaviour
 
     public void SetOrigin(Vector3 origin) //원점의 위치 -> 플레이어의 위치
     {
-        this.origin = transform.position + origin;
+        this.origin =  origin;
     }
 
     public void SetAimDirection(Vector3 aimDirection) //플레이어가 바라보는 방향으로 시작지점 설정
