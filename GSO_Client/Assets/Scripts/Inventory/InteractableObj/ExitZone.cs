@@ -50,6 +50,7 @@ public class ExitZone : InteractableObject
         Debug.Log("interact");
         if (!isExiting) {
             exitCoroutine = StartCoroutine(ExitCoroutine(exitTime));
+            exitCoroutine = null;
         }
         
 

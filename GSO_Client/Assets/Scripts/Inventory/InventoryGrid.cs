@@ -519,7 +519,7 @@ public class InventoryGrid : MonoBehaviour
         if (overlapItem != null)
         {
             //단 오버랩 아이템이 ishide인 경우 배치 실패 판정
-            if (overlapItem.ishide || placeItem.ishide)
+            if (overlapItem.isHide || placeItem.isHide)
             {
                 overlapItem = null;
                 return HighlightColor.Red;
