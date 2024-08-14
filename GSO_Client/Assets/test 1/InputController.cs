@@ -39,7 +39,7 @@ public class InputController : MonoBehaviour
 
     public void Start()
     {
-        Managers.Network.ConnectToGame();
+        //Managers.Network.ConnectToGame();
         rig = GetComponent<Rigidbody2D>();
     }
 

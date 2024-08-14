@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Net;
 using Google.Protobuf.Protocol;
 using TMPro;
 using UnityEngine;
@@ -21,7 +22,9 @@ public class LobbyScene : BaseScene
         Screen.SetResolution(1920, 1080, false);
         Debug.Log("신 초기화 로비");
         //Managers.Network.ConnectToGame("ec2-3-36-85-125.ap-northeast-2.compute.amazonaws.com");
-        Managers.Network.ConnectToGame();
+
+        Managers.Network.SettingConnection("127.0.0.1",7777, "SomeConnectionKey");
+        //Managers.Network.ConnectToGame();
     }
 
     public override void Clear()

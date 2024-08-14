@@ -62,7 +62,7 @@ namespace Server
             BattleGameRoom room = new BattleGameRoom();
             
             
-           // mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
+            //mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
             //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
             mNetworkService.Start();
             mNetworkService.SetChannel(true, room,0);

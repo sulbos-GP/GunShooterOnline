@@ -93,6 +93,8 @@ namespace ServerCore
                 return;
             }
 
+       
+            
             NetPeer peer = request.AcceptIfKey(mNetworkService.mAcceptKey);
             if(peer.Tag == null)
             {

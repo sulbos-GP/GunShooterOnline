@@ -63,7 +63,7 @@ public class MatchmakerHub : ClientHub
 
             Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
 
-            Managers.Network.ConnectToGame(response.host_ip);
+            //Managers.Network.ConnectToGame(response.host_ip);
         });
     }
 

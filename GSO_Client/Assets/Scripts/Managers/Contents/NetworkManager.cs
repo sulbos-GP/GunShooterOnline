@@ -29,20 +29,25 @@ public class NetworkManager
 
     public void SettingConnection(string ip, int port, string token)
     {
-        var ipHost = Dns.GetHostEntry(ip);
-        ipAddr = ipHost.AddressList[0];
+        ipAddr = IPAddress.Parse(ip);
 
-        var endPoint = new IPEndPoint(ipAddr, port);
+
+        ipAddr = IPAddress.Loopback;
+        IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
 
         Func<Session> session = () => { return _session; };
 
-        mNetworkService.Init(endPoint, session, "SomeConnectionKey");
+        Debug.Log($"tryConnection to {ipAddr}");
+
+        mNetworkService.Init(endPoint, session, token);
         mNetworkService.Start();
+
+
     }
    
 
 
-    public void ConnectToGame(string ip = "")
+    public void ConnectToGame()
     {
         istest = true;  //TODO 바꾸기
         
@@ -50,11 +55,11 @@ public class NetworkManager
         //var host = "ec2-3-36-85-125.ap-northeast-2.compute.amazonaws.com";
 
         var host = Dns.GetHostName();
-        if (ip.Length > 3) 
-            host = ip;
+     /*   if (ip.Length > 3) 
+            host = ip;*/
         var ipHost = Dns.GetHostEntry(host);
 
-        if (istest)
+        /*if (istest)
         {
             ipAddr = IPAddress.Loopback;
             Debug.Log("디버그 모드");
@@ -72,15 +77,15 @@ public class NetworkManager
                 }
             }
         }
-
+        */
         
 
         Debug.Log($"tryConnection to {ipAddr}");
-        var endPoint = new IPEndPoint(ipAddr, 7777);
+
         Func<Session> session = () => { return _session; };
 
-        mNetworkService.Init(endPoint, session, "SomeConnectionKey");
-        mNetworkService.Start();
+        //mNetworkService.Init(endPoint, session, "SomeConnectionKey");
+        //mNetworkService.Start();
 
 
 

@@ -100,7 +100,7 @@ public class Map
 
     public void Init()
     {
-        loadMap(2);
+        loadMap("Forest");
     }
 
     #region item
@@ -126,19 +126,16 @@ public class Map
 
 
 
-    public void loadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
+    public void loadMap(string mapName, string pathPrefix = "")
     {
-      
-
-        return;  //TODO : 삭제
-
+        //TODO : 파일 위치 josn으로 관리하기!! 240813 지승현
         var Distance = 22;
 
         //----------------------------------------
-        var mapName = "Forest";
+        mapName = "Forest";
 
         // Collision 관련 파일
-        var text = File.ReadAllText(" ./../../../../../../GSO_Client/Assets/Data/" + $"{mapName}.txt");
+        var text = File.ReadAllText(" ./../../../../../MapData/" + $"{mapName}.txt");
         var reader = new StringReader(text);
 
         var _ = reader.ReadLine();
