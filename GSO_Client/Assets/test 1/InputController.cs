@@ -11,10 +11,11 @@ using System;
 public class InputController : MonoBehaviour
 {
     public static InputController instance;
+
     public float distance;
 
     private Rigidbody2D rig;
-
+    public PlayerInput playerInput;
     
     private Vector2 _direction;
     private Vector2 lookInput;
@@ -106,7 +107,7 @@ public class InputController : MonoBehaviour
 
     private void OnEnable()
     {
-        var playerInput = new PlayerInput();
+        playerInput = new PlayerInput();
         playerInput.Player.Enable();
         playerInput.Player.Look.performed += OnLookInput;
         playerInput.Player.Look.canceled += OnLookInput;
@@ -121,7 +122,6 @@ public class InputController : MonoBehaviour
 
     private void OnDisable()
     {
-        var playerInput = new PlayerInput();
         playerInput.Player.Look.performed -= OnLookInput;
         playerInput.Player.Look.canceled -= OnMove;
         //playerInput.Player.Fire.started -= OnStartFireInput;
@@ -132,6 +132,7 @@ public class InputController : MonoBehaviour
         playerInput.Player.Move.canceled -= OnMove;
         playerInput.Player.Interaction.started -= OnInteraction;
         playerInput.Player.Disable();
+        playerInput = null;
     }
 
     private void OnInteraction(InputAction.CallbackContext callbackContext)

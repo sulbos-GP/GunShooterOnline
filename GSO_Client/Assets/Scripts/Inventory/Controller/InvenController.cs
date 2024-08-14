@@ -174,6 +174,13 @@ public partial class InventoryController : MonoBehaviour
         //Managers.Network.ConnectToGame();
     }
 
+    private void OnDisable()
+    {
+        SelectedItem = null;
+        selectedGrid = null;
+    }
+
+
     #region PlayerInput 액션
     private void OnMousePosInput(InputAction.CallbackContext context)
     {
@@ -450,7 +457,7 @@ public partial class InventoryController : MonoBehaviour
             if (clickedItem == null) { return; }
 
             //클릭한 아이템이 숨겨진 경우에는 숨김을 해제하고 아니면 아이템을 듬
-            if (clickedItem.ishide == true)
+            if (clickedItem.isHide == true)
             {
                 clickedItem.UnhideItem();
             }
@@ -521,7 +528,7 @@ public partial class InventoryController : MonoBehaviour
                 if(selectedItem.itemData.isItemConsumeable &&
                     selectedItem.itemData.itemCode == placeOverlapItem.itemData.itemCode&&
                     placeOverlapItem.itemData.itemAmount < ItemObject.maxItemMergeAmount&&
-                    !placeOverlapItem.ishide)
+                    !placeOverlapItem.isHide)
                 {
                     //두 아이템의 합이 64거나 낮으면 overlap아이템의 개수를 선택한 아이템의 양만큼 증가
                     //기존 선택한 아이템은 삭제
@@ -869,7 +876,7 @@ public partial class InventoryController : MonoBehaviour
         {
             if (playerInput == null)
             {
-                playerInput = new PlayerInput();
+                playerInput = Managers.Object.MyPlayer.playerInput;
                 playerInput.Player.Disable();
                 playerInput.UI.Enable();
                 playerInput.UI.MouseMove.performed += OnMousePosInput;
