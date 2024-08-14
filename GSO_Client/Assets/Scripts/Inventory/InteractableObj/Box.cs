@@ -35,6 +35,9 @@ public class Box : InteractableObject
     [ContextMenu("box interact")]
     public override void Interact()
     {
+        //이미 인벤토리가 열려있다면 인터렉트 하지 않음
+        if (InventoryController.invenInstance.isActive) { return; }
+
         InventoryController.invenInstance.invenUIControl();
         invenUI.invenData = GetComponent<OtherInventory>().InputInvenData;
         invenUI.InventorySet();

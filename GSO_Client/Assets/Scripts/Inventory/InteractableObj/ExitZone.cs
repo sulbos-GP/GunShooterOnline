@@ -1,5 +1,7 @@
 using Google.Protobuf.Protocol;
+using MathNet.Numerics;
 using NPOI.OpenXmlFormats.Dml;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,23 +9,32 @@ using UnityEngine;
 public class ExitZone : InteractableObject
 {
     // public GameObject gameEndUI;아직없음
-    public float ExitTime;  //나가는데 걸리는 시간
+    public float exitTime;  //나가는데 걸리는 시간
     private float remainingTime; // 남은 시간
     private bool isExiting; // 현재 탈출 중인지 여부
+
+    private float hpIndex;
+    private Vector2 posIndex;
+
+    Coroutine exitCoroutine;
+
     private void Awake()
     {
         Init();
+        SetTriggerSize();
     }
     protected override void Init()
     {
         base.Init();
+        isExiting = false;
         interactRange = 1;
-        if (ExitTime == 0)
+        if (exitTime == 0)
         {
-            ExitTime = 4;
+            exitTime = 4;
         }
-        remainingTime = ExitTime;
-        SetTriggerSize();
+        remainingTime = exitTime;
+        hpIndex = 0;
+        posIndex = Vector2.zero;
     }
 
 
@@ -37,35 +48,40 @@ public class ExitZone : InteractableObject
     public override void Interact()
     {
         Debug.Log("interact");
-        StartCoroutine(ExitCoroutine(ExitTime));
-
-    }
-    [ContextMenu("ExitZone interrupt")]
-    public void InterruptExit()
-    {
-        //피격되거나 움직일 경우
-        if (isExiting)
-        {
-            Debug.Log("interrupted");
-            remainingTime = ExitTime; // 남은 시간 초기화
-            isExiting = false;
-            StopAllCoroutines(); // 코루틴 중지
+        if (!isExiting) {
+            exitCoroutine = StartCoroutine(ExitCoroutine(exitTime));
         }
+        
 
     }
+    [ContextMenu("ExitZone Cancel")]
+    public void CancelExit()
+    {
+        //피격되거나 움직일 경우 isExiting을 false로 변환할것
+        Debug.Log("interrupted");
+        StopCoroutine(exitCoroutine); // 코루틴 중지
+        Init();
+    }
 
-    public IEnumerator ExitCoroutine(float exitTime)
+    private IEnumerator ExitCoroutine(float exitTime)
     {
         Debug.Log("Exit");
 
         isExiting = true;
         remainingTime = exitTime;
+        hpIndex = Managers.Object.MyPlayer.Hp;
+        posIndex = Managers.Object.MyPlayer.transform.position;
 
         while (remainingTime > 0)
         {
-            yield return new WaitForSeconds(0.1f); // 1초마다 업데이트
+            if (ExitCheck() == false)
+            {
+                CancelExit();
+            }
+
             remainingTime -= 0.1f;
             UpdateTimerUI(remainingTime); // UI 업데이트
+            yield return new WaitForSeconds(0.1f); // 1초마다 업데이트
         }
 
         // 탈출 성공 시 처리
@@ -86,6 +102,29 @@ public class ExitZone : InteractableObject
         Managers.Scene.LoadScene(Define.Scene.Lobby);
 
         isExiting = false; // 탈출 종료
+    }
+
+    private bool ExitCheck()
+    {
+        //hp에 변화가 생길경우
+        if(hpIndex != Managers.Object.MyPlayer.Hp)
+        {
+            return false;
+        }
+        
+        //거리가 달라질경우
+        if (Vector2.Distance(posIndex, Managers.Object.MyPlayer.transform.position) > 0.1f)
+        {
+            return false;
+        }
+
+        //총을 쏠경우
+        if (Managers.Object.MyPlayer.GetComponent<InputController>()._isFiring)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private void UpdateTimerUI(float time)

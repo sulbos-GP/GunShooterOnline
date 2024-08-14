@@ -301,9 +301,7 @@ internal class PacketHandler
             Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
             return;
         }
-
-       
-            
+ 
 
         //cc에서 피격 표시?
 

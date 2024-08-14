@@ -61,6 +61,9 @@ public class InventoryGrid : MonoBehaviour
     /// </summary>
     public void GridDataSet()
     {
+        if (gridRect == null) 
+            gridRect = GetComponent<RectTransform>();
+        
         if (gridData == null)
         {
             Debug.Log("해당 그리드 오브젝트에 그리드 데이터가 없음");

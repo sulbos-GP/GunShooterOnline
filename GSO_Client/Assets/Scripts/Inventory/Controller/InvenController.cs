@@ -870,6 +870,7 @@ public partial class InventoryController : MonoBehaviour
             if (playerInput == null)
             {
                 playerInput = new PlayerInput();
+                playerInput.Player.Disable();
                 playerInput.UI.Enable();
                 playerInput.UI.MouseMove.performed += OnMousePosInput;
                 playerInput.UI.MouseLeftClick.started += OnMouseLeftClickStartInput;
@@ -880,12 +881,15 @@ public partial class InventoryController : MonoBehaviour
             }
             else
             {
+                playerInput.Player.Disable();
                 playerInput.UI.Enable();
             }
+            
         }
         else
         {
             playerInput.UI.Disable();
+            playerInput.Player.Enable();
         }
 
         inventoryUI.SetActive(isActive);
