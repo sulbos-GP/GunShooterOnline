@@ -50,7 +50,6 @@ public class ExitZone : InteractableObject
         Debug.Log("interact");
         if (!isExiting) {
             exitCoroutine = StartCoroutine(ExitCoroutine(exitTime));
-            exitCoroutine = null;
         }
         
 
@@ -59,9 +58,12 @@ public class ExitZone : InteractableObject
     public void CancelExit()
     {
         //피격되거나 움직일 경우 isExiting을 false로 변환할것
-        Debug.Log("interrupted");
-        StopCoroutine(exitCoroutine); // 코루틴 중지
-        Init();
+        if (exitCoroutine != null)
+        {
+            Debug.Log("interrupted");
+            StopCoroutine(exitCoroutine); // 코루틴 중지
+            Init();
+        }
     }
 
     private IEnumerator ExitCoroutine(float exitTime)
