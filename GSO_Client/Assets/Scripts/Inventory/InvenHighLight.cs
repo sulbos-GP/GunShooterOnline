@@ -37,15 +37,6 @@ public class InvenHighLight : MonoBehaviour
     private RectTransform highlighter;
     public GameObject highlightPrefab;
     
-
-    private void Awake()
-    {
-        if (highlighter == null)
-        {
-            InstantHighlighter();
-        }
-    }
-
     public void InstantHighlighter()
     {
         GameObject instantObj = Instantiate(highlightPrefab);
@@ -54,13 +45,19 @@ public class InvenHighLight : MonoBehaviour
         highlighter.GetComponent<Image>().raycastTarget = false;
     }
 
+    public void DestroyHighlighter()
+    {
+        highlighter = null;
+        Destroy(highlightObj);
+    }
+
     /// <summary>
     /// 하이라이팅의 액티브 여부
     /// </summary>
     /// <param name="tf">액티브 여부</param>
     public void Show(bool tf)
     {
-        if (highlighter == null) 
+        if (highlighter == null)
         {
             InstantHighlighter();
         }
