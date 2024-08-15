@@ -168,6 +168,10 @@ public class InventoryGrid : MonoBehaviour
     /// <param name="mousePosition">마우스 위치</param>
     public Vector2Int MouseToGridPosition(Vector2 mousePosition)
     {
+        if(gridRect == null)
+        {
+            return Vector2Int.zero;
+        }
         mousePosOnGrid.X = mousePosition.X - gridRect.position.x;
         mousePosOnGrid.Y = gridRect.position.y - mousePosition.Y;
         tileGridPos.x = (int)(mousePosOnGrid.X / WidthOfTile);
@@ -180,7 +184,7 @@ public class InventoryGrid : MonoBehaviour
     /// </summary>
     public ItemObject GetItem(int x, int y)
     {
-        if (x < 0 || y < 0)
+        if (x < 0 || y < 0 || x > gridData.gridSize.x-1 || y> gridData.gridSize.y-1)
         {
             return null;
         }

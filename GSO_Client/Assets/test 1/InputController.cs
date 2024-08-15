@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
-using UnityEngine.UIElements;
 using UnityEngine.Rendering;
 using NPOI.SS.Formula.Functions;
 using System;
+using UnityEngine.UI;
 
 public class InputController : MonoBehaviour
 {
@@ -32,10 +32,16 @@ public class InputController : MonoBehaviour
 
     public List<GameObject> interactList;
     public GameObject interactTarget;
+    private Button interactBtn;
+
     private void Awake()
     {
         instance = this;
         interactList = new List<GameObject>();
+        interactBtn = GameObject.Find("InteractBtn").GetComponent<Button>();
+        if(interactBtn == null) { Debug.Log("버튼을 찾지못함"); }
+        interactBtn.interactable = false;
+        interactBtn.onClick.AddListener(PlayerInteract);
     }
 
     public void Start()
@@ -49,10 +55,12 @@ public class InputController : MonoBehaviour
         UpdateState();
         if(interactList.Count != 0)
         {
+            interactBtn.interactable = true;
             ChooseInteractObj();
         }
         else
         {
+            interactBtn.interactable = false;
             interactTarget = null;
         }
 
@@ -137,10 +145,15 @@ public class InputController : MonoBehaviour
 
     private void OnInteraction(InputAction.CallbackContext callbackContext)
     {
+        PlayerInteract();
+    }
+
+    private void PlayerInteract()
+    {
         //if(!_isRooting)
-            //return;
-        
-        if(interactTarget == null)
+        //return;
+
+        if (interactTarget == null)
         {
             return;
         }
@@ -156,7 +169,6 @@ public class InputController : MonoBehaviour
         {
             interactTarget.gameObject.GetComponent<ExitZone>().Interact();
         }
-
     }
 
     private void OnMove(InputAction.CallbackContext callbackContext)

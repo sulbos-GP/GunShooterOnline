@@ -39,8 +39,7 @@ public class InvenHighLight : MonoBehaviour
     
     public void InstantHighlighter()
     {
-        GameObject instantObj = Instantiate(highlightPrefab);
-        highlightObj = instantObj;
+        highlightObj = Managers.Resource.Instantiate("UI/Highlight");
         highlighter = highlightObj.GetComponent<RectTransform>();
         highlighter.GetComponent<Image>().raycastTarget = false;
     }
@@ -48,7 +47,7 @@ public class InvenHighLight : MonoBehaviour
     public void DestroyHighlighter()
     {
         highlighter = null;
-        Destroy(highlightObj);
+        Managers.Resource.Destroy(highlightObj);
     }
 
     /// <summary>
@@ -73,10 +72,7 @@ public class InvenHighLight : MonoBehaviour
         Vector2 size = new Vector2();
         size.X = targetItem.Width * InventoryGrid.WidthOfTile;
         size.Y = targetItem.Height* InventoryGrid.HeightOfTile;
-        if (highlighter == null)
-        {
-            InstantHighlighter();
-        }
+        
         highlighter.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
     }
 
@@ -89,10 +85,7 @@ public class InvenHighLight : MonoBehaviour
 
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem,
             targetItem.itemData.itemPos.x, targetItem.itemData.itemPos.y);
-        if (highlighter == null)
-        {
-            InstantHighlighter();
-        }
+        
         highlighter.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
     }
 
@@ -102,10 +95,7 @@ public class InvenHighLight : MonoBehaviour
     public void SetPositionOnGridByPos(InventoryGrid targetGrid, ItemObject targetItem, int posX, int posY)
     {
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem, posX, posY);
-        if (highlighter == null)
-        {
-            InstantHighlighter();
-        }
+        
         highlighter.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
     }
 
@@ -115,14 +105,8 @@ public class InvenHighLight : MonoBehaviour
     /// <param name="targetGrid"></param>
     public void SetParent(InventoryGrid targetGrid)
     {
-        if (highlighter == null)
-        {
-            InstantHighlighter();
-        }
-
         if (targetGrid == null)
         {
-            highlighter.SetParent(null);
             return;
         }
 
@@ -131,10 +115,6 @@ public class InvenHighLight : MonoBehaviour
 
     internal void SetColor(Color32 color)
     {
-        if (highlighter == null)
-        {
-            InstantHighlighter();
-        }
         highlighter.gameObject.GetComponent<Image>().color = color;
     }
 }
