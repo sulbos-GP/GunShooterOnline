@@ -15,9 +15,9 @@ public class ExitZone : InteractableObject
     private Vector2 posIndex;
 
     private Coroutine exitCoroutine;
-    public GameObject timerTextPref;
-    private GameObject timerUI;
-    private TextMeshProUGUI timeText;
+    public GameObject timerTextPref; //생성할 타이머의 프리팹
+    private GameObject timerUI; //프리팹으로 생성한 UI객체
+    private TextMeshProUGUI timeText; //타이머 객체의 텍스트UI
 
     private void Awake()
     {
@@ -145,13 +145,19 @@ public class ExitZone : InteractableObject
 
     private void UpdateTimerUI(float time)
     {
+        
+
         int seconds = Mathf.FloorToInt(time);
         int milliseconds = Mathf.FloorToInt((time - seconds) * 10);
 
         Vector2 playerPos = Camera.main.WorldToScreenPoint(Managers.Object.MyPlayer.transform.position);
         timerUI.transform.position = playerPos + new Vector2(0,40);
 
-        timeText.text = string.Format("{0}:{1}", seconds, milliseconds);
+        if (timeText != null)
+        {
+            timeText.text = string.Format("{0}:{1}", seconds, milliseconds);
+        }
+        
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
