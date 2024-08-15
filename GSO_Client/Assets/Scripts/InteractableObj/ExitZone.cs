@@ -1,15 +1,12 @@
 using Google.Protobuf.Protocol;
-using MathNet.Numerics;
-using NPOI.OpenXmlFormats.Dml;
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
 public class ExitZone : InteractableObject
 {
     // public GameObject gameEndUI;아직없음
+
     public float exitTime;  //나가는데 걸리는 시간
     private float remainingTime; // 남은 시간
     private bool isExiting; // 현재 탈출 중인지 여부
@@ -17,14 +14,32 @@ public class ExitZone : InteractableObject
     private float hpIndex;
     private Vector2 posIndex;
 
-    Coroutine exitCoroutine;
-
+    private Coroutine exitCoroutine;
+    public GameObject timerTextPref;
+    private GameObject timerUI;
+    private TextMeshProUGUI timeText;
 
     private void Awake()
     {
         Init();
         SetTriggerSize();
     }
+
+    private void CreateTimerText()
+    {
+        timerUI = Managers.Resource.Instantiate("UI/TimerText", GameObject.Find("Canvas").transform);
+        timeText= timerUI.GetComponentInChildren<TextMeshProUGUI>();
+        if (timeText != null) {
+            Debug.Log("찾지못함");
+        }
+    }
+
+    private void DestroyTimerText()
+    {
+        timeText = null;
+        Managers.Resource.Destroy(timerUI);
+    }
+
     protected override void Init()
     {
         base.Init();
@@ -51,6 +66,7 @@ public class ExitZone : InteractableObject
     {
         Debug.Log("interact");
         if (!isExiting) {
+            CreateTimerText();
             exitCoroutine = StartCoroutine(ExitCoroutine(exitTime));
         }
         
@@ -64,6 +80,7 @@ public class ExitZone : InteractableObject
         {
             Debug.Log("interrupted");
             StopCoroutine(exitCoroutine); // 코루틴 중지
+            DestroyTimerText();
             Init();
         }
     }
@@ -88,7 +105,7 @@ public class ExitZone : InteractableObject
             UpdateTimerUI(remainingTime); // UI 업데이트
             yield return new WaitForSeconds(0.1f); // 1초마다 업데이트
         }
-
+        DestroyTimerText();
         // 탈출 성공 시 처리
         C_ExitGame packet = new C_ExitGame()
         {
@@ -131,7 +148,10 @@ public class ExitZone : InteractableObject
         int seconds = Mathf.FloorToInt(time);
         int milliseconds = Mathf.FloorToInt((time - seconds) * 10);
 
-        Debug.Log(string.Format("{0}:{1}", seconds, milliseconds));
+        Vector2 playerPos = Camera.main.WorldToScreenPoint(Managers.Object.MyPlayer.transform.position);
+        timerUI.transform.position = playerPos + new Vector2(0,40);
+
+        timeText.text = string.Format("{0}:{1}", seconds, milliseconds);
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)
