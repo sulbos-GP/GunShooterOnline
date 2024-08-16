@@ -96,36 +96,6 @@ public partial class InventoryController : MonoBehaviour
     //UI액티브 관련
     public bool isActive = false;
 
-    //백업관련 변수(오버랩 아이템 교체가 없어져서 필요 없음)
-    //public List<ItemObject> backUpItemList = new List<ItemObject>(); //백업할 아이템들의 리스트
-    //public List<InventoryGrid> backUpGridList = new List<InventoryGrid>(); //백업할 그리드들의 리스트
-
-
-    /*
-    //인벤토리 드래그 관련
-    [SerializeField] private InvenData selectedInven; //드래그할 인벤토리
-    public bool isInvenSelected; //드래그할 인벤이 선택됨
-    public bool isDragging;
-    public RectTransform draggedInvenRect;
-    public InvenData SelectedInven
-    {
-        get => selectedInven;
-        set
-        {
-            selectedInven = value;
-            isInvenSelected = selectedInven != null;
-            //draggedInvenRect 지정및 해제나 dragOffset초기화를 여기에 넣으면
-            //마우스를 빠르게 움직일 경우 마우스포인터가 인벤토리를 벗어나 풀려버림
-            //드래그 이벤트가 일어날때만 Rect 지정및 해제할것
-        }
-    }
-    private Vector2 dragOffset; //드래그하는 인벤토리 렉트의 중심에서 마우스까지의 거리
-    */
-
-    //기타 변수
-
-    
-
     private void Awake()
     { 
         Debug.Log("invenInstance");
@@ -139,14 +109,6 @@ public partial class InventoryController : MonoBehaviour
             Destroy(gameObject);
         }
 
-
-        /*itemdb = new ItemDB();
-        foreach (ItemDataInfo data in itemdb.items)
-        {
-            ItemData newData = new ItemData();
-            newData.SetItemData(data);
-            itemList.Add(newData);
-        }*/
 
         invenHighlight = GetComponent<InvenHighLight>();
         //Managers.Network.ConnectToGame();
@@ -191,70 +153,18 @@ public partial class InventoryController : MonoBehaviour
     {
         invenUIControl();
     }
-    
-
-    /*
-    private void OverlapExchangeInput(InputAction.CallbackContext context)
-    {
-        Debug.Log("오버랩 작동");
-        OverlapExchange();
-    }*/
-
+   
     private void LeftClickEvent()
     {
-        /*
-         * 플로팅 인벤토리 사용안함
-        if (!isGridSelected)
-        {
-            DragEvent();
-            return;
-        }*/
+        
 
         //그리드 내에 있다면 아이템 이벤트
         ItemEvent();
     }
 
-    /*
-    /// <summary>
-    /// 떠다니는 인벤토리를 잡고 드래그하는 코드 (플로팅 인벤토리 제거로 안씀)
-    /// </summary>
-    private void DragEvent()
-    {
-        if (isDragging)
-        {
-            isDragging = false;
-            draggedInvenRect = null;
-            dragOffset = Vector2.zero;
-        }
-        else
-        {
-            if(!isInvenSelected) { return; }
-
-            isDragging = true;
-            draggedInvenRect = selectedInven.GetComponent<RectTransform>();
-            // 클릭한 위치를 기준으로 오프셋 계산
-            Vector2 clickPosition = mousePosInput;
-            Vector2 inventoryCenter = selectedInven.transform.position;
-            dragOffset = clickPosition - inventoryCenter;
-
-            SetSelectedObjectToLastSibling(draggedInvenRect);
-        }
-    }
-    */
-
     private void RightClickEvent()
     {
-        /*//아이템을 들고있다면 회전, 없다면 임시로 새로운 아이템 생성
-        if (!isItemSelected)
-        {
-            CreateRandomItem();
-        }
-        else
-        {
-            //컴퓨터로 조작시 사용
-            RotateItemRight();
-        }*/
-
+        
         RotateItemRight();
     }
     #endregion
@@ -324,22 +234,6 @@ public partial class InventoryController : MonoBehaviour
             selectedRect.position =  new UnityEngine.Vector2(mousePosInput.X, mousePosInput.Y);
         }
 
-        /* 플로팅 인벤토리를 사용하지 않음
-        if (isDragging)
-        {
-            if(draggedInvenRect.gameObject.activeSelf == false)
-            {
-                isDragging = false;
-                draggedInvenRect = null;
-                dragOffset = Vector2.zero;
-                return;
-            }
-
-            //단 인벤토리의 경우 클릭한 위치를 마우스의 중심으로 
-            Vector2 newPosition = mousePosInput - dragOffset;
-            draggedInvenRect.position = newPosition;
-        }
-        */
     }
 
     /// <summary>
@@ -404,16 +298,6 @@ public partial class InventoryController : MonoBehaviour
         if(!isItemSelected) { return; }
         selectedItem.RotateRight();
     }
-
-    /*
-    /// <summary>
-    /// 컨트롤러에서 아이템 좌회전 명령 (사용 안함)
-    /// </summary>
-    public void RotateItemLeft()
-    {
-        if (!isItemSelected) { return; }
-        selectedItem.RotateLeft();
-    }*/
 
     /// <summary>
     /// 좌클릭시 아이템을 집거나 내려 놓기
@@ -598,44 +482,6 @@ public partial class InventoryController : MonoBehaviour
         }
     }
 
-    /*오버랩 스위칭 미사용
-    private void OverlapExchange()
-    {
-        if (checkOverlapItem == null || !isItemSelected) { return; }
-
-        selectedGrid.CleanItemSlot(checkOverlapItem);
-        selectedGrid.PlaceItem(selectedItem, checkOverlapItem.curItemPos.x, checkOverlapItem.curItemPos.y);
-        
-        selectedGrid.GridWeight += SelectedItem.itemDataInfo.item_weight;
-        SelectedItem = checkOverlapItem;
-
-        AddBackUpList();
-        selectedGrid.GridWeight -= SelectedItem.itemDataInfo.item_weight;
-
-        SelectedItem.GetComponent<Image>().raycastTarget = false;
-        checkOverlapItem = null;
-        SetSelectedObjectToLastSibling(selectedRect);
-    }
-    */
-
-    /* 오버랩 스위칭 미사용
-    /// <summary>
-    /// 아이템과 그리드를 백업리스트에 저장
-    /// </summary>
-    private void AddBackUpList()
-    {
-        if(backUpItemList.Contains(selectedItem) == false)
-        {
-            backUpItemList.Add(selectedItem); //백업시 해당 리스트 안의 아이템 전부 백업
-        }
-        
-        if (backUpGridList.Contains(selectedItem.backUpItemGrid) == false)
-        {
-            backUpGridList.Add(selectedItem.backUpItemGrid);
-        }
-    }
-    */
-
     /// <summary>
     /// 아이템 슬롯을 백업함(아이템을 들때 슬롯이 업데이트되기에 백업 필요)
     /// </summary>
@@ -643,25 +489,7 @@ public partial class InventoryController : MonoBehaviour
     {
         selectedItem.curItemGrid.UpdateBackUpSlot();
         selectedItem.curItemGrid.backupWeight = selectedItem.curItemGrid.GridWeight;
-        /*오버랩 스위칭 미사용
-        //우클릭으로 생성한 아이템은 한번씩 재클릭을 해줘야 적용됨.
-        if (backUpItemList.Contains(selectedItem) == false)
-        {
-            AddBackUpList();
-        }
-
-        if (backUpGridList.Count != 0)
-        {
-            for (int i = 0; i < backUpGridList.Count; i++)
-            {
-                //해당 그리드의 부모(그리드 모음 오브젝트)의 부모(인벤토리 객체)의 인벤토리 스크립트에서
-                //UpdateInvenWeight로 해당 인벤토리의 무게 계산
-                backUpGridList[i].UpdateBackUpSlot();
-                backUpGridList[i].backupWeight = backUpGridList[i].gridWeight;
-            }
-            backUpGridList.Clear(); //완료시 리스트 초기화
-        }
-        */
+        
     }
 
      
@@ -674,20 +502,6 @@ public partial class InventoryController : MonoBehaviour
         selectedItem.backUpItemRotate = selectedItem.itemData.itemRotate; //현재 회전
         selectedItem.backUpItemGrid = selectedItem.curItemGrid; //현재 그리드
         
-        /* 오버랩 스위칭 미사용
-        //SelectedItem = null;
-        if (backUpItemList.Count != 0)
-        {
-            //백업 리스트 안의 모든 아이템 또한 백업 업데이트
-            for (int i = 0; i < backUpItemList.Count; i++)
-            {
-                backUpItemList[i].backUpItemRotate = backUpItemList[i].curItemRotate;
-                backUpItemList[i].backUpItemPos = backUpItemList[i].curItemPos;
-                backUpItemList[i].backUpItemGrid = backUpItemList[i].curItemGrid;
-            }
-            backUpItemList.Clear(); //완료시 리스트 초기화
-        }
-        */
     }
 
     /// <summary>
@@ -700,19 +514,6 @@ public partial class InventoryController : MonoBehaviour
         selectedItem.curItemGrid.UndoItemSlot();
         selectedItem.curItemGrid.PrintInvenContents(selectedItem.curItemGrid, selectedItem.curItemGrid.ItemSlot);
         
-        /*오버랩 스위칭 미사용
-        if (backUpGridList.Count != 0)
-        {
-            for (int i = 0; i < backUpGridList.Count; i++)
-            {
-                backUpGridList[i].UndoItemSlot();
-                backUpGridList[i].PrintInvenContents(backUpGridList[i], backUpGridList[i].ItemSlot);
-
-                //그리드의 무게를 백업한 무게로 설정하고 인벤토리의 무게를 업데이트
-                backUpGridList[i].GridWeight = backUpGridList[i].backupWeight;
-            }
-            backUpGridList.Clear();
-        }*/
     }
 
     /// <summary>
@@ -732,82 +533,8 @@ public partial class InventoryController : MonoBehaviour
         selectedItem.curItemGrid.PlaceItem(selectedItem, selectedItem.itemData.itemPos.x, selectedItem.itemData.itemPos.y);
         SelectedItem = null;
 
-        /*오버랩 스위칭 미사용
-        //백업 아이템 리스트 안의 내용도 모두 백업
-        if (backUpItemList.Count != 0)
-        {
-            for (int i = 0; i < backUpItemList.Count; i++)
-            {
-                ItemObject backUpItem = backUpItemList[i];
-                Vector2Int backUpPos = backUpItem.backUpItemPos;
-                backUpItem.curItemRotate = backUpItem.backUpItemRotate;
-                backUpItem.Rotate(backUpItem.backUpItemRotate);
-                backUpItem.curItemGrid = backUpItem.backUpItemGrid;
-                backUpItem.backUpItemGrid.PlaceItem(backUpItem, backUpPos.x, backUpPos.y);
-            }
-            backUpItemList.Clear();
-        }
-        */
     }
 
-    /* 인벤토리 그리드로 옮김
-    /// <summary>
-    /// 아이템이 생성된 즉시 인벤토리내에 배치 가능한 자리에 배치됨
-    /// </summary>
-    public void InsertRandomItem(InventoryGrid targetGrid)
-    {
-        SelectedItemGrid = targetGrid;
-        if (!isGridSelected) { return; }
-
-        CreateRandomItem();
-        ItemObject itemToInsert = selectedItem;
-
-        SelectedItem = null;
-        InsertItem(itemToInsert);
-    }*/
-
-    /*
-    /// <summary>
-    /// 등록된 아이템중 랜덤으로 생성
-    /// </summary>
-    private void CreateRandomItem()
-    {
-        //아이템 프리팹을 생성하고 스크립트 로드
-        ItemObject invenItem = Instantiate(itemPref).GetComponent<ItemObject>();
-        
-        //아이템은 캔버스의 자식(UI니까)
-        SetSelectedObjectToLastSibling(selectedRect);
-        //아이템 리스트 중 하나 지정
-        
-        int randomId = Random.Range(0, itemList.Count);
-        //지정된 아이템 데이터를 아이템 프리팹에 적용
-        ItemData randomData = new ItemData();
-        randomData.DuplicateItemData(itemList[randomId]);
-        invenItem.itemData = randomData;
-        invenItem.ItemDataSet(invenItem.itemData);
-
-        SelectedItem = invenItem;
-    }
-    */
-
-    /* 인벤토리그리드로 옮김
-    /// <summary>
-    /// insertRandomItem안에서 지정된 아이템을 가능한 자리에 배치
-    /// </summary>
-    private void InsertItem(ItemObject itemToInsert)
-    {
-        Vector2Int? posOnGrid = selectedGrid.FindSpaceForObject(itemToInsert);
-
-        if(posOnGrid == null) {
-            itemToInsert.RotateRight();
-            InsertItem(itemToInsert);
-            return;
-        }
-
-        selectedGrid.PlaceItem(itemToInsert, posOnGrid.Value.x, posOnGrid.Value.y);
-        SelectedItemGrid = null;
-    }
-    */
 
     /// <summary>
     /// 컨트롤러 상에서 삭제 처리
@@ -866,7 +593,6 @@ public partial class InventoryController : MonoBehaviour
                 playerInput.UI.MouseLeftClick.canceled += OnMouseLeftClickCancelInput;
                 playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
                 playerInput.UI.InventoryControl.performed += InvenUIControlInput;
-                //playerInput.UI.OverlapChangeAction.performed += OverlapExchangeInput;
             }
             else
             {
