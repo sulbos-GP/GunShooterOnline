@@ -135,7 +135,13 @@ public class Map
         mapName = "Forest";
 
         // Collision 관련 파일
+#if DOCKER
+        var text = File.ReadAllText("/app/MapData/" + $"{mapName}.txt");
+#else
         var text = File.ReadAllText(" ./../../../../../MapData/" + $"{mapName}.txt");
+#endif
+
+
         var reader = new StringReader(text);
 
         var _ = reader.ReadLine();

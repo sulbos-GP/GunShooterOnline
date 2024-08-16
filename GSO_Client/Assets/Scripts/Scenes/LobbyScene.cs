@@ -15,6 +15,9 @@ public class LobbyScene : BaseScene
     [SerializeField] private GameObject Coins;
 
 
+   // public string Ip = "127.0.0.1";
+    public string Ip = "10.0.2.2";
+
     protected override void Init()
     {
         base.Init();
@@ -23,7 +26,7 @@ public class LobbyScene : BaseScene
         Debug.Log("신 초기화 로비");
         //Managers.Network.ConnectToGame("ec2-3-36-85-125.ap-northeast-2.compute.amazonaws.com");
 
-        Managers.Network.SettingConnection("127.0.0.1",7777, "SomeConnectionKey");
+        Managers.Network.SettingConnection(Ip, 7777, "SomeConnectionKey");
         //Managers.Network.ConnectToGame();
     }
 

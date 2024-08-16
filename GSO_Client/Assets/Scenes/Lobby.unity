@@ -994,7 +994,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1142103600}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bade917cc05dc794fa4f578ce1d44f58, type: 3}
   m_Name: 
@@ -1417,6 +1417,7 @@ MonoBehaviour:
   Store: {fileID: 1935026847}
   Profile: {fileID: 13247110}
   Coins: {fileID: 1408510275}
+  Ip: 127.0.0.1
 --- !u!1 &1565354865
 GameObject:
   m_ObjectHideFlags: 0
