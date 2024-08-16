@@ -1,8 +1,12 @@
 using Google.Protobuf.Protocol;
 using NPOI.OpenXmlFormats.Dml.Diagram;
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
@@ -15,8 +19,9 @@ public partial class InventoryController : MonoBehaviour
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
     public OtherInventoryUI otherInvenUI;
-    //public ItemDB itemdb;
-    //public List<ItemData> itemList;
+    public Camera uiCamera; // UI 카메라 (Canvas의 Render Mode가 Screen Space - Camera일 때)
+    private GraphicRaycaster graphicRaycaster;
+    private EventSystem eventSystem;
 
     [Header("수동지정")]
     public Transform deleteUI;
@@ -95,6 +100,9 @@ public partial class InventoryController : MonoBehaviour
 
     //UI액티브 관련
     public bool isActive = false;
+    public bool isPress = false;
+
+    
 
     private void Awake()
     { 
@@ -109,7 +117,8 @@ public partial class InventoryController : MonoBehaviour
             Destroy(gameObject);
         }
 
-
+        graphicRaycaster = GetComponent<GraphicRaycaster>();
+        eventSystem = EventSystem.current;
         invenHighlight = GetComponent<InvenHighLight>();
         //Managers.Network.ConnectToGame();
     }
@@ -122,44 +131,37 @@ public partial class InventoryController : MonoBehaviour
 
 
     #region PlayerInput 액션
-    private void OnMousePosInput(InputAction.CallbackContext context)
+    private void OnTouchPos(InputAction.CallbackContext context)
     {
-        //마우스의 위치 실시간 업데이트
         UnityEngine.Vector2 pos = context.ReadValue<UnityEngine.Vector2>();
         mousePosInput = new Vector2(pos.x,pos.y);
+        Debug.Log(mousePosInput);
     }
 
-    private void OnMouseLeftClickStartInput(InputAction.CallbackContext context)
+    private void OnTouchStart(InputAction.CallbackContext context)
     {
-        if(!isItemSelected)
-        {
-            LeftClickEvent();
-        }
+        isPress = true;
     }
-    private void OnMouseLeftClickCancelInput(InputAction.CallbackContext context)
+
+    private void OnTouchEnd(InputAction.CallbackContext context)
     {
+        isPress = false;
         if (isItemSelected)
         {
-            LeftClickEvent();
+            ItemEvent();
         }
     }
+
 
     private void OnMouseRightClickInput(InputAction.CallbackContext context)
     {
         //마우스 우클릭시. 선택된 아이템 여부에 따라 새 아이템 생성 혹은 아이템 회전
         RightClickEvent();
     }
+
     private void InvenUIControlInput(InputAction.CallbackContext context)
     {
         invenUIControl();
-    }
-   
-    private void LeftClickEvent()
-    {
-        
-
-        //그리드 내에 있다면 아이템 이벤트
-        ItemEvent();
     }
 
     private void RightClickEvent()
@@ -174,6 +176,11 @@ public partial class InventoryController : MonoBehaviour
         if (!isActive)
         {
             return;
+        }
+
+        if(isPress  && isGridSelected && !isItemSelected)
+        {
+            ItemEvent();
         }
 
         DragObject();
@@ -195,8 +202,6 @@ public partial class InventoryController : MonoBehaviour
         // 그리드가 존재할 경우
         if (isGridSelected)
         {
-            updateGridPos = WorldToGridPos();
-
             if (selectedItem != null)
             {
                 Color32 highlightColor = selectedGrid.PlaceCheckForHighlightColor(selectedItem, updateGridPos.x, updateGridPos.y, ref checkOverlapItem);
@@ -241,6 +246,7 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void HandleHighlight()
     {
+        updateGridPos = WorldToGridPos();
         Vector2Int positionOnGrid = updateGridPos;
 
         //그리드 위에 존재하지 않는 다면 하이라이팅 없앰
@@ -304,16 +310,33 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void ItemEvent()
     {
+        if (isItemSelected && isOnDelete)
+        {
+            //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
+            C_DeleteItem packet = new C_DeleteItem();
+            packet.ItemId = selectedItem.itemData.itemId;
+            packet.PlayerId = Managers.Object.MyPlayer.Id;
+            Managers.Network.Send(packet);
+            Debug.Log("C_DeleteItem");
+
+            BackUpGridSlot();
+            DestroySelectedItem();
+            return;
+        }
+
+        if (!isGridSelected)
+        {
+            Debug.Log("그리드 없음");
+            return;
+        }
+        updateGridPos = WorldToGridPos();
+        Debug.Log("그리드 포즈 설정");
         Vector2Int tileGridPosition = updateGridPos; //마우스의 위치에 있는 그리드 좌표 할당
-        if(tileGridPosition == null) { return; }
+
+        if(tileGridPosition == null) { Debug.Log("tilegridposition = null"); return; }
 
         if (!isItemSelected)
         {
-            if (!isGridSelected)
-            {
-                return;
-            }
-
             ItemObject clickedItem = selectedGrid.GetItem(tileGridPosition.x, tileGridPosition.y); 
             if (clickedItem == null) { return; }
 
@@ -354,19 +377,6 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void ItemRelease(ItemObject item, Vector2Int pos)
     {
-        if(isOnDelete)
-        {
-            //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
-            C_DeleteItem packet = new C_DeleteItem();
-            packet.ItemId = selectedItem.itemData.itemId;
-            packet.PlayerId = Managers.Object.MyPlayer.Id;
-            Managers.Network.Send(packet);
-            Debug.Log("C_DeleteItem");
-
-            BackUpGridSlot();
-            DestroySelectedItem();
-            return;
-        }
         if (!isGridSelected)
         {
             //아이템 그리드가 아닌 잘못된 위치에 놓을경우 되돌림
@@ -585,12 +595,13 @@ public partial class InventoryController : MonoBehaviour
 
             if (playerInput == null)
             {
+                Debug.Log("touchinput On");
                 playerInput = Managers.Object.MyPlayer.playerInput;
                 playerInput.Player.Disable();
                 playerInput.UI.Enable();
-                playerInput.UI.MouseMove.performed += OnMousePosInput;
-                playerInput.UI.MouseLeftClick.started += OnMouseLeftClickStartInput;
-                playerInput.UI.MouseLeftClick.canceled += OnMouseLeftClickCancelInput;
+                playerInput.UI.TouchPosition.performed += OnTouchPos;
+                playerInput.UI.TouchPress.started += OnTouchStart;
+                playerInput.UI.TouchPress.canceled += OnTouchEnd;
                 playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
                 playerInput.UI.InventoryControl.performed += InvenUIControlInput;
             }
@@ -613,6 +624,8 @@ public partial class InventoryController : MonoBehaviour
 
         inventoryUI.SetActive(isActive);
     }
+
+    
 }
 
 
