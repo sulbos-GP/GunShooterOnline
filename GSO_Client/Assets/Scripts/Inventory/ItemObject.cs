@@ -9,28 +9,25 @@ using Vector2 = System.Numerics.Vector2;
 
 public class ItemObject : MonoBehaviour
 {
-    /*
-     * 이 코드는 item프리팹에 부착되며 아이템의 객체를 정의합니다. 
-     * 아이템의 정보와 이 아이템의 현재 상태(위치? ,회전?, 가려짐? 등)
-     * 
-     * 1. ItemDataSet 함수는 컨트롤러에서 생성과 동시에 불려지며 등록된 데이터를 현재 변수에 적용시키고
-     *    회전과 숨김여부를 초기화합니다.
-     *    
-     * 2. UnhideItem 함수는 컨트롤러에서 해당 아이템 오브젝트를 클릭했을때 isHide가 true라면
-     *    이 함수를 실행시킵니다. 코루틴을 사용하여 조회시간 후 isHide를 해제하고 아이템의 이미지
-     *    를 바꾸게 됩니다.
-     *    
-     * 3. RotateRight, RotateLeft 함수는 컨트롤러에서 회전 명령을 줄때 사용합니다.
-     *    rotated변수를 바꾸며 현재 RectTransform에 적용시킵니다.
-    */
     public const int maxItemMergeAmount = 64;
-    public Image imageUI;
-    public RectTransform itemRect;
-    public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
-    public Sprite hideSprite; //조회 전에 보여질 스프라이트
-    public List<Sprite> spriteList;
 
-    //옵저버(변수 값의 변경을 즉각 탐지하여 함수실행)
+    //자식객체
+    public Image imageUI;
+    public TextMeshProUGUI amountText; //아이템 갯수 텍스트
+    public TextMeshProUGUI unhideTimer; //아이템 수색 타이머 텍스트
+
+    //컴포넌트
+    public RectTransform itemRect;
+
+    //아이템의 스프라이트
+    public List<Sprite> spriteList;
+    private Sprite itemSprite;
+    public Sprite hideSprite; //조회 전에 보여질 스프라이트
+
+    private Coroutine searchingCoroutine;
+
+    //아이템 데이터 요소
+    public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
     public int Width
     {
         get
@@ -62,26 +59,44 @@ public class ItemObject : MonoBehaviour
             TextControl();
         }
     }
+    public InventoryGrid curItemGrid; 
 
-    public bool ishide; //아이템 정보 숨겨짐
+    //현 상태
+    public bool isHide; //아이템 정보 숨겨짐
     private bool isOnSearching; //아이템 조회중
 
-
-    //현재 아이템의 위치, 회전도, 그리드
-    public InventoryGrid curItemGrid;
-    
     //백업 변수
     public InventoryGrid backUpItemGrid; //아이템이 원래 보관된 그리드
     public Vector2Int backUpItemPos; //아이템의 원래 위치
     public int backUpItemRotate; //아이템의 원래 회전도
-    private Sprite itemSprite;
+    
 
     private void Awake()
     {
         itemRect = GetComponent<RectTransform>();
         imageUI = transform.GetChild(0).GetComponent<Image>();
         imageUI.raycastTarget = false;
+
+        unhideTimer = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        unhideTimer.raycastTarget = false;
+        unhideTimer.gameObject.SetActive(false);
+        
+        amountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        amountText.raycastTarget = false;
+        amountText.gameObject.SetActive(false);
     }
+
+    private void OnDisable()
+    {
+        if(searchingCoroutine != null)
+        {
+            StopCoroutine(searchingCoroutine);
+            unhideTimer.gameObject.SetActive(false);
+            searchingCoroutine = null;
+            isOnSearching = false;
+        }
+    }
+
     /// <summary>
     /// 아이템의 데이터를 적용
     /// </summary>
@@ -99,21 +114,22 @@ public class ItemObject : MonoBehaviour
         //아이템의 크기및 회전 설정
         itemRect.localPosition = new UnityEngine.Vector2(itemData.itemPos.x * InventoryGrid.WidthOfTile+50, itemData.itemPos.y* InventoryGrid.HeightOfTile-50);
         Rotate(itemData.itemRotate);
-        ItemAmount = itemData.itemAmount;
         itemSprite = spriteList[itemData.itemCode - 1];
         isOnSearching = false;
+
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
         if (itemData.searchedPlayerId.Contains(Managers.Object.MyPlayer.Id) == false)
         {
             imageUI.sprite = hideSprite;
-            ishide = true;
+            isHide = true;
         }
         else
         {
-
             imageUI.sprite = itemSprite;
-            ishide = false;
+            isHide = false;
         }
+
+        ItemAmount = itemData.itemAmount;
     }
 
     /// <summary>
@@ -125,14 +141,29 @@ public class ItemObject : MonoBehaviour
         isOnSearching = true;
 
         //아이템의 조회 시간동안 대기후 아이템 공개
-        StartCoroutine(SearchingTimer(itemData.item_searchTime));
+        searchingCoroutine = StartCoroutine(SearchingTimer(itemData.item_searchTime));
     }
 
     private IEnumerator SearchingTimer(float duration)
     {
-        yield return new WaitForSeconds(duration);
-        ishide = false;
+        float timeRemaining = duration;
 
+        unhideTimer.gameObject.SetActive(true);
+
+        while (timeRemaining > 0)
+        {
+            timeRemaining -= Time.deltaTime;
+            int seconds = Mathf.FloorToInt(timeRemaining);
+            int milliseconds = Mathf.FloorToInt((timeRemaining - seconds) * 10); // One decimal place
+
+            unhideTimer.text = string.Format("{0}:{1}", seconds, milliseconds);
+            yield return null;
+        }
+
+        // Hide the timer text after the countdown is complete
+        unhideTimer.gameObject.SetActive(false);
+
+        isHide = false;
         imageUI.sprite = itemSprite;
         itemData.searchedPlayerId.Add(Managers.Object.MyPlayer.Id);
         TextControl();
@@ -182,16 +213,13 @@ public class ItemObject : MonoBehaviour
 
     public void TextControl()
     {
-        TextMeshProUGUI amountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        amountText.raycastTarget = false;
-        if (itemData.itemAmount <= 1 || ishide) 
-        {
-            amountText.gameObject.SetActive(false);
-            return; 
-        }
-
         amountText.text = itemData.itemAmount.ToString();
-        amountText.gameObject.SetActive(true);
+
+        //아이템 갯수 텍스트가 비활성화 상태이고 2 이상이면 활성화
+        if (itemData.itemAmount > 1 && amountText.gameObject.activeSelf == false && !isHide) 
+        {
+            amountText.gameObject.SetActive(true);
+        }
     }
 
     public void DestroyItem()

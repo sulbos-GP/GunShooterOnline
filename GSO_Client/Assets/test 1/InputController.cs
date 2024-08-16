@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
-using UnityEngine.UIElements;
 using UnityEngine.Rendering;
 using NPOI.SS.Formula.Functions;
 using System;
+using UnityEngine.UI;
 
 public class InputController : MonoBehaviour
 {
     public static InputController instance;
+
     public float distance;
 
     private Rigidbody2D rig;
-
+    public PlayerInput playerInput;
     
     private Vector2 _direction;
     private Vector2 lookInput;
@@ -26,15 +27,21 @@ public class InputController : MonoBehaviour
     //private CreatureState State;
     private Vector3 lastPos;
 
-    private bool _isFiring; 
+    public bool _isFiring; 
     private bool _isRooting; 
 
     public List<GameObject> interactList;
     public GameObject interactTarget;
+    private Button interactBtn;
+
     private void Awake()
     {
         instance = this;
         interactList = new List<GameObject>();
+        interactBtn = GameObject.Find("InteractBtn").GetComponent<Button>();
+        if(interactBtn == null) { Debug.Log("버튼을 찾지못함"); }
+        interactBtn.interactable = false;
+        interactBtn.onClick.AddListener(PlayerInteract);
     }
 
     public void Start()
@@ -48,10 +55,12 @@ public class InputController : MonoBehaviour
         UpdateState();
         if(interactList.Count != 0)
         {
+            interactBtn.interactable = true;
             ChooseInteractObj();
         }
         else
         {
+            interactBtn.interactable = false;
             interactTarget = null;
         }
 
@@ -106,7 +115,7 @@ public class InputController : MonoBehaviour
 
     private void OnEnable()
     {
-        var playerInput = new PlayerInput();
+        playerInput = new PlayerInput();
         playerInput.Player.Enable();
         playerInput.Player.Look.performed += OnLookInput;
         playerInput.Player.Look.canceled += OnLookInput;
@@ -121,7 +130,6 @@ public class InputController : MonoBehaviour
 
     private void OnDisable()
     {
-        var playerInput = new PlayerInput();
         playerInput.Player.Look.performed -= OnLookInput;
         playerInput.Player.Look.canceled -= OnMove;
         //playerInput.Player.Fire.started -= OnStartFireInput;
@@ -132,14 +140,20 @@ public class InputController : MonoBehaviour
         playerInput.Player.Move.canceled -= OnMove;
         playerInput.Player.Interaction.started -= OnInteraction;
         playerInput.Player.Disable();
+        playerInput = null;
     }
 
     private void OnInteraction(InputAction.CallbackContext callbackContext)
     {
+        PlayerInteract();
+    }
+
+    private void PlayerInteract()
+    {
         //if(!_isRooting)
-            //return;
-        
-        if(interactTarget == null)
+        //return;
+
+        if (interactTarget == null)
         {
             return;
         }
@@ -155,7 +169,6 @@ public class InputController : MonoBehaviour
         {
             interactTarget.gameObject.GetComponent<ExitZone>().Interact();
         }
-
     }
 
     private void OnMove(InputAction.CallbackContext callbackContext)

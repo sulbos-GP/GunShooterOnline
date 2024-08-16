@@ -61,6 +61,9 @@ public class InventoryGrid : MonoBehaviour
     /// </summary>
     public void GridDataSet()
     {
+        if (gridRect == null) 
+            gridRect = GetComponent<RectTransform>();
+        
         if (gridData == null)
         {
             Debug.Log("해당 그리드 오브젝트에 그리드 데이터가 없음");
@@ -165,6 +168,10 @@ public class InventoryGrid : MonoBehaviour
     /// <param name="mousePosition">마우스 위치</param>
     public Vector2Int MouseToGridPosition(Vector2 mousePosition)
     {
+        if(gridRect == null)
+        {
+            return Vector2Int.zero;
+        }
         mousePosOnGrid.X = mousePosition.X - gridRect.position.x;
         mousePosOnGrid.Y = gridRect.position.y - mousePosition.Y;
         tileGridPos.x = (int)(mousePosOnGrid.X / WidthOfTile);
@@ -177,7 +184,7 @@ public class InventoryGrid : MonoBehaviour
     /// </summary>
     public ItemObject GetItem(int x, int y)
     {
-        if (x < 0 || y < 0)
+        if (x < 0 || y < 0 || x > gridData.gridSize.x-1 || y> gridData.gridSize.y-1)
         {
             return null;
         }
@@ -516,7 +523,7 @@ public class InventoryGrid : MonoBehaviour
         if (overlapItem != null)
         {
             //단 오버랩 아이템이 ishide인 경우 배치 실패 판정
-            if (overlapItem.ishide || placeItem.ishide)
+            if (overlapItem.isHide || placeItem.isHide)
             {
                 overlapItem = null;
                 return HighlightColor.Red;

@@ -1,5 +1,6 @@
 using Google.Protobuf.Protocol;
 using NPOI.OpenXmlFormats.Dml.Diagram;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -9,29 +10,6 @@ using Vector2 = System.Numerics.Vector2;
 
 public partial class InventoryController : MonoBehaviour
 {
-    /*
-     * 이 코드는 인벤토리 매니저에 부착되며 플레이어의 조작에 따른 함수를 호출합니다.
-     * 
-     * 1. PlayerInput으로 마우스의 위치, 좌우클릭 이벤트를 발생합니다.
-     *    좌클릭시 ItemGetOrRelease함수를 통해 selectedItem변수의 존재 여부에 따라 아이템을 
-     *     집거나 배치합니다
-     *    우클릭시(임시) selectedItem이 존재하는지 여부에 따라 회전하거나 새로운 아이템을 생성
-     *     합니다
-     * 
-     * 2. 업데이트에서 호출되는 함수
-     *    WorldToGridPos 현재 마우스의 위치를 그리드의 좌표로 변환합니다.
-     *    DragObject selectedItem이 있다면 해당 아이템의 위치 = 마우스의 위치
-     *    HandleHighlight는 selectedItem이 없을때는 배치된 아이템에 마우스를 가져다 대면 아이템
-     *     에 하이라이트를 주고 selectedItem이 있다면 해당 위치에 아이템이 배치가능한지 하이라이트
-     *     로 표시합니다
-     * 
-     * 3. CreateRandomItem : 새로운 아이템을 생성하여 selectedItem으로 지정합니다
-     *    InsertRandomItem : 해당 그리드에 바로 생성한 아이템을 집어넣습니다.
-     *    SetSelectedObjectToLastSibling : 선택된 아이템이 다른 아이템에 가려지지 않도록 하기위해
-     *    같은 부모를 가진 자식 객체중 맨 아래로 이동하며 객체의 부모, 객체의 부모의 부모 등 더이상
-     *    부모 객체가 없을때까지 재귀로 반복합니다.
-     */
-
     public static InventoryController invenInstance;
     private PlayerInput playerInput; //플레이어의 조작 인풋
     public GameObject inventoryUI;
@@ -100,7 +78,7 @@ public partial class InventoryController : MonoBehaviour
     [SerializeField] private ItemObject checkOverlapItem; //매 프레임마다 체크될 오버랩 아이템 변수
 
     //하이라이트 관련 변수
-    private InvenHighLight invenHighlight; //하이라이트 객체에 있는 변수
+    private InvenHighLight invenHighlight;
     private Vector2Int HighlightPosition; //하이라이트의 위치
 
     //삭제 관련
@@ -173,6 +151,13 @@ public partial class InventoryController : MonoBehaviour
         invenHighlight = GetComponent<InvenHighLight>();
         //Managers.Network.ConnectToGame();
     }
+
+    private void OnDisable()
+    {
+        SelectedItem = null;
+        SelectedItemGrid = null;
+    }
+
 
     #region PlayerInput 액션
     private void OnMousePosInput(InputAction.CallbackContext context)
@@ -287,11 +272,10 @@ public partial class InventoryController : MonoBehaviour
         {
             if (isOnDelete&&isItemSelected)
             {
+                invenHighlight.Show(true);
                 invenHighlight.SetColor(HighlightColor.Yellow);
                 InvenHighLight.highlightObj.transform.SetParent(deleteUI);
                 InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
-
-                invenHighlight.Show(true);
                 return;
             }
             invenHighlight.Show(false);
@@ -450,7 +434,7 @@ public partial class InventoryController : MonoBehaviour
             if (clickedItem == null) { return; }
 
             //클릭한 아이템이 숨겨진 경우에는 숨김을 해제하고 아니면 아이템을 듬
-            if (clickedItem.ishide == true)
+            if (clickedItem.isHide == true)
             {
                 clickedItem.UnhideItem();
             }
@@ -521,7 +505,7 @@ public partial class InventoryController : MonoBehaviour
                 if(selectedItem.itemData.isItemConsumeable &&
                     selectedItem.itemData.itemCode == placeOverlapItem.itemData.itemCode&&
                     placeOverlapItem.itemData.itemAmount < ItemObject.maxItemMergeAmount&&
-                    !placeOverlapItem.ishide)
+                    !placeOverlapItem.isHide)
                 {
                     //두 아이템의 합이 64거나 낮으면 overlap아이템의 개수를 선택한 아이템의 양만큼 증가
                     //기존 선택한 아이템은 삭제
@@ -867,9 +851,15 @@ public partial class InventoryController : MonoBehaviour
 
         if (isActive)
         {
+            if(InvenHighLight.highlightObj == null)
+            {
+                invenHighlight.InstantHighlighter();
+            }
+
             if (playerInput == null)
             {
-                playerInput = new PlayerInput();
+                playerInput = Managers.Object.MyPlayer.playerInput;
+                playerInput.Player.Disable();
                 playerInput.UI.Enable();
                 playerInput.UI.MouseMove.performed += OnMousePosInput;
                 playerInput.UI.MouseLeftClick.started += OnMouseLeftClickStartInput;
@@ -880,12 +870,19 @@ public partial class InventoryController : MonoBehaviour
             }
             else
             {
+                playerInput.Player.Disable();
                 playerInput.UI.Enable();
             }
+            
         }
         else
         {
+            if (InvenHighLight.highlightObj != null)
+            {
+                invenHighlight.DestroyHighlighter();
+            }
             playerInput.UI.Disable();
+            playerInput.Player.Enable();
         }
 
         inventoryUI.SetActive(isActive);

@@ -16,7 +16,6 @@ public class ObjectManager
     //public readonly Dictionary<int, InvenData> _inventoryDic = new();  //써보니 인벤토리는 오브젝트로 검색이 가능하니 필요없다
     public readonly Dictionary<int, GridData> _gridDic = new();
     public readonly Dictionary<int, ItemData> _itemDic = new();
-
     public readonly Dictionary<int, S_RaycastHit> _rayDic = new();
     public MyPlayerController MyPlayer { get; set; }
 
@@ -51,7 +50,7 @@ public class ObjectManager
                 MyPlayer.PosInfo = info.PositionInfo;
                 //MyPlayer.Stat.MergeFrom(info.StatInfo);
                 MyPlayer.SyncPos();
-
+                MyPlayer.playerInput = MyPlayer.GetComponent<InputController>().playerInput;
                 go.GetComponent<PlayerInventory>().SendPlayerInvenLoadPacket();
             }
             else
@@ -154,7 +153,7 @@ public class ObjectManager
             ExitZone exitZone = go.GetComponent<ExitZone>();
             exitZone.objectId = info.ObjectId;
             exitZone.interactType = InteractType.Exit;
-            exitZone.ExitTime = 5; //임시추가
+            exitZone.exitTime = 5; //임시추가
         }
     }
 
