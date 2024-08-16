@@ -66,13 +66,13 @@ public class ObjectManager
                 //pc.Stat = info.StatInfo;
                 pc.SyncPos();
 
-                foreach (Transform t in Managers.Map.CurrentMap.transform)
-                {
+                //foreach (Transform t in Managers.Map.CurrentMap.transform)
+                //{
                     //if (t.GetComponent<PlantsController>().Id == info.PositionInfo.CurrentPlanetId)
                     //{
                     //    go.transform.parent = t.transform;
                     //}
-                }
+                //}
             }
 
 

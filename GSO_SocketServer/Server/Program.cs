@@ -30,7 +30,7 @@ namespace Server
 
         static void Main(string[] args)
 		{
-
+            Console.WriteLine("Start Server.");
             IPAddress iPAddress;
             int port = 0;
             string acceptKey = string.Empty;
@@ -46,6 +46,7 @@ namespace Server
 
             InitWebClientService();
 #else
+
 
             iPAddress = IPAddress.Loopback;
             port = 7777;
@@ -64,6 +65,9 @@ namespace Server
             
             //mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
             //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
+            
+            
+            
             mNetworkService.Start();
             mNetworkService.SetChannel(true, room,0);
 
@@ -93,7 +97,10 @@ namespace Server
 #endif
 
 
+            while (true)
+            {
 
+            }
 
             ////FlushRoom();
             //JobTimer.Instance.Push(FlushRoom);

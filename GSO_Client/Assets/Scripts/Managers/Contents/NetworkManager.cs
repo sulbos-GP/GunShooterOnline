@@ -32,7 +32,7 @@ public class NetworkManager
         ipAddr = IPAddress.Parse(ip);
 
 
-        ipAddr = IPAddress.Loopback;
+        //ipAddr = IPAddress.Loopback;
         IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
 
         Func<Session> session = () => { return _session; };

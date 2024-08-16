@@ -22,5 +22,10 @@ RUN dotnet publish "./Server.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:
 
 FROM base AS final
 WORKDIR /app
+
+
+# Map data 추가 - 모든 .txt 파일 복사
+COPY ./MapData/*.txt /app/MapData/
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Server.dll"]
