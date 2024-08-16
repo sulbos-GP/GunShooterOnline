@@ -15,26 +15,21 @@ using Vector2 = System.Numerics.Vector2;
 public partial class InventoryController : MonoBehaviour
 {
     public static InventoryController invenInstance;
-    private PlayerInput playerInput; //플레이어의 조작 인풋
+
+    
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
     public OtherInventoryUI otherInvenUI;
-    public Camera uiCamera; // UI 카메라 (Canvas의 Render Mode가 Screen Space - Camera일 때)
-    private GraphicRaycaster graphicRaycaster;
-    private EventSystem eventSystem;
 
     [Header("수동지정")]
     public Transform deleteUI;
     public Button rotateBtn;
 
-    //우클릭 아이템 생성 예시
-    [SerializeField] private GameObject itemPref; //생성할 아이템의 프리펩(임시)
-
     [Header("디버그용")]
-    [SerializeField] private Vector2 mousePosInput; //마우스의 월드 위치
-    [SerializeField] private Vector2Int updateGridPos; //그리드상의 좌표 위치
+    [SerializeField] private Vector2 mousePosInput; 
+    [SerializeField] private Vector2Int updateGridPos; 
 
-    //그리드의 입력 변화에 따라 아래 변수 업데이트 및 하이라이트 객체의 부모객체로 설정
+    //이동 관련
     public InventoryGrid SelectedItemGrid
     {
         get => selectedGrid;
@@ -52,10 +47,9 @@ public partial class InventoryController : MonoBehaviour
             }
         }
     }
-    [SerializeField] private InventoryGrid selectedGrid; //현재 마우스가 위치한 그리드
-    public bool isGridSelected; //그리드가 선택되었는지
+    [SerializeField] private InventoryGrid selectedGrid;
+    public bool isGridSelected; 
 
-    //선택된 아이템의 변화에 따라 아래변수 업데이트
     public ItemObject SelectedItem
     {
         get => selectedItem;
@@ -75,16 +69,14 @@ public partial class InventoryController : MonoBehaviour
             }
         }
     }
-    [SerializeField] private ItemObject selectedItem; //현재 선택된 아이템
-    [SerializeField] private RectTransform selectedRect; //선택된 아이템의 Rect
+    [SerializeField] private ItemObject selectedItem;
+    [SerializeField] private RectTransform selectedRect;
     public bool isItemSelected; //현재 선택된 상태인지
 
     private ItemObject placeOverlapItem; //아이템을 배치할때 체크될 오버랩 아이템 변수
-    [SerializeField] private ItemObject checkOverlapItem; //매 프레임마다 체크될 오버랩 아이템 변수
+    private ItemObject checkOverlapItem; //매 프레임마다 체크될 오버랩 아이템 변수
 
-    //하이라이트 관련 변수
-    private InvenHighLight invenHighlight;
-    private Vector2Int HighlightPosition; //하이라이트의 위치
+    private bool isPress = false;
 
     //삭제 관련
     public bool isOnDelete;
@@ -100,9 +92,13 @@ public partial class InventoryController : MonoBehaviour
 
     //UI액티브 관련
     public bool isActive = false;
-    public bool isPress = false;
 
-    
+
+    //하이라이트 관련 변수
+    private InvenHighLight invenHighlight;
+    private Vector2Int HighlightPosition; //하이라이트의 위치
+
+    private PlayerInput playerInput; //플레이어의 조작 인풋
 
     private void Awake()
     { 
@@ -117,10 +113,7 @@ public partial class InventoryController : MonoBehaviour
             Destroy(gameObject);
         }
 
-        graphicRaycaster = GetComponent<GraphicRaycaster>();
-        eventSystem = EventSystem.current;
         invenHighlight = GetComponent<InvenHighLight>();
-        //Managers.Network.ConnectToGame();
     }
 
     private void OnDisable()
@@ -135,12 +128,13 @@ public partial class InventoryController : MonoBehaviour
     {
         UnityEngine.Vector2 pos = context.ReadValue<UnityEngine.Vector2>();
         mousePosInput = new Vector2(pos.x,pos.y);
-        Debug.Log(mousePosInput);
     }
 
     private void OnTouchStart(InputAction.CallbackContext context)
     {
         isPress = true;
+        //여기서 아이템 이벤트를 하는게 베스트이나 여기가 실행되고 다음 프레임에 그리드가 할당됨.
+        //gridInteract를 대체하여 터치위치에 UI를 얻는 코드가 있을시 수정할것
     }
 
     private void OnTouchEnd(InputAction.CallbackContext context)
@@ -155,8 +149,9 @@ public partial class InventoryController : MonoBehaviour
 
     private void OnMouseRightClickInput(InputAction.CallbackContext context)
     {
+        //임시
         //마우스 우클릭시. 선택된 아이템 여부에 따라 새 아이템 생성 혹은 아이템 회전
-        RightClickEvent();
+        RotateItemRight();
     }
 
     private void InvenUIControlInput(InputAction.CallbackContext context)
@@ -164,30 +159,25 @@ public partial class InventoryController : MonoBehaviour
         invenUIControl();
     }
 
-    private void RightClickEvent()
-    {
-        
-        RotateItemRight();
-    }
     #endregion
 
     private void Update()
     {
-        if (!isActive)
+        if (!isActive) //UI가 비활성화 라면 리턴
         {
             return;
         }
 
-        if(isPress  && isGridSelected && !isItemSelected)
+        if(isPress  && isGridSelected && !isItemSelected) //클릭한 상태고, 그리드가 설정되었고 , 아이템을 들고 잇는 상태가 아니면
         {
-            ItemEvent();
+            ItemEvent(); //아이템 이벤트에서 아이템을 들기 실행
         }
 
         DragObject();
 
-        if (!isGridSelected)
+        if (!isGridSelected) //그리드 밖에 있을경우 
         {
-            if (isOnDelete&&isItemSelected)
+            if (isOnDelete&&isItemSelected) //삭제 칸에 있다면 노란색하이라이트
             {
                 invenHighlight.Show(true);
                 invenHighlight.SetColor(HighlightColor.Yellow);
@@ -195,6 +185,10 @@ public partial class InventoryController : MonoBehaviour
                 InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
                 return;
             }
+            //플레이어 슬롯에 배치할때의 처리 추가 예정
+
+
+            //그외엔 하이라이트 없앰
             invenHighlight.Show(false);
             return;
         }
@@ -206,9 +200,9 @@ public partial class InventoryController : MonoBehaviour
             {
                 Color32 highlightColor = selectedGrid.PlaceCheckForHighlightColor(selectedItem, updateGridPos.x, updateGridPos.y, ref checkOverlapItem);
                 invenHighlight.SetColor(highlightColor);
-                
             }
-            HandleHighlight();
+
+            HandleHighlight(); //그리드 안에서만 하이라이트를 다룸
         }
     }
 
@@ -265,28 +259,7 @@ public partial class InventoryController : MonoBehaviour
         HighlightPosition = positionOnGrid;
 
         //아이템을 들고 있지 않은 경우
-        if (!isItemSelected)
-        {
-            invenHighlight.SetColor(HighlightColor.Gray);
-
-            //마우스의 위치에 놓여있는 아이템이 있는지 체크
-            ItemObject itemToHighlight = selectedGrid.GetItem(positionOnGrid.x, positionOnGrid.y);
-            
-            //해당 아이템이 존재하면 그 아이템의 크기와 위치에 맞게 하이라이트
-            if (itemToHighlight != null)
-            {
-                invenHighlight.Show(true);
-                invenHighlight.SetSize(itemToHighlight);
-                invenHighlight.SetParent(selectedGrid);
-                invenHighlight.SetPositionOnGrid(selectedGrid, itemToHighlight);
-            }
-            else
-            {
-                //없으면 하이라이트 제거
-                invenHighlight.Show(false);
-            }
-        }
-        else
+        if (isItemSelected)
         {
             //아이템을 들고 있다면 그 아이템이 위치한 곳에 하이라이팅
             invenHighlight.Show(true);
@@ -310,6 +283,7 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void ItemEvent()
     {
+        //
         if (isItemSelected && isOnDelete)
         {
             //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
@@ -326,9 +300,15 @@ public partial class InventoryController : MonoBehaviour
 
         if (!isGridSelected)
         {
+            if (isItemSelected) {
+                //아이템 그리드가 아닌 잘못된 위치에 놓을경우 되돌림
+                UndoGridSlot();
+                UndoItem();
+            }
             Debug.Log("그리드 없음");
             return;
         }
+
         updateGridPos = WorldToGridPos();
         Debug.Log("그리드 포즈 설정");
         Vector2Int tileGridPosition = updateGridPos; //마우스의 위치에 있는 그리드 좌표 할당

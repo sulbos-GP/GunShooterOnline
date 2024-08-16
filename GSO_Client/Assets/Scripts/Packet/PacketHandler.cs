@@ -192,6 +192,7 @@ internal class PacketHandler
         if (packet.PlayerId == Managers.Object.MyPlayer.Id)
         {
             //옮긴 플레이어를 제외한 다른 플레이어에게 적용되는 핸들러
+            Debug.Log("myplayer");
             return;
         }
 
@@ -225,6 +226,16 @@ internal class PacketHandler
         }
         backUpItemGrid.itemList.Remove(moveItemData);
 
+        /*
+        if (InventoryController.invenInstance.isActive)
+        {
+            //플레이어의 인벤UI가 켜져 있는 경우
+            foreach (InventoryGrid grid in InventoryController.invenInstance.otherInvenUI.instantGridList) {
+                if (grid.gridData.gridId == packet.GridId) { }
+            }
+
+        }
+        */
 
         //프로토콜 업데이트 시 주석해제
 
