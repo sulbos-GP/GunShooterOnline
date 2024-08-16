@@ -26,7 +26,7 @@ public partial class MyPlayerController : PlayerController
     private Vector3 _target;
     //게임
 
-    private PlayerInput playerInput;
+    public PlayerInput playerInput;
 
 
 

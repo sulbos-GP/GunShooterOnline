@@ -155,6 +155,7 @@ MonoBehaviour:
   distance: 0
   aimFov: {fileID: 0}
   basicFov: {fileID: 0}
+  _isFiring: 0
   interactList: []
   interactTarget: {fileID: 0}
 --- !u!114 &5589048240770995353

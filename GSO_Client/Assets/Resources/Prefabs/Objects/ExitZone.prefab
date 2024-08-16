@@ -174,4 +174,5 @@ MonoBehaviour:
   objectId: 0
   interactType: 2
   interactRange: 0
-  ExitTime: 0
+  exitTime: 0
+  timerTextPref: {fileID: 2242214742047413184, guid: ffd38b55b4a8b944486feb5934dfb1a8, type: 3}
