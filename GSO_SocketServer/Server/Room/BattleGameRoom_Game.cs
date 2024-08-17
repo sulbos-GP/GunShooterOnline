@@ -23,7 +23,7 @@ namespace Server
 
             //검사--------------------
 
-            Console.WriteLine("HandleMove" + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
+            //Console.WriteLine("HandleMove" + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
 
             var movePosInfo = packet.PositionInfo; //C요청
 
@@ -121,10 +121,24 @@ namespace Server
             C_MoveItem packet = (C_MoveItem)_packet;
 
             ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
-            Grid targetGrid = null;
+            if (target == null)
+            {
+                Console.WriteLine("옮기려는 아이템을 찾지 못함");
+                return;
+            }
+
+            
+            if(packet.LastItemPosX != target.itemDataInfo.ItemPosX || packet.LastItemPosY != target.itemDataInfo.ItemPosY)
+            {
+                Console.WriteLine("이미 누군가 아이템을 옮겨버린");
+                //클라로 옮기기 실패 패킷을 만들어야함(추후 제작)
+
+                return;
+            }
+
+            Grid targetGrid = null; //플레이어 혹은 박스에서 해당 패킷에서 주어진 그리드 id로 그리드를 찾음
             if (packet.PlayerId == packet.InventoryId)
             {
-                //플레이어의 그리드로 옮김
                 ObjectManager.Instance.Find<Player>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
             }
             else
@@ -138,7 +152,8 @@ namespace Server
                 return;
             }
 
-            target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY, packet.ItemRotate, targetGrid);
+            //타겟아이템이 존재하는 그리드가 존재하는 인벤토리에서 moveItem 메서드 실행
+            target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemPosX, packet.ItemPosY, packet.ItemRotate, targetGrid);
 
             S_MoveItem s_MoveItem = new S_MoveItem()
             {
@@ -221,6 +236,7 @@ namespace Server
                     ObjectManager.Instance.Remove(itemData.ItemId);
                 }
             }
+
             ObjectManager.Instance.Remove(player.Id);
 
             S_ExitGame packet = new S_ExitGame()

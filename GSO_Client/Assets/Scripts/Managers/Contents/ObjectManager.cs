@@ -64,13 +64,12 @@ public class ObjectManager
                 pc.PosInfo = info.PositionInfo;
                 //pc.Stat = info.StatInfo;
                 pc.SyncPos();
-
                 //foreach (Transform t in Managers.Map.CurrentMap.transform)
                 //{
-                    //if (t.GetComponent<PlantsController>().Id == info.PositionInfo.CurrentPlanetId)
-                    //{
-                    //    go.transform.parent = t.transform;
-                    //}
+                //if (t.GetComponent<PlantsController>().Id == info.PositionInfo.CurrentPlanetId)
+                //{
+                //    go.transform.parent = t.transform;
+                //}
                 //}
             }
 
