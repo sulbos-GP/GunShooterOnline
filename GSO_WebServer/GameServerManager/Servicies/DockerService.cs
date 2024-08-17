@@ -141,7 +141,7 @@ namespace GameServerManager.Servicies
         public async Task<CreateContainerResponse> CreateContainer()
         {
 
-            string port = mPortManager.PopPort().ToString();
+            string port = "7777";//mPortManager.PopPort().ToString();
             string ip = "host.docker.internal";
             string register = "10";
             string backLog = "10";
