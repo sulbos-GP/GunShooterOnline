@@ -130,7 +130,7 @@ namespace Server
             //player.inventory.MoveItem(itemId, itemPosX, itemPosY);
             C_MoveItem packet = (C_MoveItem)_packet;
 
-            ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
+            ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemData.ItemId);
             if (target == null)
             {
                 Console.WriteLine("옮기려는 아이템을 찾지 못함");
@@ -146,17 +146,17 @@ namespace Server
 
                 return;
             }
-            var invenObjType = ObjectManager.GetObjectTypeById(packet.InventoryId);
+            var invenObjType = ObjectManager.GetObjectTypeById(packet.TargetId);
             Console.WriteLine(invenObjType);
             Grid targetGrid = null; //플레이어 혹은 박스에서 해당 패킷에서 주어진 그리드 id로 그리드를 찾음
 
             if (invenObjType == GameObjectType.Player)
             {
-                ObjectManager.Instance.Find<Player> (packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+                ObjectManager.Instance.Find<Player> (packet.TargetId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
             }
             else if(invenObjType == GameObjectType.Box)
             {
-                ObjectManager.Instance.Find<RootableObject>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+                ObjectManager.Instance.Find<RootableObject>(packet.TargetId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
             }
 
             if (targetGrid == null)
@@ -166,15 +166,13 @@ namespace Server
             }
 
             //타겟아이템이 존재하는 그리드가 존재하는 인벤토리에서 moveItem 메서드 실행
-            target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemPosX, packet.ItemPosY, packet.ItemRotate, targetGrid);
+            target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemData.ItemPosX, packet.ItemData.ItemPosY, packet.ItemData.ItemRotate, targetGrid);
 
             S_MoveItem s_MoveItem = new S_MoveItem()
             {
                 PlayerId = player.Id,
-                ItemId = packet.ItemId,
-                ItemPosX = packet.ItemPosX,
-                ItemPosY = packet.ItemPosY,
-                ItemRotate = packet.ItemRotate,
+                ItemData = packet.ItemData,
+                TargetId = packet.TargetId,
                 GridId = packet.GridId,
 
                 LastItemPosX = packet.LastItemPosX,
