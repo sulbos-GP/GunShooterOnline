@@ -61,11 +61,21 @@ public partial class InventoryController : MonoBehaviour
             {
                 selectedRect = value.GetComponent<RectTransform>();
                 rotateBtn.interactable = true;
+
+                float addedWeight = playerInvenUI.invenWeight + selectedItem.itemData.item_weight;
+                playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.invenData.limitWeight}";
+                if(addedWeight > playerInvenUI.invenData.limitWeight)
+                {
+                    playerInvenUI.weightText.color = Color.red;
+                }
             }
             else
             {
                 selectedRect = null;
                 rotateBtn.interactable = false;
+
+                playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.invenWeight} / {playerInvenUI.invenData.limitWeight}";
+                playerInvenUI.weightText.color = Color.white;
             }
         }
     }

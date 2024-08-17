@@ -132,6 +132,7 @@ namespace Server
             {
                 Console.WriteLine("이미 누군가 아이템을 옮겨버린");
                 //클라로 옮기기 실패 패킷을 만들어야함(추후 제작)
+                // S_MoveItem패킷에 Success 항목 추가 true면 그대로 false면 클라는 해당 아이템 데이터의 위치대로 옮김
 
                 return;
             }
