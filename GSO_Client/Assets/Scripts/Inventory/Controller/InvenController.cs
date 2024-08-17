@@ -467,11 +467,8 @@ public partial class InventoryController : MonoBehaviour
         C_MoveItem packet = new C_MoveItem
         {
             PlayerId = Managers.Object.MyPlayer.Id,
-            ItemId = item.itemData.itemId,
-            ItemPosX = pos.x,
-            ItemPosY = pos.y,
-            ItemRotate = item.itemData.itemRotate,
-            InventoryId = item.curItemGrid.ownInven.invenData.inventoryId,
+            ItemData = item.itemData.GetItemData(),
+            TargetId = item.curItemGrid.ownInven.invenData.inventoryId,
             GridId = item.curItemGrid.gridData.gridId,
             LastItemPosX = item.backUpItemPos.x,
             LastItemPosY = item.backUpItemPos.y,

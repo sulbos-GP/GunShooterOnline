@@ -200,21 +200,36 @@ internal class PacketHandler
 
         //적플레이어가 자신의 인벤토리로 아이템을 옮김(그리드 생성안함)
         ItemData moveItemData;
-        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out moveItemData);
+        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemData.ItemId, out moveItemData);
         if (success == false)
         {
-            Debug.Log("옮기려는 아이템이 존재하지 않음(검색실패)");
+            //적플레이어가 자신의 인벤에 있던 아이템을 박스에 넣을 경우 -> 이쪽 클라에서는 해당 아이템이 없음 -> 새 아이템 생성
+            //검색 불가 패킷을 수정해야함 -> 아이템 아이디 대신 아이템 데이터 자체를 받도록 해야함
+            moveItemData.itemId = packet.ItemData.ItemId;
+
+            //수정시 return 없앨것
             return;
         }
 
-        moveItemData.itemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
-        moveItemData.itemRotate = packet.ItemRotate;
+        moveItemData.itemPos = new Vector2Int(packet.ItemData.ItemPosX, packet.ItemData.ItemPosY);
+        moveItemData.itemRotate = packet.ItemData.ItemRotate;
 
         GridData curItemGrid;
         success = Managers.Object._gridDic.TryGetValue(packet.GridId, out curItemGrid);
         if (success)
         {
-            //적이 자신의 인벤토리(내 클라에는 없음)에 아이템을 넣을 경우. curItemGrid가 없음
+            //현재 그리드를 찾은 상태에서 
+            foreach (ItemData itemData in curItemGrid.itemList)
+            {
+                //아이템의 위치가 같다면 머지(혹시모르니 아이템 코드가 같다는 조건도 넣음)
+                //이 핸들러가 도착했다는것은 아이템의 배치가 성공했음을 의미
+                //같은 그리드상에서 아이템을 옮겼을때 의 경우 이미 그리드의 아이템 리스트에는 해당 아이템이 있어 중복되는 현상 수정(itemId가 달라야하는 조건 추가)
+                if ((itemData.itemId != moveItemData.itemId) &&(itemData.itemPos == moveItemData.itemPos) && (itemData.itemCode == moveItemData.itemCode))
+                {
+                    itemData.itemAmount += moveItemData.itemAmount;
+                    return;
+                }
+            }
             curItemGrid.itemList.Add(moveItemData);
         }
 
