@@ -15,8 +15,12 @@ internal class PacketHandler
         Debug.Log("S_EnterGameHandler");
         var enterGamePacket = (S_EnterGame)packet;
         Debug.Log($"{enterGamePacket.Player}");
-
         Managers.Object.Add(enterGamePacket.Player, true);
+        
+        //Use Stat
+        var Stats = enterGamePacket.Player.StatInfo;
+        Managers.Object.MyPlayer.Hp = Stats.Hp;
+        Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
     }
 
     public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
