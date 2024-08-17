@@ -83,6 +83,8 @@ namespace Server
             {
                 var player = gameObject as Player;
                 player.gameRoom = this;
+                
+
 
                 //player.RefreshAddtionalStat();
 
