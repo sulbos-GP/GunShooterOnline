@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
@@ -64,6 +65,14 @@ public class MatchmakerHub : ClientHub
             Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
             
             Managers.Scene.LoadScene(Define.Scene.Forest);
+
+
+            C_EnterGame c_EnterGame = new C_EnterGame();
+            c_EnterGame.Name = "jish";
+
+            Managers.Network.Send(c_EnterGame);
+            Debug.Log("¡¢º”¡ﬂ");
+
             //Managers.Network.ConnectToGame(response.host_ip);
         });
     }
