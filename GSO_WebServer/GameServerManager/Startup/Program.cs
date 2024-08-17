@@ -13,6 +13,11 @@ public class Program
             .ConfigureWebHostDefaults(webBuilder =>
             {
                 webBuilder.UseStartup<Startup>();
+
+                webBuilder.ConfigureKestrel(serverOptions =>
+                {
+                    serverOptions.ListenAnyIP(7000);
+                });
             });
 
 }

@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Server
 {
@@ -23,7 +24,7 @@ namespace Server
 
             //검사--------------------
 
-            Console.WriteLine("HandleMove" + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
+            //Console.WriteLine("HandleMove" + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
 
             var movePosInfo = packet.PositionInfo; //C요청
 
@@ -66,18 +67,29 @@ namespace Server
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )
         {
             InvenDataInfo targetData = null;
+
             if(player.Id == inventoryId) 
             {
                 //플레이어의 인벤토리
-                Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
+                Player targetPlayer = ObjectManager.Instance.Find<Player>(inventoryId);
                 targetData = targetPlayer.inventory.invenData;
             }
             else
             {
-                //루터블 오브젝트의 인벤토리
                 RootableObject box = ObjectManager.Instance.Find<RootableObject>(inventoryId);
-                Console.WriteLine($"handle box id : {box.Id}");
-                targetData = box.inventory.invenData;
+                Player enemyPlayer = ObjectManager.Instance.Find<Player>(inventoryId); // playerId를 사용하여 Player를 찾음
+
+                if (box != null)
+                {
+                    Console.WriteLine($"handle box id : {box.Id}");
+                    targetData = box.inventory.invenData;
+                }
+
+                if (enemyPlayer != null)
+                {
+                    Console.WriteLine($"handle enemyPlayer id : {enemyPlayer.Id}");
+                    // player 관련 로직 추가
+                }
             }
             
             //Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
@@ -89,8 +101,6 @@ namespace Server
                 InvenData = targetData //targetPlayer.inventory.invenData,
 
             };
-
-            Console.WriteLine(s_LoadInventory.InvenData.GridData.Count);
 
             BroadCast(s_LoadInventory);
 
@@ -120,16 +130,33 @@ namespace Server
             //player.inventory.MoveItem(itemId, itemPosX, itemPosY);
             C_MoveItem packet = (C_MoveItem)_packet;
 
-            ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
-            Grid targetGrid = null;
-            if (packet.PlayerId == packet.InventoryId)
+            ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemData.ItemId);
+            if (target == null)
             {
-                //플레이어의 그리드로 옮김
-                ObjectManager.Instance.Find<Player>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+                Console.WriteLine("옮기려는 아이템을 찾지 못함");
+                return;
             }
-            else
+
+            
+            if(packet.LastItemPosX != target.itemDataInfo.ItemPosX || packet.LastItemPosY != target.itemDataInfo.ItemPosY)
             {
-                ObjectManager.Instance.Find<RootableObject>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+                Console.WriteLine("이미 누군가 아이템을 옮겨버린");
+                //클라로 옮기기 실패 패킷을 만들어야함(추후 제작)
+                // S_MoveItem패킷에 Success 항목 추가 true면 그대로 false면 클라는 해당 아이템 데이터의 위치대로 옮김
+
+                return;
+            }
+            var invenObjType = ObjectManager.GetObjectTypeById(packet.TargetId);
+            Console.WriteLine(invenObjType);
+            Grid targetGrid = null; //플레이어 혹은 박스에서 해당 패킷에서 주어진 그리드 id로 그리드를 찾음
+
+            if (invenObjType == GameObjectType.Player)
+            {
+                ObjectManager.Instance.Find<Player> (packet.TargetId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+            }
+            else if(invenObjType == GameObjectType.Box)
+            {
+                ObjectManager.Instance.Find<RootableObject>(packet.TargetId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
             }
 
             if (targetGrid == null)
@@ -138,15 +165,14 @@ namespace Server
                 return;
             }
 
-            target.ownerGrid.ownerInventory.MoveItem(packet.ItemId, packet.ItemPosX, packet.ItemPosY, packet.ItemRotate, targetGrid);
+            //타겟아이템이 존재하는 그리드가 존재하는 인벤토리에서 moveItem 메서드 실행
+            target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemData.ItemPosX, packet.ItemData.ItemPosY, packet.ItemData.ItemRotate, targetGrid);
 
             S_MoveItem s_MoveItem = new S_MoveItem()
             {
                 PlayerId = player.Id,
-                ItemId = packet.ItemId,
-                ItemPosX = packet.ItemPosX,
-                ItemPosY = packet.ItemPosY,
-                ItemRotate = packet.ItemRotate,
+                ItemData = packet.ItemData,
+                TargetId = packet.TargetId,
                 GridId = packet.GridId,
 
                 LastItemPosX = packet.LastItemPosX,
@@ -221,6 +247,7 @@ namespace Server
                     ObjectManager.Instance.Remove(itemData.ItemId);
                 }
             }
+
             ObjectManager.Instance.Remove(player.Id);
 
             S_ExitGame packet = new S_ExitGame()

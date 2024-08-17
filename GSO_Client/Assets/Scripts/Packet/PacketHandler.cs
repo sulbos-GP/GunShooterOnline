@@ -123,29 +123,31 @@ internal class PacketHandler
 
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
+        //클라이언트에서 오브젝트 생성시 서버에 패킷을 보내고 서버에서 인벤토리 아이디를 검색하여 해당 인벤토리의 내용을 반환해줌
+        
         S_LoadInventory packet = message as S_LoadInventory;
+        Debug.Log("S_LoadInventory");
         if (packet == null)
         {
             Debug.Log("패킷이 없음");
             return;
         }
-        Debug.Log("S_LoadInventory");
 
         if(packet.InvenData == null)
         {
             Debug.Log("인벤데이터가 비어있음");
+            return;
         }
 
-        //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
+        //myPlayer만 적용
+        if (packet.PlayerId != Managers.Object.MyPlayer.Id)
+        {
+            return;
+        }
+
+        //패킷의 인벤데이터를 클라의 인벤데이터로 변환
         InvenData newInvenData = new InvenData();
         newInvenData.SetInvenData(packet.InvenData);
-        
-
-        /*
-        //생성된 인벤토리와 그리드, 아이템 데이터를 오브젝트 매니저의 딕셔너리들에 추가
-        Managers.Object._inventoryDic.Add(packet.InventoryId, newInvenData);*/
-
-        
         foreach(GridData grid in newInvenData.gridList)
         {
             if(Managers.Object._gridDic.ContainsKey(grid.gridId) == true) { continue; }
@@ -157,26 +159,26 @@ internal class PacketHandler
             }
         }
         
-        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색'
-
-        Managers.Object.DebugDics();
-        //플레이어의 인벤토리id와 패킷내의 인벤토리id 비교 -> 같으면 플레이어의 인벤토리에 반영 다르면 아더 인벤토리에 반영
+        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //패킷의 해당 인벤토리의 id로 인벤토리 오브젝트 검색
         if (Managers.Object.MyPlayer.Id == packet.InventoryId)
         {
             //플레이어 인벤토리에 패킷의 invenData 적용
             if(invenObj.GetComponent<PlayerInventory>() == null)
             {
                 Debug.Log("적용할 오브젝트에 해당 스크립트가 없음(Player)");
+                return;
             }
             
             invenObj.GetComponent<PlayerInventory>().InputInvenData = newInvenData;
         }
         else
         {
+            //인벤토리 오브젝트 목록 : 박스, 다른 플레이어 객체
             //아더 인벤토리에 패킷의 invenData 적용
             if (invenObj.GetComponent<OtherInventory>() == null)
             {
                 Debug.Log("적용할 오브젝트에 해당 스크립트가 없음(Other)");
+                return;
             }
             
             invenObj.GetComponent<OtherInventory>().InputInvenData = newInvenData;
@@ -200,26 +202,40 @@ internal class PacketHandler
             return;
         }
 
-
+        //적플레이어가 자신의 인벤토리로 아이템을 옮김(그리드 생성안함)
         ItemData moveItemData;
-        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out moveItemData);
+        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemData.ItemId, out moveItemData);
         if (success == false)
         {
-            Debug.Log("옮기려는 아이템이 존재하지 않음(검색실패)");
+            //적플레이어가 자신의 인벤에 있던 아이템을 박스에 넣을 경우 -> 이쪽 클라에서는 해당 아이템이 없음 -> 새 아이템 생성
+            //검색 불가 패킷을 수정해야함 -> 아이템 아이디 대신 아이템 데이터 자체를 받도록 해야함
+            moveItemData.itemId = packet.ItemData.ItemId;
+
+            //수정시 return 없앨것
             return;
         }
 
-        moveItemData.itemPos = new Vector2Int(packet.ItemPosX, packet.ItemPosY);
-        moveItemData.itemRotate = packet.ItemRotate;
+        moveItemData.itemPos = new Vector2Int(packet.ItemData.ItemPosX, packet.ItemData.ItemPosY);
+        moveItemData.itemRotate = packet.ItemData.ItemRotate;
 
         GridData curItemGrid;
         success = Managers.Object._gridDic.TryGetValue(packet.GridId, out curItemGrid);
-        if (success == false)
+        if (success)
         {
-            Debug.Log("옮긴 후 그리드가 존재하지 않음(검색실패)");
-            return;
+            //현재 그리드를 찾은 상태에서 
+            foreach (ItemData itemData in curItemGrid.itemList)
+            {
+                //아이템의 위치가 같다면 머지(혹시모르니 아이템 코드가 같다는 조건도 넣음)
+                //이 핸들러가 도착했다는것은 아이템의 배치가 성공했음을 의미
+                //같은 그리드상에서 아이템을 옮겼을때 의 경우 이미 그리드의 아이템 리스트에는 해당 아이템이 있어 중복되는 현상 수정(itemId가 달라야하는 조건 추가)
+                if ((itemData.itemId != moveItemData.itemId) &&(itemData.itemPos == moveItemData.itemPos) && (itemData.itemCode == moveItemData.itemCode))
+                {
+                    itemData.itemAmount += moveItemData.itemAmount;
+                    return;
+                }
+            }
+            curItemGrid.itemList.Add(moveItemData);
         }
-        curItemGrid.itemList.Add(moveItemData);
 
         GridData backUpItemGrid;
         success = Managers.Object._gridDic.TryGetValue(packet.LastGridId, out backUpItemGrid);
@@ -228,18 +244,9 @@ internal class PacketHandler
             Debug.Log("옮기기전 그리드가 존재하지 않음(검색실패)");
             return;
         }
+
         backUpItemGrid.itemList.Remove(moveItemData);
 
-        /*
-        if (InventoryController.invenInstance.isActive)
-        {
-            //플레이어의 인벤UI가 켜져 있는 경우
-            foreach (InventoryGrid grid in InventoryController.invenInstance.otherInvenUI.instantGridList) {
-                if (grid.gridData.gridId == packet.GridId) { }
-            }
-
-        }
-        */
 
         //프로토콜 업데이트 시 주석해제
 
@@ -338,6 +345,7 @@ internal class PacketHandler
         {
             return;
         }
+
         //플레이어와 해당 플레이어 가진 아이템 그리드 데이터 삭제할것\
         var player = Managers.Object.FindById(packet.PlayerId);
         InvenData targetInvenData = player.GetComponent<PlayerInventory>().InputInvenData;

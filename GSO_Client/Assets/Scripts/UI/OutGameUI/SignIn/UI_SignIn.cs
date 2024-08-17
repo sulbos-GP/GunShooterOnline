@@ -213,7 +213,7 @@ public class SignInUI : MonoBehaviour
 
         //로비로 이동
         {
-            SceneManager.LoadSceneAsync("LobbyScene");
+            SceneManager.LoadSceneAsync("Shelter");
         }
 
     }

@@ -15,7 +15,7 @@ public class GsoWebService : WebClientService
 
     public GsoWebService()
     {
-        this.mBaseUrl = "http://10.0.2.2:5000";
+        this.mBaseUrl = "http://113.60.249.123:5000";
         mAuthorizeResource = new AuthorizeResource(this);
         mUserResource = new UserResource(this);
     }

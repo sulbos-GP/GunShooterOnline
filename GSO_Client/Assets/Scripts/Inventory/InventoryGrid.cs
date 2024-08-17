@@ -336,7 +336,7 @@ public class InventoryGrid : MonoBehaviour
 
         // 아이템의 새 위치를 itemData에 설정합니다.
         itemData.itemPos = pos;
-
+        item.curItemGrid = this;
         // itemList에서 아이템을 추가합니다.
         gridData.itemList.Add(itemData);
     }
@@ -346,7 +346,6 @@ public class InventoryGrid : MonoBehaviour
         // gridData의 itemList에서 아이템을 제거합니다.
         ItemData itemData = item.itemData;
         if (itemData == null) return;
-
         // itemList에서 해당 아이템을 제거합니다.
         gridData.itemList.Remove(itemData);
     }
