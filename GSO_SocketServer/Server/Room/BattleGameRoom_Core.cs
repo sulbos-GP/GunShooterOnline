@@ -7,6 +7,7 @@ using Server.Game.Object;
 using ServerCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 
@@ -81,7 +82,6 @@ namespace Server
             if (type == GameObjectType.Player)
             {
                 var player = gameObject as Player;
-                _playerDic.Add(gameObject.Id, player);
                 player.gameRoom = this;
 
                 //player.RefreshAddtionalStat();
@@ -110,14 +110,27 @@ namespace Server
                     enterPacket.Player = player.info;
                     player.Session.Send(enterPacket);
 
+
+                    // 다른 플레이어 정보
+                    var spawnPacket = new S_Spawn();
+
+                    foreach (var p in _playerDic.Values)
+                    {
+                        spawnPacket.Objects.Add(p.info);
+                    }
+
+                    player.Session.Send(spawnPacket);
+
                     //player.Vision.Update();
 
                     //--------------------------------------------
-                   // mMap.SendMapInfo(player);
+                    // mMap.SendMapInfo(player);
                 }
 
+                //inventory
                 NewEnterSpawnData(player);
 
+                _playerDic.Add(gameObject.Id, player);
 
             }
             else if (type == GameObjectType.Monster)
