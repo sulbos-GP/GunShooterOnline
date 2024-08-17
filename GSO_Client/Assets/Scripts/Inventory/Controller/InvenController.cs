@@ -27,7 +27,7 @@ public partial class InventoryController : MonoBehaviour
 
     [Header("디버그용")]
     [SerializeField] private Vector2 mousePosInput; 
-    [SerializeField] private Vector2Int updateGridPos; 
+    [SerializeField] private Vector2Int updateGridPos; //mousePosInput을 WorldToGridPos메서드로 그리드 내의 좌표로 변환한것. 그리드가 지정되어 있어야함
 
     //이동 관련
     public InventoryGrid SelectedItemGrid
@@ -208,6 +208,7 @@ public partial class InventoryController : MonoBehaviour
         {
             if (selectedItem != null)
             {
+                updateGridPos = WorldToGridPos();
                 Color32 highlightColor = selectedGrid.PlaceCheckForHighlightColor(selectedItem, updateGridPos.x, updateGridPos.y, ref checkOverlapItem);
                 invenHighlight.SetColor(highlightColor);
             }
@@ -250,23 +251,21 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void HandleHighlight()
     {
-        updateGridPos = WorldToGridPos();
-        Vector2Int positionOnGrid = updateGridPos;
+        //이미 isGridSelected가 true일때만 호출됨
 
-        //그리드 위에 존재하지 않는 다면 하이라이팅 없앰
-        if (positionOnGrid == null)
+        if (updateGridPos == null)
         {
             invenHighlight.Show(false);
             return;
         }
 
         //같은위치에 반복실행을 막음
-        if (HighlightPosition == positionOnGrid)
+        if (HighlightPosition == updateGridPos)
         {
             return;
         }
 
-        HighlightPosition = positionOnGrid;
+        HighlightPosition = updateGridPos;
 
         //아이템을 들고 있지 않은 경우
         if (isItemSelected)
@@ -275,7 +274,7 @@ public partial class InventoryController : MonoBehaviour
             invenHighlight.Show(true);
             invenHighlight.SetSize(selectedItem);
             invenHighlight.SetParent(selectedGrid);
-            invenHighlight.SetPositionOnGridByPos(selectedGrid, selectedItem, positionOnGrid.x, positionOnGrid.y);
+            invenHighlight.SetPositionOnGridByPos(selectedGrid, selectedItem, updateGridPos.x, updateGridPos.y);
         }
     }
 
@@ -293,41 +292,47 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void ItemEvent()
     {
-        //
-        if (isItemSelected && isOnDelete)
+        if (isItemSelected)
         {
-            //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
-            C_DeleteItem packet = new C_DeleteItem();
-            packet.ItemId = selectedItem.itemData.itemId;
-            packet.PlayerId = Managers.Object.MyPlayer.Id;
-            Managers.Network.Send(packet);
-            Debug.Log("C_DeleteItem");
+            //휴지통 칸에 있을경우
+            if (isOnDelete)
+            {
+                //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
+                C_DeleteItem packet = new C_DeleteItem();
+                packet.ItemId = selectedItem.itemData.itemId;
+                packet.PlayerId = Managers.Object.MyPlayer.Id;
+                Managers.Network.Send(packet);
+                Debug.Log("C_DeleteItem");
 
-            BackUpGridSlot();
-            DestroySelectedItem();
-            return;
-        }
+                BackUpGridSlot();
+                DestroySelectedItem();
+                return;
+            }
 
-        if (!isGridSelected)
-        {
-            if (isItemSelected) {
-                //아이템 그리드가 아닌 잘못된 위치에 놓을경우 되돌림
+            //그리드 밖에 아이템을 배치할경우
+            if (!isGridSelected)
+            {
                 UndoGridSlot();
                 UndoItem();
+                Debug.Log("그리드 없음");
+                return;
             }
-            Debug.Log("그리드 없음");
-            return;
+            else
+            {
+                updateGridPos = WorldToGridPos();
+                ItemRelease(selectedItem, updateGridPos);
+            }
         }
-
-        updateGridPos = WorldToGridPos();
-        Debug.Log("그리드 포즈 설정");
-        Vector2Int tileGridPosition = updateGridPos; //마우스의 위치에 있는 그리드 좌표 할당
-
-        if(tileGridPosition == null) { Debug.Log("tilegridposition = null"); return; }
-
-        if (!isItemSelected)
+        else
         {
-            ItemObject clickedItem = selectedGrid.GetItem(tileGridPosition.x, tileGridPosition.y); 
+            if (!isGridSelected)
+            {
+                Debug.Log("그리드가 지정되지 않음");
+                return;
+            }
+
+            updateGridPos = WorldToGridPos();
+            ItemObject clickedItem = selectedGrid.GetItem(updateGridPos.x, updateGridPos.y); 
             if (clickedItem == null) { return; }
 
             //클릭한 아이템이 숨겨진 경우에는 숨김을 해제하고 아니면 아이템을 듬
@@ -337,14 +342,10 @@ public partial class InventoryController : MonoBehaviour
             }
             else
             {
-                ItemGet(tileGridPosition);
+                ItemGet(updateGridPos);
             }
         }
-        else
-        {
-            //이미 든 아이템이 있는경우 해당위치에 아이템을 배치
-            ItemRelease(selectedItem, tileGridPosition);
-        }
+        
     }
 
     /// <summary>
@@ -352,11 +353,8 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void ItemGet(Vector2Int pos)
     {
-        SelectedItem = selectedGrid.PickUpItem(pos.x, pos.y);
         if (!isGridSelected) { return; }
-        
-        //AddBackUpList(); 오버랩 교체 안씀
-        
+        SelectedItem = selectedGrid.PickUpItem(pos.x, pos.y);
 
         //아이템이 그리드에 가려지는것을 방지
         SetSelectedObjectToLastSibling(selectedRect);
@@ -367,120 +365,123 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void ItemRelease(ItemObject item, Vector2Int pos)
     {
-        if (!isGridSelected)
-        {
-            //아이템 그리드가 아닌 잘못된 위치에 놓을경우 되돌림
-            UndoGridSlot();
-            UndoItem();
-            return;
-        }
-
         bool complete = selectedGrid.PlaceItemCheck(item, pos.x, pos.y, ref placeOverlapItem);
 
         if (complete)
         {
-            //SelectedItem.GetComponent<Image>().raycastTarget = true;
-            SelectedItem.curItemGrid = selectedGrid;
-            //겹치는 아이템이 있다면 SelectedItem으로 지정
-            if (placeOverlapItem != null)
+            HandleItemPlacement(item, pos);
+        }
+        else
+        {
+            UndoGridSlot();
+            UndoItem();
+        }
+    }
+
+    /// <summary>
+    /// 아이템 배치 성공. 병합 및 아이템 배치 실행
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="pos"></param>
+    private void HandleItemPlacement(ItemObject item, Vector2Int pos)
+    {
+        if (placeOverlapItem != null)
+        {
+            if (CheckAbleToMerge(item))
             {
-                //오버랩이 있을때 아이템이 소모품이고 배치할 아이템과 종류가 같고
-                //오버랩의 양이 64개 이하일 경우 아이템 합치기
-                if(selectedItem.itemData.isItemConsumeable &&
-                    selectedItem.itemData.itemCode == placeOverlapItem.itemData.itemCode&&
-                    placeOverlapItem.itemData.itemAmount < ItemObject.maxItemMergeAmount&&
-                    !placeOverlapItem.isHide)
-                {
-                    //두 아이템의 합이 64거나 낮으면 overlap아이템의 개수를 선택한 아이템의 양만큼 증가
-                    //기존 선택한 아이템은 삭제
-                    if((selectedItem.itemData.itemAmount + placeOverlapItem.itemData.itemAmount) <= ItemObject.maxItemMergeAmount)
-                    {
-                        //아이템 개수에 따라 무게가 가증되기로 하면 코드 추가 할것
-                        selectedItem.MergeItem(placeOverlapItem, selectedItem.itemData.itemAmount);
-                        
-                        C_MoveItem packet = new C_MoveItem();
-                        packet.PlayerId = Managers.Object.MyPlayer.Id;
-                        packet.ItemId = item.itemData.itemId;
-                        packet.ItemPosX = pos.x;
-                        packet.ItemPosY = pos.y;
-                        packet.ItemRotate = item.itemData.itemRotate;
-                        packet.InventoryId = item.curItemGrid.ownInven.invenData.inventoryId;
-                        packet.GridId = item.curItemGrid.gridData.gridId;
-                        packet.LastItemPosX = item.backUpItemPos.x;
-                        packet.LastItemPosY = item.backUpItemPos.y;
-                        packet.LastItemRotate = item.backUpItemRotate;
-                        packet.LastGridId = item.backUpItemGrid.gridData.gridId;
-                        Managers.Network.Send(packet);
-                        
-                        BackUpGridSlot();
-                        DestroySelectedItem();
-                    }
-                    else
-                    {
-                        int needAmount = ItemObject.maxItemMergeAmount - placeOverlapItem.itemData.itemAmount;
-                        selectedItem.MergeItem(placeOverlapItem, needAmount);
-
-                        C_MoveItem packet = new C_MoveItem();
-                        packet.PlayerId = Managers.Object.MyPlayer.Id;
-                        packet.ItemId = item.itemData.itemId;
-                        packet.ItemPosX = pos.x;
-                        packet.ItemPosY = pos.y;
-                        packet.ItemRotate = item.itemData.itemRotate;
-                        packet.InventoryId = item.curItemGrid.ownInven.invenData.inventoryId;
-                        packet.GridId = item.curItemGrid.gridData.gridId;
-                        packet.LastItemPosX = item.backUpItemPos.x;
-                        packet.LastItemPosY = item.backUpItemPos.y;
-                        packet.LastItemRotate = item.backUpItemRotate;
-                        packet.LastGridId = item.backUpItemGrid.gridData.gridId;
-                        Managers.Network.Send(packet);
-
-                        UndoGridSlot();
-                        UndoItem();
-                    }
-
-                    
-                    SelectedItem = null;
-                    placeOverlapItem = null;
-                    return;
-                }
-
-                //병합하는 경우가 아니라면 실패. 아이템과 어레이를 원래 위치로
-                placeOverlapItem = null;
-                UndoGridSlot();
-                UndoItem();
+                MergeItems(item, pos);
             }
             else
             {
-                C_MoveItem packet = new C_MoveItem();
-                packet.PlayerId = Managers.Object.MyPlayer.Id;
-                packet.ItemId = item.itemData.itemId;
-                packet.ItemPosX = pos.x;
-                packet.ItemPosY = pos.y;
-                packet.ItemRotate = item.itemData.itemRotate;
-                packet.InventoryId = item.curItemGrid.ownInven.invenData.inventoryId;
-                packet.GridId = item.curItemGrid.gridData.gridId;
-                packet.LastItemPosX = item.backUpItemPos.x;
-                packet.LastItemPosY = item.backUpItemPos.y;
-                packet.LastItemRotate = item.backUpItemRotate;
-                packet.LastGridId = item.backUpItemGrid.gridData.gridId;
-                Managers.Network.Send(packet);
-                selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
-                selectedItem.curItemGrid.AddItemToItemList(selectedItem.itemData.itemPos,selectedItem);
-                
-                BackUpItem(); //백업한 아이템의 위치를 현재의 위치로 백업
-                BackUpGridSlot(); //그리드의 슬롯을 현재의 슬롯으로 백업
-                SelectedItem = null;
+                UndoGridSlot();
+                UndoItem();
             }
         }
         else
         {
-            //아이템 배치 실패시
-            UndoGridSlot(); //인벤그리드의 내용을 되돌림
-            UndoItem(); //현재 들고있는 아이템을 원래 위치로 되돌림
-
-            placeOverlapItem = null;
+            CompleteItemPlacement(item, pos);
         }
     }
+
+    /// <summary>
+    /// 오버랩 아이템 존재할때 머지가 가능한지 체크
+    /// </summary>
+    private bool CheckAbleToMerge(ItemObject item)
+    {
+        return selectedItem.itemData.isItemConsumeable &&
+               selectedItem.itemData.itemCode == placeOverlapItem.itemData.itemCode &&
+               placeOverlapItem.itemData.itemAmount < ItemObject.maxItemMergeAmount &&
+               !placeOverlapItem.isHide;
+    }
+
+    /// <summary>
+    /// 아이템 병합 실시
+    /// </summary>
+    private void MergeItems(ItemObject item, Vector2Int pos)
+    {
+        int totalAmount = selectedItem.itemData.itemAmount + placeOverlapItem.itemData.itemAmount;
+
+        if (totalAmount <= ItemObject.maxItemMergeAmount)
+        {
+            selectedItem.MergeItem(placeOverlapItem, selectedItem.itemData.itemAmount);
+            SendMoveItemPacket(item, pos);
+            BackUpGridSlot();
+            DestroySelectedItem();
+        }
+        else
+        {
+            int needAmount = ItemObject.maxItemMergeAmount - placeOverlapItem.itemData.itemAmount;
+            selectedItem.MergeItem(placeOverlapItem, needAmount);
+            SendMoveItemPacket(item, pos);
+            UndoGridSlot();
+            UndoItem();
+        }
+
+        ResetSelection();
+    }
+
+    /// <summary>
+    /// 아이템 배치 성공
+    /// </summary>
+    private void CompleteItemPlacement(ItemObject item, Vector2Int pos)
+    {
+        SendMoveItemPacket(item, pos);
+        selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+        selectedItem.curItemGrid.AddItemToItemList(selectedItem.itemData.itemPos, selectedItem);
+
+        BackUpItem();
+        BackUpGridSlot();
+        ResetSelection();
+    }
+
+    /// <summary>
+    /// C_MoveItem패킷 생성 및 전송
+    /// </summary>
+    private void SendMoveItemPacket(ItemObject item, Vector2Int pos)
+    {
+        C_MoveItem packet = new C_MoveItem
+        {
+            PlayerId = Managers.Object.MyPlayer.Id,
+            ItemId = item.itemData.itemId,
+            ItemPosX = pos.x,
+            ItemPosY = pos.y,
+            ItemRotate = item.itemData.itemRotate,
+            InventoryId = item.curItemGrid.ownInven.invenData.inventoryId,
+            GridId = item.curItemGrid.gridData.gridId,
+            LastItemPosX = item.backUpItemPos.x,
+            LastItemPosY = item.backUpItemPos.y,
+            LastItemRotate = item.backUpItemRotate,
+            LastGridId = item.backUpItemGrid.gridData.gridId
+        };
+        Managers.Network.Send(packet);
+    }
+
+    private void ResetSelection()
+    {
+        SelectedItem = null;
+        placeOverlapItem = null;
+    }
+
 
     /// <summary>
     /// 아이템 슬롯을 백업함(아이템을 들때 슬롯이 업데이트되기에 백업 필요)
@@ -489,9 +490,7 @@ public partial class InventoryController : MonoBehaviour
     {
         selectedItem.curItemGrid.UpdateBackUpSlot();
         selectedItem.curItemGrid.backupWeight = selectedItem.curItemGrid.GridWeight;
-        
     }
-
      
     /// <summary>
     /// 아이템의 상태와 위치를 백업함
@@ -532,7 +531,6 @@ public partial class InventoryController : MonoBehaviour
         selectedItem.Rotate(selectedItem.itemData.itemRotate);
         selectedItem.curItemGrid.PlaceItem(selectedItem, selectedItem.itemData.itemPos.x, selectedItem.itemData.itemPos.y);
         SelectedItem = null;
-
     }
 
 
@@ -583,24 +581,16 @@ public partial class InventoryController : MonoBehaviour
                 invenHighlight.InstantHighlighter();
             }
 
-            if (playerInput == null)
-            {
-                Debug.Log("touchinput On");
-                playerInput = Managers.Object.MyPlayer.playerInput;
-                playerInput.Player.Disable();
-                playerInput.UI.Enable();
-                playerInput.UI.TouchPosition.performed += OnTouchPos;
-                playerInput.UI.TouchPress.started += OnTouchStart;
-                playerInput.UI.TouchPress.canceled += OnTouchEnd;
-                playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
-                playerInput.UI.InventoryControl.performed += InvenUIControlInput;
-            }
-            else
-            {
-                playerInput.Player.Disable();
-                playerInput.UI.Enable();
-            }
-            
+            Debug.Log("touchinput On");
+            playerInput = Managers.Object.MyPlayer.playerInput;
+            playerInput.Player.Disable();
+            playerInput.UI.Enable();
+            playerInput.UI.TouchPosition.performed += OnTouchPos;
+            playerInput.UI.TouchPress.started += OnTouchStart;
+            playerInput.UI.TouchPress.canceled += OnTouchEnd;
+            playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
+            playerInput.UI.InventoryControl.performed += InvenUIControlInput;
+
         }
         else
         {
@@ -608,6 +598,13 @@ public partial class InventoryController : MonoBehaviour
             {
                 invenHighlight.DestroyHighlighter();
             }
+
+            Debug.Log("touchinput Off");
+            playerInput.UI.TouchPosition.performed -= OnTouchPos;
+            playerInput.UI.TouchPress.started -= OnTouchStart;
+            playerInput.UI.TouchPress.canceled -= OnTouchEnd;
+            playerInput.UI.MouseRightClick.performed -= OnMouseRightClickInput;
+            playerInput.UI.InventoryControl.performed -= InvenUIControlInput;
             playerInput.UI.Disable();
             playerInput.Player.Enable();
         }
