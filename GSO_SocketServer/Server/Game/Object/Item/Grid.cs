@@ -93,15 +93,12 @@ namespace Server.Game
         /// <summary>
         /// 해당 위치에 아이템의 크기만큼의 공간을 해당 아이템 오브젝트를 넣음
         /// </summary>
-        /// <param name="item"></param>
-        /// <param name="posX"></param>
-        /// <param name="posY"></param>
         public void PushItemIntoSlot(ItemObject item, int posX, int posY)
         {
-            // 아이템의 위치를 갱신하고 슬롯에 배치
             item.itemDataInfo.ItemPosX = posX;
             item.itemDataInfo.ItemPosY = posY;
 
+            //그리드의 슬롯에 아이템을 배치
             for (int x = 0; x < item.Width; x++)
             {
                 for (int y = 0; y < item.Height; y++)
@@ -139,6 +136,7 @@ namespace Server.Game
         {
             gridData.ItemList.Add(target.itemDataInfo);
         }
+
 
         public void RemoveItemDataInGridData(ItemObject target)
         {

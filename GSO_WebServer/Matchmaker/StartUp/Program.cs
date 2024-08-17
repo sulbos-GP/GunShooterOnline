@@ -13,6 +13,11 @@ namespace Matchmaker.Startup
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
+
+                    webBuilder.ConfigureKestrel(serverOptions =>
+                    {
+                        serverOptions.ListenAnyIP(5200);
+                    });
                 });
 
     }

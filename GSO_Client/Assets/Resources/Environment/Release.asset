@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6660fd6b61bb141ba0e22f8cfce448, type: 3}
   m_Name: Release
   m_EditorClassIdentifier: 
-  GameServerIp: 
-  GameServerPort: 
+  GameServerIp: 113.60.249.123
+  GameServerPort: 113.60.249.123
   AuthorizationBaseUri: 
   CenterBaseUri: 
   MatchmakerBaseUri: 

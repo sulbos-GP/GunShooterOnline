@@ -142,18 +142,15 @@ namespace Server.Game
 
         
 
-        public void MoveItem(int id, int posX, int posY, int rotate, Grid targetGrid)
+        public void MoveItem(ItemObject target, int posX, int posY, int rotate, Grid targetGrid)
         {
-            //아이템 가져오기
-            ItemObject target = ObjectManager.Instance.Find<ItemObject>(id);
-
-            if(target == null)
-            {
-                return;
-            }
+            //아이템의 이름,아이디
+            //전위치 -> 옮겨질 현위치
+            //전회전 -> 현재 회전도
+            //이전 그리드의 아이디. 현재 그리드의 아이디
             Console.WriteLine($"MoveItem Method\n" +
                 $"Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
-                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosX}) -> ({posX},{posY})\n" +
+                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosY}) -> ({posX},{posY})\n" +
                 $"rotate : {target.itemDataInfo.ItemRotate} -> {rotate}\n" +
                 $"grid : {target.ownerGrid.gridData.GridId} -> {targetGrid.gridData.GridId}");
 
@@ -163,6 +160,7 @@ namespace Server.Game
             //아이템의 소유그리드와 회전도 업데이트
             target.ownerGrid = targetGrid;
             target.ItemRotate = rotate;
+            
             //그리드에 아이템 및 아이템 데이터 삽입
             target.ownerGrid.PushItemIntoSlot(target, posX, posY);
             target.ownerGrid.InsertItemDataInGridData(target);

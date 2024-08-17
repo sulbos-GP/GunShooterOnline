@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
 using Microsoft.AspNetCore.SignalR.Client;
 using System;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 public class MatchmakerHub : ClientHub
 {
-    protected override string mConnectionUrl { get; set; } = "http://10.0.2.2:5200/MatchmakerHub";
+    protected override string mConnectionUrl { get; set; } = "http://113.60.249.123:5200/MatchmakerHub";
     protected override string mConnectionName { get; set; } = "매치메이커";
     
     protected UI_Match mMatchUI;
@@ -59,9 +60,18 @@ public class MatchmakerHub : ClientHub
             mMatchUI.OnMatchComplete();
 
             //로컬
-            response.host_ip = "127.0.0.1";
+            response.host_ip = "113.60.249.123";
 
             Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
+            
+            Managers.Scene.LoadScene(Define.Scene.Forest);
+
+
+            C_EnterGame c_EnterGame = new C_EnterGame();
+            c_EnterGame.Name = "jish";
+
+            Managers.Network.Send(c_EnterGame);
+            Debug.Log("접속중");
 
             //Managers.Network.ConnectToGame(response.host_ip);
         });
