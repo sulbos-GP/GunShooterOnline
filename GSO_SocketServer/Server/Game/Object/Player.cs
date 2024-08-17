@@ -16,8 +16,8 @@ public class Player : CreatureObj
     {
         ObjectType = GameObjectType.Player;
 
-        //바꾼 부분(패킷핸들러의 C_EnterGameHandler에서 플레이어 설정
-        //inventory = new inventory(Id);
+        //바꾼 부분(패킷핸들러의 C_EnterGameHandler에서 플레이어 설정)
+        //inventory = new Inventory(Id,6, 7);
         Vision = new VisionRegion(this);
 
         stat.MergeFrom(new StatInfo()
