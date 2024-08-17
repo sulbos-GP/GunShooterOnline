@@ -20,6 +20,8 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (Managers.Object.MyPlayer == null)
+            return;
         float MaxHP = Managers.Object.MyPlayer.MaxHp;
         float HP = Managers.Object.MyPlayer.Hp;
         //HP
