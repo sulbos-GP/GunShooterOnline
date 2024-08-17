@@ -20,8 +20,10 @@ public class UIManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        float MaxHP = Managers.Object.MyPlayer.MaxHp;
+        float HP = Managers.Object.MyPlayer.Hp;
         //HP
-         Health.text =  "HP : "+LocalUnit.unitStat.GetStat(eStat.Health).ToString()+" %";
+         Health.text =  HP+" / "+MaxHP;
         //GunAmmo
         AmmoText.text = Gun.getGunStat().name+" :: "+Gun._curAmmo.ToString();
     }

@@ -28,6 +28,16 @@ public class CreatureController : BaseController
         }
     }
 
+    public override int MaxHp
+    {
+        get => base.MaxHp;
+        set
+        {
+            base.MaxHp = value;
+            ChangeStat?.Invoke();
+        }
+    }
+
     /*
     public int Exp
     {

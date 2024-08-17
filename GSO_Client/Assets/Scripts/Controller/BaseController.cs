@@ -31,6 +31,12 @@ public class BaseController : MonoBehaviour
         set => Stat.Hp = value;
     }
 
+    public virtual int MaxHp
+    {
+        get => _stat.MaxHp;
+        set => Stat.MaxHp = value;
+    }
+
     float _speed = 0; //TODO : 임시 작업 서버랑 연결
     public float Speed
     {
