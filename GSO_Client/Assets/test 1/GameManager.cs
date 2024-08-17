@@ -9,7 +9,19 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        UnitManager.Instance.loadPlayer();
+        //UnitManager.Instance.loadPlayer();
+        ObjectInfo test = new()
+        {
+            ObjectId = 16777216,
+            Name = "player",
+            PositionInfo = new PositionInfo()
+            {
+                PosX = 0,
+                PosY = 0,
+                RotZ = 0,
+            }
+        };
+        Managers.Object.Add(test,true);
     }
 
     private void Update()

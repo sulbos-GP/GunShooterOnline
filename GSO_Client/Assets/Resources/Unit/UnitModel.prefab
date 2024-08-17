@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5961796555876116867}
   - component: {fileID: 4976538378545139341}
   - component: {fileID: 4951753452970910547}
+  - component: {fileID: 7735487395050222829}
   - component: {fileID: 2151735185809450313}
   - component: {fileID: 5589048240770995353}
   - component: {fileID: 3562629690575237209}
@@ -108,6 +109,7 @@ MonoBehaviour:
   aimFov: {fileID: 0}
   basicFov: {fileID: 0}
   playerGun: {fileID: 0}
+  isFiring: 0
 --- !u!114 &4976538378545139341
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -154,6 +156,19 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &7735487395050222829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191436082380664689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a47cbe095716d4a438764dee4a8a32d4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _attackableList: []
 --- !u!114 &2151735185809450313
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -169,6 +184,9 @@ MonoBehaviour:
   distance: 0
   aimFov: {fileID: 0}
   basicFov: {fileID: 0}
+  _isFiring: 0
+  interactList: []
+  interactTarget: {fileID: 0}
 --- !u!114 &5589048240770995353
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -526,8 +544,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72fe8d205699f454696b3f840e3e5568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lineRenderer: {fileID: 0}
   _gunStat: {fileID: 11400000, guid: f272da6bfc5ce3a4da45f529413ad926, type: 2}
   _shooterId: 0
   _reloadTime: 3
   isBulletPrefShoot: 0
+  bulletLine: {fileID: 0}
+  rangeLine: {fileID: 0}
