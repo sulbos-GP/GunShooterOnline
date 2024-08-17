@@ -29,6 +29,8 @@ class PacketHandler
             p.gameRoom = Program.mNetworkService.gameRoom as BattleGameRoom;
             //바꾼 부분
             p.inventory = new Inventory(p.Id,6,7);
+
+            //p.stat
         }
 
         clientSession.Room = Program.mNetworkService.gameRoom as BattleGameRoom;

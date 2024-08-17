@@ -13,7 +13,7 @@ public class GameObject
     public GameObject()
     {
         info.PositionInfo = PosInfo;
-        //info.StatInfo = stat;
+        info.StatInfo = stat;
     }
 
     public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;
