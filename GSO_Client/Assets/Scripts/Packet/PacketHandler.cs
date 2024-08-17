@@ -120,28 +120,24 @@ internal class PacketHandler
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
         S_LoadInventory packet = message as S_LoadInventory;
+        Debug.Log("S_LoadInventory");
+
         if (packet == null)
         {
             Debug.Log("패킷이 없음");
             return;
         }
-        Debug.Log("S_LoadInventory");
 
         if(packet.InvenData == null)
         {
             Debug.Log("인벤데이터가 비어있음");
         }
 
-        //인벤 데이터 생성 및 패킷의 InvenDataInfo를 InvenData로 변환
+        //패킷의 인벤데이터를 클라의 인벤데이터로 변환
         InvenData newInvenData = new InvenData();
         newInvenData.SetInvenData(packet.InvenData);
-        
 
-        /*
-        //생성된 인벤토리와 그리드, 아이템 데이터를 오브젝트 매니저의 딕셔너리들에 추가
-        Managers.Object._inventoryDic.Add(packet.InventoryId, newInvenData);*/
-
-        
+        //이하 그리드와 아이템도 맞춰서 변환
         foreach(GridData grid in newInvenData.gridList)
         {
             if(Managers.Object._gridDic.ContainsKey(grid.gridId) == true) { continue; }
@@ -153,10 +149,10 @@ internal class PacketHandler
             }
         }
         
-        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //데이터를 적용할 대상 검색'
+        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //패킷의 해당 인벤토리의 id로 인벤토리 오브젝트 검색
 
-        Managers.Object.DebugDics();
-        //플레이어의 인벤토리id와 패킷내의 인벤토리id 비교 -> 같으면 플레이어의 인벤토리에 반영 다르면 아더 인벤토리에 반영
+        //자신의 아이디와 인벤토리의 아이디가 같으면 myPlayer의 인벤토리에 할당
+        //다르면 박스 아님 다른 플레이어 객체이며 해당 객체의 인벤토리에 할당
         if (Managers.Object.MyPlayer.Id == packet.InventoryId)
         {
             //플레이어 인벤토리에 패킷의 invenData 적용
@@ -169,6 +165,7 @@ internal class PacketHandler
         }
         else
         {
+            //인벤토리 오브젝트 목록 : 박스, 다른 플레이어 객체
             //아더 인벤토리에 패킷의 invenData 적용
             if (invenObj.GetComponent<OtherInventory>() == null)
             {
@@ -334,6 +331,7 @@ internal class PacketHandler
         {
             return;
         }
+
         //플레이어와 해당 플레이어 가진 아이템 그리드 데이터 삭제할것\
         var player = Managers.Object.FindById(packet.PlayerId);
         InvenData targetInvenData = player.GetComponent<PlayerInventory>().InputInvenData;
