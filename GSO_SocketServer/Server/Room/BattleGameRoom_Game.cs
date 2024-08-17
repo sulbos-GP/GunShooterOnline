@@ -9,6 +9,7 @@ using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Server
 {
@@ -66,18 +67,29 @@ namespace Server
         internal void HandleItemLoad(Player player, int objectId, int inventoryId )
         {
             InvenDataInfo targetData = null;
+
             if(player.Id == inventoryId) 
             {
                 //플레이어의 인벤토리
-                Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
+                Player targetPlayer = ObjectManager.Instance.Find<Player>(inventoryId);
                 targetData = targetPlayer.inventory.invenData;
             }
             else
             {
-                //루터블 오브젝트의 인벤토리
                 RootableObject box = ObjectManager.Instance.Find<RootableObject>(inventoryId);
-                Console.WriteLine($"handle box id : {box.Id}");
-                targetData = box.inventory.invenData;
+                Player enemyPlayer = ObjectManager.Instance.Find<Player>(inventoryId); // playerId를 사용하여 Player를 찾음
+
+                if (box != null)
+                {
+                    Console.WriteLine($"handle box id : {box.Id}");
+                    targetData = box.inventory.invenData;
+                }
+
+                if (enemyPlayer != null)
+                {
+                    Console.WriteLine($"handle enemyPlayer id : {enemyPlayer.Id}");
+                    // player 관련 로직 추가
+                }
             }
             
             //Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
@@ -89,8 +101,6 @@ namespace Server
                 InvenData = targetData //targetPlayer.inventory.invenData,
 
             };
-
-            Console.WriteLine(s_LoadInventory.InvenData.GridData.Count);
 
             BroadCast(s_LoadInventory);
 
@@ -136,13 +146,15 @@ namespace Server
 
                 return;
             }
-
+            var invenObjType = ObjectManager.GetObjectTypeById(packet.InventoryId);
+            Console.WriteLine(invenObjType);
             Grid targetGrid = null; //플레이어 혹은 박스에서 해당 패킷에서 주어진 그리드 id로 그리드를 찾음
-            if (packet.PlayerId == packet.InventoryId)
+
+            if (invenObjType == GameObjectType.Player)
             {
-                ObjectManager.Instance.Find<Player>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
+                ObjectManager.Instance.Find<Player> (packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
             }
-            else
+            else if(invenObjType == GameObjectType.Box)
             {
                 ObjectManager.Instance.Find<RootableObject>(packet.InventoryId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
             }

@@ -11,6 +11,7 @@ TagManager:
   - Object
   - Wall
   - World
+  - Box
   layers:
   - Default
   - TransparentFX

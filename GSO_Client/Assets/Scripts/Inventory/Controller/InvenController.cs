@@ -424,6 +424,7 @@ public partial class InventoryController : MonoBehaviour
         if (totalAmount <= ItemObject.maxItemMergeAmount)
         {
             selectedItem.MergeItem(placeOverlapItem, selectedItem.itemData.itemAmount);
+            selectedItem.curItemGrid = SelectedItemGrid;
             SendMoveItemPacket(item, pos);
             BackUpGridSlot();
             DestroySelectedItem();
@@ -432,6 +433,7 @@ public partial class InventoryController : MonoBehaviour
         {
             int needAmount = ItemObject.maxItemMergeAmount - placeOverlapItem.itemData.itemAmount;
             selectedItem.MergeItem(placeOverlapItem, needAmount);
+            selectedItem.curItemGrid = SelectedItemGrid;
             SendMoveItemPacket(item, pos);
             UndoGridSlot();
             UndoItem();
@@ -445,12 +447,15 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void CompleteItemPlacement(ItemObject item, Vector2Int pos)
     {
-        SendMoveItemPacket(item, pos);
-        selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+        selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem); //이전 
+        selectedItem.curItemGrid = SelectedItemGrid;
         selectedItem.curItemGrid.AddItemToItemList(selectedItem.itemData.itemPos, selectedItem);
+
+        SendMoveItemPacket(item, pos); //백업 전에 내보내야 lastItem 변수에 값이 제대로 할당됨
 
         BackUpItem();
         BackUpGridSlot();
+
         ResetSelection();
     }
 
