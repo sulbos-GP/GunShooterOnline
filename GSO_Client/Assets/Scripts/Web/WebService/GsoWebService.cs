@@ -15,7 +15,7 @@ public class GsoWebService : WebClientService
 
     public GsoWebService()
     {
-        this.mBaseUrl = "http://113.60.249.123:5000";
+        this.mBaseUrl = Managers.EnvConfig.GetEnvironmentConfig().CenterBaseUri;
         mAuthorizeResource = new AuthorizeResource(this);
         mUserResource = new UserResource(this);
     }

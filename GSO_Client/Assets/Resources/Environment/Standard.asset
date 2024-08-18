@@ -16,5 +16,5 @@ MonoBehaviour:
   GameServerPort: 7777
   AuthorizationBaseUri: http://127.0.0.1:5000
   CenterBaseUri: http://127.0.0.1:5000
-  MatchmakerBaseUri: http://127.0.0.1:5000
-  GameServerManagerBaseUri: http://127.0.0.1:5000
+  MatchmakerBaseUri: http://127.0.0.1:5200
+  GameServerManagerBaseUri: http://127.0.0.1:7000

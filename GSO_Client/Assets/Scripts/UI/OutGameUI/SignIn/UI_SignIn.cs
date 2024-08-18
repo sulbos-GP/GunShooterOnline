@@ -11,9 +11,6 @@ using System.Net.Http;
 public class SignInUI : MonoBehaviour
 {
     [SerializeField]
-    private GameObject      mLoading;
-
-    [SerializeField]
     private TextMeshProUGUI mResultText;
 
     [SerializeField]
@@ -22,7 +19,6 @@ public class SignInUI : MonoBehaviour
     private void Awake()
     {
         mSingInButton.onClick.AddListener(OnClickSignIn);
-        SetActiveLoading(false);
     }
 
     void Start()
@@ -41,7 +37,6 @@ public class SignInUI : MonoBehaviour
         try
         {
             ResultMessage("구글 플레이 서비스 자동 인증 시도...");
-            SetActiveLoading(true);
             PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
         }
         catch (Exception error)
@@ -59,7 +54,6 @@ public class SignInUI : MonoBehaviour
         try
         {
             ResultMessage("구글 플레이 서비스 수동 인증 시도...");
-            SetActiveLoading(true);
             PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
         }
         catch (Exception error)
@@ -111,13 +105,11 @@ public class SignInUI : MonoBehaviour
         {
             //구글 플레이 로그인 에러
             ResultMessage("인증 도중 에러가 발생하였습니다.");
-            SetActiveLoading(false);
         }
         else if (status == SignInStatus.Canceled)
         {
             //모바일로 실행을 안할 경우
             ResultMessage("인증이 취소 되었습니다.");
-            SetActiveLoading(false);
         }
 
     }
@@ -153,7 +145,6 @@ public class SignInUI : MonoBehaviour
         if(code is null)
         {
             ResultMessage("구글 플레이 서버 코드 요청 실패");
-            SetActiveLoading(false);
             return;
         }
 
@@ -188,7 +179,6 @@ public class SignInUI : MonoBehaviour
         if (response.error_code != 0)
         {
             ResultMessage($"로그인 요청 실패 : {response.error_description}");
-            SetActiveLoading(false);
             return;
         }
         else
@@ -224,9 +214,4 @@ public class SignInUI : MonoBehaviour
         SystemLogManager.Instance.LogMessage(message);
     }
     
-    private void SetActiveLoading(bool active)
-    {
-        mLoading.SetActive(active);
-    }
-
 }
