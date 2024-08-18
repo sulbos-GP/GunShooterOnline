@@ -253,9 +253,6 @@ public class InputController : MonoBehaviour
 
     private void UpdateServer()
     {
-        if (lastPos == null || Vector3.Distance(lastPos, transform.position)>0.05f)
-        {
-            lastPos = transform.position;
             var movePack = new C_Move();
             movePack.PositionInfo = new PositionInfo
             {
@@ -267,7 +264,6 @@ public class InputController : MonoBehaviour
                 RotZ = transform.rotation.z,
             };
             Managers.Network.Send(movePack);
-        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
