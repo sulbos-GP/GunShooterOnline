@@ -117,6 +117,9 @@ public class PlayerController : CreatureController
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
         rig.MovePosition(rig.position + newVec2);
+
+        //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;
+        //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
     }
 
     protected override void UpdateIdle()
