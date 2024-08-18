@@ -362,7 +362,11 @@ internal class PacketHandler
         {
             //TO - DO : 맞는지 모르겠음.
             Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
-            Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
+
+            //Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
+
+
+            //Debug.DrawLine(hitObj, hitObj);
             return;
         }
 
