@@ -51,13 +51,13 @@ internal class PacketHandler
 
             var type = (info.ObjectId >> 24) & 0x7f;
             if ((GameObjectType)type != GameObjectType.Player)
-                return;
+                continue;
             var Stats = info.StatInfo;
             var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
         }
-        //Debug.Log("S_SpawnHandler");
+        //Debug.Log("S_SpawnHandler");*/
     }
 
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
