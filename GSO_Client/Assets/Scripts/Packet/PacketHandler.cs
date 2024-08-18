@@ -348,7 +348,7 @@ internal class PacketHandler
         }
         Debug.Log("S_RaycastHit");
         //레이의 아이디를 키로 해당 패킷을 저장하는 딕셔너리
-        Managers.Object._rayDic.Add(packet.RayId, packet);
+        //Managers.Object._rayDic.Add(packet.RayId, packet);
 
         GameObject go = Managers.Object.FindById(packet.HitObjectId);
         if (go == null)
