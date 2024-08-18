@@ -191,37 +191,39 @@ namespace Server
             target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemData, targetGrid);
         }
 
-
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
-            RaycastHit2D hit = RaycastManager.Raycast(pos,dir, length);
+
+            // TODO : 삭제,  일단 레이를 좀 앞에서 쓰기
+
+            RaycastHit2D hit2D = RaycastManager.Raycast(pos+ pos*dir *0.5f ,dir, length);
             
-            if(hit.Collider == null)
+            if(hit2D.Collider == null)
             {
                 return;
             }
 
-            GameObject go = hit.Collider.Parent;
-            if (go == null)
+            GameObject hitObject = hit2D.Collider.Parent;
+            if (hitObject == null)
             {
                 Console.WriteLine("HandleRayCast null");
                 return;
             }
 
 
-            if(go.ObjectType == GameObjectType.Player || go.ObjectType == GameObjectType.Monster)
+            if(hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster)
             {
-                CreatureObj creatureObj = go as CreatureObj;
+                CreatureObj creatureObj = hitObject as CreatureObj;
 
 
                 //TODO : 공격력  attacker 밑에 넣기 240814지승현
                 creatureObj.OnDamaged(attacker, 3);
 
                 S_ChangeHp ChangeHpPacket = new S_ChangeHp();
-                ChangeHpPacket.ObjectId = hit.Id;
+                ChangeHpPacket.ObjectId = hitObject.Id;
                 ChangeHpPacket.Hp = creatureObj.Hp;
 
-                Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hit.Id + "HIT Hp : "+ ChangeHpPacket.Hp);
+                Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hitObject.Id + "HIT Hp : "+ hitObject.Hp);
 
                 BroadCast(ChangeHpPacket);
 
@@ -229,12 +231,13 @@ namespace Server
             }
 
             S_RaycastHit packet = new S_RaycastHit();
-            packet.HitObjectId = hit.Id;
-            packet.Distance = hit.distance;
-            packet.HitPointX = hit.hitPoint.Value.X;
-            packet.HitPointY = hit.hitPoint.Value.Y;
+            packet.HitObjectId = hitObject.Id;
+            packet.RayId = hit2D.rayID;
+            packet.Distance = hit2D.distance;
+            packet.HitPointX = hit2D.hitPoint.Value.X;
+            packet.HitPointY = hit2D.hitPoint.Value.Y;
 
-           
+
             BroadCast(packet);
 
         }
