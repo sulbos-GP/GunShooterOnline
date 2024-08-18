@@ -107,7 +107,7 @@ class PacketHandler
     {
         ClientSession clientSession = session as ClientSession;
         C_RaycastShoot packet = (C_RaycastShoot)message;
-        Console.WriteLine($"C_RaycastShootHandler0");
+        //Console.WriteLine($"C_RaycastShootHandler0");
 
         Player player = clientSession.MyPlayer;
         player.gameRoom.Push(player.gameRoom.HandleRayCast, player, new Vector2(packet.StartPosX, packet.StartPosY), new Vector2(packet.DirX, packet.DirY), packet.Length);

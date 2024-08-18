@@ -126,6 +126,12 @@ public class GameObject
         {
             info.PositionInfo.PosX = value.X;
             info.PositionInfo.PosY = value.Y;
+
+            if(currentShape != null)
+            {
+                currentShape.x = value.X;
+                currentShape.y = value.Y;
+            }
         }
     }
 

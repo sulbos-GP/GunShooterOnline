@@ -44,20 +44,20 @@ internal class PacketHandler
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         var spawnPacket = (S_Spawn)packet;
-
+        
         foreach (var info in spawnPacket.Objects)
         {
             Managers.Object.Add(info, false);
 
             var type = (info.ObjectId >> 24) & 0x7f;
             if ((GameObjectType)type != GameObjectType.Player)
-                return;
+                continue;
             var Stats = info.StatInfo;
             var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
         }
-        //Debug.Log("S_SpawnHandler");
+        //Debug.Log("S_SpawnHandler");*/
     }
 
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
@@ -348,7 +348,7 @@ internal class PacketHandler
         }
         Debug.Log("S_RaycastHit");
         //레이의 아이디를 키로 해당 패킷을 저장하는 딕셔너리
-        Managers.Object._rayDic.Add(packet.RayId, packet);
+        //일단 지움 : Managers.Object._rayDic.Add(packet.RayId, packet);
 
         GameObject go = Managers.Object.FindById(packet.HitObjectId);
         if (go == null)
@@ -356,16 +356,19 @@ internal class PacketHandler
             Debug.Log("Wall Hit bullet");
             return;
         }
-        Debug.Log(go.GetComponent<MyPlayerController>().Id);
+        //Debug.Log(go.GetComponent<MyPlayerController>().Id);
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
         {
             //TO - DO : 맞는지 모르겠음.
             Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
-            Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
+
+            //Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
+
+
+            //Debug.DrawLine(hitObj, hitObj);
             return;
         }
- 
 
         //cc에서 피격 표시?
 
@@ -388,6 +391,8 @@ internal class PacketHandler
 
         //플레이어와 해당 플레이어 가진 아이템 그리드 데이터 삭제할것\
         var player = Managers.Object.FindById(packet.PlayerId);
+
+        /* 다른 플레이어는 클라에서 인벤토리를 가지지 않음
         InvenData targetInvenData = player.GetComponent<PlayerInventory>().InputInvenData;
         if (targetInvenData == null) {
             Debug.Log("인벤데이터를 찾지 못함");
@@ -400,8 +405,9 @@ internal class PacketHandler
             {
                 Managers.Object.RemoveItemDic(item.itemId);
             }
-        }
+        }*/
 
+        Managers.Resource.Destroy(player);
         Managers.Object.Remove(packet.PlayerId);
         Managers.Object.DebugDics();
     }

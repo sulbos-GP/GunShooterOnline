@@ -4,6 +4,7 @@ using System.Runtime.Serialization;
 using Vector2 = System.Numerics.Vector2;
 using Server.Game;
 using ObjectManager = Server.Game.ObjectManager;
+using System;
 
 namespace Server
 {
@@ -49,14 +50,22 @@ namespace Server
                 RaycastHit2D temp = raycast.Cast(shape);
 
                 if (temp == null)
+                {
                     continue;
+
+                }
+                else
+                {
+                    Console.WriteLine("temp is not null");
+                }
+
 
                 if (rayRes != null)
                 {
                     if (rayRes.distance > temp.distance)
                     {
                         rayRes = temp;
-                        rayRes.Id = _index;
+                        rayRes.rayID = _index;
 
                         //hitpos = res.hitPoint;
                     }
@@ -64,7 +73,7 @@ namespace Server
                 else
                 {
                     rayRes = temp;
-                    rayRes.Id = _index;
+                    rayRes.rayID = _index;
 
                     //hitpos = res.hitPoint;
                 }
