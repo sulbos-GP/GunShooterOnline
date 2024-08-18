@@ -47,6 +47,10 @@ public class EnvironmentSetting
             default:
                 break;
         }
+
+        SystemLogManager.Instance.LogMessage($"Enviroment setting [{state.ToString()}]");
+
+        SystemLogManager.Instance.LogMessage($"Enviroment setting [{config.CenterBaseUri}]");
     }
 
     public EnvironmentConfig GetEnvironmentConfig()

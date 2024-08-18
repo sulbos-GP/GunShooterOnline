@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-
 
 /// <summary>
 /// 매치메이킹 서버 관련 API
@@ -14,8 +10,7 @@ public class MatchmakerService : WebClientService
     public MatchmakerService()
     {
 
-        this.mBaseUrl = "http://113.60.249.123:5200";        
-        //this.mBaseUrl = "http://127.0.0.1:5200";
+        this.mBaseUrl = Managers.EnvConfig.GetEnvironmentConfig().MatchmakerBaseUri;
 
         mMatchmakerResource = new MatchmakerResource(this);
     }
