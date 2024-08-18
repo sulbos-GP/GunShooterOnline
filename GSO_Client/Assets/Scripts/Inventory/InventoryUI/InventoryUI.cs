@@ -9,11 +9,9 @@ public class InventoryUI : MonoBehaviour
      * 서버로부터 받은 인벤토리 데이터를 통해 인벤토리를 생성함
      */
     public GameObject gridPref; //그리드의 프리팹
-
     public InvenData invenData; //서버로 부터 받은 해당 인벤토리의 위치와 크기 및 소유한 그리드의 데이터
-
     public List<InventoryGrid> instantGridList; // 생성한 인벤토리의 그리드 목록
-
+    
     private Transform grids; //그리드들의 부모 오브젝트
 
     //그리드와 배경사이의 오프셋

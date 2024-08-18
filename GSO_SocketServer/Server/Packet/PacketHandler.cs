@@ -94,13 +94,13 @@ class PacketHandler
         C_DeleteItem packet = (C_DeleteItem)message;
         Console.WriteLine($"C_DeleteItemHandler {packet.PlayerId}");
 
-        ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemId);
-        target.ownerGrid.ownerInventory.DeleteItem(packet.ItemId);
+        ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemData.ItemId);
+        target.ownerGrid.ownerInventory.DeleteItem(packet.ItemData.ItemId);
 
         Player player = clientSession.MyPlayer;
 
         //player.gameRoom.HandleItemDelete(player, packet.PlayerId, packet.ItemId);
-        player.gameRoom.Push(player.gameRoom.HandleItemDelete, player, packet.PlayerId, packet.ItemId);
+        player.gameRoom.Push(player.gameRoom.HandleItemDelete, player, message);
     }
 
     internal static void C_RaycastShootHandler(PacketSession session, IMessage message)
