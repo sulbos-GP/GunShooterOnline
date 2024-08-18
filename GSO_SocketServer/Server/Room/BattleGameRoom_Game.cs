@@ -48,17 +48,17 @@ namespace Server
             BroadCast(resMovePacket);
         }
 
-        internal void HandleItemDelete(Player player, int playerId, int itemId)
+        internal void HandleItemDelete(Player player, int playerId, ItemDataInfo itemData)
         {
             //TODO : 그리드로 옮기기
             //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
-            ItemObject item =  ObjectManager.Instance.Find<ItemObject>(itemId);
+            ItemObject item =  ObjectManager.Instance.Find<ItemObject>(itemData.ItemId);
 
             item.ownerGrid.DeleteItemFromSlot(item);
-            ObjectManager.Instance.Remove(itemId);
+            ObjectManager.Instance.Remove(itemData.ItemId);
 
             S_DeleteItem s_DeleteItem = new S_DeleteItem();
-            s_DeleteItem.ItemId = itemId;
+            s_DeleteItem.ItemData = itemData;
             s_DeleteItem.PlayerId = playerId;
 
             BroadCast(s_DeleteItem);
