@@ -388,6 +388,8 @@ internal class PacketHandler
 
         //플레이어와 해당 플레이어 가진 아이템 그리드 데이터 삭제할것\
         var player = Managers.Object.FindById(packet.PlayerId);
+
+        /* 다른 플레이어는 클라에서 인벤토리를 가지지 않음
         InvenData targetInvenData = player.GetComponent<PlayerInventory>().InputInvenData;
         if (targetInvenData == null) {
             Debug.Log("인벤데이터를 찾지 못함");
@@ -400,8 +402,9 @@ internal class PacketHandler
             {
                 Managers.Object.RemoveItemDic(item.itemId);
             }
-        }
+        }*/
 
+        Managers.Resource.Destroy(player);
         Managers.Object.Remove(packet.PlayerId);
         Managers.Object.DebugDics();
     }
