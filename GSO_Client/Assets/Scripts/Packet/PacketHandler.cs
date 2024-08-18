@@ -44,7 +44,7 @@ internal class PacketHandler
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         var spawnPacket = (S_Spawn)packet;
-
+        
         foreach (var info in spawnPacket.Objects)
         {
             Managers.Object.Add(info, false);
