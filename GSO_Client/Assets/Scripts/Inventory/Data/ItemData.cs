@@ -30,20 +30,15 @@ public class ItemData
         itemRotate = itemDataInfo.ItemRotate;
         itemAmount = itemDataInfo.ItemAmount;
 
-
-        if(itemDataInfo.SearchedPlayerId.Count == 0)
-        {
-            searchedPlayerId = new List<int>();
-        }
-        else
+        searchedPlayerId = new List<int>();
+        if (itemDataInfo.SearchedPlayerId.Count != 0)
         {
             foreach (int id in itemDataInfo.SearchedPlayerId)
             {
                 searchedPlayerId.Add(id);
             }
         }
-        
-        
+
         //임시
         item_name = itemDataInfo.ItemName;
         item_weight = itemDataInfo.ItemWeight; //아이템의 무게

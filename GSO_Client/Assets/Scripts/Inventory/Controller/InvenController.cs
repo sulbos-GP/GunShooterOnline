@@ -415,26 +415,29 @@ public partial class InventoryController : MonoBehaviour
     }
 
     /// <summary>
-    /// 아이템 병합 실시
+    /// 아이템 병합 실시. 체크가 완료되어 머지가 성공했을때의 아이템이 병합
     /// </summary>
     private void MergeItems(ItemObject item, Vector2Int pos)
     {
         int totalAmount = selectedItem.itemData.itemAmount + placeOverlapItem.itemData.itemAmount;
 
+        selectedItem.itemData.itemPos = pos;
+        selectedItem.curItemGrid = SelectedItemGrid;
+        SendMoveItemPacket(item, pos);
+
         if (totalAmount <= ItemObject.maxItemMergeAmount)
         {
             selectedItem.MergeItem(placeOverlapItem, selectedItem.itemData.itemAmount);
-            selectedItem.curItemGrid = SelectedItemGrid;
-            SendMoveItemPacket(item, pos);
+            
             BackUpGridSlot();
             DestroySelectedItem();
         }
         else
         {
             int needAmount = ItemObject.maxItemMergeAmount - placeOverlapItem.itemData.itemAmount;
+
             selectedItem.MergeItem(placeOverlapItem, needAmount);
-            selectedItem.curItemGrid = SelectedItemGrid;
-            SendMoveItemPacket(item, pos);
+            
             UndoGridSlot();
             UndoItem();
         }
