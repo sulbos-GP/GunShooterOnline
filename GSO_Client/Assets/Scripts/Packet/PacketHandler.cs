@@ -44,20 +44,20 @@ internal class PacketHandler
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         var spawnPacket = (S_Spawn)packet;
-
+        
         foreach (var info in spawnPacket.Objects)
         {
             Managers.Object.Add(info, false);
 
             var type = (info.ObjectId >> 24) & 0x7f;
             if ((GameObjectType)type != GameObjectType.Player)
-                return;
+                continue;
             var Stats = info.StatInfo;
             var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
         }
-        //Debug.Log("S_SpawnHandler");
+        //Debug.Log("S_SpawnHandler");*/
     }
 
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
@@ -387,6 +387,8 @@ internal class PacketHandler
 
         //플레이어와 해당 플레이어 가진 아이템 그리드 데이터 삭제할것\
         var player = Managers.Object.FindById(packet.PlayerId);
+
+        /* 다른 플레이어는 클라에서 인벤토리를 가지지 않음
         InvenData targetInvenData = player.GetComponent<PlayerInventory>().InputInvenData;
         if (targetInvenData == null) {
             Debug.Log("인벤데이터를 찾지 못함");
@@ -399,8 +401,9 @@ internal class PacketHandler
             {
                 Managers.Object.RemoveItemDic(item.itemId);
             }
-        }
+        }*/
 
+        Managers.Resource.Destroy(player);
         Managers.Object.Remove(packet.PlayerId);
         Managers.Object.DebugDics();
     }

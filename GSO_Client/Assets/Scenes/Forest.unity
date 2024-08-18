@@ -1547,6 +1547,7 @@ MonoBehaviour:
   inventoryUI: {fileID: 1095908246791057077}
   playerInvenUI: {fileID: 1095908246791057079}
   otherInvenUI: {fileID: 1095908246791057078}
+  instantItemList: []
   deleteUI: {fileID: 3385603023062608331}
   rotateBtn: {fileID: 1222683154}
   updateGridPos: {x: 0, y: 0}
@@ -3141,6 +3142,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1790032448}
     m_Modifications:
+    - target: {fileID: 3034584280118069898, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1397189866}
+    - target: {fileID: 3034584280118069898, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RotateBtn
+      objectReference: {fileID: 0}
     - target: {fileID: 5753915715544317874, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: invenController
       value: 

@@ -178,7 +178,7 @@ public class Gun : MonoBehaviour
 
             return true;
         }
-        Debug.Log("FireFailed");
+
         return false; //발사 성공 여부
     }
 
