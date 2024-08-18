@@ -45,7 +45,18 @@ internal class PacketHandler
     {
         var spawnPacket = (S_Spawn)packet;
 
-        foreach (var info in spawnPacket.Objects) Managers.Object.Add(info, false);
+        foreach (var info in spawnPacket.Objects)
+        {
+            Managers.Object.Add(info, false);
+
+            var type = (info.ObjectId >> 24) & 0x7f;
+            if ((GameObjectType)type != GameObjectType.Player)
+                return;
+            var Stats = info.StatInfo;
+            var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
+            player.Hp = Stats.Hp;
+            player.MaxHp = Stats.MaxHp;
+        }
         //Debug.Log("S_SpawnHandler");
     }
 
@@ -68,13 +79,21 @@ internal class PacketHandler
             return;
 
         if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
+        {
             return;
+        }
 
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
             return;
 
+        var ec = cc.GetComponent<PlayerController>();
+        ec.UpdatePosInfo(movePacket.PositionInfo);
+        ec.UpdateMoving();
         cc.PosInfo = movePacket.PositionInfo;
+        
+
+
         //cc.State = CreatureState.Moving;
     }
 
