@@ -224,8 +224,6 @@ namespace Server
                 Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hit.Id + "HIT Hp : "+ ChangeHpPacket.Hp);
 
                 BroadCast(ChangeHpPacket);
-
-
             }
 
             S_RaycastHit packet = new S_RaycastHit();
