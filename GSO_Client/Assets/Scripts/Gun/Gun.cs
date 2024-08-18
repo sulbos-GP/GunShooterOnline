@@ -144,7 +144,7 @@ public class Gun : MonoBehaviour
                     DirY = direction.y,
                     Length = Vector3.Distance(_fireStartPos.position, hit.point)  // 실제 충돌 위치까지의 거리
                 };
-                //Managers.Network.Send(cRay);
+                Managers.Network.Send(cRay);
             }
             else
             {
