@@ -142,7 +142,7 @@ namespace Server.Game
 
         
 
-        public void MoveItem(ItemObject target, int posX, int posY, int rotate, Grid targetGrid)
+        public void MoveItem(ItemObject target, ItemDataInfo packetData, Grid targetGrid)
         {
             //아이템의 이름,아이디
             //전위치 -> 옮겨질 현위치
@@ -150,8 +150,8 @@ namespace Server.Game
             //이전 그리드의 아이디. 현재 그리드의 아이디
             Console.WriteLine($"MoveItem Method\n" +
                 $"Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
-                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosY}) -> ({posX},{posY})\n" +
-                $"rotate : {target.itemDataInfo.ItemRotate} -> {rotate}\n" +
+                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosY}) -> ({packetData.ItemPosX},{packetData.ItemPosY})\n" +
+                $"rotate : {target.itemDataInfo.ItemRotate} -> {packetData.ItemRotate}\n" +
                 $"grid : {target.ownerGrid.gridData.GridId} -> {targetGrid.gridData.GridId}");
 
             //그리드에서 아이템 및 아이템 데이터 삭제
@@ -159,10 +159,10 @@ namespace Server.Game
             target.ownerGrid.RemoveItemDataInGridData(target);
             //아이템의 소유그리드와 회전도 업데이트
             target.ownerGrid = targetGrid;
-            target.ItemRotate = rotate;
+            target.ItemRotate = packetData.ItemRotate;
             
             //그리드에 아이템 및 아이템 데이터 삽입
-            target.ownerGrid.PushItemIntoSlot(target, posX, posY);
+            target.ownerGrid.PushItemIntoSlot(target, packetData.ItemPosX,packetData.ItemPosY);
             target.ownerGrid.InsertItemDataInGridData(target);
             target.ownerGrid.PrintInvenContents();
         }

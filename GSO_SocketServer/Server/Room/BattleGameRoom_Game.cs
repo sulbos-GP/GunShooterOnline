@@ -165,9 +165,7 @@ namespace Server
                 return;
             }
 
-            //타겟아이템이 존재하는 그리드가 존재하는 인벤토리에서 moveItem 메서드 실행
-            target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemData.ItemPosX, packet.ItemData.ItemPosY, packet.ItemData.ItemRotate, targetGrid);
-
+            //유효성 체크후 패킷의 데이터를 그대로 브로드캐스트로 S패킷 전달
             S_MoveItem s_MoveItem = new S_MoveItem()
             {
                 PlayerId = player.Id,
@@ -183,10 +181,10 @@ namespace Server
                 LastGridId = packet.LastGridId,
             };
 
-
             BroadCast(s_MoveItem);
 
-            // BroadCast()
+            //서버의 아이템 데이터 변경
+            target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemData, targetGrid);
         }
 
 

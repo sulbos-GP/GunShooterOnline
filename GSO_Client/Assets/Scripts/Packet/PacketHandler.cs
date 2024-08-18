@@ -4,6 +4,7 @@ using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using ServerCore;
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
@@ -16,7 +17,7 @@ internal class PacketHandler
         var enterGamePacket = (S_EnterGame)packet;
         Debug.Log($"{enterGamePacket.Player}");
         Managers.Object.Add(enterGamePacket.Player, true);
-        
+
         //Use Stat
         var Stats = enterGamePacket.Player.StatInfo;
         Managers.Object.MyPlayer.Hp = Stats.Hp;
@@ -43,7 +44,7 @@ internal class PacketHandler
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         var spawnPacket = (S_Spawn)packet;
-        
+
         foreach (var info in spawnPacket.Objects) Managers.Object.Add(info, false);
         //Debug.Log("S_SpawnHandler");
     }
@@ -110,7 +111,7 @@ internal class PacketHandler
              Managers.Map.MapRoomUpdate(roomPacket);*/
     }
 
- 
+
 
     internal static void S_ConnectedHandler(PacketSession session, IMessage message)
     {
@@ -118,13 +119,13 @@ internal class PacketHandler
         Debug.Log("S_ConnectedHandler");
 
     }
-    
-    
+
+
 
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
         //클라이언트에서 오브젝트 생성시 서버에 패킷을 보내고 서버에서 인벤토리 아이디를 검색하여 해당 인벤토리의 내용을 반환해줌
-        
+
         S_LoadInventory packet = message as S_LoadInventory;
         Debug.Log("S_LoadInventory");
         if (packet == null)
@@ -133,7 +134,7 @@ internal class PacketHandler
             return;
         }
 
-        if(packet.InvenData == null)
+        if (packet.InvenData == null)
         {
             Debug.Log("인벤데이터가 비어있음");
             return;
@@ -148,27 +149,27 @@ internal class PacketHandler
         //패킷의 인벤데이터를 클라의 인벤데이터로 변환
         InvenData newInvenData = new InvenData();
         newInvenData.SetInvenData(packet.InvenData);
-        foreach(GridData grid in newInvenData.gridList)
+        foreach (GridData grid in newInvenData.gridList)
         {
-            if(Managers.Object._gridDic.ContainsKey(grid.gridId) == true) { continue; }
+            if (Managers.Object._gridDic.ContainsKey(grid.gridId) == true) { continue; }
             Managers.Object.AddGridDic(grid.gridId, grid);
-            foreach(ItemData item in grid.itemList)
+            foreach (ItemData item in grid.itemList)
             {
                 if (Managers.Object._itemDic.ContainsKey(item.itemId) == true) { continue; }
                 Managers.Object.AddItemDic(item.itemId, item);
             }
         }
-        
+
         GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //패킷의 해당 인벤토리의 id로 인벤토리 오브젝트 검색
         if (Managers.Object.MyPlayer.Id == packet.InventoryId)
         {
             //플레이어 인벤토리에 패킷의 invenData 적용
-            if(invenObj.GetComponent<PlayerInventory>() == null)
+            if (invenObj.GetComponent<PlayerInventory>() == null)
             {
                 Debug.Log("적용할 오브젝트에 해당 스크립트가 없음(Player)");
                 return;
             }
-            
+
             invenObj.GetComponent<PlayerInventory>().InputInvenData = newInvenData;
         }
         else
@@ -180,7 +181,7 @@ internal class PacketHandler
                 Debug.Log("적용할 오브젝트에 해당 스크립트가 없음(Other)");
                 return;
             }
-            
+
             invenObj.GetComponent<OtherInventory>().InputInvenData = newInvenData;
         }
     }
@@ -195,6 +196,7 @@ internal class PacketHandler
         }
         Debug.Log("S_MoveItem");
 
+
         if (packet.PlayerId == Managers.Object.MyPlayer.Id)
         {
             //옮긴 플레이어를 제외한 다른 플레이어에게 적용되는 핸들러
@@ -203,24 +205,21 @@ internal class PacketHandler
         }
 
         //적플레이어가 자신의 인벤토리로 아이템을 옮김(그리드 생성안함)
-        ItemData moveItemData;
-        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemData.ItemId, out moveItemData);
-        if (success == false)
+        ItemData moveItemData = null;
+        Managers.Object._itemDic.TryGetValue(packet.ItemData.ItemId, out moveItemData);
+        if (moveItemData == null)
         {
-            //적플레이어가 자신의 인벤에 있던 아이템을 박스에 넣을 경우 -> 이쪽 클라에서는 해당 아이템이 없음 -> 새 아이템 생성
-            //검색 불가 패킷을 수정해야함 -> 아이템 아이디 대신 아이템 데이터 자체를 받도록 해야함
-            moveItemData.itemId = packet.ItemData.ItemId;
-
-            //수정시 return 없앨것
-            return;
+            //클라에 해당 아이템이 없는 경우(적플레이어가 자신의 인벤에 있던 아이템을 박스에 넣을 경우) -> 새 아이템을 생성
+            moveItemData = new ItemData();
+            moveItemData.SetItemData(packet.ItemData);
         }
 
         moveItemData.itemPos = new Vector2Int(packet.ItemData.ItemPosX, packet.ItemData.ItemPosY);
         moveItemData.itemRotate = packet.ItemData.ItemRotate;
 
         GridData curItemGrid;
-        success = Managers.Object._gridDic.TryGetValue(packet.GridId, out curItemGrid);
-        if (success)
+        Managers.Object._gridDic.TryGetValue(packet.GridId, out curItemGrid);
+        if (curItemGrid != null)
         {
             //현재 그리드를 찾은 상태에서 
             foreach (ItemData itemData in curItemGrid.itemList)
@@ -228,7 +227,7 @@ internal class PacketHandler
                 //아이템의 위치가 같다면 머지(혹시모르니 아이템 코드가 같다는 조건도 넣음)
                 //이 핸들러가 도착했다는것은 아이템의 배치가 성공했음을 의미
                 //같은 그리드상에서 아이템을 옮겼을때 의 경우 이미 그리드의 아이템 리스트에는 해당 아이템이 있어 중복되는 현상 수정(itemId가 달라야하는 조건 추가)
-                if ((itemData.itemId != moveItemData.itemId) &&(itemData.itemPos == moveItemData.itemPos) && (itemData.itemCode == moveItemData.itemCode))
+                if ((itemData.itemId != moveItemData.itemId) && (itemData.itemPos == moveItemData.itemPos) && (itemData.itemCode == moveItemData.itemCode))
                 {
                     itemData.itemAmount += moveItemData.itemAmount;
                     return;
@@ -238,8 +237,8 @@ internal class PacketHandler
         }
 
         GridData backUpItemGrid;
-        success = Managers.Object._gridDic.TryGetValue(packet.LastGridId, out backUpItemGrid);
-        if (success == false)
+        Managers.Object._gridDic.TryGetValue(packet.LastGridId, out backUpItemGrid);
+        if (backUpItemGrid == null)
         {
             Debug.Log("옮기기전 그리드가 존재하지 않음(검색실패)");
             return;
@@ -247,10 +246,8 @@ internal class PacketHandler
 
         backUpItemGrid.itemList.Remove(moveItemData);
 
-
-        //프로토콜 업데이트 시 주석해제
-
-        //클라이언트에서 해당 아이템을 배치 가능한지 체크해서 성공할 경우에만 패킷을 전달하기에 따로 성공 여부 체크는 필요 없을듯.
+        //todo. 만약 플레이어 1,2가 같은 박스의 인벤토리를 보고있을때 1이 아이템을 옮기면 2의 인벤토리UI 에서도 해당 아이템 오브젝트가 사라지게할것-> 딜리트에도 같음 
+        
 
     }
 
@@ -270,30 +267,17 @@ internal class PacketHandler
             //옮긴 플레이어를 제외한 다른 플레이어에게 전송됨
             return;
         }
-        /*
-        //패킷의 ItmeId를 통해 해당 아이템을 검색
-        ItemObject deleteItem;
-        bool success = Managers.Object._itemDic.TryGetValue(packet.ItemId, out deleteItem);
 
-        if (success == false)
-        {
-            Debug.Log("삭제하려는 아이템이 존재하지 않음(검색 실패)");
-            return;
-        }
-        //item.curGrid를 통해 해당 아이템이 존재하는 그리드를 도출해냄
-        InventoryGrid deleteItemGrid = deleteItem.curItemGrid;
+        /* 프로토콜 업데이트 필요 패킷에 그리드id가 필요함
+        GridData deleteItemGrid;
+        Managers.Object._gridDic.TryGetValue(packet.GridId, out deleteItemGrid);
         if (deleteItemGrid == null)
         {
             Debug.Log("아이템이 위치한 그리드가 존재하지 않음");
             return;
         }
 
-        //item.curGrid.CleanItemSlot(item)으로 해당 그리드의 아이템 슬롯에서 해당 아이템 제거
-        deleteItemGrid.CleanItemSlot(deleteItem);
-
-        //해당 오브젝트가 딕셔너리에 존재하면 해당 아이템을 삭제함
-        Managers.Object.RemoveItem(packet.ItemId);
-        */
+        deleteItemGrid.itemList.Remove(packet.itemData);*/
     }
 
     internal static void S_RaycastHitHandler(PacketSession session, IMessage message)
@@ -328,8 +312,6 @@ internal class PacketHandler
         //cc에서 피격 표시?
 
         //hit ID가 없으면 벽 맞는 거라         packet.HitPointX , Y이용하여 렌더링 및 이펙트 표시!! 
-
-
     }
 
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)
@@ -382,40 +364,40 @@ internal class PacketHandler
          Debug.Log("S_SkillHandler");
      }*/
 
-    /*internal static void S_StatChangeHandler(PacketSession session, IMessage message)
-    {
-        var statpacket = (S_StatChange)message;
-        var go = Managers.Object.FindById(statpacket.ObjectId);
-        if (go == null)
-            return;
-
-        var cc = go.GetComponent<CreatureController>();
-        if (cc == null)
-            return;
-        
-        Debug.Log($"previous : S_Stat {statpacket.ObjectId}{cc.Stat}");
-
-        cc.Stat.MergeFrom(statpacket.StatInfo);
-
-        #region IsPlayer
-        MyPlayerController mc = cc as MyPlayerController;
-        if (mc != null)
+        /*internal static void S_StatChangeHandler(PacketSession session, IMessage message)
         {
-            mc.CheakUpdateLevel();
-        }
-        #endregion
-        
-        
-        
-        
-        Debug.Log($"Next : S_Stat {statpacket.StatInfo}");
-    }*/
+            var statpacket = (S_StatChange)message;
+            var go = Managers.Object.FindById(statpacket.ObjectId);
+            if (go == null)
+                return;
 
-    /*internal static void S_LobbyPlayerInfoHandler(PacketSession session, IMessage message)
-    {
-        //서버에서 로비에관한 정보
-        Debug.Log("S_LobbyPlayerInfoHandler");
-        var lobbyPlayerInfo = (S_LobbyPlayerInfo)message;
-        GameObject.Find("LobbyScene").GetComponent<LobbyScene>().DataUpdate(lobbyPlayerInfo);
-    }*/
+            var cc = go.GetComponent<CreatureController>();
+            if (cc == null)
+                return;
+
+            Debug.Log($"previous : S_Stat {statpacket.ObjectId}{cc.Stat}");
+
+            cc.Stat.MergeFrom(statpacket.StatInfo);
+
+            #region IsPlayer
+            MyPlayerController mc = cc as MyPlayerController;
+            if (mc != null)
+            {
+                mc.CheakUpdateLevel();
+            }
+            #endregion
+
+
+
+
+            Debug.Log($"Next : S_Stat {statpacket.StatInfo}");
+        }*/
+
+        /*internal static void S_LobbyPlayerInfoHandler(PacketSession session, IMessage message)
+        {
+            //서버에서 로비에관한 정보
+            Debug.Log("S_LobbyPlayerInfoHandler");
+            var lobbyPlayerInfo = (S_LobbyPlayerInfo)message;
+            GameObject.Find("LobbyScene").GetComponent<LobbyScene>().DataUpdate(lobbyPlayerInfo);
+        }*/
 }

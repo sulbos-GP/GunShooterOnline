@@ -198,13 +198,11 @@ public class ItemObject : MonoBehaviour
 
     public void MergeItem(ItemObject targetItem, int mergeAmount)
     {
-        if (itemData.itemCode == targetItem.itemData.itemCode)
-        {
-            targetItem.ItemAmount += mergeAmount;
-            ItemAmount -= mergeAmount;
-        }
+        //이미 유효성 체크가 성공함.
+        targetItem.ItemAmount += mergeAmount;
+        ItemAmount -= mergeAmount;
 
-        if(itemData.itemAmount <= 0)
+        if (itemData.itemAmount <= 0)
         {
             backUpItemGrid.gridData.itemList.Remove(itemData);
             Managers.Object.RemoveItemDic(itemData.itemId);
