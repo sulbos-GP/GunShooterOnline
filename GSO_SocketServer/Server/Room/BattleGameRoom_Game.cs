@@ -221,7 +221,8 @@ namespace Server
                 ChangeHpPacket.ObjectId = hit.Id;
                 ChangeHpPacket.Hp = creatureObj.Hp;
 
-                
+                Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hit.Id + "HIT Hp : "+ ChangeHpPacket.Hp);
+
                 BroadCast(ChangeHpPacket);
 
 
