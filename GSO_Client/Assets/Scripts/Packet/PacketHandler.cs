@@ -44,9 +44,20 @@ internal class PacketHandler
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         var spawnPacket = (S_Spawn)packet;
+        
+        foreach (var info in spawnPacket.Objects)
+        {
+            Managers.Object.Add(info, false);
 
-        foreach (var info in spawnPacket.Objects) Managers.Object.Add(info, false);
-        //Debug.Log("S_SpawnHandler");
+            var type = (info.ObjectId >> 24) & 0x7f;
+            if ((GameObjectType)type != GameObjectType.Player)
+                continue;
+            var Stats = info.StatInfo;
+            var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
+            player.Hp = Stats.Hp;
+            player.MaxHp = Stats.MaxHp;
+        }
+        //Debug.Log("S_SpawnHandler");*/
     }
 
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
@@ -68,13 +79,21 @@ internal class PacketHandler
             return;
 
         if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
+        {
             return;
+        }
 
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
             return;
 
+        var ec = cc.GetComponent<PlayerController>();
+        ec.UpdatePosInfo(movePacket.PositionInfo);
+        ec.UpdateMoving();
         cc.PosInfo = movePacket.PositionInfo;
+        
+
+
         //cc.State = CreatureState.Moving;
     }
 
@@ -200,11 +219,10 @@ internal class PacketHandler
         if (packet.PlayerId == Managers.Object.MyPlayer.Id)
         {
             //옮긴 플레이어를 제외한 다른 플레이어에게 적용되는 핸들러
-            Debug.Log("myplayer");
             return;
         }
 
-        //적플레이어가 자신의 인벤토리로 아이템을 옮김(그리드 생성안함)
+        
         ItemData moveItemData = null;
         Managers.Object._itemDic.TryGetValue(packet.ItemData.ItemId, out moveItemData);
         if (moveItemData == null)
@@ -217,12 +235,12 @@ internal class PacketHandler
         moveItemData.itemPos = new Vector2Int(packet.ItemData.ItemPosX, packet.ItemData.ItemPosY);
         moveItemData.itemRotate = packet.ItemData.ItemRotate;
 
-        GridData curItemGrid;
-        Managers.Object._gridDic.TryGetValue(packet.GridId, out curItemGrid);
-        if (curItemGrid != null)
+        GridData movedGrid;
+        Managers.Object._gridDic.TryGetValue(packet.GridId, out movedGrid);
+        if (movedGrid != null)
         {
             //현재 그리드를 찾은 상태에서 
-            foreach (ItemData itemData in curItemGrid.itemList)
+            foreach (ItemData itemData in movedGrid.itemList)
             {
                 //아이템의 위치가 같다면 머지(혹시모르니 아이템 코드가 같다는 조건도 넣음)
                 //이 핸들러가 도착했다는것은 아이템의 배치가 성공했음을 의미
@@ -233,22 +251,40 @@ internal class PacketHandler
                     return;
                 }
             }
-            curItemGrid.itemList.Add(moveItemData);
+            movedGrid.itemList.Add(moveItemData);
         }
 
-        GridData backUpItemGrid;
-        Managers.Object._gridDic.TryGetValue(packet.LastGridId, out backUpItemGrid);
-        if (backUpItemGrid == null)
+        //todo. 만약 플레이어 1,2가 같은 박스의 인벤토리를 보고있을때 1이 아이템을 옮기면 2의 인벤토리UI 에서도 해당 아이템 오브젝트를 옮김-> 딜리트에도 같음 
+        //제대로 작동안함
+        /*for (int i = 0; i < InventoryController.invenInstance.instantItemList.Count; i++)
         {
-            Debug.Log("옮기기전 그리드가 존재하지 않음(검색실패)");
+            if (InventoryController.invenInstance.instantItemList[i].itemData.itemId == moveItemData.itemId)
+            {
+                //이미 해당 오브젝트의 아이템 데이터가 업데이트 되어 자신의 데이터를 사용하여 위치와 회전만 조정하면 됨
+                ItemObject itemObj = InventoryController.invenInstance.instantItemList[i];
+                if(itemObj.curItemGrid.gridData.gridId == movedGrid.gridId) //TODO -> 인벤토리 단위로 바꿔야함(나중에 인벤토리 내에 여러개의 그리드가 존재할경우)
+                {
+                    itemObj.curItemGrid.PlaceSprite(itemObj, itemObj.itemData.itemPos.x, itemObj.itemData.itemPos.y, itemObj.GetComponent<RectTransform>());
+                    itemObj.Rotate(itemObj.itemData.itemRotate);
+                }
+                else
+                {
+                    itemObj.DestroyItem();
+                }
+
+                break;
+            }
+        }*/ 
+
+        GridData pastGrid;
+        Managers.Object._gridDic.TryGetValue(packet.LastGridId, out pastGrid);
+        if (pastGrid == null)
+        {
+            Debug.Log("옮기기전 그리드가 존재하지 않음(무브연산)");
             return;
         }
 
-        backUpItemGrid.itemList.Remove(moveItemData);
-
-        //todo. 만약 플레이어 1,2가 같은 박스의 인벤토리를 보고있을때 1이 아이템을 옮기면 2의 인벤토리UI 에서도 해당 아이템 오브젝트가 사라지게할것-> 딜리트에도 같음 
-        
-
+        pastGrid.itemList.Remove(moveItemData);
     }
 
     //아이템을 삭제할때. 플레이어가 아이템을 들었을때 다른 플레이어에게 전송할때도 좋을듯.
@@ -268,16 +304,38 @@ internal class PacketHandler
             return;
         }
 
-        /* 프로토콜 업데이트 필요 패킷에 그리드id가 필요함
+        ItemData deleteItemdata = null;
+        Managers.Object._itemDic.TryGetValue(packet.ItemData.ItemId, out deleteItemdata);
+        if (deleteItemdata == null)
+        {
+            //클라에 해당 아이템이 없는 경우(적플레이어가 자신의 인벤에 있던 아이템을 버릴경우)
+            Debug.Log("클라에 해당 아이템 데이터가 없음(삭제 연산)");
+            return;
+        }
+
         GridData deleteItemGrid;
         Managers.Object._gridDic.TryGetValue(packet.GridId, out deleteItemGrid);
         if (deleteItemGrid == null)
         {
-            Debug.Log("아이템이 위치한 그리드가 존재하지 않음");
+            Debug.Log("클라이언트에 아이템이 위치했던 그리드가 존재하지 않음(삭제연산)");
             return;
         }
+        deleteItemGrid.itemList.Remove(deleteItemdata);
 
-        deleteItemGrid.itemList.Remove(packet.itemData);*/
+
+        //해당 데이터로 만들어진 아이템 오브젝트가 존재할경우 삭제
+        //제대로 작동안함
+        /*
+        for (int i = 0; i < InventoryController.invenInstance.instantItemList.Count; i++)
+        {
+            if(InventoryController.invenInstance.instantItemList[i].itemData.itemId == deleteItemdata.itemId)
+            {
+                Managers.Object.RemoveItemDic(InventoryController.invenInstance.instantItemList[i].itemData.itemId);
+                InventoryController.invenInstance.instantItemList[i].DestroyItem();
+                break;
+            }
+        }
+        */
     }
 
     internal static void S_RaycastHitHandler(PacketSession session, IMessage message)
@@ -290,7 +348,7 @@ internal class PacketHandler
         }
         Debug.Log("S_RaycastHit");
         //레이의 아이디를 키로 해당 패킷을 저장하는 딕셔너리
-        Managers.Object._rayDic.Add(packet.RayId, packet);
+        //일단 지움 : Managers.Object._rayDic.Add(packet.RayId, packet);
 
         GameObject go = Managers.Object.FindById(packet.HitObjectId);
         if (go == null)
@@ -298,16 +356,19 @@ internal class PacketHandler
             Debug.Log("Wall Hit bullet");
             return;
         }
-        Debug.Log(go.GetComponent<MyPlayerController>().Id);
+        //Debug.Log(go.GetComponent<MyPlayerController>().Id);
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
         {
             //TO - DO : 맞는지 모르겠음.
             Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
-            Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
+
+            //Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
+
+
+            //Debug.DrawLine(hitObj, hitObj);
             return;
         }
- 
 
         //cc에서 피격 표시?
 
@@ -330,6 +391,8 @@ internal class PacketHandler
 
         //플레이어와 해당 플레이어 가진 아이템 그리드 데이터 삭제할것\
         var player = Managers.Object.FindById(packet.PlayerId);
+
+        /* 다른 플레이어는 클라에서 인벤토리를 가지지 않음
         InvenData targetInvenData = player.GetComponent<PlayerInventory>().InputInvenData;
         if (targetInvenData == null) {
             Debug.Log("인벤데이터를 찾지 못함");
@@ -342,8 +405,9 @@ internal class PacketHandler
             {
                 Managers.Object.RemoveItemDic(item.itemId);
             }
-        }
+        }*/
 
+        Managers.Resource.Destroy(player);
         Managers.Object.Remove(packet.PlayerId);
         Managers.Object.DebugDics();
     }

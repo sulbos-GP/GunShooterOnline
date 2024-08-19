@@ -29,7 +29,7 @@ public class Player : CreatureObj
 
         });
 
-        float width = 1;
+        float width = 0.5f;
         float left = -0.5f;
         float bottom = -0.5f;
         Polygon rectangle = ShapeManager.CreateCenterSquare(left, bottom, width);

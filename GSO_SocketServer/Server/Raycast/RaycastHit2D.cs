@@ -6,7 +6,7 @@ using Vector2 = System.Numerics.Vector2;
 
 public class RaycastHit2D
 {
-    public int Id;
+    public int rayID;
     public Shape Collider;
     //public GameObject hitObj;
     public float distance;

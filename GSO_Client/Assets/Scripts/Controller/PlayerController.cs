@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Google.Protobuf.Protocol;
+using MathNet.Numerics;
 using UnityEngine;
 
 public class PlayerController : CreatureController
@@ -13,6 +14,7 @@ public class PlayerController : CreatureController
     protected override void Init()
     {
         base.Init();
+        Debug.Log("init");
     }
 
     //protected override void UpdateAnimation()
@@ -97,13 +99,27 @@ public class PlayerController : CreatureController
         base.UpdateController();
     }
 
+    public void UpdatePosInfo(PositionInfo info)
+    {
+        Dir = new Vector2(info.DirX, info.DirY);
+        gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
+        gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
+    }
 
     public override void UpdateMoving()
     {
-        if ((CellPos - transform.position).sqrMagnitude > 10)
-            transform.position = CellPos;
-        else
-            transform.position = Vector3.Lerp(transform.position, CellPos, Time.deltaTime * 10);
+        //if ((CellPos - transform.position).sqrMagnitude > 10)
+        //    transform.position = CellPos;
+        //else
+        //    transform.position = Vector3.Lerp(transform.position, CellPos, Time.deltaTime * 10);
+
+        //Move
+        Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
+        Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
+        rig.MovePosition(rig.position + newVec2);
+
+        //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;
+        //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
     }
 
     protected override void UpdateIdle()
