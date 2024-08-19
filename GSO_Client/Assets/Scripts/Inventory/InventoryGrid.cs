@@ -152,6 +152,7 @@ public class InventoryGrid : MonoBehaviour
     private void CreateItemObj(ItemData itemData)
     {
         ItemObject itemObj = Instantiate(itemPref, transform).GetComponent<ItemObject>();
+        InventoryController.invenInstance.instantItemList.Add(itemObj);
         itemObj.ItemDataSet(itemData);
         PlaceItem(itemObj, itemData.itemPos.x, itemData.itemPos.y);
         itemObj.curItemGrid = this;
@@ -338,6 +339,7 @@ public class InventoryGrid : MonoBehaviour
         itemData.itemPos = pos;
         item.curItemGrid = this;
         // itemList에서 아이템을 추가합니다.
+        InventoryController.invenInstance.instantItemList.Add(item);
         gridData.itemList.Add(itemData);
     }
 
@@ -347,6 +349,7 @@ public class InventoryGrid : MonoBehaviour
         ItemData itemData = item.itemData;
         if (itemData == null) return;
         // itemList에서 해당 아이템을 제거합니다.
+        InventoryController.invenInstance.instantItemList.Remove(item);
         gridData.itemList.Remove(itemData);
     }
 

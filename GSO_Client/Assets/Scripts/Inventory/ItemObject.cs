@@ -205,6 +205,7 @@ public class ItemObject : MonoBehaviour
         if (itemData.itemAmount <= 0)
         {
             backUpItemGrid.gridData.itemList.Remove(itemData);
+
             Managers.Object.RemoveItemDic(itemData.itemId);
         }
     }
@@ -222,8 +223,9 @@ public class ItemObject : MonoBehaviour
 
     public void DestroyItem()
     {
-        curItemGrid.gridData.itemList.Remove(itemData);
-        Managers.Object.RemoveItemDic(itemData.itemId);
+        curItemGrid.gridData.itemList.Remove(itemData); //그리드 데이터에서 삭제
+        Managers.Object.RemoveItemDic(itemData.itemId); //오브젝트 매니저 딕셔너리에서 삭제
+        InventoryController.invenInstance.instantItemList.Remove(this); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
         Destroy(gameObject);
     }
 }

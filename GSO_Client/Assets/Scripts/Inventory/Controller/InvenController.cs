@@ -20,6 +20,7 @@ public partial class InventoryController : MonoBehaviour
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
     public OtherInventoryUI otherInvenUI;
+    public List<ItemObject> instantItemList;
 
     [Header("수동지정")]
     public Transform deleteUI;
@@ -122,7 +123,7 @@ public partial class InventoryController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-
+        instantItemList = new List<ItemObject>();
         invenHighlight = GetComponent<InvenHighLight>();
     }
 
@@ -301,6 +302,8 @@ public partial class InventoryController : MonoBehaviour
                 C_DeleteItem packet = new C_DeleteItem();
                 packet.PlayerId = Managers.Object.MyPlayer.Id;
                 packet.ItemData = selectedItem.itemData.GetItemData();
+                packet.GridId = selectedItem.curItemGrid.gridData.gridId;
+                packet.LastGridId = selectedItem.backUpItemGrid.gridData.gridId;
                 Managers.Network.Send(packet);
                 Debug.Log("C_DeleteItem");
 

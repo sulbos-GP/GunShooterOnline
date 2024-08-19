@@ -14,10 +14,32 @@ public class OtherInventoryUI : InventoryUI
     private void OnDisable()
     {
         invenData = null;
-        foreach(InventoryGrid grids in instantGridList)
+
+        // 아이템을 제거할 리스트를 먼저 만듭니다.
+        List<ItemObject> itemsToRemove = new List<ItemObject>();
+
+        foreach (InventoryGrid grids in instantGridList)
         {
+            // 제거할 아이템을 수집합니다.
+            foreach (ItemObject item in InventoryController.invenInstance.instantItemList)
+            {
+                if (grids.gridData.itemList.Contains(item.itemData))
+                {
+                    itemsToRemove.Add(item);
+                }
+            }
+
+            // 수집된 아이템들을 리스트에서 제거합니다.
+            foreach (ItemObject item in itemsToRemove)
+            {
+                InventoryController.invenInstance.instantItemList.Remove(item);
+            }
+
+            itemsToRemove.Clear(); // 다음 루프를 위해 리스트를 비웁니다.
+
             Destroy(grids.gameObject);
         }
+
         instantGridList.Clear();
         invenWeight = 0;
     }
