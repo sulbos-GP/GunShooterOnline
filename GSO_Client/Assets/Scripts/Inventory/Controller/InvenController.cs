@@ -1,5 +1,6 @@
 using Google.Protobuf.Protocol;
 using NPOI.OpenXmlFormats.Dml.Diagram;
+using NPOI.SS.Formula.Eval;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -84,7 +85,7 @@ public partial class InventoryController : MonoBehaviour
     [SerializeField] private RectTransform selectedRect;
     public bool isItemSelected; //현재 선택된 상태인지
 
-    private ItemObject placeOverlapItem; //아이템을 배치할때 체크될 오버랩 아이템 변수
+    public ItemObject placeOverlapItem; //아이템을 배치할때 체크될 오버랩 아이템 변수
     private ItemObject checkOverlapItem; //매 프레임마다 체크될 오버랩 아이템 변수
 
     private bool isPress = false;
@@ -98,6 +99,30 @@ public partial class InventoryController : MonoBehaviour
         {
             isOnDelete = value;
             deleteUI.GetComponent<DeleteZone>().IsDeleteOn = value;
+        }
+    }
+
+    //장착 관련
+    [SerializeField] private EquipSlot selectedEquip;
+    [SerializeField] private bool isEquipSelected;
+    public EquipSlot SelectedEquip
+    {
+        get => selectedEquip;
+        set
+        {
+            selectedEquip = value;
+            if(selectedEquip != null)
+            {
+                isEquipSelected = true;
+            }
+            else
+            {
+                isEquipSelected = false;
+            }
+
+            if (isItemSelected) {
+                selectedItem.curEquipSlot = value;
+            }
         }
     }
 
@@ -174,54 +199,100 @@ public partial class InventoryController : MonoBehaviour
 
     private void Update()
     {
-        if (!isActive) //UI가 비활성화 라면 리턴
-        {
+        if (!isActive) // UI가 비활성화라면 리턴
             return;
-        }
 
-        if(isPress  && isGridSelected && !isItemSelected) //클릭한 상태고, 그리드가 설정되었고 , 아이템을 들고 잇는 상태가 아니면
+        if (isPress &&  !isItemSelected && (isEquipSelected || isGridSelected) )
         {
-            ItemEvent(); //아이템 이벤트에서 아이템을 들기 실행
+            ItemEvent(); // 아이템 이벤트에서 아이템을 들기 실행
         }
 
         DragObject();
 
-        if (!isGridSelected) //그리드 밖에 있을경우 
+        HandleHighlighting();
+    }
+
+    private void HandleHighlighting()
+    {
+        if (!isItemSelected)
         {
-            if (isOnDelete&&isItemSelected) //삭제 칸에 있다면 노란색하이라이트
-            {
-                invenHighlight.Show(true);
-                invenHighlight.SetColor(HighlightColor.Yellow);
-                InvenHighLight.highlightObj.transform.SetParent(deleteUI);
-                InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
-                return;
-            }
-            //플레이어 슬롯에 배치할때의 처리 추가 예정
-
-
-            //그외엔 하이라이트 없앰
             invenHighlight.Show(false);
             return;
         }
 
-        // 그리드가 존재할 경우
-        if (isGridSelected)
+        if (!isGridSelected) // 그리드 밖에 있을 경우
         {
-            if (selectedItem != null)
+            if (isItemSelected)
             {
-                updateGridPos = WorldToGridPos();
-                Color32 highlightColor = selectedGrid.PlaceCheckForHighlightColor(selectedItem, updateGridPos.x, updateGridPos.y, ref checkOverlapItem);
-                invenHighlight.SetColor(highlightColor);
+                if (isOnDelete)
+                {
+                    HighlightForDelete();
+                }
+                else if (isEquipSelected)
+                {
+                    HighlightForEquip();
+                }
+                else
+                {
+                    invenHighlight.Show(false); // 하이라이트 없앰
+                }
             }
-
-            HandleHighlight(); //그리드 안에서만 하이라이트를 다룸
+            return;
+        }
+        else //포인터가 그리드 안에 있음
+        {
+            HighlightForGrid();
+            return;
         }
     }
 
-    /// <summary>
-    /// 마우스의 위치를 Grid상의 타일 위치로 변환
-    /// </summary>
-    private Vector2Int WorldToGridPos()
+    private void HighlightForDelete()
+    {
+        invenHighlight.Show(true);
+        invenHighlight.SetColor(HighlightColor.Yellow);
+        invenHighlight.SetSize(selectedItem);
+        InvenHighLight.highlightObj.transform.SetParent(deleteUI);
+        InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
+    }
+
+    private void HighlightForEquip()
+    {
+        invenHighlight.Show(true);
+
+        // 장착칸의 아이템 타입이 다르면 빨간색 하이라이트
+        if (selectedItem.itemData.item_type != selectedEquip.allowedItemType)
+        {
+            invenHighlight.SetColor(HighlightColor.Red);
+        }
+        else
+        {
+            // 장착 가능: 이미 장착된 아이템이 있으면 노랑, 없으면 초록
+            invenHighlight.SetColor(selectedEquip.equippedItem != null ? HighlightColor.Yellow : HighlightColor.Green);
+        }
+        invenHighlight.SetSize(selectedItem);
+        InvenHighLight.highlightObj.transform.SetParent(selectedEquip.transform);
+        InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
+    }
+
+    private void HighlightForGrid()
+    {
+        if (!isItemSelected)
+        {
+            invenHighlight.Show(false);
+            return;
+        }
+
+        updateGridPos = WorldToGridPos();
+        Color32 highlightColor = selectedGrid.PlaceCheckForHighlightColor(selectedItem, updateGridPos.x, updateGridPos.y, ref checkOverlapItem);
+        invenHighlight.SetColor(highlightColor);
+
+        HandleHighlight();
+
+    }
+        /// <summary>
+        /// 마우스의 위치를 Grid상의 타일 위치로 변환
+        /// </summary>
+        private Vector2Int WorldToGridPos()
     {
         Vector2 position = mousePosInput;
         //아이템을 들고있다면
@@ -268,7 +339,6 @@ public partial class InventoryController : MonoBehaviour
 
         HighlightPosition = updateGridPos;
 
-        //아이템을 들고 있지 않은 경우
         if (isItemSelected)
         {
             //아이템을 들고 있다면 그 아이템이 위치한 곳에 하이라이팅
@@ -293,59 +363,138 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void ItemEvent()
     {
-        if (isItemSelected)
+        if (isItemSelected) //아이템을 배치해야하는경우
         {
-            //휴지통 칸에 있을경우
+            //포인터가 장착 슬롯에 있을경우
+            if (SelectedEquip != null)
+            {
+                if(SelectedEquip.equippedItem == null)
+                {
+                    selectedItem.backUpEquipSlot = selectedEquip;
+                    selectedEquip.EquipItem(selectedItem);
+                    SelectedItem = null;
+                }
+                else
+                {
+                    if(SelectedItem.backUpEquipSlot == null) //슬롯에 있는 아이템이 아니다 -> 그리드에 있던 아이템이다
+                    {
+                        ItemObject targetItem = SelectedEquip.equippedItem;
+                        InventoryGrid playerGrid = playerInvenUI.instantGridList[0]; //만약 인벤 하나에 그리드가 여러개가 된다면 수정해야함
+                        Vector2Int? findSpacePos = playerGrid.FindSpaceForObject(targetItem);
+                        if (findSpacePos != null)
+                        {
+                            //플레이어그리드에 배치할 자리가 있을시
+                            playerGrid.PlaceItem(targetItem, findSpacePos.Value.x, findSpacePos.Value.y);
+                            targetItem.curItemGrid = playerGrid;
+                            BackUpItem(targetItem);
+
+                            targetItem.curEquipSlot = null;
+                            targetItem.backUpEquipSlot = null;
+                            SelectedEquip.equippedItem = null; //원래 슬롯에 있던 아이템을 플레이어 인벤토리에 배치
+
+                            selectedItem.backUpEquipSlot = selectedEquip;
+                            selectedEquip.EquipItem(selectedItem);
+                            SelectedItem = null; //들고 있는 아이템을 장비칸에 장착
+                        }
+                        else
+                        {
+                            UndoGridSlot();
+                            UndoItem();
+                        }
+                    }
+                    else //다른 슬롯에 있던 아이템을 해당 슬롯으로 옮길경우
+                    {
+                        ItemObject targetItem = SelectedEquip.equippedItem;
+                        EquipSlot targetSlot = targetItem.backUpEquipSlot;
+                        //작업중 슬롯 교환 만들것
+
+
+                    }
+                }
+
+                return;
+            }
+
+            //포인터가 휴지통 칸에 있을경우
             if (isOnDelete)
             {
-                //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
-                C_DeleteItem packet = new C_DeleteItem();
-                packet.PlayerId = Managers.Object.MyPlayer.Id;
-                packet.ItemData = selectedItem.itemData.GetItemData();
-                packet.GridId = selectedItem.curItemGrid.gridData.gridId;
-                packet.LastGridId = selectedItem.backUpItemGrid.gridData.gridId;
-                Managers.Network.Send(packet);
-                Debug.Log("C_DeleteItem");
+                if(selectedItem.backUpEquipSlot == null)
+                {
+                    //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
+                    C_DeleteItem packet = new C_DeleteItem();
+                    packet.PlayerId = Managers.Object.MyPlayer.Id;
+                    packet.ItemData = selectedItem.itemData.GetItemData();
+                    packet.GridId = selectedItem.curItemGrid.gridData.gridId;
+                    packet.LastGridId = selectedItem.backUpItemGrid.gridData.gridId;
+                    Managers.Network.Send(packet);
+                    Debug.Log("C_DeleteItem");
 
-                BackUpGridSlot();
-                DestroySelectedItem();
-                return;
+                    BackUpGridSlot(selectedItem.curItemGrid);
+                    DestroySelectedItem();
+                    return;
+                }
+                else
+                {   //장비칸의 있던 아이템을 버릴경우
+                    //서버에서도 수정해야함
+                    C_DeleteItem packet = new C_DeleteItem();
+                    packet.PlayerId = Managers.Object.MyPlayer.Id;
+                    packet.ItemData = selectedItem.itemData.GetItemData();
+                    packet.GridId = -1; //현재 아이템이 장비칸에 있음
+                    packet.LastGridId = selectedItem.backUpItemGrid.gridData.gridId;
+                    Managers.Network.Send(packet);
+                    Debug.Log("C_DeleteItem");
+
+                    DestroySelectedItem();
+                    return;
+                }
+                
             }
 
-            //그리드 밖에 아이템을 배치할경우
-            if (!isGridSelected)
-            {
-                UndoGridSlot();
-                UndoItem();
-                Debug.Log("그리드 없음");
-                return;
-            }
-            else
+            //포인터가 인벤토리 그리드에 위치
+            if (isGridSelected)
             {
                 updateGridPos = WorldToGridPos();
                 ItemRelease(selectedItem, updateGridPos);
             }
-        }
-        else
-        {
-            if (!isGridSelected)
+            else
             {
-                Debug.Log("그리드가 지정되지 않음");
+                UndoGridSlot();
+                UndoItem();
+                Debug.Log("그리드 없음");
+            }
+        }
+        else//아이템을 픽업 해야하는 경우
+        {
+            if (isEquipSelected)
+            {
+                //장착칸을 클릭할때
+                if(selectedEquip.equippedItem != null)
+                {
+                    //장착된 아이템이 있으면 해당 아이템 장착 해제
+                    SelectedItem = selectedEquip.equippedItem;
+                    selectedEquip.UnequipItem();
+                    SetSelectedObjectToLastSibling(selectedItem.transform);
+                }
+
                 return;
             }
 
-            updateGridPos = WorldToGridPos();
-            ItemObject clickedItem = selectedGrid.GetItem(updateGridPos.x, updateGridPos.y); 
-            if (clickedItem == null) { return; }
+            if (isGridSelected)
+            {
+                updateGridPos = WorldToGridPos();
+                ItemObject clickedItem = selectedGrid.GetItem(updateGridPos.x, updateGridPos.y);
+                if (clickedItem == null) { return; }
 
-            //클릭한 아이템이 숨겨진 경우에는 숨김을 해제하고 아니면 아이템을 듬
-            if (clickedItem.isHide == true)
-            {
-                clickedItem.UnhideItem();
-            }
-            else
-            {
-                ItemGet(updateGridPos);
+                //클릭한 아이템이 숨겨진 경우에는 숨김을 해제하고 아니면 아이템을 듬
+                if (clickedItem.isHide == true)
+                {
+                    clickedItem.UnhideItem();
+                }
+                else
+                {
+                    ItemGet(updateGridPos);
+                }
+                return;
             }
         }
         
@@ -373,6 +522,8 @@ public partial class InventoryController : MonoBehaviour
         if (complete)
         {
             HandleItemPlacement(item, pos);
+            
+
         }
         else
         {
@@ -432,15 +583,16 @@ public partial class InventoryController : MonoBehaviour
         {
             selectedItem.MergeItem(placeOverlapItem, selectedItem.itemData.itemAmount);
             
-            BackUpGridSlot();
-            DestroySelectedItem();
+            BackUpGridSlot(selectedItem.curItemGrid);
+            DestroySelectedItem(); 
         }
         else
         {
             int needAmount = ItemObject.maxItemMergeAmount - placeOverlapItem.itemData.itemAmount;
 
             selectedItem.MergeItem(placeOverlapItem, needAmount);
-            
+
+            // *** 슬롯에서 그리드 아이템으로 병합의 경우 남은 아이템이 정상적으로 돌아가는지 확인할것
             UndoGridSlot();
             UndoItem();
         }
@@ -456,12 +608,17 @@ public partial class InventoryController : MonoBehaviour
         selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem); //이전 
         selectedItem.curItemGrid = SelectedItemGrid;
         selectedItem.curItemGrid.AddItemToItemList(selectedItem.itemData.itemPos, selectedItem);
-
+        if (selectedItem.backUpEquipSlot != null) //만약 장비칸에서 그리드로 아이템을 배치가 성공한 경우
+        {
+            //selectedItem.backUpEquipSlot.equippedItem = null; //이부분이 주석이어도 잘 돌아가는지 체크후 제거할것
+            selectedItem.backUpEquipSlot = null;
+        }
         SendMoveItemPacket(item, pos); //백업 전에 내보내야 lastItem 변수에 값이 제대로 할당됨
 
-        BackUpItem();
-        BackUpGridSlot();
-
+        
+        BackUpItem(selectedItem);
+        BackUpGridSlot(selectedItem.curItemGrid);
+       
         ResetSelection();
     }
 
@@ -476,6 +633,7 @@ public partial class InventoryController : MonoBehaviour
             ItemData = item.itemData.GetItemData(),
             TargetId = item.curItemGrid.ownInven.invenData.inventoryId,
             GridId = item.curItemGrid.gridData.gridId,
+
             LastItemPosX = item.backUpItemPos.x,
             LastItemPosY = item.backUpItemPos.y,
             LastItemRotate = item.backUpItemRotate,
@@ -494,20 +652,21 @@ public partial class InventoryController : MonoBehaviour
     /// <summary>
     /// 아이템 슬롯을 백업함(아이템을 들때 슬롯이 업데이트되기에 백업 필요)
     /// </summary>
-    private void BackUpGridSlot()
+    private void BackUpGridSlot(InventoryGrid grid)
     {
-        selectedItem.curItemGrid.UpdateBackUpSlot();
-        selectedItem.curItemGrid.backupWeight = selectedItem.curItemGrid.GridWeight;
+        
+        grid.UpdateBackUpSlot();
+        grid.backupWeight = selectedItem.curItemGrid.GridWeight;
     }
      
     /// <summary>
     /// 아이템의 상태와 위치를 백업함
     /// </summary>
-    private void BackUpItem()
+    private void BackUpItem(ItemObject item)
     {
-        selectedItem.backUpItemPos = selectedItem.itemData.itemPos; //현재 위치
-        selectedItem.backUpItemRotate = selectedItem.itemData.itemRotate; //현재 회전
-        selectedItem.backUpItemGrid = selectedItem.curItemGrid; //현재 그리드
+        item.backUpItemPos = selectedItem.itemData.itemPos; //현재 위치
+        item.backUpItemRotate = selectedItem.itemData.itemRotate; //현재 회전
+        item.backUpItemGrid = selectedItem.curItemGrid; //현재 그리드
         
     }
 
@@ -529,7 +688,13 @@ public partial class InventoryController : MonoBehaviour
     private void UndoItem()
     {
         if(!isItemSelected){ return; }
-
+        if (selectedItem.backUpEquipSlot)
+        {
+            selectedRect.localPosition = Vector3.zero;
+            selectedItem.backUpEquipSlot.EquipItem(selectedItem);
+            SelectedItem = null;
+            return;
+        }
         //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
         selectedItem.curItemGrid = selectedItem.backUpItemGrid;
         selectedItem.itemData.itemPos = selectedItem.backUpItemPos;
@@ -547,7 +712,15 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     private void DestroySelectedItem()
     {
-        selectedItem.curItemGrid.RemoveItemFromItemList(selectedItem);
+        if(selectedItem.curItemGrid != null)
+        {
+            selectedItem.curItemGrid.RemoveItemFromItemList(selectedItem);
+        }
+        if(selectedItem.backUpEquipSlot != null)
+        {
+            selectedItem.backUpEquipSlot.equippedItem = null;
+        }
+        
         selectedItem.DestroyItem();
         SelectedItem = null;
     }

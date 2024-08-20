@@ -235,21 +235,20 @@ public class InventoryGrid : MonoBehaviour
     /// </summary>
     public bool PlaceItemCheck(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
     {
-        //현재 선택된 그리드가 없다면 배치 실패
-        if(InventoryController.invenInstance.SelectedItemGrid == null)
-        {
-            return false;
-        }
-
         //아이템이 그리드 밖으로 나갈시 취소
         if (BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height) == false)
         {
+            Debug.Log("boundary error");
+
             return false;
+            
         }
 
+        
         //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
         if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem) == false)
         {
+            Debug.Log("overlap error");
             overlapItem = null;
             return false;
         }
@@ -257,12 +256,14 @@ public class InventoryGrid : MonoBehaviour
         //무게에 의해 배치가 불가능할 경우 취소
         if (ownInven.CheckingInvenWeight(placeItem.itemData.item_weight, overlapItem) == false)
         {
+            Debug.Log("weight error");
             return false;
         }
 
         //오버랩된 아이템이 있다면
         if (overlapItem != null)
         {
+            
             //같은 소모품의 경우 배치를 하지 않은 채로 true 리턴
             if (placeItem.itemData.isItemConsumeable && 
                 (placeItem.itemData.itemCode == overlapItem.itemData.itemCode)&&
@@ -391,6 +392,7 @@ public class InventoryGrid : MonoBehaviour
         }
     }
 
+   
     /// <summary>
     /// 머지아이템 기능에 사용, 놓으려는 아이템의 자리에 아이템이 있는지 체크함
     /// </summary>
@@ -404,19 +406,15 @@ public class InventoryGrid : MonoBehaviour
                 //해당 아이템 슬롯이 비어있지 않을 경우 
                 if (ItemSlot[posX + x, posY + y] != null)
                 {
-                    //겹치는 아이템이 1인 경우에는 선택아이템과 교체 그 이상이라면 Place 불가
-                    if (overlapItem == null)
+                    
+                    if (ItemSlot[posX + x, posY + y].itemData.isItemConsumeable)
                     {
-                        //해당 좌표의 아이템을 오버렙아이템으로 지정
+                        //아이템이 오버랩 가능할때만 해당 좌표의 아이템을 오버렙아이템으로 지정
                         overlapItem = ItemSlot[posX + x, posY + y];
                     }
                     else
                     {
-                        //이미 오버랩 아이템이 지정되어 있는데 다른 아이템이 또 오버랩되면 리턴 false;
-                        if (overlapItem != ItemSlot[posX + x, posY + y])
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
             }
@@ -608,15 +606,15 @@ public class InventoryGrid : MonoBehaviour
 
         PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
     }*/
-    /*
+    
    /// <summary>
    /// 아이템의 크기만큼 들어갈 장소를 찾음
    /// ?를 쓴 이유는 마지막 리턴값에 널값을 허용하기 위함
    /// </summary>
    public Vector2Int? FindSpaceForObject(ItemObject itemToInsert)
    {
-       int width = gridSize.x - (itemToInsert.Width - 1);
-       int height = gridSize.y - (itemToInsert.Height - 1);
+       int width = gridData.gridSize.x - (itemToInsert.Width - 1);
+       int height = gridData.gridSize.y - (itemToInsert.Height - 1);
 
        for (int y = 0; y < height; y++)
        {
@@ -629,5 +627,5 @@ public class InventoryGrid : MonoBehaviour
            }
        }
        return null;
-   }*/
+   }
 }
