@@ -40,7 +40,7 @@
   </files>
   <settings>
     <setting name="androidAbis" value="x86" />
-    <setting name="bundleId" value="com.Dummy.WebClient" />
+    <setting name="bundleId" value="com.Gamepli.SurvivalHorizon" />
     <setting name="explodeAars" value="True" />
     <setting name="gradleBuildEnabled" value="True" />
     <setting name="gradlePropertiesTemplateEnabled" value="False" />
