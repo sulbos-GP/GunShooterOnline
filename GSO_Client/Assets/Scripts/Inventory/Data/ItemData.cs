@@ -5,6 +5,15 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
 
+public enum ItemType
+{
+    Weapon,
+    Defensive,
+    Bag,
+    Recovery,
+    Bullet,
+    Spoil
+}
 
 
 [System.Serializable]
@@ -124,8 +133,8 @@ public class ItemData
     }
 
     [Header("아이템 데이터베이스 변수")]
-    public int itemId; // 해당 아이템의 고유한 아이디
-    public int itemCode; //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
+    public int itemId; // 해당 아이템의 고유한 아이디  -> 오브젝트 아이디
+    public int itemCode; //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드) -> 아이템 아이디
     public Vector2Int itemPos; // 아이템의 그리드 안 좌표상의 위치
     public int itemRotate; // 아이템의 회전코드(rotate * 90)
     public int itemAmount; // 아이템의 개수(소모품만 64개까지)

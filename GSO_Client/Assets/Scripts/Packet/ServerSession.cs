@@ -83,7 +83,7 @@ public class ServerSession : PacketSession
 
     public override void OnSend(int numOfBytes)
     {
-        Debug.Log("OnSend");
+        //Debug.Log("OnSend");
 
         //Console.WriteLine($"Transferred bytes: {numOfBytes}");
     }

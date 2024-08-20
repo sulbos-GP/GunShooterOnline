@@ -69,7 +69,11 @@ public class ItemObject : MonoBehaviour
     public InventoryGrid backUpItemGrid; //아이템이 원래 보관된 그리드
     public Vector2Int backUpItemPos; //아이템의 원래 위치
     public int backUpItemRotate; //아이템의 원래 회전도
-    
+
+    //현재 해당 아이템이 위치한 슬롯
+    public EquipSlot curEquipSlot;
+    //마지막으로 장착된 슬롯
+    public EquipSlot backUpEquipSlot;
 
     private void Awake()
     {
@@ -223,9 +227,13 @@ public class ItemObject : MonoBehaviour
 
     public void DestroyItem()
     {
-        curItemGrid.gridData.itemList.Remove(itemData); //그리드 데이터에서 삭제
-        Managers.Object.RemoveItemDic(itemData.itemId); //오브젝트 매니저 딕셔너리에서 삭제
-        InventoryController.invenInstance.instantItemList.Remove(this); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
+        if (curItemGrid != null) 
+        {
+            curItemGrid.gridData.itemList.Remove(itemData); //그리드 데이터에서 삭제
+            Managers.Object.RemoveItemDic(itemData.itemId); //오브젝트 매니저 딕셔너리에서 삭제
+            InventoryController.invenInstance.instantItemList.Remove(this); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
+        }
+        
         Destroy(gameObject);
     }
 }
