@@ -1,0 +1,354 @@
+using Google.Protobuf.Protocol;
+using NPOI.OpenXmlFormats.Dml.Diagram;
+using NPOI.SS.Formula.Eval;
+using System;
+using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
+using Vector2 = System.Numerics.Vector2;
+
+
+public partial class InventoryController : MonoBehaviour
+{
+    /// <summary>
+    /// 좌클릭시 아이템을 집거나 내려 놓기
+    /// </summary>
+    private void ItemEvent()
+    {
+        if (isItemSelected) //아이템을 배치해야하는경우
+        {
+            //포인터가 장착 슬롯에 있을경우
+            if (SelectedEquip != null)
+            {
+                ItemReleaseInEquip();
+                return;
+            }
+
+            //포인터가 휴지통 칸에 있을경우
+            if (isOnDelete)
+            {
+                ItemReleaseInDelete();
+                return;
+            }
+
+            //포인터가 인벤토리 그리드에 위치
+            if (isGridSelected)
+            {
+                gridPosition = WorldToGridPos();
+                ItemReleaseInGrid(selectedItem, gridPosition);
+                return;
+            }
+
+            //어떤 경우도 만족하지 못할경우 배치 실패
+            UndoGridSlot();
+            UndoItem();
+            Debug.Log("아이템 배치 실패");
+
+        }
+        else//아이템을 픽업 해야하는 경우
+        {
+            if (isEquipSelected)
+            {
+                if (selectedEquip.equippedItem != null)
+                {
+                    //장착된 아이템이 있으면 해당 아이템 장착 해제
+                    SelectedItem = selectedEquip.equippedItem;
+                    selectedEquip.UnequipItem();
+                    SetSelectedObjectToLastSibling(selectedItem.transform);
+                }
+
+                return;
+            }
+
+            if (isGridSelected)
+            {
+                gridPosition = WorldToGridPos();
+                ItemObject clickedItem = selectedGrid.GetItem(gridPosition.x, gridPosition.y);
+                if (clickedItem == null) { return; }
+
+                //클릭한 아이템이 숨겨진 경우에는 숨김을 해제하고 아니면 아이템을 듬
+                if (clickedItem.isHide == true)
+                {
+                    clickedItem.UnhideItem();
+                }
+                else
+                {
+                    ItemGet(gridPosition);
+                }
+                return;
+            }
+        }
+
+    }
+
+
+    /// <summary>
+    /// 아이템을 집는 시도.
+    /// </summary>
+    private void ItemGet(Vector2Int pos)
+    {
+        if (!isGridSelected) { return; }
+        SelectedItem = selectedGrid.PickUpItem(pos.x, pos.y);
+
+        //아이템이 그리드에 가려지는것을 방지
+        SetSelectedObjectToLastSibling(selectedRect);
+    }
+
+    /// <summary>
+    /// 아이템을 놓는 시도.
+    /// </summary>
+    private void ItemReleaseInGrid(ItemObject item, Vector2Int pos)
+    {
+        //bool complete = selectedGrid.CanPlaceItem(item, pos.x, pos.y, ref placeOverlapItem);
+        //if (complete)
+        if (itemPlaceableInGrid)
+        {
+            HandleItemPlacementInGrid(item, pos);
+
+        }
+        else
+        {
+            UndoGridSlot();
+            UndoItem();
+        }
+
+        itemPlaceableInGrid = false;
+    }
+
+    
+    
+    
+    private void ItemReleaseInEquip()
+    {
+        if (SelectedEquip.allowedItemType == SelectedItem.itemData.item_type)
+        {
+            if (SelectedEquip.equippedItem == null)//타입이 일치하고 장착칸에 아이템이 없을경우 -> 해당 장착칸에 아이템 장착
+            {
+                selectedItem.backUpEquipSlot = selectedEquip;
+                if (selectedItem.backUpItemGrid != null)
+                {
+                    selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+                    selectedItem.backUpItemGrid = null;
+                }
+
+                selectedEquip.EquipItem(selectedItem);
+
+                SelectedItem = null;
+            }
+            else //타입이 일치하나 장착칸에 아이템이 있음
+            {
+                if (SelectedItem.backUpItemGrid != null)
+                { //그리드 -> 장착칸
+                    ItemObject targetItem = SelectedEquip.equippedItem;
+                    InventoryGrid playerGrid = playerInvenUI.instantGridList[0]; //만약 인벤 하나에 그리드가 여러개가 된다면 수정해야함
+                    Vector2Int? findSpacePos = playerGrid.FindSpaceForObject(targetItem);
+                    if (findSpacePos != null)
+                    {
+                        //인벤토리에 기존의 아이템을 넣을수 있음 -> 교환
+                        playerGrid.PlaceItem(targetItem, findSpacePos.Value.x, findSpacePos.Value.y);
+                        BackUpItem(targetItem);
+
+                        targetItem.curEquipSlot = null;
+                        targetItem.backUpEquipSlot = null;
+                        SelectedEquip.equippedItem = null; //원래 슬롯에 있던 아이템을 플레이어 인벤토리에 배치
+
+                        selectedItem.backUpEquipSlot = selectedEquip;
+                        selectedEquip.EquipItem(selectedItem);
+
+                        if (selectedItem.backUpItemGrid != null)
+                        {
+                            selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+                            selectedItem.backUpItemGrid = null;
+                        }
+
+                        SelectedItem = null; //들고 있는 아이템을 장비칸에 장착
+                    }
+                    else
+                    {
+                        //자리 없음 배치 실패-> 원래 위치로
+                        UndoGridSlot();
+                        UndoItem();
+                    }
+                }
+                else
+                { //장착칸 -> 장착칸
+                    if (selectedItem.backUpEquipSlot == null) { Debug.Log("Something Wrong In Equip to Equip"); return; }
+                    ItemObject targetItem = SelectedEquip.equippedItem;
+                    EquipSlot targetSlot = targetItem.backUpEquipSlot;
+                    //작업중 슬롯 교환 만들것
+                    SelectedItem.backUpEquipSlot.EquipItem(targetItem); //선택한 아이템이 있던 장착칸에 장착하려는 칸에 있는 아이템 배치
+                    targetSlot.EquipItem(selectedItem);
+                    SelectedItem = null;
+                }
+            }
+        }
+        else //타입이 일치하지 않을 경우 -> 장착 거부. 넣으려는 아이템을 원래 있던 자리로 귀환시킴
+        {
+            //그리드에서 시도할경우
+            
+            if (selectedItem.backUpItemGrid != null)
+            {
+                UndoGridSlot();
+                UndoItem();
+            }
+            else if (selectedItem.backUpEquipSlot != null)
+            {//장착칸에서 시도할경우 -> 이부분 부터 테스트
+                selectedItem.curEquipSlot = selectedItem.backUpEquipSlot;
+                selectedItem.backUpEquipSlot.EquipItem(selectedItem);
+                SelectedItem = null;
+            }
+        }
+    }
+
+    private void ItemReleaseInDelete()
+    {
+        if (selectedItem.backUpEquipSlot == null)
+        {
+            //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
+            C_DeleteItem packet = new C_DeleteItem();
+            packet.PlayerId = Managers.Object.MyPlayer.Id;
+            packet.ItemData = selectedItem.itemData.GetItemData();
+            packet.GridId = selectedItem.backUpItemGrid.gridData.gridId;
+            packet.LastGridId = selectedItem.backUpItemGrid.gridData.gridId; //의미없음
+            Managers.Network.Send(packet);
+            Debug.Log("C_DeleteItem");
+
+            selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+            DestroySelectedItem();
+            return;
+        }
+        else
+        {   //장비칸의 있던 아이템을 버릴경우
+            //서버에서도 수정해야함
+            C_DeleteItem packet = new C_DeleteItem();
+            packet.PlayerId = Managers.Object.MyPlayer.Id;
+            packet.ItemData = selectedItem.itemData.GetItemData();
+            packet.GridId = -1; //현재 아이템이 장비칸에 있음
+            packet.LastGridId = selectedItem.backUpItemGrid.gridData.gridId;
+            Managers.Network.Send(packet);
+            Debug.Log("C_DeleteItem");
+
+            DestroySelectedItem();
+            return;
+        }
+    }
+
+
+
+    /// <summary>
+    /// 아이템 배치 성공. 병합 및 아이템 배치 실행
+    /// </summary>
+    /// <param name="item"></param>
+    /// <param name="pos"></param>
+    private void HandleItemPlacementInGrid(ItemObject item, Vector2Int pos)
+    {
+        if (overlapItem != null)
+        {
+            if (CheckAbleToMerge(item))
+            {
+                MergeItems(item, pos);
+            }
+            else
+            {
+                UndoGridSlot();
+                UndoItem();
+            }
+        }
+        else
+        {
+            CompleteItemPlacement(item, pos);
+        }
+    }
+
+    /// <summary>
+    /// 오버랩 아이템 존재할때 머지가 가능한지 체크
+    /// </summary>
+    private bool CheckAbleToMerge(ItemObject item)
+    {
+        return selectedItem.itemData.isItemConsumeable &&
+               selectedItem.itemData.itemCode == overlapItem.itemData.itemCode &&
+               overlapItem.itemData.itemAmount < ItemObject.maxItemMergeAmount &&
+               !overlapItem.isHide;
+    }
+
+    /// <summary>
+    /// 아이템 병합 실시. 체크가 완료되어 머지가 성공했을때의 아이템이 병합
+    /// </summary>
+    private void MergeItems(ItemObject item, Vector2Int pos)
+    {
+        int totalAmount = selectedItem.itemData.itemAmount + overlapItem.itemData.itemAmount;
+
+        selectedItem.itemData.itemPos = pos;
+        SendMoveItemInGridPacket(item, pos);
+
+        if (totalAmount <= ItemObject.maxItemMergeAmount)
+        {
+            selectedItem.MergeItem(overlapItem, selectedItem.itemData.itemAmount);
+
+            BackUpGridSlot(selectedItem.backUpItemGrid);
+            DestroySelectedItem();
+        }
+        else
+        {
+            int needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.itemAmount;
+
+            selectedItem.MergeItem(overlapItem, needAmount);
+
+            // *** 슬롯에서 그리드 아이템으로 병합의 경우 남은 아이템이 정상적으로 돌아가는지 확인할것
+            UndoGridSlot();
+            UndoItem();
+        }
+
+        ResetSelection();
+    }
+
+    /// <summary>
+    /// 컨트롤러 상에서 삭제 처리
+    /// </summary>
+    private void DestroySelectedItem()
+    {
+        if (selectedItem.backUpEquipSlot != null)
+        {
+            selectedItem.backUpEquipSlot.equippedItem = null;
+        }
+
+        if (selectedItem.backUpItemGrid != null)
+        {
+            selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+        }
+
+        selectedItem.DestroyItem();
+        SelectedItem = null;
+    }
+
+    /// <summary>
+    /// 아이템 배치 성공, 현재 아이템이 그리드 안에 존재
+    /// </summary>
+    private void CompleteItemPlacement(ItemObject item, Vector2Int pos)
+    {
+        selectedItem.curItemGrid.PlaceItem(item, pos.x, pos.y);
+        selectedItem.curItemGrid.PrintInvenContents(selectedItem.curItemGrid, selectedItem.curItemGrid.ItemSlot); //체크
+
+        selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem); //이전 그리드의 데이터의 아이템 데이터 리스트에서 해당 데이터 제거
+        selectedItem.curItemGrid.AddItemToItemList(selectedItem.itemData.itemPos, selectedItem);
+        if (selectedItem.backUpEquipSlot != null) //만약 장비칸에서 그리드로 아이템을 배치가 성공한 경우
+        {
+            //selectedItem.backUpEquipSlot.equippedItem = null; //이부분이 주석이어도 잘 돌아가는지 체크후 제거할것
+            selectedItem.backUpEquipSlot = null;
+        }
+        SendMoveItemInGridPacket(item, pos); //백업 전에 내보내야 lastItem 변수에 값이 제대로 할당됨
+
+
+        BackUpItem(selectedItem);
+        BackUpGridSlot(selectedItem.curItemGrid);
+
+        ResetSelection();
+    }
+}
+
+

@@ -11,41 +11,32 @@ public class EquipSlot : MonoBehaviour
 
     public ItemObject equippedItem; // 현재 장착된 아이템
 
-    // 아이템 장착(아이템을 들고 슬롯칸에 배치)
+    //장착 슬롯에 아이템이 배치되었을 경우
     public void EquipItem(ItemObject item)
     {
-        if (item.itemData.item_type == allowedItemType)
+        //배치에 성공 했을 경우
+        equippedItem = item;
+
+        if (equippedItem.curItemGrid != null)
         {
-            //배치에 성공 했을 경우
-            equippedItem = item;
-            if(equippedItem.curItemGrid != null)
-            {
-                equippedItem.curItemGrid.RemoveItemFromItemList(equippedItem);
-                equippedItem.curItemGrid = null;
-            }
-            
-            equippedItem.backUpEquipSlot = this;
-
-
-            //중앙에 배치 및 슬롯의 크기만큼 크기 세팅
-            equippedItem.transform.SetParent(transform);
-            equippedItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
-
-            ApplyItemEffects(equippedItem);
-
-
-            //슬롯 패킷 전송?
+            equippedItem.curItemGrid.RemoveItemFromItemList(equippedItem);
+            equippedItem.curItemGrid = null;
         }
+
+        equippedItem.backUpEquipSlot = this;
+
+
+        //중앙에 배치 및 슬롯의 크기만큼 크기 세팅
+        equippedItem.transform.SetParent(transform);
+        //equippedItem.GetComponent<RectTransform>().sizeDelta = GetComponent<RectTransform>().sizeDelta; 체크가 필요
+        equippedItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
+
+        ApplyItemEffects(equippedItem);
+
+
+        //슬롯 패킷 전송?
     }
 
-    //이 아이템 슬롯에 있는 아이템을 다른 아이템과 교체
-    private void ExchangeSlotItem(ItemObject item)
-    {
-        ItemObject thisItem = equippedItem;
-        ItemObject changeItme = item;
-
-
-    }
 
 
     // 아이템 장착 해제(장착된 슬롯을 클릭)

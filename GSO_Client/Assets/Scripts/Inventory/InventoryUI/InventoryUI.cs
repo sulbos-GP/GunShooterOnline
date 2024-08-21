@@ -62,7 +62,7 @@ public class InventoryUI : MonoBehaviour
             InventoryGrid newGrid = Instantiate(gridPref, grids).GetComponent<InventoryGrid>();
             newGrid.gridData = data;
             newGrid.ownInven = this;
-            newGrid.GridDataSet();
+            newGrid.InitializeGrid();
             instantGridList.Add(newGrid);
         }
         
@@ -85,7 +85,7 @@ public class InventoryUI : MonoBehaviour
     /// <summary>
     /// 
     /// </summary>
-    public bool CheckingInvenWeight(float addWeight, ItemObject overlap)
+    public bool CanAffordWeight(float addWeight, ItemObject overlap)
     {
         UpdateInvenWeight();
         float curWeight = invenWeight;
