@@ -16,7 +16,7 @@ public class GameObject
         info.StatInfo = stat;
     }
 
-    public GameObjectType ObjectType { get; protected set; } = GameObjectType.None;
+    public GameObjectType ObjectType { get; protected set; } = GameObjectType.Noneobject;
     public ObjectInfo info { get; set; } = new() { OwnerId = -1, Shape = new ShapeInfo() };
 
 
