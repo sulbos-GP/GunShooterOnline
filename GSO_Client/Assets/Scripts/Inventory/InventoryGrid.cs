@@ -1,53 +1,42 @@
 using UnityEngine;
 using Vector2 = System.Numerics.Vector2;
-using Random = UnityEngine.Random;
-using Google.Protobuf.Protocol;
-using UnityEngine.Rendering;
-using System.Collections.Generic;
 
 
 public class InventoryGrid : MonoBehaviour
 {
-    /*
-     * 인벤토리에 의해 UI에서 생성된 그리드(인벤UI를 끌때 플레이어의 그리드라면 남겨져 있다만 other의 그리드라면 파괴됨)
-     * 
-     * 그리드의 사이즈와 위치를 설정하고 내부에 들어있는 아이템들에 대해 아이템 오브젝트를 생성하여 그리드데이터.아이템 데이터를 할당하여 배치
-     */
+    //타일의 크기 offset
+    public const float WidthOfTile = 100;
+    public const float HeightOfTile = 100;
+
 
     //그리드 설정
     public GridData gridData; //인벤토리에서 할당된 그리드의 데이터
     public InventoryUI ownInven; //해당 그리드를 포함하는 인벤토리
-    public ItemObject[,] ItemSlot; //컨트롤러에서 아이템을 저장할 슬롯
+    public ItemObject[,] ItemSlot { get; private set; } //컨트롤러에서 아이템을 저장할 슬롯
 
-    //gridWeight 옵저버. 호출시 gridWeight 업데이트 및 인벤토리의 무게도 업데이트
 
+    [SerializeField] protected float gridWeight = 0; //그리드안의 아이템의 무게
     public float GridWeight
     {
         get => gridWeight;
         set
         {
             gridWeight = value;
-            
             ownInven.UpdateInvenWeight(); //인벤토리의 무게 변경
         }
     }
-    [SerializeField]protected float gridWeight = 0; //그리드안의 아이템의 무게
-
-    //타일의 크기 offset
-    public const float WidthOfTile = 100;
-    public const float HeightOfTile = 100;
 
     private RectTransform gridRect; //해당 그리드의 transform
     private Vector2 mousePosOnGrid = new Vector2(); //그리드 위의 마우스 위치
     private Vector2Int tileGridPos = new Vector2Int(); //마우스 아래의 타일 위치좌표
 
     //백업 관련
-    public ItemObject[,] backUpSlot; //백업 배열
-    public float backupWeight;
+    public ItemObject[,] BackUpSlot { get; private set; } //백업 배열
+    public float BackUpWeight { get; private set; }
+
 
     //아이템 생성
     public GameObject itemPref; //아이템의 prefab
-    //private bool createRandomItem;
 
 
     private void Awake()
@@ -59,51 +48,47 @@ public class InventoryGrid : MonoBehaviour
     /// <summary>
     /// 인벤토리에서 그리드를 생성할때 사용
     /// </summary>
-    public void GridDataSet()
+    public void InitializeGrid()
     {
-        if (gridRect == null) 
-            gridRect = GetComponent<RectTransform>();
-        
+        if (gridRect == null) gridRect = GetComponent<RectTransform>();
+
         if (gridData == null)
         {
-            Debug.Log("해당 그리드 오브젝트에 그리드 데이터가 없음");
+            Debug.LogError("Grid data is missing.");
             return;
         }
 
-
         if (gridData.gridSize.x <= 0 || gridData.gridSize.y <= 0)
         {
-            Debug.Log($"그리드 사이즈가 적절하지 않음 : sizeX : {gridData.gridSize.x}, sizeY : {gridData.gridSize.y}");
+            Debug.LogError($"Invalid grid size: sizeX: {gridData.gridSize.x}, sizeY: {gridData.gridSize.y}");
             return;
         }
 
         int width = gridData.gridSize.x;
-        int height = gridData.gridSize.y;  
+        int height = gridData.gridSize.y;
 
-        ItemSlot = backUpSlot = new ItemObject[width, height]; 
+        ItemSlot = BackUpSlot = new ItemObject[width, height];
 
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
-        
-        //createRandomItem = gridData.createRandomItem; 클라에서 만들필요 없음
 
-        GridRectPosSet();
+        SetGridPosition();
     }
 
     /// <summary>
     /// 그리드의 렉트를 설정
     /// </summary>
-    private void GridRectPosSet()
+    private void SetGridPosition()
     {
         //그리드가 벽에 딱 붙지 않게 약간의 오프셋을 둠
         Vector2 offsetGridPosition = new Vector2(gridData.gridPos.X + InventoryUI.offsetX, gridData.gridPos.Y - InventoryUI.offsetY);
         transform.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector2(offsetGridPosition.X, offsetGridPosition.Y);
     
         //그리드의 배치가 완료되면 그리드의 아이템슬롯을 설정하고 아이템 프리팹 또한 배치
-        GridItemSet();
+        PlaceItemInGrid();
     }
 
-    private void GridItemSet()
+    private void PlaceItemInGrid()
     {
 
         if (gridData.itemList.Count != 0)
@@ -115,37 +100,6 @@ public class InventoryGrid : MonoBehaviour
         }
 
         UpdateBackUpSlot();
-        //서버에서 받은 리스트를 gridItemArray에 할당하고
-        //아이템 프리팹을 생성후 해당 아이템의 데이터를 넣어주기
-        /*if(gridData.itemList.Count == 0)
-        {
-            //이 그리드에 아이템 데이터가 없을경우 조건에 따라 랜덤한 아이템 배치
-            
-            if (createRandomItem)
-            {
-                for(int i =0; i< gridData.randomItemAmount; i++)
-                {
-                    if (RestSlotCheck() == 0)
-                    {
-                        break;
-                    }
-                    InstantRandomItem();
-                }
-                createRandomItem = false;
-            }
-            else
-            {
-                Debug.Log("비어있는 그리드");
-            }
-    }
-        else
-        {
-            //그리드에 아이템 리스트가 있는 경우
-            foreach(ItemData itemData in gridData.itemList)
-            {
-                CreateItemObj(itemData);
-            }
-        }*/
 
     }
 
@@ -169,10 +123,7 @@ public class InventoryGrid : MonoBehaviour
     /// <param name="mousePosition">마우스 위치</param>
     public Vector2Int MouseToGridPosition(Vector2 mousePosition)
     {
-        if(gridRect == null)
-        {
-            return Vector2Int.zero;
-        }
+        if (gridRect == null) return Vector2Int.zero;
         mousePosOnGrid.X = mousePosition.X - gridRect.position.x;
         mousePosOnGrid.Y = gridRect.position.y - mousePosition.Y;
         tileGridPos.x = (int)(mousePosOnGrid.X / WidthOfTile);
@@ -230,50 +181,44 @@ public class InventoryGrid : MonoBehaviour
     }
 
     
-    /// <summary>
+    /*/// <summary>
     /// 아이템이 배치 가능한지 조건을 체크 후 배열상 아이템 배치
     /// </summary>
-    public bool PlaceItemCheck(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
+    public bool CanPlaceItem(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
     {
         //아이템이 그리드 밖으로 나갈시 취소
-        if (BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height) == false)
+        if (!BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height))
         {
             Debug.Log("boundary error");
-
+            overlapItem = null;
             return false;
             
         }
 
-        
+        //무게에 의해 배치가 불가능할 경우 취소
+        if (!ownInven.CanAffordWeight(placeItem.itemData.item_weight, overlapItem))
+        {
+            Debug.Log("weight error");
+            return false;
+        }
+
         //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
-        if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem) == false)
+        if (!OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
         {
             Debug.Log("overlap error");
             overlapItem = null;
             return false;
         }
 
-        //무게에 의해 배치가 불가능할 경우 취소
-        if (ownInven.CheckingInvenWeight(placeItem.itemData.item_weight, overlapItem) == false)
-        {
-            Debug.Log("weight error");
-            return false;
-        }
-
         //오버랩된 아이템이 있다면
         if (overlapItem != null)
         {
-            
-            //같은 소모품의 경우 배치를 하지 않은 채로 true 리턴
-            if (placeItem.itemData.isItemConsumeable && 
-                (placeItem.itemData.itemCode == overlapItem.itemData.itemCode)&&
-                overlapItem.itemData.itemAmount < 64)
-            {
-                return true;
-            }
 
-            overlapItem = null;
-            return false;
+            //같은 소모품의 경우 배치를 하지 않은 채로 true 리턴
+            return overlapItem == null 
+                || placeItem.itemData.isItemConsumeable 
+                && placeItem.itemData.itemCode == overlapItem.itemData.itemCode 
+                && overlapItem.itemData.itemAmount < 64;
         }
         
         //아이템 배열에 해당 아이템 배치
@@ -281,7 +226,7 @@ public class InventoryGrid : MonoBehaviour
         PrintInvenContents(this, ItemSlot);
         
         return true;
-    }
+    }*/
 
     /// <summary>
     /// 배열에 아이템 저장 및 해당 아이템 UI 객체 이동
@@ -300,13 +245,13 @@ public class InventoryGrid : MonoBehaviour
 
         GridWeight += item.itemData.item_weight;
 
-        PlaceSprite(item, posX, posY, itemRect);
+        UpdateItemPosition(item, posX, posY, itemRect);
     }
 
     /// <summary>
     /// 아이템의 렉트를 해당위치로 이동
     /// </summary>
-    public void PlaceSprite(ItemObject inventoryItem, int posX, int posY, RectTransform itemRect)
+    public void UpdateItemPosition(ItemObject inventoryItem, int posX, int posY, RectTransform itemRect)
     {
         inventoryItem.itemData.itemPos = new Vector2Int(posX, posY);
         Vector2 position = CalculatePositionOnGrid(inventoryItem, posX, posY);
@@ -332,26 +277,20 @@ public class InventoryGrid : MonoBehaviour
 
     public void AddItemToItemList(Vector2Int pos, ItemObject item)
     {
-        // gridData의 itemList에서 아이템을 추가합니다.
-        ItemData itemData = item.itemData;
-        if (itemData == null) return;
+        if (item.itemData == null) return;
 
-        // 아이템의 새 위치를 itemData에 설정합니다.
-        itemData.itemPos = pos;
+        item.itemData.itemPos = pos;
         item.curItemGrid = this;
-        // itemList에서 아이템을 추가합니다.
         InventoryController.invenInstance.instantItemList.Add(item);
-        gridData.itemList.Add(itemData);
+        gridData.itemList.Add(item.itemData);
     }
 
     public void RemoveItemFromItemList(ItemObject item)
     {
-        // gridData의 itemList에서 아이템을 제거합니다.
-        ItemData itemData = item.itemData;
-        if (itemData == null) return;
-        // itemList에서 해당 아이템을 제거합니다.
+        if (item.itemData == null) return;
+
         InventoryController.invenInstance.instantItemList.Remove(item);
-        gridData.itemList.Remove(itemData);
+        gridData.itemList.Remove(item.itemData);
     }
 
 
@@ -361,10 +300,10 @@ public class InventoryGrid : MonoBehaviour
     /// <param name="inventoryItem">해당 아이템</param>
     public Vector2 CalculatePositionOnGrid(ItemObject inventoryItem, int posX, int posY)
     {
-        Vector2 position = new Vector2();
-        position.X = posX * WidthOfTile + WidthOfTile * inventoryItem.Width / 2;
-        position.Y = -(posY * HeightOfTile + HeightOfTile * inventoryItem.Height / 2);
-        return position;
+        return new Vector2(
+            posX * WidthOfTile + WidthOfTile * inventoryItem.Width / 2,
+            -(posY * HeightOfTile + HeightOfTile * inventoryItem.Height / 2)
+        );
     }
 
     public void UpdateBackUpSlot()
@@ -373,9 +312,11 @@ public class InventoryGrid : MonoBehaviour
         {
             for (int j = 0; j < gridData.gridSize.y; j++)
             {
-                backUpSlot[i, j] = ItemSlot[i, j];
+                BackUpSlot[i, j] = ItemSlot[i, j];
             }
         }
+
+        BackUpWeight = GridWeight;
     }
 
     /// <summary>
@@ -387,7 +328,7 @@ public class InventoryGrid : MonoBehaviour
         {
             for (int j = 0; j < gridData.gridSize.y; j++)
             {
-                ItemSlot[i, j] = backUpSlot[i, j];
+                ItemSlot[i, j] = BackUpSlot[i, j];
             }
         }
     }
@@ -411,16 +352,14 @@ public class InventoryGrid : MonoBehaviour
                     {
                         //아이템이 오버랩 가능할때만 해당 좌표의 아이템을 오버렙아이템으로 지정
                         overlapItem = ItemSlot[posX + x, posY + y];
+                        return true;
                     }
-                    else
-                    {
-                        return false;
-                    }
+                    
                 }
             }
         }
 
-        return true;
+        return false;
     }
 
     /// <summary>
@@ -449,34 +388,15 @@ public class InventoryGrid : MonoBehaviour
         Debug.Log(content);
     }
 
-   
-
-    /// <summary>
-    /// 해당 위치가 grid의 안인지 체크
-    /// </summary>
-    private bool InsideGridCheck(int posX, int posY)
-    {
-        if (posX < 0 || posY < 0)
-        {
-            return false;
-        }
-        if (posX >= gridData.gridSize.x || posY >= gridData.gridSize.y)
-        {
-            return false;
-        }
-
-        return true;
-    }
 
     /// <summary>
     /// 아이템의 크기가 그리드를 빠져나가는지 체크
     /// </summary>
     public bool BoundaryCheck(int posX, int posY, int width, int height)
     {
-        if (InsideGridCheck(posX, posY) == false) { return false; }
-        if (InsideGridCheck(posX += (width - 1), posY += (height - 1)) == false) { return false; }
-        return true;
+        return posX >= 0 && posY >= 0 && posX + width <= gridData.gridSize.x && posY + height <= gridData.gridSize.y;
     }
+
 
     /// <summary>
     /// 해당 공간안에 아이템의 크기만큼의 공간이 되는지 확인
@@ -502,111 +422,44 @@ public class InventoryGrid : MonoBehaviour
     /// 컨트롤러의 업데이트마다 실행
     /// 해당 그리드 셀에 아이템을 배치가 가능한지 여부에 따른 색을 반환
     /// </summary>
-    public Color32 PlaceCheckForHighlightColor(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
+    public Color32 PlaceCheckInGridHighLight(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
     {
         overlapItem = null;
-        //그리드 밖으로 나가면  배치 실패 판정
-        if (BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height) == false)
+
+        //아이템이 그리드 밖으로 나갈시 취소
+        if (!BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height))
         {
+            Debug.Log("boundary error");
+            InventoryController.invenInstance.itemPlaceableInGrid = false;
+            return HighlightColor.Red;
+
+        }
+
+        //무게에 의해 배치가 불가능할 경우 취소
+        if (!ownInven.CanAffordWeight(placeItem.itemData.item_weight, overlapItem))
+        {
+            Debug.Log("weight error");
+            InventoryController.invenInstance.itemPlaceableInGrid = false;
             return HighlightColor.Red;
         }
 
-        //겹치는 아이템이 두개 이상 있다면 overlapItem변수 제거. 배치 실패 판정
-        if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem) == false)
+        //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
+        if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
         {
-            //오버랩 체크에서 좌표의 아이템슬롯을 검색하는 과정에서 널 좌표 발생으로 오류 발생 이를 해결할것
-            overlapItem = null;
-            return HighlightColor.Red;
-        }
-
-        //오버랩된 아이템이 있지만 배치가 가능할 경우
-        if (overlapItem != null)
-        {
-            //단 오버랩 아이템이 ishide인 경우 배치 실패 판정
-            if (overlapItem.isHide || placeItem.isHide)
+            if (!placeItem.itemData.isItemConsumeable
+                || placeItem.itemData.itemCode != overlapItem.itemData.itemCode
+                || overlapItem.itemData.itemAmount >= 64)
             {
-                overlapItem = null;
+                Debug.Log($"merge error");
+                InventoryController.invenInstance.itemPlaceableInGrid = false;
                 return HighlightColor.Red;
             }
-
-            //같은 소모품의 경우
-            //아이템의 수가 최대라면 수량합치기 불가. 교체 판정
-            if(overlapItem.itemData.itemAmount == 64)
-            {
-                return HighlightColor.Red;
-            }
-
-            //합치기가 가능한경우 배치 성공 판정
-            if (placeItem.itemData.isItemConsumeable &&
-                (placeItem.itemData.itemCode == overlapItem.itemData.itemCode))
-            {
-                overlapItem = null;
-                return HighlightColor.Green;
-            }
-
-            return HighlightColor.Red;
         }
+
+        InventoryController.invenInstance.itemPlaceableInGrid = true;
         return HighlightColor.Green;
     }
 
-    //랜덤 아이템 생성은 서버가 담당함. 클라는 필요없음, 받은 데이터를 잘 적용만 시키면됨
-    /*
-    private int RestSlotCheck()
-    {
-        int restSlot = 0;
-        for (int x = 0; x < gridData.gridSize.x; x++)
-        {
-            for (int y = 0; y < gridData.gridSize.y; y++)
-            {
-                if (ItemSlot[x, y] == null)
-                {
-                    restSlot++;
-                }
-            }
-        }
-
-        return restSlot;
-    }
-    */
-
-    /*
-    private void InstantRandomItem()
-    {
-        //임시(데이터베이스 연동시 수정)
-        Debug.Log($"랜덤 삽입 {transform.name}");
-        //InventoryController.invenInstance.InsertRandomItem(this);
-        
-        ItemObject randomItem = Instantiate(itemPref).GetComponent<ItemObject>();
-        InventoryController.invenInstance.SetSelectedObjectToLastSibling(transform);
-        int randomId = Random.Range(0, InventoryController.invenInstance.itemsList.Count);
-        randomItem.ItemDataSet(InventoryController.invenInstance.itemsList[randomId]);
-
-        FindPlaceableSlot(randomItem);
-        randomItem.curItemGrid = this;
-
-        randomItem.backUpItemPos = randomItem.curItemPos; //현재 위치
-        randomItem.backUpItemRotate = randomItem.curItemRotate; //현재 회전
-        randomItem.backUpItemGrid = randomItem.curItemGrid; //현재 그리드
-    }*/
-
-    /*
-    private void FindPlaceableSlot(ItemObject item)
-    {
-        Vector2Int? posOnGrid = FindSpaceForObject(item);
-        
-        if (posOnGrid == null)
-        {
-            item.RotateRight();
-            posOnGrid = FindSpaceForObject(item);
-            if (posOnGrid == null)
-            {
-                return;
-            }
-        }
-
-        PlaceItem(item, posOnGrid.Value.x, posOnGrid.Value.y);
-    }*/
-    
    /// <summary>
    /// 아이템의 크기만큼 들어갈 장소를 찾음
    /// ?를 쓴 이유는 마지막 리턴값에 널값을 허용하기 위함

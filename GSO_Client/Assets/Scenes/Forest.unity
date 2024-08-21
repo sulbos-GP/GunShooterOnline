@@ -896,7 +896,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96e36b1a81bc2c4f811689839e9cad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invenController: {fileID: 0}
 --- !u!114 &278984805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -909,7 +908,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed37cbe9767bb82479810598eefca7c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedItemType: 0
+  allowedItemType: 3
   equippedItem: {fileID: 0}
 --- !u!1 &349017789
 GameObject:
@@ -1421,7 +1420,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96e36b1a81bc2c4f811689839e9cad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invenController: {fileID: 0}
 --- !u!114 &924875828
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1434,7 +1432,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed37cbe9767bb82479810598eefca7c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedItemType: 0
+  allowedItemType: 2
   equippedItem: {fileID: 0}
 --- !u!1 &1070464333
 GameObject:
@@ -1586,7 +1584,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96e36b1a81bc2c4f811689839e9cad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invenController: {fileID: 0}
 --- !u!114 &1081841097
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1599,7 +1596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed37cbe9767bb82479810598eefca7c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedItemType: 0
+  allowedItemType: 3
   equippedItem: {fileID: 0}
 --- !u!114 &1222683154 stripped
 MonoBehaviour:
@@ -1783,15 +1780,18 @@ MonoBehaviour:
   instantItemList: []
   deleteUI: {fileID: 3385603023062608331}
   rotateBtn: {fileID: 1222683154}
-  updateGridPos: {x: 0, y: 0}
-  selectedGrid: {fileID: 0}
-  isGridSelected: 0
+  gridPosition: {x: 0, y: 0}
   selectedItem: {fileID: 0}
   selectedRect: {fileID: 0}
   isItemSelected: 0
+  selectedGrid: {fileID: 0}
+  isGridSelected: 0
   isOnDelete: 0
   selectedEquip: {fileID: 0}
+  isEquipSelected: 0
+  overlapItem: {fileID: 0}
   isActive: 0
+  itemPlaceableInGrid: 0
 --- !u!114 &1397189867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2086,7 +2086,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96e36b1a81bc2c4f811689839e9cad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invenController: {fileID: 0}
 --- !u!114 &1737959626
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3625,7 +3624,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96e36b1a81bc2c4f811689839e9cad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invenController: {fileID: 0}
 --- !u!114 &1095908246791057088
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3638,7 +3636,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed37cbe9767bb82479810598eefca7c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedItemType: 0
+  allowedItemType: 3
   equippedItem: {fileID: 0}
 --- !u!114 &1095908246791057089
 MonoBehaviour:
@@ -3652,7 +3650,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96e36b1a81bc2c4f811689839e9cad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invenController: {fileID: 0}
 --- !u!114 &1095908246791057090
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3665,7 +3662,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed37cbe9767bb82479810598eefca7c6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedItemType: 0
+  allowedItemType: 1
   equippedItem: {fileID: 0}
 --- !u!114 &1095908246791057091
 MonoBehaviour:
@@ -3679,7 +3676,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c96e36b1a81bc2c4f811689839e9cad8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  invenController: {fileID: 0}
 --- !u!114 &1095908246791057092
 MonoBehaviour:
   m_ObjectHideFlags: 0
