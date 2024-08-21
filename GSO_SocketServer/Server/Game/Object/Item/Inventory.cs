@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using Pipelines.Sockets.Unofficial.Buffers;
+using Server.Database.Handler;
 using Server.Game;
 using Server.Game.Object;
 using System;
@@ -17,129 +18,186 @@ namespace Server.Game
 {
     public class Inventory
     {
+
+        //인벤토리를 생성하기위한 데이터
+        //인벤토리 아이디 == 소유자 (인벤토리를 검색하기 위해)
+        //무게 같은 그리드 크기이지만 무게가 다를 수 있다
+        //GridData = 서버에서 오브젝트가 만들어진다
+
         public InvenDataInfo invenData = new InvenDataInfo();
         /*int32 inventoryId = 1;
         float limitWeight = 2;
         repeated GridDataInfo GridData = 3;*/
         public Dictionary<int,Grid> instantGrid = new Dictionary<int,Grid>(); //해당 인벤토리가 소유한 그리드
 
+        public Player owner;                //소유자 (플레이어)
+        public int storage_id = 0;          //가방 아이디
+        public int storage_item_id = 0;     //가방의 아이템 아이디
+        public double weight = 0.0;         
 
-        //인벤토리가 처음 생성될때?
-        public Inventory(int ownerId, int x = 0, int y = 0)
+        public Grid InventoryGrid = new Grid();
+
+        /// <summary>
+        /// 인벤토리 생성 (지금은 storage_id가 반드시 있다고 가정)
+        /// </summary>
+        public Inventory()
         {
-            invenData.InventoryId = ownerId;
-            invenData.LimitWeight = 20; //임시
-            Grid newGrid = new Grid();
-            if (x == 0)
-            {
-                x = 4;
-            }
-            if (y == 0)
-            {
-                y = 5;
-            }
-            newGrid.gridData = MakeNewGridData(x,y);
-            newGrid.ownerInventory = this;
-            newGrid.SetGrid(); 
-
-            instantGrid.Add(newGrid.gridData.GridId, newGrid);
-            invenData.GridData.Add(newGrid.gridData);
-
-            //Console.WriteLine($"ownerId : {ownerId} \n instantGridAmt : {instantGrid.Count} \nitemAmount : {newGrid.itemObjectList.Count} \n");
-
         }
 
-        private GridDataInfo MakeNewGridData(int x, int y)
+        /// <summary>
+        /// 인벤토리 처음 생성시 또는 가방을 장착시
+        /// </summary>
+        public void MakeInventory(Player owner, int storage_id)
         {
-            //그리드의 데이터를 생성함과 동시에 그리드 데이터의 아이템데이터 리스트에 넣을 아이템의 데이터 또한 생성
-            GridDataInfo newData = new GridDataInfo
-            {
-                GridId = ++Grid.lastGridId,
-                GridSizeX = x, //임시
-                GridSizeY = y, //임시
-                GridPosX = 0,
-                GridPosY = 0, //지금은 1개뿐이라 0,0 나중에 인벤토리가 어떻게 생겼는지에 대한 데이터를 추가해야할듯
-                RandomItemAmount = 3 //임시. 소유자의 조건에 따라 달라짐
-            };
+            this.owner = owner;
 
-            //Console.WriteLine($"GridId : {newData.GridId} \nGridSize : {newData.GridSizeX},{newData.GridSizeY}\n" +
-            //    $"gridPos ={newData.GridPosX},{newData.GridPosY}\n");
+            InitInventory(storage_id).Wait();
 
-            CreateRandomItemDataIntoGridData(newData);
-
-            return newData;
+            LoadInventory().Wait();
         }
 
-        private void CreateRandomItemDataIntoGridData(GridDataInfo gridData)
+        /// <summary>
+        /// 가방에 따른 인벤토리 초기화
+        /// </summary>
+        public async Task InitInventory(int storage_id)
         {
-            int restSize = gridData.GridSizeX * gridData.GridSizeY;
-            List<ItemDataInfo> canInsertlist = new List<ItemDataInfo>();
-            foreach (ItemDataInfo data in ItemDB.Instance.items.Values)
+            try
             {
-                if (data.Width * data.Height < restSize)
+                this.storage_id = storage_id;
+
+                //가방(아이템)에 대한 정보 불러오기
+                int storage_item_id = await DatabaseHandler.GameDB.GetStorageItemId(storage_id);
+                this.storage_item_id = storage_item_id;
+
+                //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기 (지금은 임시)
+                //Backpack backpack = await DatabaseHandler.MasterDB.GetBackpackInfo(storage_item_id);
+                Backpack backpack = new Backpack();
+
+                //가방의 데이터를 채움?
+                invenData.InventoryId = owner.Id;
+                invenData.LimitWeight = backpack.limit_weight;
+
+                //가방의 크기를 저장하는 곳은?
+
+                InventoryGrid.gridData = new GridDataInfo()
                 {
-                    canInsertlist.Add(data);
-                }
+                    
+                };
+
             }
-
-            //생성해야하는 아이템의 수만큼 반복
-            for (int i = 0; i < gridData.RandomItemAmount; i++)
+            catch (Exception e)
             {
-                if (restSize <= 0)
-                {
-                    //남은 공간이 없다면 반복 중지
-                    break;
-                }
-                //두번째 순서부터 
-                if (i != 0)
-                {
-                    for (int j = canInsertlist.Count - 1; j >= 0; j--)
-                    {
-                        ItemDataInfo data = canInsertlist[j];
-                        if (data.Width * data.Height > restSize)
-                        {
-                            canInsertlist.RemoveAt(j);
-                        }
-                    }
-                }
-
-                if (canInsertlist.Count <= 0)
-                {
-                    //넣을수 있는 아이템이 없다면 브레이크
-                    break;
-                }
-
-                System.Random rnd = new System.Random();
-                int random = rnd.Next(0, canInsertlist.Count);
-                ItemDataInfo newItemData = DuplicateItemData(canInsertlist[random]);
-
-                bool itemExists = false;
-                //아이템의 위치, 회전을 제외한 아이디+데이터베이스 데이터를 그리드에 넣어줌
-                //그리드에서 이 아이템 리스트를 기반으로 그리드 슬롯에 넣고 아이템 데이터 업데이트예정
-                if (newItemData.IsItemConsumeable)
-                {
-                    foreach (ItemDataInfo data in gridData.ItemList)
-                    {
-                        if (data.ItemCode == newItemData.ItemCode)
-                        {
-                            data.ItemAmount += 1;
-                            itemExists = true;
-                            break;
-                        }
-                    }
-                }
-
-                // 중복이 아닌 경우에만 새 아이템 추가
-                if (!itemExists)
-                {
-                    newItemData.ItemId = ObjectManager.Instance.Add<ItemObject>().Id;
-                    gridData.ItemList.Add(newItemData);
-
-                    restSize -= canInsertlist[random].Width * canInsertlist[random].Height;
-                }
+                Console.WriteLine($"[InitInventory] : {e.Message.ToString()}");
             }
         }
 
+        /// <summary>
+        /// 저장소 아이디에 있는 모든 아이템 불러오기
+        /// </summary>
+        public async Task LoadInventory()
+        {
+            try
+            {
+
+                IEnumerable<InventoryUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
+
+                if (units == null)
+                {
+                    return;
+                }
+
+                //인벤토리 그리드
+                Grid newItem = new Grid();
+                newItem.gridData = new GridDataInfo
+                {
+                    GridId = ++Grid.lastGridId,
+                    GridSizeX = info.scale_x,
+                    GridSizeY = info.scale_y,
+                    GridPosX = unit.grid_x,
+                    GridPosY = unit.grid_y,
+                };
+
+                foreach (InventoryUnit unit in units)
+                {
+                    
+                    //마스터테이블에서 아이템 아이디를 이용하여 아이템 정보 가져오기
+                    //TODO : 나중에는 마스터테이블을 미리 로드하여 메모리에 저장된 값을 불러와야함
+                    ItemInfo info = await DatabaseHandler.MasterDB.GetItemInfo(unit.item_id);
+
+                    //데이터베이스에서 여러개의 아이템
+                    //아이디, 위치, 회전, 몇개(카운터)
+
+                    //인벤토리 안에 넣고 싶은데 (위치랑 회전에 맞게)
+
+                    ItemInfo
+
+                    newItem.InsertItemDataInGridData();
+
+                    newItem.ownerInventory = this;
+                    newItem.SetGrid();
+
+                    instantGrid.Add(newGrid.gridData.GridId, newGrid);
+                    invenData.GridData.Add(newGrid.gridData);
+
+                }
+                
+
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[LoadInventory] : {e.Message.ToString()}");
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void InsertItem()
+        {
+
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public async Task<bool> DeleteItem(int objectId, InventoryUnit delete)
+        {
+            try
+            {
+                ItemObject item = ObjectManager.Instance.Find<ItemObject>(objectId);
+
+                if (item == null)
+                {
+                    throw new Exception("삭제하려는 아이템이 존재하지 않음");
+                }
+
+                if(false == item.Equals(delete))
+                {
+                    throw new Exception("삭제하는 아이템과 정보가 일치하지 않음");
+                }
+
+                int ret = await DatabaseHandler.GameDB.DeleteItem(owner.uid, delete);
+                if (ret == 0)
+                {
+                    throw new Exception("데이터베이스에서 삭제하지 못함");
+                }
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[DeleteItem] : {e.Message.ToString()}");
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public void MoveItem()
+        {
+
+        }
         
 
         public void MoveItem(ItemObject target, ItemDataInfo packetData, Grid targetGrid)

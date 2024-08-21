@@ -5,7 +5,7 @@ DROP PROCEDURE IF EXISTS create_dummy $$
 CREATE PROCEDURE create_dummy()
 BEGIN
 	DECLARE counter INT DEFAULT 1;
-    DECLARE max_count INT DEFAULT 100;
+    DECLARE max_count INT DEFAULT 10;
     DECLARE new_id VARCHAR(50);
     DECLARE new_uid INT;
     DECLARE new_rating DOUBLE;
@@ -28,8 +28,8 @@ BEGIN
 		SET new_volatility = 0.05 + (RAND() * 0.02);
         INSERT INTO user_skill(uid, rating, deviation, volatility) VALUES(new_uid, new_rating, new_deviation, new_volatility);
         
-		#유저 무장 장비
-		INSERT INTO user_gear(uid) VALUES(new_uid);
+		#유저 인벤토리 (임시)
+		INSERT INTO storage (storage_item_id, uid, storage_type) VALUES(1, NULL, 'backpack');
         
         SET counter = counter + 1;
 	END WHILE;
