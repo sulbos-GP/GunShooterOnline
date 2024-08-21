@@ -68,7 +68,7 @@ namespace Server
             BroadCast(s_DeleteItem);
         }
 
-        internal void HandleItemLoad(Player player, int objectId, int inventoryId )
+        internal void LoadInventoryHandler(Player player)
         {
             InvenDataInfo targetData = null;
 

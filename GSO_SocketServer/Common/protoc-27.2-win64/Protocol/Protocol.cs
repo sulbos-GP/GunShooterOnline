@@ -33,75 +33,58 @@ namespace Google.Protobuf.Protocol {
             "b25JbmZvGAEgASgLMhYuUHJvdG9jb2wuUG9zaXRpb25JbmZvIg0KC1NfQ29u",
             "bmVjdGVkIioKClNfQ2hhbmdlSHASEAoIb2JqZWN0SWQYASABKAUSCgoCaHAY",
             "AiABKAUiLQoFU19EaWUSEAoIb2JqZWN0SWQYASABKAUSEgoKYXR0YWNrZXJJ",
-            "ZBgCIAEoBSIbCgtDX0VudGVyR2FtZRIMCgRuYW1lGAEgASgJIjgKD0NfTG9h",
-            "ZEludmVudG9yeRIQCghwbGF5ZXJJZBgBIAEoBRITCgtpbnZlbnRvcnlJZBgC",
-            "IAEoBSJkCg9TX0xvYWRJbnZlbnRvcnkSEAoIcGxheWVySWQYASABKAUSEwoL",
-            "aW52ZW50b3J5SWQYAiABKAUSKgoJSW52ZW5EYXRhGAMgASgLMhcuUHJvdG9j",
-            "b2wuSW52ZW5EYXRhSW5mbyLCAQoKQ19Nb3ZlSXRlbRIQCghwbGF5ZXJJZBgB",
-            "IAEoBRIQCgh0YXJnZXRJZBgCIAEoBRIOCgZncmlkSWQYAyABKAUSKAoIaXRl",
-            "bURhdGEYBCABKAsyFi5Qcm90b2NvbC5JdGVtRGF0YUluZm8SFAoMbGFzdEl0",
-            "ZW1Qb3NYGAUgASgFEhQKDGxhc3RJdGVtUG9zWRgGIAEoBRIWCg5sYXN0SXRl",
-            "bVJvdGF0ZRgHIAEoBRISCgpsYXN0R3JpZElkGAggASgFIsIBCgpTX01vdmVJ",
-            "dGVtEhAKCHBsYXllcklkGAEgASgFEhAKCHRhcmdldElkGAIgASgFEg4KBmdy",
-            "aWRJZBgDIAEoBRIoCghpdGVtRGF0YRgEIAEoCzIWLlByb3RvY29sLkl0ZW1E",
-            "YXRhSW5mbxIUCgxsYXN0SXRlbVBvc1gYBSABKAUSFAoMbGFzdEl0ZW1Qb3NZ",
-            "GAYgASgFEhYKDmxhc3RJdGVtUm90YXRlGAcgASgFEhIKCmxhc3RHcmlkSWQY",
-            "CCABKAUibgoMQ19EZWxldGVJdGVtEhAKCHBsYXllcklkGAEgASgFEigKCGl0",
-            "ZW1EYXRhGAIgASgLMhYuUHJvdG9jb2wuSXRlbURhdGFJbmZvEg4KBmdyaWRJ",
-            "ZBgDIAEoBRISCgpsYXN0R3JpZElkGAQgASgFIm4KDFNfRGVsZXRlSXRlbRIQ",
-            "CghwbGF5ZXJJZBgBIAEoBRIoCghpdGVtRGF0YRgCIAEoCzIWLlByb3RvY29s",
-            "Lkl0ZW1EYXRhSW5mbxIOCgZncmlkSWQYAyABKAUSEgoKbGFzdEdyaWRJZBgE",
-            "IAEoBSJiCg5DX1JheWNhc3RTaG9vdBIRCglTdGFydFBvc1gYASABKAISEQoJ",
-            "U3RhcnRQb3NZGAIgASgCEgwKBERpclgYAyABKAISDAoERGlyWRgEIAEoAhIO",
-            "CgZMZW5ndGgYBSABKAIiagoMU19SYXljYXN0SGl0Eg0KBVJheUlkGAEgASgF",
-            "EhMKC2hpdE9iamVjdElkGAIgASgFEhAKCGRpc3RhbmNlGAMgASgCEhEKCWhp",
-            "dFBvaW50WBgEIAEoAhIRCgloaXRQb2ludFkYBSABKAIiLgoKU19FeGl0R2Ft",
-            "ZRIQCghwbGF5ZXJJZBgBIAEoBRIOCgZleGl0SWQYAiABKAUiLgoKQ19FeGl0",
-            "R2FtZRIQCghwbGF5ZXJJZBgBIAEoBRIOCgZleGl0SWQYAiABKAUixgEKCk9i",
-            "amVjdEluZm8SEAoIT2JqZWN0SWQYASABKAUSDwoHb3duZXJJZBgCIAEoBRIP",
-            "Cgdza2lsbElkGAMgASgFEgwKBG5hbWUYBCABKAkSLAoMcG9zaXRpb25JbmZv",
-            "GAUgASgLMhYuUHJvdG9jb2wuUG9zaXRpb25JbmZvEiQKCHN0YXRJbmZvGAYg",
-            "ASgLMhIuUHJvdG9jb2wuU3RhdEluZm8SIgoFc2hhcGUYByABKAsyEy5Qcm90",
-            "b2NvbC5TaGFwZUluZm8iXgoIU3RhdEluZm8SDQoFY2xhc3MYASABKAUSCgoC",
-            "aHAYAiABKAUSDQoFbWF4SHAYAyABKAUSEwoLYXR0YWNrUmFuZ2UYBCABKAIS",
-            "EwoLYXR0YWNrU3BlZWQYBSABKAIiawoMUG9zaXRpb25JbmZvEhUKDWN1cnJl",
-            "bnRSb29tSWQYASABKAUSDAoEZGlyWBgCIAEoAhIMCgRkaXJZGAMgASgCEgwK",
-            "BHBvc1gYBCABKAISDAoEcG9zWRgFIAEoAhIMCgRyb3RaGAYgASgCIrABCglT",
-            "aGFwZUluZm8SJwoKU2hwYXBlVHlwZRgBIAEoDjITLlByb3RvY29sLlNoYXBl",
-            "VHlwZRIMCgRQb3NYGAIgASgCEgwKBFBvc1kYAyABKAISEQoJUm9hdGF0aW9u",
-            "GAQgASgCEg4KBlJhZGl1cxgFIAEoAhIMCgRMZWZ0GAYgASgCEg4KBkJvdHRv",
-            "bRgHIAEoAhINCgVXaWR0aBgIIAEoAhIOCgZIZWlnaHQYCSABKAIiYwoNSW52",
-            "ZW5EYXRhSW5mbxITCgtpbnZlbnRvcnlJZBgBIAEoBRITCgtsaW1pdFdlaWdo",
-            "dBgCIAEoAhIoCghHcmlkRGF0YRgDIAMoCzIWLlByb3RvY29sLkdyaWREYXRh",
-            "SW5mbyLGAQoMR3JpZERhdGFJbmZvEg4KBmdyaWRJZBgBIAEoBRIRCglncmlk",
-            "U2l6ZVgYAiABKAUSEQoJZ3JpZFNpemVZGAMgASgFEhAKCGdyaWRQb3NYGAQg",
-            "ASgCEhAKCGdyaWRQb3NZGAUgASgCEigKCGl0ZW1MaXN0GAYgAygLMhYuUHJv",
-            "dG9jb2wuSXRlbURhdGFJbmZvEhgKEGNyZWF0ZVJhbmRvbUl0ZW0YByABKAgS",
-            "GAoQcmFuZG9tSXRlbUFtb3VudBgIIAEoBSKJAwoMSXRlbURhdGFJbmZvEg4K",
-            "Bml0ZW1JZBgBIAEoBRIQCghpdGVtQ29kZRgCIAEoBRIQCghpdGVtUG9zWBgD",
-            "IAEoBRIQCghpdGVtUG9zWRgEIAEoBRISCgppdGVtUm90YXRlGAUgASgFEhIK",
-            "Cml0ZW1BbW91bnQYBiABKAUSGAoQc2VhcmNoZWRQbGF5ZXJJZBgHIAMoBRIR",
-            "CglpdGVtX25hbWUYCCABKAkSEwoLaXRlbV93ZWlnaHQYCSABKAISJQoJaXRl",
-            "bV90eXBlGAogASgOMhIuUHJvdG9jb2wuSXRlbVR5cGUSGQoRaXRlbV9zdHJp",
-            "bmdfdmFsdWUYCyABKAUSGwoTaXRlbV9wdXJjaGFzZV9wcmljZRgMIAEoBRIX",
-            "Cg9pdGVtX3NlbGxfcHJpY2UYDSABKAUSFwoPaXRlbV9zZWFyY2hUaW1lGA4g",
-            "ASgCEg0KBXdpZHRoGA8gASgFEg4KBmhlaWdodBgQIAEoBRIZChFpc0l0ZW1D",
-            "b25zdW1lYWJsZRgRIAEoCCrcAgoFTXNnSWQSEAoMU19FTlRFUl9HQU1FEAAS",
-            "EAoMU19MRUFWRV9HQU1FEAESCwoHU19TUEFXThACEg0KCVNfREVTUEFXThAD",
-            "EgoKBlNfTU9WRRAEEgoKBkNfTU9WRRAFEg8KC1NfQ09OTkVDVEVEEAYSDwoL",
-            "U19DSEFOR0VfSFAQBxIJCgVTX0RJRRAIEhAKDENfRU5URVJfR0FNRRAJEhQK",
-            "EENfTE9BRF9JTlZFTlRPUlkQChIUChBTX0xPQURfSU5WRU5UT1JZEAsSDwoL",
-            "Q19NT1ZFX0lURU0QDBIPCgtTX01PVkVfSVRFTRANEhEKDUNfREVMRVRFX0lU",
-            "RU0QDhIRCg1TX0RFTEVURV9JVEVNEA8SEwoPQ19SQVlDQVNUX1NIT09UEBAS",
-            "EQoNU19SQVlDQVNUX0hJVBAREg8KC1NfRVhJVF9HQU1FEBISDwoLQ19FWElU",
-            "X0dBTUUQEyp5Cg5HYW1lT2JqZWN0VHlwZRIOCgpOT05FT0JKRUNUEAASCgoG",
-            "UExBWUVSEAESCwoHTU9OU1RFUhACEg4KClBST0pFQ1RJTEUQAxINCglJTlZF",
-            "TkRBVEEQBBIHCgNCT1gQBRIICgRJVEVNEAYSDAoIRVhJVFpPTkUQBypLCglT",
-            "aGFwZVR5cGUSCQoFU0hBUEUQABIKCgZDSVJDTEUQARINCglSRUNUQU5HTEUQ",
-            "AhILCgdQT0xZR09OEAMSCwoHQVJDUE9MWRAEKlMKCEl0ZW1UeXBlEgoKBldF",
-            "QVBPThAAEg0KCURFRkVOU0lWRRABEgcKA0JBRxACEgwKCFJFQ09WRVJZEAMS",
-            "CgoGQlVMTEVUEAQSCQoFU1BPSUwQBUIbqgIYR29vZ2xlLlByb3RvYnVmLlBy",
-            "b3RvY29sYgZwcm90bzM="));
+            "ZBgCIAEoBSIbCgtDX0VudGVyR2FtZRIMCgRuYW1lGAEgASgJIhEKD0NfTG9h",
+            "ZEludmVudG9yeSI7Cg9TX0xvYWRJbnZlbnRvcnkSKAoJaXRlbUluZm9zGAEg",
+            "AygLMhUuUHJvdG9jb2wuUFNfSXRlbUluZm8icwoKQ19Nb3ZlSXRlbRIWCg50",
+            "YXJnZXRPYmplY3RJZBgBIAEoBRInCghtb3ZlSXRlbRgCIAEoCzIVLlByb3Rv",
+            "Y29sLlBTX0l0ZW1JbmZvEiQKB21vdmVQb3MYAyABKAsyEy5Qcm90b2NvbC5Q",
+            "U19HcmlkWFkihgEKClNfTW92ZUl0ZW0SEQoJaXNTdWNjZXNzGAEgASgIEhYK",
+            "DnRhcmdldE9iamVjdElkGAIgASgFEicKCG1vdmVJdGVtGAMgASgLMhUuUHJv",
+            "dG9jb2wuUFNfSXRlbUluZm8SJAoHbW92ZVBvcxgEIAEoCzITLlByb3RvY29s",
+            "LlBTX0dyaWRYWSI5CgxDX0RlbGV0ZUl0ZW0SKQoKZGVsZXRlSXRlbRgBIAEo",
+            "CzIVLlByb3RvY29sLlBTX0l0ZW1JbmZvIkwKDFNfRGVsZXRlSXRlbRIRCglp",
+            "c1N1Y2Nlc3MYASABKAgSKQoKZGVsZXRlSXRlbRgCIAEoCzIVLlByb3RvY29s",
+            "LlBTX0l0ZW1JbmZvImIKDkNfUmF5Y2FzdFNob290EhEKCVN0YXJ0UG9zWBgB",
+            "IAEoAhIRCglTdGFydFBvc1kYAiABKAISDAoERGlyWBgDIAEoAhIMCgREaXJZ",
+            "GAQgASgCEg4KBkxlbmd0aBgFIAEoAiJqCgxTX1JheWNhc3RIaXQSDQoFUmF5",
+            "SWQYASABKAUSEwoLaGl0T2JqZWN0SWQYAiABKAUSEAoIZGlzdGFuY2UYAyAB",
+            "KAISEQoJaGl0UG9pbnRYGAQgASgCEhEKCWhpdFBvaW50WRgFIAEoAiIuCgpT",
+            "X0V4aXRHYW1lEhAKCHBsYXllcklkGAEgASgFEg4KBmV4aXRJZBgCIAEoBSIu",
+            "CgpDX0V4aXRHYW1lEhAKCHBsYXllcklkGAEgASgFEg4KBmV4aXRJZBgCIAEo",
+            "BSLGAQoKT2JqZWN0SW5mbxIQCghPYmplY3RJZBgBIAEoBRIPCgdvd25lcklk",
+            "GAIgASgFEg8KB3NraWxsSWQYAyABKAUSDAoEbmFtZRgEIAEoCRIsCgxwb3Np",
+            "dGlvbkluZm8YBSABKAsyFi5Qcm90b2NvbC5Qb3NpdGlvbkluZm8SJAoIc3Rh",
+            "dEluZm8YBiABKAsyEi5Qcm90b2NvbC5TdGF0SW5mbxIiCgVzaGFwZRgHIAEo",
+            "CzITLlByb3RvY29sLlNoYXBlSW5mbyJeCghTdGF0SW5mbxINCgVjbGFzcxgB",
+            "IAEoBRIKCgJocBgCIAEoBRINCgVtYXhIcBgDIAEoBRITCgthdHRhY2tSYW5n",
+            "ZRgEIAEoAhITCgthdHRhY2tTcGVlZBgFIAEoAiJrCgxQb3NpdGlvbkluZm8S",
+            "FQoNY3VycmVudFJvb21JZBgBIAEoBRIMCgRkaXJYGAIgASgCEgwKBGRpclkY",
+            "AyABKAISDAoEcG9zWBgEIAEoAhIMCgRwb3NZGAUgASgCEgwKBHJvdFoYBiAB",
+            "KAIisAEKCVNoYXBlSW5mbxInCgpTaHBhcGVUeXBlGAEgASgOMhMuUHJvdG9j",
+            "b2wuU2hhcGVUeXBlEgwKBFBvc1gYAiABKAISDAoEUG9zWRgDIAEoAhIRCglS",
+            "b2F0YXRpb24YBCABKAISDgoGUmFkaXVzGAUgASgCEgwKBExlZnQYBiABKAIS",
+            "DgoGQm90dG9tGAcgASgCEg0KBVdpZHRoGAggASgCEg4KBkhlaWdodBgJIAEo",
+            "AiIhCglQU19HcmlkWFkSCQoBeBgBIAEoBRIJCgF5GAIgASgFIk8KC1BTX0dy",
+            "aWREYXRhEg4KBnNjYWxlWBgBIAEoBRIOCgZzY2FsZVkYAiABKAUSIAoDcG9z",
+            "GAMgASgLMhMuUHJvdG9jb2wuUFNfR3JpZFhZIpYBCgtQU19JdGVtSW5mbxIQ",
+            "CghvYmplY3RJZBgBIAEoBRIOCgZpdGVtSWQYAiABKAUSIwoEZ3JpZBgDIAEo",
+            "CzIVLlByb3RvY29sLlBTX0dyaWREYXRhEhIKCml0ZW1Sb3RhdGUYBCABKAUS",
+            "EgoKaXRlbUFtb3VudBgFIAEoBRIYChBzZWFyY2hlZFBsYXllcklkGAYgAygF",
+            "KtwCCgVNc2dJZBIQCgxTX0VOVEVSX0dBTUUQABIQCgxTX0xFQVZFX0dBTUUQ",
+            "ARILCgdTX1NQQVdOEAISDQoJU19ERVNQQVdOEAMSCgoGU19NT1ZFEAQSCgoG",
+            "Q19NT1ZFEAUSDwoLU19DT05ORUNURUQQBhIPCgtTX0NIQU5HRV9IUBAHEgkK",
+            "BVNfRElFEAgSEAoMQ19FTlRFUl9HQU1FEAkSFAoQQ19MT0FEX0lOVkVOVE9S",
+            "WRAKEhQKEFNfTE9BRF9JTlZFTlRPUlkQCxIPCgtDX01PVkVfSVRFTRAMEg8K",
+            "C1NfTU9WRV9JVEVNEA0SEQoNQ19ERUxFVEVfSVRFTRAOEhEKDVNfREVMRVRF",
+            "X0lURU0QDxITCg9DX1JBWUNBU1RfU0hPT1QQEBIRCg1TX1JBWUNBU1RfSElU",
+            "EBESDwoLU19FWElUX0dBTUUQEhIPCgtDX0VYSVRfR0FNRRATKnkKDkdhbWVP",
+            "YmplY3RUeXBlEg4KCk5PTkVPQkpFQ1QQABIKCgZQTEFZRVIQARILCgdNT05T",
+            "VEVSEAISDgoKUFJPSkVDVElMRRADEg0KCUlOVkVOREFUQRAEEgcKA0JPWBAF",
+            "EggKBElURU0QBhIMCghFWElUWk9ORRAHKksKCVNoYXBlVHlwZRIJCgVTSEFQ",
+            "RRAAEgoKBkNJUkNMRRABEg0KCVJFQ1RBTkdMRRACEgsKB1BPTFlHT04QAxIL",
+            "CgdBUkNQT0xZEAQqUwoISXRlbVR5cGUSCgoGV0VBUE9OEAASDQoJREVGRU5T",
+            "SVZFEAESBwoDQkFHEAISDAoIUkVDT1ZFUlkQAxIKCgZCVUxMRVQQBBIJCgVT",
+            "UE9JTBAFQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), typeof(global::Google.Protobuf.Protocol.ItemType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -115,12 +98,12 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ChangeHp), global::Google.Protobuf.Protocol.S_ChangeHp.Parser, new[]{ "ObjectId", "Hp" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Die), global::Google.Protobuf.Protocol.S_Die.Parser, new[]{ "ObjectId", "AttackerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EnterGame), global::Google.Protobuf.Protocol.C_EnterGame.Parser, new[]{ "Name" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_LoadInventory), global::Google.Protobuf.Protocol.C_LoadInventory.Parser, new[]{ "PlayerId", "InventoryId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadInventory), global::Google.Protobuf.Protocol.S_LoadInventory.Parser, new[]{ "PlayerId", "InventoryId", "InvenData" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_MoveItem), global::Google.Protobuf.Protocol.C_MoveItem.Parser, new[]{ "PlayerId", "TargetId", "GridId", "ItemData", "LastItemPosX", "LastItemPosY", "LastItemRotate", "LastGridId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_MoveItem), global::Google.Protobuf.Protocol.S_MoveItem.Parser, new[]{ "PlayerId", "TargetId", "GridId", "ItemData", "LastItemPosX", "LastItemPosY", "LastItemRotate", "LastGridId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_DeleteItem), global::Google.Protobuf.Protocol.C_DeleteItem.Parser, new[]{ "PlayerId", "ItemData", "GridId", "LastGridId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_DeleteItem), global::Google.Protobuf.Protocol.S_DeleteItem.Parser, new[]{ "PlayerId", "ItemData", "GridId", "LastGridId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_LoadInventory), global::Google.Protobuf.Protocol.C_LoadInventory.Parser, null, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LoadInventory), global::Google.Protobuf.Protocol.S_LoadInventory.Parser, new[]{ "ItemInfos" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_MoveItem), global::Google.Protobuf.Protocol.C_MoveItem.Parser, new[]{ "TargetObjectId", "MoveItem", "MovePos" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_MoveItem), global::Google.Protobuf.Protocol.S_MoveItem.Parser, new[]{ "IsSuccess", "TargetObjectId", "MoveItem", "MovePos" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_DeleteItem), global::Google.Protobuf.Protocol.C_DeleteItem.Parser, new[]{ "DeleteItem" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_DeleteItem), global::Google.Protobuf.Protocol.S_DeleteItem.Parser, new[]{ "IsSuccess", "DeleteItem" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_RaycastShoot), global::Google.Protobuf.Protocol.C_RaycastShoot.Parser, new[]{ "StartPosX", "StartPosY", "DirX", "DirY", "Length" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_RaycastHit), global::Google.Protobuf.Protocol.S_RaycastHit.Parser, new[]{ "RayId", "HitObjectId", "Distance", "HitPointX", "HitPointY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ExitGame), global::Google.Protobuf.Protocol.S_ExitGame.Parser, new[]{ "PlayerId", "ExitId" }, null, null, null, null),
@@ -129,9 +112,9 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.StatInfo), global::Google.Protobuf.Protocol.StatInfo.Parser, new[]{ "Class", "Hp", "MaxHp", "AttackRange", "AttackSpeed" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PositionInfo), global::Google.Protobuf.Protocol.PositionInfo.Parser, new[]{ "CurrentRoomId", "DirX", "DirY", "PosX", "PosY", "RotZ" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ShapeInfo), global::Google.Protobuf.Protocol.ShapeInfo.Parser, new[]{ "ShpapeType", "PosX", "PosY", "Roatation", "Radius", "Left", "Bottom", "Width", "Height" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.InvenDataInfo), global::Google.Protobuf.Protocol.InvenDataInfo.Parser, new[]{ "InventoryId", "LimitWeight", "GridData" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.GridDataInfo), global::Google.Protobuf.Protocol.GridDataInfo.Parser, new[]{ "GridId", "GridSizeX", "GridSizeY", "GridPosX", "GridPosY", "ItemList", "CreateRandomItem", "RandomItemAmount" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ItemDataInfo), global::Google.Protobuf.Protocol.ItemDataInfo.Parser, new[]{ "ItemId", "ItemCode", "ItemPosX", "ItemPosY", "ItemRotate", "ItemAmount", "SearchedPlayerId", "ItemName", "ItemWeight", "ItemType", "ItemStringValue", "ItemPurchasePrice", "ItemSellPrice", "ItemSearchTime", "Width", "Height", "IsItemConsumeable" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PS_GridXY), global::Google.Protobuf.Protocol.PS_GridXY.Parser, new[]{ "X", "Y" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PS_GridData), global::Google.Protobuf.Protocol.PS_GridData.Parser, new[]{ "ScaleX", "ScaleY", "Pos" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PS_ItemInfo), global::Google.Protobuf.Protocol.PS_ItemInfo.Parser, new[]{ "ObjectId", "ItemId", "Grid", "ItemRotate", "ItemAmount", "SearchedPlayerId" }, null, null, null, null)
           }));
     }
     #endregion
@@ -2290,8 +2273,6 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public C_LoadInventory(C_LoadInventory other) : this() {
-      playerId_ = other.playerId_;
-      inventoryId_ = other.inventoryId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2299,30 +2280,6 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public C_LoadInventory Clone() {
       return new C_LoadInventory(this);
-    }
-
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private int playerId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerId {
-      get { return playerId_; }
-      set {
-        playerId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "inventoryId" field.</summary>
-    public const int InventoryIdFieldNumber = 2;
-    private int inventoryId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int InventoryId {
-      get { return inventoryId_; }
-      set {
-        inventoryId_ = value;
-      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2340,8 +2297,6 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
-      if (InventoryId != other.InventoryId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2349,8 +2304,6 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
-      if (InventoryId != 0) hash ^= InventoryId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2369,14 +2322,6 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
-      }
-      if (InventoryId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(InventoryId);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2387,14 +2332,6 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
-      }
-      if (InventoryId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(InventoryId);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2405,12 +2342,6 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
-      }
-      if (InventoryId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InventoryId);
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -2422,12 +2353,6 @@ namespace Google.Protobuf.Protocol {
     public void MergeFrom(C_LoadInventory other) {
       if (other == null) {
         return;
-      }
-      if (other.PlayerId != 0) {
-        PlayerId = other.PlayerId;
-      }
-      if (other.InventoryId != 0) {
-        InventoryId = other.InventoryId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2448,14 +2373,6 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            PlayerId = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            InventoryId = input.ReadInt32();
-            break;
-          }
         }
       }
     #endif
@@ -2475,14 +2392,6 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 8: {
-            PlayerId = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            InventoryId = input.ReadInt32();
-            break;
-          }
         }
       }
     }
@@ -2528,9 +2437,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public S_LoadInventory(S_LoadInventory other) : this() {
-      playerId_ = other.playerId_;
-      inventoryId_ = other.inventoryId_;
-      invenData_ = other.invenData_ != null ? other.invenData_.Clone() : null;
+      itemInfos_ = other.itemInfos_.Clone();
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2540,40 +2447,15 @@ namespace Google.Protobuf.Protocol {
       return new S_LoadInventory(this);
     }
 
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private int playerId_;
+    /// <summary>Field number for the "itemInfos" field.</summary>
+    public const int ItemInfosFieldNumber = 1;
+    private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.PS_ItemInfo> _repeated_itemInfos_codec
+        = pb::FieldCodec.ForMessage(10, global::Google.Protobuf.Protocol.PS_ItemInfo.Parser);
+    private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.PS_ItemInfo> itemInfos_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.PS_ItemInfo>();
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerId {
-      get { return playerId_; }
-      set {
-        playerId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "inventoryId" field.</summary>
-    public const int InventoryIdFieldNumber = 2;
-    private int inventoryId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int InventoryId {
-      get { return inventoryId_; }
-      set {
-        inventoryId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "InvenData" field.</summary>
-    public const int InvenDataFieldNumber = 3;
-    private global::Google.Protobuf.Protocol.InvenDataInfo invenData_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.Protocol.InvenDataInfo InvenData {
-      get { return invenData_; }
-      set {
-        invenData_ = value;
-      }
+    public pbc::RepeatedField<global::Google.Protobuf.Protocol.PS_ItemInfo> ItemInfos {
+      get { return itemInfos_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2591,9 +2473,7 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
-      if (InventoryId != other.InventoryId) return false;
-      if (!object.Equals(InvenData, other.InvenData)) return false;
+      if(!itemInfos_.Equals(other.itemInfos_)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2601,9 +2481,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
-      if (InventoryId != 0) hash ^= InventoryId.GetHashCode();
-      if (invenData_ != null) hash ^= InvenData.GetHashCode();
+      hash ^= itemInfos_.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2622,18 +2500,7 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
-      }
-      if (InventoryId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(InventoryId);
-      }
-      if (invenData_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(InvenData);
-      }
+      itemInfos_.WriteTo(output, _repeated_itemInfos_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2644,18 +2511,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
-      }
-      if (InventoryId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(InventoryId);
-      }
-      if (invenData_ != null) {
-        output.WriteRawTag(26);
-        output.WriteMessage(InvenData);
-      }
+      itemInfos_.WriteTo(ref output, _repeated_itemInfos_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2666,15 +2522,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
-      }
-      if (InventoryId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InventoryId);
-      }
-      if (invenData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(InvenData);
-      }
+      size += itemInfos_.CalculateSize(_repeated_itemInfos_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -2687,18 +2535,7 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.PlayerId != 0) {
-        PlayerId = other.PlayerId;
-      }
-      if (other.InventoryId != 0) {
-        InventoryId = other.InventoryId;
-      }
-      if (other.invenData_ != null) {
-        if (invenData_ == null) {
-          InvenData = new global::Google.Protobuf.Protocol.InvenDataInfo();
-        }
-        InvenData.MergeFrom(other.InvenData);
-      }
+      itemInfos_.Add(other.itemInfos_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -2718,19 +2555,8 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            PlayerId = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            InventoryId = input.ReadInt32();
-            break;
-          }
-          case 26: {
-            if (invenData_ == null) {
-              InvenData = new global::Google.Protobuf.Protocol.InvenDataInfo();
-            }
-            input.ReadMessage(InvenData);
+          case 10: {
+            itemInfos_.AddEntriesFrom(input, _repeated_itemInfos_codec);
             break;
           }
         }
@@ -2752,19 +2578,8 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 8: {
-            PlayerId = input.ReadInt32();
-            break;
-          }
-          case 16: {
-            InventoryId = input.ReadInt32();
-            break;
-          }
-          case 26: {
-            if (invenData_ == null) {
-              InvenData = new global::Google.Protobuf.Protocol.InvenDataInfo();
-            }
-            input.ReadMessage(InvenData);
+          case 10: {
+            itemInfos_.AddEntriesFrom(ref input, _repeated_itemInfos_codec);
             break;
           }
         }
@@ -2809,14 +2624,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public C_MoveItem(C_MoveItem other) : this() {
-      playerId_ = other.playerId_;
-      targetId_ = other.targetId_;
-      gridId_ = other.gridId_;
-      itemData_ = other.itemData_ != null ? other.itemData_.Clone() : null;
-      lastItemPosX_ = other.lastItemPosX_;
-      lastItemPosY_ = other.lastItemPosY_;
-      lastItemRotate_ = other.lastItemRotate_;
-      lastGridId_ = other.lastGridId_;
+      targetObjectId_ = other.targetObjectId_;
+      moveItem_ = other.moveItem_ != null ? other.moveItem_.Clone() : null;
+      movePos_ = other.movePos_ != null ? other.movePos_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2826,117 +2636,48 @@ namespace Google.Protobuf.Protocol {
       return new C_MoveItem(this);
     }
 
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private int playerId_;
+    /// <summary>Field number for the "targetObjectId" field.</summary>
+    public const int TargetObjectIdFieldNumber = 1;
+    private int targetObjectId_;
     /// <summary>
-    ///옮긴 플레이어의 id
+    /// 다른 인벤토리의
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerId {
-      get { return playerId_; }
+    public int TargetObjectId {
+      get { return targetObjectId_; }
       set {
-        playerId_ = value;
+        targetObjectId_ = value;
       }
     }
 
-    /// <summary>Field number for the "targetId" field.</summary>
-    public const int TargetIdFieldNumber = 2;
-    private int targetId_;
+    /// <summary>Field number for the "moveItem" field.</summary>
+    public const int MoveItemFieldNumber = 2;
+    private global::Google.Protobuf.Protocol.PS_ItemInfo moveItem_;
     /// <summary>
-    /// 아이템을 옮긴  인벤토리의 id
+    /// 옮긴 아이템의 데이터
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int TargetId {
-      get { return targetId_; }
+    public global::Google.Protobuf.Protocol.PS_ItemInfo MoveItem {
+      get { return moveItem_; }
       set {
-        targetId_ = value;
+        moveItem_ = value;
       }
     }
 
-    /// <summary>Field number for the "gridId" field.</summary>
-    public const int GridIdFieldNumber = 3;
-    private int gridId_;
+    /// <summary>Field number for the "movePos" field.</summary>
+    public const int MovePosFieldNumber = 3;
+    private global::Google.Protobuf.Protocol.PS_GridXY movePos_;
     /// <summary>
-    ///인벤토리의 몇번째 그리드인지(혹은 그리드의 id)
+    /// 나의 인벤토리 x,y
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridId {
-      get { return gridId_; }
+    public global::Google.Protobuf.Protocol.PS_GridXY MovePos {
+      get { return movePos_; }
       set {
-        gridId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "itemData" field.</summary>
-    public const int ItemDataFieldNumber = 4;
-    private global::Google.Protobuf.Protocol.ItemDataInfo itemData_;
-    /// <summary>
-    ///옮긴 아이템의 데이터
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.Protocol.ItemDataInfo ItemData {
-      get { return itemData_; }
-      set {
-        itemData_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastItemPosX" field.</summary>
-    public const int LastItemPosXFieldNumber = 5;
-    private int lastItemPosX_;
-    /// <summary>
-    ///문제가 있을시 백업용. 필요하나?
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastItemPosX {
-      get { return lastItemPosX_; }
-      set {
-        lastItemPosX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastItemPosY" field.</summary>
-    public const int LastItemPosYFieldNumber = 6;
-    private int lastItemPosY_;
-    /// <summary>
-    ///이전 아이템의 좌표
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastItemPosY {
-      get { return lastItemPosY_; }
-      set {
-        lastItemPosY_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastItemRotate" field.</summary>
-    public const int LastItemRotateFieldNumber = 7;
-    private int lastItemRotate_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastItemRotate {
-      get { return lastItemRotate_; }
-      set {
-        lastItemRotate_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastGridId" field.</summary>
-    public const int LastGridIdFieldNumber = 8;
-    private int lastGridId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastGridId {
-      get { return lastGridId_; }
-      set {
-        lastGridId_ = value;
+        movePos_ = value;
       }
     }
 
@@ -2955,14 +2696,9 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
-      if (TargetId != other.TargetId) return false;
-      if (GridId != other.GridId) return false;
-      if (!object.Equals(ItemData, other.ItemData)) return false;
-      if (LastItemPosX != other.LastItemPosX) return false;
-      if (LastItemPosY != other.LastItemPosY) return false;
-      if (LastItemRotate != other.LastItemRotate) return false;
-      if (LastGridId != other.LastGridId) return false;
+      if (TargetObjectId != other.TargetObjectId) return false;
+      if (!object.Equals(MoveItem, other.MoveItem)) return false;
+      if (!object.Equals(MovePos, other.MovePos)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2970,14 +2706,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
-      if (TargetId != 0) hash ^= TargetId.GetHashCode();
-      if (GridId != 0) hash ^= GridId.GetHashCode();
-      if (itemData_ != null) hash ^= ItemData.GetHashCode();
-      if (LastItemPosX != 0) hash ^= LastItemPosX.GetHashCode();
-      if (LastItemPosY != 0) hash ^= LastItemPosY.GetHashCode();
-      if (LastItemRotate != 0) hash ^= LastItemRotate.GetHashCode();
-      if (LastGridId != 0) hash ^= LastGridId.GetHashCode();
+      if (TargetObjectId != 0) hash ^= TargetObjectId.GetHashCode();
+      if (moveItem_ != null) hash ^= MoveItem.GetHashCode();
+      if (movePos_ != null) hash ^= MovePos.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2996,37 +2727,17 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId != 0) {
+      if (TargetObjectId != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteInt32(TargetObjectId);
       }
-      if (TargetId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(TargetId);
+      if (moveItem_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(MoveItem);
       }
-      if (GridId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridId);
-      }
-      if (itemData_ != null) {
-        output.WriteRawTag(34);
-        output.WriteMessage(ItemData);
-      }
-      if (LastItemPosX != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(LastItemPosX);
-      }
-      if (LastItemPosY != 0) {
-        output.WriteRawTag(48);
-        output.WriteInt32(LastItemPosY);
-      }
-      if (LastItemRotate != 0) {
-        output.WriteRawTag(56);
-        output.WriteInt32(LastItemRotate);
-      }
-      if (LastGridId != 0) {
-        output.WriteRawTag(64);
-        output.WriteInt32(LastGridId);
+      if (movePos_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(MovePos);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3038,37 +2749,17 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId != 0) {
+      if (TargetObjectId != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteInt32(TargetObjectId);
       }
-      if (TargetId != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(TargetId);
+      if (moveItem_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(MoveItem);
       }
-      if (GridId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridId);
-      }
-      if (itemData_ != null) {
-        output.WriteRawTag(34);
-        output.WriteMessage(ItemData);
-      }
-      if (LastItemPosX != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(LastItemPosX);
-      }
-      if (LastItemPosY != 0) {
-        output.WriteRawTag(48);
-        output.WriteInt32(LastItemPosY);
-      }
-      if (LastItemRotate != 0) {
-        output.WriteRawTag(56);
-        output.WriteInt32(LastItemRotate);
-      }
-      if (LastGridId != 0) {
-        output.WriteRawTag(64);
-        output.WriteInt32(LastGridId);
+      if (movePos_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(MovePos);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3080,29 +2771,14 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
+      if (TargetObjectId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetObjectId);
       }
-      if (TargetId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetId);
+      if (moveItem_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MoveItem);
       }
-      if (GridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridId);
-      }
-      if (itemData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ItemData);
-      }
-      if (LastItemPosX != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemPosX);
-      }
-      if (LastItemPosY != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemPosY);
-      }
-      if (LastItemRotate != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemRotate);
-      }
-      if (LastGridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastGridId);
+      if (movePos_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MovePos);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3116,32 +2792,20 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.PlayerId != 0) {
-        PlayerId = other.PlayerId;
+      if (other.TargetObjectId != 0) {
+        TargetObjectId = other.TargetObjectId;
       }
-      if (other.TargetId != 0) {
-        TargetId = other.TargetId;
-      }
-      if (other.GridId != 0) {
-        GridId = other.GridId;
-      }
-      if (other.itemData_ != null) {
-        if (itemData_ == null) {
-          ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+      if (other.moveItem_ != null) {
+        if (moveItem_ == null) {
+          MoveItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
         }
-        ItemData.MergeFrom(other.ItemData);
+        MoveItem.MergeFrom(other.MoveItem);
       }
-      if (other.LastItemPosX != 0) {
-        LastItemPosX = other.LastItemPosX;
-      }
-      if (other.LastItemPosY != 0) {
-        LastItemPosY = other.LastItemPosY;
-      }
-      if (other.LastItemRotate != 0) {
-        LastItemRotate = other.LastItemRotate;
-      }
-      if (other.LastGridId != 0) {
-        LastGridId = other.LastGridId;
+      if (other.movePos_ != null) {
+        if (movePos_ == null) {
+          MovePos = new global::Google.Protobuf.Protocol.PS_GridXY();
+        }
+        MovePos.MergeFrom(other.MovePos);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3163,38 +2827,21 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            TargetObjectId = input.ReadInt32();
             break;
           }
-          case 16: {
-            TargetId = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            GridId = input.ReadInt32();
-            break;
-          }
-          case 34: {
-            if (itemData_ == null) {
-              ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+          case 18: {
+            if (moveItem_ == null) {
+              MoveItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
             }
-            input.ReadMessage(ItemData);
+            input.ReadMessage(MoveItem);
             break;
           }
-          case 40: {
-            LastItemPosX = input.ReadInt32();
-            break;
-          }
-          case 48: {
-            LastItemPosY = input.ReadInt32();
-            break;
-          }
-          case 56: {
-            LastItemRotate = input.ReadInt32();
-            break;
-          }
-          case 64: {
-            LastGridId = input.ReadInt32();
+          case 26: {
+            if (movePos_ == null) {
+              MovePos = new global::Google.Protobuf.Protocol.PS_GridXY();
+            }
+            input.ReadMessage(MovePos);
             break;
           }
         }
@@ -3217,38 +2864,21 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            TargetObjectId = input.ReadInt32();
             break;
           }
-          case 16: {
-            TargetId = input.ReadInt32();
-            break;
-          }
-          case 24: {
-            GridId = input.ReadInt32();
-            break;
-          }
-          case 34: {
-            if (itemData_ == null) {
-              ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+          case 18: {
+            if (moveItem_ == null) {
+              MoveItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
             }
-            input.ReadMessage(ItemData);
+            input.ReadMessage(MoveItem);
             break;
           }
-          case 40: {
-            LastItemPosX = input.ReadInt32();
-            break;
-          }
-          case 48: {
-            LastItemPosY = input.ReadInt32();
-            break;
-          }
-          case 56: {
-            LastItemRotate = input.ReadInt32();
-            break;
-          }
-          case 64: {
-            LastGridId = input.ReadInt32();
+          case 26: {
+            if (movePos_ == null) {
+              MovePos = new global::Google.Protobuf.Protocol.PS_GridXY();
+            }
+            input.ReadMessage(MovePos);
             break;
           }
         }
@@ -3293,14 +2923,10 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public S_MoveItem(S_MoveItem other) : this() {
-      playerId_ = other.playerId_;
-      targetId_ = other.targetId_;
-      gridId_ = other.gridId_;
-      itemData_ = other.itemData_ != null ? other.itemData_.Clone() : null;
-      lastItemPosX_ = other.lastItemPosX_;
-      lastItemPosY_ = other.lastItemPosY_;
-      lastItemRotate_ = other.lastItemRotate_;
-      lastGridId_ = other.lastGridId_;
+      isSuccess_ = other.isSuccess_;
+      targetObjectId_ = other.targetObjectId_;
+      moveItem_ = other.moveItem_ != null ? other.moveItem_.Clone() : null;
+      movePos_ = other.movePos_ != null ? other.movePos_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3310,117 +2936,63 @@ namespace Google.Protobuf.Protocol {
       return new S_MoveItem(this);
     }
 
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private int playerId_;
+    /// <summary>Field number for the "isSuccess" field.</summary>
+    public const int IsSuccessFieldNumber = 1;
+    private bool isSuccess_;
     /// <summary>
-    ///옮긴 플레이어의 id
+    ///성공 유무
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerId {
-      get { return playerId_; }
+    public bool IsSuccess {
+      get { return isSuccess_; }
       set {
-        playerId_ = value;
+        isSuccess_ = value;
       }
     }
 
-    /// <summary>Field number for the "targetId" field.</summary>
-    public const int TargetIdFieldNumber = 2;
-    private int targetId_;
+    /// <summary>Field number for the "targetObjectId" field.</summary>
+    public const int TargetObjectIdFieldNumber = 2;
+    private int targetObjectId_;
     /// <summary>
-    /// 아이템을 옮긴  인벤토리의 id
+    /// 다른 인벤토리의
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int TargetId {
-      get { return targetId_; }
+    public int TargetObjectId {
+      get { return targetObjectId_; }
       set {
-        targetId_ = value;
+        targetObjectId_ = value;
       }
     }
 
-    /// <summary>Field number for the "gridId" field.</summary>
-    public const int GridIdFieldNumber = 3;
-    private int gridId_;
+    /// <summary>Field number for the "moveItem" field.</summary>
+    public const int MoveItemFieldNumber = 3;
+    private global::Google.Protobuf.Protocol.PS_ItemInfo moveItem_;
     /// <summary>
-    ///인벤토리의 몇번째 그리드인지(혹은 그리드의 id)
+    /// 옮긴 아이템의 데이터
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridId {
-      get { return gridId_; }
+    public global::Google.Protobuf.Protocol.PS_ItemInfo MoveItem {
+      get { return moveItem_; }
       set {
-        gridId_ = value;
+        moveItem_ = value;
       }
     }
 
-    /// <summary>Field number for the "itemData" field.</summary>
-    public const int ItemDataFieldNumber = 4;
-    private global::Google.Protobuf.Protocol.ItemDataInfo itemData_;
+    /// <summary>Field number for the "movePos" field.</summary>
+    public const int MovePosFieldNumber = 4;
+    private global::Google.Protobuf.Protocol.PS_GridXY movePos_;
     /// <summary>
-    ///옮긴 아이템의 데이터
+    /// 나의 인벤토리 x,y
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.Protocol.ItemDataInfo ItemData {
-      get { return itemData_; }
+    public global::Google.Protobuf.Protocol.PS_GridXY MovePos {
+      get { return movePos_; }
       set {
-        itemData_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastItemPosX" field.</summary>
-    public const int LastItemPosXFieldNumber = 5;
-    private int lastItemPosX_;
-    /// <summary>
-    ///문제가 있을시 백업용. 필요하나?
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastItemPosX {
-      get { return lastItemPosX_; }
-      set {
-        lastItemPosX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastItemPosY" field.</summary>
-    public const int LastItemPosYFieldNumber = 6;
-    private int lastItemPosY_;
-    /// <summary>
-    ///이전 아이템의 좌표
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastItemPosY {
-      get { return lastItemPosY_; }
-      set {
-        lastItemPosY_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastItemRotate" field.</summary>
-    public const int LastItemRotateFieldNumber = 7;
-    private int lastItemRotate_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastItemRotate {
-      get { return lastItemRotate_; }
-      set {
-        lastItemRotate_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastGridId" field.</summary>
-    public const int LastGridIdFieldNumber = 8;
-    private int lastGridId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastGridId {
-      get { return lastGridId_; }
-      set {
-        lastGridId_ = value;
+        movePos_ = value;
       }
     }
 
@@ -3439,14 +3011,10 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
-      if (TargetId != other.TargetId) return false;
-      if (GridId != other.GridId) return false;
-      if (!object.Equals(ItemData, other.ItemData)) return false;
-      if (LastItemPosX != other.LastItemPosX) return false;
-      if (LastItemPosY != other.LastItemPosY) return false;
-      if (LastItemRotate != other.LastItemRotate) return false;
-      if (LastGridId != other.LastGridId) return false;
+      if (IsSuccess != other.IsSuccess) return false;
+      if (TargetObjectId != other.TargetObjectId) return false;
+      if (!object.Equals(MoveItem, other.MoveItem)) return false;
+      if (!object.Equals(MovePos, other.MovePos)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3454,14 +3022,10 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
-      if (TargetId != 0) hash ^= TargetId.GetHashCode();
-      if (GridId != 0) hash ^= GridId.GetHashCode();
-      if (itemData_ != null) hash ^= ItemData.GetHashCode();
-      if (LastItemPosX != 0) hash ^= LastItemPosX.GetHashCode();
-      if (LastItemPosY != 0) hash ^= LastItemPosY.GetHashCode();
-      if (LastItemRotate != 0) hash ^= LastItemRotate.GetHashCode();
-      if (LastGridId != 0) hash ^= LastGridId.GetHashCode();
+      if (IsSuccess != false) hash ^= IsSuccess.GetHashCode();
+      if (TargetObjectId != 0) hash ^= TargetObjectId.GetHashCode();
+      if (moveItem_ != null) hash ^= MoveItem.GetHashCode();
+      if (movePos_ != null) hash ^= MovePos.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3480,37 +3044,21 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId != 0) {
+      if (IsSuccess != false) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteBool(IsSuccess);
       }
-      if (TargetId != 0) {
+      if (TargetObjectId != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(TargetId);
+        output.WriteInt32(TargetObjectId);
       }
-      if (GridId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridId);
+      if (moveItem_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(MoveItem);
       }
-      if (itemData_ != null) {
+      if (movePos_ != null) {
         output.WriteRawTag(34);
-        output.WriteMessage(ItemData);
-      }
-      if (LastItemPosX != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(LastItemPosX);
-      }
-      if (LastItemPosY != 0) {
-        output.WriteRawTag(48);
-        output.WriteInt32(LastItemPosY);
-      }
-      if (LastItemRotate != 0) {
-        output.WriteRawTag(56);
-        output.WriteInt32(LastItemRotate);
-      }
-      if (LastGridId != 0) {
-        output.WriteRawTag(64);
-        output.WriteInt32(LastGridId);
+        output.WriteMessage(MovePos);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3522,37 +3070,21 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId != 0) {
+      if (IsSuccess != false) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteBool(IsSuccess);
       }
-      if (TargetId != 0) {
+      if (TargetObjectId != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(TargetId);
+        output.WriteInt32(TargetObjectId);
       }
-      if (GridId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridId);
+      if (moveItem_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(MoveItem);
       }
-      if (itemData_ != null) {
+      if (movePos_ != null) {
         output.WriteRawTag(34);
-        output.WriteMessage(ItemData);
-      }
-      if (LastItemPosX != 0) {
-        output.WriteRawTag(40);
-        output.WriteInt32(LastItemPosX);
-      }
-      if (LastItemPosY != 0) {
-        output.WriteRawTag(48);
-        output.WriteInt32(LastItemPosY);
-      }
-      if (LastItemRotate != 0) {
-        output.WriteRawTag(56);
-        output.WriteInt32(LastItemRotate);
-      }
-      if (LastGridId != 0) {
-        output.WriteRawTag(64);
-        output.WriteInt32(LastGridId);
+        output.WriteMessage(MovePos);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3564,29 +3096,17 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
+      if (IsSuccess != false) {
+        size += 1 + 1;
       }
-      if (TargetId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetId);
+      if (TargetObjectId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TargetObjectId);
       }
-      if (GridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridId);
+      if (moveItem_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MoveItem);
       }
-      if (itemData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ItemData);
-      }
-      if (LastItemPosX != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemPosX);
-      }
-      if (LastItemPosY != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemPosY);
-      }
-      if (LastItemRotate != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastItemRotate);
-      }
-      if (LastGridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastGridId);
+      if (movePos_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(MovePos);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3600,32 +3120,23 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.PlayerId != 0) {
-        PlayerId = other.PlayerId;
+      if (other.IsSuccess != false) {
+        IsSuccess = other.IsSuccess;
       }
-      if (other.TargetId != 0) {
-        TargetId = other.TargetId;
+      if (other.TargetObjectId != 0) {
+        TargetObjectId = other.TargetObjectId;
       }
-      if (other.GridId != 0) {
-        GridId = other.GridId;
-      }
-      if (other.itemData_ != null) {
-        if (itemData_ == null) {
-          ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+      if (other.moveItem_ != null) {
+        if (moveItem_ == null) {
+          MoveItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
         }
-        ItemData.MergeFrom(other.ItemData);
+        MoveItem.MergeFrom(other.MoveItem);
       }
-      if (other.LastItemPosX != 0) {
-        LastItemPosX = other.LastItemPosX;
-      }
-      if (other.LastItemPosY != 0) {
-        LastItemPosY = other.LastItemPosY;
-      }
-      if (other.LastItemRotate != 0) {
-        LastItemRotate = other.LastItemRotate;
-      }
-      if (other.LastGridId != 0) {
-        LastGridId = other.LastGridId;
+      if (other.movePos_ != null) {
+        if (movePos_ == null) {
+          MovePos = new global::Google.Protobuf.Protocol.PS_GridXY();
+        }
+        MovePos.MergeFrom(other.MovePos);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -3647,38 +3158,25 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            IsSuccess = input.ReadBool();
             break;
           }
           case 16: {
-            TargetId = input.ReadInt32();
+            TargetObjectId = input.ReadInt32();
             break;
           }
-          case 24: {
-            GridId = input.ReadInt32();
+          case 26: {
+            if (moveItem_ == null) {
+              MoveItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
+            }
+            input.ReadMessage(MoveItem);
             break;
           }
           case 34: {
-            if (itemData_ == null) {
-              ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+            if (movePos_ == null) {
+              MovePos = new global::Google.Protobuf.Protocol.PS_GridXY();
             }
-            input.ReadMessage(ItemData);
-            break;
-          }
-          case 40: {
-            LastItemPosX = input.ReadInt32();
-            break;
-          }
-          case 48: {
-            LastItemPosY = input.ReadInt32();
-            break;
-          }
-          case 56: {
-            LastItemRotate = input.ReadInt32();
-            break;
-          }
-          case 64: {
-            LastGridId = input.ReadInt32();
+            input.ReadMessage(MovePos);
             break;
           }
         }
@@ -3701,38 +3199,25 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            IsSuccess = input.ReadBool();
             break;
           }
           case 16: {
-            TargetId = input.ReadInt32();
+            TargetObjectId = input.ReadInt32();
             break;
           }
-          case 24: {
-            GridId = input.ReadInt32();
+          case 26: {
+            if (moveItem_ == null) {
+              MoveItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
+            }
+            input.ReadMessage(MoveItem);
             break;
           }
           case 34: {
-            if (itemData_ == null) {
-              ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+            if (movePos_ == null) {
+              MovePos = new global::Google.Protobuf.Protocol.PS_GridXY();
             }
-            input.ReadMessage(ItemData);
-            break;
-          }
-          case 40: {
-            LastItemPosX = input.ReadInt32();
-            break;
-          }
-          case 48: {
-            LastItemPosY = input.ReadInt32();
-            break;
-          }
-          case 56: {
-            LastItemRotate = input.ReadInt32();
-            break;
-          }
-          case 64: {
-            LastGridId = input.ReadInt32();
+            input.ReadMessage(MovePos);
             break;
           }
         }
@@ -3743,7 +3228,7 @@ namespace Google.Protobuf.Protocol {
   }
 
   /// <summary>
-  ///14
+  ///15
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class C_DeleteItem : pb::IMessage<C_DeleteItem>
@@ -3780,10 +3265,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public C_DeleteItem(C_DeleteItem other) : this() {
-      playerId_ = other.playerId_;
-      itemData_ = other.itemData_ != null ? other.itemData_.Clone() : null;
-      gridId_ = other.gridId_;
-      lastGridId_ = other.lastGridId_;
+      deleteItem_ = other.deleteItem_ != null ? other.deleteItem_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -3793,57 +3275,18 @@ namespace Google.Protobuf.Protocol {
       return new C_DeleteItem(this);
     }
 
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private int playerId_;
+    /// <summary>Field number for the "deleteItem" field.</summary>
+    public const int DeleteItemFieldNumber = 1;
+    private global::Google.Protobuf.Protocol.PS_ItemInfo deleteItem_;
     /// <summary>
-    ///지운 플레이어의 id
+    ///지우려고 하는 아이템의 데이터
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerId {
-      get { return playerId_; }
+    public global::Google.Protobuf.Protocol.PS_ItemInfo DeleteItem {
+      get { return deleteItem_; }
       set {
-        playerId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "itemData" field.</summary>
-    public const int ItemDataFieldNumber = 2;
-    private global::Google.Protobuf.Protocol.ItemDataInfo itemData_;
-    /// <summary>
-    ///지운 아이템의 데이터
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.Protocol.ItemDataInfo ItemData {
-      get { return itemData_; }
-      set {
-        itemData_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "gridId" field.</summary>
-    public const int GridIdFieldNumber = 3;
-    private int gridId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridId {
-      get { return gridId_; }
-      set {
-        gridId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastGridId" field.</summary>
-    public const int LastGridIdFieldNumber = 4;
-    private int lastGridId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastGridId {
-      get { return lastGridId_; }
-      set {
-        lastGridId_ = value;
+        deleteItem_ = value;
       }
     }
 
@@ -3862,10 +3305,7 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
-      if (!object.Equals(ItemData, other.ItemData)) return false;
-      if (GridId != other.GridId) return false;
-      if (LastGridId != other.LastGridId) return false;
+      if (!object.Equals(DeleteItem, other.DeleteItem)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -3873,10 +3313,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
-      if (itemData_ != null) hash ^= ItemData.GetHashCode();
-      if (GridId != 0) hash ^= GridId.GetHashCode();
-      if (LastGridId != 0) hash ^= LastGridId.GetHashCode();
+      if (deleteItem_ != null) hash ^= DeleteItem.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -3895,21 +3332,9 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
-      }
-      if (itemData_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(ItemData);
-      }
-      if (GridId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridId);
-      }
-      if (LastGridId != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(LastGridId);
+      if (deleteItem_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(DeleteItem);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -3921,21 +3346,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId != 0) {
-        output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
-      }
-      if (itemData_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(ItemData);
-      }
-      if (GridId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridId);
-      }
-      if (LastGridId != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(LastGridId);
+      if (deleteItem_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(DeleteItem);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -3947,17 +3360,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
-      }
-      if (itemData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ItemData);
-      }
-      if (GridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridId);
-      }
-      if (LastGridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastGridId);
+      if (deleteItem_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DeleteItem);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -3971,20 +3375,11 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.PlayerId != 0) {
-        PlayerId = other.PlayerId;
-      }
-      if (other.itemData_ != null) {
-        if (itemData_ == null) {
-          ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+      if (other.deleteItem_ != null) {
+        if (deleteItem_ == null) {
+          DeleteItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
         }
-        ItemData.MergeFrom(other.ItemData);
-      }
-      if (other.GridId != 0) {
-        GridId = other.GridId;
-      }
-      if (other.LastGridId != 0) {
-        LastGridId = other.LastGridId;
+        DeleteItem.MergeFrom(other.DeleteItem);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -4005,23 +3400,11 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
-          case 8: {
-            PlayerId = input.ReadInt32();
-            break;
-          }
-          case 18: {
-            if (itemData_ == null) {
-              ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+          case 10: {
+            if (deleteItem_ == null) {
+              DeleteItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
             }
-            input.ReadMessage(ItemData);
-            break;
-          }
-          case 24: {
-            GridId = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            LastGridId = input.ReadInt32();
+            input.ReadMessage(DeleteItem);
             break;
           }
         }
@@ -4043,23 +3426,11 @@ namespace Google.Protobuf.Protocol {
           default:
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
-          case 8: {
-            PlayerId = input.ReadInt32();
-            break;
-          }
-          case 18: {
-            if (itemData_ == null) {
-              ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+          case 10: {
+            if (deleteItem_ == null) {
+              DeleteItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
             }
-            input.ReadMessage(ItemData);
-            break;
-          }
-          case 24: {
-            GridId = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            LastGridId = input.ReadInt32();
+            input.ReadMessage(DeleteItem);
             break;
           }
         }
@@ -4070,7 +3441,7 @@ namespace Google.Protobuf.Protocol {
   }
 
   /// <summary>
-  ///15
+  ///16
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class S_DeleteItem : pb::IMessage<S_DeleteItem>
@@ -4107,10 +3478,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public S_DeleteItem(S_DeleteItem other) : this() {
-      playerId_ = other.playerId_;
-      itemData_ = other.itemData_ != null ? other.itemData_.Clone() : null;
-      gridId_ = other.gridId_;
-      lastGridId_ = other.lastGridId_;
+      isSuccess_ = other.isSuccess_;
+      deleteItem_ = other.deleteItem_ != null ? other.deleteItem_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -4120,57 +3489,33 @@ namespace Google.Protobuf.Protocol {
       return new S_DeleteItem(this);
     }
 
-    /// <summary>Field number for the "playerId" field.</summary>
-    public const int PlayerIdFieldNumber = 1;
-    private int playerId_;
+    /// <summary>Field number for the "isSuccess" field.</summary>
+    public const int IsSuccessFieldNumber = 1;
+    private bool isSuccess_;
     /// <summary>
-    ///지운 플레이어의 id
+    ///성공 유무
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int PlayerId {
-      get { return playerId_; }
+    public bool IsSuccess {
+      get { return isSuccess_; }
       set {
-        playerId_ = value;
+        isSuccess_ = value;
       }
     }
 
-    /// <summary>Field number for the "itemData" field.</summary>
-    public const int ItemDataFieldNumber = 2;
-    private global::Google.Protobuf.Protocol.ItemDataInfo itemData_;
+    /// <summary>Field number for the "deleteItem" field.</summary>
+    public const int DeleteItemFieldNumber = 2;
+    private global::Google.Protobuf.Protocol.PS_ItemInfo deleteItem_;
     /// <summary>
     ///지운 아이템의 데이터
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.Protocol.ItemDataInfo ItemData {
-      get { return itemData_; }
+    public global::Google.Protobuf.Protocol.PS_ItemInfo DeleteItem {
+      get { return deleteItem_; }
       set {
-        itemData_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "gridId" field.</summary>
-    public const int GridIdFieldNumber = 3;
-    private int gridId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridId {
-      get { return gridId_; }
-      set {
-        gridId_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "lastGridId" field.</summary>
-    public const int LastGridIdFieldNumber = 4;
-    private int lastGridId_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int LastGridId {
-      get { return lastGridId_; }
-      set {
-        lastGridId_ = value;
+        deleteItem_ = value;
       }
     }
 
@@ -4189,10 +3534,8 @@ namespace Google.Protobuf.Protocol {
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (PlayerId != other.PlayerId) return false;
-      if (!object.Equals(ItemData, other.ItemData)) return false;
-      if (GridId != other.GridId) return false;
-      if (LastGridId != other.LastGridId) return false;
+      if (IsSuccess != other.IsSuccess) return false;
+      if (!object.Equals(DeleteItem, other.DeleteItem)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -4200,10 +3543,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (PlayerId != 0) hash ^= PlayerId.GetHashCode();
-      if (itemData_ != null) hash ^= ItemData.GetHashCode();
-      if (GridId != 0) hash ^= GridId.GetHashCode();
-      if (LastGridId != 0) hash ^= LastGridId.GetHashCode();
+      if (IsSuccess != false) hash ^= IsSuccess.GetHashCode();
+      if (deleteItem_ != null) hash ^= DeleteItem.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -4222,21 +3563,13 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (PlayerId != 0) {
+      if (IsSuccess != false) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteBool(IsSuccess);
       }
-      if (itemData_ != null) {
+      if (deleteItem_ != null) {
         output.WriteRawTag(18);
-        output.WriteMessage(ItemData);
-      }
-      if (GridId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridId);
-      }
-      if (LastGridId != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(LastGridId);
+        output.WriteMessage(DeleteItem);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -4248,21 +3581,13 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (PlayerId != 0) {
+      if (IsSuccess != false) {
         output.WriteRawTag(8);
-        output.WriteInt32(PlayerId);
+        output.WriteBool(IsSuccess);
       }
-      if (itemData_ != null) {
+      if (deleteItem_ != null) {
         output.WriteRawTag(18);
-        output.WriteMessage(ItemData);
-      }
-      if (GridId != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridId);
-      }
-      if (LastGridId != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(LastGridId);
+        output.WriteMessage(DeleteItem);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -4274,17 +3599,11 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (PlayerId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(PlayerId);
+      if (IsSuccess != false) {
+        size += 1 + 1;
       }
-      if (itemData_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ItemData);
-      }
-      if (GridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridId);
-      }
-      if (LastGridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(LastGridId);
+      if (deleteItem_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(DeleteItem);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -4298,20 +3617,14 @@ namespace Google.Protobuf.Protocol {
       if (other == null) {
         return;
       }
-      if (other.PlayerId != 0) {
-        PlayerId = other.PlayerId;
+      if (other.IsSuccess != false) {
+        IsSuccess = other.IsSuccess;
       }
-      if (other.itemData_ != null) {
-        if (itemData_ == null) {
-          ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+      if (other.deleteItem_ != null) {
+        if (deleteItem_ == null) {
+          DeleteItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
         }
-        ItemData.MergeFrom(other.ItemData);
-      }
-      if (other.GridId != 0) {
-        GridId = other.GridId;
-      }
-      if (other.LastGridId != 0) {
-        LastGridId = other.LastGridId;
+        DeleteItem.MergeFrom(other.DeleteItem);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -4333,22 +3646,14 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            IsSuccess = input.ReadBool();
             break;
           }
           case 18: {
-            if (itemData_ == null) {
-              ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+            if (deleteItem_ == null) {
+              DeleteItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
             }
-            input.ReadMessage(ItemData);
-            break;
-          }
-          case 24: {
-            GridId = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            LastGridId = input.ReadInt32();
+            input.ReadMessage(DeleteItem);
             break;
           }
         }
@@ -4371,22 +3676,14 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            PlayerId = input.ReadInt32();
+            IsSuccess = input.ReadBool();
             break;
           }
           case 18: {
-            if (itemData_ == null) {
-              ItemData = new global::Google.Protobuf.Protocol.ItemDataInfo();
+            if (deleteItem_ == null) {
+              DeleteItem = new global::Google.Protobuf.Protocol.PS_ItemInfo();
             }
-            input.ReadMessage(ItemData);
-            break;
-          }
-          case 24: {
-            GridId = input.ReadInt32();
-            break;
-          }
-          case 32: {
-            LastGridId = input.ReadInt32();
+            input.ReadMessage(DeleteItem);
             break;
           }
         }
@@ -7272,16 +6569,16 @@ namespace Google.Protobuf.Protocol {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class InvenDataInfo : pb::IMessage<InvenDataInfo>
+  public sealed partial class PS_GridXY : pb::IMessage<PS_GridXY>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<InvenDataInfo> _parser = new pb::MessageParser<InvenDataInfo>(() => new InvenDataInfo());
+    private static readonly pb::MessageParser<PS_GridXY> _parser = new pb::MessageParser<PS_GridXY>(() => new PS_GridXY());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<InvenDataInfo> Parser { get { return _parser; } }
+    public static pb::MessageParser<PS_GridXY> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7297,7 +6594,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public InvenDataInfo() {
+    public PS_GridXY() {
       OnConstruction();
     }
 
@@ -7305,72 +6602,59 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public InvenDataInfo(InvenDataInfo other) : this() {
-      inventoryId_ = other.inventoryId_;
-      limitWeight_ = other.limitWeight_;
-      gridData_ = other.gridData_.Clone();
+    public PS_GridXY(PS_GridXY other) : this() {
+      x_ = other.x_;
+      y_ = other.y_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public InvenDataInfo Clone() {
-      return new InvenDataInfo(this);
+    public PS_GridXY Clone() {
+      return new PS_GridXY(this);
     }
 
-    /// <summary>Field number for the "inventoryId" field.</summary>
-    public const int InventoryIdFieldNumber = 1;
-    private int inventoryId_;
+    /// <summary>Field number for the "x" field.</summary>
+    public const int XFieldNumber = 1;
+    private int x_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int InventoryId {
-      get { return inventoryId_; }
+    public int X {
+      get { return x_; }
       set {
-        inventoryId_ = value;
+        x_ = value;
       }
     }
 
-    /// <summary>Field number for the "limitWeight" field.</summary>
-    public const int LimitWeightFieldNumber = 2;
-    private float limitWeight_;
+    /// <summary>Field number for the "y" field.</summary>
+    public const int YFieldNumber = 2;
+    private int y_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float LimitWeight {
-      get { return limitWeight_; }
+    public int Y {
+      get { return y_; }
       set {
-        limitWeight_ = value;
+        y_ = value;
       }
-    }
-
-    /// <summary>Field number for the "GridData" field.</summary>
-    public const int GridDataFieldNumber = 3;
-    private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.GridDataInfo> _repeated_gridData_codec
-        = pb::FieldCodec.ForMessage(26, global::Google.Protobuf.Protocol.GridDataInfo.Parser);
-    private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.GridDataInfo> gridData_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.GridDataInfo>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Google.Protobuf.Protocol.GridDataInfo> GridData {
-      get { return gridData_; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as InvenDataInfo);
+      return Equals(other as PS_GridXY);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(InvenDataInfo other) {
+    public bool Equals(PS_GridXY other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (InventoryId != other.InventoryId) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(LimitWeight, other.LimitWeight)) return false;
-      if(!gridData_.Equals(other.gridData_)) return false;
+      if (X != other.X) return false;
+      if (Y != other.Y) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -7378,9 +6662,8 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (InventoryId != 0) hash ^= InventoryId.GetHashCode();
-      if (LimitWeight != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(LimitWeight);
-      hash ^= gridData_.GetHashCode();
+      if (X != 0) hash ^= X.GetHashCode();
+      if (Y != 0) hash ^= Y.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -7399,15 +6682,14 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (InventoryId != 0) {
+      if (X != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(InventoryId);
+        output.WriteInt32(X);
       }
-      if (LimitWeight != 0F) {
-        output.WriteRawTag(21);
-        output.WriteFloat(LimitWeight);
+      if (Y != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Y);
       }
-      gridData_.WriteTo(output, _repeated_gridData_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -7418,15 +6700,14 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (InventoryId != 0) {
+      if (X != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(InventoryId);
+        output.WriteInt32(X);
       }
-      if (LimitWeight != 0F) {
-        output.WriteRawTag(21);
-        output.WriteFloat(LimitWeight);
+      if (Y != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(Y);
       }
-      gridData_.WriteTo(ref output, _repeated_gridData_codec);
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -7437,13 +6718,12 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (InventoryId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(InventoryId);
+      if (X != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(X);
       }
-      if (LimitWeight != 0F) {
-        size += 1 + 4;
+      if (Y != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Y);
       }
-      size += gridData_.CalculateSize(_repeated_gridData_codec);
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -7452,17 +6732,16 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(InvenDataInfo other) {
+    public void MergeFrom(PS_GridXY other) {
       if (other == null) {
         return;
       }
-      if (other.InventoryId != 0) {
-        InventoryId = other.InventoryId;
+      if (other.X != 0) {
+        X = other.X;
       }
-      if (other.LimitWeight != 0F) {
-        LimitWeight = other.LimitWeight;
+      if (other.Y != 0) {
+        Y = other.Y;
       }
-      gridData_.Add(other.gridData_);
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -7483,15 +6762,11 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            InventoryId = input.ReadInt32();
+            X = input.ReadInt32();
             break;
           }
-          case 21: {
-            LimitWeight = input.ReadFloat();
-            break;
-          }
-          case 26: {
-            gridData_.AddEntriesFrom(input, _repeated_gridData_codec);
+          case 16: {
+            Y = input.ReadInt32();
             break;
           }
         }
@@ -7514,15 +6789,11 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            InventoryId = input.ReadInt32();
+            X = input.ReadInt32();
             break;
           }
-          case 21: {
-            LimitWeight = input.ReadFloat();
-            break;
-          }
-          case 26: {
-            gridData_.AddEntriesFrom(ref input, _repeated_gridData_codec);
+          case 16: {
+            Y = input.ReadInt32();
             break;
           }
         }
@@ -7533,16 +6804,16 @@ namespace Google.Protobuf.Protocol {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class GridDataInfo : pb::IMessage<GridDataInfo>
+  public sealed partial class PS_GridData : pb::IMessage<PS_GridData>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<GridDataInfo> _parser = new pb::MessageParser<GridDataInfo>(() => new GridDataInfo());
+    private static readonly pb::MessageParser<PS_GridData> _parser = new pb::MessageParser<PS_GridData>(() => new PS_GridData());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GridDataInfo> Parser { get { return _parser; } }
+    public static pb::MessageParser<PS_GridData> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -7558,7 +6829,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GridDataInfo() {
+    public PS_GridData() {
       OnConstruction();
     }
 
@@ -7566,142 +6837,73 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GridDataInfo(GridDataInfo other) : this() {
-      gridId_ = other.gridId_;
-      gridSizeX_ = other.gridSizeX_;
-      gridSizeY_ = other.gridSizeY_;
-      gridPosX_ = other.gridPosX_;
-      gridPosY_ = other.gridPosY_;
-      itemList_ = other.itemList_.Clone();
-      createRandomItem_ = other.createRandomItem_;
-      randomItemAmount_ = other.randomItemAmount_;
+    public PS_GridData(PS_GridData other) : this() {
+      scaleX_ = other.scaleX_;
+      scaleY_ = other.scaleY_;
+      pos_ = other.pos_ != null ? other.pos_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GridDataInfo Clone() {
-      return new GridDataInfo(this);
+    public PS_GridData Clone() {
+      return new PS_GridData(this);
     }
 
-    /// <summary>Field number for the "gridId" field.</summary>
-    public const int GridIdFieldNumber = 1;
-    private int gridId_;
+    /// <summary>Field number for the "scaleX" field.</summary>
+    public const int ScaleXFieldNumber = 1;
+    private int scaleX_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridId {
-      get { return gridId_; }
+    public int ScaleX {
+      get { return scaleX_; }
       set {
-        gridId_ = value;
+        scaleX_ = value;
       }
     }
 
-    /// <summary>Field number for the "gridSizeX" field.</summary>
-    public const int GridSizeXFieldNumber = 2;
-    private int gridSizeX_;
+    /// <summary>Field number for the "scaleY" field.</summary>
+    public const int ScaleYFieldNumber = 2;
+    private int scaleY_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridSizeX {
-      get { return gridSizeX_; }
+    public int ScaleY {
+      get { return scaleY_; }
       set {
-        gridSizeX_ = value;
+        scaleY_ = value;
       }
     }
 
-    /// <summary>Field number for the "gridSizeY" field.</summary>
-    public const int GridSizeYFieldNumber = 3;
-    private int gridSizeY_;
+    /// <summary>Field number for the "pos" field.</summary>
+    public const int PosFieldNumber = 3;
+    private global::Google.Protobuf.Protocol.PS_GridXY pos_;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int GridSizeY {
-      get { return gridSizeY_; }
+    public global::Google.Protobuf.Protocol.PS_GridXY Pos {
+      get { return pos_; }
       set {
-        gridSizeY_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "gridPosX" field.</summary>
-    public const int GridPosXFieldNumber = 4;
-    private float gridPosX_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float GridPosX {
-      get { return gridPosX_; }
-      set {
-        gridPosX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "gridPosY" field.</summary>
-    public const int GridPosYFieldNumber = 5;
-    private float gridPosY_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float GridPosY {
-      get { return gridPosY_; }
-      set {
-        gridPosY_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "itemList" field.</summary>
-    public const int ItemListFieldNumber = 6;
-    private static readonly pb::FieldCodec<global::Google.Protobuf.Protocol.ItemDataInfo> _repeated_itemList_codec
-        = pb::FieldCodec.ForMessage(50, global::Google.Protobuf.Protocol.ItemDataInfo.Parser);
-    private readonly pbc::RepeatedField<global::Google.Protobuf.Protocol.ItemDataInfo> itemList_ = new pbc::RepeatedField<global::Google.Protobuf.Protocol.ItemDataInfo>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Google.Protobuf.Protocol.ItemDataInfo> ItemList {
-      get { return itemList_; }
-    }
-
-    /// <summary>Field number for the "createRandomItem" field.</summary>
-    public const int CreateRandomItemFieldNumber = 7;
-    private bool createRandomItem_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool CreateRandomItem {
-      get { return createRandomItem_; }
-      set {
-        createRandomItem_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "randomItemAmount" field.</summary>
-    public const int RandomItemAmountFieldNumber = 8;
-    private int randomItemAmount_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int RandomItemAmount {
-      get { return randomItemAmount_; }
-      set {
-        randomItemAmount_ = value;
+        pos_ = value;
       }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as GridDataInfo);
+      return Equals(other as PS_GridData);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GridDataInfo other) {
+    public bool Equals(PS_GridData other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
-      if (GridId != other.GridId) return false;
-      if (GridSizeX != other.GridSizeX) return false;
-      if (GridSizeY != other.GridSizeY) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(GridPosX, other.GridPosX)) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(GridPosY, other.GridPosY)) return false;
-      if(!itemList_.Equals(other.itemList_)) return false;
-      if (CreateRandomItem != other.CreateRandomItem) return false;
-      if (RandomItemAmount != other.RandomItemAmount) return false;
+      if (ScaleX != other.ScaleX) return false;
+      if (ScaleY != other.ScaleY) return false;
+      if (!object.Equals(Pos, other.Pos)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -7709,14 +6911,9 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
-      if (GridId != 0) hash ^= GridId.GetHashCode();
-      if (GridSizeX != 0) hash ^= GridSizeX.GetHashCode();
-      if (GridSizeY != 0) hash ^= GridSizeY.GetHashCode();
-      if (GridPosX != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(GridPosX);
-      if (GridPosY != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(GridPosY);
-      hash ^= itemList_.GetHashCode();
-      if (CreateRandomItem != false) hash ^= CreateRandomItem.GetHashCode();
-      if (RandomItemAmount != 0) hash ^= RandomItemAmount.GetHashCode();
+      if (ScaleX != 0) hash ^= ScaleX.GetHashCode();
+      if (ScaleY != 0) hash ^= ScaleY.GetHashCode();
+      if (pos_ != null) hash ^= Pos.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -7735,34 +6932,17 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (GridId != 0) {
+      if (ScaleX != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(GridId);
+        output.WriteInt32(ScaleX);
       }
-      if (GridSizeX != 0) {
+      if (ScaleY != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(GridSizeX);
+        output.WriteInt32(ScaleY);
       }
-      if (GridSizeY != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridSizeY);
-      }
-      if (GridPosX != 0F) {
-        output.WriteRawTag(37);
-        output.WriteFloat(GridPosX);
-      }
-      if (GridPosY != 0F) {
-        output.WriteRawTag(45);
-        output.WriteFloat(GridPosY);
-      }
-      itemList_.WriteTo(output, _repeated_itemList_codec);
-      if (CreateRandomItem != false) {
-        output.WriteRawTag(56);
-        output.WriteBool(CreateRandomItem);
-      }
-      if (RandomItemAmount != 0) {
-        output.WriteRawTag(64);
-        output.WriteInt32(RandomItemAmount);
+      if (pos_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Pos);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
@@ -7774,34 +6954,17 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (GridId != 0) {
+      if (ScaleX != 0) {
         output.WriteRawTag(8);
-        output.WriteInt32(GridId);
+        output.WriteInt32(ScaleX);
       }
-      if (GridSizeX != 0) {
+      if (ScaleY != 0) {
         output.WriteRawTag(16);
-        output.WriteInt32(GridSizeX);
+        output.WriteInt32(ScaleY);
       }
-      if (GridSizeY != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(GridSizeY);
-      }
-      if (GridPosX != 0F) {
-        output.WriteRawTag(37);
-        output.WriteFloat(GridPosX);
-      }
-      if (GridPosY != 0F) {
-        output.WriteRawTag(45);
-        output.WriteFloat(GridPosY);
-      }
-      itemList_.WriteTo(ref output, _repeated_itemList_codec);
-      if (CreateRandomItem != false) {
-        output.WriteRawTag(56);
-        output.WriteBool(CreateRandomItem);
-      }
-      if (RandomItemAmount != 0) {
-        output.WriteRawTag(64);
-        output.WriteInt32(RandomItemAmount);
+      if (pos_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Pos);
       }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
@@ -7813,27 +6976,14 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
-      if (GridId != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridId);
+      if (ScaleX != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ScaleX);
       }
-      if (GridSizeX != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridSizeX);
+      if (ScaleY != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ScaleY);
       }
-      if (GridSizeY != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(GridSizeY);
-      }
-      if (GridPosX != 0F) {
-        size += 1 + 4;
-      }
-      if (GridPosY != 0F) {
-        size += 1 + 4;
-      }
-      size += itemList_.CalculateSize(_repeated_itemList_codec);
-      if (CreateRandomItem != false) {
-        size += 1 + 1;
-      }
-      if (RandomItemAmount != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RandomItemAmount);
+      if (pos_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Pos);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -7843,31 +6993,21 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GridDataInfo other) {
+    public void MergeFrom(PS_GridData other) {
       if (other == null) {
         return;
       }
-      if (other.GridId != 0) {
-        GridId = other.GridId;
+      if (other.ScaleX != 0) {
+        ScaleX = other.ScaleX;
       }
-      if (other.GridSizeX != 0) {
-        GridSizeX = other.GridSizeX;
+      if (other.ScaleY != 0) {
+        ScaleY = other.ScaleY;
       }
-      if (other.GridSizeY != 0) {
-        GridSizeY = other.GridSizeY;
-      }
-      if (other.GridPosX != 0F) {
-        GridPosX = other.GridPosX;
-      }
-      if (other.GridPosY != 0F) {
-        GridPosY = other.GridPosY;
-      }
-      itemList_.Add(other.itemList_);
-      if (other.CreateRandomItem != false) {
-        CreateRandomItem = other.CreateRandomItem;
-      }
-      if (other.RandomItemAmount != 0) {
-        RandomItemAmount = other.RandomItemAmount;
+      if (other.pos_ != null) {
+        if (pos_ == null) {
+          Pos = new global::Google.Protobuf.Protocol.PS_GridXY();
+        }
+        Pos.MergeFrom(other.Pos);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -7889,35 +7029,18 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            GridId = input.ReadInt32();
+            ScaleX = input.ReadInt32();
             break;
           }
           case 16: {
-            GridSizeX = input.ReadInt32();
+            ScaleY = input.ReadInt32();
             break;
           }
-          case 24: {
-            GridSizeY = input.ReadInt32();
-            break;
-          }
-          case 37: {
-            GridPosX = input.ReadFloat();
-            break;
-          }
-          case 45: {
-            GridPosY = input.ReadFloat();
-            break;
-          }
-          case 50: {
-            itemList_.AddEntriesFrom(input, _repeated_itemList_codec);
-            break;
-          }
-          case 56: {
-            CreateRandomItem = input.ReadBool();
-            break;
-          }
-          case 64: {
-            RandomItemAmount = input.ReadInt32();
+          case 26: {
+            if (pos_ == null) {
+              Pos = new global::Google.Protobuf.Protocol.PS_GridXY();
+            }
+            input.ReadMessage(Pos);
             break;
           }
         }
@@ -7940,35 +7063,18 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            GridId = input.ReadInt32();
+            ScaleX = input.ReadInt32();
             break;
           }
           case 16: {
-            GridSizeX = input.ReadInt32();
+            ScaleY = input.ReadInt32();
             break;
           }
-          case 24: {
-            GridSizeY = input.ReadInt32();
-            break;
-          }
-          case 37: {
-            GridPosX = input.ReadFloat();
-            break;
-          }
-          case 45: {
-            GridPosY = input.ReadFloat();
-            break;
-          }
-          case 50: {
-            itemList_.AddEntriesFrom(ref input, _repeated_itemList_codec);
-            break;
-          }
-          case 56: {
-            CreateRandomItem = input.ReadBool();
-            break;
-          }
-          case 64: {
-            RandomItemAmount = input.ReadInt32();
+          case 26: {
+            if (pos_ == null) {
+              Pos = new global::Google.Protobuf.Protocol.PS_GridXY();
+            }
+            input.ReadMessage(Pos);
             break;
           }
         }
@@ -7979,16 +7085,16 @@ namespace Google.Protobuf.Protocol {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class ItemDataInfo : pb::IMessage<ItemDataInfo>
+  public sealed partial class PS_ItemInfo : pb::IMessage<PS_ItemInfo>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<ItemDataInfo> _parser = new pb::MessageParser<ItemDataInfo>(() => new ItemDataInfo());
+    private static readonly pb::MessageParser<PS_ItemInfo> _parser = new pb::MessageParser<PS_ItemInfo>(() => new PS_ItemInfo());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<ItemDataInfo> Parser { get { return _parser; } }
+    public static pb::MessageParser<PS_ItemInfo> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -8004,7 +7110,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ItemDataInfo() {
+    public PS_ItemInfo() {
       OnConstruction();
     }
 
@@ -8012,38 +7118,42 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ItemDataInfo(ItemDataInfo other) : this() {
+    public PS_ItemInfo(PS_ItemInfo other) : this() {
+      objectId_ = other.objectId_;
       itemId_ = other.itemId_;
-      itemCode_ = other.itemCode_;
-      itemPosX_ = other.itemPosX_;
-      itemPosY_ = other.itemPosY_;
+      grid_ = other.grid_ != null ? other.grid_.Clone() : null;
       itemRotate_ = other.itemRotate_;
       itemAmount_ = other.itemAmount_;
       searchedPlayerId_ = other.searchedPlayerId_.Clone();
-      itemName_ = other.itemName_;
-      itemWeight_ = other.itemWeight_;
-      itemType_ = other.itemType_;
-      itemStringValue_ = other.itemStringValue_;
-      itemPurchasePrice_ = other.itemPurchasePrice_;
-      itemSellPrice_ = other.itemSellPrice_;
-      itemSearchTime_ = other.itemSearchTime_;
-      width_ = other.width_;
-      height_ = other.height_;
-      isItemConsumeable_ = other.isItemConsumeable_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public ItemDataInfo Clone() {
-      return new ItemDataInfo(this);
+    public PS_ItemInfo Clone() {
+      return new PS_ItemInfo(this);
+    }
+
+    /// <summary>Field number for the "objectId" field.</summary>
+    public const int ObjectIdFieldNumber = 1;
+    private int objectId_;
+    /// <summary>
+    /// 해당 아이템의 고유한 아이디
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ObjectId {
+      get { return objectId_; }
+      set {
+        objectId_ = value;
+      }
     }
 
     /// <summary>Field number for the "itemId" field.</summary>
-    public const int ItemIdFieldNumber = 1;
+    public const int ItemIdFieldNumber = 2;
     private int itemId_;
     /// <summary>
-    /// 해당 아이템의 고유한 아이디
+    /// 아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -8054,53 +7164,23 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "itemCode" field.</summary>
-    public const int ItemCodeFieldNumber = 2;
-    private int itemCode_;
-    /// <summary>
-    ///아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ItemCode {
-      get { return itemCode_; }
-      set {
-        itemCode_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "itemPosX" field.</summary>
-    public const int ItemPosXFieldNumber = 3;
-    private int itemPosX_;
+    /// <summary>Field number for the "grid" field.</summary>
+    public const int GridFieldNumber = 3;
+    private global::Google.Protobuf.Protocol.PS_GridData grid_;
     /// <summary>
     /// 아이템의 그리드 안 좌표상의 위치
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ItemPosX {
-      get { return itemPosX_; }
+    public global::Google.Protobuf.Protocol.PS_GridData Grid {
+      get { return grid_; }
       set {
-        itemPosX_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "itemPosY" field.</summary>
-    public const int ItemPosYFieldNumber = 4;
-    private int itemPosY_;
-    /// <summary>
-    /// 아이템의 그리드 안 좌표상의 위치
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ItemPosY {
-      get { return itemPosY_; }
-      set {
-        itemPosY_ = value;
+        grid_ = value;
       }
     }
 
     /// <summary>Field number for the "itemRotate" field.</summary>
-    public const int ItemRotateFieldNumber = 5;
+    public const int ItemRotateFieldNumber = 4;
     private int itemRotate_;
     /// <summary>
     /// 아이템의 회전코드(rotate * 90)
@@ -8115,7 +7195,7 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "itemAmount" field.</summary>
-    public const int ItemAmountFieldNumber = 6;
+    public const int ItemAmountFieldNumber = 5;
     private int itemAmount_;
     /// <summary>
     /// 아이템의 개수(소모품만 64개까지)
@@ -8130,9 +7210,9 @@ namespace Google.Protobuf.Protocol {
     }
 
     /// <summary>Field number for the "searchedPlayerId" field.</summary>
-    public const int SearchedPlayerIdFieldNumber = 7;
+    public const int SearchedPlayerIdFieldNumber = 6;
     private static readonly pb::FieldCodec<int> _repeated_searchedPlayerId_codec
-        = pb::FieldCodec.ForInt32(58);
+        = pb::FieldCodec.ForInt32(50);
     private readonly pbc::RepeatedField<int> searchedPlayerId_ = new pbc::RepeatedField<int>();
     /// <summary>
     /// 이 아이템을 조회한 플레이어의 아이디
@@ -8143,161 +7223,27 @@ namespace Google.Protobuf.Protocol {
       get { return searchedPlayerId_; }
     }
 
-    /// <summary>Field number for the "item_name" field.</summary>
-    public const int ItemNameFieldNumber = 8;
-    private string itemName_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string ItemName {
-      get { return itemName_; }
-      set {
-        itemName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "item_weight" field.</summary>
-    public const int ItemWeightFieldNumber = 9;
-    private float itemWeight_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float ItemWeight {
-      get { return itemWeight_; }
-      set {
-        itemWeight_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "item_type" field.</summary>
-    public const int ItemTypeFieldNumber = 10;
-    private global::Google.Protobuf.Protocol.ItemType itemType_ = global::Google.Protobuf.Protocol.ItemType.Weapon;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.Protocol.ItemType ItemType {
-      get { return itemType_; }
-      set {
-        itemType_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "item_string_value" field.</summary>
-    public const int ItemStringValueFieldNumber = 11;
-    private int itemStringValue_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ItemStringValue {
-      get { return itemStringValue_; }
-      set {
-        itemStringValue_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "item_purchase_price" field.</summary>
-    public const int ItemPurchasePriceFieldNumber = 12;
-    private int itemPurchasePrice_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ItemPurchasePrice {
-      get { return itemPurchasePrice_; }
-      set {
-        itemPurchasePrice_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "item_sell_price" field.</summary>
-    public const int ItemSellPriceFieldNumber = 13;
-    private int itemSellPrice_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int ItemSellPrice {
-      get { return itemSellPrice_; }
-      set {
-        itemSellPrice_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "item_searchTime" field.</summary>
-    public const int ItemSearchTimeFieldNumber = 14;
-    private float itemSearchTime_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public float ItemSearchTime {
-      get { return itemSearchTime_; }
-      set {
-        itemSearchTime_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "width" field.</summary>
-    public const int WidthFieldNumber = 15;
-    private int width_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Width {
-      get { return width_; }
-      set {
-        width_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "height" field.</summary>
-    public const int HeightFieldNumber = 16;
-    private int height_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int Height {
-      get { return height_; }
-      set {
-        height_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "isItemConsumeable" field.</summary>
-    public const int IsItemConsumeableFieldNumber = 17;
-    private bool isItemConsumeable_;
-    /// <summary>
-    ///Sprite itemSprite; ???
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool IsItemConsumeable {
-      get { return isItemConsumeable_; }
-      set {
-        isItemConsumeable_ = value;
-      }
-    }
-
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as ItemDataInfo);
+      return Equals(other as PS_ItemInfo);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(ItemDataInfo other) {
+    public bool Equals(PS_ItemInfo other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
       if (ReferenceEquals(other, this)) {
         return true;
       }
+      if (ObjectId != other.ObjectId) return false;
       if (ItemId != other.ItemId) return false;
-      if (ItemCode != other.ItemCode) return false;
-      if (ItemPosX != other.ItemPosX) return false;
-      if (ItemPosY != other.ItemPosY) return false;
+      if (!object.Equals(Grid, other.Grid)) return false;
       if (ItemRotate != other.ItemRotate) return false;
       if (ItemAmount != other.ItemAmount) return false;
       if(!searchedPlayerId_.Equals(other.searchedPlayerId_)) return false;
-      if (ItemName != other.ItemName) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ItemWeight, other.ItemWeight)) return false;
-      if (ItemType != other.ItemType) return false;
-      if (ItemStringValue != other.ItemStringValue) return false;
-      if (ItemPurchasePrice != other.ItemPurchasePrice) return false;
-      if (ItemSellPrice != other.ItemSellPrice) return false;
-      if (!pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.Equals(ItemSearchTime, other.ItemSearchTime)) return false;
-      if (Width != other.Width) return false;
-      if (Height != other.Height) return false;
-      if (IsItemConsumeable != other.IsItemConsumeable) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -8305,23 +7251,12 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override int GetHashCode() {
       int hash = 1;
+      if (ObjectId != 0) hash ^= ObjectId.GetHashCode();
       if (ItemId != 0) hash ^= ItemId.GetHashCode();
-      if (ItemCode != 0) hash ^= ItemCode.GetHashCode();
-      if (ItemPosX != 0) hash ^= ItemPosX.GetHashCode();
-      if (ItemPosY != 0) hash ^= ItemPosY.GetHashCode();
+      if (grid_ != null) hash ^= Grid.GetHashCode();
       if (ItemRotate != 0) hash ^= ItemRotate.GetHashCode();
       if (ItemAmount != 0) hash ^= ItemAmount.GetHashCode();
       hash ^= searchedPlayerId_.GetHashCode();
-      if (ItemName.Length != 0) hash ^= ItemName.GetHashCode();
-      if (ItemWeight != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ItemWeight);
-      if (ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) hash ^= ItemType.GetHashCode();
-      if (ItemStringValue != 0) hash ^= ItemStringValue.GetHashCode();
-      if (ItemPurchasePrice != 0) hash ^= ItemPurchasePrice.GetHashCode();
-      if (ItemSellPrice != 0) hash ^= ItemSellPrice.GetHashCode();
-      if (ItemSearchTime != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ItemSearchTime);
-      if (Width != 0) hash ^= Width.GetHashCode();
-      if (Height != 0) hash ^= Height.GetHashCode();
-      if (IsItemConsumeable != false) hash ^= IsItemConsumeable.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -8340,71 +7275,27 @@ namespace Google.Protobuf.Protocol {
     #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       output.WriteRawMessage(this);
     #else
-      if (ItemId != 0) {
+      if (ObjectId != 0) {
         output.WriteRawTag(8);
+        output.WriteInt32(ObjectId);
+      }
+      if (ItemId != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(ItemId);
       }
-      if (ItemCode != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(ItemCode);
-      }
-      if (ItemPosX != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(ItemPosX);
-      }
-      if (ItemPosY != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(ItemPosY);
+      if (grid_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Grid);
       }
       if (ItemRotate != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteInt32(ItemRotate);
       }
       if (ItemAmount != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(40);
         output.WriteInt32(ItemAmount);
       }
       searchedPlayerId_.WriteTo(output, _repeated_searchedPlayerId_codec);
-      if (ItemName.Length != 0) {
-        output.WriteRawTag(66);
-        output.WriteString(ItemName);
-      }
-      if (ItemWeight != 0F) {
-        output.WriteRawTag(77);
-        output.WriteFloat(ItemWeight);
-      }
-      if (ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) {
-        output.WriteRawTag(80);
-        output.WriteEnum((int) ItemType);
-      }
-      if (ItemStringValue != 0) {
-        output.WriteRawTag(88);
-        output.WriteInt32(ItemStringValue);
-      }
-      if (ItemPurchasePrice != 0) {
-        output.WriteRawTag(96);
-        output.WriteInt32(ItemPurchasePrice);
-      }
-      if (ItemSellPrice != 0) {
-        output.WriteRawTag(104);
-        output.WriteInt32(ItemSellPrice);
-      }
-      if (ItemSearchTime != 0F) {
-        output.WriteRawTag(117);
-        output.WriteFloat(ItemSearchTime);
-      }
-      if (Width != 0) {
-        output.WriteRawTag(120);
-        output.WriteInt32(Width);
-      }
-      if (Height != 0) {
-        output.WriteRawTag(128, 1);
-        output.WriteInt32(Height);
-      }
-      if (IsItemConsumeable != false) {
-        output.WriteRawTag(136, 1);
-        output.WriteBool(IsItemConsumeable);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -8415,71 +7306,27 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (ItemId != 0) {
+      if (ObjectId != 0) {
         output.WriteRawTag(8);
+        output.WriteInt32(ObjectId);
+      }
+      if (ItemId != 0) {
+        output.WriteRawTag(16);
         output.WriteInt32(ItemId);
       }
-      if (ItemCode != 0) {
-        output.WriteRawTag(16);
-        output.WriteInt32(ItemCode);
-      }
-      if (ItemPosX != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(ItemPosX);
-      }
-      if (ItemPosY != 0) {
-        output.WriteRawTag(32);
-        output.WriteInt32(ItemPosY);
+      if (grid_ != null) {
+        output.WriteRawTag(26);
+        output.WriteMessage(Grid);
       }
       if (ItemRotate != 0) {
-        output.WriteRawTag(40);
+        output.WriteRawTag(32);
         output.WriteInt32(ItemRotate);
       }
       if (ItemAmount != 0) {
-        output.WriteRawTag(48);
+        output.WriteRawTag(40);
         output.WriteInt32(ItemAmount);
       }
       searchedPlayerId_.WriteTo(ref output, _repeated_searchedPlayerId_codec);
-      if (ItemName.Length != 0) {
-        output.WriteRawTag(66);
-        output.WriteString(ItemName);
-      }
-      if (ItemWeight != 0F) {
-        output.WriteRawTag(77);
-        output.WriteFloat(ItemWeight);
-      }
-      if (ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) {
-        output.WriteRawTag(80);
-        output.WriteEnum((int) ItemType);
-      }
-      if (ItemStringValue != 0) {
-        output.WriteRawTag(88);
-        output.WriteInt32(ItemStringValue);
-      }
-      if (ItemPurchasePrice != 0) {
-        output.WriteRawTag(96);
-        output.WriteInt32(ItemPurchasePrice);
-      }
-      if (ItemSellPrice != 0) {
-        output.WriteRawTag(104);
-        output.WriteInt32(ItemSellPrice);
-      }
-      if (ItemSearchTime != 0F) {
-        output.WriteRawTag(117);
-        output.WriteFloat(ItemSearchTime);
-      }
-      if (Width != 0) {
-        output.WriteRawTag(120);
-        output.WriteInt32(Width);
-      }
-      if (Height != 0) {
-        output.WriteRawTag(128, 1);
-        output.WriteInt32(Height);
-      }
-      if (IsItemConsumeable != false) {
-        output.WriteRawTag(136, 1);
-        output.WriteBool(IsItemConsumeable);
-      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -8490,17 +7337,14 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public int CalculateSize() {
       int size = 0;
+      if (ObjectId != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ObjectId);
+      }
       if (ItemId != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemId);
       }
-      if (ItemCode != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemCode);
-      }
-      if (ItemPosX != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemPosX);
-      }
-      if (ItemPosY != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemPosY);
+      if (grid_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Grid);
       }
       if (ItemRotate != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemRotate);
@@ -8509,36 +7353,6 @@ namespace Google.Protobuf.Protocol {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemAmount);
       }
       size += searchedPlayerId_.CalculateSize(_repeated_searchedPlayerId_codec);
-      if (ItemName.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(ItemName);
-      }
-      if (ItemWeight != 0F) {
-        size += 1 + 4;
-      }
-      if (ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) {
-        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ItemType);
-      }
-      if (ItemStringValue != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemStringValue);
-      }
-      if (ItemPurchasePrice != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemPurchasePrice);
-      }
-      if (ItemSellPrice != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ItemSellPrice);
-      }
-      if (ItemSearchTime != 0F) {
-        size += 1 + 4;
-      }
-      if (Width != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Width);
-      }
-      if (Height != 0) {
-        size += 2 + pb::CodedOutputStream.ComputeInt32Size(Height);
-      }
-      if (IsItemConsumeable != false) {
-        size += 2 + 1;
-      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -8547,21 +7361,21 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(ItemDataInfo other) {
+    public void MergeFrom(PS_ItemInfo other) {
       if (other == null) {
         return;
+      }
+      if (other.ObjectId != 0) {
+        ObjectId = other.ObjectId;
       }
       if (other.ItemId != 0) {
         ItemId = other.ItemId;
       }
-      if (other.ItemCode != 0) {
-        ItemCode = other.ItemCode;
-      }
-      if (other.ItemPosX != 0) {
-        ItemPosX = other.ItemPosX;
-      }
-      if (other.ItemPosY != 0) {
-        ItemPosY = other.ItemPosY;
+      if (other.grid_ != null) {
+        if (grid_ == null) {
+          Grid = new global::Google.Protobuf.Protocol.PS_GridData();
+        }
+        Grid.MergeFrom(other.Grid);
       }
       if (other.ItemRotate != 0) {
         ItemRotate = other.ItemRotate;
@@ -8570,36 +7384,6 @@ namespace Google.Protobuf.Protocol {
         ItemAmount = other.ItemAmount;
       }
       searchedPlayerId_.Add(other.searchedPlayerId_);
-      if (other.ItemName.Length != 0) {
-        ItemName = other.ItemName;
-      }
-      if (other.ItemWeight != 0F) {
-        ItemWeight = other.ItemWeight;
-      }
-      if (other.ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) {
-        ItemType = other.ItemType;
-      }
-      if (other.ItemStringValue != 0) {
-        ItemStringValue = other.ItemStringValue;
-      }
-      if (other.ItemPurchasePrice != 0) {
-        ItemPurchasePrice = other.ItemPurchasePrice;
-      }
-      if (other.ItemSellPrice != 0) {
-        ItemSellPrice = other.ItemSellPrice;
-      }
-      if (other.ItemSearchTime != 0F) {
-        ItemSearchTime = other.ItemSearchTime;
-      }
-      if (other.Width != 0) {
-        Width = other.Width;
-      }
-      if (other.Height != 0) {
-        Height = other.Height;
-      }
-      if (other.IsItemConsumeable != false) {
-        IsItemConsumeable = other.IsItemConsumeable;
-      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -8620,72 +7404,31 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
             break;
           case 8: {
-            ItemId = input.ReadInt32();
+            ObjectId = input.ReadInt32();
             break;
           }
           case 16: {
-            ItemCode = input.ReadInt32();
+            ItemId = input.ReadInt32();
             break;
           }
-          case 24: {
-            ItemPosX = input.ReadInt32();
+          case 26: {
+            if (grid_ == null) {
+              Grid = new global::Google.Protobuf.Protocol.PS_GridData();
+            }
+            input.ReadMessage(Grid);
             break;
           }
           case 32: {
-            ItemPosY = input.ReadInt32();
-            break;
-          }
-          case 40: {
             ItemRotate = input.ReadInt32();
             break;
           }
-          case 48: {
+          case 40: {
             ItemAmount = input.ReadInt32();
             break;
           }
-          case 58:
-          case 56: {
+          case 50:
+          case 48: {
             searchedPlayerId_.AddEntriesFrom(input, _repeated_searchedPlayerId_codec);
-            break;
-          }
-          case 66: {
-            ItemName = input.ReadString();
-            break;
-          }
-          case 77: {
-            ItemWeight = input.ReadFloat();
-            break;
-          }
-          case 80: {
-            ItemType = (global::Google.Protobuf.Protocol.ItemType) input.ReadEnum();
-            break;
-          }
-          case 88: {
-            ItemStringValue = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            ItemPurchasePrice = input.ReadInt32();
-            break;
-          }
-          case 104: {
-            ItemSellPrice = input.ReadInt32();
-            break;
-          }
-          case 117: {
-            ItemSearchTime = input.ReadFloat();
-            break;
-          }
-          case 120: {
-            Width = input.ReadInt32();
-            break;
-          }
-          case 128: {
-            Height = input.ReadInt32();
-            break;
-          }
-          case 136: {
-            IsItemConsumeable = input.ReadBool();
             break;
           }
         }
@@ -8708,72 +7451,31 @@ namespace Google.Protobuf.Protocol {
             _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
             break;
           case 8: {
-            ItemId = input.ReadInt32();
+            ObjectId = input.ReadInt32();
             break;
           }
           case 16: {
-            ItemCode = input.ReadInt32();
+            ItemId = input.ReadInt32();
             break;
           }
-          case 24: {
-            ItemPosX = input.ReadInt32();
+          case 26: {
+            if (grid_ == null) {
+              Grid = new global::Google.Protobuf.Protocol.PS_GridData();
+            }
+            input.ReadMessage(Grid);
             break;
           }
           case 32: {
-            ItemPosY = input.ReadInt32();
-            break;
-          }
-          case 40: {
             ItemRotate = input.ReadInt32();
             break;
           }
-          case 48: {
+          case 40: {
             ItemAmount = input.ReadInt32();
             break;
           }
-          case 58:
-          case 56: {
+          case 50:
+          case 48: {
             searchedPlayerId_.AddEntriesFrom(ref input, _repeated_searchedPlayerId_codec);
-            break;
-          }
-          case 66: {
-            ItemName = input.ReadString();
-            break;
-          }
-          case 77: {
-            ItemWeight = input.ReadFloat();
-            break;
-          }
-          case 80: {
-            ItemType = (global::Google.Protobuf.Protocol.ItemType) input.ReadEnum();
-            break;
-          }
-          case 88: {
-            ItemStringValue = input.ReadInt32();
-            break;
-          }
-          case 96: {
-            ItemPurchasePrice = input.ReadInt32();
-            break;
-          }
-          case 104: {
-            ItemSellPrice = input.ReadInt32();
-            break;
-          }
-          case 117: {
-            ItemSearchTime = input.ReadFloat();
-            break;
-          }
-          case 120: {
-            Width = input.ReadInt32();
-            break;
-          }
-          case 128: {
-            Height = input.ReadInt32();
-            break;
-          }
-          case 136: {
-            IsItemConsumeable = input.ReadBool();
             break;
           }
         }
