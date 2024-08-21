@@ -71,7 +71,6 @@ internal class PacketHandler
     {
         //전투중
         //Debug.Log("S_MoveHandler");
-        Debug.Log("핸들러 수신");
         var movePacket = packet as S_Move;
 
         var go = Managers.Object.FindById(movePacket.ObjectId);
