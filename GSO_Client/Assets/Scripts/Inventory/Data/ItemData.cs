@@ -5,15 +5,7 @@ using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
 
-public enum ItemType
-{
-    Weapon,
-    Defensive,
-    Bag,
-    Recovery,
-    Bullet,
-    Spoil
-}
+
 
 
 [System.Serializable]
@@ -144,7 +136,7 @@ public class ItemData
     //임시변수(아이템 코드를 통해 데이터베이스에서 불러오기가 가능할때까지)
     public string item_name;
     public float item_weight; //아이템의 무게
-    public int item_type;
+    public ItemType item_type;
     public int item_string_value;
     public int item_purchase_price;
     public int item_sell_price;

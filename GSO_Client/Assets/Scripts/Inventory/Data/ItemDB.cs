@@ -40,7 +40,7 @@ public class ItemDB : MonoBehaviour
         pistol.IsItemConsumeable = false;
         pistol.ItemName = "Pistol01";
         pistol.ItemWeight = 2.0f;
-        pistol.ItemType = 0;
+        pistol.ItemType = ItemType.Weapon;
         pistol.ItemStringValue = 101;
         pistol.ItemPurchasePrice = 400;
         pistol.ItemSellPrice = 100;
@@ -58,7 +58,7 @@ public class ItemDB : MonoBehaviour
         ak47.IsItemConsumeable = false;
         ak47.ItemName = "Ak47";
         ak47.ItemWeight = 7.0f;
-        ak47.ItemType = 0;
+        ak47.ItemType = ItemType.Weapon;
         ak47.ItemStringValue = 102;
         ak47.ItemPurchasePrice = 2200;
         ak47.ItemSellPrice = 500;
@@ -76,7 +76,7 @@ public class ItemDB : MonoBehaviour
         recoveryKit.IsItemConsumeable = true;
         recoveryKit.ItemName = "Recovery kit";
         recoveryKit.ItemWeight = 1.0f;
-        recoveryKit.ItemType = 2;
+        recoveryKit.ItemType = ItemType.Recovery;
         recoveryKit.ItemStringValue = 301;
         recoveryKit.ItemPurchasePrice = 500;
         recoveryKit.ItemSellPrice = 120;
@@ -94,7 +94,7 @@ public class ItemDB : MonoBehaviour
         bandage.IsItemConsumeable = true;
         bandage.ItemName = "Bandage";
         bandage.ItemWeight = 0.0f;
-        bandage.ItemType = 2;
+        bandage.ItemType = ItemType.Recovery;
         bandage.ItemStringValue = 302;
         bandage.ItemPurchasePrice = 100;
         bandage.ItemSellPrice = 20;
@@ -113,7 +113,7 @@ public class ItemDB : MonoBehaviour
         pill.IsItemConsumeable = true;
         pill.ItemName = "Pill";
         pill.ItemWeight = 0.0f;
-        pill.ItemType = 3;
+        pill.ItemType = ItemType.Recovery;
         pill.ItemStringValue = 402;
         pill.ItemPurchasePrice = 150;
         pill.ItemSellPrice = 40;

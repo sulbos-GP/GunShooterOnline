@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -6,8 +7,8 @@ using UnityEngine;
 
 public class EquipSlot : MonoBehaviour
 {
-    //public ItemType allowedItemType; // 이 슬롯에 허용되는 아이템 유형
-    public int allowedItemType; //임시 프로토콜 수정시 위에 코드로 수정 예정
+    public ItemType allowedItemType; // 이 슬롯에 허용되는 아이템 유형
+
     public ItemObject equippedItem; // 현재 장착된 아이템
 
     // 아이템 장착(아이템을 들고 슬롯칸에 배치)
