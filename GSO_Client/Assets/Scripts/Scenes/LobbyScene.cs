@@ -15,12 +15,16 @@ public class LobbyScene : BaseScene
     [SerializeField] private GameObject Coins;
 
 
-   // public string Ip = "127.0.0.1";
+
+    // public string Ip = "127.0.0.1";
     public string Ip = "10.0.2.2";
 
     protected override void Init()
     {
         base.Init();
+#if UNITY_EDITOR
+        Ip = "127.0.0.1";
+#endif
         SceneType = Define.Scene.Forest;
         Screen.SetResolution(1920, 1080, false);
         Debug.Log("신 초기화 로비");
