@@ -3,6 +3,7 @@ using Google.Protobuf.Protocol;
 using LiteNetLib;
 using Server;
 using Server.Data;
+using Server.Database.Handler;
 using Server.Game;
 using Server.Game.Object;
 using Server.Game.Utils;
@@ -14,6 +15,9 @@ using System.Text;
 
 class PacketHandler
 {
+    //GWANHO TEMP
+    private static int cnt = 0;
+
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
     {
         Console.WriteLine("C_EnterGameHandler");
@@ -27,9 +31,19 @@ class PacketHandler
             p.info.PositionInfo.PosY = 0;
             p.gameRoom = Program.mNetworkService.gameRoom as BattleGameRoom;
             //바꾼 부분
-            p.inventory = new Inventory(p.Id,6,7);
+
+            ///GWANHO TEMP
+            ///TODO : LoadGear를 통해 가방의 정보를 가져오고 인벤토리의 내용을 불러와야함
+            ///현재 테스트는 uid로 통일
+            
+            p.uid = ++cnt;
+            p.inventory = new Inventory(p, p.uid);
             //p.stat
+
+
+            
         }
+        
 
         clientSession.Room = Program.mNetworkService.gameRoom as BattleGameRoom;
         clientSession.MyPlayer = p;
@@ -40,6 +54,9 @@ class PacketHandler
         ObjectManager.Instance.DebugObjectDics();
     }
 
+    /// <summary>
+    /// 인벤 버튼을 눌렀을때 
+    /// </summary>
     internal static void C_LoadInventoryHandler(PacketSession session, IMessage message)
     {
         //인벤토리 열었을떄
@@ -50,7 +67,8 @@ class PacketHandler
         Player player = clientSession.MyPlayer;
 
         //player.gameRoom.HandleItemLoad(player, packet.PlayerId,  packet.InventoryId);
-        player.gameRoom.Push (player.gameRoom.HandleItemLoad, player, packet.PlayerId,  packet.InventoryId);
+        player.gameRoom.Push (player.inventory.LoadInventory, player, packet.PlayerId,  packet.InventoryId);
+
     }
 
     /*public static void C2S_ChatHandler(PacketSession session, IPacket packet)

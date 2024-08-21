@@ -42,7 +42,6 @@ namespace Server.Game
             ObjectType = GameObjectType.Item;
         }
 
-
         public int ItemRotate
         {
             get => itemDataInfo.ItemRotate;
@@ -124,7 +123,64 @@ namespace Server.Game
             ownerGrid.gridData.ItemList.Remove(itemDataInfo);
             ObjectManager.Instance.Remove(Id);
         }
-
         
     }
+
+    public class InventoryUnit()
+    {
+        public int item_id;         //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
+        public int grid_x;          // 아이템의 그리드 안 좌표상의 위치
+        public int grid_y;          // 아이템의 그리드 안 좌표상의 위치
+        public int rotation;        // 아이템의 회전코드(rotate * 90)
+        public int stack_count;     // 아이템의 개수(소모품만 64개까지)
+
+        public bool Equals(InventoryUnit other)
+        {
+
+            if (ReferenceEquals(other, null))
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            return this.item_id.Equals(other.item_id)
+                && this.grid_x.Equals(other.grid_x)
+                && this.grid_y.Equals(other.grid_y)
+                && this.rotation.Equals(other.rotation)
+                && this.stack_count.Equals(other.stack_count);
+        }
+    }
+
+    public class Gear()
+    {
+        public int item_id;         //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
+        public int gear_type;       //장비의 종류
+    }
+
+    //임시 가방 데이터
+    public class Backpack()
+    {
+        public int scale_x = 6;
+        public int scale_y = 7;
+        public int limit_weight = 20;
+    }
+
+    public class ItemInfo
+    {
+        public int      item_id;
+        public string   code;
+        public string   name;
+        public double   weight;
+        public string   type;
+        public int      description;
+        public int      scale_x;
+        public int      scale_y;
+        public int      purchase_price;
+        public double   inquiry_time;
+        public int      sell_price;
+        public int      stack_count;
+        public string   prefab;
+        public string   icon;
+    }
+
 }

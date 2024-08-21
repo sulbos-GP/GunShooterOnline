@@ -22,7 +22,7 @@ namespace Server.Database.Handler
         private static Dictionary<EDatabase, MySQL> databases = new Dictionary<EDatabase, MySQL>();
         #region Database
         public static GameDB GameDB { get { return (GameDB)databases[EDatabase.Game]; } }
-        public static GameDB MasterDB { get { return (GameDB)databases[EDatabase.Master]; } }
+        public static MasterDB MasterDB { get { return (MasterDB)databases[EDatabase.Master]; } }
         #endregion
 
         public DatabaseHandler()

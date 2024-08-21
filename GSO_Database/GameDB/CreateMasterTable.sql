@@ -1,10 +1,10 @@
 USE master_database;
 
 
-#DROP TABLE IF EXISTS master_item_base;
+DROP TABLE IF EXISTS master_item_base;
 
-#DROP TABLE IF EXISTS app_version;
-#DROP TABLE IF EXISTS data_version;
+DROP TABLE IF EXISTS app_version;
+DROP TABLE IF EXISTS data_version;
 
 #앱 버전
 CREATE TABLE IF NOT EXISTS app_version
@@ -27,9 +27,9 @@ CREATE TABLE IF NOT EXISTS master_item_base (
     item_id						INT 			NOT NULL	COMMENT '아이템 아이디',
     code						VARCHAR(50) 	NOT NULL 	COMMENT '아이템 코드',
 	name 						VARCHAR(50) 	NOT NULL 	COMMENT '아이템 이름',
-	weight 						double 			NOT NULL 	COMMENT '아이템 무게',
+	weight 						DOUBLE 			NOT NULL 	COMMENT '아이템 무게',
 	type						VARCHAR(50) 	NOT NULL 	COMMENT '아이템 타입',
-	#description 				INT 			NOT NULL 	COMMENT '아이템 설명',
+	description 				INT 			NOT NULL 	COMMENT '아이템 설명',
 	scale_x 					INT 			NOT NULL 	COMMENT '아이템 가로 크기',
 	scale_y 					INT				NOT NULL 	COMMENT '아이템 세로 크기',
     purchase_price 				INT 			NOT NULL 	COMMENT '아이템 구매 가격',
