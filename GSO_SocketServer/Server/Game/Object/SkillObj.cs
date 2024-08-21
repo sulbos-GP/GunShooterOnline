@@ -14,7 +14,7 @@ public abstract class SkillObj : GameObject
     
     public SkillObj()
     {
-        ObjectType = GameObjectType.None;
+        ObjectType = GameObjectType.Noneobject;
     }
 
     public Skill Data { get; set; }
