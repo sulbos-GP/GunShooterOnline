@@ -1,0 +1,300 @@
+syntax = "proto3";
+
+package Protocol;
+
+option csharp_namespace = "Google.Protobuf.Protocol";
+
+
+//--------------- ENUM --------------------
+enum MsgId{
+  S_ENTER_GAME = 0;
+  S_LEAVE_GAME = 1;
+  S_SPAWN = 2;
+  S_DESPAWN = 3;
+  S_MOVE = 4;
+  C_MOVE = 5;
+  S_CONNECTED = 6;
+  S_CHANGE_HP = 7;
+  S_DIE = 8;
+  C_ENTER_GAME = 9;
+  C_LOAD_INVENTORY = 10;
+  S_LOAD_INVENTORY = 11;
+  C_MOVE_ITEM = 12;
+  S_MOVE_ITEM = 13;
+  C_DELETE_ITEM = 14; 
+  S_DELETE_ITEM = 15; 
+  C_RAYCAST_SHOOT = 16;
+  S_RAYCAST_HIT = 17;
+  S_EXIT_GAME =18;
+  C_EXIT_GAME =19;
+
+
+}
+
+enum GameObjectType{
+    NONEOBJECT = 0;
+    PLAYER = 1;
+    MONSTER = 2;
+    PROJECTILE = 3;
+    INVENDATA = 4;
+    BOX = 5;
+    ITEM = 6;
+    EXITZONE = 7;
+}
+
+enum ShapeType
+    {
+        SHAPE = 0;
+        CIRCLE = 1;
+        RECTANGLE = 2;
+        POLYGON = 3;
+        ARCPOLY = 4;
+    }
+
+
+enum ItemType{
+    WEAPON= 0;
+    DEFENSIVE= 1;
+    BAG = 2;
+    RECOVERY= 3;
+    BULLET= 4;
+    SPOIL= 5;
+}
+
+/*
+enum CreatureState{
+  IDLE = 0;
+  MOVING = 1;
+  SKILL = 2;
+  DEAD = 3;
+}*/
+
+//--------------- END ENUM --------------------
+
+//--------------- message --------------------
+message S_EnterGame{                       //0
+    ObjectInfo player = 1;
+}
+
+message S_LeaveGame{                       //1
+  
+}
+
+
+message S_Spawn{                               //2
+  repeated ObjectInfo objects = 1;
+}
+
+
+message S_Despawn{                            //3
+  repeated int32 objcetIds = 1;
+}
+
+message S_Move{                              //4
+  int32 objectId = 1;
+  PositionInfo positionInfo = 2;
+}
+
+
+message C_Move{                               //5
+  PositionInfo positionInfo = 1;
+}
+message S_Connected{                         //6 
+
+}
+
+message S_ChangeHp{                           //7
+	int32 objectId = 1;
+	int32 hp = 2;
+    //CreatureState state = 3; //
+}
+
+message S_Die{                                //8
+  int32 objectId = 1;
+  int32 attackerId = 2;
+}
+
+message C_EnterGame{                                //9
+   string name = 1;
+}
+
+message C_LoadInventory{                    //10
+    int32 playerId = 1;
+    int32 inventoryId = 2;
+}
+
+message S_LoadInventory{               //11
+    int32 playerId = 1;
+    int32 inventoryId = 2;
+    InvenDataInfo InvenData = 3;
+}
+
+message C_MoveItem    //12
+{
+    int32 playerId = 1; //옮긴 플레이어의 id
+
+    int32 targetId = 2; // 아이템을 옮긴  인벤토리의 id
+    int32 gridId = 3; //인벤토리의 몇번째 그리드인지(혹은 그리드의 id)
+    ItemDataInfo itemData= 4; //옮긴 아이템의 데이터
+
+    //문제가 있을시 백업용. 필요하나?
+     int32 lastItemPosX = 5; //이전 아이템의 좌표
+     int32 lastItemPosY = 6; //이전 아이템의 좌표
+     int32 lastItemRotate = 7;
+     int32 lastGridId = 8;
+  
+}
+
+message S_MoveItem    //12
+{
+    int32 playerId = 1; //옮긴 플레이어의 id
+
+    int32 targetId = 2; // 아이템을 옮긴  인벤토리의 id
+    int32 gridId = 3; //인벤토리의 몇번째 그리드인지(혹은 그리드의 id)
+    ItemDataInfo itemData= 4; //옮긴 아이템의 데이터
+
+
+    //문제가 있을시 백업용. 필요하나?
+     int32 lastItemPosX = 5; //이전 아이템의 좌표
+     int32 lastItemPosY = 6; //이전 아이템의 좌표
+     int32 lastItemRotate = 7;
+     int32 lastGridId = 8;
+
+}
+message C_DeleteItem{   //14
+    int32 playerId = 1; //지운 플레이어의 id
+    ItemDataInfo itemData = 2; //지운 아이템의 데이터
+    int32 gridId = 3;
+    int32 lastGridId = 4;
+}
+
+message S_DeleteItem{   //15
+    int32 playerId = 1; //지운 플레이어의 id
+    ItemDataInfo itemData = 2; //지운 아이템의 데이터
+    int32 gridId = 3;
+    int32 lastGridId = 4;
+}
+
+message C_RaycastShoot{ //16
+    float StartPosX = 1;
+    float StartPosY = 2;
+    float DirX = 3;
+    float DirY = 4;
+    float Length = 5;
+    
+}
+
+
+message S_RaycastHit // 17
+{
+    int32 RayId = 1;
+    int32 hitObjectId = 2;
+    //Shape Collider;
+    //GameObject hitObj;
+    float distance = 3;
+    //Vector2 normal;
+    float hitPointX = 4;
+    float hitPointY = 5;
+}
+
+
+
+message S_ExitGame {  //18
+  int32 playerId = 1;
+  int32 exitId = 2;
+}
+
+message C_ExitGame{   //19
+   int32 playerId = 1;
+   int32 exitId = 2;
+}
+
+
+
+
+//--------------- END message --------------------
+
+//--------------- INFO -------------------- 기생하는 친구들
+message ObjectInfo{
+    int32 ObjectId = 1;
+    int32 ownerId = 2;
+    int32 skillId = 3; //This object is PROJECTILE
+    string name = 4;
+    PositionInfo positionInfo = 5;
+    StatInfo statInfo = 6;
+    ShapeInfo shape = 7;
+    //CreatureState state = 7;
+}
+
+message StatInfo{
+  int32 class = 1;
+  int32 hp = 2;
+  int32 maxHp = 3;
+  float attackRange = 4;
+  float attackSpeed = 5;
+}
+
+
+message PositionInfo{
+  int32 currentRoomId = 1;
+  float dirX = 2;
+  float dirY = 3;
+  float posX = 4;
+  float posY = 5;
+  float rotZ = 6;
+}
+
+
+// Caustion : must sync Collision.Shapes.Shape.ShapeType Enum
+message ShapeInfo{
+    ShapeType ShpapeType    = 1;
+    float PosX          = 2;
+    float PosY          = 3;
+    float Roatation     = 4;
+    float Radius        = 5;// circle;
+    float Left           = 6;//Rectangle
+    float Bottom          = 7;//Rectangle
+    float Width         = 8;//Rectangle
+    float Height        = 9;//Rectangle
+}
+
+
+message InvenDataInfo{
+    int32 inventoryId = 1;
+    float   limitWeight = 2;
+    repeated GridDataInfo GridData = 3;
+}
+
+message GridDataInfo{
+    int32 gridId                        = 1;
+    int32 gridSizeX                     = 2;
+    int32 gridSizeY                     = 3;
+    float gridPosX                      = 4;
+    float gridPosY                      = 5;
+    repeated ItemDataInfo  itemList     = 6;
+    bool createRandomItem               = 7;
+    int32 randomItemAmount              = 8;
+}
+
+message ItemDataInfo{
+    int32 itemId                      = 1;        // 해당 아이템의 고유한 아이디
+    int32 itemCode                  = 2;        //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
+    int32 itemPosX              = 3;        // 아이템의 그리드 안 좌표상의 위치
+    int32 itemPosY              = 4;        // 아이템의 그리드 안 좌표상의 위치
+    int32 itemRotate                 = 5;        // 아이템의 회전코드(rotate * 90)
+    int32 itemAmount             = 6;      // 아이템의 개수(소모품만 64개까지)
+    repeated int32 searchedPlayerId     = 7;            // 이 아이템을 조회한 플레이어의 아이디
+
+    string item_name = 8;
+    float item_weight = 9;
+    ItemType item_type = 10;
+    int32 item_string_value = 11;
+    int32 item_purchase_price = 12;
+    int32 item_sell_price = 13;
+    float item_searchTime = 14;
+    int32 width = 15;
+    int32 height= 16;
+    bool isItemConsumeable = 17;
+    //Sprite itemSprite; ???
+}
+//--------------- END INFO ----------------
