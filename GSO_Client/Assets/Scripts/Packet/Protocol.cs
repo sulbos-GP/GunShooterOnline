@@ -98,10 +98,10 @@ namespace Google.Protobuf.Protocol {
             "UExBWUVSEAESCwoHTU9OU1RFUhACEg4KClBST0pFQ1RJTEUQAxINCglJTlZF",
             "TkRBVEEQBBIHCgNCT1gQBRIICgRJVEVNEAYSDAoIRVhJVFpPTkUQBypLCglT",
             "aGFwZVR5cGUSCQoFU0hBUEUQABIKCgZDSVJDTEUQARINCglSRUNUQU5HTEUQ",
-            "AhILCgdQT0xZR09OEAMSCwoHQVJDUE9MWRAEKlQKCEl0ZW1UeXBlEggKBE5P",
-            "TkUQABIKCgZXRUFQT04QARINCglERUZFTlNJVkUQAhIMCghSRUNPVkVSWRAD",
-            "EgoKBkJVTExFVBAEEgkKBVNQT0lMEAVCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Q",
-            "cm90b2NvbGIGcHJvdG8z"));
+            "AhILCgdQT0xZR09OEAMSCwoHQVJDUE9MWRAEKlMKCEl0ZW1UeXBlEgoKBldF",
+            "QVBPThAAEg0KCURFRkVOU0lWRRABEgcKA0JBRxACEgwKCFJFQ09WRVJZEAMS",
+            "CgoGQlVMTEVUEAQSCQoFU1BPSUwQBUIbqgIYR29vZ2xlLlByb3RvYnVmLlBy",
+            "b3RvY29sYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), typeof(global::Google.Protobuf.Protocol.ItemType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -184,9 +184,9 @@ namespace Google.Protobuf.Protocol {
   }
 
   public enum ItemType {
-    [pbr::OriginalName("NONE")] None = 0,
-    [pbr::OriginalName("WEAPON")] Weapon = 1,
-    [pbr::OriginalName("DEFENSIVE")] Defensive = 2,
+    [pbr::OriginalName("WEAPON")] Weapon = 0,
+    [pbr::OriginalName("DEFENSIVE")] Defensive = 1,
+    [pbr::OriginalName("BAG")] Bag = 2,
     [pbr::OriginalName("RECOVERY")] Recovery = 3,
     [pbr::OriginalName("BULLET")] Bullet = 4,
     [pbr::OriginalName("SPOIL")] Spoil = 5,
@@ -8169,7 +8169,7 @@ namespace Google.Protobuf.Protocol {
 
     /// <summary>Field number for the "item_type" field.</summary>
     public const int ItemTypeFieldNumber = 10;
-    private global::Google.Protobuf.Protocol.ItemType itemType_ = global::Google.Protobuf.Protocol.ItemType.None;
+    private global::Google.Protobuf.Protocol.ItemType itemType_ = global::Google.Protobuf.Protocol.ItemType.Weapon;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::Google.Protobuf.Protocol.ItemType ItemType {
@@ -8314,7 +8314,7 @@ namespace Google.Protobuf.Protocol {
       hash ^= searchedPlayerId_.GetHashCode();
       if (ItemName.Length != 0) hash ^= ItemName.GetHashCode();
       if (ItemWeight != 0F) hash ^= pbc::ProtobufEqualityComparers.BitwiseSingleEqualityComparer.GetHashCode(ItemWeight);
-      if (ItemType != global::Google.Protobuf.Protocol.ItemType.None) hash ^= ItemType.GetHashCode();
+      if (ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) hash ^= ItemType.GetHashCode();
       if (ItemStringValue != 0) hash ^= ItemStringValue.GetHashCode();
       if (ItemPurchasePrice != 0) hash ^= ItemPurchasePrice.GetHashCode();
       if (ItemSellPrice != 0) hash ^= ItemSellPrice.GetHashCode();
@@ -8373,7 +8373,7 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(77);
         output.WriteFloat(ItemWeight);
       }
-      if (ItemType != global::Google.Protobuf.Protocol.ItemType.None) {
+      if (ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) {
         output.WriteRawTag(80);
         output.WriteEnum((int) ItemType);
       }
@@ -8448,7 +8448,7 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(77);
         output.WriteFloat(ItemWeight);
       }
-      if (ItemType != global::Google.Protobuf.Protocol.ItemType.None) {
+      if (ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) {
         output.WriteRawTag(80);
         output.WriteEnum((int) ItemType);
       }
@@ -8515,7 +8515,7 @@ namespace Google.Protobuf.Protocol {
       if (ItemWeight != 0F) {
         size += 1 + 4;
       }
-      if (ItemType != global::Google.Protobuf.Protocol.ItemType.None) {
+      if (ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) ItemType);
       }
       if (ItemStringValue != 0) {
@@ -8576,7 +8576,7 @@ namespace Google.Protobuf.Protocol {
       if (other.ItemWeight != 0F) {
         ItemWeight = other.ItemWeight;
       }
-      if (other.ItemType != global::Google.Protobuf.Protocol.ItemType.None) {
+      if (other.ItemType != global::Google.Protobuf.Protocol.ItemType.Weapon) {
         ItemType = other.ItemType;
       }
       if (other.ItemStringValue != 0) {
