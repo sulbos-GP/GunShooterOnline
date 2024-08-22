@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
+using Server.Database.Handler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,178 +10,148 @@ namespace Server.Game
 {
     public class ItemObject : GameObject
     {
-        public const int maxItemMergeAmount = 64;
-        /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+        private PS_ItemInfo itemInfo = new PS_ItemInfo();
+        private readonly DB_ItemData itemData = new DB_ItemData();
 
-        public Grid ownerGrid;
-        public ItemDataInfo itemDataInfo;
-        /*소유한 데이터
-        int32 itemId = 1;        // 해당 아이템의 고유한 아이디
-        int32 itemCode = 2;        //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
-        int32 itemPosX = 3;        // 아이템의 그리드 안 좌표상의 위치
-        int32 itemPosY = 4;        // 아이템의 그리드 안 좌표상의 위치
-        int32 itemRotate = 5;        // 아이템의 회전코드(rotate * 90)
-        int32 itemAmount = 6;      // 아이템의 개수(소모품만 64개까지)
-        repeated int32 searchedPlayerId     = 7;            // 이 아이템을 조회한 플레이어의 아이디
-
-         //임시
-        string item_name = 8;
-        float item_weight = 9;
-        int32 item_type = 10;
-        int32 item_string_value = 11;
-        int32 item_purchase_price = 12;
-        int32 item_sell_price = 13;
-        float item_searchTime = 14;
-        int32 width = 15;
-        int32 height = 16;
-        bool isItemConsumeable = 17;
-        */
-
-
-        public ItemObject()
+        public ItemObject(int itemId)
         {
             ObjectType = GameObjectType.Item;
+            itemData = GetItemData(itemId).Result;
         }
 
-        public int ItemRotate
+        public async Task<DB_ItemData> GetItemData(int itemId)
         {
-            get => itemDataInfo.ItemRotate;
-            set
+            //TODO : 나중에는 마스터테이블을 미리 로드하여 메모리에 저장된 값을 불러와야함
+            return await DatabaseHandler.MasterDB.GetItemData(itemId);
+        }
+
+        public PS_ItemInfo Info
+        {
+            get
             {
-                itemDataInfo.ItemRotate = value;
+                return new PS_ItemInfo(itemInfo);
             }
         }
-       
 
-        //회전상태에 따른 너비와 높이를 보려면 이걸로
+        public DB_ItemData Data
+        {
+            get
+            {
+                return itemData;
+            }
+        }
+
+        public int ItemId
+        {
+            get
+            {
+                return itemInfo.ItemId;
+            }
+        }
+
+        public int X
+        {
+            get
+            {
+                return itemInfo.X;
+            }
+            set
+            {
+                itemInfo.X = value;
+            }
+        }
+
+        public int Y
+        {
+            get
+            {
+                return itemInfo.Y;
+            }
+            set
+            {
+                itemInfo.Y = value;
+            }
+        }
+
         public int Width
         {
             get
             {
-                if (itemDataInfo.ItemRotate % 2 == 0)
+                if (itemInfo.Rotate % 2 == 0)
                 {
-                    return itemDataInfo.Width;
+                    return itemData.scale_x;
                 }
-                return itemDataInfo.Height;
+                return itemData.scale_y;
             }
         }
+
         public int Height
         {
             get
             {
-                if (itemDataInfo.ItemRotate % 2 == 0)
+                if (itemInfo.Rotate % 2 == 0)
                 {
-                    return itemDataInfo.Height;
+                    return itemData.scale_y;
                 }
-                return itemDataInfo.Width;
+                return itemData.scale_x;
             }
         }
 
-        //첫 생성시
-        private void Init()
+        public int Rotate
         {
-            if (itemDataInfo == null)
+            get => itemInfo.Rotate;
+            set
             {
-                //해당 오브젝트에는 반드시 아이템 데이터 info가 있어야함
-                return;
+                itemInfo.Rotate = value;
             }
         }
 
-        /// <summary>
-        /// 같은 아이템코드의 아이템을 같은 위치에 두었을경우 
-        /// targetItem = 아이템 배치에 놓은 위치에 존재하는 같은 코드의 아이템
-        /// 현재 아이템과 타겟아이템의 개수를 합친것이 최대인 64개 보다 높으면 -> 64-타겟아이템의 양을 타겟에 더하고 현재아이템에 뺌 -> 현재 아이템을 원위치로
-        /// 같거나 낮으면 타겟아이템의 개수에 현재 아이템의 개수를 더하고 현재 아이템은 없앰
-        /// </summary>
-        public void MergeItem(ItemObject itemObj)
+        public int Amount
         {
-            //놓으려는 위치에 아이템이 있는데 배치에 성공했다면 이것은 아이템을 머지해야한다는 것(애초에 배치 실패였으면 패킷도 안옴)
-
-            //두개의 아이템을 합친값이 최댓값보다 큰경우 -> 타겟의 아이템은 맥스가 되고 배치 아이템은 개수가 감소한뒤 원래 위치로 돌아감
-            if (itemDataInfo.ItemAmount + itemObj.itemDataInfo.ItemAmount > maxItemMergeAmount)
+            get
             {
-                //두개의 아이템을 합친 개수가 64개보다 클경우 타겟 아이템은 64개로 만들고 기존 아이템은 남은 개수를 가지고 원래 위치로 귀환
-                //타깃 아이템의 개수가 최대가 되기위해 남은 개수
-                int indexAmount = maxItemMergeAmount - itemObj.itemDataInfo.ItemAmount;
-
-                itemObj.itemDataInfo.ItemAmount += indexAmount;
-                itemDataInfo.ItemAmount -= indexAmount;
-
-                ownerGrid.PushItemIntoSlot(this, itemDataInfo.ItemPosX, itemDataInfo.ItemPosY);
-                return;
+                return itemInfo.Amount;
             }
-            else
+            set
             {
-                itemObj.itemDataInfo.ItemAmount += itemDataInfo.ItemAmount;
-
-                DestroyItem();
+                itemInfo.Amount = value;
             }
+        }
+
+        public int LimitAmount
+        {
+            get
+            {
+                return itemData.stack_count;
+            }
+        }
+
+        public bool CompInfo(PS_ItemInfo otherInfo)
+        {
+            if (otherInfo == null)
+            {
+                return false;
+            }
+
+            return this.itemInfo == otherInfo;
         }
 
         public void DestroyItem()
         {
-            //해당 아이템 오브젝트 삭제
-            ownerGrid.gridData.ItemList.Remove(itemDataInfo);
             ObjectManager.Instance.Remove(Id);
         }
-        
-    }
 
-    public class InventoryUnit()
-    {
-        public int item_id;         //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
-        public int grid_x;          // 아이템의 그리드 안 좌표상의 위치
-        public int grid_y;          // 아이템의 그리드 안 좌표상의 위치
-        public int rotation;        // 아이템의 회전코드(rotate * 90)
-        public int stack_count;     // 아이템의 개수(소모품만 64개까지)
-
-        public bool Equals(InventoryUnit other)
+        public DB_InventoryUnit ConvertInventoryUnit()
         {
-
-            if (ReferenceEquals(other, null))
-                return false;
-
-            if (ReferenceEquals(this, other))
-                return true;
-
-            return this.item_id.Equals(other.item_id)
-                && this.grid_x.Equals(other.grid_x)
-                && this.grid_y.Equals(other.grid_y)
-                && this.rotation.Equals(other.rotation)
-                && this.stack_count.Equals(other.stack_count);
+            DB_InventoryUnit unit = new DB_InventoryUnit();
+            unit.item_id = ItemId;
+            unit.grid_x = X;
+            unit.grid_y = Y;
+            unit.rotation = Rotate;
+            unit.stack_count = Amount;
+            return unit;
         }
-    }
 
-    public class Gear()
-    {
-        public int item_id;         //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
-        public int gear_type;       //장비의 종류
-    }
-
-    //임시 가방 데이터
-    public class Backpack()
-    {
-        public int scale_x = 6;
-        public int scale_y = 7;
-        public int limit_weight = 20;
-    }
-
-    public class ItemInfo
-    {
-        public int      item_id;
-        public string   code;
-        public string   name;
-        public double   weight;
-        public string   type;
-        public int      description;
-        public int      scale_x;
-        public int      scale_y;
-        public int      purchase_price;
-        public double   inquiry_time;
-        public int      sell_price;
-        public int      stack_count;
-        public string   prefab;
-        public string   icon;
     }
 
 }

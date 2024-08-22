@@ -3,6 +3,7 @@ using Pipelines.Sockets.Unofficial.Buffers;
 using Server.Database.Handler;
 using Server.Game;
 using Server.Game.Object;
+using Server.Game.Object.Item;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,44 +17,38 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Server.Game
 {
-    public class Inventory
+    public class Inventory : GameObject
     {
-
-        //인벤토리를 생성하기위한 데이터
-        //인벤토리 아이디 == 소유자 (인벤토리를 검색하기 위해)
-        //무게 같은 그리드 크기이지만 무게가 다를 수 있다
-        //GridData = 서버에서 오브젝트가 만들어진다
-
-        public InvenDataInfo invenData = new InvenDataInfo();
-        /*int32 inventoryId = 1;
-        float limitWeight = 2;
-        repeated GridDataInfo GridData = 3;*/
-        public Dictionary<int,Grid> instantGrid = new Dictionary<int,Grid>(); //해당 인벤토리가 소유한 그리드
-
         public Player owner;                //소유자 (플레이어)
         public int storage_id = 0;          //가방 아이디
         public int storage_item_id = 0;     //가방의 아이템 아이디
-        public double weight = 0.0;         
 
-        public Grid InventoryGrid = new Grid();
+        public Storage storage = new Storage();
 
         /// <summary>
-        /// 인벤토리 생성 (지금은 storage_id가 반드시 있다고 가정)
+        /// 처음 접속한 이후 데이터베이스의 인벤토리 데이터 가져오기
         /// </summary>
-        public Inventory()
+        public Inventory(Player owner, int storage_id)
         {
+            this.owner = owner;
+            InitInventory(storage_id).Wait();
+            LoadInventory().Wait();
         }
 
         /// <summary>
-        /// 인벤토리 처음 생성시 또는 가방을 장착시
+        /// 새로운 가방을 장착 시
         /// </summary>
-        public void MakeInventory(Player owner, int storage_id)
+        public void MakeInventory(int storage_id)
         {
-            this.owner = owner;
-
-            InitInventory(storage_id).Wait();
-
-            LoadInventory().Wait();
+            if(storage.items.Count == 0)
+            {
+                //가방 처음 생성
+                InitInventory(storage_id).Wait();
+            }
+            else
+            {
+                //기존에 아이템이 있을 경우
+            }
         }
 
         /// <summary>
@@ -63,27 +58,17 @@ namespace Server.Game
         {
             try
             {
-                this.storage_id = storage_id;
-
                 //가방(아이템)에 대한 정보 불러오기
                 int storage_item_id = await DatabaseHandler.GameDB.GetStorageItemId(storage_id);
-                this.storage_item_id = storage_item_id;
 
                 //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기 (지금은 임시)
                 //Backpack backpack = await DatabaseHandler.MasterDB.GetBackpackInfo(storage_item_id);
                 Backpack backpack = new Backpack();
 
-                //가방의 데이터를 채움?
-                invenData.InventoryId = owner.Id;
-                invenData.LimitWeight = backpack.limit_weight;
+                storage.Init(backpack.scale_x, backpack.scale_y, backpack.limit_weight);
 
-                //가방의 크기를 저장하는 곳은?
-
-                InventoryGrid.gridData = new GridDataInfo()
-                {
-                    
-                };
-
+                this.storage_id = storage_id;
+                this.storage_item_id = storage_item_id;
             }
             catch (Exception e)
             {
@@ -98,49 +83,23 @@ namespace Server.Game
         {
             try
             {
-
-                IEnumerable<InventoryUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
+                IEnumerable<DB_InventoryUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
 
                 if (units == null)
                 {
                     return;
                 }
 
-                //인벤토리 그리드
-                Grid newItem = new Grid();
-                newItem.gridData = new GridDataInfo
+                foreach (DB_InventoryUnit unit in units)
                 {
-                    GridId = ++Grid.lastGridId,
-                    GridSizeX = info.scale_x,
-                    GridSizeY = info.scale_y,
-                    GridPosX = unit.grid_x,
-                    GridPosY = unit.grid_y,
-                };
+                    ItemObject newItem = new ItemObject(unit.item_id);
+                    ObjectManager.Instance.Add(newItem);
 
-                foreach (InventoryUnit unit in units)
-                {
-                    
-                    //마스터테이블에서 아이템 아이디를 이용하여 아이템 정보 가져오기
-                    //TODO : 나중에는 마스터테이블을 미리 로드하여 메모리에 저장된 값을 불러와야함
-                    ItemInfo info = await DatabaseHandler.MasterDB.GetItemInfo(unit.item_id);
-
-                    //데이터베이스에서 여러개의 아이템
-                    //아이디, 위치, 회전, 몇개(카운터)
-
-                    //인벤토리 안에 넣고 싶은데 (위치랑 회전에 맞게)
-
-                    ItemInfo
-
-                    newItem.InsertItemDataInGridData();
-
-                    newItem.ownerInventory = this;
-                    newItem.SetGrid();
-
-                    instantGrid.Add(newGrid.gridData.GridId, newGrid);
-                    invenData.GridData.Add(newGrid.gridData);
-
+                    if (false == storage.PushItem(newItem))
+                    {
+                        throw new Exception("인벤토리 DB로드 실패");
+                    }
                 }
-                
 
             }
             catch (Exception e)
@@ -150,36 +109,33 @@ namespace Server.Game
         }
 
         /// <summary>
-        /// 
+        /// 자신의 인벤토리에 있는 아이템 삭제
         /// </summary>
-        public void InsertItem()
-        {
-
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public async Task<bool> DeleteItem(int objectId, InventoryUnit delete)
+        public async Task<bool> DeleteItem(ItemObject deleteItem)
         {
             try
             {
-                ItemObject item = ObjectManager.Instance.Find<ItemObject>(objectId);
 
-                if (item == null)
+                if (deleteItem == null)
                 {
                     throw new Exception("삭제하려는 아이템이 존재하지 않음");
                 }
 
-                if(false == item.Equals(delete))
+                if(-1 == storage.ScanItem(deleteItem))
                 {
                     throw new Exception("삭제하는 아이템과 정보가 일치하지 않음");
                 }
 
-                int ret = await DatabaseHandler.GameDB.DeleteItem(owner.uid, delete);
+                if(false == storage.PopItem(deleteItem))
+                {
+                    throw new Exception("인벤토리에서 아이템을 삭제하지 못함");
+                }
+
+                DB_InventoryUnit deleteUnit = deleteItem.ConvertInventoryUnit();
+                int ret = await DatabaseHandler.GameDB.DeleteItem(storage_id, deleteUnit);
                 if (ret == 0)
                 {
-                    throw new Exception("데이터베이스에서 삭제하지 못함");
+                    throw new Exception("데이터베이스에서 아이템을 삭제하지 못함");
                 }
 
                 return true;
@@ -192,79 +148,112 @@ namespace Server.Game
         }
 
         /// <summary>
-        /// 
+        /// 박스 인벤토리에서 이동할 경우
         /// </summary>
-        public void MoveItem()
+        public async Task<bool> MoveItem(int objectId, PS_ItemInfo moveInfo, int gridX, int gridY)
         {
-
-        }
-        
-
-        public void MoveItem(ItemObject target, ItemDataInfo packetData, Grid targetGrid)
-        {
-            //아이템의 이름,아이디
-            //전위치 -> 옮겨질 현위치
-            //전회전 -> 현재 회전도
-            //이전 그리드의 아이디. 현재 그리드의 아이디
-            Console.WriteLine($"MoveItem Method\n" +
-                $"Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
-                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosY}) -> ({packetData.ItemPosX},{packetData.ItemPosY})\n" +
-                $"rotate : {target.itemDataInfo.ItemRotate} -> {packetData.ItemRotate}\n" +
-                $"grid : {target.ownerGrid.gridData.GridId} -> {targetGrid.gridData.GridId}");
-
-            //그리드에서 아이템 및 아이템 데이터 삭제
-            target.ownerGrid.DeleteItemFromSlot(target);
-            target.ownerGrid.RemoveItemDataInGridData(target);
-            //아이템의 소유그리드와 회전도 업데이트
-            target.ownerGrid = targetGrid;
-            target.ItemRotate = packetData.ItemRotate;
-            
-            //그리드에 아이템 및 아이템 데이터 삽입
-            target.ownerGrid.PushItemIntoSlot(target, packetData.ItemPosX,packetData.ItemPosY);
-            target.ownerGrid.InsertItemDataInGridData(target);
-            target.ownerGrid.PrintInvenContents();
-        }
-
-        public void DeleteItem(int id)
-        {
-            //아이템 가져오기
-            ItemObject target = ObjectManager.Instance.Find<ItemObject>(id);
-
-            if (target == null)
+            try
             {
-                return;
+                BoxObject box = ObjectManager.Instance.Find<BoxObject>(objectId);
+                ItemObject moveItem = ObjectManager.Instance.Find<ItemObject>(moveInfo.ObjectId);
+
+                if (box == null)
+                {
+                    throw new Exception("박스가 존재하지 않음");
+                }
+
+                if (false == box.storage.PopItem(moveItem))
+                {
+                    throw new Exception("박스 아이템을 제거하지 못함");
+                }
+
+                if (false == this.storage.PushItem(moveItem))
+                {
+                    throw new Exception("인벤토리에서 아이템을 삽입하지 못함");
+                }
+
+                DB_InventoryUnit moveUnit = moveItem.ConvertInventoryUnit();
+                int ret = await DatabaseHandler.GameDB.InsertItem(storage_id, moveUnit);
+                if (ret == 0)
+                {
+                    throw new Exception("데이터베이스에서 아이템을 삭제하지 못함");
+                }
+
+                return true;
             }
-
-            Console.WriteLine($"DeleteItem Method\n" +
-                $"Item = {target.itemDataInfo.ItemName}, id = {target.itemDataInfo.ItemId}\n" +
-                $"pos : ({target.itemDataInfo.ItemPosX},{target.itemDataInfo.ItemPosX} -> X)\n" +
-                $"rotate : {target.itemDataInfo.ItemRotate} -> X\n" +
-                $"grid : {target.ownerGrid.gridData.GridId} -> X");
-            target.ownerGrid.DeleteItemFromSlot(target);
-
-            target.ownerGrid.PrintInvenContents();
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MoveItem] : {e.Message.ToString()}");
+                return false;
+            }
         }
 
-        public ItemDataInfo DuplicateItemData(ItemDataInfo targetData)
+        public async Task<bool> MergeItem(ItemObject mergedItem, ItemObject combinedItem, int mergeNumber)
         {
-            ItemDataInfo newItemData = new ItemDataInfo();
-            newItemData.ItemId = targetData.ItemId;
-            newItemData.ItemPosX = targetData.ItemPosX;
-            newItemData.ItemPosY = targetData.ItemPosY;
-            newItemData.ItemRotate = targetData.ItemRotate;
-            newItemData.ItemAmount = targetData.ItemAmount;
-            newItemData.ItemCode = targetData.ItemCode;
-            newItemData.IsItemConsumeable = targetData.IsItemConsumeable;
-            newItemData.ItemName = targetData.ItemName;
-            newItemData.ItemWeight = targetData.ItemWeight;
-            newItemData.ItemType = targetData.ItemType;
-            newItemData.ItemStringValue = targetData.ItemStringValue;
-            newItemData.ItemPurchasePrice = targetData.ItemPurchasePrice;
-            newItemData.ItemSellPrice = targetData.ItemSellPrice;
-            newItemData.Width = targetData.Width;
-            newItemData.Height = targetData.Height;
-            newItemData.ItemSearchTime = targetData.ItemSearchTime;
-            return newItemData;
+            try
+            {
+
+                DB_InventoryUnit oldMergedUnit = mergedItem.ConvertInventoryUnit();
+                DB_InventoryUnit oldCombinedUnit = combinedItem.ConvertInventoryUnit();
+
+                if(false == storage.MergeItem(mergedItem, combinedItem, mergeNumber))
+                {
+                    throw new Exception("인벤토리에서 아이템 머지 실패");
+                }
+
+                bool combinedIsDelete = (storage.ScanItem(combinedItem) == -1) ? true : false;
+                await DatabaseHandler.GameDB.MergeItem(storage_id, oldMergedUnit, mergedItem.ConvertInventoryUnit(), false, oldCombinedUnit, combinedItem.ConvertInventoryUnit());
+
+
+                return true;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MergeItem] : {e.Message.ToString()}");
+                return false;
+            }
+        }
+
+        public async Task<ItemObject> DevideItem(ItemObject totalItem, int gridX, int gridY, int rotation, int devideNumber)
+        {
+            try
+            {
+
+                DB_InventoryUnit totalMergedUnit = totalItem.ConvertInventoryUnit();
+
+                ItemObject newItem = storage.DevideItem(totalItem, gridX, gridY, rotation, devideNumber);
+                if (newItem == null)
+                {
+                    throw new Exception("인벤토리에서 아이템 나누기 실패");
+                }
+
+                await DatabaseHandler.GameDB.DevideItem(storage_id, totalMergedUnit, totalItem.ConvertInventoryUnit(), newItem.ConvertInventoryUnit());
+
+                return newItem;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MergeItem] : {e.Message.ToString()}");
+                return null;
+            }
+        }
+
+        public IEnumerable<PS_ItemInfo> GetInventoryItems()
+        {
+            List<PS_ItemInfo> infos = new List<PS_ItemInfo>();
+            foreach(ItemObject item in storage.items)
+            {
+                infos.Add(item.Info);
+            }
+            return infos;
+        }
+
+        public void ClearInventory()
+        {
+            foreach (ItemObject item in storage.items)
+            {
+                item.DestroyItem();
+            }
         }
     }
 }

@@ -23,22 +23,17 @@ namespace Server.Database.Interface
         /// <summary>
         /// 가방 인벤토리 로드
         /// </summary>
-        public Task<IEnumerable<InventoryUnit>> LoadInventory(int storage_id);
+        public Task<IEnumerable<DB_InventoryUnit>> LoadInventory(int storage_id);
 
         /// <summary>
         /// 인벤토리에 아이템 삽입
         /// </summary>
-        public Task InsertItem();
+        public Task<int> InsertItem(int storage_id, DB_InventoryUnit unit);
 
         /// <summary>
         /// 인벤토리에서 아이템 제거
         /// </summary>
-        public Task DeleteItem();
-
-        /// <summary>
-        /// 아이템 이동
-        /// </summary>
-        public Task MoveItem();
+        public Task<int> DeleteItem(int storage_id, DB_InventoryUnit unit);
 
     }
 }

@@ -3,11 +3,12 @@ using Google.Protobuf.Protocol;
 using LiteNetLib;
 using QuadTree;
 using Server.Game;
-using Server.Game.Object;
+using Server.Game.Object.Item;
 using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
 
@@ -58,9 +59,6 @@ namespace Server
         public override void Clear()
         {
         }
-        
-      
-
 
         public override void BroadCast(IMessage message)
         {
@@ -110,8 +108,13 @@ namespace Server
                 {
                     var enterPacket = new S_EnterGame();
                     enterPacket.Player = player.info;
+  
+                    player.inventory = new Inventory(player, player.uid);
+                    foreach (PS_ItemInfo item in player.inventory.GetInventoryItems())
+                    {
+                        enterPacket.ItemInfos.Add(item);
+                    }
                     player.Session.Send(enterPacket);
-
 
                     // 다른 플레이어 정보
                     var spawnPacket = new S_Spawn();
@@ -172,7 +175,7 @@ namespace Server
             S_Spawn spawnPacket = new S_Spawn();
 
             //생성끝
-            foreach (RootableObject box in map.rootableObjects)
+            foreach (BoxObject box in map.rootableObjects)
             {
                 Console.WriteLine($"box id : {box.Id}");
 

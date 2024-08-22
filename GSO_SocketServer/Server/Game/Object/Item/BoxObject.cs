@@ -6,15 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Server.Game.Object
+namespace Server.Game.Object.Item
 {
-    public class RootableObject : GameObject
+    public class BoxObject : GameObject
     {
-        protected bool destroyed = false;
-        protected bool active = true;
-        public Inventory inventory;
+        public Storage storage = new Storage();
 
-        public RootableObject()
+        public BoxObject()
         {
             ObjectType = GameObjectType.Box;
 
@@ -30,14 +28,8 @@ namespace Server.Game.Object
 
         public void Init()
         {
-            inventory = new Inventory(Id);
+
         }
 
-
-
-      
-
-
-        
     }
 }
