@@ -1,5 +1,6 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
+using Server.Database.Handler;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,6 @@ namespace Server.Game.Object.Item
         {
             ObjectType = GameObjectType.Box;
 
-
             float width = 1;
             float left = -0.5f;
             float bottom = -0.5f;
@@ -26,8 +26,15 @@ namespace Server.Game.Object.Item
             currentShape = rectangle;
         }
 
-        public void Init()
+        public async void Init()
         {
+            //아이템 고정
+
+            storage.Init(5, 5, 20.0);
+
+            DB_ItemData data = await DatabaseHandler.MasterDB.GetItemData(1);
+
+            storage.PushItem();
 
         }
 
