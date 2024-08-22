@@ -81,7 +81,7 @@ public class InventoryGrid : MonoBehaviour
     private void SetGridPosition()
     {
         //그리드가 벽에 딱 붙지 않게 약간의 오프셋을 둠
-        Vector2 offsetGridPosition = new Vector2(gridData.gridPos.X + InventoryUI.offsetX, gridData.gridPos.Y - InventoryUI.offsetY);
+        Vector2 offsetGridPosition = new Vector2(InventoryUI.offsetX, InventoryUI.offsetY);
         transform.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector2(offsetGridPosition.X, offsetGridPosition.Y);
     
         //그리드의 배치가 완료되면 그리드의 아이템슬롯을 설정하고 아이템 프리팹 또한 배치
@@ -108,11 +108,11 @@ public class InventoryGrid : MonoBehaviour
         ItemObject itemObj = Instantiate(itemPref, transform).GetComponent<ItemObject>();
         InventoryController.invenInstance.instantItemList.Add(itemObj);
         itemObj.ItemDataSet(itemData);
-        PlaceItem(itemObj, itemData.itemPos.x, itemData.itemPos.y);
+        PlaceItem(itemObj, itemData.pos.x, itemData.pos.y);
         itemObj.curItemGrid = this;
 
-        itemObj.backUpItemPos = itemObj.itemData.itemPos; //현재 위치
-        itemObj.backUpItemRotate = itemObj.itemData.itemRotate; //현재 회전
+        itemObj.backUpItemPos = itemObj.itemData.pos; //현재 위치
+        itemObj.backUpItemRotate = itemObj.itemData.rotate; //현재 회전
         itemObj.backUpItemGrid = itemObj.curItemGrid; //현재 그리드
 
     }
@@ -175,7 +175,7 @@ public class InventoryGrid : MonoBehaviour
         {
             for (int y = 0; y < item.Height; y++)
             {
-                ItemSlot[item.itemData.itemPos.x + x, item.itemData.itemPos.y + y] = null;
+                ItemSlot[item.itemData.pos.x + x, item.itemData.pos.y + y] = null;
             }
         }
     }
@@ -217,8 +217,8 @@ public class InventoryGrid : MonoBehaviour
             //같은 소모품의 경우 배치를 하지 않은 채로 true 리턴
             return overlapItem == null 
                 || placeItem.itemData.isItemConsumeable 
-                && placeItem.itemData.itemCode == overlapItem.itemData.itemCode 
-                && overlapItem.itemData.itemAmount < 64;
+                && placeItem.itemData.itemId == overlapItem.itemData.itemId 
+                && overlapItem.itemData.amount < 64;
         }
         
         //아이템 배열에 해당 아이템 배치
@@ -253,7 +253,7 @@ public class InventoryGrid : MonoBehaviour
     /// </summary>
     public void UpdateItemPosition(ItemObject inventoryItem, int posX, int posY, RectTransform itemRect)
     {
-        inventoryItem.itemData.itemPos = new Vector2Int(posX, posY);
+        inventoryItem.itemData.pos = new Vector2Int(posX, posY);
         Vector2 position = CalculatePositionOnGrid(inventoryItem, posX, posY);
         itemRect.localPosition = new UnityEngine.Vector2(position.X,position.Y);
     }
@@ -266,7 +266,7 @@ public class InventoryGrid : MonoBehaviour
     {
         // 아이템 데이터에서 현재 위치를 가져옵니다.
         Vector2Int oldPos = item.backUpItemPos;
-        Vector2Int newPos = item.itemData.itemPos;
+        Vector2Int newPos = item.itemData.pos;
 
         // 이전 위치의 아이템 리스트에서 아이템을 제거합니다.
         RemoveItemFromItemList(item);
@@ -279,7 +279,7 @@ public class InventoryGrid : MonoBehaviour
     {
         if (item.itemData == null) return;
 
-        item.itemData.itemPos = pos;
+        item.itemData.pos = pos;
         item.curItemGrid = this;
         InventoryController.invenInstance.instantItemList.Add(item);
 
@@ -455,8 +455,8 @@ public class InventoryGrid : MonoBehaviour
         if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
         {
             if (!placeItem.itemData.isItemConsumeable
-                || placeItem.itemData.itemCode != overlapItem.itemData.itemCode
-                || overlapItem.itemData.itemAmount >= 64)
+                || placeItem.itemData.itemId != overlapItem.itemData.itemId
+                || overlapItem.itemData.amount >= 64)
             {
                 Debug.Log($"merge error");
                 InventoryController.invenInstance.itemPlaceableInGrid = false;

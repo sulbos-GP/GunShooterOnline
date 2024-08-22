@@ -207,10 +207,10 @@ public partial class InventoryController
         }
         else
         {
-            if(toGridItem.itemData.itemRotate != 0)
+            if(toGridItem.itemData.rotate != 0)
             {
-                toGridItem.itemData.itemRotate = 0;
-                toGridItem.Rotate(toGridItem.itemData.itemRotate);
+                toGridItem.itemData.rotate = 0;
+                toGridItem.Rotate(toGridItem.itemData.rotate);
             }
             //자리 없음 배치 실패-> 원래 위치로
             UndoGridSlot();
@@ -260,17 +260,10 @@ public partial class InventoryController
     /// </summary>
     private void ItemReleaseInDelete()
     {
+        ItemDeletePacket();
+
         if (selectedItem.backUpEquipSlot == null)
         {
-            //현 아이템의 기존 위치가 플레이어의 인벤토리였을 경우에만 버리기 가능.
-            C_DeleteItem packet = new C_DeleteItem();
-            packet.PlayerId = Managers.Object.MyPlayer.Id;
-            packet.ItemData = selectedItem.itemData.GetItemData();
-            packet.GridId = selectedItem.backUpItemGrid.gridData.gridId;
-            packet.LastGridId = selectedItem.backUpItemGrid.gridData.gridId; //의미없음
-            Managers.Network.Send(packet);
-            Debug.Log("C_DeleteItem");
-
             selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
             DestroySelectedItem();
             return;
@@ -278,18 +271,12 @@ public partial class InventoryController
         else
         {   //장비칸의 있던 아이템을 버릴경우
             //서버에서도 수정해야함
-            C_DeleteItem packet = new C_DeleteItem();
-            packet.PlayerId = Managers.Object.MyPlayer.Id;
-            packet.ItemData = selectedItem.itemData.GetItemData();
-            packet.GridId = -1; //현재 아이템이 장비칸에 있음
-            packet.LastGridId = selectedItem.backUpItemGrid.gridData.gridId;
-            Managers.Network.Send(packet);
-            Debug.Log("C_DeleteItem");
 
             DestroySelectedItem();
             return;
         }
     }
+
 
 
 
@@ -324,8 +311,8 @@ public partial class InventoryController
     private bool CheckAbleToMerge(ItemObject item)
     {
         return selectedItem.itemData.isItemConsumeable &&
-               selectedItem.itemData.itemCode == overlapItem.itemData.itemCode &&
-               overlapItem.itemData.itemAmount < ItemObject.maxItemMergeAmount &&
+               selectedItem.itemData.itemId == overlapItem.itemData.itemId &&
+               overlapItem.itemData.amount < ItemObject.maxItemMergeAmount &&
                !overlapItem.isHide;
     }
 
@@ -334,14 +321,14 @@ public partial class InventoryController
     /// </summary>
     private void MergeItems(ItemObject item, Vector2Int pos)
     {
-        int totalAmount = selectedItem.itemData.itemAmount + overlapItem.itemData.itemAmount;
+        int totalAmount = selectedItem.itemData.amount + overlapItem.itemData.amount;
 
-        selectedItem.itemData.itemPos = pos;
+        selectedItem.itemData.pos = pos;
         SendMoveItemInGridPacket(item, pos);
 
         if (totalAmount <= ItemObject.maxItemMergeAmount)
         {
-            selectedItem.MergeItem(overlapItem, selectedItem.itemData.itemAmount);
+            selectedItem.MergeItem(overlapItem, selectedItem.itemData.amount);
             if(selectedItem.backUpItemGrid != null)
             {
                 BackUpGridSlot(selectedItem.backUpItemGrid);
@@ -351,7 +338,7 @@ public partial class InventoryController
         }
         else
         {
-            int needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.itemAmount;
+            int needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.amount;
 
             selectedItem.MergeItem(overlapItem, needAmount);
 
@@ -389,7 +376,7 @@ public partial class InventoryController
     {
         item.curItemGrid.PlaceItem(item, pos.x, pos.y);
         item.curItemGrid.PrintInvenContents(item.curItemGrid, item.curItemGrid.ItemSlot); //체크
-        item.curItemGrid.AddItemToItemList(item.itemData.itemPos, item);
+        item.curItemGrid.AddItemToItemList(item.itemData.pos, item);
 
         if (item.backUpItemGrid != null) //그리드 -> 그리드
         {

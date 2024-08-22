@@ -19,7 +19,7 @@ public class InventoryUI : MonoBehaviour
     public const float offsetY = 20;
 
     public float invenWeight = 0; //그리드의 무게 총 결산.
-
+    public float limitWeight = 20; //수정 필요(임시)
     protected virtual float InvenWeight
     {
         get { return invenWeight; }
@@ -56,16 +56,13 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     private void InvenDataSet()
     {
-        foreach (GridData data in invenData.gridList) 
-        {
-            //그리드를 생성하여 Grids객체의 자식으로 생성
-            InventoryGrid newGrid = Instantiate(gridPref, grids).GetComponent<InventoryGrid>();
-            newGrid.gridData = data;
-            newGrid.ownInven = this;
-            newGrid.InitializeGrid();
-            instantGridList.Add(newGrid);
-        }
-        
+        //그리드를 생성하여 Grids객체의 자식으로 생성
+        InventoryGrid newGrid = Instantiate(gridPref, grids).GetComponent<InventoryGrid>();
+        newGrid.gridData = invenData.grid;
+        newGrid.ownInven = this;
+        newGrid.InitializeGrid();
+        instantGridList.Add(newGrid);
+
         UpdateInvenWeight();
     }
     
@@ -95,7 +92,7 @@ public class InventoryUI : MonoBehaviour
             curWeight -= overlap.itemData.item_weight;
         }
 
-        if (curWeight + addWeight > invenData.limitWeight)
+        if (curWeight + addWeight > limitWeight)
         {
             Debug.Log("인벤토리의 무게가 한계를 넘음");
             return false;

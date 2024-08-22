@@ -28,8 +28,8 @@ public partial class InventoryController
     /// </summary>
     private void BackUpItem(ItemObject item)
     {
-        item.backUpItemPos = item.itemData.itemPos; //현재 위치
-        item.backUpItemRotate = item.itemData.itemRotate; //현재 회전
+        item.backUpItemPos = item.itemData.pos; //현재 위치
+        item.backUpItemRotate = item.itemData.rotate; //현재 회전
         item.backUpItemGrid = item.curItemGrid; //현재 그리드
 
 
@@ -65,12 +65,12 @@ public partial class InventoryController
             return;
         }
         //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
-        selectedItem.itemData.itemPos = selectedItem.backUpItemPos;
-        selectedItem.itemData.itemRotate = selectedItem.backUpItemRotate;
+        selectedItem.itemData.pos = selectedItem.backUpItemPos;
+        selectedItem.itemData.rotate = selectedItem.backUpItemRotate;
 
         //바뀐 변수를 적용. 해당 아이템을 이전상태로 되돌림
-        selectedItem.Rotate(selectedItem.itemData.itemRotate);
-        selectedItem.backUpItemGrid.PlaceItem(selectedItem, selectedItem.itemData.itemPos.x, selectedItem.itemData.itemPos.y);
+        selectedItem.Rotate(selectedItem.itemData.rotate);
+        selectedItem.backUpItemGrid.PlaceItem(selectedItem, selectedItem.itemData.pos.x, selectedItem.itemData.pos.y);
         SelectedItem = null;
     }
 }
