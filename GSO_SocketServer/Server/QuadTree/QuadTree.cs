@@ -89,7 +89,7 @@ namespace QuadTree
     /// </summary>
     public class QuadTree<T> where T : class
     {
-        private static readonly int _minSize = 2; //가장 작은 내부 node사각형 크기
+        //private static readonly int _minSize = 2; //가장 작은 내부 node사각형 크기
         private readonly Rectangle bounds; // overall bounds we are indexing.
         private Quadrant root;
 

@@ -17,13 +17,13 @@ namespace Server.Database.Master
         {
         }
 
-        public async Task<ItemInfo> GetItemInfo(int item_id)
+        public async Task<DB_ItemData> GetItemData(int item_id)
         {
             var query = this.GetQueryFactory();
 
             return await query.Query("master_item_base")
                 .Where("item_id", item_id)
-                .FirstOrDefaultAsync<ItemInfo>();
+                .FirstOrDefaultAsync<DB_ItemData>();
         }
     }
 }

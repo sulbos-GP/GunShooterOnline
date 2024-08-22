@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
+using LiteNetLib;
 using Server.Game;
-using Server.Game.Object;
+using Server.Game.Object.Item;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -48,148 +49,143 @@ namespace Server
             BroadCast(resMovePacket);
         }
 
-        internal void HandleItemDelete(Player player, object message)
-        {
-            //TODO : 그리드로 옮기기
-            //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
-            C_DeleteItem packet = (C_DeleteItem)message;
-            ItemObject item =  ObjectManager.Instance.Find<ItemObject>(packet.ItemData.ItemId);
-
-            item.ownerGrid.DeleteItemFromSlot(item);
-            ObjectManager.Instance.Remove(packet.ItemData.ItemId);
-
-            S_DeleteItem s_DeleteItem = new S_DeleteItem();
-            s_DeleteItem.ItemData = packet.ItemData;
-            s_DeleteItem.PlayerId = packet.PlayerId;
-            s_DeleteItem.GridId = packet.GridId;
-            s_DeleteItem.LastGridId = packet.LastGridId;
-
-
-            BroadCast(s_DeleteItem);
-        }
+        ////////////////////////////////////////////
+        //                                        //
+        //               INVENTORY                //
+        //                                        //
+        ////////////////////////////////////////////
 
         internal void LoadInventoryHandler(Player player)
         {
-            InvenDataInfo targetData = null;
-
-            if(player.Id == inventoryId) 
+            Inventory inventory = player.inventory;
+            if(inventory == null)
             {
-                //플레이어의 인벤토리
-                Player targetPlayer = ObjectManager.Instance.Find<Player>(inventoryId);
-                targetData = targetPlayer.inventory.invenData;
+                return;
             }
-            else
+
+            S_LoadInventory packet = new S_LoadInventory();
+            foreach(PS_ItemInfo item in inventory.GetInventoryItems())
             {
-                RootableObject box = ObjectManager.Instance.Find<RootableObject>(inventoryId);
-                Player enemyPlayer = ObjectManager.Instance.Find<Player>(inventoryId); // playerId를 사용하여 Player를 찾음
-
-                if (box != null)
-                {
-                    Console.WriteLine($"handle box id : {box.Id}");
-                    targetData = box.inventory.invenData;
-                }
-
-                if (enemyPlayer != null)
-                {
-                    Console.WriteLine($"handle enemyPlayer id : {enemyPlayer.Id}");
-                    // player 관련 로직 추가
-                }
+                packet.ItemInfos.Add(item);
             }
-            
-            //Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
 
-            S_LoadInventory s_LoadInventory = new S_LoadInventory()
+            player.Session.Send(packet);
+        }
+
+        internal async void MergeItemHandler(Player player, int mergedObjectId, int combinedObjectId, int mergeNumber)
+        {
+            S_MergeItem packet = new S_MergeItem();
+
+            Inventory inventory = player.inventory;
+            if (inventory == null)
             {
-                PlayerId = objectId,
-                InventoryId = inventoryId,
-                InvenData = targetData //targetPlayer.inventory.invenData,
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
 
-            };
+            ItemObject mergeItem = ObjectManager.Instance.Find<ItemObject>(mergedObjectId);
+            ItemObject combinedItem = ObjectManager.Instance.Find<ItemObject>(combinedObjectId);
 
-            BroadCast(s_LoadInventory);
+            if (mergeItem == null || combinedItem == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            if(false == await inventory.MergeItem(mergeItem, combinedItem, mergeNumber))
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            packet.IsSuccess = true;
+            packet.MergedItem = mergeItem.Info;
+            packet.CombinedItem = combinedItem.Info;
+            player.Session.Send(packet);
+        }
+
+        internal async void DevideItemHandler(Player player, int totalObjectId, int gridX, int gridY, int rotation, int devideNumber)
+        {
+
+            S_DevideItem packet = new S_DevideItem();
+
+            Inventory inventory = player.inventory;
+            if (inventory == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            ItemObject totalItem = ObjectManager.Instance.Find<ItemObject>(totalObjectId);
+            if (totalItem == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            ItemObject newItem = await inventory.DevideItem(totalItem, gridX, gridY, rotation, devideNumber);
+            if (newItem == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            packet.IsSuccess = true;
+            packet.TotalItem = totalItem.Info;
+            packet.NewItem = newItem.Info;
+            player.Session.Send(packet);
+        }
+
+        internal void MoveItemHandler(Player player, int targetObjectId, PS_ItemInfo moveItem, int gridX, int gridY)
+        {
 
         }
 
-        /*internal void HandleItemMove(Player player, int itemId, int itemPosX, int itemPosY)
+        internal async void DeleteItemHandler(Player player, int deleteItemId)
         {
-            player.inventory.MoveItem(itemId, itemPosX, itemPosY);
 
-            //S_
-            S_MoveItem s_MoveItem = new S_MoveItem()
+            S_DeleteItem packet = new S_DeleteItem();
+
+            Inventory inventory = player.inventory;
+            if (inventory == null)
             {
-                PlayerId = player.Id,
-                ItemId = itemId,
-                ItemPosX = itemPosX,
-                ItemPosY = itemPosY,
-
-            };
-
-
-            BroadCast(RoomId, );
-
-            // BroadCast()
-        }*/
-        internal void HandleItemMove(Player player, object  _packet)
-        {
-            //player.inventory.MoveItem(itemId, itemPosX, itemPosY);
-            C_MoveItem packet = (C_MoveItem)_packet;
-
-            ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemData.ItemId);
-            if (target == null)
-            {
-                Console.WriteLine("옮기려는 아이템을 찾지 못함");
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
                 return;
             }
 
-            
-            if(packet.LastItemPosX != target.itemDataInfo.ItemPosX || packet.LastItemPosY != target.itemDataInfo.ItemPosY)
+            ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
+            if (deleteItem == null)
             {
-                Console.WriteLine("이미 누군가 아이템을 옮겨버린");
-                //클라로 옮기기 실패 패킷을 만들어야함(추후 제작)
-                // S_MoveItem패킷에 Success 항목 추가 true면 그대로 false면 클라는 해당 아이템 데이터의 위치대로 옮김
-
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
                 return;
             }
-            var invenObjType = ObjectManager.GetObjectTypeById(packet.TargetId);
-            Console.WriteLine(invenObjType);
-            Grid targetGrid = null; //플레이어 혹은 박스에서 해당 패킷에서 주어진 그리드 id로 그리드를 찾음
+            PS_ItemInfo itemInfo = deleteItem.Info;
 
-            if (invenObjType == GameObjectType.Player)
+            if(false == await inventory.DeleteItem(deleteItem))
             {
-                ObjectManager.Instance.Find<Player> (packet.TargetId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
-            }
-            else if(invenObjType == GameObjectType.Box)
-            {
-                ObjectManager.Instance.Find<RootableObject>(packet.TargetId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
-            }
-
-            if (targetGrid == null)
-            {
-                Console.WriteLine("해당 그리드가 존재하지 않음");
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
                 return;
             }
 
-            //유효성 체크후 패킷의 데이터를 그대로 브로드캐스트로 S패킷 전달
-            S_MoveItem s_MoveItem = new S_MoveItem()
-            {
-                PlayerId = player.Id,
-                ItemData = packet.ItemData,
-                TargetId = packet.TargetId,
-                GridId = packet.GridId,
-
-                LastItemPosX = packet.LastItemPosX,
-                LastItemPosY = packet.LastItemPosY,
-                LastItemRotate = packet.LastItemRotate,
-                //TODO : MoveItem 결과
-                //LastInventoryId = packet.in
-                LastGridId = packet.LastGridId,
-            };
-
-            BroadCast(s_MoveItem);
-
-            //서버의 아이템 데이터 변경
-            target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemData, targetGrid);
+            packet.IsSuccess = true;
+            packet.DeleteItem = itemInfo;
+            player.Session.Send(packet);
         }
+
+        ////////////////////////////////////////////
+        //                                        //
+        //               ?????????                //
+        //                                        //
+        ////////////////////////////////////////////
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
@@ -244,13 +240,8 @@ namespace Server
         {
 
             //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
-            foreach (GridDataInfo grid in player.inventory.invenData.GridData)
-            {
-                foreach (ItemDataInfo itemData in grid.ItemList)
-                {
-                    ObjectManager.Instance.Remove(itemData.ItemId);
-                }
-            }
+            player.inventory.ClearInventory();
+            ObjectManager.Instance.Remove(player.inventory.Id);
 
             ObjectManager.Instance.Remove(player.Id);
 

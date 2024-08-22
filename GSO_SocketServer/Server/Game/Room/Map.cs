@@ -6,9 +6,9 @@ using System.Numerics;
 using Google.Protobuf.Protocol;
 using QuadTree;
 using Server.Data;
-using Server.Game.Object;
 using Server.Game;
 using ServerCore;
+using Server.Game.Object.Item;
 
 namespace Server.Game;
 
@@ -84,7 +84,7 @@ public class Map
 
 
     #region rootableObjects
-    public readonly List<RootableObject> rootableObjects = new List<RootableObject>();
+    public readonly List<BoxObject> rootableObjects = new List<BoxObject>();
     #endregion
 
     #region EscapeObj
@@ -129,7 +129,7 @@ public class Map
     public void loadMap(string mapName, string pathPrefix = "")
     {
         //TODO : 파일 위치 josn으로 관리하기!! 240813 지승현
-        var Distance = 22;
+        //var Distance = 22;
 
         //----------------------------------------
         mapName = "Forest";
@@ -177,7 +177,7 @@ public class Map
 
                 if (_collisions[i,j]  == 2) // 박스
                 {
-                    RootableObject rb = ObjectManager.Instance.Add<RootableObject>();
+                    BoxObject rb = ObjectManager.Instance.Add<BoxObject>();
                     rb.CellPos = new Vector2(i + Bleft.x, j + Bleft.y);
                     rb.Init();
                     rb.info.Name = "Box";

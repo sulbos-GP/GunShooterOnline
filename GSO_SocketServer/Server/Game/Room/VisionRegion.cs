@@ -54,42 +54,42 @@ public class VisionRegion
 
         throw new Exception("Still working..");
 
-        var currentObject = GatherObjects();
-        currentObject.UnionWith(GatherPlayers());
+        //var currentObject = GatherObjects();
+        //currentObject.UnionWith(GatherPlayers());
 
-        var added = currentObject.Except(PreviousObjects).ToList();
-        if (added.Count > 0)
-        {
-            var spawnPacket = new S_Spawn();
-            foreach (var go in added)
-            {
-                if (go == Owner)
-                    continue;
+        //var added = currentObject.Except(PreviousObjects).ToList();
+        //if (added.Count > 0)
+        //{
+        //    var spawnPacket = new S_Spawn();
+        //    foreach (var go in added)
+        //    {
+        //        if (go == Owner)
+        //            continue;
 
-                var info = new ObjectInfo();
-                info.MergeFrom(go.info);
-                spawnPacket.Objects.Add(info); //gameObject.info가 아니고 새로 만드는 이유 값이 계속 변경됨
-            }
+        //        var info = new ObjectInfo();
+        //        info.MergeFrom(go.info);
+        //        spawnPacket.Objects.Add(info); //gameObject.info가 아니고 새로 만드는 이유 값이 계속 변경됨
+        //    }
 
-            Owner.Session.Send(spawnPacket);
-        }
+        //    Owner.Session.Send(spawnPacket);
+        //}
 
-        var removed = PreviousObjects.Except(currentObject).ToList();
-        if (removed.Count > 0)
-        {
-            var despawnPacket = new S_Despawn();
-            foreach (var go in removed)
-            {
-                if (go == Owner)
-                    continue;
-                despawnPacket.ObjcetIds.Add(go.Id);
-            }
+        //var removed = PreviousObjects.Except(currentObject).ToList();
+        //if (removed.Count > 0)
+        //{
+        //    var despawnPacket = new S_Despawn();
+        //    foreach (var go in removed)
+        //    {
+        //        if (go == Owner)
+        //            continue;
+        //        despawnPacket.ObjcetIds.Add(go.Id);
+        //    }
 
-            Owner.Session.Send(despawnPacket);
-        }
+        //    Owner.Session.Send(despawnPacket);
+        //}
 
-        PreviousObjects = currentObject;
+        //PreviousObjects = currentObject;
 
-        Owner.gameRoom.PushAfter(Program.ServerIntervalTick, Update); // .2초
+        //Owner.gameRoom.PushAfter(Program.ServerIntervalTick, Update); // .2초
     } //update
 }

@@ -9,6 +9,6 @@ namespace Server.Database.Interface
 {
     public interface IMasterDatabase
     {
-        public Task<ItemInfo> GetItemInfo(int item_id);
+        public Task<DB_ItemData> GetItemData(int item_id);
     }
 }

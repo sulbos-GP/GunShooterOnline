@@ -26,7 +26,7 @@ namespace Server
             mapHeight = loadMap.Height;
             vecMap = loadMap._collisions;
         }
-        Vector2 vIntersection;
+        //Vector2 vIntersection;
         bool bTileFound;
         float fMaxDistance;
 
