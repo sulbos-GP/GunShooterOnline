@@ -208,8 +208,11 @@ public class ItemObject : MonoBehaviour
 
         if (itemData.itemAmount <= 0)
         {
-            backUpItemGrid.gridData.itemList.Remove(itemData);
-
+            if(backUpItemGrid != null)
+            {
+                backUpItemGrid.gridData.itemList.Remove(itemData);
+            }
+            
             Managers.Object.RemoveItemDic(itemData.itemId);
         }
     }

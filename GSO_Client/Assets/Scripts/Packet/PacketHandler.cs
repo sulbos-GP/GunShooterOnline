@@ -263,7 +263,7 @@ internal class PacketHandler
                 ItemObject itemObj = InventoryController.invenInstance.instantItemList[i];
                 if(itemObj.curItemGrid.gridData.gridId == movedGrid.gridId) //TODO -> 인벤토리 단위로 바꿔야함(나중에 인벤토리 내에 여러개의 그리드가 존재할경우)
                 {
-                    itemObj.curItemGrid.PlaceSprite(itemObj, itemObj.itemData.itemPos.x, itemObj.itemData.itemPos.y, itemObj.GetComponent<RectTransform>());
+                    itemObj.curItemGrid.UpdateItemPosition(itemObj, itemObj.itemData.itemPos.x, itemObj.itemData.itemPos.y, itemObj.GetComponent<RectTransform>());
                     itemObj.Rotate(itemObj.itemData.itemRotate);
                 }
                 else
