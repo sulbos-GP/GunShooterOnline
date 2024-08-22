@@ -73,25 +73,25 @@ namespace Google.Protobuf.Protocol {
             "Zm8SJwoKU2hwYXBlVHlwZRgBIAEoDjITLlByb3RvY29sLlNoYXBlVHlwZRIM",
             "CgRQb3NYGAIgASgCEgwKBFBvc1kYAyABKAISEQoJUm9hdGF0aW9uGAQgASgC",
             "Eg4KBlJhZGl1cxgFIAEoAhIMCgRMZWZ0GAYgASgCEg4KBkJvdHRvbRgHIAEo",
-            "AhINCgVXaWR0aBgIIAEoAhIOCgZIZWlnaHQYCSABKAIifwoLUFNfSXRlbUlu",
+            "AhINCgVXaWR0aBgIIAEoAhIOCgZIZWlnaHQYCSABKAIieQoLUFNfSXRlbUlu",
             "Zm8SEAoIb2JqZWN0SWQYASABKAUSDgoGaXRlbUlkGAIgASgFEgkKAXgYAyAB",
             "KAUSCQoBeRgEIAEoBRIOCgZyb3RhdGUYBSABKAUSDgoGYW1vdW50GAYgASgF",
-            "EhgKEHNlYXJjaGVkUGxheWVySWQYByADKAUq3AIKBU1zZ0lkEhAKDFNfRU5U",
-            "RVJfR0FNRRAAEhAKDFNfTEVBVkVfR0FNRRABEgsKB1NfU1BBV04QAhINCglT",
-            "X0RFU1BBV04QAxIKCgZTX01PVkUQBBIKCgZDX01PVkUQBRIPCgtTX0NPTk5F",
-            "Q1RFRBAGEg8KC1NfQ0hBTkdFX0hQEAcSCQoFU19ESUUQCBIQCgxDX0VOVEVS",
-            "X0dBTUUQCRIUChBDX0xPQURfSU5WRU5UT1JZEAoSFAoQU19MT0FEX0lOVkVO",
-            "VE9SWRALEg8KC0NfTU9WRV9JVEVNEAwSDwoLU19NT1ZFX0lURU0QDRIRCg1D",
-            "X0RFTEVURV9JVEVNEA4SEQoNU19ERUxFVEVfSVRFTRAPEhMKD0NfUkFZQ0FT",
-            "VF9TSE9PVBAQEhEKDVNfUkFZQ0FTVF9ISVQQERIPCgtTX0VYSVRfR0FNRRAS",
-            "Eg8KC0NfRVhJVF9HQU1FEBMqeQoOR2FtZU9iamVjdFR5cGUSDgoKTk9ORU9C",
-            "SkVDVBAAEgoKBlBMQVlFUhABEgsKB01PTlNURVIQAhIOCgpQUk9KRUNUSUxF",
-            "EAMSDQoJSU5WRU5EQVRBEAQSBwoDQk9YEAUSCAoESVRFTRAGEgwKCEVYSVRa",
-            "T05FEAcqSwoJU2hhcGVUeXBlEgkKBVNIQVBFEAASCgoGQ0lSQ0xFEAESDQoJ",
-            "UkVDVEFOR0xFEAISCwoHUE9MWUdPThADEgsKB0FSQ1BPTFkQBCpTCghJdGVt",
-            "VHlwZRIKCgZXRUFQT04QABINCglERUZFTlNJVkUQARIHCgNCQUcQAhIMCghS",
-            "RUNPVkVSWRADEgoKBkJVTExFVBAEEgkKBVNQT0lMEAVCG6oCGEdvb2dsZS5Q",
-            "cm90b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
+            "EhIKCmlzU2VhcmNoZWQYByABKAgq3AIKBU1zZ0lkEhAKDFNfRU5URVJfR0FN",
+            "RRAAEhAKDFNfTEVBVkVfR0FNRRABEgsKB1NfU1BBV04QAhINCglTX0RFU1BB",
+            "V04QAxIKCgZTX01PVkUQBBIKCgZDX01PVkUQBRIPCgtTX0NPTk5FQ1RFRBAG",
+            "Eg8KC1NfQ0hBTkdFX0hQEAcSCQoFU19ESUUQCBIQCgxDX0VOVEVSX0dBTUUQ",
+            "CRIUChBDX0xPQURfSU5WRU5UT1JZEAoSFAoQU19MT0FEX0lOVkVOVE9SWRAL",
+            "Eg8KC0NfTU9WRV9JVEVNEAwSDwoLU19NT1ZFX0lURU0QDRIRCg1DX0RFTEVU",
+            "RV9JVEVNEA4SEQoNU19ERUxFVEVfSVRFTRAPEhMKD0NfUkFZQ0FTVF9TSE9P",
+            "VBAQEhEKDVNfUkFZQ0FTVF9ISVQQERIPCgtTX0VYSVRfR0FNRRASEg8KC0Nf",
+            "RVhJVF9HQU1FEBMqeQoOR2FtZU9iamVjdFR5cGUSDgoKTk9ORU9CSkVDVBAA",
+            "EgoKBlBMQVlFUhABEgsKB01PTlNURVIQAhIOCgpQUk9KRUNUSUxFEAMSDQoJ",
+            "SU5WRU5EQVRBEAQSBwoDQk9YEAUSCAoESVRFTRAGEgwKCEVYSVRaT05FEAcq",
+            "SwoJU2hhcGVUeXBlEgkKBVNIQVBFEAASCgoGQ0lSQ0xFEAESDQoJUkVDVEFO",
+            "R0xFEAISCwoHUE9MWUdPThADEgsKB0FSQ1BPTFkQBCpTCghJdGVtVHlwZRIK",
+            "CgZXRUFQT04QABINCglERUZFTlNJVkUQARIHCgNCQUcQAhIMCghSRUNPVkVS",
+            "WRADEgoKBkJVTExFVBAEEgkKBVNQT0lMEAVCG6oCGEdvb2dsZS5Qcm90b2J1",
+            "Zi5Qcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), typeof(global::Google.Protobuf.Protocol.ItemType), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -123,7 +123,7 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.StatInfo), global::Google.Protobuf.Protocol.StatInfo.Parser, new[]{ "Class", "Hp", "MaxHp", "AttackRange", "AttackSpeed" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PositionInfo), global::Google.Protobuf.Protocol.PositionInfo.Parser, new[]{ "CurrentRoomId", "DirX", "DirY", "PosX", "PosY", "RotZ" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ShapeInfo), global::Google.Protobuf.Protocol.ShapeInfo.Parser, new[]{ "ShpapeType", "PosX", "PosY", "Roatation", "Radius", "Left", "Bottom", "Width", "Height" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PS_ItemInfo), global::Google.Protobuf.Protocol.PS_ItemInfo.Parser, new[]{ "ObjectId", "ItemId", "X", "Y", "Rotate", "Amount", "SearchedPlayerId" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PS_ItemInfo), global::Google.Protobuf.Protocol.PS_ItemInfo.Parser, new[]{ "ObjectId", "ItemId", "X", "Y", "Rotate", "Amount", "IsSearched" }, null, null, null, null)
           }));
     }
     #endregion
@@ -7937,7 +7937,7 @@ namespace Google.Protobuf.Protocol {
       y_ = other.y_;
       rotate_ = other.rotate_;
       amount_ = other.amount_;
-      searchedPlayerId_ = other.searchedPlayerId_.Clone();
+      isSearched_ = other.isSearched_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -8037,18 +8037,19 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "searchedPlayerId" field.</summary>
-    public const int SearchedPlayerIdFieldNumber = 7;
-    private static readonly pb::FieldCodec<int> _repeated_searchedPlayerId_codec
-        = pb::FieldCodec.ForInt32(58);
-    private readonly pbc::RepeatedField<int> searchedPlayerId_ = new pbc::RepeatedField<int>();
+    /// <summary>Field number for the "isSearched" field.</summary>
+    public const int IsSearchedFieldNumber = 7;
+    private bool isSearched_;
     /// <summary>
-    /// 이 아이템을 조회한 플레이어의 아이디
+    /// 플레이어가 해당 아이템을 조회하였는지
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<int> SearchedPlayerId {
-      get { return searchedPlayerId_; }
+    public bool IsSearched {
+      get { return isSearched_; }
+      set {
+        isSearched_ = value;
+      }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -8072,7 +8073,7 @@ namespace Google.Protobuf.Protocol {
       if (Y != other.Y) return false;
       if (Rotate != other.Rotate) return false;
       if (Amount != other.Amount) return false;
-      if(!searchedPlayerId_.Equals(other.searchedPlayerId_)) return false;
+      if (IsSearched != other.IsSearched) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -8086,7 +8087,7 @@ namespace Google.Protobuf.Protocol {
       if (Y != 0) hash ^= Y.GetHashCode();
       if (Rotate != 0) hash ^= Rotate.GetHashCode();
       if (Amount != 0) hash ^= Amount.GetHashCode();
-      hash ^= searchedPlayerId_.GetHashCode();
+      if (IsSearched != false) hash ^= IsSearched.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -8129,7 +8130,10 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(48);
         output.WriteInt32(Amount);
       }
-      searchedPlayerId_.WriteTo(output, _repeated_searchedPlayerId_codec);
+      if (IsSearched != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(IsSearched);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -8164,7 +8168,10 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(48);
         output.WriteInt32(Amount);
       }
-      searchedPlayerId_.WriteTo(ref output, _repeated_searchedPlayerId_codec);
+      if (IsSearched != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(IsSearched);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -8193,7 +8200,9 @@ namespace Google.Protobuf.Protocol {
       if (Amount != 0) {
         size += 1 + pb::CodedOutputStream.ComputeInt32Size(Amount);
       }
-      size += searchedPlayerId_.CalculateSize(_repeated_searchedPlayerId_codec);
+      if (IsSearched != false) {
+        size += 1 + 1;
+      }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
       }
@@ -8224,7 +8233,9 @@ namespace Google.Protobuf.Protocol {
       if (other.Amount != 0) {
         Amount = other.Amount;
       }
-      searchedPlayerId_.Add(other.searchedPlayerId_);
+      if (other.IsSearched != false) {
+        IsSearched = other.IsSearched;
+      }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
 
@@ -8268,9 +8279,8 @@ namespace Google.Protobuf.Protocol {
             Amount = input.ReadInt32();
             break;
           }
-          case 58:
           case 56: {
-            searchedPlayerId_.AddEntriesFrom(input, _repeated_searchedPlayerId_codec);
+            IsSearched = input.ReadBool();
             break;
           }
         }
@@ -8316,9 +8326,8 @@ namespace Google.Protobuf.Protocol {
             Amount = input.ReadInt32();
             break;
           }
-          case 58:
           case 56: {
-            searchedPlayerId_.AddEntriesFrom(ref input, _repeated_searchedPlayerId_codec);
+            IsSearched = input.ReadBool();
             break;
           }
         }

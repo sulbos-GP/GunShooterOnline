@@ -291,6 +291,6 @@ message PS_ItemInfo{
     int32       y                           = 4;        // 아이템의 그리드 안 좌표상의 Y위치
     int32       rotate                      = 5;        // 아이템의 회전코드(rotate * 90)
     int32       amount                      = 6;        // 아이템의 개수(소모품만 64개까지)
-    repeated int32 searchedPlayerId         = 7;        // 이 아이템을 조회한 플레이어의 아이디
+    bool        isSearched                  = 7;        // 플레이어가 해당 아이템을 조회하였는지
 }
 //--------------- END INFO ----------------
