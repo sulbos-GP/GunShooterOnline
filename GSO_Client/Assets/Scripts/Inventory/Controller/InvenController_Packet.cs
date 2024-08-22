@@ -22,20 +22,22 @@ public partial class InventoryController
     {
         C_MoveItem packet = new C_MoveItem();
 
-        packet.PlayerId = Managers.Object.MyPlayer.Id;
-        packet.ItemData = item.itemData.GetItemData();
-        packet.TargetId = item.curItemGrid.ownInven.invenData.inventoryId;
-        packet.GridId = item.curItemGrid.gridData.gridId;
+        packet.TargetObjectId = Managers.Object.MyPlayer.Id; //옮긴 인벤토리의 아이디
+        packet.MoveItem = item.itemData.GetItemData();
+        packet.GridX = pos.x;
+        packet.GridY = pos.y;
             
-        if(item.backUpItemGrid != null)
-        { //장착칸에서 그리드로 옮길경우에는 백업 그리드가 없음
-            packet.LastItemPosX = item.backUpItemPos.x;
-            packet.LastItemPosY = item.backUpItemPos.y;
-            packet.LastItemRotate = item.backUpItemRotate;
-            packet.LastGridId = item.backUpItemGrid.gridData.gridId;
-        }
-            
+        
         Managers.Network.Send(packet);
+    }
+
+
+    private void ItemDeletePacket()
+    {
+        C_DeleteItem packet = new C_DeleteItem();
+        packet.DeleteItemId = SelectedItem.itemData.objectId;
+        Managers.Network.Send(packet);
+        Debug.Log("C_DeleteItem");
     }
 
     private void SendEquipItemPacket(ItemObject item, int equipSlotCode)

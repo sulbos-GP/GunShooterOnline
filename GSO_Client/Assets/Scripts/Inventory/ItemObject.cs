@@ -32,7 +32,7 @@ public class ItemObject : MonoBehaviour
     {
         get
         {
-            if (itemData.itemRotate % 2 == 0)
+            if (itemData.rotate % 2 == 0)
             {
                 return itemData.width;
             }
@@ -43,7 +43,7 @@ public class ItemObject : MonoBehaviour
     {
         get
         {
-            if (itemData.itemRotate % 2 == 0)
+            if (itemData.rotate % 2 == 0)
             {
                 return itemData.height;
             }
@@ -52,10 +52,10 @@ public class ItemObject : MonoBehaviour
     }
     public int ItemAmount
     {
-        get { return itemData.itemAmount; }
+        get { return itemData.amount; }
         set
         {
-            itemData.itemAmount = value;
+            itemData.amount = value;
             TextControl();
         }
     }
@@ -116,13 +116,13 @@ public class ItemObject : MonoBehaviour
         transform.GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
 
         //아이템의 크기및 회전 설정
-        itemRect.localPosition = new UnityEngine.Vector2(itemData.itemPos.x * InventoryGrid.WidthOfTile+50, itemData.itemPos.y* InventoryGrid.HeightOfTile-50);
-        Rotate(itemData.itemRotate);
-        itemSprite = spriteList[itemData.itemCode - 1];
+        itemRect.localPosition = new UnityEngine.Vector2(itemData.pos.x * InventoryGrid.WidthOfTile+50, itemData.pos.y* InventoryGrid.HeightOfTile-50);
+        Rotate(itemData.rotate);
+        itemSprite = spriteList[itemData.itemId - 1];
         isOnSearching = false;
 
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
-        if (itemData.searchedPlayerId.Contains(Managers.Object.MyPlayer.Id) == false)
+        if (itemData.isSearched == false)
         {
             imageUI.sprite = hideSprite;
             isHide = true;
@@ -133,7 +133,7 @@ public class ItemObject : MonoBehaviour
             isHide = false;
         }
 
-        ItemAmount = itemData.itemAmount;
+        ItemAmount = itemData.amount;
     }
 
     /// <summary>
@@ -169,7 +169,7 @@ public class ItemObject : MonoBehaviour
 
         isHide = false;
         imageUI.sprite = itemSprite;
-        itemData.searchedPlayerId.Add(Managers.Object.MyPlayer.Id);
+        itemData.isSearched = true;
         TextControl();
     }
 
@@ -178,8 +178,8 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void RotateRight()
     {
-        itemData.itemRotate = (itemData.itemRotate + 1) % 4;
-        Rotate(itemData.itemRotate);
+        itemData.rotate = (itemData.rotate + 1) % 4;
+        Rotate(itemData.rotate);
     }
 
     /// <summary>
@@ -187,8 +187,8 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void RotateLeft()
     {
-        itemData.itemRotate = (itemData.itemRotate - 1) % 4;
-        Rotate(itemData.itemRotate);
+        itemData.rotate = (itemData.rotate - 1) % 4;
+        Rotate(itemData.rotate);
     }
 
     /// <summary>
@@ -206,23 +206,23 @@ public class ItemObject : MonoBehaviour
         targetItem.ItemAmount += mergeAmount;
         ItemAmount -= mergeAmount;
 
-        if (itemData.itemAmount <= 0)
+        if (itemData.amount <= 0)
         {
             if(backUpItemGrid != null)
             {
                 backUpItemGrid.gridData.itemList.Remove(itemData);
             }
             
-            Managers.Object.RemoveItemDic(itemData.itemId);
+            Managers.Object.RemoveItemDic(itemData.objectId);
         }
     }
 
     public void TextControl()
     {
-        amountText.text = itemData.itemAmount.ToString();
+        amountText.text = itemData.amount.ToString();
 
         //아이템 갯수 텍스트가 비활성화 상태이고 2 이상이면 활성화
-        if (itemData.itemAmount > 1 && amountText.gameObject.activeSelf == false && !isHide) 
+        if (itemData.amount > 1 && amountText.gameObject.activeSelf == false && !isHide) 
         {
             amountText.gameObject.SetActive(true);
         }
@@ -233,7 +233,7 @@ public class ItemObject : MonoBehaviour
         if (curItemGrid != null) 
         {
             curItemGrid.gridData.itemList.Remove(itemData); //그리드 데이터에서 삭제
-            Managers.Object.RemoveItemDic(itemData.itemId); //오브젝트 매니저 딕셔너리에서 삭제
+            Managers.Object.RemoveItemDic(itemData.objectId); //오브젝트 매니저 딕셔너리에서 삭제
             InventoryController.invenInstance.instantItemList.Remove(this); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
         }
         
