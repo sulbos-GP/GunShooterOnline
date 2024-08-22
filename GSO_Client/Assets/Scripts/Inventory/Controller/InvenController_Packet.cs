@@ -20,19 +20,27 @@ public partial class InventoryController
     /// </summary>
     private void SendMoveItemInGridPacket(ItemObject item, Vector2Int pos)
     {
-        C_MoveItem packet = new C_MoveItem
-        {
-            PlayerId = Managers.Object.MyPlayer.Id,
-            ItemData = item.itemData.GetItemData(),
-            TargetId = item.curItemGrid.ownInven.invenData.inventoryId,
-            GridId = item.curItemGrid.gridData.gridId,
+        C_MoveItem packet = new C_MoveItem();
 
-            LastItemPosX = item.backUpItemPos.x,
-            LastItemPosY = item.backUpItemPos.y,
-            LastItemRotate = item.backUpItemRotate,
-            LastGridId = item.backUpItemGrid.gridData.gridId
-        };
+        packet.PlayerId = Managers.Object.MyPlayer.Id;
+        packet.ItemData = item.itemData.GetItemData();
+        packet.TargetId = item.curItemGrid.ownInven.invenData.inventoryId;
+        packet.GridId = item.curItemGrid.gridData.gridId;
+            
+        if(item.backUpItemGrid != null)
+        { //장착칸에서 그리드로 옮길경우에는 백업 그리드가 없음
+            packet.LastItemPosX = item.backUpItemPos.x;
+            packet.LastItemPosY = item.backUpItemPos.y;
+            packet.LastItemRotate = item.backUpItemRotate;
+            packet.LastGridId = item.backUpItemGrid.gridData.gridId;
+        }
+            
         Managers.Network.Send(packet);
+    }
+
+    private void SendEquipItemPacket(ItemObject item, int equipSlotCode)
+    {
+
     }
 }
 

@@ -28,9 +28,10 @@ public partial class InventoryController
     /// </summary>
     private void BackUpItem(ItemObject item)
     {
-        item.backUpItemPos = selectedItem.itemData.itemPos; //현재 위치
-        item.backUpItemRotate = selectedItem.itemData.itemRotate; //현재 회전
-        item.backUpItemGrid = selectedItem.curItemGrid; //현재 그리드
+        item.backUpItemPos = item.itemData.itemPos; //현재 위치
+        item.backUpItemRotate = item.itemData.itemRotate; //현재 회전
+        item.backUpItemGrid = item.curItemGrid; //현재 그리드
+
 
     }
 

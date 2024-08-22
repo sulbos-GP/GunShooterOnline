@@ -28,6 +28,14 @@ public partial class MyPlayerController : PlayerController
 
     public PlayerInput playerInput;
 
+    //플레이어가 장착한 아이템의 데이터
+    public ItemData weapon1;
+    public ItemData weapon2;
+    public ItemData defensive;
+    public ItemData bag;
+    public ItemData recovery1;
+    public ItemData recovery2;
+    public ItemData recovery3;
 
 
     //public int Attack => Stat.Attack;

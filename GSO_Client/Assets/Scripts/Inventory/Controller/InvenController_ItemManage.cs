@@ -9,6 +9,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
@@ -122,89 +123,141 @@ public partial class InventoryController
 
     
     
-    
+    /// <summary>
+    /// 장비칸에 아이템을 배치할 경우
+    /// </summary>
     private void ItemReleaseInEquip()
     {
         if (SelectedEquip.allowedItemType == SelectedItem.itemData.item_type)
         {
             if (SelectedEquip.equippedItem == null)//타입이 일치하고 장착칸에 아이템이 없을경우 -> 해당 장착칸에 아이템 장착
             {
-                selectedItem.backUpEquipSlot = selectedEquip;
-                if (selectedItem.backUpItemGrid != null)
-                {
-                    selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
-                    selectedItem.backUpItemGrid = null;
-                }
-
-                selectedEquip.EquipItem(selectedItem);
-
-                SelectedItem = null;
+                EquipSelectedItem();
             }
             else //타입이 일치하나 장착칸에 아이템이 있음
             {
                 if (SelectedItem.backUpItemGrid != null)
                 { //그리드 -> 장착칸
-                    ItemObject targetItem = SelectedEquip.equippedItem;
-                    InventoryGrid playerGrid = playerInvenUI.instantGridList[0]; //만약 인벤 하나에 그리드가 여러개가 된다면 수정해야함
-                    Vector2Int? findSpacePos = playerGrid.FindSpaceForObject(targetItem);
-                    if (findSpacePos != null)
-                    {
-                        //인벤토리에 기존의 아이템을 넣을수 있음 -> 교환
-                        playerGrid.PlaceItem(targetItem, findSpacePos.Value.x, findSpacePos.Value.y);
-                        BackUpItem(targetItem);
-
-                        targetItem.curEquipSlot = null;
-                        targetItem.backUpEquipSlot = null;
-                        SelectedEquip.equippedItem = null; //원래 슬롯에 있던 아이템을 플레이어 인벤토리에 배치
-
-                        selectedItem.backUpEquipSlot = selectedEquip;
-                        selectedEquip.EquipItem(selectedItem);
-
-                        if (selectedItem.backUpItemGrid != null)
-                        {
-                            selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
-                            selectedItem.backUpItemGrid = null;
-                        }
-
-                        SelectedItem = null; //들고 있는 아이템을 장비칸에 장착
-                    }
-                    else
-                    {
-                        //자리 없음 배치 실패-> 원래 위치로
-                        UndoGridSlot();
-                        UndoItem();
-                    }
+                    SwapWithGrid();
                 }
                 else
                 { //장착칸 -> 장착칸
-                    if (selectedItem.backUpEquipSlot == null) { Debug.Log("Something Wrong In Equip to Equip"); return; }
-                    ItemObject targetItem = SelectedEquip.equippedItem;
-                    EquipSlot targetSlot = targetItem.backUpEquipSlot;
-                    //작업중 슬롯 교환 만들것
-                    SelectedItem.backUpEquipSlot.EquipItem(targetItem); //선택한 아이템이 있던 장착칸에 장착하려는 칸에 있는 아이템 배치
-                    targetSlot.EquipItem(selectedItem);
-                    SelectedItem = null;
+                    SwapBetweenEquipSlots();
                 }
             }
         }
         else //타입이 일치하지 않을 경우 -> 장착 거부. 넣으려는 아이템을 원래 있던 자리로 귀환시킴
         {
-            //그리드에서 시도할경우
-            
-            if (selectedItem.backUpItemGrid != null)
-            {
-                UndoGridSlot();
-                UndoItem();
-            }
-            else if (selectedItem.backUpEquipSlot != null)
-            {//장착칸에서 시도할경우 -> 이부분 부터 테스트
-                selectedItem.curEquipSlot = selectedItem.backUpEquipSlot;
-                selectedItem.backUpEquipSlot.EquipItem(selectedItem);
-                SelectedItem = null;
-            }
+            RejectEquipItem();
         }
     }
 
+    /// <summary>
+    /// 장비칸이 비어있기에 선택된 아이템을 바로 배치
+    /// </summary>
+    private void EquipSelectedItem()
+    {
+        selectedItem.backUpEquipSlot = selectedEquip;
+        if (selectedItem.backUpItemGrid != null)
+        {
+            selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+            selectedItem.backUpItemGrid = null;
+        }
+
+        selectedEquip.EquipItem(selectedItem);
+
+        SelectedItem = null;
+    }
+
+    /// <summary>
+    /// 장비창의 아이템을 그리드에 넣고 선택한 아이템을 장비창에 배치 혹은 선택된 아이템 undo 
+    /// </summary>
+    private void SwapWithGrid()
+    {
+        ItemObject toSlotItem = SelectedItem;
+        ItemObject toGridItem = SelectedEquip.equippedItem;
+        EquipSlot targetEquip = SelectedEquip;
+        InventoryGrid playerGrid = playerInvenUI.instantGridList[0]; //만약 인벤 하나에 그리드가 여러개가 된다면 수정해야함
+
+        Vector2Int? findSpacePos = playerGrid.FindSpaceForObject(toGridItem);
+        if(findSpacePos == null)
+        {
+            toGridItem.RotateRight();
+            findSpacePos = playerGrid.FindSpaceForObject(toGridItem);
+        }
+
+        if (findSpacePos != null)
+        {
+            toGridItem.curItemGrid = playerGrid;
+            toGridItem.curEquipSlot = null;
+            toGridItem.backUpEquipSlot = null;
+            //인벤토리에 기존의 아이템을 넣을수 있음 -> 교환
+            CompleteItemPlacement(toGridItem, findSpacePos.Value);
+            toGridItem.backUpItemGrid = playerGrid;
+            targetEquip.UnequipItem();
+
+            toSlotItem.backUpEquipSlot = targetEquip;
+            targetEquip.EquipItem(toSlotItem);
+
+            if (toSlotItem.backUpItemGrid != null)
+            {
+                toSlotItem.backUpItemGrid.RemoveItemFromItemList(toSlotItem);
+                toSlotItem.backUpItemGrid = null;
+            }
+        }
+        else
+        {
+            if(toGridItem.itemData.itemRotate != 0)
+            {
+                toGridItem.itemData.itemRotate = 0;
+                toGridItem.Rotate(toGridItem.itemData.itemRotate);
+            }
+            //자리 없음 배치 실패-> 원래 위치로
+            UndoGridSlot();
+            UndoItem();
+        }
+    }
+
+    /// <summary>
+    /// 장비창에서 장비창으로 교환 할경우
+    /// </summary>
+    private void SwapBetweenEquipSlots()
+    {
+        if (selectedItem.backUpEquipSlot == null) { Debug.Log("Something Wrong In Equip to Equip"); return; }
+        ItemObject targetItem = SelectedEquip.equippedItem;
+        EquipSlot targetSlot = targetItem.backUpEquipSlot;
+
+        SelectedItem.backUpEquipSlot.UnequipItem(); //테스트해보기
+        targetSlot.UnequipItem();
+
+        SelectedItem.backUpEquipSlot.EquipItem(targetItem); //선택한 아이템이 있던 장착칸에 장착하려는 칸에 있는 아이템 배치
+        targetSlot.EquipItem(selectedItem);
+        SelectedItem = null;
+    }
+
+    /// <summary>
+    /// 장비칸에 배치가 불가능할경우 Undo
+    /// </summary>
+    private void RejectEquipItem()
+    {
+        //그리드에서 시도할경우
+        if (selectedItem.backUpItemGrid != null)
+        {
+            UndoGridSlot();
+            UndoItem();
+        }
+        else if (selectedItem.backUpEquipSlot != null)
+        {//장착칸에서 시도할경우
+            selectedItem.curEquipSlot = selectedItem.backUpEquipSlot;
+            selectedItem.backUpEquipSlot.EquipItem(selectedItem);
+            SelectedItem = null;
+        }
+    }
+
+
+    /// <summary>
+    /// 삭제칸에 배치할경우 -> 아이템 삭제처리
+    /// </summary>
     private void ItemReleaseInDelete()
     {
         if (selectedItem.backUpEquipSlot == null)
@@ -289,8 +342,11 @@ public partial class InventoryController
         if (totalAmount <= ItemObject.maxItemMergeAmount)
         {
             selectedItem.MergeItem(overlapItem, selectedItem.itemData.itemAmount);
-
-            BackUpGridSlot(selectedItem.backUpItemGrid);
+            if(selectedItem.backUpItemGrid != null)
+            {
+                BackUpGridSlot(selectedItem.backUpItemGrid);
+            }
+            
             DestroySelectedItem();
         }
         else
@@ -327,27 +383,36 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// 아이템 배치 성공, 현재 아이템이 그리드 안에 존재
+    /// 그리드에 배치를 성공함 
     /// </summary>
     private void CompleteItemPlacement(ItemObject item, Vector2Int pos)
     {
-        selectedItem.curItemGrid.PlaceItem(item, pos.x, pos.y);
-        selectedItem.curItemGrid.PrintInvenContents(selectedItem.curItemGrid, selectedItem.curItemGrid.ItemSlot); //체크
+        item.curItemGrid.PlaceItem(item, pos.x, pos.y);
+        item.curItemGrid.PrintInvenContents(item.curItemGrid, item.curItemGrid.ItemSlot); //체크
+        item.curItemGrid.AddItemToItemList(item.itemData.itemPos, item);
 
-        selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem); //이전 그리드의 데이터의 아이템 데이터 리스트에서 해당 데이터 제거
-        selectedItem.curItemGrid.AddItemToItemList(selectedItem.itemData.itemPos, selectedItem);
-        if (selectedItem.backUpEquipSlot != null) //만약 장비칸에서 그리드로 아이템을 배치가 성공한 경우
+        if (item.backUpItemGrid != null) //그리드 -> 그리드
         {
-            //selectedItem.backUpEquipSlot.equippedItem = null; //이부분이 주석이어도 잘 돌아가는지 체크후 제거할것
-            selectedItem.backUpEquipSlot = null;
+            item.backUpItemGrid.RemoveItemFromItemList(item); //이전 그리드의 데이터의 아이템 데이터 리스트에서 해당 데이터 제거
         }
+
+        if (item.backUpEquipSlot != null) //장착칸 -> 그리드
+        {
+            //item.backUpEquipSlot.equippedItem = null; //이부분이 주석이어도 잘 돌아가는지 체크후 제거할것
+            item.backUpEquipSlot = null;
+        }
+
         SendMoveItemInGridPacket(item, pos); //백업 전에 내보내야 lastItem 변수에 값이 제대로 할당됨
 
-
-        BackUpItem(selectedItem);
-        BackUpGridSlot(selectedItem.curItemGrid);
+        if(item.curItemGrid != null)
+        {
+            BackUpItem(item);
+            BackUpGridSlot(item.curItemGrid);
+        }
+        
 
         ResetSelection();
+
     }
 }
 

@@ -282,7 +282,11 @@ public class InventoryGrid : MonoBehaviour
         item.itemData.itemPos = pos;
         item.curItemGrid = this;
         InventoryController.invenInstance.instantItemList.Add(item);
-        gridData.itemList.Add(item.itemData);
+
+        if (!gridData.itemList.Contains(item.itemData))
+        {
+            gridData.itemList.Add(item.itemData);
+        }
     }
 
     public void RemoveItemFromItemList(ItemObject item)
@@ -290,7 +294,11 @@ public class InventoryGrid : MonoBehaviour
         if (item.itemData == null) return;
 
         InventoryController.invenInstance.instantItemList.Remove(item);
-        gridData.itemList.Remove(item.itemData);
+        if (gridData.itemList.Contains(item.itemData))
+        {
+            gridData.itemList.Remove(item.itemData);
+        }
+       
     }
 
 
