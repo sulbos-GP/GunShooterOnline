@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
 
-public partial class InventoryController : MonoBehaviour
+public partial class InventoryController
 {
     
 }

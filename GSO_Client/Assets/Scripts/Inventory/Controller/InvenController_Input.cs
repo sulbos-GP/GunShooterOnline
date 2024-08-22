@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = System.Numerics.Vector2;
 
-public partial class InventoryController : MonoBehaviour
+public partial class InventoryController
 {
     #region PlayerInput ¾×¼Ç
     private void OnTouchPos(InputAction.CallbackContext context)

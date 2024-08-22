@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
 
-public partial class InventoryController : MonoBehaviour
+public partial class InventoryController
 {
     /// <summary>
     /// 아이템 슬롯을 백업함(아이템을 들때 슬롯이 업데이트되기에 백업 필요)
