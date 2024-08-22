@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
 
-public partial class InventoryController : MonoBehaviour
+public partial class InventoryController
 {
     /// <summary>
     /// 좌클릭시 아이템을 집거나 내려 놓기

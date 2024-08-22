@@ -13,7 +13,7 @@ using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
 
-public partial class InventoryController : MonoBehaviour
+public partial class InventoryController
 {
     /// <summary>
     /// C_MoveItem패킷 생성 및 전송

@@ -1740,8 +1740,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1397189865}
   - component: {fileID: 1397189868}
+  - component: {fileID: 1397189871}
   - component: {fileID: 1397189867}
-  - component: {fileID: 1397189866}
   - component: {fileID: 1397189870}
   - component: {fileID: 1397189869}
   m_Layer: 0
@@ -1770,36 +1770,6 @@ RectTransform:
   m_AnchoredPosition: {x: -4, y: -4}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1397189866
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1397189863}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5c80b29a92f08fc4a93c3240ee31ff01, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  inventoryUI: {fileID: 1095908246791057077}
-  playerInvenUI: {fileID: 1095908246791057079}
-  otherInvenUI: {fileID: 1095908246791057078}
-  instantItemList: []
-  deleteUI: {fileID: 3385603023062608331}
-  rotateBtn: {fileID: 1222683154}
-  gridPosition: {x: 0, y: 0}
-  selectedItem: {fileID: 0}
-  selectedRect: {fileID: 0}
-  isItemSelected: 0
-  selectedGrid: {fileID: 0}
-  isGridSelected: 0
-  isOnDelete: 0
-  selectedEquip: {fileID: 0}
-  isEquipSelected: 0
-  overlapItem: {fileID: 0}
-  isActive: 0
-  itemPlaceableInGrid: 0
 --- !u!114 &1397189867
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1883,6 +1853,36 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
+--- !u!114 &1397189871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1397189863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c80b29a92f08fc4a93c3240ee31ff01, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inventoryUI: {fileID: 1095908246791057077}
+  playerInvenUI: {fileID: 1095908246791057079}
+  otherInvenUI: {fileID: 1095908246791057078}
+  instantItemList: []
+  deleteUI: {fileID: 3385603023062608331}
+  rotateBtn: {fileID: 1222683154}
+  gridPosition: {x: 0, y: 0}
+  selectedItem: {fileID: 0}
+  selectedRect: {fileID: 0}
+  isItemSelected: 0
+  selectedGrid: {fileID: 0}
+  isGridSelected: 0
+  isOnDelete: 0
+  selectedEquip: {fileID: 0}
+  isEquipSelected: 0
+  overlapItem: {fileID: 0}
+  isActive: 0
+  itemPlaceableInGrid: 0
 --- !u!1 &1474548943
 GameObject:
   m_ObjectHideFlags: 0
@@ -3413,7 +3413,7 @@ PrefabInstance:
     - target: {fileID: 3034584280118069898, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1397189866}
+      objectReference: {fileID: 0}
     - target: {fileID: 3034584280118069898, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: RotateBtn
@@ -3421,7 +3421,7 @@ PrefabInstance:
     - target: {fileID: 5753915715544317874, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: invenController
       value: 
-      objectReference: {fileID: 1397189866}
+      objectReference: {fileID: 0}
     - target: {fileID: 8170518926862303354, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -3709,7 +3709,7 @@ PrefabInstance:
     - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1397189866}
+      objectReference: {fileID: 1397189871}
     - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: invenUIControl
