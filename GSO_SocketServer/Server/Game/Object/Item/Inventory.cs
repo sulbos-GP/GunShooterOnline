@@ -97,6 +97,7 @@ namespace Server.Game
                     {
                         throw new Exception("인벤토리 DB로드 실패");
                     }
+                    newItem.AddViewer(owner.Id);
                 }
 
             }

@@ -31,6 +31,8 @@ class PacketManager
 		_handler.Add((ushort)MsgId.CLoadInventory, PacketHandler.C_LoadInventoryHandler);
         _onRecv.Add((ushort)MsgId.CCloseInventory, MakePacket<C_CloseInventory>);
         _handler.Add((ushort)MsgId.CCloseInventory, PacketHandler.C_CloseInventoryHandler);
+        _onRecv.Add((ushort)MsgId.CSearchItem, MakePacket<C_SearchInventory>);
+        _handler.Add((ushort)MsgId.CSearchItem, PacketHandler.C_SearchInventoryHandler);
         _onRecv.Add((ushort)MsgId.CMergeItem, MakePacket<C_MergeItem>);
         _handler.Add((ushort)MsgId.CMergeItem, PacketHandler.C_MergeItemHandler);
         _onRecv.Add((ushort)MsgId.CDevideItem, MakePacket<C_DevideItem>);
