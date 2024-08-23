@@ -9,8 +9,9 @@ public class GridObject : MonoBehaviour
     public const float WidthOfTile = 100;
     public const float HeightOfTile = 100;
 
+    public int objectId;
+
     public Vector2Int gridSize; //플레이어 : 가방의 크기, 박스 5*5
-    public List<ItemData> itemList;
     public ItemObject[,] ItemSlot { get; private set; } //컨트롤러에서 아이템을 저장할 슬롯
 
     [SerializeField] protected float gridWeight = 0; //그리드안의 아이템의 무게
@@ -22,8 +23,7 @@ public class GridObject : MonoBehaviour
             gridWeight = value;
         }
     }
-    public float limitWeight = 20;
-
+    public float limitWeight;
 
     private RectTransform gridRect; //해당 그리드의 transform
     private Vector2 mousePosOnGrid = new Vector2(); //그리드 위의 마우스 위치
@@ -32,6 +32,7 @@ public class GridObject : MonoBehaviour
     //백업 관련
     public ItemObject[,] BackUpSlot { get; private set; } //백업 배열
     public float BackUpWeight { get; private set; }
+
     
     private void Awake()
     {
@@ -42,24 +43,26 @@ public class GridObject : MonoBehaviour
     /// <summary>
     /// 인벤토리에서 그리드를 생성할때 사용
     /// </summary>
-    public void InitializeGrid(Vector2Int gridSize)
+    public void InitializeGrid(Vector2Int _gridSize)
     {
         if (gridRect == null) gridRect = GetComponent<RectTransform>();
 
-        if (gridSize.x <= 0 ||gridSize.y <= 0)
+        if (_gridSize.x <= 0 || _gridSize.y <= 0)
         {
-            Debug.LogError($"Invalid grid size: sizeX: {gridSize.x}, sizeY: {gridSize.y}");
+            Debug.LogError($"Invalid grid size: sizeX: {_gridSize.x}, sizeY: {_gridSize.y}");
             return;
         }
-
-        int width = gridSize.x;
-        int height = gridSize.y;
+        int width = _gridSize.x;
+        int height = _gridSize.y;
+        gridSize = _gridSize;
+        limitWeight = 20f;
 
         ItemSlot = BackUpSlot = new ItemObject[width, height];
 
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
 
+        InventoryController.invenInstance.playerInvenUI.WeightTextSet(GridWeight,limitWeight);
         SetGridPosition();
     }
 
@@ -71,23 +74,23 @@ public class GridObject : MonoBehaviour
         //그리드가 벽에 딱 붙지 않게 약간의 오프셋을 둠 -> 수정할것 : 중앙에 오도록
         Vector2 offsetGridPosition = new Vector2(InventoryUI.offsetX, InventoryUI.offsetY);
         transform.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector2(offsetGridPosition.X, offsetGridPosition.Y);
-    
-        //그리드의 배치가 완료되면 그리드의 아이템슬롯을 설정하고 아이템 프리팹 또한 배치
-        PlaceItemInGrid();
     }
 
-    private void PlaceItemInGrid()
+    /// <summary>
+    /// 패킷에서 아템을 넣을것;
+    /// </summary>
+    /// <param name="itemData"></param>
+    public void PlaceItemInGrid(List<ItemData> itemData)
     {
-        if (itemList.Count != 0)
+        if (itemData.Count != 0)
         {
-            foreach (ItemData item in itemList)
+            foreach (ItemData item in itemData)
             {
                 CreateItemObj(item);
             }
         }
 
         UpdateBackUpSlot();
-
     }
 
     private void CreateItemObj(ItemData itemData)
@@ -95,7 +98,7 @@ public class GridObject : MonoBehaviour
         //해당 그리드의 자식으로 지정하여 생성
         ItemObject itemObj = Managers.Resource.Instantiate("UI/ItemUI", transform).GetComponent<ItemObject>();
         //인벤컨트롤러에서 생성된 아이템리스트에 등록
-        InventoryController.invenInstance.instantItemList.Add(itemObj);
+        InventoryController.invenInstance.instantItemDic.Add(itemData.objectId,itemObj);
         //해당 아이템에 부여된 데이터로 아이템 세팅
         itemObj.ItemDataSet(itemData);
         //아이템을 해당 그리드에 배치하고 아이템 객체의 위치또한 맞게 변경
@@ -179,6 +182,7 @@ public class GridObject : MonoBehaviour
     {
         RectTransform itemRect = item.GetComponent<RectTransform>();
         itemRect.SetParent(gridRect);
+
         for (int x = 0; x < item.Width; x++)
         {
             for (int y = 0; y < item.Height; y++)
@@ -187,8 +191,13 @@ public class GridObject : MonoBehaviour
             }
         }
 
+        PrintInvenContents(this, ItemSlot);
         GridWeight += item.itemData.item_weight;
-
+        if (!InventoryController.invenInstance.instantItemDic.ContainsKey(item.itemData.objectId))
+        {
+            InventoryController.invenInstance.instantItemDic.Add(item.itemData.objectId, item);
+        }
+        
         UpdateItemPosition(item, posX, posY, itemRect);
     }
 
@@ -225,24 +234,14 @@ public class GridObject : MonoBehaviour
 
         item.itemData.pos = pos;
         item.curItemGrid = this;
-        InventoryController.invenInstance.instantItemList.Add(item);
-
-        if (!itemList.Contains(item.itemData))
-        {
-            itemList.Add(item.itemData);
-        }
+        InventoryController.invenInstance.instantItemDic.Add(item.itemData.objectId,item);
     }
 
     public void RemoveItemFromItemList(ItemObject item)
     {
         if (item.itemData == null) return;
 
-        InventoryController.invenInstance.instantItemList.Remove(item);
-        if (itemList.Contains(item.itemData))
-        {
-            itemList.Remove(item.itemData);
-        }
-       
+        InventoryController.invenInstance.instantItemDic.Remove(item.itemData.objectId);
     }
 
 
@@ -360,10 +359,12 @@ public class GridObject : MonoBehaviour
         //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
         if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
         {
+            
             if (!placeItem.itemData.isItemConsumeable
                 || placeItem.itemData.itemId != overlapItem.itemData.itemId
-                || overlapItem.itemData.amount >= 64)
+                || overlapItem.itemData.amount >= ItemObject.maxItemMergeAmount)
             {
+                //현재 겹치는 아이템이 있지만 머지의 기준을 충족하지 못함
                 Debug.Log($"merge error");
                 InventoryController.invenInstance.itemPlaceableInGrid = false;
                 return HighlightColor.Red;
@@ -371,7 +372,7 @@ public class GridObject : MonoBehaviour
         }
 
         //무게에 의해 배치가 불가능할 경우 취소
-        if (InventoryWeightCheck(placeItem.itemData.item_weight, overlapItem))
+        if (!InventoryWeightCheck(placeItem.itemData.item_weight, overlapItem))
         {
             Debug.Log("weight error");
             InventoryController.invenInstance.itemPlaceableInGrid = false;

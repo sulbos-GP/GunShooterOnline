@@ -24,7 +24,6 @@ namespace Server.Game
             rectangle.Parent = this;
             currentShape = rectangle;
 
-            Console.WriteLine(currentShape.position.x+ ": "+ currentShape.position.y);
         }
 
         public void Update(Player player)

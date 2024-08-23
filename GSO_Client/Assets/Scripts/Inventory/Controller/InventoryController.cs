@@ -22,7 +22,7 @@ public partial class InventoryController : MonoBehaviour
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
     public OtherInventoryUI otherInvenUI;
-    public List<ItemObject> instantItemList;
+    public Dictionary<int,ItemObject> instantItemDic;
 
     [Header("수동지정")]
     public Transform deleteUI;
@@ -31,7 +31,7 @@ public partial class InventoryController : MonoBehaviour
     [Header("디버그용")]
     [SerializeField] private Vector2 mousePosInput; 
     [SerializeField] private Vector2Int gridPosition; //mousePosInput을 WorldToGridPos메서드로 그리드 내의 좌표로 변환한것. 그리드가 지정되어 있어야함
-
+    [SerializeField] private Vector2Int gridPositionIndex;
     public ItemObject SelectedItem
     {
         get => selectedItem;
@@ -46,8 +46,8 @@ public partial class InventoryController : MonoBehaviour
                 selectedRect = value.GetComponent<RectTransform>();
 
                 float addedWeight = playerInvenUI.instantGrid.GridWeight + selectedItem.itemData.item_weight;
-                playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.instantGrid.GridWeight}";
-                if (addedWeight > playerInvenUI.instantGrid.GridWeight)
+                playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.instantGrid.limitWeight}";
+                if (addedWeight > playerInvenUI.instantGrid.limitWeight)
                 {
                     playerInvenUI.weightText.color = Color.red;
                 }
@@ -56,7 +56,7 @@ public partial class InventoryController : MonoBehaviour
             {
                 selectedRect = null;
 
-                playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.instantGrid.GridWeight} / {playerInvenUI.instantGrid.GridWeight}";
+                playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.instantGrid.GridWeight} / {playerInvenUI.instantGrid.limitWeight}";
                 playerInvenUI.weightText.color = Color.white;
             }
         }
@@ -133,7 +133,6 @@ public partial class InventoryController : MonoBehaviour
     private InvenHighLight invenHighlight;
     private Vector2Int HighlightPosition; //하이라이트의 위치
 
-    
     public bool itemPlaceableInGrid;
 
     private void Awake()
@@ -148,7 +147,14 @@ public partial class InventoryController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        instantItemList = new List<ItemObject>();
+
+        Button inventoryBtn = GameObject.Find("InventoryBtn").GetComponent<Button>();
+        if (inventoryBtn == null) { Debug.Log("버튼을 찾지못함"); }
+        inventoryBtn.onClick.AddListener(InvenBtn);
+
+        rotateBtn.onClick.AddListener(RotateBtn);
+
+        instantItemDic = new Dictionary<int, ItemObject>();
         invenHighlight = GetComponent<InvenHighLight>();
     }
 

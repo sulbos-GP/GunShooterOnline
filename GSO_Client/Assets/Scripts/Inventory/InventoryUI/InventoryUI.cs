@@ -10,16 +10,17 @@ public class InventoryUI : MonoBehaviour
 
     public GridObject instantGrid; //해당 인벤토리에서 생성된 그리드
 
-    public List<ItemData> itemList;
-
     //인벤토리 닫을시 아이템 모두 제거
     protected virtual void OnDisable()
     {
-        foreach(ItemObject item in InventoryController.invenInstance.instantItemList)
+        InventoryController.invenInstance.instantItemDic.Clear();
+
+        if (instantGrid != null)
         {
-            item.DestroyItem();
+            Managers.Resource.Destroy(instantGrid.gameObject);
         }
-        InventoryController.invenInstance.instantItemList.Clear();
+        
+
     }
 
     /// <summary>
@@ -27,10 +28,6 @@ public class InventoryUI : MonoBehaviour
     /// </summary>
     public virtual void InventorySet()
     {
-        //생성
-        if(instantGrid == null)
-        {
-            instantGrid = Managers.Resource.Instantiate("UI/GridUI", transform).GetComponent<GridObject>();
-        }
+        instantGrid = Managers.Resource.Instantiate("UI/GridUI", transform).GetComponent<GridObject>();
     }
 }

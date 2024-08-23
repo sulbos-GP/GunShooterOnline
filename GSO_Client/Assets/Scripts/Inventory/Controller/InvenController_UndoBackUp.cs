@@ -38,40 +38,38 @@ public partial class InventoryController
     /// <summary>
     /// 아이템 배열을 이전 배열로 되돌림.
     /// </summary>
-    private void UndoGridSlot()
+    private void UndoGridSlot(ItemObject item)
     {
-        if (selectedItem.backUpItemGrid != null)
+        if (item.backUpItemGrid != null)
         {
-            selectedItem.curItemGrid = selectedItem.backUpItemGrid;
+            item.curItemGrid = item.backUpItemGrid;
         }
 
-        if (selectedItem.curItemGrid == null) { return; }
-        if (!isItemSelected) { return; }
-        selectedItem.backUpItemGrid.UndoItemSlot();
-        selectedItem.backUpItemGrid.PrintInvenContents(selectedItem.curItemGrid, selectedItem.curItemGrid.ItemSlot);
+        if (item.curItemGrid == null) { return; }
+
+        item.backUpItemGrid.UndoItemSlot();
+        item.backUpItemGrid.PrintInvenContents(selectedItem.curItemGrid, selectedItem.curItemGrid.ItemSlot);
     }
 
     /// <summary>
     /// 아이템을 들었던 위치와 각도로 되돌림 selectedItem 해제되니 주의
     /// </summary>
-    private void UndoItem()
+    private void UndoItem(ItemObject item)
     {
-        if (!isItemSelected) { return; }
-        if (selectedItem.backUpEquipSlot)
+
+        if (item.backUpEquipSlot)
         {
             selectedRect.localPosition = Vector3.zero;
-            selectedItem.backUpEquipSlot.EquipItem(selectedItem);
-            SelectedItem = null;
+            item.backUpEquipSlot.EquipItem(item);
             return;
         }
         //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
-        selectedItem.itemData.pos = selectedItem.backUpItemPos;
-        selectedItem.itemData.rotate = selectedItem.backUpItemRotate;
+        item.itemData.pos = item.backUpItemPos;
+        item.itemData.rotate = item.backUpItemRotate;
 
         //바뀐 변수를 적용. 해당 아이템을 이전상태로 되돌림
-        selectedItem.Rotate(selectedItem.itemData.rotate);
-        selectedItem.backUpItemGrid.PlaceItem(selectedItem, selectedItem.itemData.pos.x, selectedItem.itemData.pos.y);
-        SelectedItem = null;
+        item.Rotate(item.itemData.rotate);
+        item.backUpItemGrid.PlaceItem(item, item.itemData.pos.x, item.itemData.pos.y);
     }
 }
 
