@@ -1,12 +1,13 @@
 ﻿using MySqlConnector;
 using SqlKata.Execution;
+using System;
 using System.Data;
 using System.Data.Common;
 
 namespace Server.Database
 {
 
-    public class MySQL
+    public class MySQL : IDisposable
     {
         private IDbConnection connection;
         private SqlKata.Compilers.MySqlCompiler compiler;
@@ -15,6 +16,11 @@ namespace Server.Database
         public MySQL() 
         {
 
+        }
+
+        public void Dispose()
+        {
+            Close();
         }
 
         public bool isOpen()
