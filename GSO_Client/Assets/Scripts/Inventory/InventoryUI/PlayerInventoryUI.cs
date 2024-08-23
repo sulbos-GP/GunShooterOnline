@@ -12,7 +12,6 @@ public class PlayerInventoryUI : InventoryUI
                                       //
     public int bagLv = 0;
     private bool isInventorySet;
-    
     protected override float InvenWeight
     {
         get { return invenWeight; }
@@ -25,7 +24,7 @@ public class PlayerInventoryUI : InventoryUI
 
     private void WeightTextSet()
     {
-        weightText.text = $"WEIGHT \n {InvenWeight} / {invenData.limitWeight}";
+        weightText.text = $"WEIGHT \n {InvenWeight} / {limitWeight}"; 
     }
 
     protected override void Awake()

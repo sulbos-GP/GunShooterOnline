@@ -17,7 +17,6 @@ namespace Server.Game.Object.Item
         {
             ObjectType = GameObjectType.Box;
 
-
             float width = 1;
             float left = -0.5f;
             float bottom = -0.5f;
@@ -29,6 +28,13 @@ namespace Server.Game.Object.Item
 
         public async void Init()
         {
+            //아이템 고정
+
+            storage.Init(5, 5, 20.0);
+
+            DB_ItemData data = await DatabaseHandler.MasterDB.GetItemData(1);
+
+            storage.PushItem();
 
             DB_ItemData data = await DatabaseHandler.MasterDB.GetItemData(1);
 

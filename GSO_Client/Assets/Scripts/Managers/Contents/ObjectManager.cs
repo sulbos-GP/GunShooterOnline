@@ -51,7 +51,6 @@ public class ObjectManager
                 //MyPlayer.Stat.MergeFrom(info.StatInfo);
                 MyPlayer.SyncPos();
                 MyPlayer.playerInput = MyPlayer.GetComponent<InputController>().playerInput;
-                go.GetComponent<PlayerInventory>().SendPlayerInvenLoadPacket();
             }
             else
             {
@@ -243,12 +242,12 @@ public class ObjectManager
         Debug.Log($"gridDic : ");
         foreach (GridData grid in _gridDic.Values)
         {
-            Debug.Log($"{grid.gridId} ");
+            //Debug.Log($"{grid.gridId} ");
         }
         Debug.Log($"Item : ");
         foreach (ItemData item in _itemDic.Values)
         {
-            Debug.Log($"{item.itemId} ");
+            Debug.Log($"{item.objectId} ");
         }
     }
 
