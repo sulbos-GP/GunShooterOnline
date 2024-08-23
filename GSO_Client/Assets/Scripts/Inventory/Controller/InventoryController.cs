@@ -45,9 +45,9 @@ public partial class InventoryController : MonoBehaviour
             {
                 selectedRect = value.GetComponent<RectTransform>();
 
-                float addedWeight = playerInvenUI.invenWeight + selectedItem.itemData.item_weight;
-                playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.limitWeight}";
-                if (addedWeight > playerInvenUI.limitWeight)
+                float addedWeight = playerInvenUI.instantGrid.GridWeight + selectedItem.itemData.item_weight;
+                playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.instantGrid.GridWeight}";
+                if (addedWeight > playerInvenUI.instantGrid.GridWeight)
                 {
                     playerInvenUI.weightText.color = Color.red;
                 }
@@ -56,7 +56,7 @@ public partial class InventoryController : MonoBehaviour
             {
                 selectedRect = null;
 
-                playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.invenWeight} / {playerInvenUI.limitWeight}";
+                playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.instantGrid.GridWeight} / {playerInvenUI.instantGrid.GridWeight}";
                 playerInvenUI.weightText.color = Color.white;
             }
         }
@@ -66,7 +66,7 @@ public partial class InventoryController : MonoBehaviour
     [SerializeField] private RectTransform selectedRect;
     public bool isItemSelected; //현재 선택된 상태인지
 
-    public InventoryGrid SelectedGrid
+    public GridObject SelectedGrid
     {
         get => selectedGrid;
         set
@@ -82,7 +82,7 @@ public partial class InventoryController : MonoBehaviour
         }
     }
 
-    [SerializeField] private InventoryGrid selectedGrid;
+    [SerializeField] private GridObject selectedGrid;
     public bool isGridSelected; 
 
     private bool isPress = false;

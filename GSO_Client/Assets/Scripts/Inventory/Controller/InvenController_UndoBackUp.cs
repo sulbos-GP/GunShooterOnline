@@ -18,7 +18,7 @@ public partial class InventoryController
     /// <summary>
     /// 아이템 슬롯을 백업함(아이템을 들때 슬롯이 업데이트되기에 백업 필요)
     /// </summary>
-    private void BackUpGridSlot(InventoryGrid grid)
+    private void BackUpGridSlot(GridObject grid)
     {
         grid.UpdateBackUpSlot();
     }

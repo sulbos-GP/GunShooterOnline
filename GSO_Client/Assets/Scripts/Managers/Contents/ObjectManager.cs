@@ -13,8 +13,7 @@ public class ObjectManager
     //게임룸 안에 존재하는 인벤토리에 관련된 데이터들
     //추가 : 핸들러에서 InventorySet을 할경우 각 데이터들이 추가됨
     //삭제 : 인벤토리와 그리드는 해당 객체가 사라질때, 아이템은 합쳐지거나 삭제될때
-    //public readonly Dictionary<int, InvenData> _inventoryDic = new();  //써보니 인벤토리는 오브젝트로 검색이 가능하니 필요없다
-    public readonly Dictionary<int, GridData> _gridDic = new();
+    
     public readonly Dictionary<int, ItemData> _itemDic = new();
     public readonly Dictionary<int, S_RaycastHit> _rayDic = new();
     public MyPlayerController MyPlayer { get; set; }
@@ -135,8 +134,6 @@ public class ObjectManager
             boxScr.interactType = InteractType.InventoryObj;
             //boxScr.interactRange = 나중에 필요시 추가(박스의 종류를 나눌경우)
 
-            OtherInventory boxInven = go.GetComponent<OtherInventory>();
-            boxInven.SendOtherInventoryPacket();
             //Add로 인벤 데이터를 생성하여 boxScr.invenData에 넣기
             //(플레이어가 해당 오브젝트와 인터렉트시 이 데이터를 플레이어의 otherInven의 인벤데이터로 불러옴)
 
@@ -155,17 +152,7 @@ public class ObjectManager
         }
     }
 
-    public void AddGridDic(int gridId, GridData grid)
-    {
-        //서버에서 받은 인벤데이터로 인벤토리를 생성하는 과정에서
-        //생성된 그리드를 그리드 딕셔너리에 추가
-        _gridDic.Add(gridId, grid);
-    }
-
-    public void RemoveGridDic(int id)
-    {
-        _gridDic.Remove(id);
-    }
+    
 
     public void AddItemDic(int itemId, ItemData item)
     {
@@ -239,11 +226,7 @@ public class ObjectManager
         {
             Debug.Log($"{obj.name} ");
         }
-        Debug.Log($"gridDic : ");
-        foreach (GridData grid in _gridDic.Values)
-        {
-            //Debug.Log($"{grid.gridId} ");
-        }
+       
         Debug.Log($"Item : ");
         foreach (ItemData item in _itemDic.Values)
         {
@@ -255,9 +238,7 @@ public class ObjectManager
     {
         foreach (var obj in _objects.Values)
             Managers.Resource.Destroy(obj);
-        
-        //_inventoryDic.Clear();
-        _gridDic.Clear();
+
         _itemDic.Clear();
         _objects.Clear();
         MyPlayer = null;

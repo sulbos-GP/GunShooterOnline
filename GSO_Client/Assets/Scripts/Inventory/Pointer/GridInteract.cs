@@ -7,7 +7,7 @@ public class GridInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        InventoryController.invenInstance.SelectedGrid = GetComponent<InventoryGrid>();
+        InventoryController.invenInstance.SelectedGrid = GetComponent<GridObject>();
     }
     public void OnPointerExit(PointerEventData eventData)
     {

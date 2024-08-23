@@ -177,7 +177,7 @@ public partial class InventoryController
         ItemObject toSlotItem = SelectedItem;
         ItemObject toGridItem = SelectedEquip.equippedItem;
         EquipSlot targetEquip = SelectedEquip;
-        InventoryGrid playerGrid = playerInvenUI.instantGridList[0]; //만약 인벤 하나에 그리드가 여러개가 된다면 수정해야함
+        GridObject playerGrid = playerInvenUI.instantGrid; //만약 인벤 하나에 그리드가 여러개가 된다면 수정해야함
 
         Vector2Int? findSpacePos = playerGrid.FindSpaceForObject(toGridItem);
         if(findSpacePos == null)
@@ -260,7 +260,7 @@ public partial class InventoryController
     /// </summary>
     private void ItemReleaseInDelete()
     {
-        ItemDeletePacket();
+        SendDelteItemPacket();
 
         if (selectedItem.backUpEquipSlot == null)
         {
@@ -324,7 +324,7 @@ public partial class InventoryController
         int totalAmount = selectedItem.itemData.amount + overlapItem.itemData.amount;
 
         selectedItem.itemData.pos = pos;
-        SendMoveItemInGridPacket(item, pos);
+        SendMoveItemPacket(item, pos);
 
         if (totalAmount <= ItemObject.maxItemMergeAmount)
         {
@@ -389,7 +389,7 @@ public partial class InventoryController
             item.backUpEquipSlot = null;
         }
 
-        SendMoveItemInGridPacket(item, pos); //백업 전에 내보내야 lastItem 변수에 값이 제대로 할당됨
+        SendMoveItemPacket(item, pos); //백업 전에 내보내야 lastItem 변수에 값이 제대로 할당됨
 
         if(item.curItemGrid != null)
         {

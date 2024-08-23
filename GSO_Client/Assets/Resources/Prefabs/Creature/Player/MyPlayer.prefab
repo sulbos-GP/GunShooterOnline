@@ -17,7 +17,6 @@ GameObject:
   - component: {fileID: 3562629690575237209}
   - component: {fileID: 4282537680480379708}
   - component: {fileID: -5452985717935214419}
-  - component: {fileID: -1893516375260961763}
   - component: {fileID: 6612892889420825590}
   m_Layer: 0
   m_Name: MyPlayer
@@ -259,22 +258,125 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _attackableList: []
---- !u!114 &-1893516375260961763
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 191436082380664689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7c478664e2a2e9b4dbab28f0e5927627, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  InputInvenData:
-    inventoryId: 0
-    limitWeight: 0
-    gridList: []
+  weapon1:
+    objectId: 0
+    itemId: 0
+    pos: {x: 0, y: 0}
+    rotate: 0
+    amount: 0
+    isSearched: 0
+    item_name: 
+    item_weight: 0
+    item_type: 0
+    item_string_value: 0
+    item_purchase_price: 0
+    item_sell_price: 0
+    item_searchTime: 0
+    width: 0
+    height: 0
+    isItemConsumeable: 0
+  weapon2:
+    objectId: 0
+    itemId: 0
+    pos: {x: 0, y: 0}
+    rotate: 0
+    amount: 0
+    isSearched: 0
+    item_name: 
+    item_weight: 0
+    item_type: 0
+    item_string_value: 0
+    item_purchase_price: 0
+    item_sell_price: 0
+    item_searchTime: 0
+    width: 0
+    height: 0
+    isItemConsumeable: 0
+  defensive:
+    objectId: 0
+    itemId: 0
+    pos: {x: 0, y: 0}
+    rotate: 0
+    amount: 0
+    isSearched: 0
+    item_name: 
+    item_weight: 0
+    item_type: 0
+    item_string_value: 0
+    item_purchase_price: 0
+    item_sell_price: 0
+    item_searchTime: 0
+    width: 0
+    height: 0
+    isItemConsumeable: 0
+  bag:
+    objectId: 0
+    itemId: 0
+    pos: {x: 0, y: 0}
+    rotate: 0
+    amount: 0
+    isSearched: 0
+    item_name: 
+    item_weight: 0
+    item_type: 0
+    item_string_value: 0
+    item_purchase_price: 0
+    item_sell_price: 0
+    item_searchTime: 0
+    width: 0
+    height: 0
+    isItemConsumeable: 0
+  recovery1:
+    objectId: 0
+    itemId: 0
+    pos: {x: 0, y: 0}
+    rotate: 0
+    amount: 0
+    isSearched: 0
+    item_name: 
+    item_weight: 0
+    item_type: 0
+    item_string_value: 0
+    item_purchase_price: 0
+    item_sell_price: 0
+    item_searchTime: 0
+    width: 0
+    height: 0
+    isItemConsumeable: 0
+  recovery2:
+    objectId: 0
+    itemId: 0
+    pos: {x: 0, y: 0}
+    rotate: 0
+    amount: 0
+    isSearched: 0
+    item_name: 
+    item_weight: 0
+    item_type: 0
+    item_string_value: 0
+    item_purchase_price: 0
+    item_sell_price: 0
+    item_searchTime: 0
+    width: 0
+    height: 0
+    isItemConsumeable: 0
+  recovery3:
+    objectId: 0
+    itemId: 0
+    pos: {x: 0, y: 0}
+    rotate: 0
+    amount: 0
+    isSearched: 0
+    item_name: 
+    item_weight: 0
+    item_type: 0
+    item_string_value: 0
+    item_purchase_price: 0
+    item_sell_price: 0
+    item_searchTime: 0
+    width: 0
+    height: 0
+    isItemConsumeable: 0
 --- !u!114 &6612892889420825590
 MonoBehaviour:
   m_ObjectHideFlags: 0

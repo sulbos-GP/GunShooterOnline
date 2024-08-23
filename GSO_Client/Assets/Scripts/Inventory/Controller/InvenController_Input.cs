@@ -54,8 +54,8 @@ public partial class InventoryController
         if (selectedItem != null)
         {
             //아이템이 마우스 중앙에 오도록 보정
-            position.X -= (selectedItem.Width - 1) * InventoryGrid.WidthOfTile / 2;
-            position.Y += (selectedItem.Height - 1) * InventoryGrid.HeightOfTile / 2;
+            position.X -= (selectedItem.Width - 1) * GridObject.WidthOfTile / 2;
+            position.Y += (selectedItem.Height - 1) * GridObject.HeightOfTile / 2;
         }
 
         return selectedGrid.MouseToGridPosition(position);

@@ -70,8 +70,8 @@ public class InvenHighLight : MonoBehaviour
     public void SetSize(ItemObject targetItem)
     {
         Vector2 size = new Vector2();
-        size.X = targetItem.Width * InventoryGrid.WidthOfTile;
-        size.Y = targetItem.Height* InventoryGrid.HeightOfTile;
+        size.X = targetItem.Width * GridObject.WidthOfTile;
+        size.Y = targetItem.Height* GridObject.HeightOfTile;
         
         highlighter.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
     }
@@ -79,7 +79,7 @@ public class InvenHighLight : MonoBehaviour
     /// <summary>
     /// 하이라이트의 위치를 해당 아이템의 위치로
     /// </summary>
-    public void SetPositionOnGrid(InventoryGrid targetGrid, ItemObject targetItem)
+    public void SetPositionOnGrid(GridObject targetGrid, ItemObject targetItem)
     {
         SetParent(targetGrid);
 
@@ -92,7 +92,7 @@ public class InvenHighLight : MonoBehaviour
     /// <summary>
     /// 기존 setPosition에서 위치를 직접 지정
     /// </summary>
-    public void SetPositionOnGridByPos(InventoryGrid targetGrid, ItemObject targetItem, int posX, int posY)
+    public void SetPositionOnGridByPos(GridObject targetGrid, ItemObject targetItem, int posX, int posY)
     {
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem, posX, posY);
         
@@ -103,7 +103,7 @@ public class InvenHighLight : MonoBehaviour
     /// 하이라이트의 부모UI 지정.
     /// </summary>
     /// <param name="targetGrid"></param>
-    public void SetParent(InventoryGrid targetGrid)
+    public void SetParent(GridObject targetGrid)
     {
         if (targetGrid == null)
         {

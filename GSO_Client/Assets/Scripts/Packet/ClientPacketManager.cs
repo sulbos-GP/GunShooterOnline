@@ -40,8 +40,8 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SDie, MakePacket<S_Die>);
 		_handler.Add((ushort)MsgId.SDie, PacketHandler.S_DieHandler);		
 		_onRecv.Add((ushort)MsgId.SLoadInventory, MakePacket<S_LoadInventory>);
-		_handler.Add((ushort)MsgId.SLoadInventory, PacketHandler.S_LoadInventoryHandler);		
-		_onRecv.Add((ushort)MsgId.SMoveItem, MakePacket<S_MoveItem>);
+		_handler.Add((ushort)MsgId.SLoadInventory, PacketHandler.S_LoadInventoryHandler);
+        _onRecv.Add((ushort)MsgId.SMoveItem, MakePacket<S_MoveItem>);
 		_handler.Add((ushort)MsgId.SMoveItem, PacketHandler.S_MoveItemHandler);		
 		_onRecv.Add((ushort)MsgId.SDeleteItem, MakePacket<S_DeleteItem>);
 		_handler.Add((ushort)MsgId.SDeleteItem, PacketHandler.S_DeleteItemHandler);		
@@ -49,7 +49,9 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SRaycastHit, PacketHandler.S_RaycastHitHandler);		
 		_onRecv.Add((ushort)MsgId.SExitGame, MakePacket<S_ExitGame>);
 		_handler.Add((ushort)MsgId.SExitGame, PacketHandler.S_ExitGameHandler);
-	}
+        _onRecv.Add((ushort)MsgId.SCloseInventory, MakePacket<S_CloseInventory>);
+        _handler.Add((ushort)MsgId.SCloseInventory, PacketHandler.S_CloseInventoryHandler);
+    }
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
 	{
