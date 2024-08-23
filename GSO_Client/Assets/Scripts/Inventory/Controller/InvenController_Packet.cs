@@ -33,12 +33,22 @@ public partial class InventoryController
 
 
 
-    //패킷들 전부 용도가 바뀌었기에 수정이 필요
-    private void SendMoveItemPacket(ItemObject item, Vector2Int pos)
+    /// <summary>
+    /// 그리드 -> 그리드 혹은 장착슬롯 -> 그리드
+    /// </summary>
+    private void SendMoveItemPacket(ItemObject item , Vector2Int pos , bool isEquip = false)
     {
         C_MoveItem packet = new C_MoveItem();
 
-        packet.SourceObjectId = item.backUpItemGrid.objectId;  //출발 소유자 id
+        if (!isEquip)
+        {
+            packet.SourceObjectId = item.backUpItemGrid.objectId;  //출발 소유자 id
+        }
+        else
+        {
+            packet.SourceObjectId = item.backUpEquipSlot.slotId; //출발 장착칸 id
+        }
+        
         packet.DestinationObjectId = item.curItemGrid.objectId;  //도착 소유자id
         packet.SourceMoveItemId = item.itemData.objectId; //옮긴 아이템 아이디
         packet.DestinationGridX = pos.x; //옮긴 위치
@@ -49,10 +59,18 @@ public partial class InventoryController
     }
 
 
-    private void SendDelteItemPacket()
+    private void SendDeleteItemPacket(ItemObject item, bool isEquip = false)
     {
         C_DeleteItem packet = new C_DeleteItem();
-        packet.SourceObjectId = 0;
+        if(!isEquip)
+        {
+            packet.SourceObjectId = item.backUpItemGrid.objectId;
+        }
+        else
+        {
+            packet.SourceObjectId = item.backUpEquipSlot.slotId; //1,2 무기 . 3 방어구 . 4 가방 . 5,6,7 소모품
+        }
+        
         packet.DeleteItemId = SelectedItem.itemData.objectId;
         Managers.Network.Send(packet);
         Debug.Log("C_DeleteItem");
