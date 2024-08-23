@@ -149,55 +149,52 @@ internal class PacketHandler
          * 만약 박스가 열렸다면 박스의 bool변수를 변경하여 다른 플레이어가 루팅중인 박스는 접근이 불가하다
          */
 
-        /*
+        
         //해당 클라이언트만 해당 되며 
         S_LoadInventory packet = message as S_LoadInventory;
-        Debug.Log("S_LoadInventory");
-
         if (packet == null)
         {
-            Debug.Log("패킷이 없음");
+            Debug.Log("S_LoadInventory 패킷이 없음");
             return;
         }
 
-        //패킷의 인벤데이터를 클라의 인벤데이터로 변환
-        InvenData newInvenData = new InvenData();
-        newInvenData.SetInvenData(packet.InvenData);
-        foreach (GridData grid in newInvenData.grid)
+        if (!packet.IsSuccess)
         {
-            if (Managers.Object._gridDic.ContainsKey(grid.gridId) == true) { continue; }
-            Managers.Object.AddGridDic(grid.gridId, grid);
-            foreach (ItemData item in grid.itemList)
-            {
-                if (Managers.Object._itemDic.ContainsKey(item.objectId) == true) { continue; }
-                Managers.Object.AddItemDic(item.objectId, item);
-            }
+            Debug.Log("S_LoadInventory 불러오기에 실패함");
+            return;
         }
 
-        GameObject invenObj = Managers.Object.FindById(packet.InventoryId); //패킷의 해당 인벤토리의 id로 인벤토리 오브젝트 검색
-        if (Managers.Object.MyPlayer.Id == packet.InventoryId)
+        //패킷으로 받은 아이템데이터 리스트를 클라이언트 형식으로 변경
+        List<ItemData> packetItemList = new List<ItemData>();
+        foreach (PS_ItemInfo packetItem in packet.ItemInfos)
         {
-            //플레이어 인벤토리에 패킷의 invenData 적용
-            if (invenObj.GetComponent<PlayerInventory>() == null)
-            {
-                Debug.Log("적용할 오브젝트에 해당 스크립트가 없음(Player)");
-                return;
-            }
+            ItemData convertItem = new ItemData();
+            convertItem.SetItemData(packetItem);
+            packetItemList.Add(convertItem);
+        }
 
-            invenObj.GetComponent<PlayerInventory>().InputInvenData = newInvenData;
+        Debug.Log($"{packet.SourceObjectId}의 아이템 설정");
+
+        if(packet.SourceObjectId == 0)
+        {
+            //플레이어의 인벤토리
+            InventoryController.invenInstance.playerInvenUI.InventorySet();
+            InventoryController.invenInstance.playerInvenUI.instantGrid.objectId = packet.SourceObjectId;
+            InventoryController.invenInstance.playerInvenUI.instantGrid.PlaceItemInGrid(packetItemList);
         }
         else
         {
-            //인벤토리 오브젝트 목록 : 박스, 다른 플레이어 객체
-            //아더 인벤토리에 패킷의 invenData 적용
-            if (invenObj.GetComponent<OtherInventory>() == null)
-            {
-                Debug.Log("적용할 오브젝트에 해당 스크립트가 없음(Other)");
-                return;
-            }
+            GameObject target = Managers.Object.FindById(packet.SourceObjectId);
+            target.GetComponent<Box>().interactable = false;
+            InventoryController.invenInstance.otherInvenUI.InventorySet();
+            InventoryController.invenInstance.otherInvenUI.instantGrid.objectId = packet.SourceObjectId;
+            InventoryController.invenInstance.otherInvenUI.instantGrid.PlaceItemInGrid(packetItemList);
+        }
 
-            invenObj.GetComponent<OtherInventory>().InputInvenData = newInvenData;
-        }*/
+        if (!InventoryController.invenInstance.isActive)
+        {
+            InventoryController.invenInstance.invenUIControl();
+        }
     }
 
     internal static void S_CloseInventoryHandler(PacketSession session, IMessage message)
@@ -207,12 +204,38 @@ internal class PacketHandler
          * isSuccess로 성공유무 판단
          * sourceObjectId로 0이 아니라면 박스이니 박스의 bool변수를 변경
          */
+        
+        S_CloseInventory packet = message as S_CloseInventory;
+        if (packet == null)
+        {
+            Debug.Log("S_CloseInventory 패킷이 없음");
+            return;
+        }
+        Debug.Log("패킷받음");
+        if (!packet.IsSuccess)
+        {
+            Debug.Log("서버에서 거부함");
+            return;
+        }
+
+        if(packet.SourceObjectId != 0)
+        {
+            GameObject target = Managers.Object.FindById(packet.SourceObjectId);
+            target.GetComponent<Box>().interactable = true;
+        }
+
+
+        if (InventoryController.invenInstance.isActive)
+        {
+            InventoryController.invenInstance.invenUIControl();
+        }
     }
 
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
         /*
          * isSuccess가 true면 출발지 아이템을 검색하여 삭제 및 목적지 아이템을 새로 생성하여 배치
+         * false면 출발지 아이템을 원래 위치로 Undo
          */
 
         /* 서버에서 success를 true로 주면 해당 아이템의 배치를 완료함 (아이템의 오브젝트 위치 설정 및 해당 그리드의 배열에 아이템 추가)
@@ -299,6 +322,11 @@ internal class PacketHandler
     //아이템을 삭제할때. 플레이어가 아이템을 들었을때 다른 플레이어에게 전송할때도 좋을듯.
     internal static void S_DeleteItemHandler(PacketSession session, IMessage message)
     {
+        /*
+         * isSuccess 가 성공하면 출발지 저장소 아이디를 통해 그리드의 내용을 삭제하고 delete아이템을 삭제함
+         * false면 해당 아이템을 Undo하여 원래 위치로
+         */
+
         /* 이것도 success에 여부에 따라 해당 아이템을 삭제
         S_DeleteItem packet = message as S_DeleteItem;
         if (packet == null)

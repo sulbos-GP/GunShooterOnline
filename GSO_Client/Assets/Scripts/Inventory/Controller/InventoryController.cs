@@ -46,8 +46,8 @@ public partial class InventoryController : MonoBehaviour
                 selectedRect = value.GetComponent<RectTransform>();
 
                 float addedWeight = playerInvenUI.instantGrid.GridWeight + selectedItem.itemData.item_weight;
-                playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.instantGrid.GridWeight}";
-                if (addedWeight > playerInvenUI.instantGrid.GridWeight)
+                playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.instantGrid.limitWeight}";
+                if (addedWeight > playerInvenUI.instantGrid.limitWeight)
                 {
                     playerInvenUI.weightText.color = Color.red;
                 }
@@ -56,7 +56,7 @@ public partial class InventoryController : MonoBehaviour
             {
                 selectedRect = null;
 
-                playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.instantGrid.GridWeight} / {playerInvenUI.instantGrid.GridWeight}";
+                playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.instantGrid.GridWeight} / {playerInvenUI.instantGrid.limitWeight}";
                 playerInvenUI.weightText.color = Color.white;
             }
         }
@@ -133,7 +133,6 @@ public partial class InventoryController : MonoBehaviour
     private InvenHighLight invenHighlight;
     private Vector2Int HighlightPosition; //하이라이트의 위치
 
-    
     public bool itemPlaceableInGrid;
 
     private void Awake()
@@ -148,6 +147,13 @@ public partial class InventoryController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        Button inventoryBtn = GameObject.Find("InventoryBtn").GetComponent<Button>();
+        if (inventoryBtn == null) { Debug.Log("버튼을 찾지못함"); }
+        inventoryBtn.onClick.AddListener(InvenBtn);
+
+        rotateBtn.onClick.AddListener(RotateBtn);
+
         instantItemList = new List<ItemObject>();
         invenHighlight = GetComponent<InvenHighLight>();
     }

@@ -15,6 +15,24 @@ using Vector2 = System.Numerics.Vector2;
 //오브젝트 id가 myPlayer의 인벤토리면 무조건 0
 public partial class InventoryController
 {
+    public void SendLoadInvenPacket(int objectId)
+    {
+        C_LoadInventory packet = new C_LoadInventory();
+        packet.SourceObjectId = objectId;
+        Managers.Network.Send(packet);
+        Debug.Log($"C_SendLoadInven : {objectId}의 아이템 요청 ");
+    }
+
+    public void SendCloseInvenPacket(int objectId = 0)
+    {
+        C_CloseInventory packet = new C_CloseInventory();
+        packet.SourceObjectId = objectId;
+        Managers.Network.Send(packet);
+        Debug.Log($"C_SendLoadInven : {objectId}의 인벤토리 닫음 ");
+    }
+
+
+
     //패킷들 전부 용도가 바뀌었기에 수정이 필요
     private void SendMoveItemPacket(ItemObject item, Vector2Int pos)
     {
