@@ -16,7 +16,7 @@ public class ItemDB
 
         //아이템 코드 임시. 나중에 정상화 해야함
         ItemData pistol = new ItemData();
-        pistol.itemId = 0;
+        pistol.itemId = 1;
         pistol.isItemConsumeable = false;
         pistol.item_name = "Pistol01";
         pistol.item_weight = 2.0f;
@@ -29,7 +29,7 @@ public class ItemDB
         pistol.item_searchTime = 2;
 
         ItemData ak47 = new ItemData();
-        ak47.itemId = 1;
+        ak47.itemId = 2;
         ak47.isItemConsumeable = false;
         ak47.item_name = "Ak47";
         ak47.item_weight = 7.0f;
@@ -42,7 +42,7 @@ public class ItemDB
         ak47.item_searchTime = 3;
 
         ItemData recoveryKit = new ItemData();
-        recoveryKit.itemId = 2;
+        recoveryKit.itemId = 3;
         recoveryKit.isItemConsumeable = true;
         recoveryKit.item_name = "Recovery kit";
         recoveryKit.item_weight = 1.0f;
@@ -55,7 +55,7 @@ public class ItemDB
         recoveryKit.item_searchTime = 1;
 
         ItemData bandage = new ItemData();
-        bandage.itemId = 3;
+        bandage.itemId = 4;
         bandage.isItemConsumeable = true;
         bandage.item_name = "Bandage";
         bandage.item_weight = 0.0f;
@@ -69,7 +69,7 @@ public class ItemDB
 
 
         ItemData pill = new ItemData();
-        pill.itemId = 4;
+        pill.itemId = 5;
         pill.isItemConsumeable = true;
         pill.item_name = "Pill";
         pill.item_weight = 0.0f;
