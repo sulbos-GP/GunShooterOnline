@@ -1,5 +1,6 @@
 ﻿using Server.Database.Interface;
 using Server.Game;
+using Server.Game.Object.Gear;
 using SqlKata.Execution;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,22 @@ namespace Server.Database.Game
 
     public partial class GameDB : MySQL, IGameDatabase
     {
+
+        public async Task<int> GetGearOfPart(int uid, EGearPart part)
+        {
+            var query = this.GetQueryFactory();
+
+            var values = new Dictionary<string, object>()
+            {
+                { "uid"  , uid },
+                { "part" , part.GetType().GetField(part.ToString()) },
+            };
+
+            return await query.Query("gear")
+                .Select("item_id")
+                .Where(values)
+                .FirstOrDefaultAsync<int>();
+        }
 
         public async Task<int> GetStorageItemId(int storage_id)
         {

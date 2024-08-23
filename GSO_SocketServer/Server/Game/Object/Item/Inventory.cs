@@ -58,8 +58,8 @@ namespace Server.Game
         {
             try
             {
-                //가방(아이템)에 대한 정보 불러오기
-                int storage_item_id = await DatabaseHandler.GameDB.GetStorageItemId(storage_id);
+                //장비에 착용되어 있는 가방을 불러옴
+                //int gear_id = await DatabaseHandler.GameDB.GetGearOfPart(owner.uid, Object.Gear.EGearPart.Backpack);
 
                 //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기 (지금은 임시)
                 //Backpack backpack = await DatabaseHandler.MasterDB.GetBackpackInfo(storage_item_id);
@@ -68,7 +68,7 @@ namespace Server.Game
                 storage.Init(backpack.scale_x, backpack.scale_y, backpack.limit_weight);
 
                 this.storage_id = storage_id;
-                this.storage_item_id = storage_item_id;
+                this.storage_item_id = 8;
             }
             catch (Exception e)
             {

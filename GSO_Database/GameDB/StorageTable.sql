@@ -1,20 +1,7 @@
 USE game_database;
 
-DROP TABLE IF EXISTS gear;
-
 DROP TABLE IF EXISTS storage;
 DROP TABLE IF EXISTS storage_unit;
-
-#유저의 무장(장비)
-CREATE TABLE IF NOT EXISTS gear (
-	uid			INT 				NOT NULL								COMMENT '유저 아이디',
-	item_id		INT 				NOT NULL								COMMENT '아이템 아이디',
-	gear_type	ENUM('main_weapon', 'sub_weapon', 'armor', 'backpack', 'pocket_first', 'pocket_second', 'pocket_third') 	NOT NULL	COMMENT '슬롯 타입',
-    
-	PRIMARY KEY (`uid`),
-	CONSTRAINT FK_gear_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-	CONSTRAINT FK_gear_item_id_master_item_base_item_id FOREIGN KEY (`item_id`) REFERENCES master_database.master_item_base(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-);
 
 #저장소
 CREATE TABLE IF NOT EXISTS storage (
@@ -42,7 +29,6 @@ CREATE TABLE IF NOT EXISTS storage_unit (
     CONSTRAINT FK_storage_unit_storage_id_storage_storage_id FOREIGN KEY (`storage_id`) REFERENCES storage (`storage_id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
 	CONSTRAINT FK_storage_item_id_master_item_base_item_id FOREIGN KEY (`item_id`) REFERENCES master_database.master_item_base(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
-
 
 SELECT * FROM gear;
 SELECT * FROM storage;

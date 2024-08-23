@@ -25,5 +25,14 @@ namespace Server.Database.Master
                 .Where("item_id", item_id)
                 .FirstOrDefaultAsync<DB_ItemData>();
         }
+
+        public async Task<DB_BackpackData> GetBackpackData(string code)
+        {
+            var query = this.GetQueryFactory();
+
+            return await query.Query("master_item_backpack")
+                .Where("code", code)
+                .FirstOrDefaultAsync<DB_BackpackData>();
+        }
     }
 }
