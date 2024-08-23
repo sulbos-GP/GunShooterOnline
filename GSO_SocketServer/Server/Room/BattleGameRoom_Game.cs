@@ -145,6 +145,34 @@ namespace Server
             player.Session.Send(packet);
         }
 
+        internal void SearchInventoryHandler(Player player, int sourceObjectId, int sourceItemId)
+        {
+            S_SearchInventory packet = new S_SearchInventory();
+
+            ItemObject sourcelItem = ObjectManager.Instance.Find<ItemObject>(sourceObjectId);
+            PS_ItemInfo sourceItemInfo = sourcelItem.Info;
+
+            Storage sourceStorage = GetStorage(player, sourceObjectId);
+            if (sourceStorage == null || sourcelItem == null || -1 == sourceStorage.ScanItem(sourcelItem))
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            if(true == sourcelItem.IsViewer(player.Id))
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+            sourcelItem.AddViewer(player.Id);
+
+            packet.IsSuccess = true;
+            packet.SourceObjectId = sourceObjectId;
+            packet.SourceItem = sourceItemInfo;
+            player.Session.Send(packet);
+        }
 
         internal async void MergeItemHandler(Player player, int sourceObjectId, int destinationObjectId, int mergedObjectId, int combinedObjectId, int mergeNumber)
         {
@@ -459,6 +487,11 @@ namespace Server
             }
 
             if (-1 == storage.ScanItem(scanItem))
+            {
+                return null;
+            }
+
+            if(false == scanItem.IsViewer(player.Id))
             {
                 return null;
             }

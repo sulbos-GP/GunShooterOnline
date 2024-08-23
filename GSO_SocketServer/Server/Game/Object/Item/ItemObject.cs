@@ -12,6 +12,7 @@ namespace Server.Game
     {
         private PS_ItemInfo itemInfo = new PS_ItemInfo();
         private readonly DB_ItemData itemData = new DB_ItemData();
+        private Dictionary<int, DateTime> viewers = new Dictionary<int, DateTime>();
 
         public ItemObject(int itemId)
         {
@@ -29,6 +30,11 @@ namespace Server.Game
         {
             ObjectManager.Instance.Add(this);
             itemInfo.ObjectId = Id;
+        }
+
+        public void InitViewer(int viewerId)
+        {
+            viewers.TryAdd(viewerId, DateTime.UtcNow);
         }
 
         public void DestroyItem()
@@ -137,14 +143,22 @@ namespace Server.Game
             }
         }
 
-        public bool CompInfo(PS_ItemInfo otherInfo)
+        public bool IsViewer(int viewerId)
         {
-            if (otherInfo == null)
+            bool viewer = viewers.TryGetValue(viewerId, out var oldTime);
+            if (false == viewer)
             {
                 return false;
             }
 
-            return this.itemInfo == otherInfo;
+            DateTime curTime = DateTime.UtcNow;
+            TimeSpan elapsedTime = curTime - oldTime;
+            return elapsedTime.TotalSeconds >= itemData.inquiry_time;
+        }
+
+        public void AddViewer(int viewerId)
+        {
+            viewers.TryAdd(viewerId, DateTime.UtcNow);
         }
 
         public DB_InventoryUnit ConvertInventoryUnit()
