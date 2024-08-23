@@ -29,12 +29,7 @@ namespace Server.Game.Object.Item
         public async void Init()
         {
             //아이템 고정
-
             storage.Init(5, 5, 20.0);
-
-            DB_ItemData data = await DatabaseHandler.MasterDB.GetItemData(1);
-
-            storage.PushItem();
 
             DB_ItemData data = await DatabaseHandler.MasterDB.GetItemData(1);
 
