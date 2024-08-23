@@ -7,6 +7,7 @@ public class ArmorSlot : EquipSlot
 {
     private void Awake()
     {
+        slotId = 3;
         allowedItemType = ItemType.Defensive;
     }
 
