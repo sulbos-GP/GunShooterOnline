@@ -84,7 +84,7 @@ public class InvenHighLight : MonoBehaviour
         SetParent(targetGrid);
 
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem,
-            targetItem.itemData.itemPos.x, targetItem.itemData.itemPos.y);
+            targetItem.itemData.pos.x, targetItem.itemData.pos.y);
         
         highlighter.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
     }

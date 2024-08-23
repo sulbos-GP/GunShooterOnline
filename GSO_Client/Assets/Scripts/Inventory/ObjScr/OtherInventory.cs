@@ -23,6 +23,7 @@ public class OtherInventory : MonoBehaviour
 
     public void SendOtherInventoryPacket()
     {
+        /* 패킷을 받아오지 못함
         if (GetComponent<OtherInventory>().InputInvenData.inventoryId == 0)
         {
             C_LoadInventory packet = new C_LoadInventory();
@@ -30,6 +31,6 @@ public class OtherInventory : MonoBehaviour
             packet.InventoryId = GetComponent<Box>().objectId;
             Managers.Network.Send(packet);
             Debug.Log($"C_LoadInventory, player : {packet.PlayerId}, inventory: {packet.InventoryId} ");
-        }
+        }*/
     }
 }
