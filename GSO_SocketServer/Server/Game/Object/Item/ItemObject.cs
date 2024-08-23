@@ -145,15 +145,16 @@ namespace Server.Game
 
         public bool IsViewer(int viewerId)
         {
-            bool viewer = viewers.TryGetValue(viewerId, out var oldTime);
-            if (false == viewer)
-            {
-                return false;
-            }
+            return true;
+            //bool viewer = viewers.TryGetValue(viewerId, out var oldTime);
+            //if (false == viewer)
+            //{
+            //    return false;
+            //}
 
-            DateTime curTime = DateTime.UtcNow;
-            TimeSpan elapsedTime = curTime - oldTime;
-            return elapsedTime.TotalSeconds >= itemData.inquiry_time;
+            //DateTime curTime = DateTime.UtcNow;
+            //TimeSpan elapsedTime = curTime - oldTime;
+            //return elapsedTime.TotalSeconds >= itemData.inquiry_time;
         }
 
         public void AddViewer(int viewerId)
