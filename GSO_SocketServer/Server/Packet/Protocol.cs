@@ -2760,7 +2760,7 @@ namespace Google.Protobuf.Protocol {
   }
 
   /// <summary>
-  ///I1
+  ///I3
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class C_CloseInventory : pb::IMessage<C_CloseInventory>

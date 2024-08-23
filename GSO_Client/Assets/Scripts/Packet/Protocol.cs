@@ -169,8 +169,6 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("S_RAYCAST_HIT")] SRaycastHit = 17,
     [pbr::OriginalName("S_EXIT_GAME")] SExitGame = 18,
     [pbr::OriginalName("C_EXIT_GAME")] CExitGame = 19,
-    [pbr::OriginalName("S_Close_Inventory")] SCloseInventory = 18,
-    [pbr::OriginalName("C_Close_Inventory")] CCloseInventory = 19,
   }
 
   public enum GameObjectType {
@@ -2762,7 +2760,7 @@ namespace Google.Protobuf.Protocol {
   }
 
   /// <summary>
-  ///I1
+  ///I3
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class C_CloseInventory : pb::IMessage<C_CloseInventory>
