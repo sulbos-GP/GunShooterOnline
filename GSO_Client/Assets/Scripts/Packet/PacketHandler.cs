@@ -269,8 +269,6 @@ internal class PacketHandler
          * isSuccess 가 성공하면 출발지 저장소 아이디를 통해 그리드의 내용을 삭제하고 delete아이템을 삭제함
          * false면 해당 아이템을 Undo하여 원래 위치로
          */
-
-        /* 이것도 success에 여부에 따라 해당 아이템을 삭제
         S_DeleteItem packet = message as S_DeleteItem;
         if (packet == null)
         {
@@ -278,6 +276,48 @@ internal class PacketHandler
             return;
         }
         Debug.Log("S_DeleteItem");
+
+        ItemObject targetItem = null;
+        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceObjectId, out targetItem);
+        if (targetItem == null)
+        {
+            Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
+            return;
+        }
+
+        if (packet.IsSuccess) {
+            
+
+            if (targetItem.backUpEquipSlot == null)
+            {
+                targetItem.backUpItemGrid.RemoveItemFromItemList(targetItem);
+                InventoryController.invenInstance.DestroyItem(targetItem);
+                return;
+            }
+            else
+            {   //장비칸의 있던 아이템을 버릴경우
+                //서버에서도 수정해야함
+
+                InventoryController.invenInstance.DestroyItem(targetItem);
+                return;
+            }
+        }
+        else
+        {
+            if (targetItem.backUpEquipSlot != null)
+            {
+                InventoryController.invenInstance.RejectEquipItem(targetItem);
+            }
+            if(targetItem.backUpItemGrid != null)
+            {
+                //InventoryController.invenInstance.Undo
+            }
+        }
+
+
+        
+        /* 이것도 success에 여부에 따라 해당 아이템을 삭제
+        
 
         if (packet.PlayerId == Managers.Object.MyPlayer.Id)
         {

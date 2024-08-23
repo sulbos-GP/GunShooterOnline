@@ -7,6 +7,7 @@ public class RecoverySlot1 : EquipSlot
 {
     private void Awake()
     {
+        slotId = 5;
         allowedItemType = ItemType.Recovery;
     }
 

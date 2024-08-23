@@ -7,6 +7,7 @@ public class WeaponSlot2 : EquipSlot
 {
     private void Awake()
     {
+        slotId = 2;
         allowedItemType = ItemType.Weapon;
     }
 
