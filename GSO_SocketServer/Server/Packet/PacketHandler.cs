@@ -103,12 +103,12 @@ class PacketHandler
 
     }
 
-    internal static void C_CloseInventory(PacketSession session, IMessage message)
+    internal static void C_CloseInventoryHandler(PacketSession session, IMessage message)
     {
         //인벤토리 열었을떄
         ClientSession clientSession = session as ClientSession;
-        C_LoadInventory packet = (C_LoadInventory)message;
-        Console.WriteLine($"[C_CloseInventory]");
+        C_CloseInventory packet = (C_CloseInventory)message;
+        Console.WriteLine($"[C_CloseInventoryHandler]");
 
         Player player = clientSession.MyPlayer;
         if (packet.SourceObjectId == 0)

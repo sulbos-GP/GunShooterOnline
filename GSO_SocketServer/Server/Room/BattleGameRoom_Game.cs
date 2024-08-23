@@ -141,7 +141,7 @@ namespace Server
             box.Close();
 
             packet.IsSuccess = true;
-            packet.SourceObjectId = 0;
+            packet.SourceObjectId = sourceObjectId;
             player.Session.Send(packet);
         }
 
