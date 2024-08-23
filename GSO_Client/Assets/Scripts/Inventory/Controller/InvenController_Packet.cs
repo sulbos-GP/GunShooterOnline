@@ -15,19 +15,17 @@ using Vector2 = System.Numerics.Vector2;
 
 public partial class InventoryController
 {
-    /// <summary>
-    /// C_MoveItem패킷 생성 및 전송
-    /// </summary>
+    //패킷들 전부 용도가 바뀌었기에 수정이 필요
     private void SendMoveItemInGridPacket(ItemObject item, Vector2Int pos)
     {
         C_MoveItem packet = new C_MoveItem();
 
-        packet.TargetObjectId = Managers.Object.MyPlayer.Id; //옮긴 인벤토리의 아이디
-        packet.MoveItem = item.itemData.GetItemData();
-        packet.GridX = pos.x;
-        packet.GridY = pos.y;
-            
-        
+        packet.SourceObjectId = Managers.Object.MyPlayer.Id; //옮기기 전 위치
+        packet.DestinationObjectId = Managers.Object.MyPlayer.Id; //옮긴 후 위치
+        packet.SourceMoveItem = item.itemData.GetItemData();
+        packet.DestinationGridX = pos.x;
+        packet.DestinationGridY = pos.y;
+
         Managers.Network.Send(packet);
     }
 
