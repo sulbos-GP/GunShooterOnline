@@ -11,6 +11,13 @@ BEGIN
     DECLARE new_rating DOUBLE;
     DECLARE new_deviation DOUBLE;
 	DECLARE new_volatility DOUBLE;
+    
+    DELETE FROM user_metadata;
+    DELETE FROM user_skill;
+    
+	DELETE FROM storage;
+    
+	DELETE FROM user;
         
     WHILE counter <= max_count DO
         SET new_id = CONCAT('a_', counter);
@@ -29,7 +36,7 @@ BEGIN
         INSERT INTO user_skill(uid, rating, deviation, volatility) VALUES(new_uid, new_rating, new_deviation, new_volatility);
         
 		#유저 인벤토리 (임시)
-		INSERT INTO storage (storage_item_id, uid, storage_type) VALUES(1, NULL, 'backpack');
+		INSERT INTO storage (storage_item_id, storage_type) VALUES(8, 'backpack');
         
         SET counter = counter + 1;
 	END WHILE;

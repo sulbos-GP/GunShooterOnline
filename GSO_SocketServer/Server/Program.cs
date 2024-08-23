@@ -57,6 +57,8 @@ namespace Server
             backLog = 100;
 #endif
 
+            InitDatabase();
+
             Func<Session> session = () => { return new ClientSession(); };
 
             IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
@@ -67,7 +69,7 @@ namespace Server
             //mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
             //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
 
-            InitDatabase();
+
 
             mNetworkService.Start();
             mNetworkService.SetChannel(true, room,0);

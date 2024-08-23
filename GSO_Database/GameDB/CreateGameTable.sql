@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS user_skill (
 
 
 #더미 생성 (CreateDummyProcedures 참고)
-#CALL create_dummy;
+CALL create_dummy;
 
 SELECT * FROM user;
 SELECT * FROM user_metadata;

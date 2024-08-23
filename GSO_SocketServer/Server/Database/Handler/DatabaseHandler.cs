@@ -19,7 +19,7 @@ namespace Server.Database.Handler
         public static DatabaseHandler Instance { get { return _instance; } }
         #endregion
 
-        private static Dictionary<EDatabase, MySQL> databases = new Dictionary<EDatabase, MySQL>();
+        private static Dictionary<EDatabase, MySQL> databases = new Dictionary<EDatabase, MySQL>(10);
         #region Database
         public static GameDB GameDB { get { return (GameDB)databases[EDatabase.Game]; } }
         public static MasterDB MasterDB { get { return (MasterDB)databases[EDatabase.Master]; } }

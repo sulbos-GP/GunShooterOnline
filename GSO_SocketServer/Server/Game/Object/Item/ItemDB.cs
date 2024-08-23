@@ -49,4 +49,12 @@ namespace Server.Game
         public readonly string prefab;
         public readonly string icon;
     }
+
+    public class DB_BackpackData
+    {
+        public readonly string code;
+        public readonly int total_x;
+        public readonly int total_y;
+        public readonly double weight;
+    }
 }
