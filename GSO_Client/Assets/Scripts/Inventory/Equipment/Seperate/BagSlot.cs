@@ -7,6 +7,7 @@ public class BagSlot : EquipSlot
 {
     private void Awake()
     {
+        slotId = 4;
         allowedItemType = ItemType.Bag;
     }
 

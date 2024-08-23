@@ -10,6 +10,7 @@ using static UnityEditor.Progress;
 
 public class EquipSlot : MonoBehaviour
 {
+    public int slotId;
     public ItemType allowedItemType; // 이 슬롯에 허용되는 아이템 유형
     public ItemObject equippedItem; // 현재 장착된 아이템
     private Vector2 originalItemSize = Vector2.zero;

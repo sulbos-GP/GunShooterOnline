@@ -148,7 +148,7 @@ public partial class InventoryController
         }
         else //타입이 일치하지 않을 경우 -> 장착 거부. 넣으려는 아이템을 원래 있던 자리로 귀환시킴
         {
-            RejectEquipItem();
+            RejectEquipItem(selectedItem);
         }
     }
 
@@ -238,19 +238,19 @@ public partial class InventoryController
     /// <summary>
     /// 장비칸에 배치가 불가능할경우 Undo
     /// </summary>
-    private void RejectEquipItem()
+    public void RejectEquipItem(ItemObject item)
     {
         //그리드에서 시도할경우
-        if (selectedItem.backUpItemGrid != null)
+        if (item.backUpItemGrid != null)
         {
-            UndoGridSlot(SelectedItem);
-            UndoItem(SelectedItem);
+            UndoGridSlot(item);
+            UndoItem(item);
         }
-        else if (selectedItem.backUpEquipSlot != null)
+        else if (item.backUpEquipSlot != null)
         {//장착칸에서 시도할경우
-            selectedItem.curEquipSlot = selectedItem.backUpEquipSlot;
-            selectedItem.backUpEquipSlot.EquipItem(selectedItem);
-            SelectedItem = null;
+            item.curEquipSlot = item.backUpEquipSlot;
+            item.backUpEquipSlot.EquipItem(item);
+            item = null;
         }
     }
 
@@ -260,21 +260,8 @@ public partial class InventoryController
     /// </summary>
     private void ItemReleaseInDelete()
     {
-        SendDelteItemPacket();
-
-        if (selectedItem.backUpEquipSlot == null)
-        {
-            selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
-            DestroySelectedItem();
-            return;
-        }
-        else
-        {   //장비칸의 있던 아이템을 버릴경우
-            //서버에서도 수정해야함
-
-            DestroySelectedItem();
-            return;
-        }
+        SendDeleteItemPacket(selectedItem);
+        ResetSelection();
     }
 
 
@@ -336,7 +323,8 @@ public partial class InventoryController
                 BackUpGridSlot(selectedItem.backUpItemGrid);
             }
             
-            DestroySelectedItem();
+            DestroyItem(selectedItem);
+            SelectedItem = null;
         }
         else
         {
@@ -355,20 +343,19 @@ public partial class InventoryController
     /// <summary>
     /// 컨트롤러 상에서 삭제 처리
     /// </summary>
-    private void DestroySelectedItem()
+    public void DestroyItem(ItemObject targetItem)
     {
-        if (selectedItem.backUpEquipSlot != null)
+        if (targetItem.backUpEquipSlot != null)
         {
-            selectedItem.backUpEquipSlot.equippedItem = null;
+            targetItem.backUpEquipSlot.equippedItem = null;
         }
 
-        if (selectedItem.backUpItemGrid != null)
+        if (targetItem.backUpItemGrid != null)
         {
-            selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
+            targetItem.backUpItemGrid.RemoveItemFromItemList(targetItem);
         }
 
-        selectedItem.DestroyItem();
-        SelectedItem = null;
+        targetItem.DestroyItem();
     }
 
     /// <summary>

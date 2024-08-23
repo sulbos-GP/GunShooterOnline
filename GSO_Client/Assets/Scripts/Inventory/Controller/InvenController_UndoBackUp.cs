@@ -38,7 +38,7 @@ public partial class InventoryController
     /// <summary>
     /// 아이템 배열을 이전 배열로 되돌림.
     /// </summary>
-    private void UndoGridSlot(ItemObject item)
+    public void UndoGridSlot(ItemObject item)
     {
         if (item.backUpItemGrid != null)
         {
@@ -54,7 +54,7 @@ public partial class InventoryController
     /// <summary>
     /// 아이템을 들었던 위치와 각도로 되돌림 selectedItem 해제되니 주의
     /// </summary>
-    private void UndoItem(ItemObject item)
+    public void UndoItem(ItemObject item)
     {
 
         if (item.backUpEquipSlot)
