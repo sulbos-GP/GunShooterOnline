@@ -22,7 +22,7 @@ public partial class InventoryController : MonoBehaviour
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
     public OtherInventoryUI otherInvenUI;
-    public List<ItemObject> instantItemList;
+    public Dictionary<int,ItemObject> instantItemDic;
 
     [Header("수동지정")]
     public Transform deleteUI;
@@ -31,7 +31,7 @@ public partial class InventoryController : MonoBehaviour
     [Header("디버그용")]
     [SerializeField] private Vector2 mousePosInput; 
     [SerializeField] private Vector2Int gridPosition; //mousePosInput을 WorldToGridPos메서드로 그리드 내의 좌표로 변환한것. 그리드가 지정되어 있어야함
-
+    [SerializeField] private Vector2Int gridPositionIndex;
     public ItemObject SelectedItem
     {
         get => selectedItem;
@@ -154,7 +154,7 @@ public partial class InventoryController : MonoBehaviour
 
         rotateBtn.onClick.AddListener(RotateBtn);
 
-        instantItemList = new List<ItemObject>();
+        instantItemDic = new Dictionary<int, ItemObject>();
         invenHighlight = GetComponent<InvenHighLight>();
     }
 

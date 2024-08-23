@@ -38,12 +38,12 @@ public partial class InventoryController
     {
         C_MoveItem packet = new C_MoveItem();
 
-        packet.SourceObjectId = 0; 
-        packet.DestinationObjectId = 0; 
-        packet.SourceMoveItemId = item.itemData.objectId;
-        packet.DestinationGridX = pos.x;
-        packet.DestinationGridY = pos.y;
-        packet.DestinationRotation = item.itemData.rotate;
+        packet.SourceObjectId = item.backUpItemGrid.objectId;  //출발 소유자 id
+        packet.DestinationObjectId = item.curItemGrid.objectId;  //도착 소유자id
+        packet.SourceMoveItemId = item.itemData.objectId; //옮긴 아이템 아이디
+        packet.DestinationGridX = pos.x; //옮긴 위치
+        packet.DestinationGridY = pos.y; //옮긴 위치
+        packet.DestinationRotation = item.itemData.rotate; //옮겼을때의 회전
 
         Managers.Network.Send(packet);
     }

@@ -46,8 +46,8 @@ public partial class InventoryController
             }
 
             //어떤 경우도 만족하지 못할경우 배치 실패
-            UndoGridSlot();
-            UndoItem();
+            UndoGridSlot(SelectedItem);
+            UndoItem(SelectedItem);
             Debug.Log("아이템 배치 실패");
 
         }
@@ -114,8 +114,8 @@ public partial class InventoryController
         }
         else
         {
-            UndoGridSlot();
-            UndoItem();
+            UndoGridSlot(SelectedItem);
+            UndoItem(SelectedItem);
         }
 
         itemPlaceableInGrid = false;
@@ -213,8 +213,8 @@ public partial class InventoryController
                 toGridItem.Rotate(toGridItem.itemData.rotate);
             }
             //자리 없음 배치 실패-> 원래 위치로
-            UndoGridSlot();
-            UndoItem();
+            UndoGridSlot(SelectedItem);
+            UndoItem(SelectedItem);
         }
     }
 
@@ -243,8 +243,8 @@ public partial class InventoryController
         //그리드에서 시도할경우
         if (selectedItem.backUpItemGrid != null)
         {
-            UndoGridSlot();
-            UndoItem();
+            UndoGridSlot(SelectedItem);
+            UndoItem(SelectedItem);
         }
         else if (selectedItem.backUpEquipSlot != null)
         {//장착칸에서 시도할경우
@@ -295,14 +295,16 @@ public partial class InventoryController
             }
             else
             {
-                UndoGridSlot();
-                UndoItem();
+                UndoGridSlot(SelectedItem);
+                UndoItem(SelectedItem);
             }
         }
         else
         {
-            CompleteItemPlacement(item, pos);
+            SendMoveItemPacket(item, pos);
         }
+
+        ResetSelection();
     }
 
     /// <summary>
@@ -343,8 +345,8 @@ public partial class InventoryController
             selectedItem.MergeItem(overlapItem, needAmount);
 
             // *** 슬롯에서 그리드 아이템으로 병합의 경우 남은 아이템이 정상적으로 돌아가는지 확인할것
-            UndoGridSlot();
-            UndoItem();
+            UndoGridSlot(SelectedItem);
+            UndoItem(SelectedItem);
         }
 
         ResetSelection();
@@ -372,11 +374,9 @@ public partial class InventoryController
     /// <summary>
     /// 그리드에 배치를 성공함 
     /// </summary>
-    private void CompleteItemPlacement(ItemObject item, Vector2Int pos)
+    public void CompleteItemPlacement(ItemObject item, Vector2Int pos)
     {
-        item.curItemGrid.PlaceItem(item, pos.x, pos.y);
-        item.curItemGrid.PrintInvenContents(item.curItemGrid, item.curItemGrid.ItemSlot); //체크
-        item.curItemGrid.AddItemToItemList(item.itemData.pos, item);
+        
 
         if (item.backUpItemGrid != null) //그리드 -> 그리드
         {
@@ -389,14 +389,13 @@ public partial class InventoryController
             item.backUpEquipSlot = null;
         }
 
-        SendMoveItemPacket(item, pos); //백업 전에 내보내야 lastItem 변수에 값이 제대로 할당됨
+        item.curItemGrid.PlaceItem(item, pos.x, pos.y);
+        item.curItemGrid.PrintInvenContents(item.curItemGrid, item.curItemGrid.ItemSlot); //체크
+        item.curItemGrid.AddItemToItemList(item.itemData.pos, item);
 
-        if(item.curItemGrid != null)
-        {
-            BackUpItem(item);
-            BackUpGridSlot(item.curItemGrid);
-        }
-        
+        BackUpItem(item);
+        BackUpGridSlot(item.curItemGrid);
+
 
         ResetSelection();
 

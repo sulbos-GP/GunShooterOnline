@@ -14,7 +14,6 @@ public class ObjectManager
     //추가 : 핸들러에서 InventorySet을 할경우 각 데이터들이 추가됨
     //삭제 : 인벤토리와 그리드는 해당 객체가 사라질때, 아이템은 합쳐지거나 삭제될때
     
-    public readonly Dictionary<int, ItemData> _itemDic = new();
     public readonly Dictionary<int, S_RaycastHit> _rayDic = new();
     public MyPlayerController MyPlayer { get; set; }
 
@@ -152,20 +151,6 @@ public class ObjectManager
         }
     }
 
-    
-
-    public void AddItemDic(int itemId, ItemData item)
-    {
-        //아이템이 생성될때
-        //생성된 아이템을 아이템 딕셔너리에 추가
-        _itemDic.Add(itemId, item);
-    }
-
-    public void RemoveItemDic(int itemId)
-    {
-        _itemDic.Remove(itemId);
-    }
-
 
     public void Remove(int id)
     {
@@ -226,20 +211,12 @@ public class ObjectManager
         {
             Debug.Log($"{obj.name} ");
         }
-       
-        Debug.Log($"Item : ");
-        foreach (ItemData item in _itemDic.Values)
-        {
-            Debug.Log($"{item.objectId} ");
-        }
     }
 
     public void Clear()
     {
         foreach (var obj in _objects.Values)
             Managers.Resource.Destroy(obj);
-
-        _itemDic.Clear();
         _objects.Clear();
         MyPlayer = null;
     }
