@@ -11,6 +11,7 @@ namespace Server.Game.Object.Item
 {
     public class BoxObject : GameObject
     {
+        public bool isOpen = false;
         public Storage storage = new Storage();
 
         public BoxObject()
@@ -24,6 +25,21 @@ namespace Server.Game.Object.Item
             rectangle.Parent = this;
 
             currentShape = rectangle;
+        }
+
+        public void Open()
+        {
+            isOpen = true;
+        }
+
+        public void Close()
+        {
+            isOpen = false;
+        }
+
+        public bool IsOpen()
+        {
+            return isOpen;
         }
 
         public async void Init()
@@ -41,7 +57,17 @@ namespace Server.Game.Object.Item
 
             ObjectManager.Instance.Add(item);
 
-            storage.PushItem(item);
+            storage.InsertItem(item);
+        }
+
+        public IEnumerable<PS_ItemInfo> GetBoxItems()
+        {
+            List<PS_ItemInfo> infos = new List<PS_ItemInfo>();
+            foreach (ItemObject item in storage.items)
+            {
+                infos.Add(item.Info);
+            }
+            return infos;
         }
 
     }

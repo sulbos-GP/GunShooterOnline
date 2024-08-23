@@ -12,8 +12,7 @@ using Server.Database.Master;
 
 namespace Server
 {
-
-	class Program
+    class Program
 	{
 		public static ServerNetworkService mNetworkService = new ServerNetworkService();
         public static WebClientService mWebClientService = new WebClientService();

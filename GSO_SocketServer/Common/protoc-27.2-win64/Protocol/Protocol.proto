@@ -133,8 +133,21 @@ message C_LoadInventory{                    //I1
 
 message S_LoadInventory                     //I2
 {                        
-    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
-    repeated PS_ItemInfo itemInfos  = 2;    // 저장소에 있는 아이템들
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    repeated PS_ItemInfo itemInfos  = 3;    // 저장소에 있는 아이템들
+}
+
+message C_CloseInventory{                   //I1
+    int32 sourceObjectId            = 1;    // 출발지 저장소(상자) 아이디
+}
+
+message S_CloseInventory                    //I2
+{                        
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
 }
 
 message C_MergeItem                         //I3
@@ -163,10 +176,10 @@ message C_DevideItem                        //I5
     int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
     int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
 
-    int32 totalItemId               = 3;    // 나눠지는 아이템 기준
-    int32 newGridX                  = 4;    // 나눠진 새로운 아이템의 위치X
-    int32 newGridY                  = 5;    // 나눠진 새로운 아이템의 위치Y
-    int32 newRotation               = 6;    // 나눠진 새로운 아이템의 회전값
+    int32 sourceItemId              = 3;    // 나눠지는 아이템 기준
+    int32 destinationGridX          = 4;    // 나눠진 새로운 아이템의 위치X
+    int32 destinationGridY          = 5;    // 나눠진 새로운 아이템의 위치Y
+    int32 destinationRotation       = 6;    // 나눠진 새로운 아이템의 회전값
     int32 devideNumber              = 7;    // 나눠지는 숫자
 }
 
@@ -177,8 +190,8 @@ message S_DevideItem                        //I6
     int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
     int32 destinationObjectId       = 3;    // 목적지 저장소 아이디
 
-    PS_ItemInfo totalItem           = 4;    // 나눠지는 아이템 기준
-    PS_ItemInfo newItem             = 5;    // 나눠진 아이템
+    PS_ItemInfo sourceItem          = 4;    // 나눠지는 아이템 기준
+    PS_ItemInfo destinationItem     = 5;    // 나눠진 아이템
 }
 
 message C_MoveItem                          //I7
@@ -186,9 +199,10 @@ message C_MoveItem                          //I7
     int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
     int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
 
-    PS_ItemInfo sourceMoveItem      = 3;    // 옮긴 아이템의 데이터
+    int32 sourceMoveItemId          = 3;    // 옮긴 아이템의 데이터
     int32 destinationGridX          = 4;    // 인벤 위치X
     int32 destinationGridY          = 5;    // 인벤 위치Y
+    int32 destinationRotation       = 6;    // 인벤 회전
 }
 
 message S_MoveItem                          //I8
@@ -199,8 +213,7 @@ message S_MoveItem                          //I8
     int32 destinationObjectId       = 3;    // 목적지 저장소 아이디
 
     PS_ItemInfo sourceMoveItem      = 4;    // 출발지 아이템의 데이터
-    int32 destinationGridX          = 5;    // 목적지 인벤 위치X
-    int32 destinationGridY          = 6;    // 목적지 인벤 위치Y
+    PS_ItemInfo destinationMoveItem = 5;    // 목적지 아이템의 데이터
 }
 
 message C_DeleteItem                        //I9
