@@ -75,7 +75,8 @@ public class ItemObject : MonoBehaviour
     //마지막으로 장착된 슬롯
     public EquipSlot backUpEquipSlot;
 
-    private void Awake()
+
+    private void Init()
     {
         itemRect = GetComponent<RectTransform>();
         imageUI = transform.GetChild(0).GetComponent<Image>();
@@ -106,19 +107,21 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void ItemDataSet(ItemData itemData)
     {
+        Init();
+
         //아이템 데이터 업데이트
         this.itemData = itemData;
-
+        itemRect = GetComponent<RectTransform>();
         //오브젝트의 렉트의 사이즈 업데이트
         Vector2 size = new Vector2();
         size.X = Width * GridObject.WidthOfTile;
         size.Y = Height * GridObject.HeightOfTile;
-        transform.GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
+        itemRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
 
         //아이템의 크기및 회전 설정
-        itemRect.localPosition = new UnityEngine.Vector2(itemData.pos.x * GridObject.WidthOfTile+50, itemData.pos.y* GridObject.HeightOfTile-50);
+        itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile+50, itemData.height * GridObject.HeightOfTile-50);
         Rotate(itemData.rotate);
-        itemSprite = spriteList[itemData.itemId - 1];
+        itemSprite = spriteList[itemData.itemId];
         isOnSearching = false;
 
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
@@ -208,11 +211,6 @@ public class ItemObject : MonoBehaviour
 
         if (itemData.amount <= 0)
         {
-            if(backUpItemGrid != null)
-            {
-                backUpItemGrid.itemList.Remove(itemData);
-            }
-            
             Managers.Object.RemoveItemDic(itemData.objectId);
         }
     }
@@ -232,7 +230,6 @@ public class ItemObject : MonoBehaviour
     {
         if (curItemGrid != null) 
         {
-            curItemGrid.itemList.Remove(itemData); //그리드 데이터에서 삭제
             Managers.Object.RemoveItemDic(itemData.objectId); //오브젝트 매니저 딕셔너리에서 삭제
             InventoryController.invenInstance.instantItemList.Remove(this); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
         }

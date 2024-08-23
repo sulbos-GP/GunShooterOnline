@@ -7,9 +7,8 @@ using UnityEngine;
 
 public class Box : InteractableObject
 {
-    private InventoryController invenController;
     private OtherInventoryUI invenUI;
-
+    public bool interactable;
     private void Awake()
     {
         Init();
@@ -18,6 +17,7 @@ public class Box : InteractableObject
     protected override void Init()
     {
         base.Init();
+        interactable = true; 
         interactRange = 2;
         invenUI = InventoryController.invenInstance.otherInvenUI;
         SetTriggerSize();
@@ -35,13 +35,15 @@ public class Box : InteractableObject
     [ContextMenu("box interact")]
     public override void Interact()
     {
-        //이미 인벤토리가 열려있다면 인터렉트 하지 않음
-        if (InventoryController.invenInstance.isActive) { return; }
-
-        InventoryController.invenInstance.invenUIControl();
-
-        //invenUI.InventorySet();
-        
+        if (interactable)
+        {
+            InventoryController.invenInstance.SendLoadInvenPacket(0);
+            InventoryController.invenInstance.SendLoadInvenPacket(objectId);
+        }
+        else
+        {
+            Debug.Log("불가능");
+        }
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)

@@ -161,9 +161,6 @@ public class InputController : MonoBehaviour
         if (interactTarget.gameObject.GetComponent<Box>() != null)
         {
             interactTarget.gameObject.GetComponent<Box>().Interact();
-            OtherInventoryUI otherUI = FindObjectOfType<OtherInventoryUI>();
-
-            otherUI.InventorySet();
         }
         else if (interactTarget.gameObject.GetComponent<ExitZone>() != null)
         {
