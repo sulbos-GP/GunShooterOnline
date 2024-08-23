@@ -127,72 +127,94 @@ message S_Die{                                //8
 //                                        //
 ////////////////////////////////////////////
 
-message C_LoadInventory{                        //10
-
+message C_LoadInventory{                    //I1
+    int32 sourceObjectId            = 1;    // 출발지 저장소(인벤토리 or 상자) 아이디 (자신일 경우 0)
 }
 
-message S_LoadInventory{                        //11
-    repeated PS_ItemInfo itemInfos = 1;
+message S_LoadInventory                     //I2
+{                        
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    repeated PS_ItemInfo itemInfos  = 2;    // 저장소에 있는 아이템들
 }
 
-message C_MergeItem                              //12
+message C_MergeItem                         //I3
 {
-    int32 mergedObjectId    = 1;    // 합쳐지는 아이템 기준
-    int32 combinedObjectId  = 2;    // 합치기위한 아이템
-    int32 mergeNumber       = 3;    // 합쳐지는 숫자
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
+
+    int32 mergedObjectId            = 3;    // 합쳐지는 아이템 기준
+    int32 combinedObjectId          = 4;    // 합치기위한 아이템
+    int32 mergeNumber               = 5;    // 합쳐지는 숫자
 }
 
-message S_MergeItem                              //14
+message S_MergeItem                         //I4
 {
-    bool isSuccess            = 1;    //성공 유무
+    bool isSuccess                  = 1;    // 성공 유무
 
-    PS_ItemInfo mergedItem    = 2;    // 합쳐지는 아이템 기준
-    PS_ItemInfo combinedItem  = 3;    // 합치기위한 아이템
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 3;    // 목적지 저장소 아이디
+
+    PS_ItemInfo mergedItem          = 4;    // 합쳐지는 아이템 기준
+    PS_ItemInfo combinedItem        = 5;    // 합치기위한 아이템
 }
 
-message C_DevideItem                              //15
+message C_DevideItem                        //I5
 {
-    int32 totalItemId       = 1;    // 나눠지는 아이템 기준
-    int32 GridX             = 2;    // 나눠진 아이템의 위치X
-    int32 GridY             = 3;    // 나눠진 아이템의 위치Y
-    int32 rotation          = 4;    // 나눠진 아이템의 회전값
-    int32 devideNumber      = 5;    // 나눠지는 숫자
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
+
+    int32 totalItemId               = 3;    // 나눠지는 아이템 기준
+    int32 newGridX                  = 4;    // 나눠진 새로운 아이템의 위치X
+    int32 newGridY                  = 5;    // 나눠진 새로운 아이템의 위치Y
+    int32 newRotation               = 6;    // 나눠진 새로운 아이템의 회전값
+    int32 devideNumber              = 7;    // 나눠지는 숫자
 }
 
-message S_DevideItem                              //16
+message S_DevideItem                        //I6
 {
-    bool isSuccess        = 1;   //성공 유무
+    bool isSuccess                  = 1;    // 성공 유무
 
-    PS_ItemInfo totalItem  = 2;    // 나눠지는 아이템 기준
-    PS_ItemInfo newItem  = 3;    // 나눠진 아이템
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 3;    // 목적지 저장소 아이디
+
+    PS_ItemInfo totalItem           = 4;    // 나눠지는 아이템 기준
+    PS_ItemInfo newItem             = 5;    // 나눠진 아이템
 }
 
-message C_MoveItem                              //17
+message C_MoveItem                          //I7
 {
-    int32 targetObjectId  = 1;    // 박스 아이디
-    PS_ItemInfo moveItem  = 2;    // 옮긴 아이템의 데이터
-    int32 GridX           = 3;    //인벤 위치X
-    int32 GridY           = 4;    //인벤 위치Y
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
+
+    PS_ItemInfo sourceMoveItem      = 3;    // 옮긴 아이템의 데이터
+    int32 destinationGridX          = 4;    // 인벤 위치X
+    int32 destinationGridY          = 5;    // 인벤 위치Y
 }
 
-message S_MoveItem                              //13
+message S_MoveItem                          //I8
 {
-    bool isSuccess        = 1;   //성공 유무
+    bool isSuccess                  = 1;    // 성공 유무
 
-    int32 targetObjectId  = 2;   // 박스 아이디
-    PS_ItemInfo moveItem  = 3;   // 옮긴 아이템의 데이터
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 3;    // 목적지 저장소 아이디
 
-    int32 GridX           = 4;    //인벤 위치X
-    int32 GridY           = 5;    //인벤 위치Y
+    PS_ItemInfo sourceMoveItem      = 4;    // 출발지 아이템의 데이터
+    int32 destinationGridX          = 5;    // 목적지 인벤 위치X
+    int32 destinationGridY          = 6;    // 목적지 인벤 위치Y
 }
 
-message C_DeleteItem{                           //15
-    int32 deleteItemId = 1; //지우려고 하는 아이템의 데이터
+message C_DeleteItem                        //I9
+{                   
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    int32 deleteItemId              = 2;    // 지우려고 하는 아이템의 데이터
 }
 
-message S_DeleteItem{                           //16
-    bool isSuccess = 1;         //성공 유무
-    PS_ItemInfo deleteItem = 2; //지운 아이템의 데이터
+message S_DeleteItem                        //I10
+{                  
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    PS_ItemInfo deleteItem          = 3;    // 지운 아이템의 데이터
 }
 
 ////////////////////////////////////////////
