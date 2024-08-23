@@ -49,7 +49,7 @@ namespace Server.Game
         /// <summary>
         /// Storage간 결합
         /// </summary>
-        public void Merge(Storage other)
+        public void ChangeStorge(Storage newStorge)
         {
 
         }
@@ -66,54 +66,12 @@ namespace Server.Game
                 OverWriteToRollBackGrid(rollback);
                 return false;
             }
-            PrintInvenContents();
+
+            item.InitItem();
             items.Add(item);
-            return true;
-        }
-
-        /// <summary>
-        /// 아이템 합치기
-        /// </summary>
-        public bool MergeItem(ItemObject mergedItem, ItemObject combinedItem, int mergeNumber)
-        {
-            int index = ScanItem(mergedItem);
-            if (index == -1)
-            {
-                return false;
-            }
-
-            index = ScanItem(combinedItem);
-            if (index == -1)
-            {
-                return false;
-            }
-
-            if (mergedItem.Info.ItemId != combinedItem.Info.ItemId)
-            {
-                return false;
-            }
-
-            int limit = mergedItem.LimitAmount;
-            if (mergedItem.Amount + mergeNumber > limit)
-            {
-                return false;
-            }
-
-            if (combinedItem.Amount - mergeNumber < 0)
-            {
-                return false;
-            }
-
-            mergedItem.Amount += mergeNumber;
-            combinedItem.Amount -= mergeNumber;
-
-            if (combinedItem.Amount == 0)
-            {
-                items.Remove(combinedItem);
-                combinedItem.DestroyItem();
-            }
 
             PrintInvenContents();
+
             return true;
         }
 
@@ -136,43 +94,9 @@ namespace Server.Game
                 return false;
             }
 
+            item.DestroyItem();
             PrintInvenContents();
             return true;
-        }
-
-        /// <summary>
-        /// 아이템 나누기
-        /// </summary>
-        public ItemObject DevideItem(ItemObject totalItem, int gridX, int gridY, int rotation, int devideNumber)
-        {
-            int index = ScanItem(totalItem);
-            if (index == -1)
-            {
-                return null;
-            }
-
-            if (totalItem.Amount - devideNumber < 0)
-            {
-                return null;
-            }
-
-            ItemObject newItem = new ItemObject(totalItem.Data.item_id);
-            newItem.X = gridX;
-            newItem.Y = gridY;
-            newItem.Rotate = rotation;
-            newItem.Amount = devideNumber;
-
-            if(false == InsertItem(newItem))
-            {
-                return null;
-            }
-            totalItem.Amount -= devideNumber;
-
-            items.Add(newItem);
-            ObjectManager.Instance.Add(newItem);
-
-            PrintInvenContents();
-            return newItem;
         }
 
         /// <summary>
@@ -206,7 +130,7 @@ namespace Server.Game
             else if(value == 0)
             {
                 item.Amount = 0;
-                items.Remove(item);
+                DeleteItem(item);
                 return EStorageResult.ZeroAmount;
             }
             else

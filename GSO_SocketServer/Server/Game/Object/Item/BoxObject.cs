@@ -55,9 +55,9 @@ namespace Server.Game.Object.Item
             item.Rotate = 0;
             item.Amount = 1;
 
-            ObjectManager.Instance.Add(item);
-
             storage.InsertItem(item);
+
+            Console.WriteLine();
         }
 
         public IEnumerable<PS_ItemInfo> GetBoxItems()

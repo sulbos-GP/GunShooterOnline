@@ -93,8 +93,6 @@ namespace Server.Game
                 foreach (DB_InventoryUnit unit in units)
                 {
                     ItemObject newItem = new ItemObject(unit.item_id);
-                    ObjectManager.Instance.Add(newItem);
-
                     if (false == storage.InsertItem(newItem))
                     {
                         throw new Exception("인벤토리 DB로드 실패");
