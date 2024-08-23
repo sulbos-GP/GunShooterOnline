@@ -381,7 +381,7 @@ namespace Server
                 if (IsInventory(destinationObjectId))
                 {
                     Inventory inventory = player.inventory;
-                    isInsert = await inventory.InsertItem(sourceMovelItem);
+                    isInsert = await inventory.InsertItem(newItem);
                 }
                 else
                 {

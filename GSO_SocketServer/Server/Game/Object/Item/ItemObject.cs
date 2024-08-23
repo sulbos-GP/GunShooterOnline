@@ -30,6 +30,7 @@ namespace Server.Game
         {
             ObjectManager.Instance.Add(this);
             itemInfo.ObjectId = Id;
+            itemInfo.ItemId = Data.item_id;
         }
 
         public void InitViewer(int viewerId)
