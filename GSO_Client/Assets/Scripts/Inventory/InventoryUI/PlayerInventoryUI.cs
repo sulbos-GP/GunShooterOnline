@@ -12,9 +12,9 @@ public class PlayerInventoryUI : InventoryUI
                                       //
     public int bagLv = 0;
 
-    private void WeightTextSet()
+    public void WeightTextSet(float GridWeigt, float limitWeight)
     {
-        weightText.text = $"WEIGHT \n {instantGrid.GridWeight} / {instantGrid.limitWeight}"; 
+        weightText.text = $"WEIGHT \n {GridWeigt} / {limitWeight}"; 
     }
 
     private void Awake()
@@ -36,6 +36,7 @@ public class PlayerInventoryUI : InventoryUI
 
         //생성된 그리드를 초기세팅하고 들어있는 아이템
         instantGrid.InitializeGrid(new Vector2Int(6,7)); // 가방의 크기로 바꿀것
+        
     }
 
     public void ChangeInventory()

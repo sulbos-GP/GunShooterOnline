@@ -10,6 +10,7 @@ using UnityEngine;
 [System.Serializable]
 public class ItemData
 {
+
     /*
      * 스크립터블 오브젝트로 아이템의 데이터를 정의합니다.
      * itemId(아이템 종류에 따른 코드) , 아이템의 이름, 아이템을 검색하는 시간, 크기, 이미지
@@ -32,7 +33,23 @@ public class ItemData
 
         isSearched = itemInfo.IsSearched;
 
-        
+        foreach(ItemData dbData in ItemDB.items) //서버를 통한 데이터베이스 검색으로 변경할것
+        {
+            if(dbData.itemId == itemId)
+            {
+                item_name = dbData.item_name;
+                item_weight = dbData.item_weight; //아이템의 무게
+                item_type = dbData.item_type;
+                item_string_value = dbData.item_string_value;
+                item_purchase_price = dbData.item_purchase_price;
+                item_sell_price = dbData.item_sell_price;
+                item_searchTime = dbData.item_searchTime;
+                width = dbData.width;
+                height = dbData.height;
+                isItemConsumeable = dbData.isItemConsumeable;
+                break;
+            }
+        }
     }
 
     /// <summary>

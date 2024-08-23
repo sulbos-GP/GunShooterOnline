@@ -3,41 +3,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ItemDB : MonoBehaviour
+public class ItemDB
 {
-    private static ItemDB instance = new ItemDB();
-    public static ItemDB Instance
-    {
-        get
-        {
-            return instance;
-
-        }
-        set
-        {
-            instance = value;
-        }
-    }
-    
-    public List<ItemData> items = new List<ItemData>();
-
-    public ItemDB()
+    public static List<ItemData> items = new List<ItemData>();
+    static ItemDB()
     {
         Init();
     }
 
-    private void Init()
+    private static void Init()
     {
 
         //아이템 코드 임시. 나중에 정상화 해야함
         ItemData pistol = new ItemData();
-        pistol.objectId = 0;
-        pistol.itemId = 1;
-        pistol.pos.x = 0;
-        pistol.pos.x = 0;
-        pistol.rotate = 0;
-        pistol.amount = 1;
-        
+        pistol.itemId = 0;
         pistol.isItemConsumeable = false;
         pistol.item_name = "Pistol01";
         pistol.item_weight = 2.0f;
@@ -50,12 +29,7 @@ public class ItemDB : MonoBehaviour
         pistol.item_searchTime = 2;
 
         ItemData ak47 = new ItemData();
-        ak47.objectId = 0;
-        ak47.pos.x = 0;
-        ak47.pos.y = 0;
-        ak47.rotate = 0;
-        ak47.amount = 1;
-        ak47.itemId = 2;
+        ak47.itemId = 1;
         ak47.isItemConsumeable = false;
         ak47.item_name = "Ak47";
         ak47.item_weight = 7.0f;
@@ -68,12 +42,7 @@ public class ItemDB : MonoBehaviour
         ak47.item_searchTime = 3;
 
         ItemData recoveryKit = new ItemData();
-        recoveryKit.objectId = 0;
-        recoveryKit.pos.x = 0;
-        recoveryKit.pos.y = 0;
-        recoveryKit.rotate = 0;
-        recoveryKit.amount = 1;
-        recoveryKit.itemId = 3;
+        recoveryKit.itemId = 2;
         recoveryKit.isItemConsumeable = true;
         recoveryKit.item_name = "Recovery kit";
         recoveryKit.item_weight = 1.0f;
@@ -86,12 +55,7 @@ public class ItemDB : MonoBehaviour
         recoveryKit.item_searchTime = 1;
 
         ItemData bandage = new ItemData();
-        bandage.objectId = 0;
-        bandage.pos.x = 0;
-        bandage.pos.y = 0;
-        bandage.rotate = 0;
-        bandage.amount = 1;
-        bandage.itemId = 4;
+        bandage.itemId = 3;
         bandage.isItemConsumeable = true;
         bandage.item_name = "Bandage";
         bandage.item_weight = 0.0f;
@@ -105,12 +69,7 @@ public class ItemDB : MonoBehaviour
 
 
         ItemData pill = new ItemData();
-        pill.objectId = 0;
-        pill.pos.x = 0;
-        pill.pos.y = 0;
-        pill.rotate = 0;
-        pill.amount = 1;
-        pill.itemId = 5;
+        pill.itemId = 4;
         pill.isItemConsumeable = true;
         pill.item_name = "Pill";
         pill.item_weight = 0.0f;
