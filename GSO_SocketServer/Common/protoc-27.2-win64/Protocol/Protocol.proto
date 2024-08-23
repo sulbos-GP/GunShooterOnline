@@ -139,18 +139,18 @@ message S_LoadInventory                     //I2
     repeated PS_ItemInfo itemInfos  = 3;    // 저장소에 있는 아이템들
 }
 
-message C_CloseInventory{                   //I1
+message C_CloseInventory{                   //I3
     int32 sourceObjectId            = 1;    // 출발지 저장소(상자) 아이디
 }
 
-message S_CloseInventory                    //I2
+message S_CloseInventory                    //I4
 {                        
     bool isSuccess                  = 1;    // 성공 유무
 
     int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
 }
 
-message C_MergeItem                         //I3
+message C_MergeItem                         //I5
 {
     int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
     int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
@@ -160,7 +160,7 @@ message C_MergeItem                         //I3
     int32 mergeNumber               = 5;    // 합쳐지는 숫자
 }
 
-message S_MergeItem                         //I4
+message S_MergeItem                         //I6
 {
     bool isSuccess                  = 1;    // 성공 유무
 
@@ -171,7 +171,7 @@ message S_MergeItem                         //I4
     PS_ItemInfo combinedItem        = 5;    // 합치기위한 아이템
 }
 
-message C_DevideItem                        //I5
+message C_DevideItem                        //I7
 {
     int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
     int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
@@ -183,7 +183,7 @@ message C_DevideItem                        //I5
     int32 devideNumber              = 7;    // 나눠지는 숫자
 }
 
-message S_DevideItem                        //I6
+message S_DevideItem                        //I8
 {
     bool isSuccess                  = 1;    // 성공 유무
 
@@ -194,7 +194,7 @@ message S_DevideItem                        //I6
     PS_ItemInfo destinationItem     = 5;    // 나눠진 아이템
 }
 
-message C_MoveItem                          //I7
+message C_MoveItem                          //I9
 {
     int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
     int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
@@ -205,7 +205,7 @@ message C_MoveItem                          //I7
     int32 destinationRotation       = 6;    // 인벤 회전
 }
 
-message S_MoveItem                          //I8
+message S_MoveItem                          //I10
 {
     bool isSuccess                  = 1;    // 성공 유무
 
@@ -216,13 +216,13 @@ message S_MoveItem                          //I8
     PS_ItemInfo destinationMoveItem = 5;    // 목적지 아이템의 데이터
 }
 
-message C_DeleteItem                        //I9
+message C_DeleteItem                        //I11
 {                   
     int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
     int32 deleteItemId              = 2;    // 지우려고 하는 아이템의 데이터
 }
 
-message S_DeleteItem                        //I10
+message S_DeleteItem                        //I12
 {                  
     bool isSuccess                  = 1;    // 성공 유무
 
