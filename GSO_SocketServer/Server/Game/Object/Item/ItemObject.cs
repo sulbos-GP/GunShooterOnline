@@ -25,6 +25,17 @@ namespace Server.Game
             return await DatabaseHandler.MasterDB.GetItemData(itemId);
         }
 
+        public void InitItem()
+        {
+            ObjectManager.Instance.Add(this);
+            itemInfo.ObjectId = Id;
+        }
+
+        public void DestroyItem()
+        {
+            ObjectManager.Instance.Remove(Id);
+        }
+
         public PS_ItemInfo Info
         {
             get
@@ -134,11 +145,6 @@ namespace Server.Game
             }
 
             return this.itemInfo == otherInfo;
-        }
-
-        public void DestroyItem()
-        {
-            ObjectManager.Instance.Remove(Id);
         }
 
         public DB_InventoryUnit ConvertInventoryUnit()
