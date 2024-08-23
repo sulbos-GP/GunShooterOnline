@@ -14,6 +14,14 @@ using Utils;
 
 namespace Server.Game
 {
+
+    public enum EStorageResult
+    {
+        Successed,
+        Failed,
+        ZeroAmount,
+    }
+
     public class Storage
     {
         public List<ItemObject> items = new List<ItemObject>();     //저장소에 들어있는 아이템 오브젝트
@@ -49,7 +57,7 @@ namespace Server.Game
         /// <summary>
         /// 아이템 삽입
         /// </summary>
-        public bool PushItem(ItemObject item)
+        public bool InsertItem(ItemObject item)
         {
             //자리가 겹치는지 확인
             List<List<int>> rollback = InitRollBack();
@@ -112,7 +120,7 @@ namespace Server.Game
         /// <summary>
         /// 아이템 제거
         /// </summary>
-        public bool PopItem(ItemObject item)
+        public bool DeleteItem(ItemObject item)
         {
             //자리가 겹치는지 확인
             List<List<int>> rollback = InitRollBack();
@@ -154,7 +162,7 @@ namespace Server.Game
             newItem.Rotate = rotation;
             newItem.Amount = devideNumber;
 
-            if(false == PushItem(newItem))
+            if(false == InsertItem(newItem))
             {
                 return null;
             }
@@ -165,6 +173,47 @@ namespace Server.Game
 
             PrintInvenContents();
             return newItem;
+        }
+
+        /// <summary>
+        /// 아이템 수량 증가
+        /// </summary>
+        public EStorageResult IncreaseAmount(ItemObject item, int amount)
+        {
+            int value = item.Amount + amount;
+            if (value > item.LimitAmount)
+            {
+                return EStorageResult.Failed;
+            }
+            else
+            {
+                item.Amount += amount;
+                return EStorageResult.Successed;
+            }
+        }
+
+
+        /// <summary>
+        /// 아이템 수량 감소 (0일 경우 삭제)
+        /// </summary>
+        public EStorageResult DecreaseAmount(ItemObject item, int amount)
+        {
+            int value = item.Amount - amount;
+            if(value < 0)
+            {
+                return EStorageResult.Failed;
+            }
+            else if(value == 0)
+            {
+                item.Amount = 0;
+                items.Remove(item);
+                return EStorageResult.ZeroAmount;
+            }
+            else
+            {
+                item.Amount -= amount;
+                return EStorageResult.Successed;
+            }
         }
 
         public List<List<int>> InitRollBack()

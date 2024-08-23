@@ -80,7 +80,7 @@ namespace Server.Database.Game
                 DeleteAsync();
         }
 
-        public async Task<int> UpdateItem(int storage_id, DB_InventoryUnit oldUnit, DB_InventoryUnit newUnit)
+        public async Task<int> UpdateItem(int storage_id, DB_InventoryUnit oldUnit, DB_InventoryUnit curUnit)
         {
             var query = this.GetQueryFactory();
 
@@ -97,11 +97,11 @@ namespace Server.Database.Game
             var newValues = new Dictionary<string, object>()
             {
                 { "storage_id"  , storage_id },
-                { "item_id"     , newUnit.item_id },
-                { "grid_x"      , newUnit.grid_x },
-                { "grid_y"      , newUnit.grid_y },
-                { "rotation"    , newUnit.rotation },
-                { "stack_count" , newUnit.stack_count },
+                { "item_id"     , curUnit.item_id },
+                { "grid_x"      , curUnit.grid_x },
+                { "grid_y"      , curUnit.grid_y },
+                { "rotation"    , curUnit.rotation },
+                { "stack_count" , curUnit.stack_count },
             };
 
             return await query.Query("storage_unit").
@@ -109,62 +109,5 @@ namespace Server.Database.Game
                 UpdateAsync(newValues);
         }
 
-        public async Task<bool> MergeItem(int storage_id, DB_InventoryUnit oldMergeUnit, DB_InventoryUnit newMergeUnit, bool isDelete, DB_InventoryUnit oldCombinedUnit, DB_InventoryUnit newCombinedUnit)
-        {
-            var query = this.GetQueryFactory();
-
-            using (var transaction = this.GetConnection().BeginTransaction())
-            {
-                try
-                {
-                    if(isDelete)
-                    {
-                        await DeleteItem(storage_id, oldCombinedUnit);
-                    }
-                    else
-                    {
-                        await UpdateItem(storage_id, oldCombinedUnit, newCombinedUnit);
-                    }
-
-                    await UpdateItem(storage_id, oldMergeUnit, newMergeUnit);
-
-                    transaction.Commit();
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    transaction.Rollback();
-                    Console.WriteLine($"[MergeItem] : {e.Message.ToString()}");
-                    return false;
-                }
-               
-            }
-
-        }
-
-        public async Task<bool> DevideItem(int storage_id, DB_InventoryUnit oldTotalUnit, DB_InventoryUnit newTotalUnit, DB_InventoryUnit newUnit)
-        {
-            var query = this.GetQueryFactory();
-
-            using (var transaction = this.GetConnection().BeginTransaction())
-            {
-                try
-                {
-                    await InsertItem(storage_id, newUnit);
-                    await UpdateItem(storage_id, oldTotalUnit, newTotalUnit);
-
-                    transaction.Commit();
-                    return true;
-                }
-                catch (Exception e)
-                {
-                    transaction.Rollback();
-                    Console.WriteLine($"[DevideItem] : {e.Message.ToString()}");
-                    return false;
-                }
-
-            }
-
-        }
     }
 }

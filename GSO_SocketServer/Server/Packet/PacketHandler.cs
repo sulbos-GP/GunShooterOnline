@@ -92,8 +92,37 @@ class PacketHandler
         Console.WriteLine($"[C_LoadInventoryHandler]");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.Push(player.gameRoom.LoadInventoryHandler, player);
+        if (packet.SourceObjectId == 0)
+        {
+            player.gameRoom.Push(player.gameRoom.LoadInventoryHandler, player);
+        }
+        else
+        {
+            player.gameRoom.Push(player.gameRoom.LoadInventoryHandler, player, packet.SourceObjectId);
+        }
+
     }
+
+    internal static void C_CloseInventory(PacketSession session, IMessage message)
+    {
+        //인벤토리 열었을떄
+        ClientSession clientSession = session as ClientSession;
+        C_LoadInventory packet = (C_LoadInventory)message;
+        Console.WriteLine($"[C_CloseInventory]");
+
+        Player player = clientSession.MyPlayer;
+        if (packet.SourceObjectId == 0)
+        {
+            player.gameRoom.Push(player.gameRoom.CloseInventoryHandler, player);
+        }
+        else
+        {
+            player.gameRoom.Push(player.gameRoom.CloseInventoryHandler, player, packet.SourceObjectId);
+
+        }
+        
+    }
+
     internal static void C_MergeItemHandler(PacketSession session, IMessage message)
     {
         ClientSession clientSession = session as ClientSession;
@@ -101,7 +130,9 @@ class PacketHandler
         Console.WriteLine($"[C_MergeItemHandler]");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.Push(player.gameRoom.MergeItemHandler, player, packet.MergedObjectId, packet.CombinedObjectId, packet.MergeNumber);
+
+        player.gameRoom.Push(player.gameRoom.MergeItemHandler, player, packet.SourceObjectId, packet.DestinationObjectId, packet.MergedObjectId, packet.CombinedObjectId, packet.MergeNumber);
+
     }
 
     internal static void C_DevideItemHandler(PacketSession session, IMessage message)
@@ -111,7 +142,7 @@ class PacketHandler
         Console.WriteLine($"[C_DevideItemHandler]");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.Push(player.gameRoom.DevideItemHandler, player, packet.TotalItemId, packet.GridX, packet.GridY, packet.Rotation, packet.DevideNumber);
+        player.gameRoom.Push(player.gameRoom.DevideItemHandler, player, packet.SourceObjectId, packet.DestinationObjectId, packet.SourceItemId, packet.DestinationGridX, packet.DestinationGridY, packet.DestinationRotation, packet.DevideNumber);
     }
 
     internal static void C_MoveItemHandler(PacketSession session, IMessage message)
@@ -121,7 +152,7 @@ class PacketHandler
         Console.WriteLine($"[C_MoveItemHandler]");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.Push(player.gameRoom.MoveItemHandler, player, packet.TargetObjectId, packet.MoveItem, packet.GridX, packet.GridY);
+        player.gameRoom.Push(player.gameRoom.MoveItemHandler, player, packet.SourceObjectId, packet.DestinationObjectId, packet.SourceMoveItemId, packet.DestinationGridX, packet.DestinationGridY, packet.DestinationRotation);
     }
 
     internal static void C_DeleteItemHandler(PacketSession session, IMessage message)
@@ -132,7 +163,7 @@ class PacketHandler
         Console.WriteLine($"[C_DeleteItemHandler]");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.Push(player.gameRoom.DeleteItemHandler, player, packet.DeleteItemId);
+        player.gameRoom.Push(player.gameRoom.DeleteItemHandler, player, packet.SourceObjectId, packet.DeleteItemId);
     }
 
     internal static void C_RaycastShootHandler(PacketSession session, IMessage message)
