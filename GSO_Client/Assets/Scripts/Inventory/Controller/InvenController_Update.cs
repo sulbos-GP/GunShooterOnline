@@ -115,6 +115,15 @@ public partial class InventoryController
         }
 
         gridPosition = WorldToGridPos();
+        if(gridPosition != null)
+        {
+            if(gridPosition == gridPositionIndex)
+            {
+                return;
+            }
+            gridPositionIndex = gridPosition;
+        }
+        
         Color32 highlightColor = selectedGrid.PlaceCheckInGridHighLight(selectedItem, gridPosition.x, gridPosition.y, ref overlapItem);
         invenHighlight.SetColor(highlightColor);
 

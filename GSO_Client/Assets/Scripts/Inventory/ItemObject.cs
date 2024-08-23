@@ -209,10 +209,6 @@ public class ItemObject : MonoBehaviour
         targetItem.ItemAmount += mergeAmount;
         ItemAmount -= mergeAmount;
 
-        if (itemData.amount <= 0)
-        {
-            Managers.Object.RemoveItemDic(itemData.objectId);
-        }
     }
 
     public void TextControl()
@@ -230,10 +226,9 @@ public class ItemObject : MonoBehaviour
     {
         if (curItemGrid != null) 
         {
-            Managers.Object.RemoveItemDic(itemData.objectId); //오브젝트 매니저 딕셔너리에서 삭제
-            InventoryController.invenInstance.instantItemList.Remove(this); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
+            InventoryController.invenInstance.instantItemDic.Remove(itemData.objectId); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
         }
         
-        Destroy(gameObject);
+        Managers.Resource.Destroy(gameObject);
     }
 }

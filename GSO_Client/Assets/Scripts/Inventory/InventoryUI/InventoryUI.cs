@@ -13,7 +13,7 @@ public class InventoryUI : MonoBehaviour
     //인벤토리 닫을시 아이템 모두 제거
     protected virtual void OnDisable()
     {
-        InventoryController.invenInstance.instantItemList.Clear();
+        InventoryController.invenInstance.instantItemDic.Clear();
 
         if (instantGrid != null)
         {

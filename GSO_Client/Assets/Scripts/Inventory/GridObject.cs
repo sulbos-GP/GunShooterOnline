@@ -98,7 +98,7 @@ public class GridObject : MonoBehaviour
         //해당 그리드의 자식으로 지정하여 생성
         ItemObject itemObj = Managers.Resource.Instantiate("UI/ItemUI", transform).GetComponent<ItemObject>();
         //인벤컨트롤러에서 생성된 아이템리스트에 등록
-        InventoryController.invenInstance.instantItemList.Add(itemObj);
+        InventoryController.invenInstance.instantItemDic.Add(itemData.objectId,itemObj);
         //해당 아이템에 부여된 데이터로 아이템 세팅
         itemObj.ItemDataSet(itemData);
         //아이템을 해당 그리드에 배치하고 아이템 객체의 위치또한 맞게 변경
@@ -193,7 +193,11 @@ public class GridObject : MonoBehaviour
 
         PrintInvenContents(this, ItemSlot);
         GridWeight += item.itemData.item_weight;
-        InventoryController.invenInstance.instantItemList.Add(item);
+        if (!InventoryController.invenInstance.instantItemDic.ContainsKey(item.itemData.objectId))
+        {
+            InventoryController.invenInstance.instantItemDic.Add(item.itemData.objectId, item);
+        }
+        
         UpdateItemPosition(item, posX, posY, itemRect);
     }
 
@@ -230,14 +234,14 @@ public class GridObject : MonoBehaviour
 
         item.itemData.pos = pos;
         item.curItemGrid = this;
-        InventoryController.invenInstance.instantItemList.Add(item);
+        InventoryController.invenInstance.instantItemDic.Add(item.itemData.objectId,item);
     }
 
     public void RemoveItemFromItemList(ItemObject item)
     {
         if (item.itemData == null) return;
 
-        InventoryController.invenInstance.instantItemList.Remove(item);
+        InventoryController.invenInstance.instantItemDic.Remove(item.itemData.objectId);
     }
 
 

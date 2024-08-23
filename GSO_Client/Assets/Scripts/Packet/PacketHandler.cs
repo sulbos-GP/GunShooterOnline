@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
+using static UnityEditor.Progress;
 
 internal class PacketHandler
 {
@@ -237,8 +239,6 @@ internal class PacketHandler
          * isSuccess가 true면 출발지 아이템을 검색하여 삭제 및 목적지 아이템을 새로 생성하여 배치
          * false면 출발지 아이템을 원래 위치로 Undo
          */
-
-        /* 서버에서 success를 true로 주면 해당 아이템의 배치를 완료함 (아이템의 오브젝트 위치 설정 및 해당 그리드의 배열에 아이템 추가)
         S_MoveItem packet = message as S_MoveItem;
         if (packet == null)
         {
@@ -247,76 +247,19 @@ internal class PacketHandler
         }
         Debug.Log("S_MoveItem");
 
-
-        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+        if (packet.IsSuccess)
         {
-            //옮긴 플레이어를 제외한 다른 플레이어에게 적용되는 핸들러
-            return;
+            ItemObject targetItem = null;
+            InventoryController.invenInstance.instantItemDic.TryGetValue(packet.DestinationMoveItem.ObjectId, out targetItem);
+            if (targetItem == null)
+            {
+                Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
+                return;
+            }
+            Vector2Int movePos = new Vector2Int(packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
+            InventoryController.invenInstance.CompleteItemPlacement(targetItem, movePos);
         }
-
         
-        ItemData moveItemData = null;
-        Managers.Object._itemDic.TryGetValue(packet.ItemData.ItemId, out moveItemData);
-        if (moveItemData == null)
-        {
-            //클라에 해당 아이템이 없는 경우(적플레이어가 자신의 인벤에 있던 아이템을 박스에 넣을 경우) -> 새 아이템을 생성
-            moveItemData = new ItemData();
-            moveItemData.SetItemData(packet.ItemData);
-        }
-
-        moveItemData.pos = new Vector2Int(packet.ItemData.ItemPosX, packet.ItemData.ItemPosY);
-        moveItemData.rotate = packet.ItemData.ItemRotate;
-
-        GridData movedGrid;
-        Managers.Object._gridDic.TryGetValue(packet.GridId, out movedGrid);
-        if (movedGrid != null)
-        {
-            //현재 그리드를 찾은 상태에서 
-            foreach (ItemData itemData in movedGrid.itemList)
-            {
-                //아이템의 위치가 같다면 머지(혹시모르니 아이템 코드가 같다는 조건도 넣음)
-                //이 핸들러가 도착했다는것은 아이템의 배치가 성공했음을 의미
-                //같은 그리드상에서 아이템을 옮겼을때 의 경우 이미 그리드의 아이템 리스트에는 해당 아이템이 있어 중복되는 현상 수정(itemId가 달라야하는 조건 추가)
-                if ((itemData.objectId != moveItemData.objectId) && (itemData.pos == moveItemData.pos) && (itemData.itemId == moveItemData.itemId))
-                {
-                    itemData.amount += moveItemData.amount;
-                    return;
-                }
-            }
-            movedGrid.itemList.Add(moveItemData);
-        }
-
-        //todo. 만약 플레이어 1,2가 같은 박스의 인벤토리를 보고있을때 1이 아이템을 옮기면 2의 인벤토리UI 에서도 해당 아이템 오브젝트를 옮김-> 딜리트에도 같음 
-        //제대로 작동안함
-        for (int i = 0; i < InventoryController.invenInstance.instantItemList.Count; i++)
-        {
-            if (InventoryController.invenInstance.instantItemList[i].itemData.objectId == moveItemData.objectId)
-            {
-                //이미 해당 오브젝트의 아이템 데이터가 업데이트 되어 자신의 데이터를 사용하여 위치와 회전만 조정하면 됨
-                ItemObject itemObj = InventoryController.invenInstance.instantItemList[i];
-                if(itemObj.curItemGrid.gridData.gridId == movedGrid.gridId) //TODO -> 인벤토리 단위로 바꿔야함(나중에 인벤토리 내에 여러개의 그리드가 존재할경우)
-                {
-                    itemObj.curItemGrid.UpdateItemPosition(itemObj, itemObj.itemData.pos.x, itemObj.itemData.pos.y, itemObj.GetComponent<RectTransform>());
-                    itemObj.Rotate(itemObj.itemData.rotate);
-                }
-                else
-                {
-                    itemObj.DestroyItem();
-                }
-
-                break;
-            }
-        }
-
-        GridData pastGrid;
-        Managers.Object._gridDic.TryGetValue(packet.LastGridId, out pastGrid);
-        if (pastGrid == null)
-        {
-            Debug.Log("옮기기전 그리드가 존재하지 않음(무브연산)");
-            return;
-        }
-
-        pastGrid.itemList.Remove(moveItemData);*/
     }
 
     //아이템을 삭제할때. 플레이어가 아이템을 들었을때 다른 플레이어에게 전송할때도 좋을듯.
@@ -364,12 +307,12 @@ internal class PacketHandler
         //해당 데이터로 만들어진 아이템 오브젝트가 존재할경우 삭제
         //제대로 작동안함
         /*
-        for (int i = 0; i < InventoryController.invenInstance.instantItemList.Count; i++)
+        for (int i = 0; i < InventoryController.invenInstance.instantItemDic.Count; i++)
         {
-            if(InventoryController.invenInstance.instantItemList[i].itemData.objectId == deleteItemdata.objectId)
+            if(InventoryController.invenInstance.instantItemDic[i].itemData.objectId == deleteItemdata.objectId)
             {
-                Managers.Object.RemoveItemDic(InventoryController.invenInstance.instantItemList[i].itemData.objectId);
-                InventoryController.invenInstance.instantItemList[i].DestroyItem();
+                Managers.Object.RemoveItemDic(InventoryController.invenInstance.instantItemDic[i].itemData.objectId);
+                InventoryController.invenInstance.instantItemDic[i].DestroyItem();
                 break;
             }
         }
