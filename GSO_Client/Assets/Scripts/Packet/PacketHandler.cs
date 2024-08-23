@@ -138,10 +138,17 @@ internal class PacketHandler
 
     }
 
-
-
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
-    { //핸들러 다시 작성 이것은 플레이어가 인벤토리를 열때마다 플레이어의 아이템데이터를 서버에 요청한다
+    { 
+        /*
+         * 플레이어가 인벤토리를 여는 키를 눌렀을대 전송되며 플레이어의 아이템데이터를 서버에 요청한다
+         * sourceObjectId가 0이면 플레이어, id가 있으면 박스의 id
+         * 각 타겟의 UI의 ItemList에 패킷으로 전달된 아이템들을 넣어줌
+         * 
+         * 인벤토리를 열고 InventorySet 함수를 실행시키면 각 인벤토리가 생성된다
+         * 만약 박스가 열렸다면 박스의 bool변수를 변경하여 다른 플레이어가 루팅중인 박스는 접근이 불가하다
+         */
+
         /*
         //해당 클라이언트만 해당 되며 
         S_LoadInventory packet = message as S_LoadInventory;
@@ -193,8 +200,21 @@ internal class PacketHandler
         }*/
     }
 
+    internal static void S_CloseInventoryHandler(PacketSession session, IMessage message)
+    {
+        /*
+         * 인벤토리를 닫을경우 패킷 -> 박스에 2명이 접근하는걸 막기 위함
+         * isSuccess로 성공유무 판단
+         * sourceObjectId로 0이 아니라면 박스이니 박스의 bool변수를 변경
+         */
+    }
+
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
+        /*
+         * isSuccess가 true면 출발지 아이템을 검색하여 삭제 및 목적지 아이템을 새로 생성하여 배치
+         */
+
         /* 서버에서 success를 true로 주면 해당 아이템의 배치를 완료함 (아이템의 오브젝트 위치 설정 및 해당 그리드의 배열에 아이템 추가)
         S_MoveItem packet = message as S_MoveItem;
         if (packet == null)

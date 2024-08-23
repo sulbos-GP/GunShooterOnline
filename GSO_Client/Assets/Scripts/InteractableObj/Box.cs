@@ -39,7 +39,7 @@ public class Box : InteractableObject
         if (InventoryController.invenInstance.isActive) { return; }
 
         InventoryController.invenInstance.invenUIControl();
-        //invenUI.invenData = GetComponent<OtherInventory>().InputInvenData; //플레이어 인풋에서 실행하여 여기서는 안함
+
         //invenUI.InventorySet();
         
     }
