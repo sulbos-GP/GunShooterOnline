@@ -19,8 +19,6 @@ namespace Server.Game
             ObjectType = GameObjectType.Item;
             itemData = GetItemData(itemId).Result;
 
-            ObjectManager.Instance.Add(this);
-
             itemInfo = new PS_ItemInfo()
             {
                 ObjectId = this.Id,
@@ -35,13 +33,13 @@ namespace Server.Game
 
         public ItemObject(int viewerId, int itemId, int gridX, int grixY, int rotate, int amount) : this(itemId, gridX, grixY, rotate, amount)
         {
-            viewers.TryAdd(viewerId, DateTime.UtcNow);
+            viewers.TryAdd(viewerId, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
         }
 
         public ItemObject(ItemObject other)
         {
             ObjectType = GameObjectType.Item;
-            ObjectManager.Instance.Add(this);
+            Id = other.Id;
             viewers = other.viewers;
             itemInfo = other.itemInfo;
             itemData = other.itemData;
@@ -53,17 +51,14 @@ namespace Server.Game
             return await DatabaseHandler.MasterDB.GetItemData(itemId);
         }
 
-        public void DestroyItem()
+        public void CreateItem()
         {
-            ObjectManager.Instance.Remove(Id);
+            ObjectManager.Instance.Add(this);
         }
 
-        public PS_ItemInfo Info
+        public void DestroyItem()
         {
-            get
-            {
-                return new PS_ItemInfo(itemInfo);
-            }
+            ObjectManager.Instance.Remove(this.Id);
         }
 
         public DB_ItemData Data
@@ -88,10 +83,6 @@ namespace Server.Game
             {
                 return itemInfo.X;
             }
-            set
-            {
-                itemInfo.X = value;
-            }
         }
 
         public int Y
@@ -99,10 +90,6 @@ namespace Server.Game
             get
             {
                 return itemInfo.Y;
-            }
-            set
-            {
-                itemInfo.Y = value;
             }
         }
 
@@ -161,21 +148,20 @@ namespace Server.Game
 
         public bool IsViewer(int viewerId)
         {
-            return true;
-            //bool viewer = viewers.TryGetValue(viewerId, out var oldTime);
-            //if (false == viewer)
-            //{
-            //    return false;
-            //}
+            bool viewer = viewers.TryGetValue(viewerId, out var oldTime);
+            if (false == viewer)
+            {
+                return false;
+            }
 
-            //DateTime curTime = DateTime.UtcNow;
-            //TimeSpan elapsedTime = curTime - oldTime;
-            //return elapsedTime.TotalSeconds >= itemData.inquiry_time;
+            DateTime curTime = DateTime.UtcNow;
+            TimeSpan elapsedTime = curTime - oldTime;
+            return elapsedTime.TotalSeconds >= Data.inquiry_time;
         }
 
-        public void AddViewer(int viewerId)
+        public void AddViewer(int viewerId, int rtt)
         {
-            viewers.TryAdd(viewerId, DateTime.UtcNow);
+            viewers.TryAdd(viewerId, DateTime.UtcNow.AddMicroseconds(-rtt));
         }
 
         public DB_InventoryUnit ConvertInventoryUnit()
@@ -187,6 +173,14 @@ namespace Server.Game
             unit.rotation = Rotate;
             unit.stack_count = Amount;
             return unit;
+        }
+
+        public PS_ItemInfo ConvertItemInfo(int viewerId)
+        {
+            PS_ItemInfo info = new PS_ItemInfo(itemInfo);
+            if (IsViewer(viewerId)) { info.IsSearched = true; }
+            else { info.IsSearched = false; }
+            return info;
         }
 
     }

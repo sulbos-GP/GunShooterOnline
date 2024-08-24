@@ -110,7 +110,7 @@ namespace Server
                     enterPacket.Player = player.info;
   
                     player.inventory = new Inventory(player, player.uid);
-                    foreach (PS_ItemInfo item in player.inventory.GetInventoryItems())
+                    foreach (PS_ItemInfo item in player.inventory.storage.GetItems(player.Id))
                     {
                         enterPacket.ItemInfos.Add(item);
                     }

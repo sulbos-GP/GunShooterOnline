@@ -55,15 +55,5 @@ namespace Server.Game.Object.Item
             Console.WriteLine();
         }
 
-        public IEnumerable<PS_ItemInfo> GetBoxItems()
-        {
-            List<PS_ItemInfo> infos = new List<PS_ItemInfo>();
-            foreach (ItemObject item in storage.items)
-            {
-                infos.Add(item.Info);
-            }
-            return infos;
-        }
-
     }
 }

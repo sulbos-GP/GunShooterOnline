@@ -68,8 +68,7 @@ namespace Server
                 return;
             }
 
-
-            foreach(PS_ItemInfo item in inventory.GetInventoryItems())
+            foreach(PS_ItemInfo item in inventory.storage.GetItems(player.Id))
             {
                 packet.ItemInfos.Add(item);
             }
@@ -99,7 +98,7 @@ namespace Server
             }
             box.Open();
 
-            foreach (PS_ItemInfo item in box.GetBoxItems())
+            foreach (PS_ItemInfo item in box.storage.GetItems(player.Id))
             {
                 packet.ItemInfos.Add(item);
             }
@@ -150,7 +149,7 @@ namespace Server
             S_SearchInventory packet = new S_SearchInventory();
 
             ItemObject sourcelItem = ObjectManager.Instance.Find<ItemObject>(sourceObjectId);
-            PS_ItemInfo sourceItemInfo = sourcelItem.Info;
+            PS_ItemInfo sourceItemInfo = sourcelItem.ConvertItemInfo(player.Id);
 
             Storage sourceStorage = GetStorage(player, sourceObjectId);
             if (sourceStorage == null || sourcelItem == null || -1 == sourceStorage.ScanItem(sourcelItem))
@@ -166,7 +165,7 @@ namespace Server
                 player.Session.Send(packet);
                 return;
             }
-            sourcelItem.AddViewer(player.Id);
+            sourcelItem.AddViewer(player.Id, player.Session.mPeer.RoundTripTime);
 
             packet.IsSuccess = true;
             packet.SourceObjectId = sourceObjectId;
@@ -179,7 +178,7 @@ namespace Server
             S_MergeItem packet = new S_MergeItem();
 
             ItemObject mergedlItem = ObjectManager.Instance.Find<ItemObject>(sourceObjectId);
-            PS_ItemInfo mergedItemInfo = mergedlItem.Info;
+            PS_ItemInfo mergedItemInfo = mergedlItem.ConvertItemInfo(player.Id);
 
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, mergedlItem);
             if (sourceStorage == null)
@@ -190,7 +189,7 @@ namespace Server
             }
 
             ItemObject combinedItem = ObjectManager.Instance.Find<ItemObject>(combinedObjectId);
-            PS_ItemInfo combinedInfo = combinedItem.Info;
+            PS_ItemInfo combinedInfo = combinedItem.ConvertItemInfo(player.Id);
 
             Storage destinationStorage = GetStorageWithScanItem(player, destinationObjectId, combinedItem);
             if (sourceStorage == null)
@@ -254,7 +253,7 @@ namespace Server
             S_DevideItem packet = new S_DevideItem();
 
             ItemObject sourcelItem = ObjectManager.Instance.Find<ItemObject>(sourceItemId);
-            PS_ItemInfo sourceItemInfo = sourcelItem.Info;
+            PS_ItemInfo sourceItemInfo = sourcelItem.ConvertItemInfo(player.Id);
 
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourcelItem);
             if (sourceStorage == null)
@@ -318,7 +317,7 @@ namespace Server
             packet.SourceObjectId = sourceObjectId;
             packet.DestinationObjectId = destinationObjectId;
             packet.SourceItem = sourceItemInfo;
-            packet.DestinationItem = destinationItem.Info;
+            packet.DestinationItem = destinationItem.ConvertItemInfo(player.Id);
             player.Session.Send(packet);
         }
 
@@ -328,7 +327,7 @@ namespace Server
             S_MoveItem packet = new S_MoveItem();
 
             ItemObject sourceMovelItem = ObjectManager.Instance.Find<ItemObject>(sourceMoveItemId);
-            PS_ItemInfo sourceMoveItemInfo = sourceMovelItem.Info;
+            PS_ItemInfo sourceMoveItemInfo = sourceMovelItem.ConvertItemInfo(player.Id);
 
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourceMovelItem);
             if(sourceStorage == null)
@@ -348,8 +347,7 @@ namespace Server
                 return;
             }
 
-            ItemObject newItem = new ItemObject(player.Id, sourceMovelItem.ItemId, destinationGridX, destinationGridY, destinationRotation, sourceMoveItemInfo.Amount);
-
+            ItemObject tempItemObject = new ItemObject(sourceMovelItem);
             bool isDelete = false;
             {
                 if (IsInventory(sourceObjectId))
@@ -363,22 +361,32 @@ namespace Server
                 }
             }
 
+            ItemObject newItem = new ItemObject(player.Id, sourceMovelItem.ItemId, destinationGridX, destinationGridY, destinationRotation, sourceMoveItemInfo.Amount);
             bool isInsert = false;
             {
                 if (IsInventory(destinationObjectId))
                 {
                     Inventory inventory = player.inventory;
                     isInsert = await inventory.InsertItem(newItem);
+                    if (false == isInsert)
+                    {
+                        await inventory.InsertItem(sourceMovelItem);
+                    }
                 }
                 else
                 {
                     isInsert = destinationStorage.InsertItem(newItem);
+                    if (false == isInsert)
+                    {
+                        destinationStorage.InsertItem(sourceMovelItem);
+                    }
                 }
             }
 
             if (isInsert == false || isDelete == false)
             {
                 packet.IsSuccess = false;
+                packet.SourceObjectId = sourceObjectId;
                 packet.SourceMoveItem = sourceMoveItemInfo;
                 player.Session.Send(packet);
                 return;
@@ -388,7 +396,7 @@ namespace Server
             packet.SourceObjectId = sourceObjectId;
             packet.DestinationObjectId = destinationObjectId;
             packet.SourceMoveItem = sourceMoveItemInfo;
-            packet.DestinationMoveItem = newItem.Info;
+            packet.DestinationMoveItem = newItem.ConvertItemInfo(player.Id);
             player.Session.Send(packet);
         }
 
@@ -397,7 +405,7 @@ namespace Server
             S_DeleteItem packet = new S_DeleteItem();
 
             ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
-            PS_ItemInfo deleteInfo = deleteItem.Info;
+            PS_ItemInfo deleteInfo = deleteItem.ConvertItemInfo(player.Id);
 
             Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
             if (storage == null)
