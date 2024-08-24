@@ -49,12 +49,7 @@ namespace Server.Game.Object.Item
 
             DB_ItemData data = await DatabaseHandler.MasterDB.GetItemData(1);
 
-            ItemObject item = new ItemObject(data.item_id);
-            item.X = 0;
-            item.Y = 0;
-            item.Rotate = 0;
-            item.Amount = 1;
-
+            ItemObject item = new ItemObject(data.item_id, 0, 0, 0, 1);
             storage.InsertItem(item);
 
             Console.WriteLine();

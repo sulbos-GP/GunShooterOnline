@@ -11,6 +11,7 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using Utils;
+using static Humanizer.In;
 
 namespace Server.Game
 {
@@ -67,9 +68,7 @@ namespace Server.Game
                 return false;
             }
 
-            item.InitItem();
             items.Add(item);
-
             PrintInvenContents();
 
             return true;
@@ -179,16 +178,20 @@ namespace Server.Game
             int width = item.Width;
             int height = item.Height;
 
-            for (int i = y; i < height; ++i)
+            if(y + height > grid.Count() || y + height < 0 || x + width > grid[0].Count() || x + width < 0)
             {
-                for (int j = x; j < width; ++j)
+                return false;
+            }
+
+            for (int i = y; i < y + height; ++i)
+            {
+                for (int j = x; j < x + width; ++j)
                 {
                     int value = isPush ? 1 : -1;
                     grid[i][j] += value;
 
                     if(grid[i][j] == -1 || grid[i][j] == 2)
                     {
-
                         return false;
                     }
 

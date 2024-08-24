@@ -10,32 +10,47 @@ namespace Server.Game
 {
     public class ItemObject : GameObject
     {
-        private PS_ItemInfo itemInfo = new PS_ItemInfo();
+        private PS_ItemInfo itemInfo = null;
         private readonly DB_ItemData itemData = new DB_ItemData();
         private Dictionary<int, DateTime> viewers = new Dictionary<int, DateTime>();
 
-        public ItemObject(int itemId)
+        public ItemObject(int itemId, int gridX, int grixY, int rotate, int amount)
         {
             ObjectType = GameObjectType.Item;
             itemData = GetItemData(itemId).Result;
+
+            ObjectManager.Instance.Add(this);
+
+            itemInfo = new PS_ItemInfo()
+            {
+                ObjectId = this.Id,
+                ItemId = itemId,
+                X = gridX,
+                Y = grixY,
+                Rotate = rotate,
+                Amount = amount
+            };
+
+        }
+
+        public ItemObject(int viewerId, int itemId, int gridX, int grixY, int rotate, int amount) : this(itemId, gridX, grixY, rotate, amount)
+        {
+            viewers.TryAdd(viewerId, DateTime.UtcNow);
+        }
+
+        public ItemObject(ItemObject other)
+        {
+            ObjectType = GameObjectType.Item;
+            ObjectManager.Instance.Add(this);
+            viewers = other.viewers;
+            itemInfo = other.itemInfo;
+            itemData = other.itemData;
         }
 
         public async Task<DB_ItemData> GetItemData(int itemId)
         {
             //TODO : 나중에는 마스터테이블을 미리 로드하여 메모리에 저장된 값을 불러와야함
             return await DatabaseHandler.MasterDB.GetItemData(itemId);
-        }
-
-        public void InitItem()
-        {
-            ObjectManager.Instance.Add(this);
-            itemInfo.ObjectId = Id;
-            itemInfo.ItemId = Data.item_id;
-        }
-
-        public void InitViewer(int viewerId)
-        {
-            viewers.TryAdd(viewerId, DateTime.UtcNow);
         }
 
         public void DestroyItem()

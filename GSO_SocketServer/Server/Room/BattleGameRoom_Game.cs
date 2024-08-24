@@ -292,11 +292,7 @@ namespace Server
                 }
             }
 
-            ItemObject destinationItem = new ItemObject(sourcelItem.ItemId);
-            destinationItem.X = destinationGridX;
-            destinationItem.Y = destinationGridY;
-            destinationItem.Rotate = destinationRotation;
-            destinationItem.Amount = devideNumber;
+            ItemObject destinationItem = new ItemObject(player.Id, sourcelItem.ItemId, destinationGridX, destinationGridY, destinationRotation, devideNumber);
 
             {
                 bool isInsert = false;
@@ -350,14 +346,10 @@ namespace Server
                 return;
             }
 
-            ItemObject newItem = new ItemObject(sourceMovelItem.ItemId);
-            newItem.X = destinationGridX;
-            newItem.Y = destinationGridY;
-            newItem.Rotate = destinationRotation;
-            newItem.Amount = sourceMovelItem.Amount;
+            ItemObject newItem = new ItemObject(player.Id, sourceMovelItem.ItemId, destinationGridX, destinationGridY, destinationRotation, sourceMoveItemInfo.Amount);
 
+            bool isDelete = false;
             {
-                bool isDelete = false;
                 if (IsInventory(sourceObjectId))
                 {
                     Inventory inventory = player.inventory;
@@ -367,17 +359,10 @@ namespace Server
                 {
                     isDelete = sourceStorage.DeleteItem(sourceMovelItem);
                 }
-
-                if (false == isDelete)
-                {
-                    packet.IsSuccess = false;
-                    player.Session.Send(packet);
-                    return;
-                }
             }
 
+            bool isInsert = false;
             {
-                bool isInsert = false;
                 if (IsInventory(destinationObjectId))
                 {
                     Inventory inventory = player.inventory;
@@ -387,13 +372,13 @@ namespace Server
                 {
                     isInsert = destinationStorage.InsertItem(newItem);
                 }
+            }
 
-                if (isInsert == false)
-                {
-                    packet.IsSuccess = false;
-                    player.Session.Send(packet);
-                    return;
-                }
+            if (isInsert == false || isDelete == false)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
             }
 
             packet.IsSuccess = true;
@@ -433,6 +418,8 @@ namespace Server
             if (false == isDelete)
             {
                 packet.IsSuccess = false;
+                packet.SourceObjectId = sourceObjectId;
+                packet.DeleteItem = deleteInfo;
                 player.Session.Send(packet);
                 return;
             }
