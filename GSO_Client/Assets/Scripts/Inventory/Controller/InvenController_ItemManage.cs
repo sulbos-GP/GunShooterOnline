@@ -85,6 +85,7 @@ public partial class InventoryController
                 //클릭한 아이템이 숨겨진 경우에는 숨김을 해제하고 아니면 아이템을 듬
                 if (clickedItem.isHide == true)
                 {
+                    SendSearchItemPacket(clickedItem.backUpItemGrid.objectId, clickedItem);
                     clickedItem.UnhideItem();
                 }
                 else

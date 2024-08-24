@@ -31,6 +31,14 @@ public partial class InventoryController
         Debug.Log($"C_SendLoadInven : {objectId}의 인벤토리 닫음 ");
     }
 
+    private void SendSearchItemPacket(int objectId, ItemObject item)
+    {
+        C_SearchItem packet = new C_SearchItem();
+        packet.SourceObjectId = objectId;
+        packet.SourceItemId = item.itemData.objectId; 
+        Managers.Network.Send(packet);
+        Debug.Log($"C_SearchInventory : {item.itemData.objectId} 아이템 검색 ");
+    }
 
 
     /// <summary>

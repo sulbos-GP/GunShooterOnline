@@ -148,7 +148,7 @@ namespace Server
         {
             S_SearchItem packet = new S_SearchItem();
 
-            ItemObject sourcelItem = ObjectManager.Instance.Find<ItemObject>(sourceObjectId);
+            ItemObject sourcelItem = ObjectManager.Instance.Find<ItemObject>(sourceItemId);
             PS_ItemInfo sourceItemInfo = sourcelItem.ConvertItemInfo(player.Id);
 
             Storage sourceStorage = GetStorage(player, sourceObjectId);

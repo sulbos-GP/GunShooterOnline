@@ -240,6 +240,36 @@ internal class PacketHandler
             InventoryController.invenInstance.invenUIControl();
         }
     }
+
+    internal static void S_SearchItemHandler(PacketSession session, IMessage message)
+    {
+        /*
+         * 아이템을 검색 시작할때 보낸패킷의 답장
+         * isSuccess로 성공유무 판단
+         * 실패하면 검색 코루틴을 중지하거나 isHide가 풀려있으면 다시 잠금
+         */
+
+        S_SearchItem packet = message as S_SearchItem;
+        if (packet == null)
+        {
+            Debug.Log("S_SearchInventory 패킷이 없음");
+            return;
+        }
+
+        Debug.Log("패킷받음");
+
+        if (!packet.IsSuccess)
+        {
+            ItemObject targetItem = null;
+            InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out targetItem);
+            if (!targetItem.isHide || targetItem.searchingCoroutine != null)
+            {
+                targetItem.HideItem();
+            }
+        }
+    }
+
+
     private static void ChangeItemObjectId(ItemObject targetItem, int newId)
     {
         InventoryController.invenInstance.instantItemDic.Remove(targetItem.itemData.objectId);
@@ -309,7 +339,6 @@ internal class PacketHandler
             targetItem.curItemGrid.PrintInvenContents();
             targetItem.backUpItemGrid.PrintInvenContents();
 
-            ChangeItemObjectId(targetItem, packet.SourceMoveItem.ObjectId);
             InventoryController.invenInstance.UndoGridSlot(targetItem);
             InventoryController.invenInstance.UndoItem(targetItem);
 
@@ -361,54 +390,10 @@ internal class PacketHandler
         else
         {
             Debug.Log("S_DeleteItem 실패");
-            ChangeItemObjectId(targetItem, packet.DeleteItem.ObjectId);
             InventoryController.invenInstance.UndoGridSlot(targetItem);
             InventoryController.invenInstance.UndoItem(targetItem);
         }
 
-
-        
-        /* 이것도 success에 여부에 따라 해당 아이템을 삭제
-        
-
-        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
-        {
-            //옮긴 플레이어를 제외한 다른 플레이어에게 전송됨
-            return;
-        }
-
-        ItemData deleteItemdata = null;
-        Managers.Object._itemDic.TryGetValue(packet.ItemData.ItemId, out deleteItemdata);
-        if (deleteItemdata == null)
-        {
-            //클라에 해당 아이템이 없는 경우(적플레이어가 자신의 인벤에 있던 아이템을 버릴경우)
-            Debug.Log("클라에 해당 아이템 데이터가 없음(삭제 연산)");
-            return;
-        }
-
-        GridData deleteItemGrid;
-        Managers.Object._gridDic.TryGetValue(packet.GridId, out deleteItemGrid);
-        if (deleteItemGrid == null)
-        {
-            Debug.Log("클라이언트에 아이템이 위치했던 그리드가 존재하지 않음(삭제연산)");
-            return;
-        }
-        deleteItemGrid.itemList.Remove(deleteItemdata);
-
-
-        //해당 데이터로 만들어진 아이템 오브젝트가 존재할경우 삭제
-        //제대로 작동안함
-        /*
-        for (int i = 0; i < InventoryController.invenInstance.instantItemDic.Count; i++)
-        {
-            if(InventoryController.invenInstance.instantItemDic[i].itemData.objectId == deleteItemdata.objectId)
-            {
-                Managers.Object.RemoveItemDic(InventoryController.invenInstance.instantItemDic[i].itemData.objectId);
-                InventoryController.invenInstance.instantItemDic[i].DestroyItem();
-                break;
-            }
-        }
-        */
     }
 
     internal static void S_RaycastHitHandler(PacketSession session, IMessage message)
