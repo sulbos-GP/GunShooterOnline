@@ -24,7 +24,7 @@ public class ItemObject : MonoBehaviour
     private Sprite itemSprite;
     public Sprite hideSprite; //조회 전에 보여질 스프라이트
 
-    private Coroutine searchingCoroutine;
+    public Coroutine searchingCoroutine;
 
     //아이템 데이터 요소
     public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
@@ -59,11 +59,15 @@ public class ItemObject : MonoBehaviour
             TextControl();
         }
     }
-    public GridObject curItemGrid; 
+
+    
 
     //현 상태
     public bool isHide; //아이템 정보 숨겨짐
     private bool isOnSearching; //아이템 조회중
+
+    //현재 위치한 그리드
+    public GridObject curItemGrid;
 
     //백업 변수
     public GridObject backUpItemGrid; //아이템이 원래 보관된 그리드
@@ -174,6 +178,22 @@ public class ItemObject : MonoBehaviour
         itemData.isSearched = true;
         imageUI.sprite = itemSprite;
         TextControl();
+    }
+    
+    public void HideItem()
+    {
+        isHide = true;
+        itemData.isSearched = false;
+        if (searchingCoroutine != null)
+        {
+            StopCoroutine(searchingCoroutine);
+            isOnSearching = false;
+            searchingCoroutine = null;
+        }
+
+        imageUI.sprite = hideSprite;
+
+        
     }
 
     /// <summary>
