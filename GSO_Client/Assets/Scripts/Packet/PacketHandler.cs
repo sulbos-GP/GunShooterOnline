@@ -3,13 +3,13 @@ using Google.Protobuf.Protocol;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using ServerCore;
-using System;
+
 using System.Collections.Generic;
+
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
-using static UnityEditor.Progress;
+
 
 internal class PacketHandler
 {
@@ -141,7 +141,7 @@ internal class PacketHandler
     }
 
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
-    { 
+    {
         /*
          * 플레이어가 인벤토리를 여는 키를 눌렀을대 전송되며 플레이어의 아이템데이터를 서버에 요청한다
          * sourceObjectId가 0이면 플레이어, id가 있으면 박스의 id
@@ -150,7 +150,7 @@ internal class PacketHandler
          * 인벤토리를 열고 InventorySet 함수를 실행시키면 각 인벤토리가 생성된다
          * 만약 박스가 열렸다면 박스의 bool변수를 변경하여 다른 플레이어가 루팅중인 박스는 접근이 불가하다
          */
-
+        
         
         //해당 클라이언트만 해당 되며 
         S_LoadInventory packet = message as S_LoadInventory;
@@ -257,7 +257,7 @@ internal class PacketHandler
         }
 
         Debug.Log("패킷받음");
-
+        Debug.Log($"패킷의 아이템id = {packet.SourceItem.ObjectId}");
         if (!packet.IsSuccess)
         {
             ItemObject targetItem = null;
@@ -290,7 +290,7 @@ internal class PacketHandler
             return;
         }
         Debug.Log("S_MoveItem");
-
+        
         ItemObject targetItem = null;
         InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
         if (targetItem == null)
@@ -302,6 +302,7 @@ internal class PacketHandler
         if (packet.IsSuccess)
         {
             Debug.Log("S_MoveItem 성공");
+            Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
             GridObject sourceGrid;
             if (packet.SourceObjectId == 0) {
                 sourceGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
@@ -336,9 +337,11 @@ internal class PacketHandler
         else
         {
             Debug.Log("S_MoveItem 실패");
+            Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
             targetItem.curItemGrid.PrintInvenContents();
             targetItem.backUpItemGrid.PrintInvenContents();
 
+            ChangeItemObjectId(targetItem, packet.SourceMoveItem.ObjectId);
             InventoryController.invenInstance.UndoGridSlot(targetItem);
             InventoryController.invenInstance.UndoItem(targetItem);
 
@@ -362,6 +365,7 @@ internal class PacketHandler
             return;
         }
         Debug.Log("S_DeleteItem");
+        Debug.Log($"패킷의 아이템id = {packet.DeleteItem.ObjectId}");
 
         ItemObject targetItem = null;
         InventoryController.invenInstance.instantItemDic.TryGetValue(packet.DeleteItem.ObjectId, out targetItem);
