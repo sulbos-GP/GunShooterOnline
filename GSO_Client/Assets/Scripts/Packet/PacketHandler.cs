@@ -163,6 +163,10 @@ internal class PacketHandler
         if (!packet.IsSuccess)
         {
             Debug.Log("S_LoadInventory 불러오기에 실패함");
+            if (InventoryController.invenInstance.isActive)
+            {
+                InventoryController.invenInstance.invenUIControl();
+            }
             return;
         }
 
@@ -226,9 +230,11 @@ internal class PacketHandler
             target.GetComponent<Box>().interactable = true;
         }
 
+        
 
         if (InventoryController.invenInstance.isActive)
         {
+            InventoryController.invenInstance.instantItemDic.Clear();
             InventoryController.invenInstance.invenUIControl();
         }
     }
@@ -247,17 +253,46 @@ internal class PacketHandler
         }
         Debug.Log("S_MoveItem");
 
+        ItemObject targetItem = null;
+        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
+        if (targetItem == null)
+        {
+            Debug.Log("해당 아이템 검색 실패");
+            return;
+        }
+
         if (packet.IsSuccess)
         {
-            ItemObject targetItem = null;
-            InventoryController.invenInstance.instantItemDic.TryGetValue(packet.DestinationMoveItem.ObjectId, out targetItem);
-            if (targetItem == null)
-            {
-                Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
-                return;
+            GridObject sourceGrid;
+            if (packet.SourceObjectId == 0) {
+                sourceGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
             }
-            Vector2Int movePos = new Vector2Int(packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
-            InventoryController.invenInstance.CompleteItemPlacement(targetItem, movePos);
+            else
+            {
+                sourceGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
+            }
+
+            GridObject destinationGrid;
+            if (packet.DestinationObjectId == 0)
+            {
+                destinationGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
+            }
+            else
+            {
+                destinationGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
+            }
+
+            sourceGrid.CleanItemSlot(targetItem);
+            destinationGrid.PlaceItem(targetItem, packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
+            targetItem.Rotate(packet.DestinationMoveItem.Rotate);
+            InventoryController.invenInstance.BackUpGridSlot(targetItem);
+            InventoryController.invenInstance.BackUpItem(targetItem);
+        }
+
+        else
+        {
+            InventoryController.invenInstance.UndoGridSlot(targetItem);
+            InventoryController.invenInstance.UndoItem(targetItem);
         }
         
     }
@@ -290,7 +325,6 @@ internal class PacketHandler
 
             if (targetItem.backUpEquipSlot == null)
             {
-                targetItem.backUpItemGrid.RemoveItemFromItemList(targetItem);
                 InventoryController.invenInstance.DestroyItem(targetItem);
                 return;
             }

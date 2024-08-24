@@ -37,7 +37,7 @@ public class Box : InteractableObject
     {
         if (interactable)
         {
-            InventoryController.invenInstance.SendLoadInvenPacket(0);
+            InventoryController.invenInstance.SendLoadInvenPacket(0);  //플레이어는 실패 가능성이 없기에 플레이어 인벤 먼저
             InventoryController.invenInstance.SendLoadInvenPacket(objectId);
         }
         else

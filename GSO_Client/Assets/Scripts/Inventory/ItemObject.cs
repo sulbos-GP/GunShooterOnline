@@ -121,7 +121,7 @@ public class ItemObject : MonoBehaviour
         //아이템의 크기및 회전 설정
         itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile+50, itemData.height * GridObject.HeightOfTile-50);
         Rotate(itemData.rotate);
-        itemSprite = spriteList[itemData.itemId];
+        itemSprite = spriteList[itemData.itemId-1];
         isOnSearching = false;
 
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
@@ -171,8 +171,8 @@ public class ItemObject : MonoBehaviour
         unhideTimer.gameObject.SetActive(false);
 
         isHide = false;
-        imageUI.sprite = itemSprite;
         itemData.isSearched = true;
+        imageUI.sprite = itemSprite;
         TextControl();
     }
 

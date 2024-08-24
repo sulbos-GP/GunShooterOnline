@@ -99,6 +99,7 @@ public class GridObject : MonoBehaviour
         ItemObject itemObj = Managers.Resource.Instantiate("UI/ItemUI", transform).GetComponent<ItemObject>();
         //인벤컨트롤러에서 생성된 아이템리스트에 등록
         InventoryController.invenInstance.instantItemDic.Add(itemData.objectId,itemObj);
+        Debug.Log($"인벤컨트롤러의 인스턴트 아이템 리스트에 아이템 등록 {itemData.objectId}");
         //해당 아이템에 부여된 데이터로 아이템 세팅
         itemObj.ItemDataSet(itemData);
         //아이템을 해당 그리드에 배치하고 아이템 객체의 위치또한 맞게 변경
@@ -193,11 +194,7 @@ public class GridObject : MonoBehaviour
 
         PrintInvenContents(this, ItemSlot);
         GridWeight += item.itemData.item_weight;
-        if (!InventoryController.invenInstance.instantItemDic.ContainsKey(item.itemData.objectId))
-        {
-            InventoryController.invenInstance.instantItemDic.Add(item.itemData.objectId, item);
-        }
-        
+
         UpdateItemPosition(item, posX, posY, itemRect);
     }
 
@@ -210,40 +207,6 @@ public class GridObject : MonoBehaviour
         Vector2 position = CalculatePositionOnGrid(inventoryItem, posX, posY);
         itemRect.localPosition = new UnityEngine.Vector2(position.X,position.Y);
     }
-
-    /// <summary>
-    /// 아이템 이동시 그리드 데이터 수정
-    /// </summary>
-    /// <param name="item"></param>
-    public void UpdateItemInGridData(ItemObject item)
-    {
-        // 아이템 데이터에서 현재 위치를 가져옵니다.
-        Vector2Int oldPos = item.backUpItemPos;
-        Vector2Int newPos = item.itemData.pos;
-
-        // 이전 위치의 아이템 리스트에서 아이템을 제거합니다.
-        RemoveItemFromItemList(item);
-
-        // 새로운 위치에 아이템을 추가합니다.
-        AddItemToItemList(newPos, item);
-    }
-
-    public void AddItemToItemList(Vector2Int pos, ItemObject item)
-    {
-        if (item.itemData == null) return;
-
-        item.itemData.pos = pos;
-        item.curItemGrid = this;
-        InventoryController.invenInstance.instantItemDic.Add(item.itemData.objectId,item);
-    }
-
-    public void RemoveItemFromItemList(ItemObject item)
-    {
-        if (item.itemData == null) return;
-
-        InventoryController.invenInstance.instantItemDic.Remove(item.itemData.objectId);
-    }
-
 
     /// <summary>
     /// 그리드 내의 월드위치 계산. 아이템을 해당 위치에 고정시키기 위함

@@ -334,6 +334,7 @@ namespace Server
             if(sourceStorage == null)
             {
                 packet.IsSuccess = false;
+                packet.SourceMoveItem = sourceMoveItemInfo;
                 player.Session.Send(packet);
                 return;
             }
@@ -342,6 +343,7 @@ namespace Server
             if(sourceStorage == null)
             {
                 packet.IsSuccess = false;
+                packet.SourceMoveItem = sourceMoveItemInfo;
                 player.Session.Send(packet);
                 return;
             }
@@ -377,6 +379,7 @@ namespace Server
             if (isInsert == false || isDelete == false)
             {
                 packet.IsSuccess = false;
+                packet.SourceMoveItem = sourceMoveItemInfo;
                 player.Session.Send(packet);
                 return;
             }

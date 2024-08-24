@@ -36,19 +36,11 @@ public partial class InventoryController
     /// <summary>
     /// 그리드 -> 그리드 혹은 장착슬롯 -> 그리드
     /// </summary>
-    private void SendMoveItemPacket(ItemObject item , Vector2Int pos , bool isEquip = false)
+    private void SendMoveItemPacket(ItemObject item , Vector2Int pos)
     {
         C_MoveItem packet = new C_MoveItem();
-
-        if (!isEquip)
-        {
-            packet.SourceObjectId = item.backUpItemGrid.objectId;  //출발 소유자 id
-        }
-        else
-        {
-            packet.SourceObjectId = item.backUpEquipSlot.slotId; //출발 장착칸 id
-        }
         
+        packet.SourceObjectId = item.backUpItemGrid.objectId;  //출발 소유자 id
         packet.DestinationObjectId = item.curItemGrid.objectId;  //도착 소유자id
         packet.SourceMoveItemId = item.itemData.objectId; //옮긴 아이템 아이디
         packet.DestinationGridX = pos.x; //옮긴 위치

@@ -23,7 +23,6 @@ public class EquipSlot : MonoBehaviour
 
         if (equippedItem.curItemGrid != null)
         {
-            equippedItem.curItemGrid.RemoveItemFromItemList(equippedItem);
             equippedItem.curItemGrid = null;
             equippedItem.backUpItemGrid = null;
         }
