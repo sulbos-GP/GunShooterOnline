@@ -18,7 +18,7 @@ public class ItemDB
         ItemData pistol = new ItemData();
         pistol.itemId = 1;
         pistol.isItemConsumeable = false;
-        pistol.item_name = "Pistol01";
+        pistol.item_name = "Colt45";
         pistol.item_weight = 2.0f;
         pistol.item_type = ItemType.Weapon;
         pistol.item_string_value = 101;
@@ -28,64 +28,35 @@ public class ItemDB
         pistol.height = 2;
         pistol.item_searchTime = 2;
 
-        ItemData ak47 = new ItemData();
-        ak47.itemId = 2;
-        ak47.isItemConsumeable = false;
-        ak47.item_name = "Ak47";
-        ak47.item_weight = 7.0f;
-        ak47.item_type = ItemType.Weapon;
-        ak47.item_string_value = 102;
-        ak47.item_purchase_price = 2200;
-        ak47.item_sell_price = 500;
-        ak47.width = 4;
-        ak47.height = 3;
-        ak47.item_searchTime = 3;
+        ItemData armor = new ItemData();
+        armor.itemId = 2;
+        armor.isItemConsumeable = true;
+        armor.item_name = "ak47";
+        armor.item_weight = 7.0f;
+        armor.item_type = ItemType.Weapon;
+        armor.item_string_value = 201;
+        armor.item_purchase_price = 1100;
+        armor.item_sell_price = 550;
+        armor.width = 4;
+        armor.height = 2;
+        armor.item_searchTime = 1;
 
-        ItemData recoveryKit = new ItemData();
-        recoveryKit.itemId = 3;
-        recoveryKit.isItemConsumeable = true;
-        recoveryKit.item_name = "Recovery kit";
-        recoveryKit.item_weight = 1.0f;
-        recoveryKit.item_type = ItemType.Recovery;
-        recoveryKit.item_string_value = 301;
-        recoveryKit.item_purchase_price = 500;
-        recoveryKit.item_sell_price = 120;
-        recoveryKit.width = 2;
-        recoveryKit.height = 2;
-        recoveryKit.item_searchTime = 1;
-
-        ItemData bandage = new ItemData();
-        bandage.itemId = 4;
-        bandage.isItemConsumeable = true;
-        bandage.item_name = "Bandage";
-        bandage.item_weight = 0.0f;
-        bandage.item_type = ItemType.Recovery;
-        bandage.item_string_value = 302;
-        bandage.item_purchase_price = 100;
-        bandage.item_sell_price = 20;
-        bandage.width = 1;
-        bandage.height = 1;
-        bandage.item_searchTime = 1;
-
-
-        ItemData pill = new ItemData();
-        pill.itemId = 5;
-        pill.isItemConsumeable = true;
-        pill.item_name = "Pill";
-        pill.item_weight = 0.0f;
-        pill.item_type = ItemType.Recovery;
-        pill.item_string_value = 402;
-        pill.item_purchase_price = 150;
-        pill.item_sell_price = 40;
-        pill.width = 1;
-        pill.height = 1;
-        pill.item_searchTime = 1;
+        ItemData band = new ItemData();
+        band.itemId = 11;
+        band.isItemConsumeable = true;
+        band.item_name = "Band";
+        band.item_weight = 0.2f;
+        band.item_type = ItemType.Recovery;
+        band.item_string_value = 401;
+        band.item_purchase_price = 100;
+        band.item_sell_price = 200;
+        band.width = 1;
+        band.height = 1;
+        band.item_searchTime = 0.5f;
 
         items.Add(pistol);
-        items.Add(ak47);
-        items.Add(recoveryKit);
-        items.Add(bandage);
-        items.Add( pill);
+        items.Add(armor);
+        items.Add(band);
 
 
 

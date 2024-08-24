@@ -341,7 +341,7 @@ internal class PacketHandler
             targetItem.curItemGrid.PrintInvenContents();
             targetItem.backUpItemGrid.PrintInvenContents();
 
-            ChangeItemObjectId(targetItem, packet.SourceMoveItem.ObjectId);
+            ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
             InventoryController.invenInstance.UndoGridSlot(targetItem);
             InventoryController.invenInstance.UndoItem(targetItem);
 

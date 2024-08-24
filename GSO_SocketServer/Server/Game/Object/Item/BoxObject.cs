@@ -44,15 +44,20 @@ namespace Server.Game.Object.Item
 
         public async void Init()
         {
-            //아이템 고정
+            //임의의 아이템
             storage.Init(5, 5, 20.0);
 
-            DB_ItemData data = await DatabaseHandler.MasterDB.GetItemData(1);
+            DB_ItemData colt45Data = await DatabaseHandler.MasterDB.GetItemData(1);
+            ItemObject colt45Item = new ItemObject(colt45Data.item_id, 0, 0, 0, 1);
+            storage.InsertItem(colt45Item);
 
-            ItemObject item = new ItemObject(data.item_id, 0, 0, 0, 1);
-            storage.InsertItem(item);
+            DB_ItemData akData = await DatabaseHandler.MasterDB.GetItemData(2);
+            ItemObject akItem = new ItemObject(akData.item_id, 3, 0, 1, 1);
+            storage.InsertItem(akItem);
 
-            Console.WriteLine();
+            DB_ItemData bandData = await DatabaseHandler.MasterDB.GetItemData(11);
+            ItemObject bandItem = new ItemObject(bandData.item_id, 1, 3, 0, 10);
+            storage.InsertItem(bandItem);
         }
 
     }
