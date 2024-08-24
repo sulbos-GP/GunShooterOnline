@@ -160,7 +160,6 @@ public partial class InventoryController
         selectedItem.backUpEquipSlot = selectedEquip;
         if (selectedItem.backUpItemGrid != null)
         {
-            selectedItem.backUpItemGrid.RemoveItemFromItemList(selectedItem);
             selectedItem.backUpItemGrid = null;
         }
 
@@ -201,7 +200,6 @@ public partial class InventoryController
 
             if (toSlotItem.backUpItemGrid != null)
             {
-                toSlotItem.backUpItemGrid.RemoveItemFromItemList(toSlotItem);
                 toSlotItem.backUpItemGrid = null;
             }
         }
@@ -320,7 +318,7 @@ public partial class InventoryController
             selectedItem.MergeItem(overlapItem, selectedItem.itemData.amount);
             if(selectedItem.backUpItemGrid != null)
             {
-                BackUpGridSlot(selectedItem.backUpItemGrid);
+                BackUpGridSlot(selectedItem);
             }
             
             DestroyItem(selectedItem);
@@ -352,7 +350,7 @@ public partial class InventoryController
 
         if (targetItem.backUpItemGrid != null)
         {
-            targetItem.backUpItemGrid.RemoveItemFromItemList(targetItem);
+
         }
 
         targetItem.DestroyItem();
@@ -365,11 +363,6 @@ public partial class InventoryController
     {
         
 
-        if (item.backUpItemGrid != null) //그리드 -> 그리드
-        {
-            item.backUpItemGrid.RemoveItemFromItemList(item); //이전 그리드의 데이터의 아이템 데이터 리스트에서 해당 데이터 제거
-        }
-
         if (item.backUpEquipSlot != null) //장착칸 -> 그리드
         {
             //item.backUpEquipSlot.equippedItem = null; //이부분이 주석이어도 잘 돌아가는지 체크후 제거할것
@@ -378,10 +371,9 @@ public partial class InventoryController
 
         item.curItemGrid.PlaceItem(item, pos.x, pos.y);
         item.curItemGrid.PrintInvenContents(item.curItemGrid, item.curItemGrid.ItemSlot); //체크
-        item.curItemGrid.AddItemToItemList(item.itemData.pos, item);
 
         BackUpItem(item);
-        BackUpGridSlot(item.curItemGrid);
+        BackUpGridSlot(item);
 
 
         ResetSelection();

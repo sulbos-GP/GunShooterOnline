@@ -18,15 +18,15 @@ public partial class InventoryController
     /// <summary>
     /// 아이템 슬롯을 백업함(아이템을 들때 슬롯이 업데이트되기에 백업 필요)
     /// </summary>
-    private void BackUpGridSlot(GridObject grid)
+    public void BackUpGridSlot(ItemObject item)
     {
-        grid.UpdateBackUpSlot();
+        item.curItemGrid.UpdateBackUpSlot();
     }
 
     /// <summary>
     /// 아이템의 상태와 위치를 백업함
     /// </summary>
-    private void BackUpItem(ItemObject item)
+    public void BackUpItem(ItemObject item)
     {
         item.backUpItemPos = item.itemData.pos; //현재 위치
         item.backUpItemRotate = item.itemData.rotate; //현재 회전
@@ -48,7 +48,7 @@ public partial class InventoryController
         if (item.curItemGrid == null) { return; }
 
         item.backUpItemGrid.UndoItemSlot();
-        item.backUpItemGrid.PrintInvenContents(selectedItem.curItemGrid, selectedItem.curItemGrid.ItemSlot);
+        item.backUpItemGrid.PrintInvenContents(item.backUpItemGrid, item.backUpItemGrid.ItemSlot);
     }
 
     /// <summary>
@@ -66,10 +66,8 @@ public partial class InventoryController
         //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
         item.itemData.pos = item.backUpItemPos;
         item.itemData.rotate = item.backUpItemRotate;
-
-        //바뀐 변수를 적용. 해당 아이템을 이전상태로 되돌림
+        item.curItemGrid = item.backUpItemGrid;
         item.Rotate(item.itemData.rotate);
-        item.backUpItemGrid.PlaceItem(item, item.itemData.pos.x, item.itemData.pos.y);
     }
 }
 
