@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using Server.Database.Handler;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,12 @@ namespace Server.Game
 {
     public class ItemObject : GameObject
     {
-        private PS_ItemInfo itemInfo = null;
+        
+        private int x;
+        private int y;
+        private int rotate;
+        private int amount;
+
         private readonly DB_ItemData itemData = new DB_ItemData();
         private Dictionary<int, DateTime> viewers = new Dictionary<int, DateTime>();
 
@@ -19,16 +25,10 @@ namespace Server.Game
             ObjectType = GameObjectType.Item;
             itemData = GetItemData(itemId).Result;
 
-            itemInfo = new PS_ItemInfo()
-            {
-                ObjectId = this.Id,
-                ItemId = itemId,
-                X = gridX,
-                Y = grixY,
-                Rotate = rotate,
-                Amount = amount
-            };
-
+            this.x = gridX;
+            this.y = grixY;
+            this.rotate = rotate;
+            this.amount = amount;
         }
 
         public ItemObject(int viewerId, int itemId, int gridX, int grixY, int rotate, int amount) : this(itemId, gridX, grixY, rotate, amount)
@@ -38,11 +38,14 @@ namespace Server.Game
 
         public ItemObject(ItemObject other)
         {
-            ObjectType = GameObjectType.Item;
-            Id = other.Id;
-            viewers = other.viewers;
-            itemInfo = other.itemInfo;
-            itemData = other.itemData;
+            this.ObjectType = GameObjectType.Item;
+            this.Id = other.Id;
+            this.viewers = other.viewers;
+            this.x = other.x;
+            this.y = other.y;
+            this.rotate = other.rotate;
+            this.amount = other.amount;
+            this.itemData = other.itemData;
         }
 
         public async Task<DB_ItemData> GetItemData(int itemId)
@@ -54,7 +57,6 @@ namespace Server.Game
         public void CreateItem()
         {
             ObjectManager.Instance.Add(this);
-            this.info.ObjectId = this.Id;
         }
 
         public void DestroyItem()
@@ -74,7 +76,7 @@ namespace Server.Game
         {
             get
             {
-                return itemInfo.ItemId;
+                return Data.item_id;
             }
         }
 
@@ -82,7 +84,11 @@ namespace Server.Game
         {
             get
             {
-                return itemInfo.X;
+                return x;
+            }
+            set
+            {
+                x = value;
             }
         }
 
@@ -90,7 +96,11 @@ namespace Server.Game
         {
             get
             {
-                return itemInfo.Y;
+                return y;
+            }
+            set
+            {
+                y = value;
             }
         }
 
@@ -98,11 +108,11 @@ namespace Server.Game
         {
             get
             {
-                if (itemInfo.Rotate % 2 == 0)
+                if (rotate % 2 == 0)
                 {
-                    return itemData.scale_x;
+                    return Data.scale_x;
                 }
-                return itemData.scale_y;
+                return Data.scale_y;
             }
         }
 
@@ -110,20 +120,28 @@ namespace Server.Game
         {
             get
             {
-                if (itemInfo.Rotate % 2 == 0)
+                if (rotate % 2 == 0)
                 {
-                    return itemData.scale_y;
+                    return Data.scale_y;
                 }
-                return itemData.scale_x;
+                return Data.scale_x;
             }
         }
 
         public int Rotate
         {
-            get => itemInfo.Rotate;
+            get => rotate;
             set
             {
-                itemInfo.Rotate = value;
+                rotate = value;
+            }
+        }
+
+        public double Weight
+        {
+            get
+            {
+                return Data.weight;
             }
         }
 
@@ -131,11 +149,11 @@ namespace Server.Game
         {
             get
             {
-                return itemInfo.Amount;
+                return amount;
             }
             set
             {
-                itemInfo.Amount = value;
+                amount = value;
             }
         }
 
@@ -143,7 +161,7 @@ namespace Server.Game
         {
             get
             {
-                return itemData.stack_count;
+                return Data.stack_count;
             }
         }
 
@@ -186,11 +204,8 @@ namespace Server.Game
                 Y = Y,
                 Rotate = Rotate,
                 Amount = Amount,
-                IsSearched = true,
+                IsSearched = IsViewer(viewerId),
             };
-
-            if (IsViewer(viewerId)) { info.IsSearched = true; }
-            else { info.IsSearched = false; }
             return info;
         }
 
