@@ -144,9 +144,9 @@ namespace Server
             player.Session.Send(packet);
         }
 
-        internal void SearchInventoryHandler(Player player, int sourceObjectId, int sourceItemId)
+        internal void SearchItemHandler(Player player, int sourceObjectId, int sourceItemId)
         {
-            S_SearchInventory packet = new S_SearchInventory();
+            S_SearchItem packet = new S_SearchItem();
 
             ItemObject sourcelItem = ObjectManager.Instance.Find<ItemObject>(sourceObjectId);
             PS_ItemInfo sourceItemInfo = sourcelItem.ConvertItemInfo(player.Id);

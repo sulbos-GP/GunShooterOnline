@@ -68,6 +68,14 @@ namespace Server.Game
                 return false;
             }
 
+            //if(weight - item.Weight < 0)
+            //{
+            //    OverWriteToRollBackGrid(rollback);
+            //    return false;
+            //}
+
+            //weight -= item.Weight;
+
             items.Add(item);
             item.CreateItem();
             PrintInvenContents();

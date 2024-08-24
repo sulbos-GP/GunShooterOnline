@@ -160,17 +160,17 @@ message S_CloseInventory                    //I4
     int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
 }
 
-message C_SearchInventory{                  //I5
-    int32 sourceObjectId            = 1;    // 출발지 저장소(상자) 아이디
-    int32 sourceItemId              = 2;    // 나눠지는 아이템 기준
+message C_SearchItem{                  //I5
+    int32 sourceObjectId            = 1;    // 출발지 저장소(인벤, 상자) 아이디
+    int32 sourceItemId              = 2;    // 서칭하는 아이템 아이디
 }
 
-message S_SearchInventory                   //I6
+message S_SearchItem                   //I6
 {                        
     bool isSuccess                  = 1;    // 성공 유무
 
-    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
-    PS_ItemInfo sourceItem          = 3;    // 나눠지는 아이템 기준
+    int32 sourceObjectId            = 2;    // 출발지 저장소(인벤, 상자) 아이디
+    PS_ItemInfo sourceItem          = 3;    // 서칭된 아이템 정보
 }
 
 message C_MergeItem                         //I7

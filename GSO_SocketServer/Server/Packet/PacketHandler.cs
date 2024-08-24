@@ -123,14 +123,14 @@ class PacketHandler
         
     }
 
-    internal static void C_SearchInventoryHandler(PacketSession session, IMessage message)
+    internal static void C_SearchItemHandler(PacketSession session, IMessage message)
     {
         ClientSession clientSession = session as ClientSession;
-        C_SearchInventory packet = (C_SearchInventory)message;
-        Console.WriteLine($"[C_SearchInventoryHandler]");
+        C_SearchItem packet = (C_SearchItem)message;
+        Console.WriteLine($"[C_SearchItemHandler]");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.Push(player.gameRoom.SearchInventoryHandler, player, packet.SourceObjectId, packet.SourceItemId);
+        player.gameRoom.Push(player.gameRoom.SearchItemHandler, player, packet.SourceObjectId, packet.SourceItemId);
 
     }
 
