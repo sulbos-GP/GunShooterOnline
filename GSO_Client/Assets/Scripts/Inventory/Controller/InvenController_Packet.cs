@@ -54,7 +54,7 @@ public partial class InventoryController
         packet.DestinationGridX = pos.x; //옮긴 위치
         packet.DestinationGridY = pos.y; //옮긴 위치
         packet.DestinationRotation = item.itemData.rotate; //옮겼을때의 회전
-
+        Debug.Log($"C_SearchInventory : {item.itemData.objectId} 아이템 옮김 ");
         Managers.Network.Send(packet);
     }
 
@@ -65,7 +65,7 @@ public partial class InventoryController
         packet.SourceObjectId = item.backUpItemGrid.objectId;
         packet.DeleteItemId = item.itemData.objectId;
         Managers.Network.Send(packet);
-        Debug.Log("C_DeleteItem");
+        Debug.Log($"C_SearchInventory : {item.itemData.objectId} 아이템 삭제");
     }
 
     private void SendEquipItemPacket(ItemObject item, int equipSlotCode)
