@@ -187,6 +187,7 @@ internal class PacketHandler
             InventoryController.invenInstance.playerInvenUI.InventorySet();
             InventoryController.invenInstance.playerInvenUI.instantGrid.objectId = packet.SourceObjectId;
             InventoryController.invenInstance.playerInvenUI.instantGrid.PlaceItemInGrid(packetItemList);
+            InventoryController.invenInstance.playerInvenUI.instantGrid.PrintInvenContents();
         }
         else
         {
@@ -195,6 +196,7 @@ internal class PacketHandler
             InventoryController.invenInstance.otherInvenUI.InventorySet();
             InventoryController.invenInstance.otherInvenUI.instantGrid.objectId = packet.SourceObjectId;
             InventoryController.invenInstance.otherInvenUI.instantGrid.PlaceItemInGrid(packetItemList);
+            InventoryController.invenInstance.otherInvenUI.instantGrid.PrintInvenContents();
         }
 
         if (!InventoryController.invenInstance.isActive)
@@ -238,6 +240,12 @@ internal class PacketHandler
             InventoryController.invenInstance.invenUIControl();
         }
     }
+    private static void ChangeItemObjectId(ItemObject targetItem, int newId)
+    {
+        InventoryController.invenInstance.instantItemDic.Remove(targetItem.itemData.objectId);
+        targetItem.itemData.objectId = newId;
+        InventoryController.invenInstance.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
+    }
 
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
@@ -263,6 +271,7 @@ internal class PacketHandler
 
         if (packet.IsSuccess)
         {
+            Debug.Log("S_MoveItem 성공");
             GridObject sourceGrid;
             if (packet.SourceObjectId == 0) {
                 sourceGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
@@ -282,19 +291,32 @@ internal class PacketHandler
                 destinationGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
             }
 
-            sourceGrid.CleanItemSlot(targetItem);
+            //sourceGrid.CleanItemSlot(targetItem); 이미 아이템을 집을때 슬롯에서 삭제되어 있음
             destinationGrid.PlaceItem(targetItem, packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
             targetItem.Rotate(packet.DestinationMoveItem.Rotate);
+
+            ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
+
+            targetItem.curItemGrid.PrintInvenContents();
+            targetItem.backUpItemGrid.PrintInvenContents();
             InventoryController.invenInstance.BackUpGridSlot(targetItem);
             InventoryController.invenInstance.BackUpItem(targetItem);
         }
 
         else
         {
+            Debug.Log("S_MoveItem 실패");
+            targetItem.curItemGrid.PrintInvenContents();
+            targetItem.backUpItemGrid.PrintInvenContents();
+
+            ChangeItemObjectId(targetItem, packet.SourceMoveItem.ObjectId);
             InventoryController.invenInstance.UndoGridSlot(targetItem);
             InventoryController.invenInstance.UndoItem(targetItem);
+
+            targetItem.curItemGrid.PrintInvenContents();
+            targetItem.backUpItemGrid.PrintInvenContents();
         }
-        
+
     }
 
     //아이템을 삭제할때. 플레이어가 아이템을 들었을때 다른 플레이어에게 전송할때도 좋을듯.
@@ -313,7 +335,7 @@ internal class PacketHandler
         Debug.Log("S_DeleteItem");
 
         ItemObject targetItem = null;
-        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceObjectId, out targetItem);
+        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.DeleteItem.ObjectId, out targetItem);
         if (targetItem == null)
         {
             Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
@@ -321,31 +343,27 @@ internal class PacketHandler
         }
 
         if (packet.IsSuccess) {
-            
 
-            if (targetItem.backUpEquipSlot == null)
+            Debug.Log("S_DeleteItem 성공");
+            GridObject sourceGrid;
+            if (packet.SourceObjectId == 0)
             {
-                InventoryController.invenInstance.DestroyItem(targetItem);
-                return;
+                sourceGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
             }
             else
-            {   //장비칸의 있던 아이템을 버릴경우
-                //서버에서도 수정해야함
-
-                InventoryController.invenInstance.DestroyItem(targetItem);
-                return;
+            {
+                sourceGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
             }
+
+            sourceGrid.CleanItemSlot(targetItem);
+            InventoryController.invenInstance.DestroyItem(targetItem);
         }
         else
         {
-            if (targetItem.backUpEquipSlot != null)
-            {
-                InventoryController.invenInstance.RejectEquipItem(targetItem);
-            }
-            if(targetItem.backUpItemGrid != null)
-            {
-                //InventoryController.invenInstance.Undo
-            }
+            Debug.Log("S_DeleteItem 실패");
+            ChangeItemObjectId(targetItem, packet.DeleteItem.ObjectId);
+            InventoryController.invenInstance.UndoGridSlot(targetItem);
+            InventoryController.invenInstance.UndoItem(targetItem);
         }
 
 

@@ -403,6 +403,7 @@ namespace Server
             if (storage == null)
             {
                 packet.IsSuccess = false;
+                packet.DeleteItem = deleteInfo;
                 player.Session.Send(packet);
                 return;
             }

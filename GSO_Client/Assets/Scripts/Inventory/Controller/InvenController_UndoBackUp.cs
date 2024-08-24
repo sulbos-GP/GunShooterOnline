@@ -20,7 +20,7 @@ public partial class InventoryController
     /// </summary>
     public void BackUpGridSlot(ItemObject item)
     {
-        item.curItemGrid.UpdateBackUpSlot();
+        item.backUpItemGrid.UpdateBackUpSlot();
     }
 
     /// <summary>
@@ -40,15 +40,7 @@ public partial class InventoryController
     /// </summary>
     public void UndoGridSlot(ItemObject item)
     {
-        if (item.backUpItemGrid != null)
-        {
-            item.curItemGrid = item.backUpItemGrid;
-        }
-
-        if (item.curItemGrid == null) { return; }
-
         item.backUpItemGrid.UndoItemSlot();
-        item.backUpItemGrid.PrintInvenContents(item.backUpItemGrid, item.backUpItemGrid.ItemSlot);
     }
 
     /// <summary>
@@ -56,19 +48,14 @@ public partial class InventoryController
     /// </summary>
     public void UndoItem(ItemObject item)
     {
-
-        if (item.backUpEquipSlot)
-        {
-            selectedRect.localPosition = Vector3.zero;
-            item.backUpEquipSlot.EquipItem(item);
-            return;
-        }
         //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
         item.itemData.pos = item.backUpItemPos;
         item.itemData.rotate = item.backUpItemRotate;
         item.curItemGrid = item.backUpItemGrid;
         item.Rotate(item.itemData.rotate);
+
+        item.backUpItemGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
     }
+
+
 }
-
-

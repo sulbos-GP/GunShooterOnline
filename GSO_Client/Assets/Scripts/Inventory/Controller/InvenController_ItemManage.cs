@@ -41,6 +41,7 @@ public partial class InventoryController
             if (isGridSelected)
             {
                 gridPosition = WorldToGridPos();
+                
                 ItemReleaseInGrid(selectedItem, gridPosition);
                 return;
             }
@@ -68,7 +69,16 @@ public partial class InventoryController
 
             if (isGridSelected)
             {
+                
                 gridPosition = WorldToGridPos();
+                if (gridPosition != null)
+                {
+                    if (gridPosition == gridPositionIndex)
+                    {
+                        return;
+                    }
+                    gridPositionIndex = gridPosition;
+                }
                 ItemObject clickedItem = selectedGrid.GetItem(gridPosition.x, gridPosition.y);
                 if (clickedItem == null) { Debug.Log("해당 위치에 아이템이 없음");  return; }
 
@@ -84,7 +94,7 @@ public partial class InventoryController
                 return;
             }
         }
-
+        ResetSelection();
     }
 
 
@@ -105,20 +115,22 @@ public partial class InventoryController
     /// </summary>
     private void ItemReleaseInGrid(ItemObject item, Vector2Int pos)
     {
-        //bool complete = selectedGrid.CanPlaceItem(item, pos.x, pos.y, ref placeOverlapItem);
-        //if (complete)
         if (itemPlaceableInGrid)
         {
             HandleItemPlacementInGrid(item, pos);
-
+            
         }
         else
         {
-            UndoGridSlot(SelectedItem);
-            UndoItem(SelectedItem);
+            Debug.Log("아이템 배치 실패");
+            item.curItemGrid.PrintInvenContents();
+            item.backUpItemGrid.PrintInvenContents();
+
+            UndoGridSlot(item);
+            UndoItem(item);
         }
 
-        itemPlaceableInGrid = false;
+        ResetSelection();
     }
 
     
@@ -191,7 +203,6 @@ public partial class InventoryController
             toGridItem.curEquipSlot = null;
             toGridItem.backUpEquipSlot = null;
             //인벤토리에 기존의 아이템을 넣을수 있음 -> 교환
-            CompleteItemPlacement(toGridItem, findSpacePos.Value);
             toGridItem.backUpItemGrid = playerGrid;
             targetEquip.UnequipItem();
 
@@ -262,9 +273,6 @@ public partial class InventoryController
         ResetSelection();
     }
 
-
-
-
     /// <summary>
     /// 아이템 배치 성공. 병합 및 아이템 배치 실행
     /// </summary>
@@ -288,8 +296,6 @@ public partial class InventoryController
         {
             SendMoveItemPacket(item, pos);
         }
-
-        ResetSelection();
     }
 
     /// <summary>
@@ -316,10 +322,7 @@ public partial class InventoryController
         if (totalAmount <= ItemObject.maxItemMergeAmount)
         {
             selectedItem.MergeItem(overlapItem, selectedItem.itemData.amount);
-            if(selectedItem.backUpItemGrid != null)
-            {
-                BackUpGridSlot(selectedItem);
-            }
+            
             
             DestroyItem(selectedItem);
             SelectedItem = null;
@@ -343,16 +346,7 @@ public partial class InventoryController
     /// </summary>
     public void DestroyItem(ItemObject targetItem)
     {
-        if (targetItem.backUpEquipSlot != null)
-        {
-            targetItem.backUpEquipSlot.equippedItem = null;
-        }
-
-        if (targetItem.backUpItemGrid != null)
-        {
-
-        }
-
+        instantItemDic.Remove(targetItem.itemData.objectId);
         targetItem.DestroyItem();
     }
 
@@ -370,10 +364,6 @@ public partial class InventoryController
         }
 
         item.curItemGrid.PlaceItem(item, pos.x, pos.y);
-        item.curItemGrid.PrintInvenContents(item.curItemGrid, item.curItemGrid.ItemSlot); //체크
-
-        BackUpItem(item);
-        BackUpGridSlot(item);
 
 
         ResetSelection();

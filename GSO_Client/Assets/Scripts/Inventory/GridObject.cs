@@ -57,8 +57,8 @@ public class GridObject : MonoBehaviour
         gridSize = _gridSize;
         limitWeight = 20f;
 
-        ItemSlot = BackUpSlot = new ItemObject[width, height];
-
+        ItemSlot = new ItemObject[width, height];
+        BackUpSlot = new ItemObject[width, height];
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
 
@@ -152,11 +152,8 @@ public class GridObject : MonoBehaviour
         ItemObject targetItem = ItemSlot[x, y];
         
         if (targetItem == null) { return null; }
-
+        CleanItemSlot(targetItem); //꼭 든 순간 아이템을 슬롯에서 제거해야함!!!
         GridWeight -= targetItem.itemData.item_weight;
-
-        CleanItemSlot(targetItem);
-        PrintInvenContents(this,ItemSlot);
 
         return targetItem;
     }
@@ -192,17 +189,18 @@ public class GridObject : MonoBehaviour
             }
         }
 
-        PrintInvenContents(this, ItemSlot);
+        UpdateBackUpSlot();
         GridWeight += item.itemData.item_weight;
 
-        UpdateItemPosition(item, posX, posY, itemRect);
+        UpdateItemPosition(item, posX, posY);
     }
 
     /// <summary>
     /// 아이템의 렉트를 해당위치로 이동
     /// </summary>
-    public void UpdateItemPosition(ItemObject inventoryItem, int posX, int posY, RectTransform itemRect)
+    public void UpdateItemPosition(ItemObject inventoryItem, int posX, int posY)
     {
+        RectTransform itemRect = inventoryItem.GetComponent<RectTransform>();
         inventoryItem.itemData.pos = new Vector2Int(posX, posY);
         Vector2 position = CalculatePositionOnGrid(inventoryItem, posX, posY);
         itemRect.localPosition = new UnityEngine.Vector2(position.X,position.Y);
@@ -261,14 +259,8 @@ public class GridObject : MonoBehaviour
                 //해당 아이템 슬롯이 비어있지 않을 경우 
                 if (ItemSlot[posX + x, posY + y] != null)
                 {
-                    
-                    if (ItemSlot[posX + x, posY + y].itemData.isItemConsumeable)
-                    {
-                        //아이템이 오버랩 가능할때만 해당 좌표의 아이템을 오버렙아이템으로 지정
-                        overlapItem = ItemSlot[posX + x, posY + y];
-                        return true;
-                    }
-                    
+                    overlapItem = ItemSlot[posX + x, posY + y];
+                    return true;
                 }
             }
         }
@@ -279,14 +271,34 @@ public class GridObject : MonoBehaviour
     /// <summary>
     /// InventoryItemSlot을 출력
     /// </summary>
-    public void PrintInvenContents(GridObject grid, ItemObject[,] slots)
+    public void PrintInvenContents()
     {
-        string content = grid.gameObject.name + "\n";
+        string content = gameObject.name + " slot\n";
         for (int i = 0; i < ItemSlot.GetLength(1); i++)
         {
             for (int j = 0; j < ItemSlot.GetLength(0); j++)
             {
                 ItemObject item = ItemSlot[j, i];
+                if (item != null)
+                {
+                    content += $"| {item.itemData.item_name} |";
+                }
+                else
+                {
+                    content += $"| Null |";
+                }
+            }
+            content += "\n";
+        }
+
+        content += "\n\n";
+
+        content += gameObject.name + " backUp slot\n";
+        for (int i = 0; i < BackUpSlot.GetLength(1); i++)
+        {
+            for (int j = 0; j < BackUpSlot.GetLength(0); j++)
+            {
+                ItemObject item = BackUpSlot[j, i];
                 if (item != null)
                 {
                     content += $"| {item.itemData.item_name} |";
@@ -309,16 +321,16 @@ public class GridObject : MonoBehaviour
     public Color32 PlaceCheckInGridHighLight(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
     {
         overlapItem = null;
-
+        InventoryController.invenInstance.itemPlaceableInGrid = false;
         //아이템이 그리드 밖으로 나갈시 취소
         if (!BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height))
         {
             Debug.Log("boundary error");
-            InventoryController.invenInstance.itemPlaceableInGrid = false;
             return HighlightColor.Red;
 
         }
 
+        /* 서버에서 거부할경우를 체크하기 위한 임시 제거
         //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
         if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
         {
@@ -329,16 +341,14 @@ public class GridObject : MonoBehaviour
             {
                 //현재 겹치는 아이템이 있지만 머지의 기준을 충족하지 못함
                 Debug.Log($"merge error");
-                InventoryController.invenInstance.itemPlaceableInGrid = false;
                 return HighlightColor.Red;
             }
-        }
+        }*/
 
         //무게에 의해 배치가 불가능할 경우 취소
         if (!InventoryWeightCheck(placeItem.itemData.item_weight, overlapItem))
         {
             Debug.Log("weight error");
-            InventoryController.invenInstance.itemPlaceableInGrid = false;
             return HighlightColor.Red;
         }
 

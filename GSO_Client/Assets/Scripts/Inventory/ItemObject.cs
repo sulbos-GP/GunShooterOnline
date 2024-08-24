@@ -224,11 +224,6 @@ public class ItemObject : MonoBehaviour
 
     public void DestroyItem()
     {
-        if (curItemGrid != null) 
-        {
-            InventoryController.invenInstance.instantItemDic.Remove(itemData.objectId); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
-        }
-        
         Managers.Resource.Destroy(gameObject);
     }
 }
