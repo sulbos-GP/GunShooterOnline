@@ -374,7 +374,7 @@ namespace Server
                     isInsert = await inventory.InsertItem(newItem);
                     if (false == isInsert)
                     {
-                        await inventory.InsertItem(sourceMovelItem);
+                        await inventory.InsertItem(tempItemObject);
                     }
                 }
                 else
@@ -382,7 +382,7 @@ namespace Server
                     isInsert = destinationStorage.InsertItem(newItem);
                     if (false == isInsert)
                     {
-                        destinationStorage.InsertItem(sourceMovelItem);
+                        destinationStorage.InsertItem(tempItemObject);
                     }
                 }
             }
@@ -392,6 +392,7 @@ namespace Server
                 packet.IsSuccess = false;
                 packet.SourceObjectId = sourceObjectId;
                 packet.SourceMoveItem = sourceMoveItemInfo;
+                packet.DestinationMoveItem = tempItemObject.ConvertItemInfo(player.Id);
                 player.Session.Send(packet);
                 return;
             }
