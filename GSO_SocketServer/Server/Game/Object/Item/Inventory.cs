@@ -97,7 +97,6 @@ namespace Server.Game
                     {
                         throw new Exception("인벤토리 DB로드 실패");
                     }
-                    newItem.AddViewer(owner.Id);
                 }
 
             }
@@ -107,27 +106,27 @@ namespace Server.Game
             }
         }
 
-        public async Task<bool> InsertItem(ItemObject deleteItem)
+        public async Task<bool> InsertItem(ItemObject insertItem)
         {
             try
             {
 
-                if (deleteItem == null)
+                if (insertItem == null)
                 {
                     throw new Exception("삽입하려는 아이템이 존재하지 않음");
                 }
 
-                if (-1 != storage.ScanItem(deleteItem))
+                if (-1 != storage.ScanItem(insertItem))
                 {
                     throw new Exception("삽입하는 아이템이 동일하게 존재함");
                 }
 
-                if (false == storage.InsertItem(deleteItem))
+                if (false == storage.InsertItem(insertItem))
                 {
                     throw new Exception("인벤토리에서 아이템을 삽입하지 못함");
                 }
 
-                DB_InventoryUnit insertUnit = deleteItem.ConvertInventoryUnit();
+                DB_InventoryUnit insertUnit = insertItem.ConvertInventoryUnit();
                 int ret = await DatabaseHandler.GameDB.InsertItem(storage_id, insertUnit);
                 if (ret == 0)
                 {
@@ -247,16 +246,6 @@ namespace Server.Game
                 Console.WriteLine($"[DecreaseAmount] : {e.Message.ToString()}");
                 return EStorageResult.Failed;
             }
-        }
-
-        public IEnumerable<PS_ItemInfo> GetInventoryItems()
-        {
-            List<PS_ItemInfo> infos = new List<PS_ItemInfo>();
-            foreach(ItemObject item in storage.items)
-            {
-                infos.Add(item.Info);
-            }
-            return infos;
         }
 
         public void ClearInventory()

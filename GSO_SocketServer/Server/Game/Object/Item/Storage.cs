@@ -69,6 +69,7 @@ namespace Server.Game
             }
 
             items.Add(item);
+            item.CreateItem();
             PrintInvenContents();
 
             return true;
@@ -163,7 +164,7 @@ namespace Server.Game
             for (int index = 0; index < items.Count; ++index)
             {
                 ItemObject item = items[index];
-                if (item.Info.ItemId == target.Info.ItemId && item.Rotate == target.Rotate && item.X == target.X && item.Y == target.Y)
+                if (item.ItemId == target.ItemId && item.Rotate == target.Rotate && item.X == target.X && item.Y == target.Y)
                 {
                     return index;
                 }
@@ -198,6 +199,16 @@ namespace Server.Game
                 }
             }
             return true;
+        }
+
+        public IEnumerable<PS_ItemInfo> GetItems(int viewerId)
+        {
+            List<PS_ItemInfo> infos = new List<PS_ItemInfo>();
+            foreach (ItemObject item in items)
+            {
+                infos.Add(item.ConvertItemInfo(viewerId));
+            }
+            return infos;
         }
 
         public void PrintInvenContents()
