@@ -155,6 +155,8 @@ namespace Server
             if (sourceStorage == null || sourcelItem == null || -1 == sourceStorage.ScanItem(sourcelItem))
             {
                 packet.IsSuccess = false;
+                packet.SourceObjectId = sourceObjectId;
+                packet.SourceItem = sourceItemInfo;
                 player.Session.Send(packet);
                 return;
             }
@@ -162,6 +164,8 @@ namespace Server
             if(true == sourcelItem.IsViewer(player.Id))
             {
                 packet.IsSuccess = false;
+                packet.SourceObjectId = sourceObjectId;
+                packet.SourceItem = sourceItemInfo;
                 player.Session.Send(packet);
                 return;
             }

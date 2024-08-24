@@ -54,6 +54,7 @@ namespace Server.Game
         public void CreateItem()
         {
             ObjectManager.Instance.Add(this);
+            this.info.ObjectId = this.Id;
         }
 
         public void DestroyItem()
@@ -177,7 +178,17 @@ namespace Server.Game
 
         public PS_ItemInfo ConvertItemInfo(int viewerId)
         {
-            PS_ItemInfo info = new PS_ItemInfo(itemInfo);
+            PS_ItemInfo info = new PS_ItemInfo()
+            {
+                ObjectId = this.Id,
+                ItemId = Data.item_id,
+                X = X,
+                Y = Y,
+                Rotate = Rotate,
+                Amount = Amount,
+                IsSearched = true,
+            };
+
             if (IsViewer(viewerId)) { info.IsSearched = true; }
             else { info.IsSearched = false; }
             return info;
