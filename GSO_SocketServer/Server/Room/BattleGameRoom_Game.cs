@@ -372,19 +372,25 @@ namespace Server
                 {
                     Inventory inventory = player.inventory;
                     isInsert = await inventory.InsertItem(newItem);
-                    if (false == isInsert)
-                    {
-                        await inventory.InsertItem(tempItemObject);
-                    }
                 }
                 else
                 {
                     isInsert = destinationStorage.InsertItem(newItem);
-                    if (false == isInsert)
+                }
+
+                if(false == isInsert)
+                {
+                    if (IsInventory(sourceObjectId))
                     {
-                        destinationStorage.InsertItem(tempItemObject);
+                        Inventory inventory = player.inventory;
+                        await inventory.InsertItem(tempItemObject);
+                    }
+                    else
+                    {
+                        sourceStorage.InsertItem(tempItemObject);
                     }
                 }
+
             }
 
             if (isInsert == false || isDelete == false)

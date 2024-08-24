@@ -27,7 +27,8 @@ namespace Server.Game
     {
         public List<ItemObject> items = new List<ItemObject>();     //저장소에 들어있는 아이템 오브젝트
         public List<List<int>> grid = new List<List<int>>();        //저장소의 그리드
-        public double weight = 0.0;                                 //저장소 무게
+        public double maxWeight = 0.0;                              //저장소 최대 무게
+        public double curWeight = 0.0;                              //저장소 현재 무게
 
         /// <summary>
         /// 그리드의 크기 및 무게 설정
@@ -37,7 +38,8 @@ namespace Server.Game
             grid.Clear();
  
             this.items.Clear();
-            this.weight = weight;
+            this.maxWeight = weight;
+            this.curWeight = 0.0;
 
             for (int i = 0; i < cols; i++)
             {
@@ -68,13 +70,12 @@ namespace Server.Game
                 return false;
             }
 
-            //if(weight - item.Weight < 0)
-            //{
-            //    OverWriteToRollBackGrid(rollback);
-            //    return false;
-            //}
-
-            //weight -= item.Weight;
+            if(maxWeight < curWeight + item.Weight)
+            {
+                OverWriteToRollBackGrid(rollback);
+                return false;
+            }
+            curWeight += item.Weight;
 
             items.Add(item);
             item.CreateItem();
@@ -96,7 +97,14 @@ namespace Server.Game
                 return false;
             }
 
-            if(false == items.Remove(item))
+            if (0 > curWeight - item.Weight)
+            {
+                OverWriteToRollBackGrid(rollback);
+                return false;
+            }
+            curWeight -= item.Weight;
+
+            if (false == items.Remove(item))
             {
                 OverWriteToRollBackGrid(rollback);
                 return false;
@@ -234,7 +242,6 @@ namespace Server.Game
             }
 
             Console.WriteLine(content);
-
         }
     }
 }
