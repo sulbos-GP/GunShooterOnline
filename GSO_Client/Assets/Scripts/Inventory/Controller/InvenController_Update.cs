@@ -115,6 +115,7 @@ public partial class InventoryController
         }
 
         gridPosition = WorldToGridPos();
+
         if(gridPosition != null)
         {
             if(gridPosition == gridPositionIndex)

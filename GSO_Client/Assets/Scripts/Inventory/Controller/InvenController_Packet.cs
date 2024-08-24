@@ -51,19 +51,11 @@ public partial class InventoryController
     }
 
 
-    private void SendDeleteItemPacket(ItemObject item, bool isEquip = false)
+    private void SendDeleteItemPacket(ItemObject item)
     {
         C_DeleteItem packet = new C_DeleteItem();
-        if(!isEquip)
-        {
-            packet.SourceObjectId = item.backUpItemGrid.objectId;
-        }
-        else
-        {
-            packet.SourceObjectId = item.backUpEquipSlot.slotId; //1,2 公扁 . 3 规绢备 . 4 啊规 . 5,6,7 家葛前
-        }
-        
-        packet.DeleteItemId = SelectedItem.itemData.objectId;
+        packet.SourceObjectId = item.backUpItemGrid.objectId;
+        packet.DeleteItemId = item.itemData.objectId;
         Managers.Network.Send(packet);
         Debug.Log("C_DeleteItem");
     }
