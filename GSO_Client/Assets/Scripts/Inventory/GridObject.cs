@@ -21,6 +21,7 @@ public class GridObject : MonoBehaviour
         set
         {
             gridWeight = value;
+            
         }
     }
     public float limitWeight;
