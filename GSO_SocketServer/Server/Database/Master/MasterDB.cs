@@ -1,4 +1,5 @@
-﻿using Server.Database.Interface;
+﻿using Server.Database.Data;
+using Server.Database.Interface;
 using Server.Game;
 using SqlKata.Execution;
 using StackExchange.Redis;
@@ -17,13 +18,12 @@ namespace Server.Database.Master
         {
         }
 
-        public async Task<DB_ItemData> GetItemData(int item_id)
+        public async Task<IEnumerable<T>> LoadTable<T>(string table)
         {
             var query = this.GetQueryFactory();
 
-            return await query.Query("master_item_base")
-                .Where("item_id", item_id)
-                .FirstOrDefaultAsync<DB_ItemData>();
+            return await query.Query(table)
+                .GetAsync<T>();
         }
 
         public async Task<DB_BackpackData> GetBackpackData(string code)
@@ -34,5 +34,6 @@ namespace Server.Database.Master
                 .Where("code", code)
                 .FirstOrDefaultAsync<DB_BackpackData>();
         }
+
     }
 }

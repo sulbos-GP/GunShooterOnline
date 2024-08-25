@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
+using Server.Database.Data;
 using Server.Database.Handler;
 using StackExchange.Redis;
 using System;
@@ -11,20 +12,19 @@ namespace Server.Game
 {
     public class ItemObject : GameObject
     {
-        
+        private int itemId;
         private int x;
         private int y;
         private int rotate;
         private int amount;
 
-        private readonly DB_ItemData itemData = new DB_ItemData();
         private Dictionary<int, DateTime> viewers = new Dictionary<int, DateTime>();
 
         public ItemObject(int itemId, int gridX, int grixY, int rotate, int amount)
         {
             ObjectType = GameObjectType.Item;
-            itemData = GetItemData(itemId).Result;
 
+            this.itemId = itemId;
             this.x = gridX;
             this.y = grixY;
             this.rotate = rotate;
@@ -45,13 +45,6 @@ namespace Server.Game
             this.y = other.y;
             this.rotate = other.rotate;
             this.amount = other.amount;
-            this.itemData = other.itemData;
-        }
-
-        public async Task<DB_ItemData> GetItemData(int itemId)
-        {
-            //TODO : 나중에는 마스터테이블을 미리 로드하여 메모리에 저장된 값을 불러와야함
-            return await DatabaseHandler.MasterDB.GetItemData(itemId);
         }
 
         public void CreateItem()
@@ -64,11 +57,11 @@ namespace Server.Game
             ObjectManager.Instance.Remove(this.Id);
         }
 
-        public DB_ItemData Data
+        public DB_ItemBase Data
         {
             get
             {
-                return itemData;
+                return DatabaseHandler.Context.ItemBase.Get(ItemId);
             }
         }
 
@@ -76,7 +69,7 @@ namespace Server.Game
         {
             get
             {
-                return Data.item_id;
+                return itemId;
             }
         }
 
@@ -199,7 +192,7 @@ namespace Server.Game
             PS_ItemInfo info = new PS_ItemInfo()
             {
                 ObjectId = this.Id,
-                ItemId = Data.item_id,
+                ItemId = ItemId,
                 X = X,
                 Y = Y,
                 Rotate = Rotate,

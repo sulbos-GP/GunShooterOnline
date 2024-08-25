@@ -20,6 +20,8 @@ namespace Server.Database.Handler
         #endregion
 
         private static Dictionary<EDatabase, string> databases = new Dictionary<EDatabase, string>(10);
+        private static DatabaseContext context = new DatabaseContext();
+
         #region Database
         public static GameDB GameDB 
         { 
@@ -38,6 +40,19 @@ namespace Server.Database.Handler
                 MasterDB database = new MasterDB();
                 database.Open(databases[EDatabase.Master]);
                 return database;
+            }
+        }
+
+        #endregion
+
+
+        #region Context
+
+        public static DatabaseContext Context
+        {
+            get
+            {
+                return context;
             }
         }
         #endregion
