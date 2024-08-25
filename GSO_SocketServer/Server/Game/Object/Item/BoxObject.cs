@@ -57,8 +57,13 @@ namespace Server.Game.Object.Item
             storage.InsertItem(akItem);
 
             DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(11);
-            ItemObject bandItem = new ItemObject(bandData.item_id, 1, 3, 0, 10);
-            storage.InsertItem(bandItem);
+
+            for(int i = 0; i < 5; ++i)
+            {
+                ItemObject bandItem = new ItemObject(bandData.item_id, i, 4, 0, 1 + (i * 5));
+                storage.InsertItem(bandItem);
+            }
+
         }
 
     }

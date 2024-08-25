@@ -36,15 +36,10 @@ namespace Server.Game
             viewers.TryAdd(viewerId, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
         }
 
-        public ItemObject(ItemObject other)
+        public ItemObject(ItemObject other) : this(other.itemId, other.x, other.y, other.rotate, other.amount)
         {
-            this.ObjectType = GameObjectType.Item;
             this.Id = other.Id;
             this.viewers = other.viewers;
-            this.x = other.x;
-            this.y = other.y;
-            this.rotate = other.rotate;
-            this.amount = other.amount;
         }
 
         public void CreateItem()
