@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using Server.Database.Game;
 using Server.Database.Handler;
 using Server.Database.Master;
+using Server.Database.Data;
+using System.Collections.Generic;
 
 namespace Server
 {
@@ -57,7 +59,7 @@ namespace Server
             backLog = 100;
 #endif
 
-            InitDatabase();
+            InitDatabase().Wait();
 
             Func<Session> session = () => { return new ClientSession(); };
 
@@ -114,7 +116,7 @@ namespace Server
             //}
         }
 
-        static void InitDatabase()
+        static async Task InitDatabase()
         {
 
             /// <summary>
@@ -129,6 +131,10 @@ namespace Server
             handler.AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
             handler.AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
 #endif
+
+
+            await DatabaseHandler.Context.LoadDatabaseContext();
+
         }
 
         static void InitWebClientService()

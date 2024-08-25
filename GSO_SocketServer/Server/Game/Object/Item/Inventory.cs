@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using Pipelines.Sockets.Unofficial.Buffers;
+using Server.Database.Data;
 using Server.Database.Handler;
 using Server.Game;
 using Server.Game.Object;

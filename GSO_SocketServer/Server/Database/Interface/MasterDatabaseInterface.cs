@@ -1,4 +1,5 @@
-﻿using Server.Game;
+﻿using Server.Database.Data;
+using Server.Game;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,6 +10,5 @@ namespace Server.Database.Interface
 {
     public interface IMasterDatabase
     {
-        public Task<DB_ItemData> GetItemData(int item_id);
     }
 }
