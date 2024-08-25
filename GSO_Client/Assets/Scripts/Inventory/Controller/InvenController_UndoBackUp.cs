@@ -31,8 +31,6 @@ public partial class InventoryController
         item.backUpItemPos = item.itemData.pos; //현재 위치
         item.backUpItemRotate = item.itemData.rotate; //현재 회전
         item.backUpItemGrid = item.curItemGrid; //현재 그리드
-
-
     }
 
     /// <summary>

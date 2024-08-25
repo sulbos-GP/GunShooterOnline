@@ -62,7 +62,6 @@ public class GridObject : MonoBehaviour
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
 
-        InventoryController.invenInstance.playerInvenUI.WeightTextSet(GridWeight,limitWeight);
         SetGridPosition();
     }
 
@@ -90,6 +89,7 @@ public class GridObject : MonoBehaviour
             }
         }
 
+        
         UpdateBackUpSlot();
     }
 
@@ -101,7 +101,7 @@ public class GridObject : MonoBehaviour
         InventoryController.invenInstance.instantItemDic.Add(itemData.objectId,itemObj);
         Debug.Log($"인벤컨트롤러의 인스턴트 아이템 리스트에 아이템 등록 {itemData.objectId}");
         //해당 아이템에 부여된 데이터로 아이템 세팅
-        itemObj.ItemDataSet(itemData);
+        itemObj.SetItem(itemData);
         //아이템을 해당 그리드에 배치하고 아이템 객체의 위치또한 맞게 변경
         PlaceItem(itemObj, itemData.pos.x, itemData.pos.y);
         itemObj.curItemGrid = this;
@@ -188,9 +188,8 @@ public class GridObject : MonoBehaviour
                 ItemSlot[posX + x, posY + y] = item;
             }
         }
-
-        UpdateBackUpSlot();
         GridWeight += item.itemData.item_weight;
+        UpdateBackUpSlot();
 
         UpdateItemPosition(item, posX, posY);
     }
@@ -243,6 +242,8 @@ public class GridObject : MonoBehaviour
                 ItemSlot[i, j] = BackUpSlot[i, j];
             }
         }
+
+        GridWeight = BackUpWeight;
     }
 
    
