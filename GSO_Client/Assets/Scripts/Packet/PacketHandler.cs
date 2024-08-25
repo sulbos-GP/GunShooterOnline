@@ -184,19 +184,27 @@ internal class PacketHandler
         if(packet.SourceObjectId == 0)
         {
             //플레이어의 인벤토리
-            InventoryController.invenInstance.playerInvenUI.InventorySet();
-            InventoryController.invenInstance.playerInvenUI.instantGrid.objectId = packet.SourceObjectId;
-            InventoryController.invenInstance.playerInvenUI.instantGrid.PlaceItemInGrid(packetItemList);
-            InventoryController.invenInstance.playerInvenUI.instantGrid.PrintInvenContents();
+            PlayerInventoryUI playerInvenUI = InventoryController.invenInstance.playerInvenUI;
+            playerInvenUI.InventorySet(); //그리드 생성됨
+
+            GridObject playerGrid = playerInvenUI.instantGrid;
+            playerGrid.objectId = packet.SourceObjectId;
+            playerGrid.PlaceItemInGrid(packetItemList);
+            playerInvenUI.WeightTextSet(playerGrid.GridWeight, playerGrid.limitWeight);
+            playerGrid.PrintInvenContents();
         }
         else
         {
             GameObject target = Managers.Object.FindById(packet.SourceObjectId);
             target.GetComponent<Box>().interactable = false;
-            InventoryController.invenInstance.otherInvenUI.InventorySet();
-            InventoryController.invenInstance.otherInvenUI.instantGrid.objectId = packet.SourceObjectId;
-            InventoryController.invenInstance.otherInvenUI.instantGrid.PlaceItemInGrid(packetItemList);
-            InventoryController.invenInstance.otherInvenUI.instantGrid.PrintInvenContents();
+
+            OtherInventoryUI otherInvenUI = InventoryController.invenInstance.otherInvenUI;
+            otherInvenUI.InventorySet();
+            GridObject boxGrid = otherInvenUI.instantGrid;
+
+            boxGrid.objectId = packet.SourceObjectId;
+            boxGrid.PlaceItemInGrid(packetItemList);
+            boxGrid.PrintInvenContents();
         }
 
         if (!InventoryController.invenInstance.isActive)
@@ -332,6 +340,10 @@ internal class PacketHandler
             targetItem.backUpItemGrid.PrintInvenContents();
             InventoryController.invenInstance.BackUpGridSlot(targetItem);
             InventoryController.invenInstance.BackUpItem(targetItem);
+
+            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight, 
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
         }
 
         else
@@ -344,6 +356,10 @@ internal class PacketHandler
             ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
             InventoryController.invenInstance.UndoGridSlot(targetItem);
             InventoryController.invenInstance.UndoItem(targetItem);
+
+            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
 
             targetItem.curItemGrid.PrintInvenContents();
             targetItem.backUpItemGrid.PrintInvenContents();
@@ -390,12 +406,20 @@ internal class PacketHandler
 
             sourceGrid.CleanItemSlot(targetItem);
             InventoryController.invenInstance.DestroyItem(targetItem);
+
+            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
         }
         else
         {
             Debug.Log("S_DeleteItem 실패");
             InventoryController.invenInstance.UndoGridSlot(targetItem);
             InventoryController.invenInstance.UndoItem(targetItem);
+
+            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
         }
 
     }

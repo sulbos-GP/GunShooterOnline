@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
@@ -56,7 +57,10 @@ public class ItemObject : MonoBehaviour
         set
         {
             itemData.amount = value;
-            TextControl();
+            if (itemData.isSearched)
+            {
+                TextControl();
+            }
         }
     }
 
@@ -83,7 +87,7 @@ public class ItemObject : MonoBehaviour
     private void Init()
     {
         itemRect = GetComponent<RectTransform>();
-        imageUI = transform.GetChild(0).GetComponent<Image>();
+        imageUI = transform.GetChild(0).GetComponent<Image>(); 
         imageUI.raycastTarget = false;
 
         unhideTimer = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -109,24 +113,16 @@ public class ItemObject : MonoBehaviour
     /// <summary>
     /// 아이템의 데이터를 적용
     /// </summary>
-    public void ItemDataSet(ItemData itemData)
+    public void SetItem(ItemData itemData)
     {
         Init();
 
         //아이템 데이터 업데이트
         this.itemData = itemData;
         itemRect = GetComponent<RectTransform>();
-        //오브젝트의 렉트의 사이즈 업데이트
-        Vector2 size = new Vector2();
-        size.X = Width * GridObject.WidthOfTile;
-        size.Y = Height * GridObject.HeightOfTile;
-        itemRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
-
-        //아이템의 크기및 회전 설정
-        itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile+50, itemData.height * GridObject.HeightOfTile-50);
-        Rotate(itemData.rotate);
-        itemSprite = spriteList[itemData.itemId-1];
+        itemSprite = FindItemSprtie(itemData.itemId);
         isOnSearching = false;
+        ItemAmount = itemData.amount;
 
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
         if (itemData.isSearched == false)
@@ -140,7 +136,36 @@ public class ItemObject : MonoBehaviour
             isHide = false;
         }
 
-        ItemAmount = itemData.amount;
+        //아이템 오브젝트의 초기 크기를 지정
+        //아이템의 rotate가 0일때로 먼저 생성하고 그 후에 rotate로 변경
+        Vector2 size = new Vector2();
+        size.X = itemData.width * GridObject.WidthOfTile;
+        size.Y = itemData.height * GridObject.HeightOfTile;
+        itemRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
+        imageUI.GetComponent<RectTransform>().sizeDelta = itemRect.sizeDelta;
+
+        Rotate(itemData.rotate);
+
+        //아이템의 위치를 설정
+        itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile + 50, itemData.height * GridObject.HeightOfTile - 50);
+
+        
+    }
+
+    private Sprite FindItemSprtie(int itemCode)
+    {
+        string spritePath = $"Assets/Sprite/ItemSprite/{itemCode}.png";
+        Sprite itemSprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        if (itemSprite == null)
+        {
+            Debug.LogError("Failed to load the sprite in editor!");
+            return null;
+        }
+
+        Debug.Log("Sprite loaded successfully in editor!");
+        // 스프라이트를 사용하는 예시
+        return itemSprite;
     }
 
     /// <summary>
@@ -176,6 +201,7 @@ public class ItemObject : MonoBehaviour
 
         isHide = false;
         itemData.isSearched = true;
+        
         imageUI.sprite = itemSprite;
         TextControl();
     }
@@ -219,8 +245,10 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void Rotate(int rotateInt)
     {
-        //itemRect.rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
+        itemRect.sizeDelta = new UnityEngine.Vector2(Width* GridObject.WidthOfTile, Height*GridObject.HeightOfTile);
+       
         imageUI.GetComponent< RectTransform >().rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
+        
     }
 
     public void MergeItem(ItemObject targetItem, int mergeAmount)
