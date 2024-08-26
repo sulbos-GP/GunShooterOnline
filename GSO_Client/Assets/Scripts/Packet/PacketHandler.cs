@@ -3,7 +3,7 @@ using Google.Protobuf.Protocol;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using ServerCore;
-
+using System;
 using System.Collections.Generic;
 
 using System.Runtime.CompilerServices;
@@ -330,7 +330,7 @@ internal class PacketHandler
                 destinationGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
             }
 
-            //sourceGrid.CleanItemSlot(targetItem); 이미 아이템을 집을때 슬롯에서 삭제되어 있음
+            //sourceGrid.CleanItemSlot(sourceItem); 이미 아이템을 집을때 슬롯에서 삭제되어 있음
             destinationGrid.PlaceItem(targetItem, packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
             targetItem.Rotate(packet.DestinationMoveItem.Rotate);
 
@@ -424,6 +424,94 @@ internal class PacketHandler
 
     }
 
+    internal static void S_MergeItemHandler(PacketSession session, IMessage message)
+    {
+        S_MergeItem packet = message as S_MergeItem;
+        if (packet == null)
+        {
+            Debug.Log("패킷이 없음");
+            return;
+        }
+        Debug.Log("S_MergeItem");
+        Debug.Log($"합쳐지는 아이템 아이디 = {packet.MergedItem.ObjectId}, 합치기 위한 아이디 = {packet.CombinedItem.ObjectId}");
+
+        ItemObject mergedItem = null;
+        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.MergedItem.ObjectId, out mergedItem);
+        ItemObject combinedItem = null;
+        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.CombinedItem.ObjectId, out combinedItem);
+
+        if (mergedItem == null || combinedItem == null)
+        {
+            Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
+            return;
+        }
+
+        if (packet.IsSuccess)
+        {
+            //성공할경우 로직
+            /*
+             * 패킷의 combinedItem의 수량이 0이라면 combinedItem의 삭제하고 아니라면 combinedItem의 원래 위치로 돌아감
+             * 
+             * mergedItme 수량을 패킷의 수량으로 업데이트
+             */
+
+
+        }
+        else
+        {
+            //실패할경우 로직
+            Debug.Log("S_MergeItem 실패");
+            InventoryController.invenInstance.UndoGridSlot(combinedItem);
+            InventoryController.invenInstance.UndoItem(combinedItem);
+
+            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
+            
+        }
+    }
+
+    internal static void S_DevideItemHandler(PacketSession session, IMessage message)
+    {
+        S_DevideItem packet = message as S_DevideItem;
+        if (packet == null)
+        {
+            Debug.Log("패킷이 없음");
+            return;
+        }
+        Debug.Log("S_DevideItem");
+        Debug.Log($"합쳐지는 아이템 아이디 = {packet.SourceItem.ObjectId}, 합치기 위한 아이디 = {packet.DestinationItem.ObjectId}");
+
+        ItemObject sourceItem = null;
+        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out sourceItem);
+        ItemObject destinationItem = null;
+        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.DestinationItem.ObjectId, out destinationItem);
+
+        if (sourceItem == null || destinationItem == null)
+        {
+            Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
+            return;
+        }
+
+        if (packet.IsSuccess)
+        {
+            //성공할경우 로직
+            /*
+             * 
+             */
+
+
+        }
+        else
+        {
+            //실패할경우 로직
+           
+
+        }
+    }
+
+
+
     internal static void S_RaycastHitHandler(PacketSession session, IMessage message)
     {
         S_RaycastHit packet = message as S_RaycastHit;
@@ -498,6 +586,7 @@ internal class PacketHandler
         Managers.Object.DebugDics();
     }
 
+    
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
@@ -514,40 +603,40 @@ internal class PacketHandler
          Debug.Log("S_SkillHandler");
      }*/
 
-        /*internal static void S_StatChangeHandler(PacketSession session, IMessage message)
+    /*internal static void S_StatChangeHandler(PacketSession session, IMessage message)
+    {
+        var statpacket = (S_StatChange)message;
+        var go = Managers.Object.FindById(statpacket.ObjectId);
+        if (go == null)
+            return;
+
+        var cc = go.GetComponent<CreatureController>();
+        if (cc == null)
+            return;
+
+        Debug.Log($"previous : S_Stat {statpacket.ObjectId}{cc.Stat}");
+
+        cc.Stat.MergeFrom(statpacket.StatInfo);
+
+        #region IsPlayer
+        MyPlayerController mc = cc as MyPlayerController;
+        if (mc != null)
         {
-            var statpacket = (S_StatChange)message;
-            var go = Managers.Object.FindById(statpacket.ObjectId);
-            if (go == null)
-                return;
-
-            var cc = go.GetComponent<CreatureController>();
-            if (cc == null)
-                return;
-
-            Debug.Log($"previous : S_Stat {statpacket.ObjectId}{cc.Stat}");
-
-            cc.Stat.MergeFrom(statpacket.StatInfo);
-
-            #region IsPlayer
-            MyPlayerController mc = cc as MyPlayerController;
-            if (mc != null)
-            {
-                mc.CheakUpdateLevel();
-            }
-            #endregion
+            mc.CheakUpdateLevel();
+        }
+        #endregion
 
 
 
 
-            Debug.Log($"Next : S_Stat {statpacket.StatInfo}");
-        }*/
+        Debug.Log($"Next : S_Stat {statpacket.StatInfo}");
+    }*/
 
-        /*internal static void S_LobbyPlayerInfoHandler(PacketSession session, IMessage message)
-        {
-            //서버에서 로비에관한 정보
-            Debug.Log("S_LobbyPlayerInfoHandler");
-            var lobbyPlayerInfo = (S_LobbyPlayerInfo)message;
-            GameObject.Find("LobbyScene").GetComponent<LobbyScene>().DataUpdate(lobbyPlayerInfo);
-        }*/
+    /*internal static void S_LobbyPlayerInfoHandler(PacketSession session, IMessage message)
+    {
+        //서버에서 로비에관한 정보
+        Debug.Log("S_LobbyPlayerInfoHandler");
+        var lobbyPlayerInfo = (S_LobbyPlayerInfo)message;
+        GameObject.Find("LobbyScene").GetComponent<LobbyScene>().DataUpdate(lobbyPlayerInfo);
+    }*/
 }

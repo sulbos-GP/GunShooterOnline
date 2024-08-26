@@ -135,6 +135,13 @@ public partial class InventoryController : MonoBehaviour
 
     public bool itemPlaceableInGrid;
 
+
+    private bool isDivideMode;
+    private GameObject itemPreviewInstance; // 현재 아이템 미리보기 인스턴스
+    private Vector2 lastDragPosition; // 마지막 드래그 위치
+    private float dragTime = 0f; // 드래그 시간이 경과한 시간
+    private const float maxDragTime = 2f; // 최대 드래그 대기 시간 (초)
+
     private void Awake()
     { 
         Debug.Log("invenInstance");
@@ -173,6 +180,7 @@ public partial class InventoryController : MonoBehaviour
         isPress = false;
         isOnDelete = false;
         itemPlaceableInGrid = false;
+        isDivideMode = false;
     }
 
     /// <summary>

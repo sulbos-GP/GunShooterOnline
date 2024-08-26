@@ -57,6 +57,7 @@ public class ItemObject : MonoBehaviour
         set
         {
             itemData.amount = value;
+            itemWeight = itemData.item_weight * value;
             if (itemData.isSearched)
             {
                 TextControl();
@@ -65,10 +66,12 @@ public class ItemObject : MonoBehaviour
     }
 
     
-
+   
     //현 상태
     public bool isHide; //아이템 정보 숨겨짐
     private bool isOnSearching; //아이템 조회중
+
+    public float itemWeight; //지금까지 쓰인 itemData.itme_weight를  이변수로 바꿀것
 
     //현재 위치한 그리드
     public GridObject curItemGrid;
@@ -123,6 +126,7 @@ public class ItemObject : MonoBehaviour
         itemSprite = FindItemSprtie(itemData.itemId);
         isOnSearching = false;
         ItemAmount = itemData.amount;
+        
 
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
         if (itemData.isSearched == false)
