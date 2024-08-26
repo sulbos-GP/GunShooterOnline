@@ -30,7 +30,7 @@ namespace Server.Database.Interface
         /// <summary>
         /// 인벤토리에 아이템 삽입
         /// </summary>
-        public Task<int> InsertItem(int storage_id, DB_StorageUnit unit);
+        public Task<int> InsertItem(int storage_id, DB_StorageUnit unit, IDbTransaction transaction = null);
 
         /// <summary>
         /// 인벤토리에서 아이템 제거

@@ -18,7 +18,7 @@ namespace Server.Database.Game
     ///                                         ///
     ///////////////////////////////////////////////
 
-    public partial class GameDB : MySQL
+    public partial class GameDB : MySQL, IGameDatabase
     {
 
         public async Task<int> GetGearOfPart(int uid, EGearPart part)
