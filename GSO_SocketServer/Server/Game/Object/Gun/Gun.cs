@@ -1,5 +1,8 @@
 ﻿using Google.Protobuf.Protocol;
+using Server.Game.Coroutine;
 using Server.Game.Utils;
+using ServerCore;
+using StackExchange.Redis;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,6 +37,7 @@ namespace Server.Game
 
         private void Awake()
         {
+            ExtensionMethod.Start();
             Init();
         }
 
@@ -84,11 +88,11 @@ namespace Server.Game
 
             float halfAngle = gunData.accuracy * 0.5f;
 
-            Vector3 direction1 = Quaternion.Euler(0, 0, halfAngle) * _fireStartPos.up;
+            Vector3 direction1 = ExtensionMethod.Quaternion.Euler(0, 0, halfAngle) * _fireStartPos.up;
             Vector3 endPoint1 = _fireStartPos.position + direction1 * gunData.range;
 
 
-            Vector3 direction2 = Quaternion.Euler(0, 0, -halfAngle) * _fireStartPos.up;
+            Vector3 direction2 = ExtensionMethod.Quaternion.Euler(0, 0, -halfAngle) * _fireStartPos.up;
             Vector3 endPoint2 = _fireStartPos.position + direction2 * gunData.range;
 
 
@@ -102,9 +106,9 @@ namespace Server.Game
         //발사버튼 누를시
         public bool Fire()
         {
-            if (gunState == GunState.Shootable && Time.time >= _lastFireTime + 1 / gunData.fireRate)
+            if (gunState == GunState.Shootable && ExtensionMethod.time >= _lastFireTime + 1 / gunData.fireRate)
             {
-                Debug.Log("FireSuccess");
+                Console.WriteLine("FireSuccess");
                 /*
                  발사 코드 작성.
                  총알을 발사하든 레이케스트로 충돌감지를 하든
@@ -117,7 +121,7 @@ namespace Server.Game
                 float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
                 float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
                 float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
-                Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * _fireStartPos.up;
+                Vector3 direction = ExtensionMethod.Quaternion.Euler(0, 0, randomAngle) * _fireStartPos.up;
 
                 //레이캐스트를 사용한 방법
                 RaycastHit2D hit = Physics2D.Raycast(_fireStartPos.position, direction, gunData.range);
@@ -139,7 +143,6 @@ namespace Server.Game
                         DirY = direction.y,
                         Length = Vector3.Distance(_fireStartPos.position, hit.point)  // 실제 충돌 위치까지의 거리
                     };
-                    Managers.Network.Send(cRay);
                 }
                 else
                 {
@@ -152,16 +155,17 @@ namespace Server.Game
                 if (isBulletPrefShoot)
                 {
                     //총알을 사용한 방법
-                    Bullet bullet = gunData.bulletObj.GetComponent<Bullet>();
-                    bullet._damage = gunData.damage;
-                    bullet._range = gunData.range;
-                    bullet._dir = direction;
-                    Instantiate(bullet, _fireStartPos.position, _fireStartPos.rotation);
+                    //Bullet bullet = gunData.bulletObj;
+                    //bullet._damage = gunData.damage;
+                    //bullet._range = gunData.range;
+                    //bullet._dir = direction;
+                    ObjectManager.Instance.Add((gunData.bulletObj));
+                    //Instantiate(bullet, _fireStartPos.position, _fireStartPos.rotation);
                 }
-                _lastFireTime = Time.time;//마지막 사격 시간 업데이트
+                _lastFireTime = ExtensionMethod.time;//마지막 사격 시간 업데이트
 
                 _curAmmo--; //현재 총알감소
-                _curAmmo = Mathf.Max(_curAmmo, 0);
+                _curAmmo = Math.Max(_curAmmo, 0);
                 if (_curAmmo == 0)
                 {
                     gunState = GunState.Empty;
@@ -174,10 +178,8 @@ namespace Server.Game
         public float GetRandomNormalDistribution(float mean, float standard)
         {
             // 정규 분포로 부터 랜덤값을 가져오는 함수
-            System.Random rand = new System.Random();
-            float randFloat = rand.Next(0f, 1f);
-            float x1 = Random.Range(0f, 1f);
-            float x2 = Random.Range(0f, 1f);
+            float x1 = ExtensionMethod.Range(0f, 1f);
+            float x2 = ExtensionMethod.Range(0f, 1f);
             float randStdNormal = Convert.ToSingle(Math.Sqrt(-2.0f * Math.Log(x1)) * Math.Sin(2.0f * Math.PI * x2));
             float randNormal = mean + standard * randStdNormal; //평균 + 표준편차* 랜덤정규분포
             return randNormal;
@@ -185,22 +187,21 @@ namespace Server.Game
 
 
         //재장전 버튼 누를시
-        public void Reload()
+        public async Task Reload()
         {
             if (_curAmmo < gunData.ammo || gunState != GunState.Reloading)
             {
-                coroutineManager.StartCoroutine(Reloading());
+                await Reloading();
                 
             }
         }
 
         //실질적인 재장전
-        private IEnumerator Reloading()
+        private async Task Reloading()
         {
             gunState = GunState.Reloading;
-            yield return new WaitForSeconds(gunData.reloadTime);
+            await Task.Delay(gunData.reloadTime);
             
-
             _curAmmo = gunData.ammo;
             gunState = GunState.Shootable;
         }
