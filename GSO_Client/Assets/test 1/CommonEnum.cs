@@ -14,3 +14,18 @@ public enum eStat
     Health,
     Armor
 }
+
+public enum GunState
+{
+    Shootable,
+    Empty,
+    Reloading
+}
+
+public enum GunType
+{
+    Pistol,
+    AssultRifle,
+    ShotGun,
+    Sniper
+}
