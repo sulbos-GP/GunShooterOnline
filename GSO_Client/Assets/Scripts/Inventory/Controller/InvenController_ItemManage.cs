@@ -41,8 +41,14 @@ public partial class InventoryController
             if (isGridSelected)
             {
                 gridPosition = WorldToGridPos();
-                
-                ItemReleaseInGrid(selectedItem, gridPosition);
+                if (isDivideMode)
+                {
+                    ItemDivideInGrid(selectedItem, gridPosition);
+                }
+                else
+                {
+                    ItemReleaseInGrid(selectedItem, gridPosition);
+                }
                 return;
             }
 
@@ -98,6 +104,8 @@ public partial class InventoryController
         ResetSelection();
     }
 
+    
+
 
     /// <summary>
     /// 아이템을 집는 시도.
@@ -110,6 +118,14 @@ public partial class InventoryController
         //아이템이 그리드에 가려지는것을 방지
         SetSelectedObjectToLastSibling(selectedRect);
     }
+
+    private void ItemDivideInGrid(ItemObject selectedItem, Vector2Int gridPosition)
+    {
+        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",selectedItem.transform).GetComponent<DivideInterface>();
+        divideInterface.SetAmountIndex(selectedItem, gridPosition);
+        ResetSelection();
+    }
+
 
     /// <summary>
     /// 아이템을 놓는 시도.

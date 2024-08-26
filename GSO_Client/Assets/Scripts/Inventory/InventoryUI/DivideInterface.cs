@@ -15,8 +15,8 @@ public class DivideInterface : MonoBehaviour
     public int splitAmountIndex;
     public int maxAmountIndex;
 
-
-
+    public Vector2Int targetPos;
+    public ItemObject targetItem;
     private void Awake()
     {
         scrollBar = transform.GetChild(0).GetComponent<Scrollbar>();
@@ -25,13 +25,22 @@ public class DivideInterface : MonoBehaviour
         cancelBtn = Buttons.GetChild(0).GetComponent<Button>();
         enterBtn = Buttons.GetChild(1).GetComponent<Button>();
 
-        SetAmountIndex(32);
+        targetItem = null;
     }
 
-    public void SetAmountIndex(int _maxIndex)
+    public void SetAmountIndex(ItemObject item, Vector2Int gridPos)
     {
+        InventoryController.invenInstance.isDivideInterfaceOn = true;
+        targetPos = gridPos;
+        targetItem = item;
+
+        if(targetItem == null)
+        {
+            Debug.Log("아이템을 받지 못함");
+            return;
+        }
         splitAmountIndex = 0;
-        maxAmountIndex = _maxIndex;
+        maxAmountIndex = targetItem.ItemAmount;
 
         InitializeScrollbar();
         scrollBar.value = splitAmountIndex/maxAmountIndex;
@@ -71,18 +80,21 @@ public class DivideInterface : MonoBehaviour
         amountText.text = $"{splitAmountIndex} / {maxAmountIndex}";
     }
 
+    private void DestroyInterface()
+    {
+        InventoryController.invenInstance.isDivideInterfaceOn = false;
+        Managers.Resource.Destroy(gameObject);
+    }
+
     public void OnConfirmButtonClicked()
     {
         Debug.Log("아이템을 " + splitAmountIndex + "개로 분리합니다.");
 
-        //todo : 아이템 분리로직 작성할것
-
+        InventoryController.invenInstance.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
+        
         DestroyInterface();
     }
 
 
-    public void DestroyInterface()
-    {
-        Managers.Resource.Destroy(gameObject);
-    }
+    
 }

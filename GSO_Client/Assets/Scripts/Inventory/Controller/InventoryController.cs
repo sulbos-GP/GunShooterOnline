@@ -137,6 +137,7 @@ public partial class InventoryController : MonoBehaviour
 
 
     private bool isDivideMode;
+    public bool isDivideInterfaceOn;
     private GameObject itemPreviewInstance; // 현재 아이템 미리보기 인스턴스
     private Vector2 lastDragPosition; // 마지막 드래그 위치
     private float dragTime = 0f; // 드래그 시간이 경과한 시간
