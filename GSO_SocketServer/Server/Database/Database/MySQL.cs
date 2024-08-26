@@ -43,17 +43,17 @@ namespace Server.Database
             connection.Close();
         }
 
-        protected IDbConnection GetConnection()
+        public IDbConnection GetConnection()
         {
             return connection;
         }
 
-        protected SqlKata.Compilers.MySqlCompiler GetCompier()
+        public SqlKata.Compilers.MySqlCompiler GetCompier()
         {
             return compiler;
         }
 
-        protected QueryFactory GetQueryFactory()
+        public QueryFactory GetQueryFactory()
         {
             return queryFactory;
         }
