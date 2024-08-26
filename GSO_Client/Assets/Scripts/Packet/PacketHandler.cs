@@ -484,7 +484,7 @@ internal class PacketHandler
         }
     }
 
-    internal static void S_DevideItemHandler(PacketSession session, IMessage message)
+    internal static void S_DivideItemHandler(PacketSession session, IMessage message)
     {
         S_DevideItem packet = message as S_DevideItem;
         if (packet == null)

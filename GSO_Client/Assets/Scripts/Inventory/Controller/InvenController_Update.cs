@@ -12,6 +12,11 @@ public partial class InventoryController
         if (!isActive) // UI가 비활성화라면 리턴
             return;
 
+        if (isDivideInterfaceOn)
+        {
+            return; //나누기 인터페이스가 켜져있다면 아래의 아이템 이벤트를 진행시키지 않음
+        }
+
         if (isPress && !isItemSelected && (isEquipSelected || isGridSelected))
         {
             ItemEvent(); // 아이템 이벤트에서 아이템을 들기 실행
@@ -31,12 +36,9 @@ public partial class InventoryController
         {
             selectedRect.position = new UnityEngine.Vector2(mousePosInput.X, mousePosInput.Y);
 
-            if (!isDivideMode)
+            if (!isDivideMode && selectedItem.ItemAmount >1) //나누기 모드가 실행되지 않았고 아이템이 2개 이상이라면 진행
             {
-                Vector2Int currentGridPosition = gridPosition;
-
-                // 드래그 타이머 업데이트
-                if (currentGridPosition != gridPosition)
+                if (selectedItem.backUpItemPos != gridPosition)
                 {
                     Debug.Log("움직임");
                     return;
@@ -46,7 +48,6 @@ public partial class InventoryController
                     dragTime += Time.deltaTime; // 드래그 타이머 업데이트
                 }
 
-                // 드래그 시간이 2초가 넘으면 아이템의 이미지를 생성하고 divide 모드로 변경
                 if (dragTime >= maxDragTime)
                 {
                     Debug.Log("나누기 모드");
