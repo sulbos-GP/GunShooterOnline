@@ -414,8 +414,7 @@ internal class PacketHandler
         else
         {
             Debug.Log("S_DeleteItem 실패");
-            InventoryController.invenInstance.UndoGridSlot(targetItem);
-            InventoryController.invenInstance.UndoItem(targetItem);
+            
 
             InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
@@ -451,11 +450,25 @@ internal class PacketHandler
             //성공할경우 로직
             /*
              * 패킷의 combinedItem의 수량이 0이라면 combinedItem의 삭제하고 아니라면 combinedItem의 원래 위치로 돌아감
-             * 
+             * merge에 combined 수량을 갯수만큼 더한다
              * mergedItme 수량을 패킷의 수량으로 업데이트
              */
+            mergedItem.ItemAmount = packet.MergedItem.Amount;
 
+            if(packet.CombinedItem.Amount == 0)
+            {
+                InventoryController.invenInstance.DestroyItem(combinedItem);
+            }
+            else
+            {
+                InventoryController.invenInstance.UndoGridSlot(combinedItem);
+                InventoryController.invenInstance.UndoItem(combinedItem);
+                combinedItem.ItemAmount = packet.CombinedItem.Amount;
+            }
 
+            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
         }
         else
         {
