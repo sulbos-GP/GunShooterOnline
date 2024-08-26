@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.Progress;
 
 
 internal class PacketHandler
@@ -341,9 +342,6 @@ internal class PacketHandler
             InventoryController.invenInstance.BackUpGridSlot(targetItem);
             InventoryController.invenInstance.BackUpItem(targetItem);
 
-            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight, 
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
         }
 
         else
@@ -357,13 +355,14 @@ internal class PacketHandler
             InventoryController.invenInstance.UndoGridSlot(targetItem);
             InventoryController.invenInstance.UndoItem(targetItem);
 
-            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
-
             targetItem.curItemGrid.PrintInvenContents();
             targetItem.backUpItemGrid.PrintInvenContents();
         }
+
+        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
+        InventoryController.invenInstance.ResetSelection();
 
     }
 
@@ -407,20 +406,17 @@ internal class PacketHandler
             sourceGrid.CleanItemSlot(targetItem);
             InventoryController.invenInstance.DestroyItem(targetItem);
 
-            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
         }
         else
         {
             Debug.Log("S_DeleteItem 실패");
-            
-
-            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+            InventoryController.invenInstance.UndoGridSlot(targetItem);
+            InventoryController.invenInstance.UndoItem(targetItem);
+        }
+        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
                 InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
-        }
-
+        InventoryController.invenInstance.ResetSelection();
     }
 
     internal static void S_MergeItemHandler(PacketSession session, IMessage message)
@@ -436,8 +432,11 @@ internal class PacketHandler
 
         ItemObject mergedItem = null;
         InventoryController.invenInstance.instantItemDic.TryGetValue(packet.MergedItem.ObjectId, out mergedItem);
+        ChangeItemObjectId(mergedItem, packet.MergedItem.ObjectId);
+
         ItemObject combinedItem = null;
         InventoryController.invenInstance.instantItemDic.TryGetValue(packet.CombinedItem.ObjectId, out combinedItem);
+        ChangeItemObjectId(combinedItem, packet.CombinedItem.ObjectId);
 
         if (mergedItem == null || combinedItem == null)
         {
@@ -463,12 +462,10 @@ internal class PacketHandler
             {
                 InventoryController.invenInstance.UndoGridSlot(combinedItem);
                 InventoryController.invenInstance.UndoItem(combinedItem);
+                
                 combinedItem.ItemAmount = packet.CombinedItem.Amount;
             }
 
-            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
         }
         else
         {
@@ -477,12 +474,13 @@ internal class PacketHandler
             InventoryController.invenInstance.UndoGridSlot(combinedItem);
             InventoryController.invenInstance.UndoItem(combinedItem);
 
-            InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+        }
+        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
                 InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
-            
-        }
+        InventoryController.invenInstance.ResetSelection();
     }
+
 
     internal static void S_DivideItemHandler(PacketSession session, IMessage message)
     {
@@ -493,14 +491,15 @@ internal class PacketHandler
             return;
         }
         Debug.Log("S_DevideItem");
-        Debug.Log($"합쳐지는 아이템 아이디 = {packet.SourceItem.ObjectId}, 합치기 위한 아이디 = {packet.DestinationItem.ObjectId}");
+        Debug.Log($"원래 아이디 = {packet.SourceItem.ObjectId}, 새로 생성된 아이디 = {packet.DestinationItem.ObjectId}");
 
-        ItemObject sourceItem = null;
+        Managers.Resource.Destroy(InventoryController.invenInstance.itemPreviewInstance); //아이템 이미지 인스턴스 삭제
+
+        ItemObject sourceItem = null; //원래 있던 아이템
         InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out sourceItem);
-        ItemObject destinationItem = null;
-        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.DestinationItem.ObjectId, out destinationItem);
+        ChangeItemObjectId(sourceItem, packet.SourceItem.ObjectId);
 
-        if (sourceItem == null || destinationItem == null)
+        if (sourceItem == null )
         {
             Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
             return;
@@ -509,18 +508,73 @@ internal class PacketHandler
         if (packet.IsSuccess)
         {
             //성공할경우 로직
-            /*
-             * 
-             */
+            InventoryController.invenInstance.UndoGridSlot(sourceItem);
+            InventoryController.invenInstance.UndoItem(sourceItem);
+            sourceItem.ItemAmount = packet.SourceItem.Amount; //원래 있던 아이템은 원래위치로 되돌린뒤 개수 업데이트
 
+            ItemData newData = new ItemData();
+            newData.SetItemData(packet.DestinationItem);
+
+            if(packet.DestinationObjectId == 0)
+            {
+                //PlayerUI
+                GridObject targetGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
+                ItemObject destinationItem = Managers.Resource.Instantiate("UI/ItemUI", targetGrid.transform).GetComponent<ItemObject>(); //새로 만들어진 아이템
+                destinationItem.SetItem(newData);
+                targetGrid.PlaceItem(destinationItem, destinationItem.itemData.pos.x, destinationItem.itemData.pos.y);
+                InventoryController.invenInstance.instantItemDic.Add(destinationItem.itemData.objectId, destinationItem);
+                destinationItem.curItemGrid = targetGrid;
+                InventoryController.invenInstance.BackUpItem(destinationItem);
+                InventoryController.invenInstance.BackUpGridSlot(destinationItem);
+
+                //todo : 아이템이 있는곳에 아이템이 있는경우 머지가능여부 체크 후 가능하다면 머지 패킷 전송
+                /*
+                if (CheckAbleToMerge(item))
+                {
+                    //아이템의 머지가 가능함
+                    int totalAmount = selectedItem.itemData.amount + overlapItem.itemData.amount;
+                    int needAmount = 0;
+                    if (totalAmount <= ItemObject.maxItemMergeAmount) //이부분 데이터베이스에서 해당 아이템코드를 검색하여 최대 수량을 도출할것
+                    {
+                        needAmount = selectedItem.itemData.amount;
+                    }
+                    else
+                    {
+                        needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.amount;
+                    }
+
+                    SendMergeItemPacket(item, overlapItem, needAmount);
+                }*/
+            }
+            else
+            { //otherUI
+                GridObject targetGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
+                ItemObject destinationItem = Managers.Resource.Instantiate("UI/ItemUI", targetGrid.transform).GetComponent<ItemObject>(); //새로 만들어진 아이템
+                destinationItem.SetItem(newData);
+                targetGrid.PlaceItem(destinationItem, destinationItem.itemData.pos.x, destinationItem.itemData.pos.y);
+                InventoryController.invenInstance.instantItemDic.Add(destinationItem.itemData.objectId, destinationItem);
+                destinationItem.curItemGrid = targetGrid;
+                InventoryController.invenInstance.BackUpItem(destinationItem);
+                InventoryController.invenInstance.BackUpGridSlot(destinationItem);
+                
+                destinationItem.backUpItemGrid = targetGrid;
+            }
 
         }
         else
         {
             //실패할경우 로직
-           
+            Debug.Log("S_MergeItem 실패");
+            InventoryController.invenInstance.UndoGridSlot(sourceItem);
+            InventoryController.invenInstance.UndoItem(sourceItem);
 
+            
         }
+
+        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
+        InventoryController.invenInstance.ResetSelection();
     }
 
 
