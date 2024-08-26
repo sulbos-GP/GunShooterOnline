@@ -18,7 +18,7 @@ namespace Server.Database.Game
     ///                                         ///
     ///////////////////////////////////////////////
 
-    public partial class GameDB : MySQL, IGameDatabase
+    public partial class GameDB : MySQL
     {
 
         public async Task<int> GetGearOfPart(int uid, EGearPart part)
@@ -65,7 +65,7 @@ namespace Server.Database.Game
                 .GetAsync<DB_StorageUnit>();
         }
 
-        public async Task<int> InsertItem(int storage_id, DB_StorageUnit unit)
+        public async Task<int> InsertItem(int storage_id, DB_StorageUnit unit, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
@@ -78,7 +78,7 @@ namespace Server.Database.Game
                     grid_y = unit.grid_y,
                     rotation = unit.rotation,
                     stack_count = unit.stack_count
-                }, null);
+                }, transaction);
         }
 
         public async Task<int> DeleteItem(int storage_id, DB_StorageUnit unit, IDbTransaction transaction = null)
