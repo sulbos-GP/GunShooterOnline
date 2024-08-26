@@ -77,14 +77,7 @@ public partial class InventoryController
             {
                 
                 gridPosition = WorldToGridPos();
-                if (gridPosition != null)
-                {
-                    if (gridPosition == gridPositionIndex)
-                    {
-                        return;
-                    }
-                    gridPositionIndex = gridPosition;
-                }
+                
                 ItemObject clickedItem = selectedGrid.GetItem(gridPosition.x, gridPosition.y);
                 if (clickedItem == null) { Debug.Log("해당 위치에 아이템이 없음");  return; }
 

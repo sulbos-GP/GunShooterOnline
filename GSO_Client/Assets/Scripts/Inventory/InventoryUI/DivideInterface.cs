@@ -54,7 +54,7 @@ public class DivideInterface : MonoBehaviour
         enterBtn.onClick.RemoveAllListeners();
         enterBtn.onClick.AddListener(OnConfirmButtonClicked);
         cancelBtn.onClick.RemoveAllListeners();
-        cancelBtn.onClick.AddListener(DestroyInterface);
+        cancelBtn.onClick.AddListener(OnCancelButtonClicked);
     }
 
     private void InitializeScrollbar()
@@ -80,11 +80,19 @@ public class DivideInterface : MonoBehaviour
         amountText.text = $"{splitAmountIndex} / {maxAmountIndex}";
     }
 
-    private void DestroyInterface()
+    private void OnCancelButtonClicked()
     {
-        InventoryController.invenInstance.isDivideInterfaceOn = false;
-        Managers.Resource.Destroy(gameObject);
+        Managers.Resource.Destroy(InventoryController.invenInstance.itemPreviewInstance);
+        InventoryController.invenInstance.UndoGridSlot(targetItem);
+        InventoryController.invenInstance.UndoItem(targetItem);
+
+        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
+                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
+                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
+        InventoryController.invenInstance.ResetSelection();
+        DestroyInterface();
     }
+    
 
     public void OnConfirmButtonClicked()
     {
@@ -95,6 +103,10 @@ public class DivideInterface : MonoBehaviour
         DestroyInterface();
     }
 
+    private void DestroyInterface()
+    {
+        InventoryController.invenInstance.isDivideInterfaceOn = false;
+        Managers.Resource.Destroy(gameObject);
+    }
 
-    
 }
