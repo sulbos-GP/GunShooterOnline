@@ -23,9 +23,6 @@ namespace Server.Game
     }
 
 
-
-
-
     public class DB_BackpackData
     {
         public readonly string code;

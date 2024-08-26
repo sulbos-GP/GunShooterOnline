@@ -1,20 +1,12 @@
-using Google.Protobuf.Protocol;
-using NPOI.OpenXmlFormats.Dml.Diagram;
-using NPOI.SS.Formula.Eval;
-using System;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
 
 public partial class InventoryController
 {
+    
+
     private void Update()
     {
         if (!isActive) // UI가 비활성화라면 리턴
@@ -38,11 +30,56 @@ public partial class InventoryController
         if (isItemSelected)
         {
             selectedRect.position = new UnityEngine.Vector2(mousePosInput.X, mousePosInput.Y);
-        }
 
+            if (!isDivideMode)
+            {
+                Vector2Int currentGridPosition = gridPosition;
+
+                // 드래그 타이머 업데이트
+                if (currentGridPosition != gridPosition)
+                {
+                    Debug.Log("움직임");
+                    return;
+                }
+                else
+                {
+                    dragTime += Time.deltaTime; // 드래그 타이머 업데이트
+                }
+
+                // 드래그 시간이 2초가 넘으면 아이템의 이미지를 생성하고 divide 모드로 변경
+                if (dragTime >= maxDragTime)
+                {
+                    Debug.Log("나누기 모드");
+                    CreateItemPreview();
+                    isDivideMode = true;
+                }
+            }
+        }
     }
 
-    
+    private void CreateItemPreview()
+    {
+        if (selectedItem != null)
+        {
+            itemPreviewInstance = Managers.Resource.Instantiate("UI/DivideImageInstance", selectedGrid.transform);
+
+            RectTransform previewRect = itemPreviewInstance.GetComponent<RectTransform>();
+            GameObject selectedImage = selectedItem.transform.GetChild(0).gameObject;
+            itemPreviewInstance.GetComponent<Image>().sprite = selectedImage.GetComponent<Image>().sprite;
+
+            if (previewRect != null)
+            {
+                // 아이템의 크기, 위치, 회전 설정
+                previewRect.sizeDelta = selectedRect.sizeDelta;
+
+                Vector2 imagePos = new Vector2(gridPosition.x * GridObject.WidthOfTile + GridObject.WidthOfTile * selectedItem.Width
+                    / 2, -(gridPosition.y * GridObject.HeightOfTile + GridObject.HeightOfTile * selectedItem.Height / 2));
+
+                previewRect.localPosition = new UnityEngine.Vector2(imagePos.X, imagePos.Y);
+                previewRect.rotation = selectedImage.GetComponent<RectTransform>().rotation;
+            }
+        }
+    }
 
     private void HandleHighlighting()
     {

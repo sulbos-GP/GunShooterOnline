@@ -285,7 +285,19 @@ public partial class InventoryController
         {
             if (CheckAbleToMerge(item))
             {
-                MergeItems(item, pos);
+                //아이템의 머지가 가능함
+                int totalAmount = selectedItem.itemData.amount + overlapItem.itemData.amount;
+                int needAmount = 0;
+                if (totalAmount <= ItemObject.maxItemMergeAmount) //이부분 데이터베이스에서 해당 아이템코드를 검색하여 최대 수량을 도출할것
+                {
+                    needAmount = selectedItem.itemData.amount;
+                }
+                else
+                {
+                    needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.amount;
+                }
+
+                SendMergeItemPacket(overlapItem, item, needAmount);
             }
             else
             {
@@ -310,37 +322,7 @@ public partial class InventoryController
                !overlapItem.isHide;
     }
 
-    /// <summary>
-    /// 아이템 병합 실시. 체크가 완료되어 머지가 성공했을때의 아이템이 병합
-    /// </summary>
-    private void MergeItems(ItemObject item, Vector2Int pos)
-    {
-        int totalAmount = selectedItem.itemData.amount + overlapItem.itemData.amount;
-
-        selectedItem.itemData.pos = pos;
-        SendMoveItemPacket(item, pos);
-
-        if (totalAmount <= ItemObject.maxItemMergeAmount)
-        {
-            selectedItem.MergeItem(overlapItem, selectedItem.itemData.amount);
-            
-            
-            DestroyItem(selectedItem);
-            SelectedItem = null;
-        }
-        else
-        {
-            int needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.amount;
-
-            selectedItem.MergeItem(overlapItem, needAmount);
-
-            // *** 슬롯에서 그리드 아이템으로 병합의 경우 남은 아이템이 정상적으로 돌아가는지 확인할것
-            UndoGridSlot(SelectedItem);
-            UndoItem(SelectedItem);
-        }
-
-        ResetSelection();
-    }
+    
 
     /// <summary>
     /// 컨트롤러 상에서 삭제 처리

@@ -73,32 +73,35 @@ public partial class InventoryController
         //보류
     }
 
-    private void SendMergeItemPacket(ItemObject item, ItemObject targetItem , int mergeAmount)
+    private void SendMergeItemPacket(ItemObject combinedItem, ItemObject mergedItem,  int itemAmount)
     {
         C_MergeItem packet = new C_MergeItem();
-        packet.SourceObjectId = 0;
-        packet.DestinationObjectId = 0;
+        packet.SourceObjectId = combinedItem.backUpItemGrid.objectId; //플레이어가 들고 있는 아이템이 있던 그리드
+        packet.DestinationObjectId = mergedItem.backUpItemGrid.objectId; //플레이어가 놓은 = 머지할 아이템이 있는 그리드
 
-        packet.MergedObjectId = item.itemData.objectId;
-        packet.CombinedObjectId = targetItem.itemData.objectId;
-        packet.MergeNumber = mergeAmount;
+        packet.MergedObjectId = mergedItem.itemData.objectId; //합쳐지는 아이템 = 플레이어가 들고 있는 아이템
+        packet.CombinedObjectId = combinedItem.itemData.objectId; //합치기 위한 아이템 combined -> merged = 플레이어가 들고 있는 아이템을 놓은 위치의 아이템
+        packet.MergeNumber = itemAmount;
 
         Managers.Network.Send(packet);
         Debug.Log("C_MergeItem");
     }
 
-    private void SendDevideItemPacket(ItemObject DevideItem, ItemObject newItem)
+    private void SendDevideItemPacket(ItemObject DevideItem)
     {
         C_DevideItem packet = new C_DevideItem();
-        packet.SourceObjectId = 0;
+        packet.SourceObjectId = DevideItem.backUpItemGrid.objectId;
         packet.DestinationObjectId = 0;
 
         packet.SourceItemId = DevideItem.itemData.objectId;
         //분리된 새로운 아이템 오브젝트 생성후 그것을 배치했을때의 위치
+
+        /*
         packet.DestinationGridX = newItem.itemData.pos.x;
         packet.DestinationGridY = newItem.itemData.pos.y;
         packet.DestinationRotation = newItem.itemData.rotate;
         packet.DevideNumber = 0; //임시
+        */
 
         Managers.Network.Send(packet);
         Debug.Log("C_DevideItem");
