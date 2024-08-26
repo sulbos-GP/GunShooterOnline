@@ -171,9 +171,9 @@ namespace Server.Game
             viewers.TryAdd(viewerId, DateTime.UtcNow.AddMicroseconds(-rtt));
         }
 
-        public DB_InventoryUnit ConvertInventoryUnit()
+        public DB_StorageUnit ConvertInventoryUnit()
         {
-            DB_InventoryUnit unit = new DB_InventoryUnit();
+            DB_StorageUnit unit = new DB_StorageUnit();
             unit.item_id = ItemId;
             unit.grid_x = X;
             unit.grid_y = Y;

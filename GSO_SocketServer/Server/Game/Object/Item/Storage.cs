@@ -75,10 +75,11 @@ namespace Server.Game
                 OverWriteToRollBackGrid(rollback);
                 return false;
             }
-            curWeight += item.Weight;
 
+            curWeight += item.Weight;
             items.Add(item);
             item.CreateItem();
+
             PrintInvenContents();
 
             return true;
@@ -102,7 +103,6 @@ namespace Server.Game
                 OverWriteToRollBackGrid(rollback);
                 return false;
             }
-            curWeight -= item.Weight;
 
             if (false == items.Remove(item))
             {
@@ -110,7 +110,9 @@ namespace Server.Game
                 return false;
             }
 
+            curWeight -= item.Weight;
             item.DestroyItem();
+
             PrintInvenContents();
             return true;
         }
@@ -118,17 +120,17 @@ namespace Server.Game
         /// <summary>
         /// 아이템 수량 증가
         /// </summary>
-        public EStorageResult IncreaseAmount(ItemObject item, int amount)
+        public int IncreaseAmount(ItemObject item, int amount)
         {
             int value = item.Amount + amount;
             if (value > item.LimitAmount)
             {
-                return EStorageResult.Failed;
+                return -1;
             }
             else
             {
                 item.Amount += amount;
-                return EStorageResult.Successed;
+                return item.Amount;
             }
         }
 
@@ -136,23 +138,17 @@ namespace Server.Game
         /// <summary>
         /// 아이템 수량 감소 (0일 경우 삭제)
         /// </summary>
-        public EStorageResult DecreaseAmount(ItemObject item, int amount)
+        public int DecreaseAmount(ItemObject item, int amount)
         {
             int value = item.Amount - amount;
             if(value < 0)
             {
-                return EStorageResult.Failed;
-            }
-            else if(value == 0)
-            {
-                item.Amount = 0;
-                DeleteItem(item);
-                return EStorageResult.ZeroAmount;
+                return -1;
             }
             else
             {
                 item.Amount -= amount;
-                return EStorageResult.Successed;
+                return item.Amount;
             }
         }
 

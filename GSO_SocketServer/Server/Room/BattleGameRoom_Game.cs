@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using LiteNetLib;
 using Newtonsoft.Json.Bson;
+using Server.Database.Data;
 using Server.Game;
 using Server.Game.Object.Item;
 using System;
@@ -180,10 +181,10 @@ namespace Server
         internal async void MergeItemHandler(Player player, int sourceObjectId, int destinationObjectId, int mergedObjectId, int combinedObjectId, int mergeNumber)
         {
             S_MergeItem packet = new S_MergeItem();
+            packet.SourceObjectId = sourceObjectId;
+            packet.DestinationObjectId = destinationObjectId;
 
-            ItemObject mergedlItem = ObjectManager.Instance.Find<ItemObject>(sourceObjectId);
-            PS_ItemInfo mergedItemInfo = mergedlItem.ConvertItemInfo(player.Id);
-
+            ItemObject mergedlItem = ObjectManager.Instance.Find<ItemObject>(mergedObjectId);
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, mergedlItem);
             if (sourceStorage == null)
             {
@@ -191,10 +192,10 @@ namespace Server
                 player.Session.Send(packet);
                 return;
             }
+            DB_StorageUnit oldMergedUnit = mergedlItem.ConvertInventoryUnit();
+            PS_ItemInfo oldMergedItemInfo = mergedlItem.ConvertItemInfo(player.Id);
 
             ItemObject combinedItem = ObjectManager.Instance.Find<ItemObject>(combinedObjectId);
-            PS_ItemInfo combinedInfo = combinedItem.ConvertItemInfo(player.Id);
-
             Storage destinationStorage = GetStorageWithScanItem(player, destinationObjectId, combinedItem);
             if (sourceStorage == null)
             {
@@ -202,53 +203,197 @@ namespace Server
                 player.Session.Send(packet);
                 return;
             }
+            DB_StorageUnit oldCombinedUnit = combinedItem.ConvertInventoryUnit();
+            PS_ItemInfo oldCombinedInfo = combinedItem.ConvertItemInfo(player.Id);
+
+
 
             {
-                EStorageResult result = EStorageResult.Failed;
-                if (IsInventory(sourceObjectId))
+                ItemObject tempItem = new ItemObject(combinedItem);
+
+                //CombinedItem의 MergeNumber만큼 감소
+                int lessAmount = destinationStorage.DecreaseAmount(combinedItem, mergeNumber);
+
+                //MergedItem에 수량 증가
+                int moreAmount = sourceStorage.IncreaseAmount(mergedlItem, mergeNumber);
+
+                //CombinedItem의 수량을 MergeNumber만큼 감소하였을때 음수가 나올 경우
+                //MergeItem의 수량을 MergeNumber만큼 증가하였을때 Limit을 넘은 경우
+                if (lessAmount == -1 || moreAmount == -1)
+                {
+                    packet.IsSuccess = false;
+                    packet.MergedItem = oldMergedItemInfo;
+                    packet.CombinedItem = oldCombinedInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+                //Combined의 수량을 전부 소진한 경우
+                if (lessAmount == 0)
+                {
+                    bool isDelete = destinationStorage.DeleteItem(combinedItem);
+                    if (false == isDelete)
+                    {
+                        //CombinedItem의 수량 감소에 성공했을 테니까 기존에 정보로 되돌려준다
+                        combinedItem.Amount = oldCombinedInfo.Amount;
+
+                        packet.IsSuccess = false;
+                        packet.MergedItem = oldMergedItemInfo;
+                        packet.CombinedItem = oldCombinedInfo;
+                        player.Session.Send(packet);
+                        return;
+                    }
+                }
+
+                bool isMerge = false;
+                if (IsInventory(sourceObjectId) && IsInventory(destinationObjectId))
                 {
                     Inventory inventory = player.inventory;
-                    result = await inventory.IncreaseAmount(mergedlItem, mergeNumber);
+                    isMerge = await inventory.MergeItem(oldMergedUnit, mergedlItem.ConvertInventoryUnit(), oldCombinedUnit, combinedItem.ConvertInventoryUnit());
+                }
+                else if (IsInventory(sourceObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isMerge = await inventory.MergeItem(oldMergedUnit, mergedlItem.ConvertInventoryUnit());
+                }
+                else if (IsInventory(destinationObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isMerge = await inventory.MergeItem(oldCombinedUnit, combinedItem.ConvertInventoryUnit());
                 }
                 else
                 {
-                    result = sourceStorage.IncreaseAmount(mergedlItem, mergeNumber);
+                    isMerge = true;
                 }
 
-                if (result == EStorageResult.Failed)
+                if (false == isMerge)
                 {
+                    if (lessAmount == 0)
+                    {
+                        sourceStorage.InsertItem(tempItem);
+
+                        packet.CombinedItem = tempItem.ConvertItemInfo(player.Id);
+                    }
+                    else
+                    {
+                        destinationStorage.DecreaseAmount(mergedlItem, mergeNumber);
+                        sourceStorage.IncreaseAmount(combinedItem, lessAmount);
+
+                        packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
+                    }
+
                     packet.IsSuccess = false;
+                    packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                    player.Session.Send(packet);
+                    return;
+                }
+                else
+                {
+                    packet.IsSuccess = true;
+                    packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                    packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
                     player.Session.Send(packet);
                     return;
                 }
             }
 
-            {
-                bool isDelete = false;
-                if (IsInventory(sourceObjectId))
-                {
-                    Inventory inventory = player.inventory;
-                    isDelete = await inventory.DeleteItem(combinedItem);
-                }
-                else
-                {
-                    isDelete = sourceStorage.DeleteItem(combinedItem);
-                }
+            //{
+            //    int lessAmout = 0;
+            //    if (IsInventory(sourceObjectId))
+            //    {
+            //        Inventory inventory = player.inventory;
+            //        lessAmout = await inventory.IncreaseAmount(mergedlItem, mergeNumber);
+            //    }
+            //    else
+            //    {
+            //        lessAmout = sourceStorage.IncreaseAmount(mergedlItem, mergeNumber);
+            //    }
 
-                if (false == isDelete)
-                {
-                    packet.IsSuccess = false;
-                    player.Session.Send(packet);
-                    return;
-                }
-            }
+            //    //데이터베이스 업데이트 실패 시
+            //    if (lessAmout == -1)
+            //    {
 
-            packet.IsSuccess = true;
-            packet.SourceObjectId = sourceObjectId;
-            packet.DestinationObjectId = destinationObjectId;
-            packet.MergedItem = mergedItemInfo;
-            packet.CombinedItem = combinedInfo;
-            player.Session.Send(packet);
+            //        mergedlItem.Amount = mergedItemInfo.Amount;
+            //        combinedItem.Amount = combinedInfo.Amount;
+
+            //        packet.IsSuccess = false;
+            //        packet.MergedItem = mergedItemInfo;
+            //        packet.CombinedItem = combinedInfo;
+            //        player.Session.Send(packet);
+            //        return;
+            //    }
+            //    //merge의 최대 수량을 넘었다면 combined의 수량을 줄인다
+            //    else if (lessAmout > 0)
+            //    {
+            //        int moreAmout =  0;
+            //        if (IsInventory(sourceObjectId))
+            //        {
+            //            Inventory inventory = player.inventory;
+            //            moreAmout = await inventory.DecreaseAmount(combinedItem, lessAmout);
+            //        }
+            //        else
+            //        {
+            //            moreAmout = sourceStorage.DecreaseAmount(combinedItem, lessAmout);
+            //        }
+
+
+            //        if(moreAmout == -1)
+            //        {
+
+            //        }
+            //        else
+            //        {
+            //            combinedInfo = combinedItem.ConvertItemInfo(player.Id); //갱신된 CombinedItem
+            //        }
+
+            //    }
+            //    //combined가 수량 전부를 소모한 경우
+            //    else if(lessAmout == 0)
+            //    {
+            //        bool isDelete = false;
+            //        if (IsInventory(sourceObjectId))
+            //        {
+            //            Inventory inventory = player.inventory;
+            //            isDelete = await inventory.DeleteItem(combinedItem);
+            //        }
+            //        else
+            //        {
+            //            isDelete = sourceStorage.DeleteItem(combinedItem);
+            //        }
+
+            //        if (false == isDelete)
+            //        {
+            //            combinedInfo = combinedItem.ConvertItemInfo(player.Id);
+
+            //            if (IsInventory(sourceObjectId))
+            //            {
+            //                Inventory inventory = player.inventory;
+            //                await inventory.DecreaseAmount(mergedlItem, mergeNumber);
+            //            }
+            //            else
+            //            {
+            //                sourceStorage.DecreaseAmount(mergedlItem, mergeNumber);
+            //            }
+            //            mergedItemInfo = mergedlItem.ConvertItemInfo(player.Id);
+
+            //            packet.IsSuccess = false;
+            //            packet.MergedItem = mergedItemInfo;
+            //            packet.CombinedItem = combinedInfo;
+            //            player.Session.Send(packet);
+            //            return;
+            //        }
+            //        else
+            //        {
+            //            combinedInfo.Amount = 0;
+            //        }
+            //    }
+            //}
+
+            //mergedItemInfo = mergedlItem.ConvertItemInfo(player.Id);    //갱신 된 MergedItem
+
+            //packet.IsSuccess = true;
+            //packet.MergedItem = mergedItemInfo;
+            //packet.CombinedItem = combinedInfo;
+            //player.Session.Send(packet);
         }
 
         internal async void DevideItemHandler(Player player, int sourceObjectId, int destinationObjectId, int sourceItemId, int destinationGridX, int destinationGridY, int destinationRotation, int devideNumber)
@@ -275,25 +420,25 @@ namespace Server
                 return;
             }
 
-            {
-                EStorageResult result = EStorageResult.Failed;
-                if (IsInventory(sourceObjectId))
-                {
-                    Inventory inventory = player.inventory;
-                    result = await inventory.DecreaseAmount(sourcelItem, devideNumber);
-                }
-                else
-                {
-                    result = sourceStorage.DecreaseAmount(sourcelItem, devideNumber);
-                }
+            //{
+            //    EStorageResult result = EStorageResult.Failed;
+            //    if (IsInventory(sourceObjectId))
+            //    {
+            //        Inventory inventory = player.inventory;
+            //        result = await inventory.DecreaseAmount(sourcelItem, devideNumber);
+            //    }
+            //    else
+            //    {
+            //        result = sourceStorage.DecreaseAmount(sourcelItem, devideNumber);
+            //    }
 
-                if (result == EStorageResult.Failed)
-                {
-                    packet.IsSuccess = false;
-                    player.Session.Send(packet);
-                    return;
-                }
-            }
+            //    if (result == EStorageResult.Failed)
+            //    {
+            //        packet.IsSuccess = false;
+            //        player.Session.Send(packet);
+            //        return;
+            //    }
+            //}
 
             ItemObject destinationItem = new ItemObject(player.Id, sourcelItem.ItemId, destinationGridX, destinationGridY, destinationRotation, devideNumber);
 
