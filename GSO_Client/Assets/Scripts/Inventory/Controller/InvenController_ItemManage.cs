@@ -297,7 +297,7 @@ public partial class InventoryController
                     needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.amount;
                 }
 
-                SendMergeItemPacket(overlapItem, item, needAmount);
+                SendMergeItemPacket(item, overlapItem, needAmount);
             }
             else
             {

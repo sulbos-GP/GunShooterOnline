@@ -73,14 +73,14 @@ public partial class InventoryController
         //보류
     }
 
-    private void SendMergeItemPacket(ItemObject combinedItem, ItemObject mergedItem,  int itemAmount)
+    private void SendMergeItemPacket(ItemObject selectedItem, ItemObject overlapItem,  int itemAmount)
     {
-        C_MergeItem packet = new C_MergeItem();
-        packet.SourceObjectId = combinedItem.backUpItemGrid.objectId; //플레이어가 들고 있는 아이템이 있던 그리드
-        packet.DestinationObjectId = mergedItem.backUpItemGrid.objectId; //플레이어가 놓은 = 머지할 아이템이 있는 그리드
+        C_MergeItem packet = new C_MergeItem(); // merge에 combined 수량을 갯수만큼 더한다
+        packet.SourceObjectId = overlapItem.backUpItemGrid.objectId; //combined가 있는 그리드
+        packet.DestinationObjectId = selectedItem.backUpItemGrid.objectId;  //selectedㅇ가 있던 그리드
 
-        packet.MergedObjectId = mergedItem.itemData.objectId; //합쳐지는 아이템 = 플레이어가 들고 있는 아이템
-        packet.CombinedObjectId = combinedItem.itemData.objectId; //합치기 위한 아이템 combined -> merged = 플레이어가 들고 있는 아이템을 놓은 위치의 아이템
+        packet.MergedObjectId = overlapItem.itemData.objectId; //감소하는 아이템
+        packet.CombinedObjectId = selectedItem.itemData.objectId; 
         packet.MergeNumber = itemAmount;
 
         Managers.Network.Send(packet);
