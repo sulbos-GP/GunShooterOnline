@@ -47,6 +47,10 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SMoveItem, PacketHandler.S_MoveItemHandler);		
 		_onRecv.Add((ushort)MsgId.SDeleteItem, MakePacket<S_DeleteItem>);
 		_handler.Add((ushort)MsgId.SDeleteItem, PacketHandler.S_DeleteItemHandler);
+        _onRecv.Add((ushort)MsgId.SMergeItem, MakePacket<S_MergeItem>);
+        _handler.Add((ushort)MsgId.SMergeItem, PacketHandler.S_MergeItemHandler);
+        _onRecv.Add((ushort)MsgId.SDevideItem, MakePacket<S_DevideItem>);
+        _handler.Add((ushort)MsgId.SDevideItem, PacketHandler.S_DivideItemHandler);
         _onRecv.Add((ushort)MsgId.SSearchItem, MakePacket<S_SearchItem>);
         _handler.Add((ushort)MsgId.SSearchItem, PacketHandler.S_SearchItemHandler);
         _onRecv.Add((ushort)MsgId.SRaycastHit, MakePacket<S_RaycastHit>);

@@ -332,7 +332,6 @@ public class GridObject : MonoBehaviour
 
         }
 
-        /* 서버에서 거부할경우를 체크하기 위한 임시 제거
         //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
         if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
         {
@@ -345,7 +344,7 @@ public class GridObject : MonoBehaviour
                 Debug.Log($"merge error");
                 return HighlightColor.Red;
             }
-        }*/
+        }
 
         //무게에 의해 배치가 불가능할 경우 취소
         if (!InventoryWeightCheck(placeItem.itemData.item_weight, overlapItem))
