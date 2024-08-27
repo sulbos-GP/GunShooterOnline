@@ -77,7 +77,7 @@ namespace Server.Game
                 return false;
             }
 
-            curWeight += item.Weight * weight;
+            curWeight += weight;
             items.Add(item);
             item.CreateItem();
 
