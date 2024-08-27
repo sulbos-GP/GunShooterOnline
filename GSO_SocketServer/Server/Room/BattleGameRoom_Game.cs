@@ -333,7 +333,11 @@ namespace Server
 
             {
                 ItemObject tempItem = new ItemObject(sourceItem);
-                ItemObject devideItem = new ItemObject(player.Id, sourceItem.ItemId, destinationGridX, destinationGridY, destinationRotation, devideNumber);
+
+                DB_UnitAttributes devideAttributes = sourceItem.Attributes;
+                devideAttributes.amount = devideNumber;
+
+                ItemObject devideItem = new ItemObject(player.Id, destinationGridX, destinationGridY, destinationRotation, devideAttributes);
                 DB_StorageUnit oldDevideUnit = devideItem.ConvertInventoryUnit();
                 PS_ItemInfo oldDevideItemInfo = devideItem.ConvertItemInfo(player.Id);
 
@@ -463,7 +467,7 @@ namespace Server
                 }
             }
 
-            ItemObject newItem = new ItemObject(player.Id, sourceMovelItem.ItemId, destinationGridX, destinationGridY, destinationRotation, sourceMoveItemInfo.Amount);
+            ItemObject newItem = new ItemObject(player.Id, destinationGridX, destinationGridY, destinationRotation, sourceMovelItem.Attributes);
             bool isInsert = false;
             {
                 if (IsInventory(destinationObjectId))

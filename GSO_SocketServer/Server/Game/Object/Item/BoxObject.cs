@@ -49,18 +49,41 @@ namespace Server.Game.Object.Item
             storage.Init(5, 5, 20.0);
 
             DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(1);
-            ItemObject colt45Item = new ItemObject(colt45Data.item_id, 0, 0, 0, 1);
+            DB_UnitAttributes colt45Att = new DB_UnitAttributes()
+            {
+                item_id = colt45Data.item_id,
+                durability = 0,
+                unit_storage_id = null,
+                amount = 1
+            };
+
+            ItemObject colt45Item = new ItemObject(0, 0, 0, colt45Att);
             storage.InsertItem(colt45Item);
 
             DB_ItemBase akData = DatabaseHandler.Context.ItemBase.Get(2);
-            ItemObject akItem = new ItemObject(akData.item_id, 3, 0, 1, 1);
+            DB_UnitAttributes akAtt = new DB_UnitAttributes()
+            {
+                item_id = akData.item_id,
+                durability = 0,
+                unit_storage_id = null,
+                amount = 1
+            };
+
+            ItemObject akItem = new ItemObject(3, 0, 1, akAtt);
             storage.InsertItem(akItem);
 
             DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(11);
-
             for(int i = 0; i < 5; ++i)
             {
-                ItemObject bandItem = new ItemObject(bandData.item_id, i, 4, 0, 1 + (i * 5));
+                DB_UnitAttributes bandAtt = new DB_UnitAttributes()
+                {
+                    item_id = bandData.item_id,
+                    durability = 0,
+                    unit_storage_id = null,
+                    amount = 1 + (i * 5)
+                };
+
+                ItemObject bandItem = new ItemObject(i, 4, 0, bandAtt);
                 storage.InsertItem(bandItem);
             }
 

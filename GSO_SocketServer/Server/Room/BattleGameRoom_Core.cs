@@ -7,10 +7,7 @@ using Server.Game.Object.Item;
 using ServerCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Numerics;
-using System.Text;
+using Server.Game.Object.Gear;
 
 namespace Server
 {
@@ -108,6 +105,8 @@ namespace Server
                 {
                     var enterPacket = new S_EnterGame();
                     enterPacket.Player = player.info;
+
+                    player.gear = new Gear(player);
   
                     player.inventory = new Inventory(player, player.uid);
                     foreach (PS_ItemInfo item in player.inventory.storage.GetItems(player.Id))

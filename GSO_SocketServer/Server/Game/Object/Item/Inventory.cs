@@ -23,7 +23,6 @@ namespace Server.Game
     {
         public Player owner;                //소유자 (플레이어)
         public int storage_id = 0;          //가방 아이디
-        public int storage_item_id = 0;     //가방의 아이템 아이디
 
         public Storage storage = new Storage();
 
@@ -33,7 +32,7 @@ namespace Server.Game
         public Inventory(Player owner, int storage_id)
         {
             this.owner = owner;
-            InitInventory(storage_id).Wait();
+            InitInventory(storage_id);
             LoadInventory().Wait();
         }
 
@@ -45,7 +44,7 @@ namespace Server.Game
             if(storage.items.Count == 0)
             {
                 //가방 처음 생성
-                InitInventory(storage_id).Wait();
+                InitInventory(storage_id);
             }
             else
             {
@@ -56,21 +55,34 @@ namespace Server.Game
         /// <summary>
         /// 가방에 따른 인벤토리 초기화
         /// </summary>
-        public async Task InitInventory(int storage_id)
+        public void InitInventory(int storage_id)
         {
             try
             {
-                //장비에 착용되어 있는 가방을 불러옴
-                //int gear_id = await DatabaseHandler.GameDB.GetGearOfPart(owner.uid, Object.Gear.EGearPart.Backpack);
+                //장비에 착용되어 있는 가방을 불러옴d
+                ItemObject backpackItem = owner.gear.GetPart(EGearPart.Backpack);
 
-                //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기 (지금은 임시)
-                //Backpack backpack = await DatabaseHandler.MasterDB.GetBackpackInfo(storage_item_id);
-                Backpack backpack = new Backpack();
-
-                storage.Init(backpack.scale_x, backpack.scale_y, backpack.limit_weight);
+                int scaleX = 0;
+                int scaleY = 0;
+                double weight = 0.0;
+                if(backpackItem == null)
+                {
+                    //가방이 없다면 기본 제공
+                    scaleX = 2;
+                    scaleY = 3;
+                    weight = 5.0;
+                }
+                else
+                {
+                    //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기
+                    DB_ItemBackpack backpackData = DatabaseHandler.Context.ItemBackpack.Get(backpackItem.ItemId);
+                    scaleX = backpackData.total_scale_x;
+                    scaleY = backpackData.total_scale_y;
+                    weight = backpackData.total_weight;
+                }
+                storage.Init(scaleX, scaleY, weight);
 
                 this.storage_id = storage_id;
-                this.storage_item_id = 8;
             }
             catch (Exception e)
             {
@@ -94,7 +106,7 @@ namespace Server.Game
 
                 foreach (DB_StorageUnit unit in units)
                 {
-                    ItemObject newItem = new ItemObject(owner.Id, unit.item_id, unit.grid_x, unit.grid_y, unit.rotation, unit.stack_count);
+                    ItemObject newItem = new ItemObject(owner.Id, unit.grid_x, unit.grid_y, unit.rotation, unit.attributes);
                     if (false == storage.InsertItem(newItem))
                     {
                         throw new Exception("인벤토리 DB로드 실패");
@@ -251,7 +263,7 @@ namespace Server.Game
                     try
                     {
 
-                        if (newInvenUnit1.stack_count > 0)
+                        if (newInvenUnit1.attributes.amount > 0)
                         {
                             //인벤토리 아이템이 증가
                             //인벤토리 아이템이 감소
@@ -269,7 +281,7 @@ namespace Server.Game
                             }
                         }
 
-                        if (newInvenUnit2.stack_count > 0)
+                        if (newInvenUnit2.attributes.amount > 0)
                         {
                             //인벤토리 아이템이 증가
                             //인벤토리 아이템이 감소
@@ -310,7 +322,7 @@ namespace Server.Game
                     try
                     {
 
-                        if (newInvenUnit.stack_count > 0)
+                        if (newInvenUnit.attributes.amount > 0)
                         {
                             //인벤토리 아이템이 증가
                             //인벤토리 아이템이 감소
@@ -351,7 +363,7 @@ namespace Server.Game
                     try
                     {
 
-                        if (newInvenUnit.stack_count > 0)
+                        if (newInvenUnit.attributes.amount > 0)
                         {
                             //인벤토리 아이템이 감소
                             if (0 == await database.UpdateItem(storage_id, oldInvenUnit, newInvenUnit, transaction))
@@ -399,7 +411,7 @@ namespace Server.Game
 
                         if(isSource)
                         {
-                            if (newInvenUnit.stack_count > 0)
+                            if (newInvenUnit.attributes.amount > 0)
                             {
                                 //인벤토리 아이템이 증가
                                 //인벤토리 아이템이 감소

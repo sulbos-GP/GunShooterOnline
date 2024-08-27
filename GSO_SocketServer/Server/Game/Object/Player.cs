@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
+using Server.Game.Object.Gear;
 
 namespace Server.Game;
 

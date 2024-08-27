@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Game\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="CloudStructures" Version="3.3.0" />
     <PackageReference Include="Google.Apis.Auth" Version="1.68.0" />
     <PackageReference Include="Google.Apis.Games.v1" Version="1.68.0.3469" />

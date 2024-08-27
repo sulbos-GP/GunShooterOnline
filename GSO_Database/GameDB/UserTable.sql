@@ -1,5 +1,9 @@
 USE game_database;
 
+DROP TABLE IF EXISTS user_metadata;
+DROP TABLE IF EXISTS user_skill;
+DROP TABLE IF EXISTS user;
+
 #유저 정보
 CREATE TABLE IF NOT EXISTS user (
     uid 				INT 			NOT NULL 	AUTO_INCREMENT 				COMMENT '유저 아이디',
