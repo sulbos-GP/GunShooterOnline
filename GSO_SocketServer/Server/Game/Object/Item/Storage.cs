@@ -16,13 +16,6 @@ using static Humanizer.In;
 namespace Server.Game
 {
 
-    public enum EStorageResult
-    {
-        Successed,
-        Failed,
-        ZeroAmount,
-    }
-
     public class Storage
     {
         public List<ItemObject> items = new List<ItemObject>();     //저장소에 들어있는 아이템 오브젝트
@@ -230,17 +223,21 @@ namespace Server.Game
         public void PrintInvenContents()
         {
             
-            string content = "[PrintInvenContents]\n";
+            string content = $"[Storage : {items.Count}]\n";
+            content += $"[size ( {grid.Count} x {grid[0].Count} )]\n";
+            content += $"[weight ( {curWeight} / {maxWeight} )]\n";
+            content += "{\n";
 
             for (int i = 0; i < grid.Count; i++)
             {
+                content += "\t";
                 for (int j = 0; j < grid[i].Count; j++)
                 {
                     content += "[" + grid[i][j] + "]";
                 }
                 content += "\n";
             }
-
+            content += "}\n";
             Console.WriteLine(content);
         }
     }
