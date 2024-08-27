@@ -54,7 +54,7 @@ public partial class InventoryController
         packet.DestinationGridX = pos.x; //옮긴 위치
         packet.DestinationGridY = pos.y; //옮긴 위치
         packet.DestinationRotation = item.itemData.rotate; //옮겼을때의 회전
-        Debug.Log($"C_SearchInventory : {item.itemData.objectId} 아이템 옮김 ");
+        Debug.Log($"C_MoveItem : {item.itemData.objectId} 아이템 옮김 ");
         Managers.Network.Send(packet);
     }
 
@@ -65,7 +65,7 @@ public partial class InventoryController
         packet.SourceObjectId = item.backUpItemGrid.objectId;
         packet.DeleteItemId = item.itemData.objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_SearchInventory : {item.itemData.objectId} 아이템 삭제");
+        Debug.Log($"C_DeleteItem : {item.itemData.objectId} 아이템 삭제");
     }
 
     private void SendEquipItemPacket(ItemObject item, int equipSlotCode)
@@ -73,32 +73,32 @@ public partial class InventoryController
         //보류
     }
 
-    private void SendMergeItemPacket(ItemObject item, ItemObject targetItem , int mergeAmount)
+    private void SendMergeItemPacket(ItemObject selectedItem, ItemObject overlapItem,  int itemAmount)
     {
-        C_MergeItem packet = new C_MergeItem();
-        packet.SourceObjectId = 0;
-        packet.DestinationObjectId = 0;
+        C_MergeItem packet = new C_MergeItem(); // merge에 combined 수량을 갯수만큼 더한다
+        packet.SourceObjectId = overlapItem.backUpItemGrid.objectId; //combined가 있는 그리드
+        packet.DestinationObjectId = selectedItem.backUpItemGrid.objectId;  //selectedㅇ가 있던 그리드
 
-        packet.MergedObjectId = item.itemData.objectId;
-        packet.CombinedObjectId = targetItem.itemData.objectId;
-        packet.MergeNumber = mergeAmount;
+        packet.MergedObjectId = overlapItem.itemData.objectId; //감소하는 아이템
+        packet.CombinedObjectId = selectedItem.itemData.objectId; 
+        packet.MergeNumber = itemAmount;
 
         Managers.Network.Send(packet);
         Debug.Log("C_MergeItem");
     }
 
-    private void SendDevideItemPacket(ItemObject DevideItem, ItemObject newItem)
+    public void SendDivideItemPacket(ItemObject devideItem, Vector2Int pos, int amount)
     {
         C_DevideItem packet = new C_DevideItem();
-        packet.SourceObjectId = 0;
-        packet.DestinationObjectId = 0;
+        packet.SourceObjectId = devideItem.backUpItemGrid.objectId;
+        packet.DestinationObjectId = devideItem.curItemGrid.objectId;
 
-        packet.SourceItemId = DevideItem.itemData.objectId;
-        //분리된 새로운 아이템 오브젝트 생성후 그것을 배치했을때의 위치
-        packet.DestinationGridX = newItem.itemData.pos.x;
-        packet.DestinationGridY = newItem.itemData.pos.y;
-        packet.DestinationRotation = newItem.itemData.rotate;
-        packet.DevideNumber = 0; //임시
+        packet.SourceItemId = devideItem.itemData.objectId;
+        packet.DestinationGridX = pos.x;
+        packet.DestinationGridY = pos.y;
+        packet.DestinationRotation = devideItem.itemData.rotate;
+        packet.DevideNumber = amount;
+        
 
         Managers.Network.Send(packet);
         Debug.Log("C_DevideItem");

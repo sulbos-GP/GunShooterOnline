@@ -10,6 +10,7 @@ public class Player : CreatureObj
 {
     public SkillCoolDown SkillCoolDown = new();
     public Inventory inventory;
+    public Gear gear;
 
     //GWANHO TEMP
     public int uid = 0;

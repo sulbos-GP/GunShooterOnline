@@ -18,6 +18,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Server.Game
 {
+
     public class Inventory : GameObject
     {
         public Player owner;                //소유자 (플레이어)
@@ -84,14 +85,14 @@ namespace Server.Game
         {
             try
             {
-                IEnumerable<DB_InventoryUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
+                IEnumerable<DB_StorageUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
 
                 if (units == null)
                 {
                     return;
                 }
 
-                foreach (DB_InventoryUnit unit in units)
+                foreach (DB_StorageUnit unit in units)
                 {
                     ItemObject newItem = new ItemObject(owner.Id, unit.item_id, unit.grid_x, unit.grid_y, unit.rotation, unit.stack_count);
                     if (false == storage.InsertItem(newItem))
@@ -127,7 +128,7 @@ namespace Server.Game
                     throw new Exception("인벤토리에서 아이템을 삽입하지 못함");
                 }
 
-                DB_InventoryUnit insertUnit = insertItem.ConvertInventoryUnit();
+                DB_StorageUnit insertUnit = insertItem.ConvertInventoryUnit();
                 int ret = await DatabaseHandler.GameDB.InsertItem(storage_id, insertUnit);
                 if (ret == 0)
                 {
@@ -166,7 +167,7 @@ namespace Server.Game
                     throw new Exception("인벤토리에서 아이템을 삭제하지 못함");
                 }
 
-                DB_InventoryUnit deleteUnit = deleteItem.ConvertInventoryUnit();
+                DB_StorageUnit deleteUnit = deleteItem.ConvertInventoryUnit();
                 int ret = await DatabaseHandler.GameDB.DeleteItem(storage_id, deleteUnit);
                 if (ret == 0)
                 {
@@ -182,70 +183,259 @@ namespace Server.Game
             }
         }
 
-        public async Task<EStorageResult> IncreaseAmount(ItemObject item, int amount)
+        public async Task<int> IncreaseAmount(ItemObject item, int amount)
         {
             try
             {
 
-                DB_InventoryUnit oldUnit = item.ConvertInventoryUnit();
+                DB_StorageUnit oldUnit = item.ConvertInventoryUnit();
 
-                EStorageResult result = this.storage.IncreaseAmount(item, amount);
-                if (result == EStorageResult.Failed)
+                int lessAmount = this.storage.IncreaseAmount(item, amount);
+
+                DB_StorageUnit curUnit = item.ConvertInventoryUnit();
+                if (0 == await DatabaseHandler.GameDB.UpdateItem(storage_id, oldUnit, curUnit))
                 {
-                    throw new Exception("인벤토리에서 아이템 감소시 최대를 넘음");
-                }
-                else
-                {
-                    DB_InventoryUnit curUnit = item.ConvertInventoryUnit();
-                    if (0 == await DatabaseHandler.GameDB.UpdateItem(storage_id, oldUnit, curUnit))
-                    {
-                        throw new Exception("인벤토리에서 아이템 업데이트 안됨");
-                    }
+                    throw new Exception("인벤토리에서 아이템 수량 증가 업데이트 안됨");
                 }
 
-                return EStorageResult.Successed;
+                return lessAmount;
             }
             catch (Exception e)
             {
                 Console.WriteLine($"[IncreaseAmount] : {e.Message.ToString()}");
-                return EStorageResult.Failed;
+                return -1;
             }
         }
 
-        public async Task<EStorageResult> DecreaseAmount(ItemObject item, int amount)
+        public async Task<int> DecreaseAmount(ItemObject item, int amount)
         {
             try
             {
 
-                DB_InventoryUnit oldUnit = item.ConvertInventoryUnit();
+                DB_StorageUnit oldUnit = item.ConvertInventoryUnit();
 
-                EStorageResult result = this.storage.DecreaseAmount(item, amount);
-                if(result == EStorageResult.Failed)
+                int lessAmount = this.storage.DecreaseAmount(item, amount);
+                if(lessAmount == -1)
                 {
                     throw new Exception("인벤토리에서 아이템 감소시 음수");
                 }
-                else if(result == EStorageResult.ZeroAmount)
+                else if(lessAmount == 0)
                 {
-                    if(0 == await DatabaseHandler.GameDB.DeleteItem(storage_id, oldUnit))
-                    {
-                        throw new Exception("인벤토리에서 아이템 삭제 안됨");
-                    }
+                    return 0;
                 }
                 else
                 {
-                    DB_InventoryUnit curUnit = item.ConvertInventoryUnit();
+                    DB_StorageUnit curUnit = item.ConvertInventoryUnit();
                     if(0 == await DatabaseHandler.GameDB.UpdateItem(storage_id, oldUnit, curUnit))
                     {
                         throw new Exception("인벤토리에서 아이템 업데이트 안됨");
                     }
                 }
 
-                return EStorageResult.Successed;
+                return lessAmount;
             }
             catch (Exception e)
             {
                 Console.WriteLine($"[DecreaseAmount] : {e.Message.ToString()}");
-                return EStorageResult.Failed;
+                return -1;
+            }
+        }
+
+        public async Task<bool> MergeItem(DB_StorageUnit oldInvenUnit1, DB_StorageUnit newInvenUnit1, DB_StorageUnit oldInvenUnit2, DB_StorageUnit newInvenUnit2)
+        {
+            using (var database = DatabaseHandler.GameDB)
+            {
+
+                using (var transaction = database.GetConnection().BeginTransaction())
+                {
+                    try
+                    {
+
+                        if (newInvenUnit1.stack_count > 0)
+                        {
+                            //인벤토리 아이템이 증가
+                            //인벤토리 아이템이 감소
+                            if (0 == await database.UpdateItem(storage_id, oldInvenUnit1, newInvenUnit1, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+                            }
+                        }
+                        else
+                        {
+                            //인벤토리 아이템이 삭제
+                            if (0 == await database.DeleteItem(storage_id, oldInvenUnit1, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 삭제가 안됨");
+                            }
+                        }
+
+                        if (newInvenUnit2.stack_count > 0)
+                        {
+                            //인벤토리 아이템이 증가
+                            //인벤토리 아이템이 감소
+                            if (0 == await database.UpdateItem(storage_id, oldInvenUnit2, newInvenUnit2, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+                            }
+                        }
+                        else
+                        {
+                            //인벤토리 아이템이 삭제
+                            if (0 == await database.DeleteItem(storage_id, oldInvenUnit2, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 삭제가 안됨");
+                            }
+                        }
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[MergeItem] : {e.Message.ToString()}");
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public async Task<bool> MergeItem(DB_StorageUnit oldInvenUnit, DB_StorageUnit newInvenUnit)
+        {
+            using (var database = DatabaseHandler.GameDB)
+            {
+
+                using (var transaction = database.GetConnection().BeginTransaction())
+                {
+                    try
+                    {
+
+                        if (newInvenUnit.stack_count > 0)
+                        {
+                            //인벤토리 아이템이 증가
+                            //인벤토리 아이템이 감소
+                            if (0 == await database.UpdateItem(storage_id, oldInvenUnit, newInvenUnit, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+                            }
+                        }
+                        else
+                        {
+                            //인벤토리 아이템이 삭제
+                            if (0 == await database.DeleteItem(storage_id, oldInvenUnit, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 삭제가 안됨");
+                            }
+                        }
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[MergeItem] : {e.Message.ToString()}");
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public async Task<bool> DevideItem(DB_StorageUnit oldInvenUnit, DB_StorageUnit newInvenUnit, DB_StorageUnit newDevideUnit)
+        {
+            using (var database = DatabaseHandler.GameDB)
+            {
+
+                using (var transaction = database.GetConnection().BeginTransaction())
+                {
+                    try
+                    {
+
+                        if (newInvenUnit.stack_count > 0)
+                        {
+                            //인벤토리 아이템이 감소
+                            if (0 == await database.UpdateItem(storage_id, oldInvenUnit, newInvenUnit, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+                            }
+                        }
+                        else
+                        {
+                            //인벤토리 아이템이 삭제
+                            if (0 == await database.DeleteItem(storage_id, oldInvenUnit, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 삭제가 안됨");
+                            }
+                        }
+
+                        //인벤토리에 삽입
+                        if (0 == await database.InsertItem(storage_id, newDevideUnit, transaction))
+                        {
+                            throw new Exception("인벤토리에서 아이템 삭제가 안됨");
+                        }
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[DevideItem] : {e.Message.ToString()}");
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        public async Task<bool> DevideItem(bool isSource, DB_StorageUnit oldInvenUnit, DB_StorageUnit newInvenUnit)
+        {
+            using (var database = DatabaseHandler.GameDB)
+            {
+
+                using (var transaction = database.GetConnection().BeginTransaction())
+                {
+                    try
+                    {
+
+                        if(isSource)
+                        {
+                            if (newInvenUnit.stack_count > 0)
+                            {
+                                //인벤토리 아이템이 증가
+                                //인벤토리 아이템이 감소
+                                if (0 == await database.UpdateItem(storage_id, oldInvenUnit, newInvenUnit, transaction))
+                                {
+                                    throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+                                }
+                            }
+                            else
+                            {
+                                //인벤토리 아이템이 삭제
+                                if (0 == await database.DeleteItem(storage_id, oldInvenUnit, transaction))
+                                {
+                                    throw new Exception("인벤토리에서 아이템 삭제가 안됨");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (0 == await database.InsertItem(storage_id, oldInvenUnit, transaction))
+                            {
+                                throw new Exception("인벤토리에서 아이템 삽입이 안됨");
+                            }
+                        }
+
+
+                        transaction.Commit();
+                        return true;
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[DevideItem] : {e.Message.ToString()}");
+                        transaction.Rollback();
+                        return false;
+                    }
+                }
             }
         }
 

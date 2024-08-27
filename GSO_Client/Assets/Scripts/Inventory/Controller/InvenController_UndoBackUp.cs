@@ -16,7 +16,7 @@ using Vector2 = System.Numerics.Vector2;
 public partial class InventoryController
 {
     /// <summary>
-    /// 아이템 슬롯을 백업함(아이템을 들때 슬롯이 업데이트되기에 백업 필요)
+    /// 해당 아이템의 배치된 그리드 오브젝트의 아이템슬롯을 백업함. 이거 전에 backupitem을 먼저 할것
     /// </summary>
     public void BackUpGridSlot(ItemObject item)
     {

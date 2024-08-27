@@ -1,10 +1,12 @@
-﻿using Server.Database.Data;
+﻿using Google.Protobuf.Protocol;
+using Server.Database.Data;
 using Server.Database.Interface;
 using Server.Game;
 using Server.Game.Object.Gear;
 using SqlKata.Execution;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Threading.Tasks;
 using System.Transactions;
 
@@ -45,25 +47,25 @@ namespace Server.Database.Game
                 .FirstOrDefaultAsync<int>();
         }
 
-        public async Task<IEnumerable<Gear>> LoadGear(int uid)
+        public async Task<IEnumerable<DB_Gear>> LoadGear(int uid)
         {
             var query = this.GetQueryFactory();
 
             return await query.Query("gear")
                 .Where("uid", uid)
-                .GetAsync<Gear>();
+                .GetAsync<DB_Gear>();
         }
 
-        public async Task<IEnumerable<DB_InventoryUnit>> LoadInventory(int storage_id)
+        public async Task<IEnumerable<DB_StorageUnit>> LoadInventory(int storage_id)
         {
             var query = this.GetQueryFactory();
 
             return await query.Query("storage_unit")
                 .Where("storage_id", storage_id)
-                .GetAsync<DB_InventoryUnit>();
+                .GetAsync<DB_StorageUnit>();
         }
 
-        public async Task<int> InsertItem(int storage_id, DB_InventoryUnit unit)
+        public async Task<int> InsertItem(int storage_id, DB_StorageUnit unit, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
@@ -76,10 +78,10 @@ namespace Server.Database.Game
                     grid_y = unit.grid_y,
                     rotation = unit.rotation,
                     stack_count = unit.stack_count
-                }, null);
+                }, transaction);
         }
 
-        public async Task<int> DeleteItem(int storage_id, DB_InventoryUnit unit)
+        public async Task<int> DeleteItem(int storage_id, DB_StorageUnit unit, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
@@ -95,10 +97,10 @@ namespace Server.Database.Game
 
             return await query.Query("storage_unit").
                 Where(values).
-                DeleteAsync();
+                DeleteAsync(transaction);
         }
 
-        public async Task<int> UpdateItem(int storage_id, DB_InventoryUnit oldUnit, DB_InventoryUnit curUnit)
+        public async Task<int> UpdateItem(int storage_id, DB_StorageUnit oldUnit, DB_StorageUnit curUnit, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
@@ -124,7 +126,7 @@ namespace Server.Database.Game
 
             return await query.Query("storage_unit").
                 Where(oldValues).
-                UpdateAsync(newValues);
+                UpdateAsync(newValues, transaction);
         }
 
     }
