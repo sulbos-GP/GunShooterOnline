@@ -70,13 +70,14 @@ namespace Server.Game
                 return false;
             }
 
-            if(maxWeight < curWeight + item.Weight)
+            double weight = item.Weight * item.Amount;
+            if(maxWeight < curWeight + weight)
             {
                 OverWriteToRollBackGrid(rollback);
                 return false;
             }
 
-            curWeight += item.Weight;
+            curWeight += item.Weight * weight;
             items.Add(item);
             item.CreateItem();
 
@@ -98,7 +99,8 @@ namespace Server.Game
                 return false;
             }
 
-            if (0 > curWeight - item.Weight)
+            double weight = item.Weight * item.Amount;
+            if (0 > curWeight - weight)
             {
                 OverWriteToRollBackGrid(rollback);
                 return false;
@@ -110,7 +112,7 @@ namespace Server.Game
                 return false;
             }
 
-            curWeight -= item.Weight;
+            curWeight -= weight;
             item.DestroyItem();
 
             PrintInvenContents();
@@ -129,6 +131,7 @@ namespace Server.Game
             }
             else
             {
+                this.curWeight += item.Weight * amount;
                 item.Amount += amount;
                 return item.Amount;
             }
@@ -147,6 +150,7 @@ namespace Server.Game
             }
             else
             {
+                this.curWeight -= item.Weight * amount;
                 item.Amount -= amount;
                 return item.Amount;
             }

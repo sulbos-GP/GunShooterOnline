@@ -12,6 +12,9 @@ BEGIN
     DECLARE new_deviation DOUBLE;
 	DECLARE new_volatility DOUBLE;
     
+    DECLARE new_storage_id INT;
+	DECLARE new_attributes_id INT;
+    
     DELETE FROM user_metadata;
     DELETE FROM user_skill;
     
@@ -36,7 +39,13 @@ BEGIN
         INSERT INTO user_skill(uid, rating, deviation, volatility) VALUES(new_uid, new_rating, new_deviation, new_volatility);
         
 		#유저 인벤토리 (임시)
-		INSERT INTO storage (storage_item_id, storage_type) VALUES(8, 'backpack');
+        INSERT INTO storage (uid, storage_type) VALUES (null, 'backpack');
+		SET new_storage_id = LAST_INSERT_ID();
+                
+        INSERT INTO unit_attributes(item_id, unit_storage_id, amount) VALUES(8, new_storage_id, 1);
+		SET new_attributes_id = LAST_INSERT_ID();
+        
+		INSERT INTO gear (uid, part, unit_attributes_id) VALUES(new_uid, 'backpack', new_attributes_id);
         
         SET counter = counter + 1;
 	END WHILE;

@@ -7,15 +7,14 @@ using System.Threading.Tasks;
 namespace Server.Database.Data
 {
 
-
     public class DB_StorageUnit()
     {
-        public int item_id;             // 아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
-        public int grid_x;              // 아이템의 그리드 안 좌표상의 위치
-        public int grid_y;              // 아이템의 그리드 안 좌표상의 위치
-        public int rotation;            // 아이템의 회전코드(rotate * 90)
-        public int stack_count;         // 아이템의 개수(소모품만 64개까지
-        public int unit_attributes_id;  // 아이템의 속성 아이디
+        public int grid_x;                  
+        public int grid_y;                  
+        public int rotation;                
+        public int unit_attributes_id;     
+
+        public DB_UnitAttributes attributes = new DB_UnitAttributes();
     }
 
     /// <summary>
@@ -23,8 +22,10 @@ namespace Server.Database.Data
     /// </summary>
     public class DB_UnitAttributes
     {
+        public int item_id;
         public int durability;
-        public int storage_id;
+        public int? unit_storage_id = null;
+        public int amount;
     }
 
     public class DB_ItemBase
@@ -41,7 +42,14 @@ namespace Server.Database.Data
         public readonly double inquiry_time;
         public readonly int sell_price;
         public readonly int stack_count;
-        public readonly string prefab;
         public readonly string icon;
+    }
+
+    public class DB_ItemBackpack
+    {
+        public readonly int item_id;
+        public readonly int total_scale_x;
+        public readonly int total_scale_y;
+        public readonly double total_weight;
     }
 }

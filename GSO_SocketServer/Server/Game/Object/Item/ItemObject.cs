@@ -12,31 +12,39 @@ namespace Server.Game
 {
     public class ItemObject : GameObject
     {
-        private int itemId;
+        private DB_UnitAttributes attributes = new DB_UnitAttributes();
         private int x;
         private int y;
         private int rotate;
-        private int amount;
 
         private Dictionary<int, DateTime> viewers = new Dictionary<int, DateTime>();
 
-        public ItemObject(int itemId, int gridX, int grixY, int rotate, int amount)
+        public ItemObject()
         {
             ObjectType = GameObjectType.Item;
+            x = 0;
+            y = 0;
+            rotate = 0;
+        }
 
-            this.itemId = itemId;
+        public ItemObject(int gridX, int grixY, int rotate, DB_UnitAttributes attributes)
+        {
+            ObjectType = GameObjectType.Item;
+            
+            this.attributes = attributes;
+
             this.x = gridX;
             this.y = grixY;
             this.rotate = rotate;
-            this.amount = amount;
+
         }
 
-        public ItemObject(int viewerId, int itemId, int gridX, int grixY, int rotate, int amount) : this(itemId, gridX, grixY, rotate, amount)
+        public ItemObject(int viewerId, int gridX, int grixY, int rotate, DB_UnitAttributes attributes) : this(gridX, grixY, rotate, attributes)
         {
             viewers.TryAdd(viewerId, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
         }
 
-        public ItemObject(ItemObject other) : this(other.itemId, other.x, other.y, other.rotate, other.amount)
+        public ItemObject(ItemObject other) : this(other.x, other.y, other.rotate, other.attributes)
         {
             this.Id = other.Id;
             this.viewers = other.viewers;
@@ -60,11 +68,41 @@ namespace Server.Game
             }
         }
 
+        public DB_UnitAttributes Attributes
+        {
+            get
+            {
+                return new DB_UnitAttributes()
+                {
+                    item_id = ItemId,
+                    durability = Durability,
+                    unit_storage_id = UnitStorageId,
+                    amount = Amount
+                };
+            }
+        }
+
         public int ItemId
         {
             get
             {
-                return itemId;
+                return attributes.item_id;
+            }
+        }
+
+        public int Durability
+        {
+            get
+            {
+                return attributes.durability;
+            }
+        }
+
+        public int? UnitStorageId
+        {
+            get
+            {
+                return attributes.unit_storage_id;
             }
         }
 
@@ -137,11 +175,11 @@ namespace Server.Game
         {
             get
             {
-                return amount;
+                return attributes.amount;
             }
             set
             {
-                amount = value;
+                attributes.amount = value;
             }
         }
 
@@ -174,11 +212,14 @@ namespace Server.Game
         public DB_StorageUnit ConvertInventoryUnit()
         {
             DB_StorageUnit unit = new DB_StorageUnit();
-            unit.item_id = ItemId;
             unit.grid_x = X;
             unit.grid_y = Y;
             unit.rotation = Rotate;
-            unit.stack_count = Amount;
+
+            unit.attributes.item_id = ItemId;
+            unit.attributes.durability = attributes.durability;
+            unit.attributes.unit_storage_id = attributes.unit_storage_id;
+            unit.attributes.amount = Amount;
             return unit;
         }
 
