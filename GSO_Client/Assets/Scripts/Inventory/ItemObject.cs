@@ -57,6 +57,7 @@ public class ItemObject : MonoBehaviour
         set
         {
             itemData.amount = value;
+
             itemWeight = itemData.item_weight * value;
             if (itemData.isSearched)
             {
@@ -69,7 +70,7 @@ public class ItemObject : MonoBehaviour
    
     //현 상태
     public bool isHide; //아이템 정보 숨겨짐
-    private bool isOnSearching; //아이템 조회중
+    public bool isOnSearching; //아이템 조회중
 
     public float itemWeight; //지금까지 쓰인 itemData.itme_weight를  이변수로 바꿀것
 
@@ -163,12 +164,10 @@ public class ItemObject : MonoBehaviour
 
         if (itemSprite == null)
         {
-            Debug.LogError("Failed to load the sprite in editor!");
+            Debug.LogError("스프라이트 검색 실패");
             return null;
         }
 
-        Debug.Log("Sprite loaded successfully in editor!");
-        // 스프라이트를 사용하는 예시
         return itemSprite;
     }
 
@@ -265,12 +264,16 @@ public class ItemObject : MonoBehaviour
 
     public void TextControl()
     {
-        amountText.text = itemData.amount.ToString();
+        amountText.text = ItemAmount.ToString();
 
         //아이템 갯수 텍스트가 비활성화 상태이고 2 이상이면 활성화
-        if (itemData.amount > 1 && amountText.gameObject.activeSelf == false && !isHide) 
+        if (ItemAmount > 1  && !isHide) 
         {
             amountText.gameObject.SetActive(true);
+        }
+        else
+        {
+            amountText.gameObject.SetActive(false);
         }
     }
 

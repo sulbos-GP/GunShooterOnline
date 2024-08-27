@@ -31,7 +31,7 @@ public partial class InventoryController
         Debug.Log($"C_SendLoadInven : {objectId}의 인벤토리 닫음 ");
     }
 
-    private void SendSearchItemPacket(int objectId, ItemObject item)
+    public void SendSearchItemPacket(int objectId, ItemObject item)
     {
         C_SearchItem packet = new C_SearchItem();
         packet.SourceObjectId = objectId;
@@ -44,7 +44,7 @@ public partial class InventoryController
     /// <summary>
     /// 그리드 -> 그리드 혹은 장착슬롯 -> 그리드
     /// </summary>
-    private void SendMoveItemPacket(ItemObject item , Vector2Int pos)
+    public void SendMoveItemPacket(ItemObject item , Vector2Int pos)
     {
         C_MoveItem packet = new C_MoveItem();
         
@@ -59,7 +59,7 @@ public partial class InventoryController
     }
 
 
-    private void SendDeleteItemPacket(ItemObject item)
+    public void SendDeleteItemPacket(ItemObject item)
     {
         C_DeleteItem packet = new C_DeleteItem();
         packet.SourceObjectId = item.backUpItemGrid.objectId;
@@ -68,12 +68,8 @@ public partial class InventoryController
         Debug.Log($"C_DeleteItem : {item.itemData.objectId} 아이템 삭제");
     }
 
-    private void SendEquipItemPacket(ItemObject item, int equipSlotCode)
-    {
-        //보류
-    }
-
-    private void SendMergeItemPacket(ItemObject selectedItem, ItemObject overlapItem,  int itemAmount)
+    
+    public void SendMergeItemPacket(ItemObject selectedItem, ItemObject overlapItem,  int itemAmount)
     {
         C_MergeItem packet = new C_MergeItem(); // merge에 combined 수량을 갯수만큼 더한다
         packet.SourceObjectId = overlapItem.backUpItemGrid.objectId; //combined가 있는 그리드
@@ -103,6 +99,12 @@ public partial class InventoryController
         Managers.Network.Send(packet);
         Debug.Log("C_DevideItem");
     }
+
+    public void SendEquipItemPacket(ItemObject item, int equipSlotCode)
+    {
+        //보류
+    }
+
 }
 
 
