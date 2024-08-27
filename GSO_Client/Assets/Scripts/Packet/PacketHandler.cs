@@ -143,17 +143,6 @@ internal class PacketHandler
 
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
-        /*
-         * 플레이어가 인벤토리를 여는 키를 눌렀을대 전송되며 플레이어의 아이템데이터를 서버에 요청한다
-         * sourceObjectId가 0이면 플레이어, id가 있으면 박스의 id
-         * 각 타겟의 UI의 ItemList에 패킷으로 전달된 아이템들을 넣어줌
-         * 
-         * 인벤토리를 열고 InventorySet 함수를 실행시키면 각 인벤토리가 생성된다
-         * 만약 박스가 열렸다면 박스의 bool변수를 변경하여 다른 플레이어가 루팅중인 박스는 접근이 불가하다
-         */
-        
-        
-        //해당 클라이언트만 해당 되며 
         S_LoadInventory packet = message as S_LoadInventory;
         if (packet == null)
         {
@@ -208,7 +197,7 @@ internal class PacketHandler
             boxGrid.PrintInvenContents();
         }
 
-        if (!InventoryController.invenInstance.isActive)
+        if (!InventoryController.invenInstance.isActive) //인벤토리가 꺼져있으면 킴
         {
             InventoryController.invenInstance.invenUIControl();
         }
@@ -238,12 +227,15 @@ internal class PacketHandler
         if(packet.SourceObjectId != 0)
         {
             GameObject target = Managers.Object.FindById(packet.SourceObjectId);
+            if(target == null)
+            {
+                Debug.Log("타겟박스의 검색 실패");
+                return;
+            }
             target.GetComponent<Box>().interactable = true;
         }
 
-        
-
-        if (InventoryController.invenInstance.isActive)
+        if (InventoryController.invenInstance.isActive)//인벤토리가 켜져 있으면 끔
         {
             InventoryController.invenInstance.instantItemDic.Clear();
             InventoryController.invenInstance.invenUIControl();
@@ -265,9 +257,9 @@ internal class PacketHandler
             return;
         }
 
-        Debug.Log("패킷받음");
         Debug.Log($"패킷의 아이템id = {packet.SourceItem.ObjectId}");
-        if (!packet.IsSuccess)
+
+        if (!packet.IsSuccess) //실패시 아이템을 다시 숨김상태로 전환
         {
             ItemObject targetItem = null;
             InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out targetItem);
@@ -278,7 +270,9 @@ internal class PacketHandler
         }
     }
 
-
+    /// <summary>
+    /// moveItem에선 이동전 아이템과 이동후 아이템을 따로 주는데 이동전 아이템의 아이디와 이동후 아이템의 아이디가 다룰수 있어 이동후 아이디로 교체
+    /// </summary>
     private static void ChangeItemObjectId(ItemObject targetItem, int newId)
     {
         InventoryController.invenInstance.instantItemDic.Remove(targetItem.itemData.objectId);
@@ -298,10 +292,12 @@ internal class PacketHandler
             Debug.Log("패킷이 없음");
             return;
         }
+        InventoryController invenInstance = InventoryController.invenInstance;
+
         Debug.Log("S_MoveItem");
         
         ItemObject targetItem = null;
-        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
+        invenInstance.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
         if (targetItem == null)
         {
             Debug.Log("해당 아이템 검색 실패");
@@ -310,28 +306,10 @@ internal class PacketHandler
 
         if (packet.IsSuccess)
         {
-            Debug.Log("S_MoveItem 성공");
             Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
-            GridObject sourceGrid;
-            if (packet.SourceObjectId == 0) {
-                sourceGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
-            }
-            else
-            {
-                sourceGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
-            }
+            GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
+            GridObject destinationGrid = packet.DestinationObjectId == 0 ? invenInstance.playerInvenUI.instantGrid : invenInstance.otherInvenUI.instantGrid;
 
-            GridObject destinationGrid;
-            if (packet.DestinationObjectId == 0)
-            {
-                destinationGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
-            }
-            else
-            {
-                destinationGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
-            }
-
-            //sourceGrid.CleanItemSlot(sourceItem); 이미 아이템을 집을때 슬롯에서 삭제되어 있음
             destinationGrid.PlaceItem(targetItem, packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
             targetItem.Rotate(packet.DestinationMoveItem.Rotate);
 
@@ -339,51 +317,44 @@ internal class PacketHandler
 
             targetItem.curItemGrid.PrintInvenContents();
             targetItem.backUpItemGrid.PrintInvenContents();
-            InventoryController.invenInstance.BackUpGridSlot(targetItem);
-            InventoryController.invenInstance.BackUpItem(targetItem);
-
+            invenInstance.BackUpGridSlot(targetItem); //Undo 외에 옮긴 후에는 아이템 오브젝트 백업 필수
+            invenInstance.BackUpItem(targetItem);
         }
-
         else
         {
             Debug.Log("S_MoveItem 실패");
             Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
-            targetItem.curItemGrid.PrintInvenContents();
-            targetItem.backUpItemGrid.PrintInvenContents();
 
             ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
-            InventoryController.invenInstance.UndoGridSlot(targetItem);
-            InventoryController.invenInstance.UndoItem(targetItem);
+            invenInstance.UndoGridSlot(targetItem);
+            invenInstance.UndoItem(targetItem);
 
             targetItem.curItemGrid.PrintInvenContents();
             targetItem.backUpItemGrid.PrintInvenContents();
         }
 
-        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
-        InventoryController.invenInstance.ResetSelection();
+        //패킷종료시 플레이어 인벤토리의 무게 텍스트 업데이트
+        invenInstance.playerInvenUI.WeightTextSet(
+                invenInstance.playerInvenUI.instantGrid.GridWeight,
+                invenInstance.playerInvenUI.instantGrid.limitWeight);
 
     }
 
     //아이템을 삭제할때. 플레이어가 아이템을 들었을때 다른 플레이어에게 전송할때도 좋을듯.
     internal static void S_DeleteItemHandler(PacketSession session, IMessage message)
     {
-        /*
-         * isSuccess 가 성공하면 출발지 저장소 아이디를 통해 그리드의 내용을 삭제하고 delete아이템을 삭제함
-         * false면 해당 아이템을 Undo하여 원래 위치로
-         */
         S_DeleteItem packet = message as S_DeleteItem;
         if (packet == null)
         {
             Debug.Log("패킷이 없음");
             return;
         }
-        Debug.Log("S_DeleteItem");
         Debug.Log($"패킷의 아이템id = {packet.DeleteItem.ObjectId}");
 
+        InventoryController invenInstance = InventoryController.invenInstance;
+
         ItemObject targetItem = null;
-        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.DeleteItem.ObjectId, out targetItem);
+        invenInstance.instantItemDic.TryGetValue(packet.DeleteItem.ObjectId, out targetItem);
         if (targetItem == null)
         {
             Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
@@ -394,29 +365,21 @@ internal class PacketHandler
 
             Debug.Log("S_DeleteItem 성공");
             GridObject sourceGrid;
-            if (packet.SourceObjectId == 0)
-            {
-                sourceGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
-            }
-            else
-            {
-                sourceGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
-            }
+            sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
 
             sourceGrid.CleanItemSlot(targetItem);
-            InventoryController.invenInstance.DestroyItem(targetItem);
+            invenInstance.DestroyItem(targetItem);
 
         }
         else
         {
             Debug.Log("S_DeleteItem 실패");
-            InventoryController.invenInstance.UndoGridSlot(targetItem);
-            InventoryController.invenInstance.UndoItem(targetItem);
+            invenInstance.UndoGridSlot(targetItem);
+            invenInstance.UndoItem(targetItem);
         }
         InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
                 InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
-        InventoryController.invenInstance.ResetSelection();
     }
 
     internal static void S_MergeItemHandler(PacketSession session, IMessage message)
@@ -427,16 +390,14 @@ internal class PacketHandler
             Debug.Log("패킷이 없음");
             return;
         }
-        Debug.Log("S_MergeItem");
         Debug.Log($"합쳐지는 아이템 아이디 = {packet.MergedItem.ObjectId}, 합치기 위한 아이디 = {packet.CombinedItem.ObjectId}");
+        InventoryController invenInstance = InventoryController.invenInstance;
 
         ItemObject mergedItem = null;
-        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.MergedItem.ObjectId, out mergedItem);
-        ChangeItemObjectId(mergedItem, packet.MergedItem.ObjectId);
+        invenInstance.instantItemDic.TryGetValue(packet.MergedItem.ObjectId, out mergedItem);
 
         ItemObject combinedItem = null;
-        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.CombinedItem.ObjectId, out combinedItem);
-        ChangeItemObjectId(combinedItem, packet.CombinedItem.ObjectId);
+        invenInstance.instantItemDic.TryGetValue(packet.CombinedItem.ObjectId, out combinedItem);
 
         if (mergedItem == null || combinedItem == null)
         {
@@ -446,22 +407,16 @@ internal class PacketHandler
 
         if (packet.IsSuccess)
         {
-            //성공할경우 로직
-            /*
-             * 패킷의 combinedItem의 수량이 0이라면 combinedItem의 삭제하고 아니라면 combinedItem의 원래 위치로 돌아감
-             * merge에 combined 수량을 갯수만큼 더한다
-             * mergedItme 수량을 패킷의 수량으로 업데이트
-             */
             mergedItem.ItemAmount = packet.MergedItem.Amount;
 
             if(packet.CombinedItem.Amount == 0)
             {
-                InventoryController.invenInstance.DestroyItem(combinedItem);
+                invenInstance.DestroyItem(combinedItem);
             }
             else
             {
-                InventoryController.invenInstance.UndoGridSlot(combinedItem);
-                InventoryController.invenInstance.UndoItem(combinedItem);
+                invenInstance.UndoGridSlot(combinedItem);
+                invenInstance.UndoItem(combinedItem);
                 
                 combinedItem.ItemAmount = packet.CombinedItem.Amount;
             }
@@ -469,16 +424,14 @@ internal class PacketHandler
         }
         else
         {
-            //실패할경우 로직
             Debug.Log("S_MergeItem 실패");
             InventoryController.invenInstance.UndoGridSlot(combinedItem);
             InventoryController.invenInstance.UndoItem(combinedItem);
-
         }
+
         InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
                 InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
-        InventoryController.invenInstance.ResetSelection();
     }
 
 
@@ -490,14 +443,11 @@ internal class PacketHandler
             Debug.Log("패킷이 없음");
             return;
         }
-        Debug.Log("S_DevideItem");
-        Debug.Log($"원래 아이디 = {packet.SourceItem.ObjectId}, 새로 생성된 아이디 = {packet.DestinationItem.ObjectId}");
-
-        Managers.Resource.Destroy(InventoryController.invenInstance.itemPreviewInstance); //아이템 이미지 인스턴스 삭제
+        
+        InventoryController invenInstance = InventoryController.invenInstance;
 
         ItemObject sourceItem = null; //원래 있던 아이템
-        InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out sourceItem);
-        ChangeItemObjectId(sourceItem, packet.SourceItem.ObjectId);
+        invenInstance.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out sourceItem);
 
         if (sourceItem == null )
         {
@@ -505,76 +455,69 @@ internal class PacketHandler
             return;
         }
 
+        int itemAmountInstance = sourceItem.ItemAmount; //수량 변경후 sourceItem의 수량을 되돌려야할때 사용
+
         if (packet.IsSuccess)
         {
-            //성공할경우 로직
-            InventoryController.invenInstance.UndoGridSlot(sourceItem);
-            InventoryController.invenInstance.UndoItem(sourceItem);
-            sourceItem.ItemAmount = packet.SourceItem.Amount; //원래 있던 아이템은 원래위치로 되돌린뒤 개수 업데이트
+            Debug.Log($"원래 아이디 = {packet.SourceItem.ObjectId}, 새로 생성된 아이디 = {packet.DestinationItem.ObjectId}");
+            invenInstance.UndoGridSlot(sourceItem);
+            invenInstance.UndoItem(sourceItem);
 
+            sourceItem.ItemAmount = packet.SourceItem.Amount; //원래 있던 아이템은 원래위치로 되돌린뒤 개수 업데이트(나뉜만큼 개수 감소)
+
+            //새로운 아이템을 생성하여 나눈 아이템 생성
             ItemData newData = new ItemData();
             newData.SetItemData(packet.DestinationItem);
 
-            if(packet.DestinationObjectId == 0)
+            GridObject targetGrid = packet.DestinationObjectId == 0 ? targetGrid = invenInstance.playerInvenUI.instantGrid : targetGrid = invenInstance.otherInvenUI.instantGrid;
+            
+            ItemObject overlapItem = null; //겹치는 아이템 오브젝트 
+            targetGrid.OverLapCheck(newData.pos.x, newData.pos.y, newData.width, newData.height, ref overlapItem); //겹치는 아이템이 있는지 체크
+            if(overlapItem != null)
             {
-                //PlayerUI
-                GridObject targetGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
-                ItemObject destinationItem = Managers.Resource.Instantiate("UI/ItemUI", targetGrid.transform).GetComponent<ItemObject>(); //새로 만들어진 아이템
-                destinationItem.SetItem(newData);
-                targetGrid.PlaceItem(destinationItem, destinationItem.itemData.pos.x, destinationItem.itemData.pos.y);
-                InventoryController.invenInstance.instantItemDic.Add(destinationItem.itemData.objectId, destinationItem);
-                destinationItem.curItemGrid = targetGrid;
-                InventoryController.invenInstance.BackUpItem(destinationItem);
-                InventoryController.invenInstance.BackUpGridSlot(destinationItem);
+                ItemObject targetItem = new ItemObject();//새로 생성된 아이템
+                targetItem.SetItem(newData);
 
-                //todo : 아이템이 있는곳에 아이템이 있는경우 머지가능여부 체크 후 가능하다면 머지 패킷 전송
-                /*
-                if (CheckAbleToMerge(item))
+                if (invenInstance.CheckAbleToMerge(targetItem, overlapItem)) 
                 {
-                    //아이템의 머지가 가능함
-                    int totalAmount = selectedItem.itemData.amount + overlapItem.itemData.amount;
-                    int needAmount = 0;
-                    if (totalAmount <= ItemObject.maxItemMergeAmount) //이부분 데이터베이스에서 해당 아이템코드를 검색하여 최대 수량을 도출할것
-                    {
-                        needAmount = selectedItem.itemData.amount;
-                    }
-                    else
-                    {
-                        needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.amount;
-                    }
+                    //머지 체크에 성공함
+                    int needAmount = targetItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
+                    ? targetItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
 
-                    SendMergeItemPacket(item, overlapItem, needAmount);
-                }*/
+                    C_MergeItem mergeItem = new C_MergeItem();
+                    mergeItem.SourceObjectId = packet.SourceObjectId; //원래 있던 자리 -> sourceItem이 있는 그리드
+                    mergeItem.DestinationObjectId = overlapItem.backUpItemGrid.objectId; //겹치는 아이템이 존재하는 그리드
+
+                    mergeItem.MergedObjectId = overlapItem.itemData.objectId; //합쳐지는 아이템 = 겹치는 아이템
+                    mergeItem.CombinedObjectId = targetItem.itemData.objectId; //합칠 아이템 = 이번에 새로 만든 아이템
+                    mergeItem.MergeNumber = needAmount; 
+
+                    Managers.Network.Send(packet);
+                }
+                else
+                {
+                    //실패시 sourceItem의 위치와 배치는 되돌아 갔으니 수량만 원래대로 조정해 주면됨
+                    sourceItem.ItemAmount = itemAmountInstance;
+                }
             }
             else
-            { //otherUI
-                GridObject targetGrid = InventoryController.invenInstance.otherInvenUI.instantGrid;
-                ItemObject destinationItem = Managers.Resource.Instantiate("UI/ItemUI", targetGrid.transform).GetComponent<ItemObject>(); //새로 만들어진 아이템
-                destinationItem.SetItem(newData);
-                targetGrid.PlaceItem(destinationItem, destinationItem.itemData.pos.x, destinationItem.itemData.pos.y);
-                InventoryController.invenInstance.instantItemDic.Add(destinationItem.itemData.objectId, destinationItem);
-                destinationItem.curItemGrid = targetGrid;
-                InventoryController.invenInstance.BackUpItem(destinationItem);
-                InventoryController.invenInstance.BackUpGridSlot(destinationItem);
-                
-                destinationItem.backUpItemGrid = targetGrid;
+            {
+                targetGrid.CreateItemObjAndPlace(newData);
             }
 
+            
         }
         else
         {
             //실패할경우 로직
-            Debug.Log("S_MergeItem 실패");
-            InventoryController.invenInstance.UndoGridSlot(sourceItem);
-            InventoryController.invenInstance.UndoItem(sourceItem);
-
-            
+            Debug.Log("S_Divide 실패");
+            invenInstance.UndoGridSlot(sourceItem);
+            invenInstance.UndoItem(sourceItem);
         }
 
-        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
-        InventoryController.invenInstance.ResetSelection();
+        invenInstance.playerInvenUI.WeightTextSet(
+                invenInstance.playerInvenUI.instantGrid.GridWeight,
+                invenInstance.playerInvenUI.instantGrid.limitWeight);
     }
 
 

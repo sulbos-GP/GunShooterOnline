@@ -27,6 +27,7 @@ public partial class InventoryController
             if (SelectedEquip != null)
             {
                 ItemReleaseInEquip();
+                ResetSelection(); //아이템을 놓은 상태라면 selection 리셋
                 return;
             }
 
@@ -34,6 +35,7 @@ public partial class InventoryController
             if (isOnDelete)
             {
                 ItemReleaseInDelete();
+                ResetSelection();
                 return;
             }
 
@@ -49,12 +51,14 @@ public partial class InventoryController
                 {
                     ItemReleaseInGrid(selectedItem, gridPosition);
                 }
+                ResetSelection();
                 return;
             }
 
             //어떤 경우도 만족하지 못할경우 배치 실패
             UndoGridSlot(SelectedItem);
             UndoItem(SelectedItem);
+            ResetSelection();
             Debug.Log("아이템 배치 실패");
 
         }
@@ -69,7 +73,6 @@ public partial class InventoryController
                     selectedEquip.UnequipItem();
                     SetSelectedObjectToLastSibling(selectedItem.transform);
                 }
-
                 return;
             }
 
@@ -84,8 +87,11 @@ public partial class InventoryController
                 //클릭한 아이템이 숨겨진 경우에는 숨김을 해제하고 아니면 아이템을 듬
                 if (clickedItem.isHide == true)
                 {
-                    SendSearchItemPacket(clickedItem.backUpItemGrid.objectId, clickedItem);
-                    clickedItem.UnhideItem();
+                    if (!clickedItem.isOnSearching)
+                    {
+                        SendSearchItemPacket(clickedItem.backUpItemGrid.objectId, clickedItem);
+                        clickedItem.UnhideItem();
+                    }
                 }
                 else
                 {
@@ -94,7 +100,6 @@ public partial class InventoryController
                 return;
             }
         }
-        ResetSelection();
     }
 
     
@@ -112,11 +117,19 @@ public partial class InventoryController
         SetSelectedObjectToLastSibling(selectedRect);
     }
 
-    private void ItemDivideInGrid(ItemObject selectedItem, Vector2Int gridPosition)
+    private void ItemDivideInGrid(ItemObject item, Vector2Int gridPosition)
     {
-        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",selectedItem.transform).GetComponent<DivideInterface>();
-        divideInterface.SetAmountIndex(selectedItem, gridPosition);
-        ResetSelection();
+        if (item.curItemGrid == selectedGrid && item.itemData.pos == gridPosition || !itemPlaceableInGrid)
+        {
+            UndoGridSlot(item);
+            UndoItem(item);
+            return;
+        }
+
+        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",item.transform.parent).GetComponent<DivideInterface>(); //그리드 오브젝트의 자식으로 생성
+        divideInterface.SetInterfacePos(item);
+        divideInterface.SetAmountIndex(item, gridPosition);
+        
     }
 
 
@@ -140,7 +153,6 @@ public partial class InventoryController
             UndoItem(item);
         }
 
-        ResetSelection();
     }
 
     
@@ -280,7 +292,6 @@ public partial class InventoryController
     private void ItemReleaseInDelete()
     {
         SendDeleteItemPacket(selectedItem);
-        ResetSelection();
     }
 
     /// <summary>
@@ -292,19 +303,11 @@ public partial class InventoryController
     {
         if (overlapItem != null)
         {
-            if (CheckAbleToMerge(item))
+            if (CheckAbleToMerge(item , overlapItem))
             {
                 //아이템의 머지가 가능함
-                int totalAmount = selectedItem.itemData.amount + overlapItem.itemData.amount;
-                int needAmount = 0;
-                if (totalAmount <= ItemObject.maxItemMergeAmount) //이부분 데이터베이스에서 해당 아이템코드를 검색하여 최대 수량을 도출할것
-                {
-                    needAmount = selectedItem.itemData.amount;
-                }
-                else
-                {
-                    needAmount = ItemObject.maxItemMergeAmount - overlapItem.itemData.amount;
-                }
+                int needAmount = selectedItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount 
+                    ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
 
                 SendMergeItemPacket(item, overlapItem, needAmount);
             }
@@ -323,12 +326,12 @@ public partial class InventoryController
     /// <summary>
     /// 오버랩 아이템 존재할때 머지가 가능한지 체크
     /// </summary>
-    private bool CheckAbleToMerge(ItemObject item)
+    public bool CheckAbleToMerge(ItemObject item, ItemObject _overlapItem)
     {
-        return selectedItem.itemData.isItemConsumeable &&
-               selectedItem.itemData.itemId == overlapItem.itemData.itemId &&
-               overlapItem.itemData.amount < ItemObject.maxItemMergeAmount &&
-               !overlapItem.isHide;
+        return item.itemData.isItemConsumeable &&
+               item.itemData.itemId == _overlapItem.itemData.itemId &&
+               _overlapItem.ItemAmount < ItemObject.maxItemMergeAmount &&
+               !_overlapItem.isHide;
     }
 
     
