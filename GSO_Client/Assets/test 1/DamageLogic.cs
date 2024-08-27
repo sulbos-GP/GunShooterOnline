@@ -17,16 +17,16 @@ public static  class DamageLogic
     //데미지 적용
     public static void TakeDamage(int damage, Unit Receive)
     {
-        int health = Receive.unitStat.GetStat(eStat.Health);
+        int health = Receive.unitStat.GetStat(eSTAT.Health);
         if(health-damage > 0) 
         {
-            Receive.unitStat.Add(eStat.Health,-damage);
+            Receive.unitStat.Add(eSTAT.Health,-damage);
             Debug.Log("Calc Damage Logic");
         }
         else
         {
             //TO-DO : Die Logic 구성
-            Receive.unitStat.SetStat(eStat.Health, 0);
+            Receive.unitStat.SetStat(eSTAT.Health, 0);
             Debug.LogError("Die Unit : "+Receive.gameObject.name);
         }
         

@@ -61,14 +61,14 @@ public class MySQLToExcel : MonoBehaviour
             using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 workbook = new XSSFWorkbook(file);
-                sheet = workbook.GetSheet("ItemSheet") ?? workbook.CreateSheet("ItemSheet");
+                sheet = workbook.GetSheet("Item") ?? workbook.CreateSheet("Item");
             }
         }
         else
         {
             // 새 파일 생성
             workbook = new XSSFWorkbook();
-            sheet = workbook.CreateSheet("ItemSheet");
+            sheet = workbook.CreateSheet("Item");
         }
 
         // DataTable 데이터를 엑셀 시트에 쓰기
