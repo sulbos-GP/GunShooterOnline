@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.IO;
+using NPOI.SS.Formula.Functions;
 
 public class CSVReader : MonoBehaviour
 {
@@ -10,7 +11,7 @@ public class CSVReader : MonoBehaviour
     {
         ExcelReader.ReadExcel();
         Debug.Log("success Read");
-        Debug.Log(Data_TestItem.GetData(0));
+        Debug.Log(Data_Item.GetData(1));
         //List<Data_TestItem> playerDataList = ReadCSVFile(csvFilePath);
         //foreach (Data_TestItem player in playerDataList)
         //{
@@ -18,9 +19,9 @@ public class CSVReader : MonoBehaviour
         //}
     }
 
-    List<Data_TestItem> ReadCSVFile(string filePath)
+    List<T> ReadCSVFile(string filePath)
     {   
-        List<Data_TestItem> playerDataList = new List<Data_TestItem>();
+        List<T> playerDataList = new List<T>();
 
         if (!File.Exists(filePath))
         {
@@ -52,7 +53,7 @@ public class CSVReader : MonoBehaviour
                     string var2 = values[1];
                     string var3 = values[2];
 
-                    Data_TestItem playerData = new Data_TestItem();
+                    T playerData = new T();
                     playerDataList.Add(playerData);
                 }
             }
