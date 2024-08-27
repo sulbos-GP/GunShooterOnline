@@ -46,7 +46,13 @@ public class DivideInterface : MonoBehaviour
         scrollBar.value = splitAmountIndex/maxAmountIndex;
 
         AddButtonHandler();
+    }
 
+    public void SetInterfacePos(ItemObject item)
+    {
+        //todo : 변경 필요시 변경
+        //현재는 그냥 해당 타겟 그리드 오브젝트의 중앙에 배치되도록 설정
+        GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
     private void AddButtonHandler()
@@ -82,14 +88,8 @@ public class DivideInterface : MonoBehaviour
 
     private void OnCancelButtonClicked()
     {
-        Managers.Resource.Destroy(InventoryController.invenInstance.itemPreviewInstance);
         InventoryController.invenInstance.UndoGridSlot(targetItem);
         InventoryController.invenInstance.UndoItem(targetItem);
-
-        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
-        InventoryController.invenInstance.ResetSelection();
         DestroyInterface();
     }
     
@@ -97,9 +97,15 @@ public class DivideInterface : MonoBehaviour
     public void OnConfirmButtonClicked()
     {
         Debug.Log("아이템을 " + splitAmountIndex + "개로 분리합니다.");
+        if(splitAmountIndex == targetItem.ItemAmount)
+        {
+            InventoryController.invenInstance.SendMoveItemPacket(targetItem, targetPos);
+        }
+        else if(splitAmountIndex < targetItem.ItemAmount)
+        {
+            InventoryController.invenInstance.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
+        }
 
-        InventoryController.invenInstance.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
-        
         DestroyInterface();
     }
 

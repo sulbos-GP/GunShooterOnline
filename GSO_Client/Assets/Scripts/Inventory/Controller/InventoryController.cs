@@ -45,7 +45,7 @@ public partial class InventoryController : MonoBehaviour
             {
                 selectedRect = value.GetComponent<RectTransform>();
 
-                float addedWeight = playerInvenUI.instantGrid.GridWeight + selectedItem.itemData.item_weight;
+                float addedWeight = playerInvenUI.instantGrid.GridWeight + selectedItem.itemWeight;
                 playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.instantGrid.limitWeight}";
                 if (addedWeight > playerInvenUI.instantGrid.limitWeight)
                 {
@@ -183,6 +183,10 @@ public partial class InventoryController : MonoBehaviour
         itemPlaceableInGrid = false;
         isDivideMode = false;
         dragTime = 0;
+        if(itemPreviewInstance != null)
+        {
+            Managers.Resource.Destroy(itemPreviewInstance);
+        }
     }
 
     /// <summary>
