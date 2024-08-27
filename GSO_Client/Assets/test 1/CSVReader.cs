@@ -11,7 +11,7 @@ public class CSVReader : MonoBehaviour
     {
         ExcelReader.ReadExcel();
         Debug.Log("success Read");
-        Debug.Log(Data_Item.GetData(1));
+        Debug.Log(Data_Item.GetData(1).name);
         //List<Data_TestItem> playerDataList = ReadCSVFile(csvFilePath);
         //foreach (Data_TestItem player in playerDataList)
         //{

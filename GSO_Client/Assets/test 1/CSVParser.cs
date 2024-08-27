@@ -20,9 +20,6 @@ public class CSVParser : MonoBehaviour
     private const char DOUBLE_QUOTE = '"';
     private const string EMPTY_STR = "";
 
-    // 전용 경로와 파일명.
-    private const string BASIC_PATH = "Table/";
-
     public static List<T> LoadData<T>(string csvText) where T : new()
     {
         // 최종 리턴할 List.
@@ -238,7 +235,8 @@ public class CSVParser : MonoBehaviour
                 if (i > cursor + 1)
                 {
                     string targetFieldName = csvText.Substring(cursor + 1, i - cursor - 1);
-
+                    if (targetFieldName.Contains("_id"))
+                        targetFieldName = "Key";
                     // 필드명에 해당하는 컬럼위치를 찾는 다른 방법.
                     //int targetIndex = mObjFieldNameList.FindIndex((string x) => { return x.Equals(targetFieldName, StringComparison.InvariantCultureIgnoreCase); });
                     int targetIndex = _objFieldNameList.IndexOf(targetFieldName);
