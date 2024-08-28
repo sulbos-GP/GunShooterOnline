@@ -46,7 +46,7 @@ public class GridObject : MonoBehaviour
     /// <summary>
     /// 인벤토리에서 그리드를 생성할때 사용
     /// </summary>
-    public void InitializeGrid(Vector2Int _gridSize, float gridWeigth = 30f)
+    public void InitializeGrid(Vector2Int _gridSize, double gridWeigth = 30f)
     {
         if (gridRect == null) gridRect = GetComponent<RectTransform>();
 
@@ -160,13 +160,16 @@ public class GridObject : MonoBehaviour
             }
         }
 
-
-        //무게에 의해 배치가 불가능할 경우 취소
-        if (!CheckGridWeight(placeItem,overlapItem))
+        if(objectId == 0) //플레이어의 인벤토리에서만 무게 적용
         {
-            Debug.Log("weight error");
-            return HighlightColor.Red;
+            //무게에 의해 배치가 불가능할 경우 취소
+            if (!CheckGridWeight(placeItem, overlapItem))
+            {
+                Debug.Log("weight error");
+                return HighlightColor.Red;
+            }
         }
+        
 
         InventoryController.invenInstance.itemPlaceableInGrid = true;
         return HighlightColor.Green;
@@ -220,6 +223,10 @@ public class GridObject : MonoBehaviour
             if (result > playerGrid.limitWeight)
             {
                 InventoryController.invenInstance.playerInvenUI.weightText.color = Color.red;
+            }
+            else
+            {
+                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
             }
         }
         

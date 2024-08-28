@@ -187,10 +187,12 @@ internal class PacketHandler
         else
         {
             GameObject target = Managers.Object.FindById(packet.SourceObjectId);
-            target.GetComponent<Box>().interactable = false;
+            Box box = target.GetComponent<Box>();
+            box.interactable = false;
 
             OtherInventoryUI otherInvenUI = InventoryController.invenInstance.otherInvenUI;
             otherInvenUI.InventorySet();
+            otherInvenUI.instantGrid.InitializeGrid(box.size, box.weight);
             GridObject boxGrid = otherInvenUI.instantGrid;
 
             boxGrid.objectId = packet.SourceObjectId;

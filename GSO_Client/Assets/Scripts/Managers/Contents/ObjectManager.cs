@@ -131,7 +131,7 @@ public class ObjectManager
             Box boxScr = go.GetComponent<Box>();
             boxScr.objectId = info.ObjectId;
             boxScr.interactType = InteractType.InventoryObj;
-            boxScr.SetBox(info.Box.X, info.Box.Y, info.Box.Weight);
+            boxScr.SetBox((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
             //boxScr.interactRange = 나중에 필요시 추가(박스의 종류를 나눌경우)
 
             //Add로 인벤 데이터를 생성하여 boxScr.invenData에 넣기

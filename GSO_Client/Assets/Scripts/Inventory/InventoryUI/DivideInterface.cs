@@ -15,8 +15,11 @@ public class DivideInterface : MonoBehaviour
     public int splitAmountIndex;
     public int maxAmountIndex;
 
+    public GridObject targetGrid;
     public Vector2Int targetPos;
     public ItemObject targetItem;
+
+    private ItemObject overlapItem;
     private void Awake()
     {
         scrollBar = transform.GetChild(0).GetComponent<Scrollbar>();
@@ -28,13 +31,15 @@ public class DivideInterface : MonoBehaviour
         targetItem = null;
     }
 
-    public void SetAmountIndex(ItemObject item, Vector2Int gridPos)
+    public void SetAmountIndex(ItemObject item, Vector2Int gridPos, GridObject grid, ItemObject overlapItem)
     {
         InventoryController.invenInstance.isDivideInterfaceOn = true;
         targetPos = gridPos;
         targetItem = item;
+        targetGrid = grid;
+        this.overlapItem = overlapItem != null ? overlapItem : null;
 
-        if(targetItem == null)
+        if (targetItem == null)
         {
             Debug.Log("아이템을 받지 못함");
             return;
@@ -79,9 +84,9 @@ public class DivideInterface : MonoBehaviour
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 1)) + 1;
         UpdateCountText();
 
-        if (InventoryController.invenInstance.SelectedItem.curItemGrid.objectId == 0)
+        if(targetGrid.objectId == 0)
         {
-            GridObject playerGrid = InventoryController.invenInstance.SelectedGrid;
+            GridObject playerGrid = targetGrid;
             double result = Math.Round(playerGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
             InventoryController.invenInstance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
 
@@ -108,9 +113,13 @@ public class DivideInterface : MonoBehaviour
 
     public void OnConfirmButtonClicked()
     {
-        
         Debug.Log("아이템을 " + splitAmountIndex + "개로 분리합니다.");
-        if(splitAmountIndex == targetItem.ItemAmount)
+
+        if (overlapItem != null)
+        {
+            InventoryController.invenInstance.SendMergeItemPacket(targetItem, overlapItem, splitAmountIndex);
+        }
+        else if (splitAmountIndex == targetItem.ItemAmount)
         {
             InventoryController.invenInstance.SendMoveItemPacket(targetItem, targetPos);
         }
