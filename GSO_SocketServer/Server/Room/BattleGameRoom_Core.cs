@@ -178,6 +178,8 @@ namespace Server
             {
                 Console.WriteLine($"box id : {box.Id}");
 
+                int size = box.info.CalculateSize();
+                long x = box.info.Box.X;
                 spawnPacket.Objects.Add(box.info);
             }
 

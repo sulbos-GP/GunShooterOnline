@@ -26,6 +26,14 @@ namespace Server.Game.Object.Item
             rectangle.Parent = this;
 
             currentShape = rectangle;
+
+            info.Box = new BoxInfo()
+            {
+                X = 5,
+                Y = 5,
+                Weight = 15,
+            };
+
         }
 
         public void Open()
