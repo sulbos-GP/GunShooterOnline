@@ -216,13 +216,25 @@ namespace Server
             }
 
             {
-                ItemObject tempItem = new ItemObject(combinedItem);
 
+                if (false == destinationStorage.IsHaveAmount(combinedItem, mergeNumber))
+                {
+                    packet.IsSuccess = false;
+                    packet.MergedItem = oldMergedItemInfo;
+                    packet.CombinedItem = oldCombinedInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+
+                //인벤토리에 넣을 수 있는 최대 수량
+                int maxAmount = destinationStorage.CheackMaxAmount(combinedItem, mergeNumber);
+
+                ItemObject tempItem = new ItemObject(combinedItem);
                 //CombinedItem의 MergeNumber만큼 감소
-                int lessAmount = destinationStorage.DecreaseAmount(combinedItem, mergeNumber);
+                int lessAmount = destinationStorage.DecreaseAmount(combinedItem, maxAmount);
 
                 //MergedItem에 수량 증가
-                int moreAmount = sourceStorage.IncreaseAmount(mergedlItem, mergeNumber);
+                int moreAmount = sourceStorage.IncreaseAmount(mergedlItem, maxAmount);
 
                 //CombinedItem의 수량을 MergeNumber만큼 감소하였을때 음수가 나올 경우
                 //MergeItem의 수량을 MergeNumber만큼 증가하였을때 Limit을 넘은 경우
@@ -282,7 +294,7 @@ namespace Server
                     }
                     else
                     {
-                        destinationStorage.DecreaseAmount(mergedlItem, mergeNumber);
+                        destinationStorage.DecreaseAmount(mergedlItem, maxAmount);
                         sourceStorage.IncreaseAmount(combinedItem, lessAmount);
 
                         packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
@@ -333,6 +345,14 @@ namespace Server
 
             {
                 ItemObject tempItem = new ItemObject(sourceItem);
+
+                if (false == destinationStorage.IsHaveAmount(sourceItem, devideNumber))
+                {
+                    packet.IsSuccess = false;
+                    packet.SourceItem = oldSourceItemInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
 
                 DB_UnitAttributes devideAttributes = sourceItem.Attributes;
                 devideAttributes.amount = devideNumber;
