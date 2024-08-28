@@ -1,4 +1,5 @@
 using Google.Protobuf.Protocol;
+using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.OpenXmlFormats.Dml.Diagram;
 using NPOI.SS.Formula.Eval;
 using System;
@@ -41,21 +42,10 @@ public partial class InventoryController : MonoBehaviour
             isItemSelected = selectedItem != null;
             rotateBtn.interactable = isItemSelected;
 
-            if (isItemSelected)
-            {
-                selectedRect = value.GetComponent<RectTransform>();
+            selectedRect = isItemSelected ? value.GetComponent<RectTransform>() : null;
 
-                float addedWeight = playerInvenUI.instantGrid.GridWeight + selectedItem.itemWeight;
-                playerInvenUI.weightText.text = $"WEIGHT \n{addedWeight} / {playerInvenUI.instantGrid.limitWeight}";
-                if (addedWeight > playerInvenUI.instantGrid.limitWeight)
-                {
-                    playerInvenUI.weightText.color = Color.red;
-                }
-            }
-            else
+            if (!isItemSelected)
             {
-                selectedRect = null;
-
                 playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.instantGrid.GridWeight} / {playerInvenUI.instantGrid.limitWeight}";
                 playerInvenUI.weightText.color = Color.white;
             }
@@ -81,6 +71,8 @@ public partial class InventoryController : MonoBehaviour
             }
         }
     }
+
+    
 
     [SerializeField] private GridObject selectedGrid;
     public bool isGridSelected; 
@@ -123,11 +115,11 @@ public partial class InventoryController : MonoBehaviour
         }
     }
 
-    [SerializeField] private ItemObject overlapItem; //매 프레임마다 체크될 오버랩 아이템 변수
+    private ItemObject overlapItem; //매 프레임마다 체크될 오버랩 아이템 변수
 
     //UI액티브 관련
     public bool isActive = false;
-
+   
 
     //하이라이트 관련 변수
     private InvenHighLight invenHighlight;
@@ -136,7 +128,8 @@ public partial class InventoryController : MonoBehaviour
     public bool itemPlaceableInGrid;
 
 
-    private bool isDivideMode;
+    public bool isDivideMode; //divide모드가 켜졌는지
+    private bool dontCheckDivide; //만약이것이 true라면 더이상 divide체크를 하지 않음
     public bool isDivideInterfaceOn;
     public GameObject itemPreviewInstance; // 현재 아이템 미리보기 인스턴스
     private Vector2 lastDragPosition; // 마지막 드래그 위치
@@ -182,11 +175,15 @@ public partial class InventoryController : MonoBehaviour
         isOnDelete = false;
         itemPlaceableInGrid = false;
         isDivideMode = false;
+        dontCheckDivide = false;
         dragTime = 0;
         if(itemPreviewInstance != null)
         {
             Managers.Resource.Destroy(itemPreviewInstance);
         }
+
+        Debug.Log("reset");
+
     }
 
     /// <summary>

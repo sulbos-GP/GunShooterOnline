@@ -59,6 +59,7 @@ public class ItemObject : MonoBehaviour
             itemData.amount = value;
 
             itemWeight = itemData.item_weight * value;
+            itemWeight = Math.Round(itemWeight,2);
             if (itemData.isSearched)
             {
                 TextControl();
@@ -72,7 +73,7 @@ public class ItemObject : MonoBehaviour
     public bool isHide; //아이템 정보 숨겨짐
     public bool isOnSearching; //아이템 조회중
 
-    public float itemWeight; //지금까지 쓰인 itemData.itme_weight를  이변수로 바꿀것
+    public double itemWeight; //지금까지 쓰인 itemData.itme_weight를  이변수로 바꿀것
 
     //현재 위치한 그리드
     public GridObject curItemGrid;

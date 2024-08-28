@@ -43,14 +43,9 @@ public partial class InventoryController
             if (isGridSelected)
             {
                 gridPosition = WorldToGridPos();
-                if (isDivideMode)
-                {
-                    ItemDivideInGrid(selectedItem, gridPosition);
-                }
-                else
-                {
-                    ItemReleaseInGrid(selectedItem, gridPosition);
-                }
+                
+                ItemReleaseInGrid(selectedItem, gridPosition);
+                
                 ResetSelection();
                 return;
             }
@@ -119,6 +114,7 @@ public partial class InventoryController
 
     private void ItemDivideInGrid(ItemObject item, Vector2Int gridPosition)
     {
+        //배치가 불가능하거나 원래 자리라면 Undo
         if (item.curItemGrid == selectedGrid && item.itemData.pos == gridPosition || !itemPlaceableInGrid)
         {
             UndoGridSlot(item);
@@ -319,7 +315,15 @@ public partial class InventoryController
         }
         else
         {
-            SendMoveItemPacket(item, pos);
+            if (isDivideMode)
+            {
+                ItemDivideInGrid(selectedItem, gridPosition);
+            }
+            else
+            {
+                SendMoveItemPacket(item, pos);
+            }
+            
         }
     }
 

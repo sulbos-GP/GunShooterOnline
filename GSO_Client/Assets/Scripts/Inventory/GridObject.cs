@@ -1,4 +1,7 @@
+using NPOI.SS.Formula.Functions;
+using System;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 using Vector2 = System.Numerics.Vector2;
 
@@ -14,17 +17,16 @@ public class GridObject : MonoBehaviour
     public Vector2Int gridSize; //플레이어 : 가방의 크기, 박스 5*5
     public ItemObject[,] ItemSlot { get; private set; } //컨트롤러에서 아이템을 저장할 슬롯
 
-    [SerializeField] protected float gridWeight = 0; //그리드안의 아이템의 무게
-    public float GridWeight
+    [SerializeField] protected double gridWeight = 0; //그리드안의 아이템의 무게
+    public double GridWeight
     {
         get => gridWeight;
         set
         {
             gridWeight = value;
-            
         }
     }
-    public float limitWeight;
+    public double limitWeight;
 
     private RectTransform gridRect; //해당 그리드의 transform
     private Vector2 mousePosOnGrid = new Vector2(); //그리드 위의 마우스 위치
@@ -32,7 +34,7 @@ public class GridObject : MonoBehaviour
 
     //백업 관련
     public ItemObject[,] BackUpSlot { get; private set; } //백업 배열
-    public float BackUpWeight { get; private set; }
+    public double BackUpWeight { get; private set; }
 
     
     private void Awake()
@@ -129,7 +131,6 @@ public class GridObject : MonoBehaviour
         return tileGridPos;
     }
 
-
     /// <summary>
     /// 컨트롤러의 업데이트마다 실행
     /// 해당 그리드의 위치에 아이템을 배치가 가능한지 여부와 그에 따른 색을 반환
@@ -149,7 +150,6 @@ public class GridObject : MonoBehaviour
         //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
         if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
         {
-
             if (!placeItem.itemData.isItemConsumeable
                 || placeItem.itemData.itemId != overlapItem.itemData.itemId
                 || overlapItem.ItemAmount >= ItemObject.maxItemMergeAmount)
@@ -160,8 +160,9 @@ public class GridObject : MonoBehaviour
             }
         }
 
+
         //무게에 의해 배치가 불가능할 경우 취소
-        if (!InventoryWeightCheck(placeItem.itemWeight, overlapItem))
+        if (!CheckGridWeight(placeItem,overlapItem))
         {
             Debug.Log("weight error");
             return HighlightColor.Red;
@@ -169,6 +170,65 @@ public class GridObject : MonoBehaviour
 
         InventoryController.invenInstance.itemPlaceableInGrid = true;
         return HighlightColor.Green;
+    }
+
+    private bool CheckGridWeight(ItemObject placeItem, ItemObject overlapItem)
+    {
+        GridObject playerGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
+        double curWeight = playerGrid.GridWeight;
+        double itemWeight = 0;
+        if (overlapItem != null) 
+        {
+            int giveAmount = placeItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
+                    ? placeItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount; //머지가 가능한 개수
+
+            int ableAmount = (int)Math.Round((playerGrid.limitWeight - curWeight) / placeItem.itemData.item_weight); //남은 무게에서 채울수 있는 개수
+
+            if (giveAmount > ableAmount) { 
+                itemWeight = placeItem.itemData.item_weight * ableAmount;
+            }
+            else
+            {
+                itemWeight = placeItem.itemData.item_weight * giveAmount;
+            }
+
+            itemWeight = giveAmount > ableAmount ? placeItem.itemData.item_weight * ableAmount : itemWeight = placeItem.itemData.item_weight * giveAmount;
+        }
+        else if ( InventoryController.invenInstance.isDivideMode)
+        {
+            //오버랩 아이템이 존재한다면 이것은 머지가 가능할 경우 + divide모드가 켜져있다면 나누기 모드(일단은 배치가 가능하게 하여 서버에 패킷을 전송해야함)
+            itemWeight = placeItem.itemData.item_weight; //최소한의 개수인 1개의 무게가 들어갈수 있다면 성공판정
+        }
+        else
+        {
+            //평상시
+            itemWeight = placeItem.itemWeight;
+        }
+
+
+        if (placeItem.backUpItemGrid.objectId == 0)
+        {
+            itemWeight = 0;
+        }
+        
+        double result = Math.Round(curWeight + itemWeight,2);
+
+        if(InventoryController.invenInstance.SelectedGrid.objectId == 0)
+        {
+            InventoryController.invenInstance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
+
+            if (result > playerGrid.limitWeight)
+            {
+                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.red;
+            }
+        }
+        
+        if (result > playerGrid.limitWeight)
+        {
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -198,7 +258,6 @@ public class GridObject : MonoBehaviour
         
         if (targetItem == null) { return null; }
         CleanItemSlot(targetItem); //꼭 든 순간 아이템을 슬롯에서 제거해야함!!!
-        GridWeight -= targetItem.itemWeight;
 
         return targetItem;
     }
@@ -216,6 +275,7 @@ public class GridObject : MonoBehaviour
                 ItemSlot[item.itemData.pos.x + x, item.itemData.pos.y + y] = null;
             }
         }
+
     }
 
     /// <summary>
@@ -233,7 +293,7 @@ public class GridObject : MonoBehaviour
                 ItemSlot[posX + x, posY + y] = item;
             }
         }
-        GridWeight += item.itemWeight;
+
         item.curItemGrid = this;
         UpdateBackUpSlot();
         UpdateItemPosition(item, posX, posY);
@@ -271,7 +331,6 @@ public class GridObject : MonoBehaviour
                 BackUpSlot[i, j] = ItemSlot[i, j];
             }
         }
-
         BackUpWeight = GridWeight;
     }
 
@@ -291,6 +350,22 @@ public class GridObject : MonoBehaviour
         GridWeight = BackUpWeight;
     }
 
+    public void UpdateGridWeight()
+    {
+        double weightIndex = 0;
+        foreach(Transform itemUI in transform)
+        {
+            ItemObject itemObject = itemUI.GetComponent<ItemObject>();
+            if (itemObject != null)
+            {
+                // itemWeight를 소수점 둘째 자리까지 반올림
+                double roundedWeight = Math.Round(itemObject.itemWeight, 2);
+                weightIndex += roundedWeight;
+            }
+        }
+
+        GridWeight = Math.Round(weightIndex, 2);
+    }
    
     /// <summary>
     /// 머지아이템 기능에 사용, 놓으려는 아이템의 자리에 아이템이 있는지 체크함
@@ -411,23 +486,5 @@ public class GridObject : MonoBehaviour
        }
        return null;
    }
-
-    public bool InventoryWeightCheck(float addWeight, ItemObject overlap)
-    {
-        float curWeight = GridWeight;
-
-        if (overlap != null)
-        {
-            curWeight -= overlap.itemWeight;
-        }
-
-        if (curWeight + addWeight > limitWeight)
-        {
-            Debug.Log("인벤토리의 무게가 한계를 넘음");
-            return false;
-        }
-
-        return true;
-    }
 
 }
