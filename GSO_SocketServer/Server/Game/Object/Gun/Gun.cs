@@ -1,5 +1,4 @@
 ﻿using Google.Protobuf.Protocol;
-using Server.Game.Coroutine;
 using Server.Game.Utils;
 using ServerCore;
 using StackExchange.Redis;
@@ -131,10 +130,8 @@ namespace Server.Game
                     // 충돌 위치까지 LineRenderer 설정
                     bulletLine.SetPosition(0, _fireStartPos.position);
                     bulletLine.SetPosition(1, hit.point);
-                    Debug.Log(hit.collider.name);
 
                     // 패킷 전송
-                    Debug.Log("Hit: " + hit.collider.name);
                     var cRay = new C_RaycastShoot
                     {
                         StartPosX = _fireStartPos.position.x,
