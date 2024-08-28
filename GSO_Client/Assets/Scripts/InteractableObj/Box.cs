@@ -8,6 +8,7 @@ using UnityEngine;
 public class Box : InteractableObject
 {
     private OtherInventoryUI invenUI;
+
     private Vector2Int size;
     private double weight;
 
@@ -15,7 +16,6 @@ public class Box : InteractableObject
     private void Awake()
     {
         Init();
-
     }
     protected override void Init()
     {
@@ -26,12 +26,12 @@ public class Box : InteractableObject
         SetTriggerSize();
     }
 
+
     public void SetBox(int x, int y, double weight)
     {
         this.size.x = x;
         this.size.y = y;
         this.weight = weight;
-    }
 
     protected override void SetTriggerSize()
     {
@@ -39,20 +39,20 @@ public class Box : InteractableObject
         Collider.radius = interactRange;
     }
 
-    //ÆÐÅ¶À¸·Î ¹ÞÀº ¹Ù²ï ÀÎº¥µ¥ÀÌÅÍ ¹Ý¿µ
+    //ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¿ï¿½
 
-    //ÇÃ·¹ÀÌ¾î°¡ »óÈ£ÀÛ¿ë Å°¸¦ ´­·¶À»¶§ ½ÇÇàµÉ ³»¿ë
+    //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½È£ï¿½Û¿ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [ContextMenu("box interact")]
     public override void Interact()
     {
         if (interactable)
         {
-            InventoryController.invenInstance.SendLoadInvenPacket(0);  //ÇÃ·¹ÀÌ¾î´Â ½ÇÆÐ °¡´É¼ºÀÌ ¾ø±â¿¡ ÇÃ·¹ÀÌ¾î ÀÎº¥ ¸ÕÀú
+            InventoryController.invenInstance.SendLoadInvenPacket(0);  //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½
             InventoryController.invenInstance.SendLoadInvenPacket(objectId);
         }
         else
         {
-            Debug.Log("ºÒ°¡´É");
+            Debug.Log("ï¿½Ò°ï¿½ï¿½ï¿½");
         }
     }
 

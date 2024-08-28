@@ -12,7 +12,7 @@ public class PlayerInventoryUI : InventoryUI
                                       //
     public int bagLv = 0;
 
-    public void WeightTextSet(float GridWeigt, float limitWeight)
+    public void WeightTextSet(double GridWeigt, double limitWeight)
     {
         weightText.text = $"WEIGHT \n {GridWeigt} / {limitWeight}"; 
     }

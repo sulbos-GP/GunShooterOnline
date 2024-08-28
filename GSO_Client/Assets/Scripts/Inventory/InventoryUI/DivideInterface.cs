@@ -78,6 +78,18 @@ public class DivideInterface : MonoBehaviour
     {
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 1)) + 1;
         UpdateCountText();
+
+        if (InventoryController.invenInstance.SelectedItem.curItemGrid.objectId == 0)
+        {
+            GridObject playerGrid = InventoryController.invenInstance.SelectedGrid;
+            double result = Math.Round(playerGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
+            InventoryController.invenInstance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
+
+            if (result > playerGrid.limitWeight)
+            {
+                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.red;
+            }
+        }
     }
 
 
@@ -96,6 +108,7 @@ public class DivideInterface : MonoBehaviour
 
     public void OnConfirmButtonClicked()
     {
+        
         Debug.Log("아이템을 " + splitAmountIndex + "개로 분리합니다.");
         if(splitAmountIndex == targetItem.ItemAmount)
         {

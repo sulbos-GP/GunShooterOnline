@@ -180,6 +180,7 @@ internal class PacketHandler
             GridObject playerGrid = playerInvenUI.instantGrid;
             playerGrid.objectId = packet.SourceObjectId;
             playerGrid.PlaceItemInGrid(packetItemList);
+            playerGrid.UpdateGridWeight();
             playerInvenUI.WeightTextSet(playerGrid.GridWeight, playerGrid.limitWeight);
             playerGrid.PrintInvenContents();
         }
@@ -193,6 +194,7 @@ internal class PacketHandler
             GridObject boxGrid = otherInvenUI.instantGrid;
 
             boxGrid.objectId = packet.SourceObjectId;
+            boxGrid.UpdateGridWeight(); //필요한가? 박스에는 무게가 의미 없음
             boxGrid.PlaceItemInGrid(packetItemList);
             boxGrid.PrintInvenContents();
         }
@@ -304,11 +306,13 @@ internal class PacketHandler
             return;
         }
 
+        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
+        GridObject destinationGrid = packet.DestinationObjectId == 0 ? invenInstance.playerInvenUI.instantGrid : invenInstance.otherInvenUI.instantGrid;
+
         if (packet.IsSuccess)
         {
             Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
-            GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
-            GridObject destinationGrid = packet.DestinationObjectId == 0 ? invenInstance.playerInvenUI.instantGrid : invenInstance.otherInvenUI.instantGrid;
+            
 
             destinationGrid.PlaceItem(targetItem, packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
             targetItem.Rotate(packet.DestinationMoveItem.Rotate);
@@ -331,9 +335,13 @@ internal class PacketHandler
 
             targetItem.curItemGrid.PrintInvenContents();
             targetItem.backUpItemGrid.PrintInvenContents();
+
         }
 
         //패킷종료시 플레이어 인벤토리의 무게 텍스트 업데이트
+        sourceGrid.UpdateGridWeight();
+        destinationGrid.UpdateGridWeight();
+
         invenInstance.playerInvenUI.WeightTextSet(
                 invenInstance.playerInvenUI.instantGrid.GridWeight,
                 invenInstance.playerInvenUI.instantGrid.limitWeight);
@@ -361,11 +369,12 @@ internal class PacketHandler
             return;
         }
 
+        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
+
         if (packet.IsSuccess) {
 
             Debug.Log("S_DeleteItem 성공");
-            GridObject sourceGrid;
-            sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
+            
 
             sourceGrid.CleanItemSlot(targetItem);
             invenInstance.DestroyItem(targetItem);
@@ -377,6 +386,8 @@ internal class PacketHandler
             invenInstance.UndoGridSlot(targetItem);
             invenInstance.UndoItem(targetItem);
         }
+
+        sourceGrid.UpdateGridWeight();
         InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
                 InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
@@ -395,7 +406,6 @@ internal class PacketHandler
 
         ItemObject mergedItem = null;
         invenInstance.instantItemDic.TryGetValue(packet.MergedItem.ObjectId, out mergedItem);
-
         ItemObject combinedItem = null;
         invenInstance.instantItemDic.TryGetValue(packet.CombinedItem.ObjectId, out combinedItem);
 
@@ -404,6 +414,10 @@ internal class PacketHandler
             Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
             return;
         }
+
+        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
+        GridObject destinationGrid = packet.DestinationObjectId == 0 ? invenInstance.playerInvenUI.instantGrid : invenInstance.otherInvenUI.instantGrid;
+
 
         if (packet.IsSuccess)
         {
@@ -428,6 +442,9 @@ internal class PacketHandler
             InventoryController.invenInstance.UndoGridSlot(combinedItem);
             InventoryController.invenInstance.UndoItem(combinedItem);
         }
+
+        sourceGrid.UpdateGridWeight();
+        destinationGrid.UpdateGridWeight();
 
         InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
@@ -455,57 +472,21 @@ internal class PacketHandler
             return;
         }
 
-        int itemAmountInstance = sourceItem.ItemAmount; //수량 변경후 sourceItem의 수량을 되돌려야할때 사용
-
+        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
+        GridObject destinationGrid = packet.DestinationObjectId == 0 ? destinationGrid = invenInstance.playerInvenUI.instantGrid : destinationGrid = invenInstance.otherInvenUI.instantGrid;
+        
         if (packet.IsSuccess)
         {
             Debug.Log($"원래 아이디 = {packet.SourceItem.ObjectId}, 새로 생성된 아이디 = {packet.DestinationItem.ObjectId}");
             invenInstance.UndoGridSlot(sourceItem);
             invenInstance.UndoItem(sourceItem);
-
             sourceItem.ItemAmount = packet.SourceItem.Amount; //원래 있던 아이템은 원래위치로 되돌린뒤 개수 업데이트(나뉜만큼 개수 감소)
 
             //새로운 아이템을 생성하여 나눈 아이템 생성
             ItemData newData = new ItemData();
             newData.SetItemData(packet.DestinationItem);
 
-            GridObject targetGrid = packet.DestinationObjectId == 0 ? targetGrid = invenInstance.playerInvenUI.instantGrid : targetGrid = invenInstance.otherInvenUI.instantGrid;
-            
-            ItemObject overlapItem = null; //겹치는 아이템 오브젝트 
-            targetGrid.OverLapCheck(newData.pos.x, newData.pos.y, newData.width, newData.height, ref overlapItem); //겹치는 아이템이 있는지 체크
-            if(overlapItem != null)
-            {
-                ItemObject targetItem = new ItemObject();//새로 생성된 아이템
-                targetItem.SetItem(newData);
-
-                if (invenInstance.CheckAbleToMerge(targetItem, overlapItem)) 
-                {
-                    //머지 체크에 성공함
-                    int needAmount = targetItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
-                    ? targetItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
-
-                    C_MergeItem mergeItem = new C_MergeItem();
-                    mergeItem.SourceObjectId = packet.SourceObjectId; //원래 있던 자리 -> sourceItem이 있는 그리드
-                    mergeItem.DestinationObjectId = overlapItem.backUpItemGrid.objectId; //겹치는 아이템이 존재하는 그리드
-
-                    mergeItem.MergedObjectId = overlapItem.itemData.objectId; //합쳐지는 아이템 = 겹치는 아이템
-                    mergeItem.CombinedObjectId = targetItem.itemData.objectId; //합칠 아이템 = 이번에 새로 만든 아이템
-                    mergeItem.MergeNumber = needAmount; 
-
-                    Managers.Network.Send(packet);
-                }
-                else
-                {
-                    //실패시 sourceItem의 위치와 배치는 되돌아 갔으니 수량만 원래대로 조정해 주면됨
-                    sourceItem.ItemAmount = itemAmountInstance;
-                }
-            }
-            else
-            {
-                targetGrid.CreateItemObjAndPlace(newData);
-            }
-
-            
+            destinationGrid.CreateItemObjAndPlace(newData);
         }
         else
         {
@@ -514,6 +495,9 @@ internal class PacketHandler
             invenInstance.UndoGridSlot(sourceItem);
             invenInstance.UndoItem(sourceItem);
         }
+
+        sourceGrid.UpdateGridWeight();
+        destinationGrid.UpdateGridWeight();
 
         invenInstance.playerInvenUI.WeightTextSet(
                 invenInstance.playerInvenUI.instantGrid.GridWeight,

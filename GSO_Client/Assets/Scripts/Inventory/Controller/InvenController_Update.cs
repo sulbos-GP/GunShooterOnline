@@ -36,24 +36,29 @@ public partial class InventoryController
         {
             selectedRect.position = new UnityEngine.Vector2(mousePosInput.X, mousePosInput.Y);
 
-            if (!isDivideMode && selectedItem.ItemAmount >1) //나누기 모드가 실행되지 않았고 아이템이 2개 이상이라면 진행
+            // 먼저 조건을 검사하여 조기 리턴을 통해 코드의 깊이를 줄입니다
+            if (dontCheckDivide || isDivideMode || selectedItem.ItemAmount <= 1)
             {
-                if (selectedItem.backUpItemPos != gridPosition)
-                {
-                    Debug.Log("움직임");
-                    return;
-                }
-                else
-                {
-                    dragTime += Time.deltaTime; // 드래그 타이머 업데이트
-                }
+                return;
+            }
 
-                if (dragTime >= maxDragTime)
-                {
-                    Debug.Log("나누기 모드");
-                    CreateItemPreview();
-                    isDivideMode = true;
-                }
+            // 아이템의 위치나 그리드가 변경되었는지 확인합니다
+            bool itemMoved = selectedItem.backUpItemPos != gridPosition;
+
+            if (itemMoved)
+            {
+                Debug.Log("움직임");
+                dontCheckDivide = true; // 나중에 나누기 모드를 확인하지 않도록 설정
+                return; // 조건을 만족했으므로 함수 종료
+            }
+
+            dragTime += Time.deltaTime;
+
+            if (dragTime >= maxDragTime)
+            {
+                Debug.Log("나누기 모드 On");
+                CreateItemPreview(); // 아이템 미리보기 생성
+                isDivideMode = true; // 나누기 모드 활성화
             }
         }
     }
