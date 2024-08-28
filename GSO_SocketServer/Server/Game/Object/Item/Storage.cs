@@ -20,8 +20,40 @@ namespace Server.Game
     {
         public List<ItemObject> items = new List<ItemObject>();     //저장소에 들어있는 아이템 오브젝트
         public List<List<int>> grid = new List<List<int>>();        //저장소의 그리드
-        public double maxWeight = 0.0;                              //저장소 최대 무게
-        public double curWeight = 0.0;                              //저장소 현재 무게
+        private double maxWeight = 0.0;                             //저장소 최대 무게
+        private double curWeight = 0.0;                             //저장소 현재 무게
+
+        public double MaxWeight
+        {
+            get
+            {
+                return Math.Round(maxWeight, 1);
+            }
+            set
+            {
+                maxWeight = Math.Round(value, 1);
+            }
+        }
+
+        public double CurWeight
+        {
+            get
+            {
+                return Math.Round(curWeight, 1);
+            }
+            set
+            {
+                curWeight = Math.Round(value, 1);
+            }
+        }
+
+        public double LessWeight
+        {
+            get
+            {
+                return Math.Round(maxWeight - curWeight, 1);
+            }
+        }
 
         /// <summary>
         /// 그리드의 크기 및 무게 설정
@@ -31,8 +63,8 @@ namespace Server.Game
             grid.Clear();
  
             this.items.Clear();
-            this.maxWeight = weight;
-            this.curWeight = 0.0;
+            this.MaxWeight = weight;
+            this.CurWeight = 0.0;
 
             for (int i = 0; i < cols; i++)
             {
@@ -64,13 +96,13 @@ namespace Server.Game
             }
 
             double weight = item.Weight * item.Amount;
-            if(maxWeight < curWeight + weight)
+            if(MaxWeight < CurWeight + weight)
             {
                 OverWriteToRollBackGrid(rollback);
                 return false;
             }
 
-            curWeight += weight;
+            CurWeight += weight;
             items.Add(item);
             item.CreateItem();
 
@@ -93,7 +125,7 @@ namespace Server.Game
             }
 
             double weight = item.Weight * item.Amount;
-            if (0 > curWeight - weight)
+            if (0 > CurWeight - weight)
             {
                 OverWriteToRollBackGrid(rollback);
                 return false;
@@ -105,11 +137,44 @@ namespace Server.Game
                 return false;
             }
 
-            curWeight -= weight;
+            CurWeight -= weight;
             item.DestroyItem();
 
             PrintInvenContents();
             return true;
+        }
+
+        public bool IsHaveAmount(ItemObject target, int amount)
+        {
+            int index = ScanItem(target);
+            if(index == -1)
+            {
+                return false;
+            }
+
+            ItemObject item = items[index];
+            return item.Amount >= amount;
+        }
+
+        /// <summary>
+        ///아이템 무게에 따른 현재 아이템을 담을 수 있는 최대 수량
+        /// </summary>
+        public int CheackMaxAmount(ItemObject item, int amount)
+        {
+            
+            if(LessWeight >= Math.Round(item.Weight * amount, 1))
+            {
+                return amount;
+            }
+
+            double weight = 0.0;
+            int maxAmount = 0;
+            while(LessWeight >= weight)
+            {
+                weight = Math.Round((++maxAmount) * item.Weight, 1);
+            }
+
+            return maxAmount;
         }
 
         /// <summary>
@@ -124,7 +189,7 @@ namespace Server.Game
             }
             else
             {
-                this.curWeight += item.Weight * amount;
+                CurWeight += Math.Round(item.Weight * amount, 1);
                 item.Amount += amount;
                 return item.Amount;
             }
@@ -143,7 +208,7 @@ namespace Server.Game
             }
             else
             {
-                this.curWeight -= item.Weight * amount;
+                CurWeight -= Math.Round(item.Weight * amount, 1);
                 item.Amount -= amount;
                 return item.Amount;
             }
@@ -225,7 +290,7 @@ namespace Server.Game
             
             string content = $"[Storage : {items.Count}]\n";
             content += $"[size ( {grid.Count} x {grid[0].Count} )]\n";
-            content += $"[weight ( {curWeight} / {maxWeight} )]\n";
+            content += $"[weight ( {CurWeight} / {MaxWeight} )]\n";
             content += "{\n";
 
             for (int i = 0; i < grid.Count; i++)

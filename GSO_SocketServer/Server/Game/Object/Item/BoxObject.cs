@@ -46,7 +46,7 @@ namespace Server.Game.Object.Item
         public void Init()
         {
             //임의의 아이템
-            storage.Init(5, 5, 20.0);
+            storage.Init(5, 5, 100.0);
 
             DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(1);
             DB_UnitAttributes colt45Att = new DB_UnitAttributes()
