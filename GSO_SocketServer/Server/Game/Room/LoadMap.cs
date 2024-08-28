@@ -25,7 +25,7 @@ namespace Server
         public void loadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
         {
 
-            var Distance = 22;
+            //var Distance = 22;
 
             //----------------------------------------
             var mapName = "Map_2";

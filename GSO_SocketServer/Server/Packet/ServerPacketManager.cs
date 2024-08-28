@@ -28,8 +28,16 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.CEnterGame, MakePacket<C_EnterGame>);
 		_handler.Add((ushort)MsgId.CEnterGame, PacketHandler.C_EnterGameHandler);		
 		_onRecv.Add((ushort)MsgId.CLoadInventory, MakePacket<C_LoadInventory>);
-		_handler.Add((ushort)MsgId.CLoadInventory, PacketHandler.C_LoadInventoryHandler);		
-		_onRecv.Add((ushort)MsgId.CMoveItem, MakePacket<C_MoveItem>);
+		_handler.Add((ushort)MsgId.CLoadInventory, PacketHandler.C_LoadInventoryHandler);
+        _onRecv.Add((ushort)MsgId.CCloseInventory, MakePacket<C_CloseInventory>);
+        _handler.Add((ushort)MsgId.CCloseInventory, PacketHandler.C_CloseInventoryHandler);
+        _onRecv.Add((ushort)MsgId.CSearchItem, MakePacket<C_SearchItem>);
+        _handler.Add((ushort)MsgId.CSearchItem, PacketHandler.C_SearchItemHandler);
+        _onRecv.Add((ushort)MsgId.CMergeItem, MakePacket<C_MergeItem>);
+        _handler.Add((ushort)MsgId.CMergeItem, PacketHandler.C_MergeItemHandler);
+        _onRecv.Add((ushort)MsgId.CDevideItem, MakePacket<C_DevideItem>);
+        _handler.Add((ushort)MsgId.CDevideItem, PacketHandler.C_DevideItemHandler);
+        _onRecv.Add((ushort)MsgId.CMoveItem, MakePacket<C_MoveItem>);
 		_handler.Add((ushort)MsgId.CMoveItem, PacketHandler.C_MoveItemHandler);		
 		_onRecv.Add((ushort)MsgId.CDeleteItem, MakePacket<C_DeleteItem>);
 		_handler.Add((ushort)MsgId.CDeleteItem, PacketHandler.C_DeleteItemHandler);		

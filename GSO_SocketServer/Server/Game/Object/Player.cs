@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
+using Server.Game.Object.Gear;
 
 namespace Server.Game;
 
@@ -10,7 +11,10 @@ public class Player : CreatureObj
 {
     public SkillCoolDown SkillCoolDown = new();
     public Inventory inventory;
+    public Gear gear;
 
+    //GWANHO TEMP
+    public int uid = 0;
 
     public Player()
     {
@@ -25,7 +29,7 @@ public class Player : CreatureObj
             //Attack = 3,
             Hp = 20,
             MaxHp = 20,
-            
+
 
         });
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
-using Server.Game.Object;
+using Server.Game.Object.Item;
 
 namespace Server.Game;
 
@@ -13,7 +13,7 @@ internal class ObjectManager
     private int _counter = 1;
     private readonly object _lock = new();
     private readonly Dictionary<int, Player> _players = new();
-    private readonly Dictionary<int, RootableObject> _rootable = new();
+    private readonly Dictionary<int, BoxObject> _rootable = new();
     private readonly Dictionary<int, ExitZone> _exit = new();
     private readonly Dictionary<int, ItemObject> _items = new();
     public static ObjectManager Instance { get; } = new();
@@ -32,7 +32,7 @@ internal class ObjectManager
                 _items.Add(gameObjcet.Id, gameObjcet as ItemObject);
 
             else if (gameObjcet.ObjectType == GameObjectType.Box)
-                _rootable.Add(gameObjcet.Id, gameObjcet as RootableObject);   
+                _rootable.Add(gameObjcet.Id, gameObjcet as BoxObject);   
             
             else if (gameObjcet.ObjectType == GameObjectType.Exitzone)
                 _exit.Add(gameObjcet.Id, gameObjcet as ExitZone);
@@ -52,7 +52,7 @@ internal class ObjectManager
             else if (obj.ObjectType == GameObjectType.Item)
                 _items.Add(obj.Id, obj as ItemObject);
             else if (obj.ObjectType == GameObjectType.Box)
-                _rootable.Add(obj.Id, obj as RootableObject);
+                _rootable.Add(obj.Id, obj as BoxObject);
             else if (obj.ObjectType == GameObjectType.Exitzone)
                 _exit.Add(obj.Id, obj as ExitZone);
         }
@@ -69,7 +69,7 @@ internal class ObjectManager
         }
         Console.WriteLine($"\n");
         Console.WriteLine($"rootable : ");
-        foreach (RootableObject root in _rootable.Values)
+        foreach (BoxObject root in _rootable.Values)
         {
             Console.WriteLine($"{root.Id} ");
         }
@@ -154,7 +154,7 @@ internal class ObjectManager
             }
             else if (objectType == GameObjectType.Box)
             {
-                RootableObject obj = null;
+                BoxObject obj = null;
                 if (_rootable.TryGetValue(objectId, out obj))
                     return obj as T;
 
@@ -190,7 +190,7 @@ internal class ObjectManager
 
         //The box doesn't use a lock because it doesn't allow for dynamic generation
 
-        foreach (RootableObject r in _rootable.Values)
+        foreach (BoxObject r in _rootable.Values)
         {
             shape.Add(r.currentShape);
         }

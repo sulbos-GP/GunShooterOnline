@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
@@ -24,7 +25,7 @@ public class ItemObject : MonoBehaviour
     private Sprite itemSprite;
     public Sprite hideSprite; //조회 전에 보여질 스프라이트
 
-    private Coroutine searchingCoroutine;
+    public Coroutine searchingCoroutine;
 
     //아이템 데이터 요소
     public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
@@ -32,7 +33,7 @@ public class ItemObject : MonoBehaviour
     {
         get
         {
-            if (itemData.itemRotate % 2 == 0)
+            if (itemData.rotate % 2 == 0)
             {
                 return itemData.width;
             }
@@ -43,7 +44,7 @@ public class ItemObject : MonoBehaviour
     {
         get
         {
-            if (itemData.itemRotate % 2 == 0)
+            if (itemData.rotate % 2 == 0)
             {
                 return itemData.height;
             }
@@ -52,21 +53,33 @@ public class ItemObject : MonoBehaviour
     }
     public int ItemAmount
     {
-        get { return itemData.itemAmount; }
+        get { return itemData.amount; }
         set
         {
-            itemData.itemAmount = value;
-            TextControl();
+            itemData.amount = value;
+
+            itemWeight = itemData.item_weight * value;
+            itemWeight = Math.Round(itemWeight,2);
+            if (itemData.isSearched)
+            {
+                TextControl();
+            }
         }
     }
-    public InventoryGrid curItemGrid; 
 
+    
+   
     //현 상태
     public bool isHide; //아이템 정보 숨겨짐
-    private bool isOnSearching; //아이템 조회중
+    public bool isOnSearching; //아이템 조회중
+
+    public double itemWeight; //지금까지 쓰인 itemData.itme_weight를  이변수로 바꿀것
+
+    //현재 위치한 그리드
+    public GridObject curItemGrid;
 
     //백업 변수
-    public InventoryGrid backUpItemGrid; //아이템이 원래 보관된 그리드
+    public GridObject backUpItemGrid; //아이템이 원래 보관된 그리드
     public Vector2Int backUpItemPos; //아이템의 원래 위치
     public int backUpItemRotate; //아이템의 원래 회전도
 
@@ -75,10 +88,11 @@ public class ItemObject : MonoBehaviour
     //마지막으로 장착된 슬롯
     public EquipSlot backUpEquipSlot;
 
-    private void Awake()
+
+    private void Init()
     {
         itemRect = GetComponent<RectTransform>();
-        imageUI = transform.GetChild(0).GetComponent<Image>();
+        imageUI = transform.GetChild(0).GetComponent<Image>(); 
         imageUI.raycastTarget = false;
 
         unhideTimer = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
@@ -104,25 +118,20 @@ public class ItemObject : MonoBehaviour
     /// <summary>
     /// 아이템의 데이터를 적용
     /// </summary>
-    public void ItemDataSet(ItemData itemData)
+    public void SetItem(ItemData itemData)
     {
+        Init();
+
         //아이템 데이터 업데이트
         this.itemData = itemData;
-
-        //오브젝트의 렉트의 사이즈 업데이트
-        Vector2 size = new Vector2();
-        size.X = Width * InventoryGrid.WidthOfTile;
-        size.Y = Height * InventoryGrid.HeightOfTile;
-        transform.GetComponent<RectTransform>().sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
-
-        //아이템의 크기및 회전 설정
-        itemRect.localPosition = new UnityEngine.Vector2(itemData.itemPos.x * InventoryGrid.WidthOfTile+50, itemData.itemPos.y* InventoryGrid.HeightOfTile-50);
-        Rotate(itemData.itemRotate);
-        itemSprite = spriteList[itemData.itemCode - 1];
+        itemRect = GetComponent<RectTransform>();
+        itemSprite = FindItemSprtie(itemData.itemId);
         isOnSearching = false;
+        ItemAmount = itemData.amount;
+        
 
         //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
-        if (itemData.searchedPlayerId.Contains(Managers.Object.MyPlayer.Id) == false)
+        if (itemData.isSearched == false)
         {
             imageUI.sprite = hideSprite;
             isHide = true;
@@ -133,7 +142,34 @@ public class ItemObject : MonoBehaviour
             isHide = false;
         }
 
-        ItemAmount = itemData.itemAmount;
+        //아이템 오브젝트의 초기 크기를 지정
+        //아이템의 rotate가 0일때로 먼저 생성하고 그 후에 rotate로 변경
+        Vector2 size = new Vector2();
+        size.X = itemData.width * GridObject.WidthOfTile;
+        size.Y = itemData.height * GridObject.HeightOfTile;
+        itemRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
+        imageUI.GetComponent<RectTransform>().sizeDelta = itemRect.sizeDelta;
+
+        Rotate(itemData.rotate);
+
+        //아이템의 위치를 설정
+        itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile + 50, itemData.height * GridObject.HeightOfTile - 50);
+
+        
+    }
+
+    private Sprite FindItemSprtie(int itemCode)
+    {
+        string spritePath = $"Assets/Sprite/ItemSprite/{itemCode}.png";
+        Sprite itemSprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        if (itemSprite == null)
+        {
+            Debug.LogError("스프라이트 검색 실패");
+            return null;
+        }
+
+        return itemSprite;
     }
 
     /// <summary>
@@ -168,9 +204,26 @@ public class ItemObject : MonoBehaviour
         unhideTimer.gameObject.SetActive(false);
 
         isHide = false;
+        itemData.isSearched = true;
+        
         imageUI.sprite = itemSprite;
-        itemData.searchedPlayerId.Add(Managers.Object.MyPlayer.Id);
         TextControl();
+    }
+    
+    public void HideItem()
+    {
+        isHide = true;
+        itemData.isSearched = false;
+        if (searchingCoroutine != null)
+        {
+            StopCoroutine(searchingCoroutine);
+            isOnSearching = false;
+            searchingCoroutine = null;
+        }
+
+        imageUI.sprite = hideSprite;
+
+        
     }
 
     /// <summary>
@@ -178,8 +231,8 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void RotateRight()
     {
-        itemData.itemRotate = (itemData.itemRotate + 1) % 4;
-        Rotate(itemData.itemRotate);
+        itemData.rotate = (itemData.rotate + 1) % 4;
+        Rotate(itemData.rotate);
     }
 
     /// <summary>
@@ -187,8 +240,8 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void RotateLeft()
     {
-        itemData.itemRotate = (itemData.itemRotate - 1) % 4;
-        Rotate(itemData.itemRotate);
+        itemData.rotate = (itemData.rotate - 1) % 4;
+        Rotate(itemData.rotate);
     }
 
     /// <summary>
@@ -196,8 +249,10 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public void Rotate(int rotateInt)
     {
-        //itemRect.rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
+        itemRect.sizeDelta = new UnityEngine.Vector2(Width* GridObject.WidthOfTile, Height*GridObject.HeightOfTile);
+       
         imageUI.GetComponent< RectTransform >().rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
+        
     }
 
     public void MergeItem(ItemObject targetItem, int mergeAmount)
@@ -206,34 +261,25 @@ public class ItemObject : MonoBehaviour
         targetItem.ItemAmount += mergeAmount;
         ItemAmount -= mergeAmount;
 
-        if (itemData.itemAmount <= 0)
-        {
-            backUpItemGrid.gridData.itemList.Remove(itemData);
-
-            Managers.Object.RemoveItemDic(itemData.itemId);
-        }
     }
 
     public void TextControl()
     {
-        amountText.text = itemData.itemAmount.ToString();
+        amountText.text = ItemAmount.ToString();
 
         //아이템 갯수 텍스트가 비활성화 상태이고 2 이상이면 활성화
-        if (itemData.itemAmount > 1 && amountText.gameObject.activeSelf == false && !isHide) 
+        if (ItemAmount > 1  && !isHide) 
         {
             amountText.gameObject.SetActive(true);
+        }
+        else
+        {
+            amountText.gameObject.SetActive(false);
         }
     }
 
     public void DestroyItem()
     {
-        if (curItemGrid != null) 
-        {
-            curItemGrid.gridData.itemList.Remove(itemData); //그리드 데이터에서 삭제
-            Managers.Object.RemoveItemDic(itemData.itemId); //오브젝트 매니저 딕셔너리에서 삭제
-            InventoryController.invenInstance.instantItemList.Remove(this); //인벤컨트롤러에서 생성된 아이템 리스트에서 삭제
-        }
-        
-        Destroy(gameObject);
+        Managers.Resource.Destroy(gameObject);
     }
 }

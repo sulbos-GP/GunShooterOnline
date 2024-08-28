@@ -17,16 +17,26 @@ enum MsgId{
   S_CHANGE_HP = 7;
   S_DIE = 8;
   C_ENTER_GAME = 9;
+
   C_LOAD_INVENTORY = 10;
   S_LOAD_INVENTORY = 11;
-  C_MOVE_ITEM = 12;
-  S_MOVE_ITEM = 13;
-  C_DELETE_ITEM = 14; 
-  S_DELETE_ITEM = 15; 
-  C_RAYCAST_SHOOT = 16;
-  S_RAYCAST_HIT = 17;
-  S_EXIT_GAME =18;
-  C_EXIT_GAME =19;
+  C_CLOSE_INVENTORY = 13;
+  S_CLOSE_INVENTORY = 14;
+  C_MERGE_ITEM = 15;
+  S_MERGE_ITEM = 16;
+  C_DEVIDE_ITEM = 17;
+  S_DEVIDE_ITEM = 18;
+  C_MOVE_ITEM = 19;
+  S_MOVE_ITEM = 20;
+  C_DELETE_ITEM = 21; 
+  S_DELETE_ITEM = 22; 
+  C_SEARCH_ITEM = 23;
+  S_SEARCH_ITEM = 24;
+
+  C_RAYCAST_SHOOT = 25;
+  S_RAYCAST_HIT = 26;
+  S_EXIT_GAME = 27;
+  C_EXIT_GAME = 28;
 
 
 }
@@ -72,8 +82,13 @@ enum CreatureState{
 //--------------- END ENUM --------------------
 
 //--------------- message --------------------
+message C_EnterGame{                                //9
+    string name = 1;
+}
+
 message S_EnterGame{                       //0
     ObjectInfo player = 1;
+    repeated PS_ItemInfo itemInfos = 2;
 }
 
 message S_LeaveGame{                       //1
@@ -114,66 +129,135 @@ message S_Die{                                //8
   int32 attackerId = 2;
 }
 
-message C_EnterGame{                                //9
-   string name = 1;
+
+
+////////////////////////////////////////////
+//                                        //
+//               INVENTORY                //
+//                                        //
+////////////////////////////////////////////
+
+message C_LoadInventory{                    //I1
+    int32 sourceObjectId            = 1;    // 출발지 저장소(인벤토리 or 상자) 아이디 (자신일 경우 0)
 }
 
-message C_LoadInventory{                    //10
-    int32 playerId = 1;
-    int32 inventoryId = 2;
+message S_LoadInventory                     //I2
+{                        
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    repeated PS_ItemInfo itemInfos  = 3;    // 저장소에 있는 아이템들
 }
 
-message S_LoadInventory{               //11
-    int32 playerId = 1;
-    int32 inventoryId = 2;
-    InvenDataInfo InvenData = 3;
+message C_CloseInventory{                   //I3
+    int32 sourceObjectId            = 1;    // 출발지 저장소(상자) 아이디
 }
 
-message C_MoveItem    //12
+message S_CloseInventory                    //I4
+{                        
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+}
+
+message C_SearchItem{                  //I5
+    int32 sourceObjectId            = 1;    // 출발지 저장소(인벤, 상자) 아이디
+    int32 sourceItemId              = 2;    // 서칭하는 아이템 아이디
+}
+
+message S_SearchItem                   //I6
+{                        
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소(인벤, 상자) 아이디
+    PS_ItemInfo sourceItem          = 3;    // 서칭된 아이템 정보
+}
+
+message C_MergeItem                         //I7
 {
-    int32 playerId = 1; //옮긴 플레이어의 id
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
 
-    int32 targetId = 2; // 아이템을 옮긴  인벤토리의 id
-    int32 gridId = 3; //인벤토리의 몇번째 그리드인지(혹은 그리드의 id)
-    ItemDataInfo itemData= 4; //옮긴 아이템의 데이터
-
-    //문제가 있을시 백업용. 필요하나?
-     int32 lastItemPosX = 5; //이전 아이템의 좌표
-     int32 lastItemPosY = 6; //이전 아이템의 좌표
-     int32 lastItemRotate = 7;
-     int32 lastGridId = 8;
-  
+    int32 mergedObjectId            = 3;    // 합쳐지는 아이템 기준
+    int32 combinedObjectId          = 4;    // 합치기위한 아이템
+    int32 mergeNumber               = 5;    // 합쳐지는 숫자
 }
 
-message S_MoveItem    //12
+message S_MergeItem                         //I8
 {
-    int32 playerId = 1; //옮긴 플레이어의 id
+    bool isSuccess                  = 1;    // 성공 유무
 
-    int32 targetId = 2; // 아이템을 옮긴  인벤토리의 id
-    int32 gridId = 3; //인벤토리의 몇번째 그리드인지(혹은 그리드의 id)
-    ItemDataInfo itemData= 4; //옮긴 아이템의 데이터
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 3;    // 목적지 저장소 아이디
 
-
-    //문제가 있을시 백업용. 필요하나?
-     int32 lastItemPosX = 5; //이전 아이템의 좌표
-     int32 lastItemPosY = 6; //이전 아이템의 좌표
-     int32 lastItemRotate = 7;
-     int32 lastGridId = 8;
-
-}
-message C_DeleteItem{   //14
-    int32 playerId = 1; //지운 플레이어의 id
-    ItemDataInfo itemData = 2; //지운 아이템의 데이터
-    int32 gridId = 3;
-    int32 lastGridId = 4;
+    PS_ItemInfo mergedItem          = 4;    // 합쳐지는 아이템 기준
+    PS_ItemInfo combinedItem        = 5;    // 합치기위한 아이템
 }
 
-message S_DeleteItem{   //15
-    int32 playerId = 1; //지운 플레이어의 id
-    ItemDataInfo itemData = 2; //지운 아이템의 데이터
-    int32 gridId = 3;
-    int32 lastGridId = 4;
+message C_DevideItem                        //I9
+{
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
+
+    int32 sourceItemId              = 3;    // 나눠지는 아이템 기준
+    int32 destinationGridX          = 4;    // 나눠진 새로운 아이템의 위치X
+    int32 destinationGridY          = 5;    // 나눠진 새로운 아이템의 위치Y
+    int32 destinationRotation       = 6;    // 나눠진 새로운 아이템의 회전값
+    int32 devideNumber              = 7;    // 나눠지는 숫자
 }
+
+message S_DevideItem                        //I10
+{
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 3;    // 목적지 저장소 아이디
+
+    PS_ItemInfo sourceItem          = 4;    // 나눠지는 아이템 기준
+    PS_ItemInfo destinationItem     = 5;    // 나눠진 아이템
+}
+
+message C_MoveItem                          //I11
+{
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 2;    // 목적지 저장소 아이디
+
+    int32 sourceMoveItemId          = 3;    // 옮긴 아이템의 데이터
+    int32 destinationGridX          = 4;    // 인벤 위치X
+    int32 destinationGridY          = 5;    // 인벤 위치Y
+    int32 destinationRotation       = 6;    // 인벤 회전
+}
+
+message S_MoveItem                          //I12
+{
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    int32 destinationObjectId       = 3;    // 목적지 저장소 아이디
+
+    PS_ItemInfo sourceMoveItem      = 4;    // 출발지 아이템의 데이터
+    PS_ItemInfo destinationMoveItem = 5;    // 목적지 아이템의 데이터
+}
+
+message C_DeleteItem                        //I13
+{                   
+    int32 sourceObjectId            = 1;    // 출발지 저장소 아이디
+    int32 deleteItemId              = 2;    // 지우려고 하는 아이템의 데이터
+}
+
+message S_DeleteItem                        //I14
+{                  
+    bool isSuccess                  = 1;    // 성공 유무
+
+    int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
+    PS_ItemInfo deleteItem          = 3;    // 지운 아이템의 데이터
+}
+
+////////////////////////////////////////////
+//                                        //
+//                 ????                   //
+//                                        //
+////////////////////////////////////////////
 
 message C_RaycastShoot{ //16
     float StartPosX = 1;
@@ -223,7 +307,8 @@ message ObjectInfo{
     PositionInfo positionInfo = 5;
     StatInfo statInfo = 6;
     ShapeInfo shape = 7;
-    //CreatureState state = 7;
+    BoxInfo box = 8;
+    //CreatureState state = 9;
 }
 
 message StatInfo{
@@ -244,6 +329,13 @@ message PositionInfo{
   float rotZ = 6;
 }
 
+message BoxInfo
+{
+    int32 x = 1;
+    int32 y = 2;
+    float weight = 3;
+}
+
 
 // Caustion : must sync Collision.Shapes.Shape.ShapeType Enum
 message ShapeInfo{
@@ -258,43 +350,13 @@ message ShapeInfo{
     float Height        = 9;//Rectangle
 }
 
-
-message InvenDataInfo{
-    int32 inventoryId = 1;
-    float   limitWeight = 2;
-    repeated GridDataInfo GridData = 3;
-}
-
-message GridDataInfo{
-    int32 gridId                        = 1;
-    int32 gridSizeX                     = 2;
-    int32 gridSizeY                     = 3;
-    float gridPosX                      = 4;
-    float gridPosY                      = 5;
-    repeated ItemDataInfo  itemList     = 6;
-    bool createRandomItem               = 7;
-    int32 randomItemAmount              = 8;
-}
-
-message ItemDataInfo{
-    int32 itemId                      = 1;        // 해당 아이템의 고유한 아이디
-    int32 itemCode                  = 2;        //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
-    int32 itemPosX              = 3;        // 아이템의 그리드 안 좌표상의 위치
-    int32 itemPosY              = 4;        // 아이템의 그리드 안 좌표상의 위치
-    int32 itemRotate                 = 5;        // 아이템의 회전코드(rotate * 90)
-    int32 itemAmount             = 6;      // 아이템의 개수(소모품만 64개까지)
-    repeated int32 searchedPlayerId     = 7;            // 이 아이템을 조회한 플레이어의 아이디
-
-    string item_name = 8;
-    float item_weight = 9;
-    ItemType item_type = 10;
-    int32 item_string_value = 11;
-    int32 item_purchase_price = 12;
-    int32 item_sell_price = 13;
-    float item_searchTime = 14;
-    int32 width = 15;
-    int32 height= 16;
-    bool isItemConsumeable = 17;
-    //Sprite itemSprite; ???
+message PS_ItemInfo{
+    int32       objectId                    = 1;        // 해당 아이템의 고유한 아이디
+    int32       itemId                      = 2;        // 아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
+    int32       x                           = 3;        // 아이템의 그리드 안 좌표상의 X위치
+    int32       y                           = 4;        // 아이템의 그리드 안 좌표상의 Y위치
+    int32       rotate                      = 5;        // 아이템의 회전코드(rotate * 90)
+    int32       amount                      = 6;        // 아이템의 개수(소모품만 64개까지)
+    bool        isSearched                  = 7;        // 플레이어가 해당 아이템을 조회하였는지
 }
 //--------------- END INFO ----------------

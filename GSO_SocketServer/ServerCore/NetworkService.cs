@@ -137,6 +137,8 @@ namespace ServerCore
 
             }
 
+            mManager.DisconnectTimeout = 100000;
+
             if (false == mManager.Start(mEndPoint.Port))
             {
                 return false;

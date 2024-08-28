@@ -7,20 +7,31 @@ using UnityEngine;
 
 public class Box : InteractableObject
 {
-    private InventoryController invenController;
     private OtherInventoryUI invenUI;
 
+    private Vector2Int size;
+    private double weight;
+
+    public bool interactable;
     private void Awake()
     {
         Init();
-
     }
     protected override void Init()
     {
         base.Init();
+        interactable = true; 
         interactRange = 2;
         invenUI = InventoryController.invenInstance.otherInvenUI;
         SetTriggerSize();
+    }
+
+
+    public void SetBox(long x, long y, double weight)
+    {
+        this.size.x = (int)x;
+        this.size.y = (int)y;
+        this.weight = weight;
     }
 
     protected override void SetTriggerSize()
@@ -29,19 +40,21 @@ public class Box : InteractableObject
         Collider.radius = interactRange;
     }
 
-    //ÆÐÅ¶À¸·Î ¹ÞÀº ¹Ù²ï ÀÎº¥µ¥ÀÌÅÍ ¹Ý¿µ
+    //ï¿½ï¿½Å¶ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ ï¿½Îºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ý¿ï¿½
 
-    //ÇÃ·¹ÀÌ¾î°¡ »óÈ£ÀÛ¿ë Å°¸¦ ´­·¶À»¶§ ½ÇÇàµÉ ³»¿ë
+    //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½È£ï¿½Û¿ï¿½ Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [ContextMenu("box interact")]
     public override void Interact()
     {
-        //ÀÌ¹Ì ÀÎº¥Åä¸®°¡ ¿­·ÁÀÖ´Ù¸é ÀÎÅÍ·ºÆ® ÇÏÁö ¾ÊÀ½
-        if (InventoryController.invenInstance.isActive) { return; }
-
-        InventoryController.invenInstance.invenUIControl();
-        //invenUI.invenData = GetComponent<OtherInventory>().InputInvenData; //ÇÃ·¹ÀÌ¾î ÀÎÇ²¿¡¼­ ½ÇÇàÇÏ¿© ¿©±â¼­´Â ¾ÈÇÔ
-        //invenUI.InventorySet();
-        
+        if (interactable)
+        {
+            InventoryController.invenInstance.SendLoadInvenPacket(0);  //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½É¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½Îºï¿½ ï¿½ï¿½ï¿½ï¿½
+            InventoryController.invenInstance.SendLoadInvenPacket(objectId);
+        }
+        else
+        {
+            Debug.Log("ï¿½Ò°ï¿½ï¿½ï¿½");
+        }
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)

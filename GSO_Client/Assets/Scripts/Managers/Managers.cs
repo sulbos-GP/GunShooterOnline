@@ -28,6 +28,11 @@ internal class Managers : MonoBehaviour
         Init();
     }
 
+    private void Start()
+    {
+        s_instance._environment.InitEnviromentSetting(EEnvironmentState.Emulator);
+    }
+
 
     private void Update()
     {
@@ -74,8 +79,6 @@ internal class Managers : MonoBehaviour
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
 
-            s_instance._environment.InitEnviromentSetting(EEnvironmentState.Emulator);
-
             //s_instance._data.InventorySet();
 
             s_instance._pool.Init();
@@ -96,7 +99,7 @@ internal class Managers : MonoBehaviour
 
     private readonly EnvironmentSetting _environment = new();
 
-    public static EnvironmentSetting Environment => Instance._environment;
+    public static EnvironmentSetting EnvConfig => Instance._environment;
 
     #endregion
 

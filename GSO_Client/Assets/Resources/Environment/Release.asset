@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: Release
   m_EditorClassIdentifier: 
   GameServerIp: 113.60.249.123
-  GameServerPort: 113.60.249.123
-  AuthorizationBaseUri: 
-  CenterBaseUri: 
-  MatchmakerBaseUri: 
-  GameServerManagerBaseUri: 
+  GameServerPort: 7777
+  AuthorizationBaseUri: http://113.60.249.123:5000
+  CenterBaseUri: http://113.60.249.123:5000
+  MatchmakerBaseUri: http://113.60.249.123:5200
+  GameServerManagerBaseUri: http://113.60.249.123:7000
