@@ -31,7 +31,7 @@ namespace Server.Game.Object.Item
             {
                 X = 5,
                 Y = 5,
-                Weight = 15,
+                Weight = 40,
             };
 
         }
@@ -54,7 +54,7 @@ namespace Server.Game.Object.Item
         public void Init()
         {
             //임의의 아이템
-            storage.Init(5, 5, 100.0);
+            storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
             DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(1);
             DB_UnitAttributes colt45Att = new DB_UnitAttributes()

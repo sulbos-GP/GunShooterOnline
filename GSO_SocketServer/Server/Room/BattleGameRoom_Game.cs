@@ -346,7 +346,7 @@ namespace Server
             {
                 ItemObject tempItem = new ItemObject(sourceItem);
 
-                if (false == destinationStorage.IsHaveAmount(sourceItem, devideNumber))
+                if (false == sourceStorage.IsHaveAmount(sourceItem, devideNumber))
                 {
                     packet.IsSuccess = false;
                     packet.SourceItem = oldSourceItemInfo;
