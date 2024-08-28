@@ -169,7 +169,7 @@ namespace Server.Game
 
             double weight = 0.0;
             int maxAmount = 0;
-            while(LessWeight >= weight)
+            while(LessWeight > weight)
             {
                 weight = Math.Round((++maxAmount) * item.Weight, 1);
             }

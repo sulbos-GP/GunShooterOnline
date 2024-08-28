@@ -227,7 +227,7 @@ namespace Server
                 }
 
                 //인벤토리에 넣을 수 있는 최대 수량
-                int maxAmount = destinationStorage.CheackMaxAmount(combinedItem, mergeNumber);
+                int maxAmount = sourceStorage.CheackMaxAmount(mergedlItem, mergeNumber);
 
                 ItemObject tempItem = new ItemObject(combinedItem);
                 //CombinedItem의 MergeNumber만큼 감소

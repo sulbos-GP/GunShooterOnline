@@ -27,11 +27,12 @@ public class Box : InteractableObject
     }
 
 
-    public void SetBox(int x, int y, double weight)
+    public void SetBox(long x, long y, double weight)
     {
-        this.size.x = x;
-        this.size.y = y;
+        this.size.x = (int)x;
+        this.size.y = (int)y;
         this.weight = weight;
+    }
 
     protected override void SetTriggerSize()
     {
