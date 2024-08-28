@@ -29,9 +29,9 @@ namespace Server.Game.Object.Item
 
             info.Box = new BoxInfo()
             {
-                X = 5,
-                Y = 5,
-                Weight = 40,
+                X = 6,
+                Y = 6,
+                Weight = 50,
             };
 
         }
