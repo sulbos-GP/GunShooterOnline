@@ -227,7 +227,15 @@ namespace Server
                 }
 
                 //인벤토리에 넣을 수 있는 최대 수량
-                int maxAmount = sourceStorage.CheackMaxAmount(mergedlItem, mergeNumber);
+                int maxAmount = 0;
+                if (sourceObjectId == destinationObjectId)
+                {
+                    maxAmount = mergeNumber;
+                }
+                else
+                {
+                    maxAmount = sourceStorage.CheackMaxAmount(mergedlItem, mergeNumber);
+                }
 
                 ItemObject tempItem = new ItemObject(combinedItem);
                 //CombinedItem의 MergeNumber만큼 감소
@@ -361,17 +369,21 @@ namespace Server
                 DB_StorageUnit oldDevideUnit = devideItem.ConvertInventoryUnit();
                 PS_ItemInfo oldDevideItemInfo = devideItem.ConvertItemInfo(player.Id);
 
+
+                //SourcelItem의 수량을 DevideNumber만큼 감소
+                int lessAmount = sourceStorage.DecreaseAmount(sourceItem, devideNumber);
+
                 //미리 나눠진 아이템의 공간이 확보되어 있는지 확인한다
                 if (false == destinationStorage.InsertItem(devideItem))
                 {
+
+                    sourceStorage.IncreaseAmount(sourceItem, devideNumber);
+
                     packet.IsSuccess = false;
                     packet.SourceItem = oldSourceItemInfo;
                     player.Session.Send(packet);
                     return;
                 }
-
-                //SourcelItem의 수량을 DevideNumber만큼 감소
-                int lessAmount = sourceStorage.DecreaseAmount(sourceItem, devideNumber);
 
                 //SourcelItem 수량을 DevideNumber만큼 감소하였을때 음수가 나올 경우
                 if (lessAmount == -1)
