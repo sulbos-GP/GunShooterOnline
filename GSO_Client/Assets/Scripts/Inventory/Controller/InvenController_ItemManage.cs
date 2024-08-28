@@ -124,7 +124,7 @@ public partial class InventoryController
 
         DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",item.transform.parent).GetComponent<DivideInterface>(); //그리드 오브젝트의 자식으로 생성
         divideInterface.SetInterfacePos(item);
-        divideInterface.SetAmountIndex(item, gridPosition);
+        divideInterface.SetAmountIndex(item, gridPosition,selectedGrid,overlapItem);
         
     }
 
@@ -137,7 +137,6 @@ public partial class InventoryController
         if (itemPlaceableInGrid)
         {
             HandleItemPlacementInGrid(item, pos);
-            
         }
         else
         {
@@ -297,33 +296,32 @@ public partial class InventoryController
     /// <param name="pos"></param>
     private void HandleItemPlacementInGrid(ItemObject item, Vector2Int pos)
     {
-        if (overlapItem != null)
+        if (isDivideMode)
         {
-            if (CheckAbleToMerge(item , overlapItem))
-            {
-                //아이템의 머지가 가능함
-                int needAmount = selectedItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount 
-                    ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
-
-                SendMergeItemPacket(item, overlapItem, needAmount);
-            }
-            else
-            {
-                UndoGridSlot(SelectedItem);
-                UndoItem(SelectedItem);
-            }
+            ItemDivideInGrid(selectedItem, gridPosition);
         }
         else
         {
-            if (isDivideMode)
+            if (overlapItem != null)
             {
-                ItemDivideInGrid(selectedItem, gridPosition);
+                if (CheckAbleToMerge(item, overlapItem))
+                {
+                    //아이템의 머지가 가능함
+                    int needAmount = selectedItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
+                        ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
+
+                    SendMergeItemPacket(item, overlapItem, needAmount);
+                }
+                else
+                {
+                    UndoGridSlot(SelectedItem);
+                    UndoItem(SelectedItem);
+                }
             }
             else
             {
                 SendMoveItemPacket(item, pos);
             }
-            
         }
     }
 
