@@ -8,6 +8,9 @@ using UnityEngine;
 public class Box : InteractableObject
 {
     private OtherInventoryUI invenUI;
+    private Vector2Int size;
+    private double weight;
+
     public bool interactable;
     private void Awake()
     {
@@ -21,6 +24,13 @@ public class Box : InteractableObject
         interactRange = 2;
         invenUI = InventoryController.invenInstance.otherInvenUI;
         SetTriggerSize();
+    }
+
+    public void SetBox(int x, int y, double weight)
+    {
+        this.size.x = x;
+        this.size.y = y;
+        this.weight = weight;
     }
 
     protected override void SetTriggerSize()

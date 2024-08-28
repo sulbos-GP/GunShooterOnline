@@ -29,7 +29,7 @@ public class Player : CreatureObj
             //Attack = 3,
             Hp = 20,
             MaxHp = 20,
-            
+
 
         });
 

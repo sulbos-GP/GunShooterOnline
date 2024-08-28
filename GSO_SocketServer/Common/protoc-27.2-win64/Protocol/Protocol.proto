@@ -307,7 +307,8 @@ message ObjectInfo{
     PositionInfo positionInfo = 5;
     StatInfo statInfo = 6;
     ShapeInfo shape = 7;
-    //CreatureState state = 7;
+    BoxInfo box = 8;
+    //CreatureState state = 9;
 }
 
 message StatInfo{
@@ -326,6 +327,13 @@ message PositionInfo{
   float posX = 4;
   float posY = 5;
   float rotZ = 6;
+}
+
+message BoxInfo
+{
+    int32 x = 1;
+    int32 y = 2;
+    float weight = 3;
 }
 
 
