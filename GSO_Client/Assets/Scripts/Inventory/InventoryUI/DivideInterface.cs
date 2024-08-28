@@ -94,6 +94,10 @@ public class DivideInterface : MonoBehaviour
             {
                 InventoryController.invenInstance.playerInvenUI.weightText.color = Color.red;
             }
+            else
+            {
+                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
+            }
         }
     }
 
@@ -127,7 +131,7 @@ public class DivideInterface : MonoBehaviour
         {
             InventoryController.invenInstance.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
         }
-
+        InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
         DestroyInterface();
     }
 
