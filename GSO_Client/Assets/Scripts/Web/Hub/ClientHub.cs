@@ -12,13 +12,15 @@ using System.Threading.Tasks;
 public abstract class ClientHub : MonoBehaviour
 {
     protected HubConnection mConnection;
-    protected abstract string mConnectionUrl { get; set; }
-    protected abstract string mConnectionName { get; set; }
+    protected string mConnectionUrl { get; set; }
+    protected string mConnectionName { get; set; }
 
     private readonly Queue<Action> mExecutionQueue = new Queue<Action>();
 
     protected void Start()
     {
+
+        Init();
 
         CreateHubConnectionHandler();
 
@@ -35,6 +37,8 @@ public abstract class ClientHub : MonoBehaviour
             mExecutionQueue.Dequeue().Invoke();
         }
     }
+
+    protected abstract void Init();
 
     private void CreateHubConnectionHandler()
     {
@@ -66,6 +70,12 @@ public abstract class ClientHub : MonoBehaviour
     protected void OnDestroy()
     {
         StoptHub();
+    }
+
+    protected void SetHub(string name, string url)
+    {
+        this.mConnectionName = name;
+        this.mConnectionUrl = url;
     }
 
     public void StartHub()

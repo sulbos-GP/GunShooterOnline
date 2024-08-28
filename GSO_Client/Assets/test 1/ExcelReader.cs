@@ -13,7 +13,8 @@ public class ExcelReader
 
     private static Dictionary<eTABLE_TYPE, Action<string>> _readDicData = new Dictionary<eTABLE_TYPE, Action<string>>()
     {
-        {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>}
+        {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>},
+        {eTABLE_TYPE.Item, TableExcel.ReadCSV<Data_Item> }
     };
 
     public static void ReadExcel()

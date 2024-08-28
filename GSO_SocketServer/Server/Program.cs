@@ -6,11 +6,15 @@ using Server.Docker;
 using ServerCore;
 using Server.DTO;
 using System.Threading.Tasks;
+using Server.Database.Game;
+using Server.Database.Handler;
+using Server.Database.Master;
+using Server.Database.Data;
+using System.Collections.Generic;
 
 namespace Server
 {
-
-	class Program
+    class Program
 	{
 		public static ServerNetworkService mNetworkService = new ServerNetworkService();
         public static WebClientService mWebClientService = new WebClientService();
@@ -55,19 +59,20 @@ namespace Server
             backLog = 100;
 #endif
 
+            InitDatabase().Wait();
+
             Func<Session> session = () => { return new ClientSession(); };
 
             IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
             mNetworkService.Init(endPoint, session, acceptKey, register, backLog);
             
             BattleGameRoom room = new BattleGameRoom();
-            
-            
+
             //mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
             //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
-            
-            
-            
+
+
+
             mNetworkService.Start();
             mNetworkService.SetChannel(true, room,0);
 
@@ -111,6 +116,27 @@ namespace Server
             //}
         }
 
+        static async Task InitDatabase()
+        {
+
+            /// <summary>
+            /// 데이터베이스 초기화
+            /// </summary>
+           
+            var handler = DatabaseHandler.Instance;
+#if DOCKER
+            handler.AddDatabaseConnectionPool(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+            handler.AddDatabaseConnectionPool(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+#else
+            handler.AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+            handler.AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+#endif
+
+
+            await DatabaseHandler.Context.LoadDatabaseContext();
+
+        }
+
         static void InitWebClientService()
         {
             mWebClientService.AddHttpClientUri("GameServerManager", $"http://{DockerUtil.GetHostIP()}:7000");
@@ -122,7 +148,7 @@ namespace Server
             /// <summary>
             /// 서버에서 유저를 받아줄 준비를 모두 마쳤다면 호출
             /// </summary>
-            /// 
+            
             Console.WriteLine("[RequestReady GameServer]");
 
             RequestReadyMatchReq request = new RequestReadyMatchReq

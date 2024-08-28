@@ -5,16 +5,26 @@ using UnityEngine;
 public enum eTABLE_TYPE
 {
     None,
-    TestItem
+    TestItem,
+    Item
 }
 
-public enum eStat
+public enum eSTAT
 {
     None,
     Health,
     Armor
 }
 
+public enum eITEM_TYPE
+{
+    None,
+    weapone,
+    defensive,
+    bag,
+    recovery,
+    bullet,
+    spoil
 public enum GunState
 {
     Shootable,

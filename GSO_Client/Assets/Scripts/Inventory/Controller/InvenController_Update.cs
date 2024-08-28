@@ -1,24 +1,21 @@
-using Google.Protobuf.Protocol;
-using NPOI.OpenXmlFormats.Dml.Diagram;
-using NPOI.SS.Formula.Eval;
-using System;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
 
-public partial class InventoryController : MonoBehaviour
+public partial class InventoryController
 {
+    
+
     private void Update()
     {
         if (!isActive) // UI가 비활성화라면 리턴
             return;
+
+        if (isDivideInterfaceOn)
+        {
+            return; //나누기 인터페이스가 켜져있다면 아래의 아이템 이벤트를 진행시키지 않음
+        }
 
         if (isPress && !isItemSelected && (isEquipSelected || isGridSelected))
         {
@@ -38,11 +35,57 @@ public partial class InventoryController : MonoBehaviour
         if (isItemSelected)
         {
             selectedRect.position = new UnityEngine.Vector2(mousePosInput.X, mousePosInput.Y);
-        }
 
+            // 먼저 조건을 검사하여 조기 리턴을 통해 코드의 깊이를 줄입니다
+            if (dontCheckDivide || isDivideMode || selectedItem.ItemAmount <= 1)
+            {
+                return;
+            }
+
+            // 아이템의 위치나 그리드가 변경되었는지 확인합니다
+            bool itemMoved = selectedItem.backUpItemPos != gridPosition;
+
+            if (itemMoved)
+            {
+                Debug.Log("움직임");
+                dontCheckDivide = true; // 나중에 나누기 모드를 확인하지 않도록 설정
+                return; // 조건을 만족했으므로 함수 종료
+            }
+
+            dragTime += Time.deltaTime;
+
+            if (dragTime >= maxDragTime)
+            {
+                Debug.Log("나누기 모드 On");
+                CreateItemPreview(); // 아이템 미리보기 생성
+                isDivideMode = true; // 나누기 모드 활성화
+            }
+        }
     }
 
-    
+    private void CreateItemPreview()
+    {
+        if (selectedItem != null)
+        {
+            itemPreviewInstance = Managers.Resource.Instantiate("UI/DivideImageInstance", selectedGrid.transform);
+
+            RectTransform previewRect = itemPreviewInstance.GetComponent<RectTransform>();
+            GameObject selectedImage = selectedItem.transform.GetChild(0).gameObject;
+            itemPreviewInstance.GetComponent<Image>().sprite = selectedImage.GetComponent<Image>().sprite;
+
+            if (previewRect != null)
+            {
+                // 아이템의 크기, 위치, 회전 설정
+                previewRect.sizeDelta = selectedRect.sizeDelta;
+
+                Vector2 imagePos = new Vector2(gridPosition.x * GridObject.WidthOfTile + GridObject.WidthOfTile * selectedItem.Width
+                    / 2, -(gridPosition.y * GridObject.HeightOfTile + GridObject.HeightOfTile * selectedItem.Height / 2));
+
+                previewRect.localPosition = new UnityEngine.Vector2(imagePos.X, imagePos.Y);
+                previewRect.rotation = selectedImage.GetComponent<RectTransform>().rotation;
+            }
+        }
+    }
 
     private void HandleHighlighting()
     {
@@ -115,6 +158,16 @@ public partial class InventoryController : MonoBehaviour
         }
 
         gridPosition = WorldToGridPos();
+
+        if(gridPosition != null)
+        {
+            if(gridPosition == gridPositionIndex)
+            {
+                return;
+            }
+            gridPositionIndex = gridPosition;
+        }
+        
         Color32 highlightColor = selectedGrid.PlaceCheckInGridHighLight(selectedItem, gridPosition.x, gridPosition.y, ref overlapItem);
         invenHighlight.SetColor(highlightColor);
 

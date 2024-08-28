@@ -23,7 +23,7 @@ namespace GsoWebServer.Startup
 
                     webBuilder.ConfigureKestrel(serverOptions =>
                     {
-                        serverOptions.ListenAnyIP(5000);
+                        //serverOptions.ListenAnyIP(5000);
                     });
                 });
 

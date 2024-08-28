@@ -7,14 +7,20 @@ using UnityEngine;
 
 public class MatchmakerHub : ClientHub
 {
-    protected override string mConnectionUrl { get; set; } = "http://113.60.249.123:5200/MatchmakerHub";
-    protected override string mConnectionName { get; set; } = "매치메이커";
     
     protected UI_Match mMatchUI;
 
     private void Awake()
     {
         mMatchUI        = GetComponent<UI_Match>();
+    }
+
+    protected override void Init()
+    {
+        string name = "매치메이커";
+        string url = Managers.EnvConfig.GetEnvironmentConfig().MatchmakerBaseUri;
+
+        this.SetHub(name, url);
     }
 
     protected override void SetOnRecivedFunc()

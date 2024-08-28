@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Vector2 = System.Numerics.Vector2;
 
-public partial class InventoryController : MonoBehaviour
+public partial class InventoryController
 {
     #region PlayerInput 액션
     private void OnTouchPos(InputAction.CallbackContext context)
@@ -38,7 +38,7 @@ public partial class InventoryController : MonoBehaviour
 
     private void InvenUIControlInput(InputAction.CallbackContext context)
     {
-        invenUIControl();
+        InvenBtn();
     }
 
     #endregion
@@ -54,8 +54,8 @@ public partial class InventoryController : MonoBehaviour
         if (selectedItem != null)
         {
             //아이템이 마우스 중앙에 오도록 보정
-            position.X -= (selectedItem.Width - 1) * InventoryGrid.WidthOfTile / 2;
-            position.Y += (selectedItem.Height - 1) * InventoryGrid.HeightOfTile / 2;
+            position.X -= (selectedItem.Width - 1) * GridObject.WidthOfTile / 2;
+            position.Y += (selectedItem.Height - 1) * GridObject.HeightOfTile / 2;
         }
 
         return selectedGrid.MouseToGridPosition(position);
@@ -84,12 +84,7 @@ public partial class InventoryController : MonoBehaviour
             Debug.Log("touchinput On");
             playerInput = Managers.Object.MyPlayer.playerInput;
             playerInput.Player.Disable();
-            playerInput.UI.Enable();
-            playerInput.UI.TouchPosition.performed += OnTouchPos;
-            playerInput.UI.TouchPress.started += OnTouchStart;
-            playerInput.UI.TouchPress.canceled += OnTouchEnd;
-            playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
-            playerInput.UI.InventoryControl.performed += InvenUIControlInput;
+            InvenInputOn();
 
         }
         else
@@ -100,16 +95,48 @@ public partial class InventoryController : MonoBehaviour
             }
 
             Debug.Log("touchinput Off");
-            playerInput.UI.TouchPosition.performed -= OnTouchPos;
-            playerInput.UI.TouchPress.started -= OnTouchStart;
-            playerInput.UI.TouchPress.canceled -= OnTouchEnd;
-            playerInput.UI.MouseRightClick.performed -= OnMouseRightClickInput;
-            playerInput.UI.InventoryControl.performed -= InvenUIControlInput;
-            playerInput.UI.Disable();
+            InvenInputOff();
             playerInput.Player.Enable();
         }
 
         inventoryUI.SetActive(isActive);
+    }
+
+    private void InvenInputOff()
+    {
+        playerInput.UI.TouchPosition.performed -= OnTouchPos;
+        playerInput.UI.TouchPress.started -= OnTouchStart;
+        playerInput.UI.TouchPress.canceled -= OnTouchEnd;
+        playerInput.UI.MouseRightClick.performed -= OnMouseRightClickInput;
+        playerInput.UI.InventoryControl.performed -= InvenUIControlInput;
+        playerInput.UI.Disable();
+    }
+
+    private void InvenInputOn()
+    {
+        playerInput.UI.Enable();
+        playerInput.UI.TouchPosition.performed += OnTouchPos;
+        playerInput.UI.TouchPress.started += OnTouchStart;
+        playerInput.UI.TouchPress.canceled += OnTouchEnd;
+        playerInput.UI.MouseRightClick.performed += OnMouseRightClickInput;
+        playerInput.UI.InventoryControl.performed += InvenUIControlInput;
+    }
+
+    
+
+    public void InvenBtn()
+    {
+        //자신의 인벤토리 요청
+        if (!isActive) {
+            //인벤토리를 킬 경우
+            SendLoadInvenPacket(0);
+        }
+        else
+        {
+            //인벤토리를 닫을 경우
+            if (otherInvenUI.instantGrid != null) { SendCloseInvenPacket(otherInvenUI.instantGrid.objectId); return; }
+            if (playerInvenUI.instantGrid != null) { SendCloseInvenPacket(); }
+        }
     }
 
     public void RotateBtn()

@@ -1,6 +1,9 @@
 ﻿using Google.Protobuf.Protocol;
+using LiteNetLib;
+using Newtonsoft.Json.Bson;
+using Server.Database.Data;
 using Server.Game;
-using Server.Game.Object;
+using Server.Game.Object.Item;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;
@@ -48,148 +51,591 @@ namespace Server
             BroadCast(resMovePacket);
         }
 
-        internal void HandleItemDelete(Player player, object message)
+        ////////////////////////////////////////////
+        //                                        //
+        //               INVENTORY                //
+        //                                        //
+        ////////////////////////////////////////////
+
+        internal void LoadInventoryHandler(Player player)
         {
-            //TODO : 그리드로 옮기기
-            //TODO : playerId -> ownerId box같이 내꺼 아닌것도 버릴수 있게
-            C_DeleteItem packet = (C_DeleteItem)message;
-            ItemObject item =  ObjectManager.Instance.Find<ItemObject>(packet.ItemData.ItemId);
+            S_LoadInventory packet = new S_LoadInventory();
 
-            item.ownerGrid.DeleteItemFromSlot(item);
-            ObjectManager.Instance.Remove(packet.ItemData.ItemId);
+            Inventory inventory = player.inventory;
+            if(inventory == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
 
-            S_DeleteItem s_DeleteItem = new S_DeleteItem();
-            s_DeleteItem.ItemData = packet.ItemData;
-            s_DeleteItem.PlayerId = packet.PlayerId;
-            s_DeleteItem.GridId = packet.GridId;
-            s_DeleteItem.LastGridId = packet.LastGridId;
+            foreach(PS_ItemInfo item in inventory.storage.GetItems(player.Id))
+            {
+                packet.ItemInfos.Add(item);
+            }
 
-
-            BroadCast(s_DeleteItem);
+            packet.IsSuccess = true;
+            packet.SourceObjectId = 0;
+            player.Session.Send(packet);
         }
 
-        internal void HandleItemLoad(Player player, int objectId, int inventoryId )
+        internal void LoadInventoryHandler(Player player, int sourceObjectId)
         {
-            InvenDataInfo targetData = null;
+            S_LoadInventory packet = new S_LoadInventory();
 
-            if(player.Id == inventoryId) 
+            BoxObject box = ObjectManager.Instance.Find<BoxObject>(sourceObjectId);
+            if (box == null)
             {
-                //플레이어의 인벤토리
-                Player targetPlayer = ObjectManager.Instance.Find<Player>(inventoryId);
-                targetData = targetPlayer.inventory.invenData;
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            if(true == box.IsOpen())
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+            box.Open();
+
+            foreach (PS_ItemInfo item in box.storage.GetItems(player.Id))
+            {
+                packet.ItemInfos.Add(item);
+            }
+
+            packet.IsSuccess = true;
+            packet.SourceObjectId = sourceObjectId;
+            player.Session.Send(packet);
+        }
+
+        internal void CloseInventoryHandler(Player player)
+        {
+            S_CloseInventory packet = new S_CloseInventory();
+
+            packet.IsSuccess = true;
+            packet.SourceObjectId = 0;
+            player.Session.Send(packet);
+            return;
+        }
+
+        internal void CloseInventoryHandler(Player player, int sourceObjectId)
+        {
+
+            S_CloseInventory packet = new S_CloseInventory();
+
+            BoxObject box = ObjectManager.Instance.Find<BoxObject>(sourceObjectId);
+            if (box == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            if (false == box.IsOpen())
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+            box.Close();
+
+            packet.IsSuccess = true;
+            packet.SourceObjectId = sourceObjectId;
+            player.Session.Send(packet);
+        }
+
+        internal void SearchItemHandler(Player player, int sourceObjectId, int sourceItemId)
+        {
+            S_SearchItem packet = new S_SearchItem();
+
+            ItemObject sourcelItem = ObjectManager.Instance.Find<ItemObject>(sourceItemId);
+            PS_ItemInfo sourceItemInfo = sourcelItem.ConvertItemInfo(player.Id);
+
+            Storage sourceStorage = GetStorage(player, sourceObjectId);
+            if (sourceStorage == null || sourcelItem == null || -1 == sourceStorage.ScanItem(sourcelItem))
+            {
+                packet.IsSuccess = false;
+                packet.SourceObjectId = sourceObjectId;
+                packet.SourceItem = sourceItemInfo;
+                player.Session.Send(packet);
+                return;
+            }
+
+            if(true == sourcelItem.IsViewer(player.Id))
+            {
+                packet.IsSuccess = false;
+                packet.SourceObjectId = sourceObjectId;
+                packet.SourceItem = sourceItemInfo;
+                player.Session.Send(packet);
+                return;
+            }
+            sourcelItem.AddViewer(player.Id, player.Session.mPeer.RoundTripTime);
+
+            packet.IsSuccess = true;
+            packet.SourceObjectId = sourceObjectId;
+            packet.SourceItem = sourceItemInfo;
+            player.Session.Send(packet);
+        }
+
+        internal async void MergeItemHandler(Player player, int sourceObjectId, int destinationObjectId, int mergedObjectId, int combinedObjectId, int mergeNumber)
+        {
+            S_MergeItem packet = new S_MergeItem();
+            packet.SourceObjectId = sourceObjectId;
+            packet.DestinationObjectId = destinationObjectId;
+
+            ItemObject mergedlItem = ObjectManager.Instance.Find<ItemObject>(mergedObjectId);
+            Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, mergedlItem);
+            if (sourceStorage == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+            DB_StorageUnit oldMergedUnit = mergedlItem.ConvertInventoryUnit();
+            PS_ItemInfo oldMergedItemInfo = mergedlItem.ConvertItemInfo(player.Id);
+
+            ItemObject combinedItem = ObjectManager.Instance.Find<ItemObject>(combinedObjectId);
+            Storage destinationStorage = GetStorageWithScanItem(player, destinationObjectId, combinedItem);
+            if (sourceStorage == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+            DB_StorageUnit oldCombinedUnit = combinedItem.ConvertInventoryUnit();
+            PS_ItemInfo oldCombinedInfo = combinedItem.ConvertItemInfo(player.Id);
+
+            if (mergedlItem.ItemId != combinedItem.ItemId)
+            {
+                packet.IsSuccess = false;
+                packet.MergedItem = oldMergedItemInfo;
+                packet.CombinedItem = oldCombinedInfo;
+                player.Session.Send(packet);
+                return;
+            }
+
+            {
+
+                if (false == destinationStorage.IsHaveAmount(combinedItem, mergeNumber))
+                {
+                    packet.IsSuccess = false;
+                    packet.MergedItem = oldMergedItemInfo;
+                    packet.CombinedItem = oldCombinedInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+
+                //인벤토리에 넣을 수 있는 최대 수량
+                int maxAmount = sourceStorage.CheackMaxAmount(mergedlItem, mergeNumber);
+
+                ItemObject tempItem = new ItemObject(combinedItem);
+                //CombinedItem의 MergeNumber만큼 감소
+                int lessAmount = destinationStorage.DecreaseAmount(combinedItem, maxAmount);
+
+                //MergedItem에 수량 증가
+                int moreAmount = sourceStorage.IncreaseAmount(mergedlItem, maxAmount);
+
+                //CombinedItem의 수량을 MergeNumber만큼 감소하였을때 음수가 나올 경우
+                //MergeItem의 수량을 MergeNumber만큼 증가하였을때 Limit을 넘은 경우
+                if (lessAmount == -1 || moreAmount == -1)
+                {
+                    packet.IsSuccess = false;
+                    packet.MergedItem = oldMergedItemInfo;
+                    packet.CombinedItem = oldCombinedInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+                //Combined의 수량을 전부 소진한 경우
+                if (lessAmount == 0)
+                {
+                    bool isDelete = destinationStorage.DeleteItem(combinedItem);
+                    if (false == isDelete)
+                    {
+                        //CombinedItem의 수량 감소에 성공했을 테니까 기존에 정보로 되돌려준다
+                        combinedItem.Amount = oldCombinedInfo.Amount;
+
+                        packet.IsSuccess = false;
+                        packet.MergedItem = oldMergedItemInfo;
+                        packet.CombinedItem = oldCombinedInfo;
+                        player.Session.Send(packet);
+                        return;
+                    }
+                }
+
+                bool isMerge = false;
+                if (IsInventory(sourceObjectId) && IsInventory(destinationObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isMerge = await inventory.MergeItem(oldMergedUnit, mergedlItem.ConvertInventoryUnit(), oldCombinedUnit, combinedItem.ConvertInventoryUnit());
+                }
+                else if (IsInventory(sourceObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isMerge = await inventory.MergeItem(oldMergedUnit, mergedlItem.ConvertInventoryUnit());
+                }
+                else if (IsInventory(destinationObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isMerge = await inventory.MergeItem(oldCombinedUnit, combinedItem.ConvertInventoryUnit());
+                }
+                else
+                {
+                    isMerge = true;
+                }
+
+                if (false == isMerge)
+                {
+                    if (lessAmount == 0)
+                    {
+                        sourceStorage.InsertItem(tempItem);
+
+                        packet.CombinedItem = tempItem.ConvertItemInfo(player.Id);
+                    }
+                    else
+                    {
+                        destinationStorage.DecreaseAmount(mergedlItem, maxAmount);
+                        sourceStorage.IncreaseAmount(combinedItem, lessAmount);
+
+                        packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
+                    }
+
+                    packet.IsSuccess = false;
+                    packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                    player.Session.Send(packet);
+                    return;
+                }
+                else
+                {
+                    packet.IsSuccess = true;
+                    packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                    packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
+                    player.Session.Send(packet);
+                    return;
+                }
+            }
+        }
+
+        internal async void DevideItemHandler(Player player, int sourceObjectId, int destinationObjectId, int sourceItemId, int destinationGridX, int destinationGridY, int destinationRotation, int devideNumber)
+        {
+
+            S_DevideItem packet = new S_DevideItem();
+            packet.SourceObjectId = sourceObjectId;
+            packet.DestinationObjectId = destinationObjectId;
+
+            ItemObject sourceItem = ObjectManager.Instance.Find<ItemObject>(sourceItemId);
+            DB_StorageUnit oldSourceUnit = sourceItem.ConvertInventoryUnit();
+            PS_ItemInfo oldSourceItemInfo = sourceItem.ConvertItemInfo(player.Id);
+
+            Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourceItem);
+            if (sourceStorage == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            Storage destinationStorage = GetStorage(player, destinationObjectId);
+            if (sourceStorage == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            {
+                ItemObject tempItem = new ItemObject(sourceItem);
+
+                if (false == sourceStorage.IsHaveAmount(sourceItem, devideNumber))
+                {
+                    packet.IsSuccess = false;
+                    packet.SourceItem = oldSourceItemInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+
+                DB_UnitAttributes devideAttributes = sourceItem.Attributes;
+                devideAttributes.amount = devideNumber;
+
+                ItemObject devideItem = new ItemObject(player.Id, destinationGridX, destinationGridY, destinationRotation, devideAttributes);
+                DB_StorageUnit oldDevideUnit = devideItem.ConvertInventoryUnit();
+                PS_ItemInfo oldDevideItemInfo = devideItem.ConvertItemInfo(player.Id);
+
+                //미리 나눠진 아이템의 공간이 확보되어 있는지 확인한다
+                if (false == destinationStorage.InsertItem(devideItem))
+                {
+                    packet.IsSuccess = false;
+                    packet.SourceItem = oldSourceItemInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+
+                //SourcelItem의 수량을 DevideNumber만큼 감소
+                int lessAmount = sourceStorage.DecreaseAmount(sourceItem, devideNumber);
+
+                //SourcelItem 수량을 DevideNumber만큼 감소하였을때 음수가 나올 경우
+                if (lessAmount == -1)
+                {
+                    packet.IsSuccess = false;
+                    packet.SourceItem = oldSourceItemInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+                //SourcelItem의 수량을 전부 소진한 경우
+                if (lessAmount == 0)
+                {
+                    bool isDelete = sourceStorage.DeleteItem(sourceItem);
+                    if (false == isDelete)
+                    {
+                        //나눠진 아이템을 삭제한다
+                        destinationStorage.DeleteItem(devideItem);
+
+                        //CombinedItem의 수량 감소에 성공했을 테니까 기존에 정보로 되돌려준다
+                        sourceItem.Amount = oldSourceItemInfo.Amount;
+
+                        packet.IsSuccess = false;
+                        packet.SourceItem = oldSourceItemInfo;
+                        player.Session.Send(packet);
+                        return;
+                    }
+                }
+
+                bool isDevide = false;
+                if (IsInventory(sourceObjectId) && IsInventory(destinationObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isDevide = await inventory.DevideItem(oldSourceUnit, sourceItem.ConvertInventoryUnit(), devideItem.ConvertInventoryUnit());
+                }
+                else if (IsInventory(sourceObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isDevide = await inventory.DevideItem(true, oldSourceUnit, sourceItem.ConvertInventoryUnit());
+                }
+                else if (IsInventory(destinationObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isDevide = await inventory.DevideItem(false, oldDevideUnit, devideItem.ConvertInventoryUnit());
+                }
+                else
+                {
+                    isDevide = true;
+                }
+
+                if (false == isDevide)
+                {
+                    if (lessAmount == 0)
+                    {
+                        destinationStorage.DeleteItem(devideItem);
+                        sourceStorage.InsertItem(tempItem);
+                    }
+
+                    packet.IsSuccess = false;
+                    packet.SourceItem = oldSourceItemInfo;                          //클라이언트에 남아있는 기존 아이템
+                    packet.DestinationItem = tempItem.ConvertItemInfo(player.Id);   //서버에서 다시 생성한 새로운 아이템
+                    player.Session.Send(packet);
+                    return;
+                }
+                else
+                {
+                    packet.IsSuccess = true;
+                    packet.SourceItem = sourceItem.ConvertItemInfo(player.Id);
+                    packet.DestinationItem = devideItem.ConvertItemInfo(player.Id);
+                    player.Session.Send(packet);
+                    return;
+                }
+            
+            }
+        }
+
+        internal async void MoveItemHandler(Player player, int sourceObjectId, int destinationObjectId, int sourceMoveItemId, int destinationGridX, int destinationGridY, int destinationRotation)
+        {
+            
+            S_MoveItem packet = new S_MoveItem();
+
+            ItemObject sourceMovelItem = ObjectManager.Instance.Find<ItemObject>(sourceMoveItemId);
+            PS_ItemInfo sourceMoveItemInfo = sourceMovelItem.ConvertItemInfo(player.Id);
+
+            Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourceMovelItem);
+            if(sourceStorage == null)
+            {
+                packet.IsSuccess = false;
+                packet.SourceMoveItem = sourceMoveItemInfo;
+                player.Session.Send(packet);
+                return;
+            }
+
+            Storage destinationStorage = GetStorage(player, destinationObjectId);
+            if(sourceStorage == null)
+            {
+                packet.IsSuccess = false;
+                packet.SourceMoveItem = sourceMoveItemInfo;
+                player.Session.Send(packet);
+                return;
+            }
+
+            ItemObject tempItemObject = new ItemObject(sourceMovelItem);
+            bool isDelete = false;
+            {
+                if (IsInventory(sourceObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isDelete = await inventory.DeleteItem(sourceMovelItem);
+                }
+                else
+                {
+                    isDelete = sourceStorage.DeleteItem(sourceMovelItem);
+                }
+            }
+
+            ItemObject newItem = new ItemObject(player.Id, destinationGridX, destinationGridY, destinationRotation, sourceMovelItem.Attributes);
+            bool isInsert = false;
+            {
+                if (IsInventory(destinationObjectId))
+                {
+                    Inventory inventory = player.inventory;
+                    isInsert = await inventory.InsertItem(newItem);
+                }
+                else
+                {
+                    isInsert = destinationStorage.InsertItem(newItem);
+                }
+
+                if(false == isInsert)
+                {
+                    if (IsInventory(sourceObjectId))
+                    {
+                        Inventory inventory = player.inventory;
+                        await inventory.InsertItem(tempItemObject);
+                    }
+                    else
+                    {
+                        sourceStorage.InsertItem(tempItemObject);
+                    }
+                }
+
+            }
+
+            if (isInsert == false || isDelete == false)
+            {
+                packet.IsSuccess = false;
+                packet.SourceObjectId = sourceObjectId;
+                packet.SourceMoveItem = sourceMoveItemInfo;
+                packet.DestinationMoveItem = tempItemObject.ConvertItemInfo(player.Id);
+                player.Session.Send(packet);
+                return;
+            }
+
+            packet.IsSuccess = true;
+            packet.SourceObjectId = sourceObjectId;
+            packet.DestinationObjectId = destinationObjectId;
+            packet.SourceMoveItem = sourceMoveItemInfo;
+            packet.DestinationMoveItem = newItem.ConvertItemInfo(player.Id);
+            player.Session.Send(packet);
+        }
+
+        internal async void DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
+        {
+            S_DeleteItem packet = new S_DeleteItem();
+
+            ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
+            PS_ItemInfo deleteInfo = deleteItem.ConvertItemInfo(player.Id);
+
+            Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
+            if (storage == null)
+            {
+                packet.IsSuccess = false;
+                packet.DeleteItem = deleteInfo;
+                player.Session.Send(packet);
+                return;
+            }
+
+            bool isDelete = false;
+            if (IsInventory(sourceObjectId))
+            {
+                Inventory inventory = player.inventory;
+                isDelete = await inventory.DeleteItem(deleteItem);
             }
             else
             {
-                RootableObject box = ObjectManager.Instance.Find<RootableObject>(inventoryId);
-                Player enemyPlayer = ObjectManager.Instance.Find<Player>(inventoryId); // playerId를 사용하여 Player를 찾음
-
-                if (box != null)
-                {
-                    Console.WriteLine($"handle box id : {box.Id}");
-                    targetData = box.inventory.invenData;
-                }
-
-                if (enemyPlayer != null)
-                {
-                    Console.WriteLine($"handle enemyPlayer id : {enemyPlayer.Id}");
-                    // player 관련 로직 추가
-                }
+                isDelete = storage.DeleteItem(deleteItem);
             }
-            
-            //Player targetPlayer = ObjectManager.Instance.Find<Player>(objectId);
 
-            S_LoadInventory s_LoadInventory = new S_LoadInventory()
+            if (false == isDelete)
             {
-                PlayerId = objectId,
-                InventoryId = inventoryId,
-                InvenData = targetData //targetPlayer.inventory.invenData,
+                packet.IsSuccess = false;
+                packet.SourceObjectId = sourceObjectId;
+                packet.DeleteItem = deleteInfo;
+                player.Session.Send(packet);
+                return;
+            }
 
-            };
-
-            BroadCast(s_LoadInventory);
-
+            packet.IsSuccess = true;
+            packet.SourceObjectId = sourceObjectId;
+            packet.DeleteItem = deleteInfo;
+            player.Session.Send(packet);
         }
 
-        /*internal void HandleItemMove(Player player, int itemId, int itemPosX, int itemPosY)
+        public bool IsInventory(int storageObjectId)
         {
-            player.inventory.MoveItem(itemId, itemPosX, itemPosY);
-
-            //S_
-            S_MoveItem s_MoveItem = new S_MoveItem()
-            {
-                PlayerId = player.Id,
-                ItemId = itemId,
-                ItemPosX = itemPosX,
-                ItemPosY = itemPosY,
-
-            };
-
-
-            BroadCast(RoomId, );
-
-            // BroadCast()
-        }*/
-        internal void HandleItemMove(Player player, object  _packet)
-        {
-            //player.inventory.MoveItem(itemId, itemPosX, itemPosY);
-            C_MoveItem packet = (C_MoveItem)_packet;
-
-            ItemObject target = ObjectManager.Instance.Find<ItemObject>(packet.ItemData.ItemId);
-            if (target == null)
-            {
-                Console.WriteLine("옮기려는 아이템을 찾지 못함");
-                return;
-            }
-
-            
-            if(packet.LastItemPosX != target.itemDataInfo.ItemPosX || packet.LastItemPosY != target.itemDataInfo.ItemPosY)
-            {
-                Console.WriteLine("이미 누군가 아이템을 옮겨버린");
-                //클라로 옮기기 실패 패킷을 만들어야함(추후 제작)
-                // S_MoveItem패킷에 Success 항목 추가 true면 그대로 false면 클라는 해당 아이템 데이터의 위치대로 옮김
-
-                return;
-            }
-            var invenObjType = ObjectManager.GetObjectTypeById(packet.TargetId);
-            Console.WriteLine(invenObjType);
-            Grid targetGrid = null; //플레이어 혹은 박스에서 해당 패킷에서 주어진 그리드 id로 그리드를 찾음
-
-            if (invenObjType == GameObjectType.Player)
-            {
-                ObjectManager.Instance.Find<Player> (packet.TargetId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
-            }
-            else if(invenObjType == GameObjectType.Box)
-            {
-                ObjectManager.Instance.Find<RootableObject>(packet.TargetId).inventory.instantGrid.TryGetValue(packet.GridId, out targetGrid);
-            }
-
-            if (targetGrid == null)
-            {
-                Console.WriteLine("해당 그리드가 존재하지 않음");
-                return;
-            }
-
-            //유효성 체크후 패킷의 데이터를 그대로 브로드캐스트로 S패킷 전달
-            S_MoveItem s_MoveItem = new S_MoveItem()
-            {
-                PlayerId = player.Id,
-                ItemData = packet.ItemData,
-                TargetId = packet.TargetId,
-                GridId = packet.GridId,
-
-                LastItemPosX = packet.LastItemPosX,
-                LastItemPosY = packet.LastItemPosY,
-                LastItemRotate = packet.LastItemRotate,
-                //TODO : MoveItem 결과
-                //LastInventoryId = packet.in
-                LastGridId = packet.LastGridId,
-            };
-
-            BroadCast(s_MoveItem);
-
-            //서버의 아이템 데이터 변경
-            target.ownerGrid.ownerInventory.MoveItem(target, packet.ItemData, targetGrid);
+            return storageObjectId == 0;
         }
+
+        public Storage GetStorage(Player player, int storageObjectId)
+        {
+            Storage storage = new Storage();
+            if (storageObjectId == 0)
+            {
+                Inventory inventory = player.inventory;
+                if (inventory == null)
+                {
+                    return null;
+                }
+
+                return inventory.storage;
+            }
+            else
+            {
+                BoxObject box = ObjectManager.Instance.Find<BoxObject>(storageObjectId);
+                if (box == null)
+                {
+                    return null;
+                }
+
+                return box.storage;
+            }
+        }
+
+        public Storage GetStorageWithScanItem(Player player, int storageObjectId, ItemObject scanItem)
+        {
+            Storage storage = GetStorage(player, storageObjectId);
+            if(storage == null)
+            {
+                return null;
+            }
+
+            if(scanItem == null)
+            {
+                return null;
+            }
+
+            if (-1 == storage.ScanItem(scanItem))
+            {
+                return null;
+            }
+
+            if(false == scanItem.IsViewer(player.Id))
+            {
+                return null;
+            }
+
+            return storage;
+        }
+
+        ////////////////////////////////////////////
+        //                                        //
+        //               ?????????                //
+        //                                        //
+        ////////////////////////////////////////////
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
@@ -244,13 +690,8 @@ namespace Server
         {
 
             //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
-            foreach (GridDataInfo grid in player.inventory.invenData.GridData)
-            {
-                foreach (ItemDataInfo itemData in grid.ItemList)
-                {
-                    ObjectManager.Instance.Remove(itemData.ItemId);
-                }
-            }
+            player.inventory.ClearInventory();
+            ObjectManager.Instance.Remove(player.inventory.Id);
 
             ObjectManager.Instance.Remove(player.Id);
 
