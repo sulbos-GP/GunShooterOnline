@@ -82,22 +82,55 @@ public class DivideInterface : MonoBehaviour
 
     private void OnScrollbarValueChanged(float value)
     {
+        InventoryController inven = InventoryController.invenInstance;
+        GridObject playerGridObj = inven.playerInvenUI.instantGrid;
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 1)) + 1;
         UpdateCountText();
 
-        if(targetGrid.objectId == 0)
+        if (targetGrid.objectId == 0) //현재 이동하려는 타겟
         {
-            GridObject playerGrid = targetGrid;
-            double result = Math.Round((playerGrid.GridWeight - targetItem.itemWeight) + targetItem.itemData.item_weight * splitAmountIndex, 2);
-            InventoryController.invenInstance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
-
-            if (result > playerGrid.limitWeight)
+            if (targetItem.backUpParentId == 0)
             {
-                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.red;
+                //플 -> 플 = 변화 없음
+                double result = Math.Round(playerGridObj.GridWeight,2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
             }
             else
+            {   //박 -> 플 
+                double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
+
+                if (result > playerGridObj.limitWeight)
+                {
+                    inven.playerInvenUI.weightText.color = Color.red;
+                }
+                else
+                {
+                    inven.playerInvenUI.weightText.color = Color.white;
+                }
+            }
+        }
+        else 
+        {
+            if (targetItem.backUpParentId == 0)
             {
-                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
+                //플 -> 박 = 증가
+                double result = Math.Round(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex, 2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
+
+                if (result > playerGridObj.limitWeight)
+                {
+                    inven.playerInvenUI.weightText.color = Color.red;
+                }
+                else
+                {
+                    inven.playerInvenUI.weightText.color = Color.white;
+                }
+            }
+            else
+            {   //박 -> 박 = 변화없음
+                double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight,2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
             }
         }
     }
@@ -132,6 +165,7 @@ public class DivideInterface : MonoBehaviour
         {
             InventoryController.invenInstance.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
         }
+
         InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
         DestroyInterface();
     }
