@@ -71,6 +71,17 @@ enum ItemType{
     SPOIL= 5;
 }
 
+enum PE_GearPart{
+  NONE          = 0;
+  MainWeapon    = 1;
+  SubWeapon     = 2;
+  Armor         = 3;
+  Backpack      = 4;
+  PocketFirst   = 5;
+  PocketSecond  = 6;
+  PocketThird   = 7;
+}
+
 /*
 enum CreatureState{
   IDLE = 0;
@@ -255,6 +266,12 @@ message S_DeleteItem                        //I14
 
 ////////////////////////////////////////////
 //                                        //
+//                  Gear                  //
+//                                        //
+////////////////////////////////////////////
+
+////////////////////////////////////////////
+//                                        //
 //                 ????                   //
 //                                        //
 ////////////////////////////////////////////
@@ -350,6 +367,7 @@ message ShapeInfo{
     float Height        = 9;//Rectangle
 }
 
+
 message PS_ItemInfo{
     int32       objectId                    = 1;        // 해당 아이템의 고유한 아이디
     int32       itemId                      = 2;        // 아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드)
@@ -359,4 +377,9 @@ message PS_ItemInfo{
     int32       amount                      = 6;        // 아이템의 개수(소모품만 64개까지)
     bool        isSearched                  = 7;        // 플레이어가 해당 아이템을 조회하였는지
 }
+
+message PS_GearInfo{
+    PE_GearPart part = 1;
+}
+
 //--------------- END INFO ----------------

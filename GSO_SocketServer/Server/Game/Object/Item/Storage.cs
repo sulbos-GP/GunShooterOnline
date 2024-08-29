@@ -18,8 +18,8 @@ namespace Server.Game
 
     public class Storage
     {
-        public List<ItemObject> items = new List<ItemObject>();     //저장소에 들어있는 아이템 오브젝트
-        public List<List<int>> grid = new List<List<int>>();        //저장소의 그리드
+        private List<ItemObject> items = new List<ItemObject>();     //저장소에 들어있는 아이템 오브젝트
+        private List<List<int>> grid = new List<List<int>>();        //저장소의 그리드
         private double maxWeight = 0.0;                             //저장소 최대 무게
         private double curWeight = 0.0;                             //저장소 현재 무게
 
@@ -52,6 +52,14 @@ namespace Server.Game
             get
             {
                 return Math.Round(maxWeight - curWeight, 1);
+            }
+        }
+
+        public int ItemCount
+        {
+            get
+            {
+                return items.Count;
             }
         }
 
@@ -283,6 +291,20 @@ namespace Server.Game
                 infos.Add(item.ConvertItemInfo(viewerId));
             }
             return infos;
+        }
+
+        public ItemObject GetItem(int index = 0)
+        {
+            return items[index];
+        }
+
+        public void ClearStorage()
+        {
+            foreach (ItemObject item in items)
+            {
+                item.DestroyItem();
+            }
+            items.Clear();
         }
 
         public void PrintInvenContents()

@@ -12,43 +12,31 @@ namespace Server.Game
 {
     public class ItemObject : GameObject
     {
-        private DB_UnitAttributes attributes = new DB_UnitAttributes();
-        private int x;
-        private int y;
-        private int rotate;
-
+        private DB_Unit unit = new DB_Unit();
         private Dictionary<int, DateTime> viewers = new Dictionary<int, DateTime>();
 
         public ItemObject()
         {
             ObjectType = GameObjectType.Item;
-            x = 0;
-            y = 0;
-            rotate = 0;
         }
 
-        public ItemObject(int gridX, int grixY, int rotate, DB_UnitAttributes attributes)
-        {
-            ObjectType = GameObjectType.Item;
-            
-            this.attributes = attributes;
-
-            this.x = gridX;
-            this.y = grixY;
-            this.rotate = rotate;
-
-        }
-
-        public ItemObject(int viewerId, int gridX, int grixY, int rotate, DB_UnitAttributes attributes) : this(gridX, grixY, rotate, attributes)
-        {
-            viewers.TryAdd(viewerId, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
-        }
-
-        public ItemObject(ItemObject other) : this(other.x, other.y, other.rotate, other.attributes)
+        public ItemObject(ItemObject other) : this(other.unit)
         {
             this.Id = other.Id;
             this.viewers = other.viewers;
         }
+
+        public ItemObject(DB_Unit unit)
+        {
+            ObjectType = GameObjectType.Item;
+            this.unit = unit;
+        }
+
+        public ItemObject(int viewerId, DB_Unit unit) : this(unit)
+        {
+            viewers.TryAdd(viewerId, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
+        }
+
 
         public void CreateItem()
         {
@@ -65,6 +53,32 @@ namespace Server.Game
             get
             {
                 return DatabaseHandler.Context.ItemBase.Get(ItemId);
+            }
+        }
+
+        public DB_Unit Unit
+        {
+            get
+            {
+                return new DB_Unit()
+                {
+                    storage = StorageUnit,
+                    attributes = Attributes,
+                };
+            }
+        }
+
+        public DB_StorageUnit StorageUnit
+        {
+            get
+            {
+                return new DB_StorageUnit()
+                {
+                    grid_x = unit.storage.grid_x,
+                    grid_y = unit.storage.grid_y,
+                    rotation = unit.storage.rotation,
+                    unit_attributes_id = unit.storage.unit_attributes_id
+                };
             }
         }
 
@@ -86,7 +100,15 @@ namespace Server.Game
         {
             get
             {
-                return attributes.item_id;
+                return unit.attributes.item_id;
+            }
+        }
+
+        public string Type
+        {
+            get
+            {
+                return Data.type;
             }
         }
 
@@ -94,7 +116,7 @@ namespace Server.Game
         {
             get
             {
-                return attributes.durability;
+                return unit.attributes.durability;
             }
         }
 
@@ -102,7 +124,23 @@ namespace Server.Game
         {
             get
             {
-                return attributes.unit_storage_id;
+                return unit.attributes.unit_storage_id;
+            }
+            set
+            {
+                unit.attributes.unit_storage_id = value;
+            }
+        }
+
+        public int UnitAttributesId
+        {
+            get
+            {
+                return unit.storage.unit_attributes_id;
+            }
+            set
+            {
+                unit.storage.unit_attributes_id = value;
             }
         }
 
@@ -110,11 +148,11 @@ namespace Server.Game
         {
             get
             {
-                return x;
+                return unit.storage.grid_x;
             }
             set
             {
-                x = value;
+                unit.storage.grid_x = value;
             }
         }
 
@@ -122,11 +160,11 @@ namespace Server.Game
         {
             get
             {
-                return y;
+                return unit.storage.grid_y;
             }
             set
             {
-                y = value;
+                unit.storage.grid_y = value;
             }
         }
 
@@ -134,7 +172,7 @@ namespace Server.Game
         {
             get
             {
-                if (rotate % 2 == 0)
+                if (unit.storage.rotation % 2 == 0)
                 {
                     return Data.scale_x;
                 }
@@ -146,7 +184,7 @@ namespace Server.Game
         {
             get
             {
-                if (rotate % 2 == 0)
+                if (unit.storage.rotation % 2 == 0)
                 {
                     return Data.scale_y;
                 }
@@ -156,10 +194,10 @@ namespace Server.Game
 
         public int Rotate
         {
-            get => rotate;
+            get => unit.storage.rotation;
             set
             {
-                rotate = value;
+                unit.storage.rotation = value;
             }
         }
 
@@ -175,11 +213,11 @@ namespace Server.Game
         {
             get
             {
-                return attributes.amount;
+                return unit.attributes.amount;
             }
             set
             {
-                attributes.amount = value;
+                unit.attributes.amount = value;
             }
         }
 
@@ -207,20 +245,6 @@ namespace Server.Game
         public void AddViewer(int viewerId, int rtt)
         {
             viewers.TryAdd(viewerId, DateTime.UtcNow.AddMicroseconds(-rtt));
-        }
-
-        public DB_StorageUnit ConvertInventoryUnit()
-        {
-            DB_StorageUnit unit = new DB_StorageUnit();
-            unit.grid_x = X;
-            unit.grid_y = Y;
-            unit.rotation = Rotate;
-
-            unit.attributes.item_id = ItemId;
-            unit.attributes.durability = attributes.durability;
-            unit.attributes.unit_storage_id = attributes.unit_storage_id;
-            unit.attributes.amount = Amount;
-            return unit;
         }
 
         public PS_ItemInfo ConvertItemInfo(int viewerId)

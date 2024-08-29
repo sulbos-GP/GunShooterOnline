@@ -9,6 +9,9 @@ namespace Server.Database.Data
 {
     public enum EGearPart
     {
+        [Description("none")]
+        None,
+
         [Description("main_weapon")]
         MainWeapon,
 
