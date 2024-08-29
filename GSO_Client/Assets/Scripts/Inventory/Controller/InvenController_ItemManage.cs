@@ -161,7 +161,8 @@ public partial class InventoryController
         {
             if (SelectedEquip.equippedItem == null)//타입이 일치하고 장착칸에 아이템이 없을경우 -> 해당 장착칸에 아이템 장착
             {
-                EquipSelectedItem();
+                SendMoveItemPacket(SelectedItem);
+                //EquipSelectedItem();
             }
             else //타입이 일치하나 장착칸에 아이템이 있음
             {
