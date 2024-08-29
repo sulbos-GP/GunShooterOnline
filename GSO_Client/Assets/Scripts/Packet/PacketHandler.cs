@@ -46,6 +46,7 @@ internal class PacketHandler
 
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
+        // 1번째 : 적 Spawn 정보 2번째 : box 정보 3번째 : 로컬 플레이어 정보?
         var spawnPacket = (S_Spawn)packet;
         
         foreach (var info in spawnPacket.Objects)
@@ -55,10 +56,16 @@ internal class PacketHandler
             var type = (info.ObjectId >> 24) & 0x7f;
             if ((GameObjectType)type != GameObjectType.Player)
                 continue;
+
+            //체력 STAT 주입
             var Stats = info.StatInfo;
             var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
+
+            //Collider Line 작성
+            //player.SetDrawLine(info.Shape.Width,info.Shape.Height);
+             
         }
         //Debug.Log("S_SpawnHandler");*/
     }
