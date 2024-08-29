@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Xml;
 using UnityEditor;
 using UnityEngine;
 using static UnityEditor.Progress;
@@ -169,8 +170,25 @@ internal class PacketHandler
             packetItemList.Add(convertItem);
         }
 
-        Debug.Log($"{packet.SourceObjectId}의 아이템 설정");
+        foreach (PS_GearInfo packetItem in packet.GearInfos)
+        {
+            ItemData convertItem = new ItemData();
+            convertItem.SetItemData(packetItem.Item);
 
+            EquipSlot targetSlot = GetEquipSlot((int)packetItem.Part); 
+
+            ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
+            InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId,newItem);
+            newItem.SetItem(convertItem);
+            newItem.curEquipSlot = targetSlot;
+
+            
+
+            targetSlot.EquipItem(newItem);
+            Debug.Log($"{convertItem.item_name}");
+        }
+
+        Debug.Log($"{packet.SourceObjectId}의 아이템 설정");
         if(packet.SourceObjectId == 0)
         {
             //플레이어의 인벤토리
@@ -284,6 +302,40 @@ internal class PacketHandler
         InventoryController.invenInstance.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
     }
 
+    private static void AssignEquipOrGrid(int objectId, ref EquipSlot equipSlot, ref GridObject gridObject)
+    {
+
+        if (objectId > 0 && objectId <= 7)
+        {
+            equipSlot = GetEquipSlot(objectId);
+        }
+        else
+        {
+            gridObject = GetGridObject(objectId);
+        }
+    }
+
+    private static EquipSlot GetEquipSlot(int objectId)
+    {
+        switch (objectId)
+        {
+            case 1: return InventoryController.invenInstance.Weapon1;
+            case 2: return InventoryController.invenInstance.Weapon2;
+            case 3: return InventoryController.invenInstance.Armor;
+            case 4: return InventoryController.invenInstance.Bag;
+            case 5: return InventoryController.invenInstance.Consume1;
+            case 6: return InventoryController.invenInstance.Consume2;
+            case 7: return InventoryController.invenInstance.Consume3;
+            default: return null; // objectId가 유효하지 않은 경우 null 반환
+        }
+    }
+
+    private static GridObject GetGridObject(int objectId)
+    {
+
+        return objectId == 0 ? InventoryController.invenInstance.playerInvenUI.instantGrid : InventoryController.invenInstance.otherInvenUI.instantGrid;
+    }
+
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
         /*
@@ -313,40 +365,9 @@ internal class PacketHandler
         EquipSlot sourceEquip = null;
         EquipSlot destinationEquip = null;
 
-        if (packet.SourceObjectId <= 7 && packet.SourceObjectId > 0) {
-            switch (packet.SourceObjectId) {
-                case 1: sourceEquip = invenInstance.Weapon1; break;
-                case 2: sourceEquip = invenInstance.Weapon2; break;
-                case 3: sourceEquip = invenInstance.Armor; break;
-                case 4: sourceEquip = invenInstance.Bag; break;
-                case 5: sourceEquip = invenInstance.Consume1; break;
-                case 6: sourceEquip = invenInstance.Consume2; break;
-                case 7: sourceEquip = invenInstance.Consume3; break;
-            }
-        }
-        else
-        {
-            sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
-        }
+        AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
+        AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
 
-        if (packet.DestinationObjectId <= 7 && packet.DestinationObjectId > 0)
-        {
-            switch (packet.DestinationObjectId)
-            {
-                case 1: destinationEquip = invenInstance.Weapon1; break;
-                case 2: destinationEquip = invenInstance.Weapon2; break;
-                case 3: destinationEquip = invenInstance.Armor; break;
-                case 4: destinationEquip = invenInstance.Bag; break;
-                case 5: destinationEquip = invenInstance.Consume1; break;
-                case 6: destinationEquip = invenInstance.Consume2; break;
-                case 7: destinationEquip = invenInstance.Consume3; break;
-
-            }
-        }
-        else
-        {
-            destinationGrid = packet.DestinationObjectId == 0 ? invenInstance.playerInvenUI.instantGrid : invenInstance.otherInvenUI.instantGrid;
-        }
 
         if (packet.IsSuccess)
         {
@@ -368,9 +389,15 @@ internal class PacketHandler
         else
         {
             Debug.Log("S_MoveItem 실패");
+            if (targetItem.backUpItemGrid != null) {
+                invenInstance.UndoGridSlot(targetItem);
+            }
 
-            ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
-            invenInstance.UndoGridSlot(targetItem);
+            if(packet.DestinationMoveItem != null)
+            {
+                ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
+            }
+            
             invenInstance.UndoItem(targetItem);
         }
 
@@ -402,7 +429,11 @@ internal class PacketHandler
             return;
         }
 
-        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
+        GridObject sourceGrid = null;
+        EquipSlot sourceEquip = null;
+
+        AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
+
 
         if (packet.IsSuccess) {
 
@@ -448,8 +479,13 @@ internal class PacketHandler
             return;
         }
 
-        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
-        GridObject destinationGrid = packet.DestinationObjectId == 0 ? invenInstance.playerInvenUI.instantGrid : invenInstance.otherInvenUI.instantGrid;
+        GridObject sourceGrid = null;
+        GridObject destinationGrid = null;
+        EquipSlot sourceEquip = null;
+        EquipSlot destinationEquip = null;
+
+        AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
+        AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
 
 
         if (packet.IsSuccess)
@@ -504,9 +540,14 @@ internal class PacketHandler
             return;
         }
 
-        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
-        GridObject destinationGrid = packet.DestinationObjectId == 0 ? destinationGrid = invenInstance.playerInvenUI.instantGrid : destinationGrid = invenInstance.otherInvenUI.instantGrid;
-        
+        GridObject sourceGrid = null;
+        GridObject destinationGrid = null;
+        EquipSlot sourceEquip = null;
+        EquipSlot destinationEquip = null;
+
+        AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
+        AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
+
         if (packet.IsSuccess)
         {
             Debug.Log($"원래 아이디 = {packet.SourceItem.ObjectId}, 새로 생성된 아이디 = {packet.DestinationItem.ObjectId}");
@@ -529,7 +570,6 @@ internal class PacketHandler
         }
 
         invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
-
         invenInstance.playerInvenUI.WeightTextSet(
                 invenInstance.playerInvenUI.instantGrid.GridWeight,
                 invenInstance.playerInvenUI.instantGrid.limitWeight);

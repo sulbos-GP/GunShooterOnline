@@ -209,7 +209,7 @@ public class GridObject : MonoBehaviour
         }
 
 
-        if (placeItem.backUpItemGrid.objectId == 0)
+        if (placeItem.curItemGrid.objectId == 0)
         {
             itemWeight = 0;
         }

@@ -30,7 +30,10 @@ public partial class InventoryController
     {
         item.backUpItemPos = item.itemData.pos; //현재 위치
         item.backUpItemRotate = item.itemData.rotate; //현재 회전
-        item.backUpItemGrid = item.curItemGrid; //현재 그리드
+
+        
+        item.backUpItemGrid =item.curItemGrid != null ? item.curItemGrid : null; //현재 그리드
+        item.backUpEquipSlot = item.curEquipSlot != null ? item.curEquipSlot : null; 
     }
 
     /// <summary>
@@ -46,13 +49,23 @@ public partial class InventoryController
     /// </summary>
     public void UndoItem(ItemObject item)
     {
-        //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
         item.itemData.pos = item.backUpItemPos;
         item.itemData.rotate = item.backUpItemRotate;
-        item.curItemGrid = item.backUpItemGrid;
         item.Rotate(item.itemData.rotate);
 
-        item.backUpItemGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
+        //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
+        if (item.backUpItemGrid != null)
+        {
+            item.curItemGrid = item.backUpItemGrid;
+            item.curEquipSlot = null;
+            item.backUpItemGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
+        }
+        else if (item.backUpEquipSlot != null) 
+        {
+            item.curEquipSlot = item.backUpEquipSlot;
+            item.curItemGrid = null;
+            item.backUpEquipSlot.EquipItem(item);
+        }
     }
 
 

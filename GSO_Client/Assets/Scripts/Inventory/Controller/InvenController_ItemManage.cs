@@ -162,7 +162,6 @@ public partial class InventoryController
             if (SelectedEquip.equippedItem == null)//타입이 일치하고 장착칸에 아이템이 없을경우 -> 해당 장착칸에 아이템 장착
             {
                 SendMoveItemPacket(SelectedItem);
-                //EquipSelectedItem();
             }
             else //타입이 일치하나 장착칸에 아이템이 있음
             {
@@ -180,22 +179,6 @@ public partial class InventoryController
         {
             RejectEquipItem(selectedItem);
         }
-    }
-
-    /// <summary>
-    /// 장비칸이 비어있기에 선택된 아이템을 바로 배치
-    /// </summary>
-    private void EquipSelectedItem()
-    {
-        selectedItem.backUpEquipSlot = selectedEquip;
-        if (selectedItem.backUpItemGrid != null)
-        {
-            selectedItem.backUpItemGrid = null;
-        }
-
-        selectedEquip.EquipItem(selectedItem);
-
-        SelectedItem = null;
     }
 
     /// <summary>

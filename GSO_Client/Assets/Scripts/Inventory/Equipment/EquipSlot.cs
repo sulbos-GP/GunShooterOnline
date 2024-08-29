@@ -32,17 +32,21 @@ public class EquipSlot : MonoBehaviour
 
         //중앙에 배치 및 슬롯의 크기만큼 크기 세팅
         equippedItem.transform.SetParent(transform);
-
-        item.itemData.rotate = 0;
-        item.Rotate(0);
-        originalItemSize = item.GetComponent<RectTransform>().rect.size;
-        AdjustRectTransform(item);
-        equippedItem.GetComponent<RectTransform>().localPosition = Vector3.zero;
+        SetEquipItemObj(item);
 
         ApplyItemEffects(equippedItem);
 
 
         //슬롯 패킷 전송?
+    }
+
+    public void SetEquipItemObj(ItemObject item)
+    {
+        item.itemData.rotate = 0;
+        item.Rotate(0);
+        originalItemSize = item.GetComponent<RectTransform>().rect.size;
+        AdjustRectTransform(item);
+        item.GetComponent<RectTransform>().localPosition = Vector3.zero;
     }
 
     private void AdjustRectTransform(ItemObject item)
