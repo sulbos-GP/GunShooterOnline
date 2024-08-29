@@ -22,7 +22,7 @@ namespace Server.Database.Game
 
     public partial class GameDB : MySQL, IGameDatabase
     {
-        public async Task<IEnumerable<DB_StorageUnit>> LoadInventory(int storage_id)
+        public async Task<IEnumerable<DB_Unit>> LoadInventory(int storage_id)
         {
             var query = this.GetQueryFactory();
 
@@ -43,12 +43,16 @@ namespace Server.Database.Game
             .Where("storage_unit.storage_id", storage_id)
             .GetAsync();
 
-            var inventory = result.Select(row => new DB_StorageUnit
+            var inventory = result.Select(row => new DB_Unit
             {
-                grid_x = row.grid_x,
-                grid_y = row.grid_y,
-                rotation = row.rotation,
-                unit_attributes_id = row.unit_attributes_id,
+                storage = new DB_StorageUnit
+                {
+                    grid_x = row.grid_x,
+                    grid_y = row.grid_y,
+                    rotation = row.rotation,
+                    unit_attributes_id = row.unit_attributes_id,
+                },
+
                 attributes = new DB_UnitAttributes
                 {
                     item_id = row.item_id,
@@ -61,10 +65,11 @@ namespace Server.Database.Game
             return inventory;
         }
 
-        public async Task<int> InsertItem(int storage_id, DB_StorageUnit unit, IDbTransaction transaction = null)
+        public async Task<int> InsertItem(int storage_id, ItemObject item, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
+            DB_Unit unit = item.Unit;
             int unit_attributes_id = await query.Query("unit_attributes").
                 InsertGetIdAsync<int>(new
                 {
@@ -73,57 +78,78 @@ namespace Server.Database.Game
                     unit_storage_id = unit.attributes.unit_storage_id,
                     amount = unit.attributes.amount
                 }, transaction);
+            item.UnitAttributesId = unit_attributes_id;
 
             return await query.Query("storage_unit").
                 InsertAsync(new
                 {
                     storage_id = storage_id,
-                    grid_x = unit.grid_x,
-                    grid_y = unit.grid_y,
-                    rotation = unit.rotation,
+                    grid_x = unit.storage.grid_x,
+                    grid_y = unit.storage.grid_y,
+                    rotation = unit.storage.rotation,
                     unit_attributes_id = unit_attributes_id,
                 }, transaction);
         }
 
-        public async Task<int> DeleteItem(int storage_id, DB_StorageUnit unit, IDbTransaction transaction = null)
+        public async Task<int> InsertGetStorageId(IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
-            int result = await query.Query("unit_attributes").
-                Where("unit_attributes_id", unit.unit_attributes_id).
-                DeleteAsync(transaction);
+            return await query.Query("storage").
+                InsertGetIdAsync<int>(new
+                {
+                    storage_type = "backpack"
+                }, transaction);
+        }
 
-            var values = new Dictionary<string, object>()
-            {
-                { "storage_id"  , storage_id },
-                { "grid_x"      , unit.grid_x },
-                { "grid_y"      , unit.grid_y },
-                { "rotation"    , unit.rotation }
-            };
+        public async Task<int> DeleteStorage(int? storage_id, IDbTransaction transaction = null)
+        {
+            var query = this.GetQueryFactory();
 
-            return await query.Query("storage_unit").
-                Where(values).
+            return await query.Query("storage").
+                Where("storage_id", storage_id).
                 DeleteAsync(transaction);
         }
 
-        public async Task<int> UpdateItem(int storage_id, DB_StorageUnit oldUnit, DB_StorageUnit curUnit, IDbTransaction transaction = null)
+        public async Task<int> DeleteItem(int storage_id, DB_Unit unit, IDbTransaction transaction = null)
+        {
+            var query = this.GetQueryFactory();
+
+            return await query.Query("unit_attributes").
+                Where("unit_attributes_id", unit.storage.unit_attributes_id).
+                DeleteAsync(transaction);
+
+            //var values = new Dictionary<string, object>()
+            //{
+            //    { "storage_id"  , storage_id },
+            //    { "grid_x"      , unit.storage.grid_x },
+            //    { "grid_y"      , unit.storage.grid_y },
+            //    { "rotation"    , unit.storage.rotation }
+            //};
+
+            //return await query.Query("storage_unit").
+            //    Where(values).
+            //    DeleteAsync(transaction);
+        }
+
+        public async Task<int> UpdateItem(int storage_id, DB_Unit oldUnit, DB_Unit curUnit, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
             var oldValues = new Dictionary<string, object>()
             {
                 { "storage_id"  , storage_id },
-                { "grid_x"      , oldUnit.grid_x },
-                { "grid_y"      , oldUnit.grid_y },
-                { "rotation"    , oldUnit.rotation }
+                { "grid_x"      , oldUnit.storage.grid_x },
+                { "grid_y"      , oldUnit.storage.grid_y },
+                { "rotation"    , oldUnit.storage.rotation }
             };
 
             var newValues = new Dictionary<string, object>()
             {
                 { "storage_id"  , storage_id },
-                { "grid_x"      , curUnit.grid_x },
-                { "grid_y"      , curUnit.grid_y },
-                { "rotation"    , curUnit.rotation }
+                { "grid_x"      , curUnit.storage.grid_x },
+                { "grid_y"      , curUnit.storage.grid_y },
+                { "rotation"    , curUnit.storage.rotation }
             };
 
             return await query.Query("storage_unit").

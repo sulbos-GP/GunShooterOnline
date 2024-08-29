@@ -57,41 +57,73 @@ namespace Server.Game.Object.Item
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
             DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(1);
-            DB_UnitAttributes colt45Att = new DB_UnitAttributes()
+            DB_Unit colt45 = new DB_Unit()
             {
-                item_id = colt45Data.item_id,
-                durability = 0,
-                unit_storage_id = null,
-                amount = 1
-            };
+                storage = new DB_StorageUnit()
+                {
+                    grid_x = 0,
+                    grid_y = 0,
+                    rotation = 0,
+                    unit_attributes_id = 0
+                },
 
-            ItemObject colt45Item = new ItemObject(0, 0, 0, colt45Att);
+                attributes = new DB_UnitAttributes()
+                {
+                    item_id = colt45Data.item_id,
+                    durability = 0,
+                    unit_storage_id = null,
+                    amount = 1
+                }
+            };
+            ItemObject colt45Item = new ItemObject(colt45);
             storage.InsertItem(colt45Item);
 
+            //
             DB_ItemBase akData = DatabaseHandler.Context.ItemBase.Get(2);
-            DB_UnitAttributes akAtt = new DB_UnitAttributes()
+            DB_Unit ak47 = new DB_Unit()
             {
-                item_id = akData.item_id,
-                durability = 0,
-                unit_storage_id = null,
-                amount = 1
-            };
+                storage = new DB_StorageUnit()
+                {
+                    grid_x = 3,
+                    grid_y = 0,
+                    rotation = 1,
+                    unit_attributes_id = 0
+                },
 
-            ItemObject akItem = new ItemObject(3, 0, 1, akAtt);
+                attributes = new DB_UnitAttributes()
+                {
+                    item_id = akData.item_id,
+                    durability = 0,
+                    unit_storage_id = null,
+                    amount = 1
+                }
+            };
+            ItemObject akItem = new ItemObject(ak47);
             storage.InsertItem(akItem);
 
+            //
             DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(11);
             for(int i = 0; i < 5; ++i)
             {
-                DB_UnitAttributes bandAtt = new DB_UnitAttributes()
+                DB_Unit band = new DB_Unit()
                 {
-                    item_id = bandData.item_id,
-                    durability = 0,
-                    unit_storage_id = null,
-                    amount = 1 + (i * 5)
-                };
+                    storage = new DB_StorageUnit()
+                    {
+                        grid_x = i,
+                        grid_y = 4,
+                        rotation = 0,
+                        unit_attributes_id = 0
+                    },
 
-                ItemObject bandItem = new ItemObject(i, 4, 0, bandAtt);
+                    attributes = new DB_UnitAttributes()
+                    {
+                        item_id = bandData.item_id,
+                        durability = 0,
+                        unit_storage_id = null,
+                        amount = 1 + (i * 5)
+                    }
+                };
+                ItemObject bandItem = new ItemObject(band);
                 storage.InsertItem(bandItem);
             }
 
