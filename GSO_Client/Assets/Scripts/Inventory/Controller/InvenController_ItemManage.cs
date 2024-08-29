@@ -43,9 +43,7 @@ public partial class InventoryController
             if (isGridSelected)
             {
                 gridPosition = WorldToGridPos();
-                
                 ItemReleaseInGrid(selectedItem, gridPosition);
-                
                 ResetSelection();
                 return;
             }
@@ -84,7 +82,7 @@ public partial class InventoryController
                 {
                     if (!clickedItem.isOnSearching)
                     {
-                        SendSearchItemPacket(clickedItem.backUpItemGrid.objectId, clickedItem);
+                        SendSearchItemPacket(clickedItem.backUpParentId, clickedItem);
                         clickedItem.UnhideItem();
                     }
                 }
@@ -115,7 +113,7 @@ public partial class InventoryController
     private void ItemDivideInGrid(ItemObject item, Vector2Int gridPosition)
     {
         //배치가 불가능하거나 원래 자리라면 Undo
-        if (item.curItemGrid == selectedGrid && item.itemData.pos == gridPosition || !itemPlaceableInGrid)
+        if (item.parentObjId == selectedGrid.objectId && item.itemData.pos == gridPosition || !itemPlaceableInGrid)
         {
             UndoGridSlot(item);
             UndoItem(item);
@@ -140,10 +138,6 @@ public partial class InventoryController
         }
         else
         {
-            Debug.Log("아이템 배치 실패");
-            item.curItemGrid.PrintInvenContents();
-            item.backUpItemGrid.PrintInvenContents();
-
             UndoGridSlot(item);
             UndoItem(item);
         }
@@ -165,6 +159,7 @@ public partial class InventoryController
             }
             else //타입이 일치하나 장착칸에 아이템이 있음
             {
+                /*
                 if (SelectedItem.backUpItemGrid != null)
                 { //그리드 -> 장착칸
                     SwapWithGrid();
@@ -172,15 +167,16 @@ public partial class InventoryController
                 else
                 { //장착칸 -> 장착칸
                     SwapBetweenEquipSlots();
-                }
+                }*/
             }
         }
         else //타입이 일치하지 않을 경우 -> 장착 거부. 넣으려는 아이템을 원래 있던 자리로 귀환시킴
         {
-            RejectEquipItem(selectedItem);
+            //RejectEquipItem(selectedItem);
         }
     }
 
+    /*
     /// <summary>
     /// 장비창의 아이템을 그리드에 넣고 선택한 아이템을 장비창에 배치 혹은 선택된 아이템 undo 
     /// </summary>
@@ -226,8 +222,9 @@ public partial class InventoryController
             UndoGridSlot(SelectedItem);
             UndoItem(SelectedItem);
         }
-    }
+    }*/
 
+    /*
     /// <summary>
     /// 장비창에서 장비창으로 교환 할경우
     /// </summary>
@@ -243,8 +240,9 @@ public partial class InventoryController
         SelectedItem.backUpEquipSlot.EquipItem(targetItem); //선택한 아이템이 있던 장착칸에 장착하려는 칸에 있는 아이템 배치
         targetSlot.EquipItem(selectedItem);
         SelectedItem = null;
-    }
+    }*/
 
+    /*
     /// <summary>
     /// 장비칸에 배치가 불가능할경우 Undo
     /// </summary>
@@ -262,7 +260,7 @@ public partial class InventoryController
             item.backUpEquipSlot.EquipItem(item);
             item = null;
         }
-    }
+    }*/
 
 
     /// <summary>
@@ -331,25 +329,24 @@ public partial class InventoryController
         targetItem.DestroyItem();
     }
 
+    /* 사용안함
     /// <summary>
     /// 그리드에 배치를 성공함 
     /// </summary>
     public void CompleteItemPlacement(ItemObject item, Vector2Int pos)
     {
-        
-
-        if (item.backUpEquipSlot != null) //장착칸 -> 그리드
+        if(item.parentObjId == 0)
         {
-            //item.backUpEquipSlot.equippedItem = null; //이부분이 주석이어도 잘 돌아가는지 체크후 제거할것
-            item.backUpEquipSlot = null;
+            playerInvenUI.instantGrid.PlaceItem(item, pos.x, pos.y);
         }
-
-        item.curItemGrid.PlaceItem(item, pos.x, pos.y);
-
-
+        else
+        {
+            otherInvenUI.instantGrid.PlaceItem(item, pos.x, pos.y);
+        }
+    
         ResetSelection();
 
-    }
+    }*/
 }
 
 

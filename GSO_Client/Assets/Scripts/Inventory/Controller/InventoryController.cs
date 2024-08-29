@@ -73,9 +73,9 @@ public partial class InventoryController : MonoBehaviour
             isGridSelected = selectedGrid != null;
             invenHighlight.SetParent(isGridSelected ? value : null);
 
-            if (isItemSelected)
+            if (isItemSelected && isGridSelected)
             {
-                selectedItem.curItemGrid = value;
+                selectedItem.parentObjId = value.objectId;
             }
         }
     }
@@ -116,7 +116,7 @@ public partial class InventoryController : MonoBehaviour
             }
 
             if (isItemSelected) {
-                selectedItem.curEquipSlot = value;
+                selectedItem.parentObjId = value.slotId;
             }
         }
     }

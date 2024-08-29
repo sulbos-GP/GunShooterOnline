@@ -20,14 +20,7 @@ public class EquipSlot : MonoBehaviour
     {
         //배치에 성공 했을 경우
         equippedItem = item;
-
-        if (equippedItem.curItemGrid != null)
-        {
-            equippedItem.curItemGrid = null;
-            equippedItem.backUpItemGrid = null;
-        }
-
-        equippedItem.backUpEquipSlot = this;
+        equippedItem.backUpParentId = slotId;
 
 
         //중앙에 배치 및 슬롯의 크기만큼 크기 세팅
@@ -116,5 +109,20 @@ public class EquipSlot : MonoBehaviour
         //가방일경우 가방의 기본크기보다 아이템이 많이 들어있으면 제거 불가
 
         //회복용품일 경우 해당 퀵슬롯의 아이템 제거
+    }
+
+    public static EquipSlot GetEquipSlot(int objectId)
+    {
+        switch (objectId)
+        {
+            case 1: return InventoryController.invenInstance.Weapon1;
+            case 2: return InventoryController.invenInstance.Weapon2;
+            case 3: return InventoryController.invenInstance.Armor;
+            case 4: return InventoryController.invenInstance.Bag;
+            case 5: return InventoryController.invenInstance.Consume1;
+            case 6: return InventoryController.invenInstance.Consume2;
+            case 7: return InventoryController.invenInstance.Consume3;
+            default: return null; // objectId가 유효하지 않은 경우 null 반환
+        }
     }
 }

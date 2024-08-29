@@ -92,7 +92,6 @@ public class GridObject : MonoBehaviour
             }
         }
 
-        
         UpdateBackUpSlot();
     }
 
@@ -113,7 +112,7 @@ public class GridObject : MonoBehaviour
         //아이템 백업 변수에 현재 정보 백업
         itemObj.backUpItemPos = itemObj.itemData.pos; //현재 위치
         itemObj.backUpItemRotate = itemObj.itemData.rotate; //현재 회전
-        itemObj.backUpItemGrid = itemObj.curItemGrid; //현재 그리드
+        itemObj.backUpParentId = itemObj.parentObjId; //현재 그리드
         return itemObj;
     }
 
@@ -209,7 +208,7 @@ public class GridObject : MonoBehaviour
         }
 
 
-        if (placeItem.curItemGrid.objectId == 0)
+        if (placeItem.backUpParentId == 0) //체크
         {
             itemWeight = 0;
         }
@@ -301,7 +300,7 @@ public class GridObject : MonoBehaviour
             }
         }
 
-        item.curItemGrid = this;
+        item.parentObjId = objectId;
         UpdateBackUpSlot();
         UpdateItemPosition(item, posX, posY);
     }

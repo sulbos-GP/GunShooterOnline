@@ -48,33 +48,14 @@ public partial class InventoryController
     {
         C_MoveItem packet = new C_MoveItem();
 
-        if (item.backUpItemGrid != null) 
-        {
-            packet.SourceObjectId = item.backUpItemGrid.objectId;
-        }
-        else if(item.backUpEquipSlot != null)
-        {
-            packet.SourceObjectId = item.backUpEquipSlot.slotId;
-        }
-
-        if (item.curItemGrid != null)
-        {
-            packet.DestinationObjectId = item.curItemGrid.objectId;
-            packet.DestinationGridX = pos.x; //옮긴 위치
-            packet.DestinationGridY = pos.y; //옮긴 위치
-            packet.DestinationRotation = item.itemData.rotate; //옮겼을때의 회전
-        }
-        else if (item.curEquipSlot != null) 
-        {
-            packet.DestinationObjectId = item.curEquipSlot.slotId;
-            packet.DestinationGridX = 0; //옮긴 위치
-            packet.DestinationGridY = 0; //옮긴 위치
-            packet.DestinationRotation = 0; //옮겼을때의 회전
-        }
-
+        packet.SourceObjectId = item.backUpParentId;
+        packet.DestinationObjectId = item.parentObjId;
+        packet.DestinationGridX = pos.x; //옮긴 위치
+        packet.DestinationGridY = pos.y; //옮긴 위치
+        packet.DestinationRotation = item.itemData.rotate; //옮겼을때의 회전
+        
         packet.SourceMoveItemId = item.itemData.objectId; 
 
-        
         Debug.Log($"C_MoveItem : {item.itemData.objectId} 아이템 옮김 ");
         Managers.Network.Send(packet);
     }
@@ -83,7 +64,7 @@ public partial class InventoryController
     public void SendDeleteItemPacket(ItemObject item)
     {
         C_DeleteItem packet = new C_DeleteItem();
-        packet.SourceObjectId = item.backUpItemGrid.objectId;
+        packet.SourceObjectId = item.backUpParentId;
         packet.DeleteItemId = item.itemData.objectId;
         Managers.Network.Send(packet);
         Debug.Log($"C_DeleteItem : {item.itemData.objectId} 아이템 삭제");
@@ -93,8 +74,8 @@ public partial class InventoryController
     public void SendMergeItemPacket(ItemObject selectedItem, ItemObject overlapItem,  int itemAmount)
     {
         C_MergeItem packet = new C_MergeItem(); // merge에 combined 수량을 갯수만큼 더한다
-        packet.SourceObjectId = overlapItem.backUpItemGrid.objectId; //combined가 있는 그리드
-        packet.DestinationObjectId = selectedItem.backUpItemGrid.objectId;  //selectedㅇ가 있던 그리드
+        packet.SourceObjectId = overlapItem.backUpParentId; //combined가 있는 그리드
+        packet.DestinationObjectId = selectedItem.backUpParentId;  //selectedㅇ가 있던 그리드
 
         packet.MergedObjectId = overlapItem.itemData.objectId; //감소하는 아이템
         packet.CombinedObjectId = selectedItem.itemData.objectId; 
@@ -107,8 +88,8 @@ public partial class InventoryController
     public void SendDivideItemPacket(ItemObject devideItem, Vector2Int pos, int amount)
     {
         C_DevideItem packet = new C_DevideItem();
-        packet.SourceObjectId = devideItem.backUpItemGrid.objectId;
-        packet.DestinationObjectId = devideItem.curItemGrid.objectId;
+        packet.SourceObjectId = devideItem.backUpParentId;
+        packet.DestinationObjectId = devideItem.backUpParentId;
 
         packet.SourceItemId = devideItem.itemData.objectId;
         packet.DestinationGridX = pos.x;

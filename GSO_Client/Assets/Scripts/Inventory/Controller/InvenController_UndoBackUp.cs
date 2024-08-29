@@ -20,7 +20,21 @@ public partial class InventoryController
     /// </summary>
     public void BackUpGridSlot(ItemObject item)
     {
-        item.backUpItemGrid.UpdateBackUpSlot();
+        if (item.parentObjId > 0 && item.parentObjId <= 7)
+        {
+            return;
+        }
+
+        if (item.backUpParentId == 0) 
+        { 
+            playerInvenUI.instantGrid.UpdateBackUpSlot();
+        }
+        else
+        {
+            otherInvenUI.instantGrid.UpdateBackUpSlot();
+        }
+        
+        
     }
 
     /// <summary>
@@ -31,9 +45,7 @@ public partial class InventoryController
         item.backUpItemPos = item.itemData.pos; //현재 위치
         item.backUpItemRotate = item.itemData.rotate; //현재 회전
 
-        
-        item.backUpItemGrid =item.curItemGrid != null ? item.curItemGrid : null; //현재 그리드
-        item.backUpEquipSlot = item.curEquipSlot != null ? item.curEquipSlot : null; 
+        item.backUpParentId = item.parentObjId;
     }
 
     /// <summary>
@@ -41,7 +53,19 @@ public partial class InventoryController
     /// </summary>
     public void UndoGridSlot(ItemObject item)
     {
-        item.backUpItemGrid.UndoItemSlot();
+        if(item.parentObjId > 0 && item.parentObjId <= 7)
+        {
+            return;
+        }
+
+        if (item.backUpParentId == 0)
+        {
+            playerInvenUI.instantGrid.UndoItemSlot(); ;
+        }
+        else
+        {
+            otherInvenUI.instantGrid.UndoItemSlot();
+        }
     }
 
     /// <summary>
@@ -53,18 +77,20 @@ public partial class InventoryController
         item.itemData.rotate = item.backUpItemRotate;
         item.Rotate(item.itemData.rotate);
 
-        //현재 아이템 오브젝트의 변수를 백업한 변수의 값으로 롤백
-        if (item.backUpItemGrid != null)
+        item.parentObjId = item.backUpParentId;
+
+        if(item.parentObjId >0 && item.parentObjId <= 7)
         {
-            item.curItemGrid = item.backUpItemGrid;
-            item.curEquipSlot = null;
-            item.backUpItemGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
+            EquipSlot targetSlot = EquipSlot.GetEquipSlot(item.parentObjId);
+            targetSlot.EquipItem(item);
         }
-        else if (item.backUpEquipSlot != null) 
+        else if(item.parentObjId == 0)
         {
-            item.curEquipSlot = item.backUpEquipSlot;
-            item.curItemGrid = null;
-            item.backUpEquipSlot.EquipItem(item);
+            playerInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
+        }
+        else
+        {
+            otherInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
         }
     }
 

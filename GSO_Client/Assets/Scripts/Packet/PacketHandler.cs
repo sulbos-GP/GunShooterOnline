@@ -177,25 +177,7 @@ internal class PacketHandler
             packetItemList.Add(convertItem);
         }
 
-        foreach (PS_GearInfo packetItem in packet.GearInfos)
-        {
-            ItemData convertItem = new ItemData();
-            convertItem.SetItemData(packetItem.Item);
-
-            EquipSlot targetSlot = GetEquipSlot((int)packetItem.Part); 
-
-            ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
-            InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId,newItem);
-            newItem.SetItem(convertItem);
-            newItem.curEquipSlot = targetSlot;
-
-            
-
-            targetSlot.EquipItem(newItem);
-            Debug.Log($"{convertItem.item_name}");
-        }
-
-        Debug.Log($"{packet.SourceObjectId}의 아이템 설정");
+        //인벤토리 불러오기
         if(packet.SourceObjectId == 0)
         {
             //플레이어의 인벤토리
@@ -208,6 +190,21 @@ internal class PacketHandler
             playerGrid.UpdateGridWeight();
             playerInvenUI.WeightTextSet(playerGrid.GridWeight, playerGrid.limitWeight);
             playerGrid.PrintInvenContents();
+
+            //장착칸 불러오기
+            foreach (PS_GearInfo packetItem in packet.GearInfos)
+            {
+                ItemData convertItem = new ItemData();
+                convertItem.SetItemData(packetItem.Item);
+
+                EquipSlot targetSlot = EquipSlot.GetEquipSlot((int)packetItem.Part);
+
+                ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
+                InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);
+                newItem.SetItem(convertItem);
+                newItem.parentObjId = targetSlot.slotId;
+                targetSlot.EquipItem(newItem);
+            }
         }
         else
         {
@@ -314,26 +311,11 @@ internal class PacketHandler
 
         if (objectId > 0 && objectId <= 7)
         {
-            equipSlot = GetEquipSlot(objectId);
+            equipSlot = EquipSlot.GetEquipSlot(objectId);
         }
         else
         {
             gridObject = GetGridObject(objectId);
-        }
-    }
-
-    private static EquipSlot GetEquipSlot(int objectId)
-    {
-        switch (objectId)
-        {
-            case 1: return InventoryController.invenInstance.Weapon1;
-            case 2: return InventoryController.invenInstance.Weapon2;
-            case 3: return InventoryController.invenInstance.Armor;
-            case 4: return InventoryController.invenInstance.Bag;
-            case 5: return InventoryController.invenInstance.Consume1;
-            case 6: return InventoryController.invenInstance.Consume2;
-            case 7: return InventoryController.invenInstance.Consume3;
-            default: return null; // objectId가 유효하지 않은 경우 null 반환
         }
     }
 
@@ -395,16 +377,11 @@ internal class PacketHandler
         }
         else
         {
-            Debug.Log("S_MoveItem 실패");
-            if (targetItem.backUpItemGrid != null) {
-                invenInstance.UndoGridSlot(targetItem);
-            }
-
             if(packet.DestinationMoveItem != null)
             {
                 ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
             }
-            
+            invenInstance.UndoGridSlot(targetItem); // 수정예정
             invenInstance.UndoItem(targetItem);
         }
 
@@ -499,16 +476,16 @@ internal class PacketHandler
         {
             mergedItem.ItemAmount = packet.MergedItem.Amount;
 
-            if(packet.CombinedItem.Amount == 0)
+            combinedItem.ItemAmount = packet.CombinedItem.Amount;
+            if (packet.CombinedItem.Amount == 0)
             {
+                
                 invenInstance.DestroyItem(combinedItem);
             }
             else
             {
                 invenInstance.UndoGridSlot(combinedItem);
                 invenInstance.UndoItem(combinedItem);
-                
-                combinedItem.ItemAmount = packet.CombinedItem.Amount;
             }
 
         }

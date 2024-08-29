@@ -76,12 +76,8 @@ public class ItemObject : MonoBehaviour
 
     public double itemWeight; //지금까지 쓰인 itemData.itme_weight를  이변수로 바꿀것
 
-    public GridObject curItemGrid;
-    public GridObject backUpItemGrid;
-
-    public EquipSlot curEquipSlot;
-    public EquipSlot backUpEquipSlot;
-
+    public int parentObjId;
+    public int backUpParentId;
 
     private void Init()
     {
