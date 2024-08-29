@@ -100,6 +100,7 @@ message C_EnterGame{                                //9
 message S_EnterGame{                       //0
     ObjectInfo player = 1;
     repeated PS_ItemInfo itemInfos = 2;
+    repeated PS_GearInfo gearInfos = 3;
 }
 
 message S_LeaveGame{                       //1
@@ -158,6 +159,7 @@ message S_LoadInventory                     //I2
 
     int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
     repeated PS_ItemInfo itemInfos  = 3;    // 저장소에 있는 아이템들
+    repeated PS_GearInfo gearInfos  = 4;    // 장비에 있는 아이템들
 }
 
 message C_CloseInventory{                   //I3
@@ -379,7 +381,8 @@ message PS_ItemInfo{
 }
 
 message PS_GearInfo{
-    PE_GearPart part = 1;
+    PE_GearPart part                        = 1;        // 장비 아이템 번호
+    PS_ItemInfo item                        = 2;        // 아이템 정보
 }
 
 //--------------- END INFO ----------------
