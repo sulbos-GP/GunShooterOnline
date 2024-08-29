@@ -173,58 +173,6 @@ namespace Server.Game
             return true;
         }
 
-        //public async Task<bool> DevideItem(bool isSource, DB_Unit oldInvenUnit, DB_Unit newInvenUnit)
-        //{
-        //    using (var database = DatabaseHandler.GameDB)
-        //    {
-
-        //        using (var transaction = database.GetConnection().BeginTransaction())
-        //        {
-        //            try
-        //            {
-
-        //                if(isSource)
-        //                {
-        //                    if (newInvenUnit.attributes.amount > 0)
-        //                    {
-        //                        //인벤토리 아이템이 증가
-        //                        //인벤토리 아이템이 감소
-        //                        if (0 == await database.UpdateItem(storage_id, oldInvenUnit, newInvenUnit, transaction))
-        //                        {
-        //                            throw new Exception("인벤토리에서 아이템 업데이트 안됨");
-        //                        }
-        //                    }
-        //                    else
-        //                    {
-        //                        //인벤토리 아이템이 삭제
-        //                        if (0 == await database.DeleteItem(storage_id, oldInvenUnit, transaction))
-        //                        {
-        //                            throw new Exception("인벤토리에서 아이템 삭제가 안됨");
-        //                        }
-        //                    }
-        //                }
-        //                else
-        //                {
-        //                    //if (0 == await database.InsertItem(storage_id, oldInvenUnit, transaction))
-        //                    //{
-        //                    //    throw new Exception("인벤토리에서 아이템 삽입이 안됨");
-        //                    //}
-        //                }
-
-
-        //                transaction.Commit();
-        //                return true;
-        //            }
-        //            catch (Exception e)
-        //            {
-        //                Console.WriteLine($"[DevideItem] : {e.Message.ToString()}");
-        //                transaction.Rollback();
-        //                return false;
-        //            }
-        //        }
-        //    }
-        //}
-
         public void ClearInventory()
         {
             storage.ClearStorage();

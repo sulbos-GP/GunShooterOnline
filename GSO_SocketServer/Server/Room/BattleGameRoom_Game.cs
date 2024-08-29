@@ -385,13 +385,27 @@ namespace Server
                     return;
                 }
 
-                DB_Unit devideUnit = sourceItem.Unit;
+                DB_Unit devideUnit = new DB_Unit()
+                {
+                    attributes = new DB_UnitAttributes()
+                    {
+                        item_id = sourceItem.ItemId,
+                        amount = devideNumber,
+                        durability = 0,
+                        unit_storage_id = null,
+                    },
+
+                    storage = new DB_StorageUnit()
+                    {
+                        grid_x = destinationGridX,
+                        grid_y = destinationGridY,
+                        rotation = destinationRotation,
+                        unit_attributes_id = 0,
+                    }
+                };
                 devideUnit.attributes.amount = devideNumber;
 
                 ItemObject devideItem = new ItemObject(player.Id, devideUnit);
-                DB_Unit oldDevideUnit = devideItem.Unit;
-                PS_ItemInfo oldDevideItemInfo = devideItem.ConvertItemInfo(player.Id);
-
 
                 //SourcelItem의 수량을 DevideNumber만큼 감소
                 int lessAmount = sourceStorage.DecreaseAmount(sourceItem, devideNumber);
@@ -435,50 +449,73 @@ namespace Server
                     }
                 }
 
-                bool isDevide = false;
-                //if (IsInventory(sourceObjectId) && IsInventory(destinationObjectId))
-                //{
-                //    Inventory inventory = player.inventory;
-                //    isDevide = await inventory.DevideItem(oldSourceUnit, sourceItem.Unit, devideItem.Unit);
-                //}
-                //else if (IsInventory(sourceObjectId))
-                //{
-                //    Inventory inventory = player.inventory;
-                //    isDevide = await inventory.DevideItem(true, oldSourceUnit, sourceItem.Unit);
-                //}
-                //else if (IsInventory(destinationObjectId))
-                //{
-                //    Inventory inventory = player.inventory;
-                //    isDevide = await inventory.DevideItem(false, oldDevideUnit, devideItem.Unit);
-                //}
-                //else
-                //{
-                //    isDevide = true;
-                //}
-
-                if (false == isDevide)
+                using (var database = DatabaseHandler.GameDB)
                 {
-                    if (lessAmount == 0)
+                    using (var transaction = database.GetConnection().BeginTransaction())
                     {
-                        destinationStorage.DeleteItem(devideItem);
-                        sourceStorage.InsertItem(tempItem);
-                    }
+                        try
+                        {
+                            if (IsInventory(sourceObjectId))
+                            {
+                                Inventory inventory = player.inventory;
+                                if (sourceItem.Amount > 0)
+                                {
+                                    await inventory.UpdateItemAttributes(sourceItem, database, transaction);
+                                }
+                                else
+                                {
+                                    await inventory.DeleteItem(sourceItem, database, transaction);
+                                }
+                            }
+                            else if (IsGear(sourceObjectId))
+                            {
+                                Gear gear = player.gear;
+                                if (sourceItem.Amount > 0)
+                                {
+                                    await gear.UpdateItemAttributes(sourceItem, database, transaction);
+                                }
+                                else
+                                {
+                                    await gear.DeleteGear((EGearPart)destinationObjectId, sourceItem, database, transaction);
+                                }
+                            }
+                            
+                            if (IsInventory(destinationObjectId))
+                            {
+                                Inventory inventory = player.inventory;
+                                await inventory.InsertItem(devideItem, database, transaction);
+                            }
+                            else if (IsGear(destinationObjectId))
+                            {
+                                Gear gear = player.gear;
+                                await gear.InsertGear((EGearPart)destinationObjectId, devideItem, database, transaction);
+                            }
 
-                    packet.IsSuccess = false;
-                    packet.SourceItem = oldSourceItemInfo;                          //클라이언트에 남아있는 기존 아이템
-                    packet.DestinationItem = tempItem.ConvertItemInfo(player.Id);   //서버에서 다시 생성한 새로운 아이템
-                    player.Session.Send(packet);
-                    return;
-                }
-                else
-                {
-                    packet.IsSuccess = true;
-                    packet.SourceItem = sourceItem.ConvertItemInfo(player.Id);
-                    packet.DestinationItem = devideItem.ConvertItemInfo(player.Id);
-                    player.Session.Send(packet);
-                    return;
-                }
-            
+                            transaction.Commit();
+
+                            packet.IsSuccess = true;
+                            packet.SourceItem = sourceItem.ConvertItemInfo(player.Id);
+                            packet.DestinationItem = devideItem.ConvertItemInfo(player.Id);
+                            player.Session.Send(packet);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine($"[DevideItem] : {e.Message.ToString()}");
+                            transaction.Rollback();
+
+                            if (lessAmount == 0)
+                            {
+                                destinationStorage.DeleteItem(devideItem);
+                                sourceStorage.InsertItem(tempItem);
+                            }
+
+                            packet.IsSuccess = false;
+                            packet.SourceItem = oldSourceItemInfo;                          //클라이언트에 남아있는 기존 아이템
+                            packet.DestinationItem = tempItem.ConvertItemInfo(player.Id);   //서버에서 다시 생성한 새로운 아이템
+                            player.Session.Send(packet);
+                        }
+                    }
+                }           
             }
         }
 
