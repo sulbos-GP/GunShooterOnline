@@ -78,7 +78,7 @@ namespace Server.Game.Object.Gear
                 infos.Add(info);
 
             }
-            return storage.GetItem();
+            return infos;
         }
 
         public void InitGear()
