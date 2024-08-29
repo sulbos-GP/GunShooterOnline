@@ -44,7 +44,7 @@ namespace Server.Database.Data
         public readonly int purchase_price;
         public readonly double inquiry_time;
         public readonly int sell_price;
-        public readonly int stack_count;
+        public readonly int amount;
         public readonly string icon;
     }
 

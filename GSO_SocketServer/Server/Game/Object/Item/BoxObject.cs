@@ -56,7 +56,7 @@ namespace Server.Game.Object.Item
             //임의의 아이템
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
-            DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(1);
+            DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(101);
             DB_Unit colt45 = new DB_Unit()
             {
                 storage = new DB_StorageUnit()
@@ -79,7 +79,7 @@ namespace Server.Game.Object.Item
             storage.InsertItem(colt45Item);
 
             //
-            DB_ItemBase akData = DatabaseHandler.Context.ItemBase.Get(2);
+            DB_ItemBase akData = DatabaseHandler.Context.ItemBase.Get(102);
             DB_Unit ak47 = new DB_Unit()
             {
                 storage = new DB_StorageUnit()
@@ -102,7 +102,7 @@ namespace Server.Game.Object.Item
             storage.InsertItem(akItem);
 
             //
-            DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(11);
+            DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(402);
             for(int i = 0; i < 5; ++i)
             {
                 DB_Unit band = new DB_Unit()
