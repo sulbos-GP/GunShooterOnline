@@ -38,12 +38,12 @@ public class ItemData
         item_weight = Math.Round(itemDB.weight,2); //아이템의 무게
         
         switch (itemDB.type) {
-            case eITEM_TYPE.weapone: item_type = ItemType.Weapon; break;
-            case eITEM_TYPE.defensive: item_type = ItemType.Defensive; break;
-            case eITEM_TYPE.bag: item_type = ItemType.Bag; break;
-            case eITEM_TYPE.recovery: item_type = ItemType.Recovery; break;
-            case eITEM_TYPE.bullet: item_type = ItemType.Bullet; break;
-            case eITEM_TYPE.spoil: item_type = ItemType.Spoil; break;
+            case eITEM_TYPE.Weapone: item_type = ItemType.Weapon; break;
+            case eITEM_TYPE.Defensive: item_type = ItemType.Defensive; break;
+            case eITEM_TYPE.Bag: item_type = ItemType.Bag; break;
+            case eITEM_TYPE.Recovery: item_type = ItemType.Recovery; break;
+            case eITEM_TYPE.Bullet: item_type = ItemType.Bullet; break;
+            case eITEM_TYPE.Spoil: item_type = ItemType.Spoil; break;
         }
 
         item_string_value = itemDB.description;
@@ -52,7 +52,7 @@ public class ItemData
         item_searchTime = itemDB.inquiry_time;
         width = itemDB.scale_x;
         height = itemDB.scale_y;
-        isItemConsumeable = itemDB.type == eITEM_TYPE.recovery || itemDB.type == eITEM_TYPE.bullet;
+        isItemConsumeable = itemDB.type == eITEM_TYPE.Recovery || itemDB.type == eITEM_TYPE.Bullet;
         icon = itemDB.icon;
     }
 
