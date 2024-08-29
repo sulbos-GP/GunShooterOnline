@@ -112,5 +112,27 @@ namespace Server.Database.Game
                 .Where(values)
                 .DeleteAsync(transaction);
         }
+
+        public async Task<int> UpdateGear(int uid, ItemObject oldItem, ItemObject newItem, EGearPart part, IDbTransaction transaction = null)
+        {
+            var query = this.GetQueryFactory();
+
+            var oldValues = new Dictionary<string, object>()
+            {
+                { "uid"  , uid },
+                { "part" , part.GetType().GetField(part.ToString()) },
+                { "unit_attributes_id", oldItem.UnitAttributesId }
+            };
+
+            var newValues = new Dictionary<string, object>()
+            {
+                { "part" , part.GetType().GetField(part.ToString()) },
+                { "unit_attributes_id", newItem.UnitAttributesId },
+            };
+
+            return await query.Query("gear")
+                .Where(oldValues)
+                .UpdateAsync(newValues, transaction);
+        }
     }
 }

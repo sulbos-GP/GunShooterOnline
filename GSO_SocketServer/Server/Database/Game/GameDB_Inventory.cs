@@ -132,10 +132,11 @@ namespace Server.Database.Game
             //    DeleteAsync(transaction);
         }
 
-        public async Task<int> UpdateItem(int storage_id, DB_Unit oldUnit, DB_Unit curUnit, IDbTransaction transaction = null)
+        public async Task<int> UpdateItem(int storage_id, ItemObject oldItem, ItemObject newItem, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
+            DB_Unit oldUnit = oldItem.Unit;
             var oldValues = new Dictionary<string, object>()
             {
                 { "storage_id"  , storage_id },
@@ -144,12 +145,13 @@ namespace Server.Database.Game
                 { "rotation"    , oldUnit.storage.rotation }
             };
 
+            DB_Unit newUnit = newItem.Unit;
             var newValues = new Dictionary<string, object>()
             {
                 { "storage_id"  , storage_id },
-                { "grid_x"      , curUnit.storage.grid_x },
-                { "grid_y"      , curUnit.storage.grid_y },
-                { "rotation"    , curUnit.storage.rotation }
+                { "grid_x"      , newUnit.storage.grid_x },
+                { "grid_y"      , newUnit.storage.grid_y },
+                { "rotation"    , newUnit.storage.rotation }
             };
 
             return await query.Query("storage_unit").
@@ -157,20 +159,21 @@ namespace Server.Database.Game
                 UpdateAsync(newValues, transaction);
         }
 
-        public async Task<int> UpdateItemAttributes(int unit_attributes_id, DB_UnitAttributes attributes,  IDbTransaction transaction = null)
+        public async Task<int> UpdateItemAttributes(ItemObject item,  IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
+            DB_Unit unit = item.Unit;
             var newValues = new Dictionary<string, object>()
             {
-                { "item_id"     , attributes.item_id },
-                { "durability"  , attributes.durability },
-                { "storage_id"  , attributes.unit_storage_id },
-                { "amount"      , attributes.amount },
+                { "item_id"     , unit.attributes.item_id },
+                { "durability"  , unit.attributes.durability },
+                { "unit_storage_id"  , unit.attributes.unit_storage_id },
+                { "amount"      , unit.attributes.amount },
             };
 
             return await query.Query("unit_attributes").
-                Where("unit_attributes_id", unit_attributes_id).
+                Where("unit_attributes_id", unit.storage.unit_attributes_id).
                 UpdateAsync(newValues, transaction);
         }
 
