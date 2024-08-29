@@ -35,15 +35,15 @@ CREATE TABLE IF NOT EXISTS master_item_base (
     purchase_price 				INT 			NOT NULL 	COMMENT '아이템 구매 가격',
 	inquiry_time 				DOUBLE 			NOT NULL 	COMMENT '아이템 조회 시간',
     sell_price 					INT 			NOT NULL 	COMMENT '아이템 판매 가격',
-    stack_count					INT				NOT NULL	COMMENT '스택 카운터',
+    amount						INT				NOT NULL	COMMENT '수량',
 	#loot_xp 					INT 			NOT NULL 	COMMENT '획득 경험치',
 	#exam_xp 					INT 			NOT NULL 	COMMENT '조사 경험치',
-	prefab						VARCHAR(50) 	NOT NULL 	COMMENT '아이템 프리펩 경로',
     icon						VARCHAR(50) 	NOT NULL 	COMMENT '아이템 아이콘 경로',
         
     PRIMARY KEY (item_id),
 	UNIQUE KEY (code)
 );
+
 
 #아이템 정보
 CREATE TABLE IF NOT EXISTS master_item_backpack (

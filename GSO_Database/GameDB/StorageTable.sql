@@ -44,3 +44,6 @@ CREATE TABLE IF NOT EXISTS storage_unit (
 SELECT * FROM storage;
 SELECT * FROM unit_attributes;
 SELECT * FROM storage_unit;
+
+#DELETE FROM storage_unit;
+#DELETE FROM unit_attributes WHERE unit_attributes_id=11;

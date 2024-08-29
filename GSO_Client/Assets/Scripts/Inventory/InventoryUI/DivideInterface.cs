@@ -51,6 +51,7 @@ public class DivideInterface : MonoBehaviour
         scrollBar.value = splitAmountIndex/maxAmountIndex;
 
         AddButtonHandler();
+
     }
 
     public void SetInterfacePos(ItemObject item)
@@ -87,7 +88,7 @@ public class DivideInterface : MonoBehaviour
         if(targetGrid.objectId == 0)
         {
             GridObject playerGrid = targetGrid;
-            double result = Math.Round(playerGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
+            double result = Math.Round((playerGrid.GridWeight - targetItem.itemWeight) + targetItem.itemData.item_weight * splitAmountIndex, 2);
             InventoryController.invenInstance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
 
             if (result > playerGrid.limitWeight)

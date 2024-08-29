@@ -84,7 +84,7 @@ CREATE TABLE `master_item_backpack` (
 
 LOCK TABLES `master_item_backpack` WRITE;
 /*!40000 ALTER TABLE `master_item_backpack` DISABLE KEYS */;
-INSERT INTO `master_item_backpack` VALUES (7,3,4,10),(8,5,5,15),(9,7,6,20);
+INSERT INTO `master_item_backpack` VALUES (301,3,4,10),(302,5,5,15),(303,7,6,20);
 /*!40000 ALTER TABLE `master_item_backpack` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -107,8 +107,7 @@ CREATE TABLE `master_item_base` (
   `purchase_price` int(11) NOT NULL COMMENT '아이템 구매 가격',
   `inquiry_time` double NOT NULL COMMENT '아이템 조회 시간',
   `sell_price` int(11) NOT NULL COMMENT '아이템 판매 가격',
-  `stack_count` int(11) NOT NULL COMMENT '스택 카운터',
-  `prefab` varchar(50) NOT NULL COMMENT '아이템 프리펩 경로',
+  `amount` int(11) NOT NULL COMMENT '수량',
   `icon` varchar(50) NOT NULL COMMENT '아이템 아이콘 경로',
   PRIMARY KEY (`item_id`),
   UNIQUE KEY `code` (`code`)
@@ -121,7 +120,7 @@ CREATE TABLE `master_item_base` (
 
 LOCK TABLES `master_item_base` WRITE;
 /*!40000 ALTER TABLE `master_item_base` DISABLE KEYS */;
-INSERT INTO `master_item_base` VALUES (1,'W001','Colt45',2,'weapone',101,2,2,400,0.5,100,1,'0','0'),(2,'W002','Ak47',7,'weapone',102,4,2,2200,0.6,500,1,'0','0'),(3,'W003','Aug',6,'weapone',103,4,2,2300,0.4,440,1,'0','0'),(4,'D001','경찰조끼',3,'defensive',201,2,3,1100,0.1,550,1,'0','0'),(5,'D002','방탄조끼',4,'defensive',202,2,3,1500,0.2,750,1,'0','0'),(6,'D003','군용조끼',5,'defensive',203,2,3,1700,0.3,850,1,'0','0'),(7,'B001','의약품가방',3,'bag',301,2,2,500,0.4,250,1,'0','0'),(8,'B002','군대가방',3,'bag',302,2,2,1500,0.5,750,1,'0','0'),(9,'B003','군용더블백',4,'bag',303,2,2,2500,0.6,1300,1,'0','0'),(10,'R001','의약품상자',1,'recovery',401,1,1,500,0.7,200,1,'0','0'),(11,'R002','밴드',0.2,'recovery',402,1,1,100,0.8,50,64,'0','0'),(12,'R003','아드레날린',0.2,'recovery',403,1,1,1000,0.9,600,1,'0','0'),(13,'R004','알약',0.2,'recovery',404,1,1,500,0.1,300,64,'0','0'),(14,'E001','5.59mm',0.3,'bullet',501,1,1,10,0.2,0,64,'0','0'),(15,'E002','7.29mm',0.3,'bullet',502,1,1,10,0.3,0,64,'0','0'),(16,'S001','타이어휠',10,'spoil',601,4,4,0,0.4,2000,1,'0','0'),(17,'S002','1.5볼트건전지',2,'spoil',602,1,2,0,0.5,600,1,'0','0'),(18,'S003','밧줄한묶음',6,'spoil',603,1,3,0,0.6,500,1,'0','0'),(19,'S004','은도금톱니바퀴',8,'spoil',604,3,3,0,0.7,200,1,'0','0'),(20,'S005','금괴',5,'spoil',605,2,1,0,0.8,2000,1,'0','0'),(21,'S006','통나무',3,'spoil',606,2,2,0,0.9,250,1,'0','0');
+INSERT INTO `master_item_base` VALUES (101,'W001','Colt45',2,'Weapone',101,2,2,400,1.2,100,1,'IconW_colt'),(102,'W002','Ak47',7,'Weapone',102,4,2,2200,1.8,500,1,'IconW_ak'),(103,'W003','Aug',6,'Weapone',103,4,2,2300,1.8,440,1,'IconW_aug'),(201,'D001','경찰조끼',3,'Defensive',201,2,3,1100,1.5,550,1,'IconD_police'),(202,'D002','방탄조끼',4,'Defensive',202,2,3,1500,1.5,750,1,'IconD_proof'),(203,'D003','군용조끼',5,'Defensive',203,2,3,1700,1.5,850,1,'IconD_military'),(301,'B001','의약품가방',3,'Bag',301,2,2,500,1.4,250,1,'IconB_medical'),(302,'B002','군대가방',3,'Bag',302,2,2,1500,1.4,750,1,'IconB_army'),(303,'B003','군용더블백',4,'Bag',303,2,2,2500,1.4,1300,1,'IconB_double'),(401,'R001','의약품상자',1,'Recovery',401,1,1,500,0.7,200,1,'IconR_medical'),(402,'R002','밴드',0.2,'Recovery',402,1,1,100,0.7,50,64,'IconR_band'),(403,'R003','아드레날린',0.2,'Recovery',403,1,1,1000,0.7,600,1,'IconR_Adrenaline'),(404,'R004','알약',0.2,'Recovery',404,1,1,500,0.7,300,64,'IconR_pill'),(501,'E001','5.59mm',0.3,'Bullet',501,1,1,10,0.4,0,64,'IconE_5.59'),(502,'E002','7.29mm',0.3,'Bullet',502,1,1,10,0.4,0,64,'IconE_7.29'),(601,'S001','타이어휠',10,'Spoil',601,4,4,0,2.2,2000,1,'IconS_spoil'),(602,'S002','1.5볼트건전지',2,'Spoil',602,1,2,0,1.2,600,1,'IconS_battery'),(603,'S003','밧줄한묶음',6,'Spoil',603,1,3,0,1.3,500,1,'IconS_rope'),(604,'S004','은도금톱니바퀴',8,'Spoil',604,3,3,0,1.8,200,1,'IconS_wheel'),(605,'S005','금괴',5,'Spoil',605,2,1,0,1.2,2000,1,'IconS_goldbar'),(606,'S006','통나무',3,'Spoil',606,2,2,0,1.2,250,1,'IconS_solidwood');
 /*!40000 ALTER TABLE `master_item_base` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -134,4 +133,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-27 21:44:10
+-- Dump completed on 2024-08-29 19:23:21

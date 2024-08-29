@@ -53,6 +53,7 @@ public class ItemData
         width = itemDB.scale_x;
         height = itemDB.scale_y;
         isItemConsumeable = itemDB.type == eITEM_TYPE.recovery || itemDB.type == eITEM_TYPE.bullet;
+        icon = itemDB.icon;
     }
 
     /// <summary>
@@ -90,5 +91,5 @@ public class ItemData
     public int height;
 
     public bool isItemConsumeable; //임시(아이템 타입으로 유추가능, 아이템 머지에 소모품인지 판단함. 이후 코드를 통해 조회로 변경)
-    //public Sprite itemSprite;
+    public string icon;
 }

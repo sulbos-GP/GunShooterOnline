@@ -12,7 +12,8 @@ CREATE TABLE IF NOT EXISTS gear (
     PRIMARY KEY (`gear_id`),
     UNIQUE (`uid`, `part`),
 	CONSTRAINT FK_gear_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-	CONSTRAINT FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id FOREIGN KEY (`unit_attributes_id`) REFERENCES unit_attributes(`unit_attributes_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+	CONSTRAINT FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id FOREIGN KEY (`unit_attributes_id`) REFERENCES unit_attributes(`unit_attributes_id`) ON DELETE CASCADE ON UPDATE RESTRICT
 );
 
 SELECT * FROM gear;
+DELETE FROM gear WHERE gear_id = 12
