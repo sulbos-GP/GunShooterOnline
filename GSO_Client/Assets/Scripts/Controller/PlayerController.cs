@@ -8,7 +8,47 @@ public class PlayerController : CreatureController
     protected Coroutine _coSkill;
     protected bool _rangedSkill = false;
 
+    protected float _width;
+    protected float _height;
+    public struct Rectangle
+    {
+        public Vector2 topLeft;
+        public Vector2 topRight;
+        public Vector2 bottomLeft;
+        public Vector2 bottomRight;
+
+        public Rectangle(float width, float height,Transform trans)
+        {
+            topLeft = new Vector2(trans.position.x - (width / 2), trans.position.y + (height / 2));
+            topRight = new Vector2(trans.position.x + (width / 2), trans.position.y - (height / 2));
+            bottomLeft = new Vector2(trans.position.x - (width / 2), trans.position.y - (height / 2));
+            bottomRight = new Vector2(trans.position.x + (width / 2), trans.position.y + (height / 2));
+        }
+    };
+
+    public Rectangle rect;
    //private SkillType skillType = SkillType.None; //애니메이션용
+
+    public void SetDrawLine(float width , float height)
+    {
+        _width = width;
+        _height = height;
+        rect = new Rectangle(width,height,gameObject.transform);
+    }
+
+    public void OnDrawGizmos()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawLine(rect.topLeft, rect.topRight);
+        Gizmos.DrawLine(rect.topRight, rect.bottomRight);
+        Gizmos.DrawLine(rect.bottomRight, rect.bottomLeft);
+        Gizmos.DrawLine(rect.bottomLeft, rect.topLeft);
+    }
+
+    protected void UpdateDrawLine()
+    {
+
+    }
 
 
     protected override void Init()
@@ -101,6 +141,7 @@ public class PlayerController : CreatureController
 
     public void UpdatePosInfo(PositionInfo info)
     {
+        Debug.Log("Update PosInfo");
         Dir = new Vector2(info.DirX, info.DirY);
         gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
         gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
@@ -113,6 +154,7 @@ public class PlayerController : CreatureController
         //else
         //    transform.position = Vector3.Lerp(transform.position, CellPos, Time.deltaTime * 10);
 
+        Debug.Log("Update Moving");
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;

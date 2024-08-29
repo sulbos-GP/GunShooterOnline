@@ -7,7 +7,7 @@ public class CSVReader : MonoBehaviour
 {
     public string csvFilePath;
 
-    void Start()
+    void Awake()
     {
         ExcelReader.ReadExcel();
         Debug.Log("success Read");
