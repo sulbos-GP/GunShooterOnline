@@ -32,7 +32,7 @@ CREATE TABLE `gear` (
   KEY `FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id` (`unit_attributes_id`),
   CONSTRAINT `FK_gear_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`),
   CONSTRAINT `FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id` FOREIGN KEY (`unit_attributes_id`) REFERENCES `unit_attributes` (`unit_attributes_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `gear` (
 
 LOCK TABLES `gear` WRITE;
 /*!40000 ALTER TABLE `gear` DISABLE KEYS */;
-INSERT INTO `gear` VALUES (1,1,'backpack',1),(2,2,'backpack',2),(3,3,'backpack',3),(4,4,'backpack',4),(5,5,'backpack',5),(6,6,'backpack',6),(7,7,'backpack',7),(8,8,'backpack',8),(9,9,'backpack',9),(10,10,'backpack',10),(13,1,'main_weapon',49);
+INSERT INTO `gear` VALUES (1,1,'backpack',1),(2,2,'backpack',2),(3,3,'backpack',3),(4,4,'backpack',4),(5,5,'backpack',5),(6,6,'backpack',6),(7,7,'backpack',7),(8,8,'backpack',8),(9,9,'backpack',9),(10,10,'backpack',10);
 /*!40000 ALTER TABLE `gear` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ CREATE TABLE `storage_unit` (
   KEY `FK_storage_unit_id_att_id_uatt_att_id` (`unit_attributes_id`),
   CONSTRAINT `FK_storage_unit_id_att_id_uatt_att_id` FOREIGN KEY (`unit_attributes_id`) REFERENCES `unit_attributes` (`unit_attributes_id`) ON DELETE CASCADE,
   CONSTRAINT `FK_storage_unit_storage_id_storage_storage_id` FOREIGN KEY (`storage_id`) REFERENCES `storage` (`storage_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,6 @@ CREATE TABLE `storage_unit` (
 
 LOCK TABLES `storage_unit` WRITE;
 /*!40000 ALTER TABLE `storage_unit` DISABLE KEYS */;
-INSERT INTO `storage_unit` VALUES (30,1,3,2,0,40);
 /*!40000 ALTER TABLE `storage_unit` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -122,7 +121,7 @@ CREATE TABLE `unit_attributes` (
   KEY `FK_unit_attributes_unit_storage_id_storage_storage_id` (`unit_storage_id`),
   CONSTRAINT `FK_unit_attributes_item_id_master_item_base_item_id` FOREIGN KEY (`item_id`) REFERENCES `master_database`.`master_item_base` (`item_id`),
   CONSTRAINT `FK_unit_attributes_unit_storage_id_storage_storage_id` FOREIGN KEY (`unit_storage_id`) REFERENCES `storage` (`storage_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +130,7 @@ CREATE TABLE `unit_attributes` (
 
 LOCK TABLES `unit_attributes` WRITE;
 /*!40000 ALTER TABLE `unit_attributes` DISABLE KEYS */;
-INSERT INTO `unit_attributes` VALUES (1,8,0,1,1),(2,8,0,2,1),(3,8,0,3,1),(4,8,0,4,1),(5,8,0,5,1),(6,8,0,6,1),(7,8,0,7,1),(8,8,0,8,1),(9,8,0,9,1),(10,8,0,10,1),(40,11,0,NULL,20),(49,2,0,NULL,1);
+INSERT INTO `unit_attributes` VALUES (1,302,0,1,1),(2,302,0,2,1),(3,302,0,3,1),(4,302,0,4,1),(5,302,0,5,1),(6,302,0,6,1),(7,302,0,7,1),(8,302,0,8,1),(9,302,0,9,1),(10,302,0,10,1);
 /*!40000 ALTER TABLE `unit_attributes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +160,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'a_1','a_1','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(2,'a_2','a_2','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(3,'a_3','a_3','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(4,'a_4','a_4','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(5,'a_5','a_5','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(6,'a_6','a_6','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(7,'a_7','a_7','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(8,'a_8','a_8','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(9,'a_9','a_9','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52'),(10,'a_10','a_10','Google',NULL,'2024-08-29 12:53:52','2024-08-29 12:53:52');
+INSERT INTO `user` VALUES (1,'a_1','a_1','Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(2,'a_2','a_2','Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(3,'a_3','a_3','Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(4,'a_4','a_4','Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(5,'a_5','a_5','Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(6,'a_6','a_6','Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(7,'a_7','a_7','Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(8,'a_8','a_8','Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41'),(9,'a_9','a_9','Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41'),(10,'a_10','a_10','Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -219,7 +218,7 @@ CREATE TABLE `user_skill` (
 
 LOCK TABLES `user_skill` WRITE;
 /*!40000 ALTER TABLE `user_skill` DISABLE KEYS */;
-INSERT INTO `user_skill` VALUES (1,1415.2901616089885,260.52355404060665,0.06576198815904744),(2,1546.0051979366738,242.87476329400647,0.054781616763008405),(3,1467.5817911211232,345.8453441465696,0.06695569270938234),(4,1464.4032650295676,210.00916250982243,0.05735179611235093),(5,1527.5531617249858,212.9089485508473,0.06034001779774206),(6,1465.3651018304424,212.46873602501,0.05870296074888014),(7,1585.2730994906958,248.95751085035272,0.06705641133436599),(8,1456.9905294636176,329.94523507537804,0.05953299849250633),(9,1556.8689904705332,273.76625279315397,0.052116805335615586),(10,1410.775261754892,342.7791161395415,0.061953499514566274);
+INSERT INTO `user_skill` VALUES (1,1431.093800841918,280.67481394920014,0.054455069661564263),(2,1500.0542334281413,324.96431258038086,0.06329327230648443),(3,1564.8063711494267,218.92526952449722,0.05317493561950972),(4,1483.045709024226,289.98536201192564,0.06507652924868887),(5,1593.8850205334695,287.84692351505805,0.05039911013133741),(6,1468.5678186533673,298.14934660508237,0.05486255275538429),(7,1450.530257495614,280.0810332224528,0.06822827884762388),(8,1591.0898156381118,206.45053918142852,0.05697341537752507),(9,1522.8686182972683,203.85547723048876,0.055709733279151595),(10,1470.0647611823535,334.27386026296193,0.05849647910194144);
 /*!40000 ALTER TABLE `user_skill` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -232,4 +231,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-29 18:37:41
+-- Dump completed on 2024-08-29 19:30:23
