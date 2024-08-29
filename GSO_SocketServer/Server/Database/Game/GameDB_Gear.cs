@@ -49,14 +49,14 @@ namespace Server.Database.Game
             return gears;
         }
 
-        public async Task<int> GetGearOfPart(int uid, EGearPart part)
+        public async Task<int> GetGearOfPart(int uid, string part)
         {
             var query = this.GetQueryFactory();
 
             var values = new Dictionary<string, object>()
             {
                 { "uid"  , uid },
-                { "part" , part.GetType().GetField(part.ToString()) },
+                { "part" , part },
             };
 
             return await query.Query("gear")
@@ -65,7 +65,7 @@ namespace Server.Database.Game
                 .FirstOrDefaultAsync<int>();
         }
 
-        public async Task<int> InsertGear(int uid, ItemObject item, EGearPart part, IDbTransaction transaction = null)
+        public async Task<int> InsertGear(int uid, ItemObject item, string part, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
@@ -88,12 +88,12 @@ namespace Server.Database.Game
                 InsertAsync(new
                 {
                     uid = uid,
-                    part = part.GetType().GetField(part.ToString()),
+                    part = part,
                     unit_attributes_id = unit_attributes_id,
                 }, transaction);
         }
 
-        public async Task<int> DeleteGear(int uid, ItemObject item, EGearPart part, IDbTransaction transaction = null)
+        public async Task<int> DeleteGear(int uid, ItemObject item, string part, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
@@ -105,7 +105,7 @@ namespace Server.Database.Game
             var values = new Dictionary<string, object>()
             {
                 { "uid"  , uid },
-                { "part" , part.GetType().GetField(part.ToString()) },
+                { "part" , part },
             };
 
             return await query.Query("gear")
@@ -113,20 +113,20 @@ namespace Server.Database.Game
                 .DeleteAsync(transaction);
         }
 
-        public async Task<int> UpdateGear(int uid, ItemObject oldItem, ItemObject newItem, EGearPart part, IDbTransaction transaction = null)
+        public async Task<int> UpdateGear(int uid, ItemObject oldItem, ItemObject newItem, string part, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
             var oldValues = new Dictionary<string, object>()
             {
                 { "uid"  , uid },
-                { "part" , part.GetType().GetField(part.ToString()) },
+                { "part" , part },
                 { "unit_attributes_id", oldItem.UnitAttributesId }
             };
 
             var newValues = new Dictionary<string, object>()
             {
-                { "part" , part.GetType().GetField(part.ToString()) },
+                { "part" , part },
                 { "unit_attributes_id", newItem.UnitAttributesId },
             };
 

@@ -28,17 +28,18 @@ namespace Server.Game.Object.Gear
 
         public string ConvertPartToString(EGearPart part)
         {
+            string partString = "";
             switch (part)
             {
-                case EGearPart.MainWeapon:      return "main_weapon";
-                case EGearPart.SubWeapon:       return "sub_weapon";
-                case EGearPart.Armor:           return "armor";
-                case EGearPart.Backpack:        return "backpack";
-                case EGearPart.PocketFirst:     return "pocket_first";
-                case EGearPart.PocketSecond:    return "pocket_second";
-                case EGearPart.PocketThird:     return "pocket_third";
+                case EGearPart.MainWeapon:      partString =  "main_weapon";    break;
+                case EGearPart.SubWeapon:       partString =  "sub_weapon";     break;
+                case EGearPart.Armor:           partString =  "armor";          break;
+                case EGearPart.Backpack:        partString =  "backpack";       break;
+                case EGearPart.PocketFirst:     partString =  "pocket_first";   break;
+                case EGearPart.PocketSecond:    partString =  "pocket_second";  break;
+                case EGearPart.PocketThird:     partString =  "pocket_third";   break;
             }
-            return "";
+            return partString;
         }
 
         public Storage GetPart(EGearPart part)
@@ -52,6 +53,30 @@ namespace Server.Game.Object.Gear
             if(storage.ItemCount == 0)
             {
                 return null;
+            }
+            return storage.GetItem();
+        }
+
+        public IEnumerable<PS_GearInfo> GetPartItems(int viewerId)
+        {
+
+            List<PS_GearInfo> infos = new List<PS_GearInfo>();
+
+            EGearPart[] statuses = (EGearPart[])System.Enum.GetValues(typeof(EGearPart));
+            for (int i = 1; i < statuses.Length; i++)
+            {
+                ItemObject item = GetPartItem(statuses[i]);
+                if(item == null)
+                {
+                    continue;
+                }
+
+                PS_GearInfo info = new PS_GearInfo();
+                info.Part = (PE_GearPart)i;
+                info.Item = item.ConvertItemInfo(viewerId);
+
+                infos.Add(info);
+
             }
             return storage.GetItem();
         }
@@ -123,7 +148,7 @@ namespace Server.Game.Object.Gear
                 item.UnitStorageId = storage_id;
             }
 
-            int ret = await database.InsertGear(owner.uid, item, part, transaction);
+            int ret = await database.InsertGear(owner.uid, item, ConvertPartToString(part), transaction);
             if (ret == 0)
             {
                 throw new Exception($"장비[{part}]에서 아이템을 삽입하지 못함");
@@ -139,7 +164,7 @@ namespace Server.Game.Object.Gear
                 await database.DeleteStorage(item.UnitStorageId, transaction);
             }
 
-            int ret = await database.DeleteGear(owner.uid, item, part, transaction);
+            int ret = await database.DeleteGear(owner.uid, item, ConvertPartToString(part), transaction);
             if (ret == 0)
             {
                 throw new Exception($"장비[{part}]에서 아이템을 삭제하지 못함");
@@ -155,7 +180,7 @@ namespace Server.Game.Object.Gear
                 throw new Exception("인벤토리에서 아이템 업데이트 안됨");
             }
 
-            ret = await database.UpdateGear(owner.uid, oldItem, newItem, part, transaction);
+            ret = await database.UpdateGear(owner.uid, oldItem, newItem, ConvertPartToString(part), transaction);
             if (ret == 0)
             {
                 throw new Exception("장비에서 아이템 업데이트 안됨");

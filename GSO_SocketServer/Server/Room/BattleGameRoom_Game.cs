@@ -76,6 +76,19 @@ namespace Server
                 packet.ItemInfos.Add(item);
             }
 
+            Gear gear = player.gear;
+            if (inventory == null)
+            {
+                packet.IsSuccess = false;
+                player.Session.Send(packet);
+                return;
+            }
+
+            foreach (PS_GearInfo item in gear.GetPartItems(player.Id))
+            {
+                packet.GearInfos.Add(item);
+            }
+
             packet.IsSuccess = true;
             packet.SourceObjectId = 0;
             player.Session.Send(packet);
@@ -476,7 +489,7 @@ namespace Server
                                 }
                                 else
                                 {
-                                    await gear.DeleteGear((EGearPart)destinationObjectId, sourceItem, database, transaction);
+                                    await gear.DeleteGear((EGearPart)sourceObjectId, sourceItem, database, transaction);
                                 }
                             }
                             
@@ -603,7 +616,7 @@ namespace Server
                         else if (IsGear(destinationObjectId))
                         {
                             Gear gear = player.gear;
-                            isInsert = await gear.InsertGear((EGearPart)sourceObjectId, moveItem, database, transaction);
+                            isInsert = await gear.InsertGear((EGearPart)destinationObjectId, moveItem, database, transaction);
                         }
 
                         transaction.Commit();
