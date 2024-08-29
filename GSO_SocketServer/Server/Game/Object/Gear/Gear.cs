@@ -1,5 +1,7 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Google.Protobuf.Protocol;
+using Google.Protobuf.WellKnownTypes;
 using Server.Database.Data;
+using Server.Database.Game;
 using Server.Database.Handler;
 using System;
 using System.Collections.Generic;
@@ -112,35 +114,61 @@ namespace Server.Game.Object.Gear
             }
         }
 
-        public async Task<bool> InsertGear(EGearPart part, ItemObject item, IDbTransaction transaction = null)
+        public async Task<bool> InsertGear(EGearPart part, ItemObject item, GameDB database, IDbTransaction transaction = null)
         {
 
             if (item.Type == "Backpack" && item.UnitStorageId == null)
             {
-                int storage_id = await DatabaseHandler.GameDB.InsertGetStorageId(transaction);
+                int storage_id = await database.InsertGetStorageId(transaction);
                 item.UnitStorageId = storage_id;
             }
 
-            int ret = await DatabaseHandler.GameDB.InsertGear(owner.uid, item, part, transaction);
+            int ret = await database.InsertGear(owner.uid, item, part, transaction);
             if (ret == 0)
             {
-                throw new Exception($"데이터베이스에서 장비[{part}]아이템을 삽입하지 못함");
+                throw new Exception($"장비[{part}]에서 아이템을 삽입하지 못함");
             }
             return true;
         }
 
-        public async Task<bool> DeleteGear(EGearPart part, ItemObject item, IDbTransaction transaction = null)
+        public async Task<bool> DeleteGear(EGearPart part, ItemObject item, GameDB database, IDbTransaction transaction = null)
         {
 
             if (item.Type == "Backpack" && item.UnitStorageId != null)
             {
-                await DatabaseHandler.GameDB.DeleteStorage(item.UnitStorageId, transaction);
+                await database.DeleteStorage(item.UnitStorageId, transaction);
             }
 
-            int ret = await DatabaseHandler.GameDB.DeleteGear(owner.uid, item, part, transaction);
+            int ret = await database.DeleteGear(owner.uid, item, part, transaction);
             if (ret == 0)
             {
-                throw new Exception($"데이터베이스에서 장비[{part}]아이템을 삭제하지 못함");
+                throw new Exception($"장비[{part}]에서 아이템을 삭제하지 못함");
+            }
+            return true;
+        }
+
+        public async Task<bool> UpdateGear(EGearPart part, ItemObject oldItem, ItemObject newItem, GameDB database, IDbTransaction transaction = null)
+        {
+            int ret = await database.UpdateItemAttributes(newItem, transaction);
+            if (ret == 0)
+            {
+                throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+            }
+
+            ret = await database.UpdateGear(owner.uid, oldItem, newItem, part, transaction);
+            if (ret == 0)
+            {
+                throw new Exception("장비에서 아이템 업데이트 안됨");
+            }
+            return true;
+        }
+
+        public async Task<bool> UpdateItemAttributes(ItemObject item, GameDB database, IDbTransaction transaction = null)
+        {
+            int ret = await database.UpdateItemAttributes(item, transaction);
+            if (ret == 0)
+            {
+                throw new Exception("인벤토리에서 아이템 속성 업데이트 안됨");
             }
             return true;
         }

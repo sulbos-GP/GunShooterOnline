@@ -208,6 +208,7 @@ namespace Server
             DB_Unit oldCombinedUnit = combinedItem.Unit;
             PS_ItemInfo oldCombinedInfo = combinedItem.ConvertItemInfo(player.Id);
 
+            //머지하는 아이템 이름이 다를경우
             if (mergedlItem.ItemId != combinedItem.ItemId)
             {
                 packet.IsSuccess = false;
@@ -240,14 +241,9 @@ namespace Server
                 }
 
                 ItemObject tempItem = new ItemObject(combinedItem);
-                //CombinedItem의 MergeNumber만큼 감소
                 int lessAmount = destinationStorage.DecreaseAmount(combinedItem, maxAmount);
-
-                //MergedItem에 수량 증가
                 int moreAmount = sourceStorage.IncreaseAmount(mergedlItem, maxAmount);
 
-                //CombinedItem의 수량을 MergeNumber만큼 감소하였을때 음수가 나올 경우
-                //MergeItem의 수량을 MergeNumber만큼 증가하였을때 Limit을 넘은 경우
                 if (lessAmount == -1 || moreAmount == -1)
                 {
                     packet.IsSuccess = false;
@@ -273,55 +269,80 @@ namespace Server
                     }
                 }
 
-                bool isMerge = false;
-                if (IsInventory(sourceObjectId) && IsInventory(destinationObjectId))
+                //DB
+                using (var database = DatabaseHandler.GameDB)
                 {
-                    Inventory inventory = player.inventory;
-                    isMerge = await inventory.MergeItem(oldMergedUnit, mergedlItem.Unit, oldCombinedUnit, combinedItem.Unit);
-                }
-                else if (IsInventory(sourceObjectId))
-                {
-                    Inventory inventory = player.inventory;
-                    isMerge = await inventory.MergeItem(oldMergedUnit, mergedlItem.Unit);
-                }
-                else if (IsInventory(destinationObjectId))
-                {
-                    Inventory inventory = player.inventory;
-                    isMerge = await inventory.MergeItem(oldCombinedUnit, combinedItem.Unit);
-                }
-                else
-                {
-                    isMerge = true;
-                }
-
-                if (false == isMerge)
-                {
-                    if (lessAmount == 0)
+                    using (var transaction = database.GetConnection().BeginTransaction())
                     {
-                        sourceStorage.InsertItem(tempItem);
+                        try
+                        {
+                            if (IsInventory(sourceObjectId))
+                            {
+                                Inventory inventory = player.inventory;
+                                await inventory.UpdateItemAttributes(mergedlItem, database, transaction);
+                            }
+                            else if (IsGear(sourceObjectId))
+                            {
+                                Gear gear = player.gear;
+                                await gear.UpdateItemAttributes(mergedlItem, database, transaction);
+                            }
 
-                        packet.CombinedItem = tempItem.ConvertItemInfo(player.Id);
+                            if (IsInventory(destinationObjectId))
+                            {
+                                Inventory inventory = player.inventory;
+                                if (combinedItem.Amount > 0)
+                                {
+                                    await inventory.UpdateItemAttributes(combinedItem, database, transaction);
+                                }
+                                else
+                                {
+                                    await inventory.DeleteItem(combinedItem, database, transaction);
+                                }
+                            }
+                            else if (IsGear(destinationObjectId))
+                            {
+                                Gear gear = player.gear;
+                                if (combinedItem.Amount > 0)
+                                {
+                                    await gear.UpdateItemAttributes(combinedItem, database, transaction);
+                                }
+                                else
+                                {
+                                    await gear.DeleteGear((EGearPart)destinationObjectId, combinedItem, database, transaction);
+                                }
+                            }
+
+                            transaction.Commit();
+
+                            packet.IsSuccess = true;
+                            packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                            packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
+                            player.Session.Send(packet);
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine($"[MergeItem] : {e.Message.ToString()}");
+                            transaction.Rollback();
+
+                            if (lessAmount == 0)
+                            {
+                                sourceStorage.InsertItem(tempItem);
+
+                                packet.CombinedItem = tempItem.ConvertItemInfo(player.Id);
+                            }
+                            else
+                            {
+                                destinationStorage.DecreaseAmount(mergedlItem, maxAmount);
+                                sourceStorage.IncreaseAmount(combinedItem, lessAmount);
+
+                                packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
+                            }
+
+                            packet.IsSuccess = false;
+                            packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                            player.Session.Send(packet);
+                        }
                     }
-                    else
-                    {
-                        destinationStorage.DecreaseAmount(mergedlItem, maxAmount);
-                        sourceStorage.IncreaseAmount(combinedItem, lessAmount);
-
-                        packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
-                    }
-
-                    packet.IsSuccess = false;
-                    packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
-                    player.Session.Send(packet);
-                    return;
-                }
-                else
-                {
-                    packet.IsSuccess = true;
-                    packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
-                    packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
-                    player.Session.Send(packet);
-                    return;
                 }
             }
         }
@@ -415,25 +436,25 @@ namespace Server
                 }
 
                 bool isDevide = false;
-                if (IsInventory(sourceObjectId) && IsInventory(destinationObjectId))
-                {
-                    Inventory inventory = player.inventory;
-                    isDevide = await inventory.DevideItem(oldSourceUnit, sourceItem.Unit, devideItem.Unit);
-                }
-                else if (IsInventory(sourceObjectId))
-                {
-                    Inventory inventory = player.inventory;
-                    isDevide = await inventory.DevideItem(true, oldSourceUnit, sourceItem.Unit);
-                }
-                else if (IsInventory(destinationObjectId))
-                {
-                    Inventory inventory = player.inventory;
-                    isDevide = await inventory.DevideItem(false, oldDevideUnit, devideItem.Unit);
-                }
-                else
-                {
-                    isDevide = true;
-                }
+                //if (IsInventory(sourceObjectId) && IsInventory(destinationObjectId))
+                //{
+                //    Inventory inventory = player.inventory;
+                //    isDevide = await inventory.DevideItem(oldSourceUnit, sourceItem.Unit, devideItem.Unit);
+                //}
+                //else if (IsInventory(sourceObjectId))
+                //{
+                //    Inventory inventory = player.inventory;
+                //    isDevide = await inventory.DevideItem(true, oldSourceUnit, sourceItem.Unit);
+                //}
+                //else if (IsInventory(destinationObjectId))
+                //{
+                //    Inventory inventory = player.inventory;
+                //    isDevide = await inventory.DevideItem(false, oldDevideUnit, devideItem.Unit);
+                //}
+                //else
+                //{
+                //    isDevide = true;
+                //}
 
                 if (false == isDevide)
                 {
@@ -534,7 +555,7 @@ namespace Server
                         else if (IsGear(sourceObjectId))
                         {
                             Gear gear = player.gear;
-                            isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, sourceMovelItem, transaction);
+                            isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, sourceMovelItem,database, transaction);
                         }
 
                         if (IsInventory(destinationObjectId))
@@ -545,7 +566,7 @@ namespace Server
                         else if (IsGear(destinationObjectId))
                         {
                             Gear gear = player.gear;
-                            isInsert = await gear.InsertGear((EGearPart)sourceObjectId, moveItem, transaction);
+                            isInsert = await gear.InsertGear((EGearPart)sourceObjectId, moveItem, database, transaction);
                         }
 
                         transaction.Commit();
@@ -612,7 +633,7 @@ namespace Server
                     else if (IsGear(sourceObjectId))
                     {
                         Gear gear = player.gear;
-                        isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, deleteItem);
+                        isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, deleteItem, database);
                     }
 
                     packet.IsSuccess = true;
