@@ -42,18 +42,39 @@ public partial class InventoryController
 
 
     /// <summary>
-    /// 그리드 -> 그리드 혹은 장착슬롯 -> 그리드
+    /// 아이템을 그리드 혹은 장착 슬롯에 배치
     /// </summary>
-    public void SendMoveItemPacket(ItemObject item , Vector2Int pos)
+    public void SendMoveItemPacket(ItemObject item , Vector2Int pos = default)
     {
         C_MoveItem packet = new C_MoveItem();
+
+        if (item.backUpItemGrid != null) 
+        {
+            packet.SourceObjectId = item.backUpItemGrid.objectId;
+        }
+        else if(item.backUpEquipSlot != null)
+        {
+            packet.SourceObjectId = item.backUpEquipSlot.slotId;
+        }
+
+        if (item.curItemGrid != null)
+        {
+            packet.DestinationObjectId = item.curItemGrid.objectId;
+            packet.DestinationGridX = pos.x; //옮긴 위치
+            packet.DestinationGridY = pos.y; //옮긴 위치
+            packet.DestinationRotation = item.itemData.rotate; //옮겼을때의 회전
+        }
+        else if (item.curEquipSlot != null) 
+        {
+            packet.DestinationObjectId = item.curEquipSlot.slotId;
+            packet.DestinationGridX = 0; //옮긴 위치
+            packet.DestinationGridY = 0; //옮긴 위치
+            packet.DestinationRotation = 0; //옮겼을때의 회전
+        }
+
+        packet.SourceMoveItemId = item.itemData.objectId; 
+
         
-        packet.SourceObjectId = item.backUpItemGrid.objectId;  //출발 소유자 id
-        packet.DestinationObjectId = item.curItemGrid.objectId;  //도착 소유자id
-        packet.SourceMoveItemId = item.itemData.objectId; //옮긴 아이템 아이디
-        packet.DestinationGridX = pos.x; //옮긴 위치
-        packet.DestinationGridY = pos.y; //옮긴 위치
-        packet.DestinationRotation = item.itemData.rotate; //옮겼을때의 회전
         Debug.Log($"C_MoveItem : {item.itemData.objectId} 아이템 옮김 ");
         Managers.Network.Send(packet);
     }

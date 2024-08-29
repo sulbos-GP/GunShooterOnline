@@ -25,6 +25,14 @@ public partial class InventoryController : MonoBehaviour
     public OtherInventoryUI otherInvenUI;
     public Dictionary<int,ItemObject> instantItemDic;
 
+    public EquipSlot Weapon1;
+    public EquipSlot Weapon2;
+    public EquipSlot Armor;
+    public EquipSlot Bag;
+    public EquipSlot Consume1;
+    public EquipSlot Consume2;
+    public EquipSlot Consume3;
+
     [Header("수동지정")]
     public Transform deleteUI;
     public Button rotateBtn;
@@ -71,8 +79,6 @@ public partial class InventoryController : MonoBehaviour
             }
         }
     }
-
-    
 
     [SerializeField] private GridObject selectedGrid;
     public bool isGridSelected; 
@@ -127,7 +133,6 @@ public partial class InventoryController : MonoBehaviour
 
     public bool itemPlaceableInGrid;
 
-
     public bool isDivideMode; //divide모드가 켜졌는지
     private bool dontCheckDivide; //만약이것이 true라면 더이상 divide체크를 하지 않음
     public bool isDivideInterfaceOn;
@@ -135,6 +140,7 @@ public partial class InventoryController : MonoBehaviour
     private Vector2 lastDragPosition; // 마지막 드래그 위치
     private float dragTime = 0f; // 드래그 시간이 경과한 시간
     private const float maxDragTime = 2f; // 최대 드래그 대기 시간 (초)
+
 
     private void Awake()
     { 
@@ -149,14 +155,31 @@ public partial class InventoryController : MonoBehaviour
             Destroy(gameObject);
         }
 
+        SetEquipSlot();
+
         Button inventoryBtn = GameObject.Find("InventoryBtn").GetComponent<Button>();
         if (inventoryBtn == null) { Debug.Log("버튼을 찾지못함"); }
-        inventoryBtn.onClick.AddListener(InvenBtn);
 
+        inventoryBtn.onClick.RemoveAllListeners();
+        inventoryBtn.onClick.AddListener(InvenBtn);
+        rotateBtn.onClick.RemoveAllListeners();
         rotateBtn.onClick.AddListener(RotateBtn);
 
         instantItemDic = new Dictionary<int, ItemObject>();
         invenHighlight = GetComponent<InvenHighLight>();
+    }
+
+    private void SetEquipSlot()
+    {
+        Transform EquipSector = inventoryUI.transform.GetChild(0);
+        Weapon1 = EquipSector.GetChild(0).GetComponent<EquipSlot>();
+        Weapon2 = EquipSector.GetChild(1).GetComponent<EquipSlot>();
+        Armor = EquipSector.GetChild(2).GetComponent<EquipSlot>();
+        Bag = EquipSector.GetChild(3).GetComponent<EquipSlot>();
+        Consume1 = EquipSector.GetChild(4).GetComponent<EquipSlot>();
+        Consume2 = EquipSector.GetChild(5).GetComponent<EquipSlot>();
+        Consume3 = EquipSector.GetChild(6).GetComponent<EquipSlot>();
+
     }
 
     private void OnDisable()

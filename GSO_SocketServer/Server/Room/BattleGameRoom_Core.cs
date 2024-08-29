@@ -8,6 +8,7 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 using Server.Game.Object.Gear;
+using System.Net.Sockets;
 
 namespace Server
 {
@@ -113,6 +114,13 @@ namespace Server
                     {
                         enterPacket.ItemInfos.Add(item);
                     }
+
+                    Gear gear = player.gear;
+                    foreach (PS_GearInfo item in gear.GetPartItems(player.Id))
+                    {
+                        enterPacket.GearInfos.Add(item);
+                    }
+
                     player.Session.Send(enterPacket);
 
                     // 다른 플레이어 정보

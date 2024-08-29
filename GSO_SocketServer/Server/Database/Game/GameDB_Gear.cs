@@ -1,9 +1,11 @@
 ﻿using Server.Database.Data;
 using Server.Database.Interface;
+using Server.Game;
 using Server.Game.Object.Gear;
 using SqlKata.Execution;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,20 +49,90 @@ namespace Server.Database.Game
             return gears;
         }
 
-        public async Task<int> GetGearOfPart(int uid, EGearPart part)
+        public async Task<int> GetGearOfPart(int uid, string part)
         {
             var query = this.GetQueryFactory();
 
             var values = new Dictionary<string, object>()
             {
                 { "uid"  , uid },
-                { "part" , part.GetType().GetField(part.ToString()) },
+                { "part" , part },
             };
 
             return await query.Query("gear")
                 .Select("item_id")
                 .Where(values)
                 .FirstOrDefaultAsync<int>();
+        }
+
+        public async Task<int> InsertGear(int uid, ItemObject item, string part, IDbTransaction transaction = null)
+        {
+            var query = this.GetQueryFactory();
+
+            DB_Unit unit = item.Unit;
+            int unit_attributes_id = unit.storage.unit_attributes_id;
+            if (unit_attributes_id == 0)
+            {
+                    unit_attributes_id = await query.Query("unit_attributes").
+                    InsertGetIdAsync<int>(new
+                    {
+                        item_id = unit.attributes.item_id,
+                        durability = unit.attributes.durability,
+                        unit_storage_id = unit.attributes.unit_storage_id,
+                        amount = unit.attributes.amount
+                    }, transaction);
+            }
+            item.UnitAttributesId = unit_attributes_id;
+
+            return await query.Query("gear").
+                InsertAsync(new
+                {
+                    uid = uid,
+                    part = part,
+                    unit_attributes_id = unit_attributes_id,
+                }, transaction);
+        }
+
+        public async Task<int> DeleteGear(int uid, ItemObject item, string part, IDbTransaction transaction = null)
+        {
+            var query = this.GetQueryFactory();
+
+            DB_Unit unit = item.Unit;
+            int result = await query.Query("unit_attributes").
+                Where("unit_attributes_id", unit.storage.unit_attributes_id).
+                DeleteAsync(transaction);
+
+            var values = new Dictionary<string, object>()
+            {
+                { "uid"  , uid },
+                { "part" , part },
+            };
+
+            return await query.Query("gear")
+                .Where(values)
+                .DeleteAsync(transaction);
+        }
+
+        public async Task<int> UpdateGear(int uid, ItemObject oldItem, ItemObject newItem, string part, IDbTransaction transaction = null)
+        {
+            var query = this.GetQueryFactory();
+
+            var oldValues = new Dictionary<string, object>()
+            {
+                { "uid"  , uid },
+                { "part" , part },
+                { "unit_attributes_id", oldItem.UnitAttributesId }
+            };
+
+            var newValues = new Dictionary<string, object>()
+            {
+                { "part" , part },
+                { "unit_attributes_id", newItem.UnitAttributesId },
+            };
+
+            return await query.Query("gear")
+                .Where(oldValues)
+                .UpdateAsync(newValues, transaction);
         }
     }
 }
