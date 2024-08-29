@@ -71,7 +71,7 @@ namespace Server.Database.Game
 
             DB_Unit unit = item.Unit;
             int unit_attributes_id = unit.storage.unit_attributes_id;
-            if (unit.storage.unit_attributes_id == 0)
+            if (unit_attributes_id == 0)
             {
                     unit_attributes_id = await query.Query("unit_attributes").
                     InsertGetIdAsync<int>(new

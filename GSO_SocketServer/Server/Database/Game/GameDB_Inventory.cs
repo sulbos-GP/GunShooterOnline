@@ -70,7 +70,10 @@ namespace Server.Database.Game
             var query = this.GetQueryFactory();
 
             DB_Unit unit = item.Unit;
-            int unit_attributes_id = await query.Query("unit_attributes").
+            int unit_attributes_id = unit.storage.unit_attributes_id;
+            if (unit_attributes_id == 0)
+            {
+                unit_attributes_id = await query.Query("unit_attributes").
                 InsertGetIdAsync<int>(new
                 {
                     item_id = unit.attributes.item_id,
@@ -78,6 +81,7 @@ namespace Server.Database.Game
                     unit_storage_id = unit.attributes.unit_storage_id,
                     amount = unit.attributes.amount
                 }, transaction);
+            }
             item.UnitAttributesId = unit_attributes_id;
 
             return await query.Query("storage_unit").
