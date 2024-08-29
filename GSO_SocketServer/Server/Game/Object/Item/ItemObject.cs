@@ -225,7 +225,7 @@ namespace Server.Game
         {
             get
             {
-                return Data.stack_count;
+                return Data.amount;
             }
         }
 

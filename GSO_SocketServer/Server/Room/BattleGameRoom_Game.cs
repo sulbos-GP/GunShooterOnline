@@ -575,7 +575,7 @@ namespace Server
                     grid_x = destinationGridX,
                     grid_y = destinationGridY,
                     rotation = destinationRotation,
-                    unit_attributes_id = sourceMovelItem.UnitAttributesId
+                    unit_attributes_id = 0
                 },
                 attributes = sourceMovelItem.Attributes,
             };
