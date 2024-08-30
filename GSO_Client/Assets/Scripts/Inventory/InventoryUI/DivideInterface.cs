@@ -15,11 +15,12 @@ public class DivideInterface : MonoBehaviour
     public int splitAmountIndex;
     public int maxAmountIndex;
 
-    public GridObject targetGrid;
+    public int objectId;
     public Vector2Int targetPos;
-    public ItemObject targetItem;
 
+    public ItemObject targetItem;
     private ItemObject overlapItem;
+
     private void Awake()
     {
         scrollBar = transform.GetChild(0).GetComponent<Scrollbar>();
@@ -31,17 +32,17 @@ public class DivideInterface : MonoBehaviour
         targetItem = null;
     }
 
-    public void SetAmountIndex(ItemObject item, Vector2Int gridPos, GridObject grid, ItemObject overlapItem)
+    public void SetAmountIndex(ItemObject item, Vector2Int pos, ItemObject overlapItem)
     {
         InventoryController.invenInstance.isDivideInterfaceOn = true;
-        targetPos = gridPos;
+        targetPos = pos;
         targetItem = item;
-        targetGrid = grid;
+        objectId = item.parentObjId;
         this.overlapItem = overlapItem != null ? overlapItem : null;
 
         if (targetItem == null)
         {
-            Debug.Log("¾ÆÀÌÅÛÀ» ¹ÞÁö ¸øÇÔ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
         splitAmountIndex = 0;
@@ -56,8 +57,8 @@ public class DivideInterface : MonoBehaviour
 
     public void SetInterfacePos(ItemObject item)
     {
-        //todo : º¯°æ ÇÊ¿ä½Ã º¯°æ
-        //ÇöÀç´Â ±×³É ÇØ´ç Å¸°Ù ±×¸®µå ¿ÀºêÁ§Æ®ÀÇ Áß¾Ó¿¡ ¹èÄ¡µÇµµ·Ï ¼³Á¤
+        //todo : ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½Ø´ï¿½ Å¸ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½Ä¡ï¿½Çµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
@@ -87,16 +88,23 @@ public class DivideInterface : MonoBehaviour
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 1)) + 1;
         UpdateCountText();
 
-        if (targetGrid.objectId == 0) //ÇöÀç ÀÌµ¿ÇÏ·Á´Â Å¸°Ù
+        if(objectId > 0 && objectId <= 7)
+        {
+            //ìž¥ë¹„ì¹¸ì— ì•„ì´í…œì˜ ë¬´ê²Œë¥¼ ì¶”ê°€í•œë‹¤ê³  í–ˆë‚˜?
+            double result = Math.Round(playerGridObj.GridWeight,2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
+        }
+
+        if (objectId == 0) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï·ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½
         {
             if (targetItem.backUpParentId == 0)
             {
-                //ÇÃ -> ÇÃ = º¯È­ ¾øÀ½
+                //ï¿½ï¿½ -> ï¿½ï¿½ = ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
                 double result = Math.Round(playerGridObj.GridWeight,2);
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
             }
             else
-            {   //¹Ú -> ÇÃ 
+            {   //ï¿½ï¿½ -> ï¿½ï¿½ 
                 double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
 
@@ -114,7 +122,7 @@ public class DivideInterface : MonoBehaviour
         {
             if (targetItem.backUpParentId == 0)
             {
-                //ÇÃ -> ¹Ú = Áõ°¡
+                //ï¿½ï¿½ -> ï¿½ï¿½ = ï¿½ï¿½ï¿½ï¿½
                 double result = Math.Round(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex, 2);
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
 
@@ -128,7 +136,7 @@ public class DivideInterface : MonoBehaviour
                 }
             }
             else
-            {   //¹Ú -> ¹Ú = º¯È­¾øÀ½
+            {   //ï¿½ï¿½ -> ï¿½ï¿½ = ï¿½ï¿½È­ï¿½ï¿½ï¿½ï¿½
                 double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight,2);
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
             }
@@ -143,7 +151,7 @@ public class DivideInterface : MonoBehaviour
 
     private void OnCancelButtonClicked()
     {
-        InventoryController.invenInstance.UndoGridSlot(targetItem);
+        InventoryController.invenInstance.UndoSlot(targetItem);
         InventoryController.invenInstance.UndoItem(targetItem);
         DestroyInterface();
     }
@@ -151,7 +159,7 @@ public class DivideInterface : MonoBehaviour
 
     public void OnConfirmButtonClicked()
     {
-        Debug.Log("¾ÆÀÌÅÛÀ» " + splitAmountIndex + "°³·Î ºÐ¸®ÇÕ´Ï´Ù.");
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ " + splitAmountIndex + "ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¸ï¿½ï¿½Õ´Ï´ï¿½.");
 
         if (overlapItem != null)
         {
