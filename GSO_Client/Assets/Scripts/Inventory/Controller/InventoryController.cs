@@ -18,7 +18,7 @@ public partial class InventoryController : MonoBehaviour
 {
     public static InventoryController invenInstance;
 
-    private PlayerInput playerInput; //ÇÃ·¹ÀÌ¾îÀÇ Á¶ÀÛ ÀÎÇ²
+    private PlayerInput playerInput; //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç²
 
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
@@ -33,13 +33,13 @@ public partial class InventoryController : MonoBehaviour
     public EquipSlot Consume2;
     public EquipSlot Consume3;
 
-    [Header("¼öµ¿ÁöÁ¤")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½")]
     public Transform deleteUI;
     public Button rotateBtn;
 
-    [Header("µð¹ö±×¿ë")]
+    [Header("ï¿½ï¿½ï¿½ï¿½×¿ï¿½")]
     [SerializeField] private Vector2 mousePosInput; 
-    [SerializeField] private Vector2Int gridPosition; //mousePosInputÀ» WorldToGridPos¸Þ¼­µå·Î ±×¸®µå ³»ÀÇ ÁÂÇ¥·Î º¯È¯ÇÑ°Í. ±×¸®µå°¡ ÁöÁ¤µÇ¾î ÀÖ¾î¾ßÇÔ
+    [SerializeField] private Vector2Int gridPosition; //mousePosInputï¿½ï¿½ WorldToGridPosï¿½Þ¼ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ ï¿½ï¿½È¯ï¿½Ñ°ï¿½. ï¿½×¸ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ ï¿½Ö¾ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private Vector2Int gridPositionIndex;
     public ItemObject SelectedItem
     {
@@ -62,7 +62,7 @@ public partial class InventoryController : MonoBehaviour
 
     [SerializeField] private ItemObject selectedItem;
     [SerializeField] private RectTransform selectedRect;
-    public bool isItemSelected; //ÇöÀç ¼±ÅÃµÈ »óÅÂÀÎÁö
+    public bool isItemSelected; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ãµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
     public GridObject SelectedGrid
     {
@@ -85,7 +85,7 @@ public partial class InventoryController : MonoBehaviour
 
     private bool isPress = false;
 
-    //»èÁ¦ °ü·Ã
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool isOnDelete;
     public bool IsOnDelete
     {
@@ -97,7 +97,7 @@ public partial class InventoryController : MonoBehaviour
         }
     }
 
-    //ÀåÂø °ü·Ã
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     [SerializeField] private EquipSlot selectedEquip;
     [SerializeField] private bool isEquipSelected;
     public EquipSlot SelectedEquip
@@ -109,37 +109,39 @@ public partial class InventoryController : MonoBehaviour
             if(selectedEquip != null)
             {
                 isEquipSelected = true;
+                if (isItemSelected)
+                {
+                    selectedItem.parentObjId = value.slotId;
+                }
             }
             else
             {
                 isEquipSelected = false;
             }
 
-            if (isItemSelected) {
-                selectedItem.parentObjId = value.slotId;
-            }
+            
         }
     }
 
-    private ItemObject overlapItem; //¸Å ÇÁ·¹ÀÓ¸¶´Ù Ã¼Å©µÉ ¿À¹ö·¦ ¾ÆÀÌÅÛ º¯¼ö
+    private ItemObject overlapItem; //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó¸ï¿½ï¿½ï¿½ Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
-    //UI¾×Æ¼ºê °ü·Ã
+    //UIï¿½ï¿½Æ¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool isActive = false;
    
 
-    //ÇÏÀÌ¶óÀÌÆ® °ü·Ã º¯¼ö
+    //ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     private InvenHighLight invenHighlight;
-    private Vector2Int HighlightPosition; //ÇÏÀÌ¶óÀÌÆ®ÀÇ À§Ä¡
+    private Vector2Int HighlightPosition; //ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä¡
 
     public bool itemPlaceableInGrid;
 
-    public bool isDivideMode; //divide¸ðµå°¡ ÄÑÁ³´ÂÁö
-    private bool dontCheckDivide; //¸¸¾àÀÌ°ÍÀÌ true¶ó¸é ´õÀÌ»ó divideÃ¼Å©¸¦ ÇÏÁö ¾ÊÀ½
+    public bool isDivideMode; //divideï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    private bool dontCheckDivide; //ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½ï¿½ï¿½ trueï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì»ï¿½ divideÃ¼Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public bool isDivideInterfaceOn;
-    public GameObject itemPreviewInstance; // ÇöÀç ¾ÆÀÌÅÛ ¹Ì¸®º¸±â ÀÎ½ºÅÏ½º
-    private Vector2 lastDragPosition; // ¸¶Áö¸· µå·¡±× À§Ä¡
-    private float dragTime = 0f; // µå·¡±× ½Ã°£ÀÌ °æ°úÇÑ ½Ã°£
-    private const float maxDragTime = 2f; // ÃÖ´ë µå·¡±× ´ë±â ½Ã°£ (ÃÊ)
+    public GameObject itemPreviewInstance; // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Î½ï¿½ï¿½Ï½ï¿½
+    private Vector2 lastDragPosition; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½Ä¡
+    private float dragTime = 0f; // ï¿½å·¡ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½
+    private const float maxDragTime = 2f; // ï¿½Ö´ï¿½ ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ (ï¿½ï¿½)
 
 
     private void Awake()
@@ -158,7 +160,7 @@ public partial class InventoryController : MonoBehaviour
         SetEquipSlot();
 
         Button inventoryBtn = GameObject.Find("InventoryBtn").GetComponent<Button>();
-        if (inventoryBtn == null) { Debug.Log("¹öÆ°À» Ã£Áö¸øÇÔ"); }
+        if (inventoryBtn == null) { Debug.Log("ï¿½ï¿½Æ°ï¿½ï¿½ Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"); }
 
         inventoryBtn.onClick.RemoveAllListeners();
         inventoryBtn.onClick.AddListener(InvenBtn);
@@ -210,13 +212,13 @@ public partial class InventoryController : MonoBehaviour
     }
 
     /// <summary>
-    /// Å¬¸¯ÇÑ ¿ÀºêÁ§Æ®ÀÇ ¸ðµç ºÎ¸ð¿¡°Ô LastSiblingÀ» Àû¿ëÇÔ. Ç×»ó ÁöÁ¤ÇÑ ÀÎÅÍ·º¼ÇÇÑ rectÀ» °¡Àå ¾ÕÀ¸·Î.
+    /// Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Î¸ð¿¡°ï¿½ LastSiblingï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½×»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í·ï¿½ï¿½ï¿½ï¿½ï¿½ rectï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
     /// </summary>
     public void SetSelectedObjectToLastSibling(Transform child)
     {
         if (child == null) return;
 
-        if(child.gameObject.name == "InventoryUI") //ÀÎº¥Åä¸® UIÀÇ ÀÚ½Äµé ±îÁö¸¸ Àû¿ëÇÔ
+        if(child.gameObject.name == "InventoryUI") //ï¿½Îºï¿½ï¿½ä¸® UIï¿½ï¿½ ï¿½Ú½Äµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         {
             return;
         }
