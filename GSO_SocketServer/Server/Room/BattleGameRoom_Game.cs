@@ -540,13 +540,14 @@ namespace Server
             packet.DestinationObjectId = destinationObjectId;
 
             ItemObject sourceMovelItem = ObjectManager.Instance.Find<ItemObject>(sourceMoveItemId);
-            PS_ItemInfo sourceMoveItemInfo = sourceMovelItem.ConvertItemInfo(player.Id);
+            PS_ItemInfo oldSourceMoveItemInfo = sourceMovelItem.ConvertItemInfo(player.Id);
 
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourceMovelItem);
             if(sourceStorage == null)
             {
                 packet.IsSuccess = false;
-                packet.SourceMoveItem = sourceMoveItemInfo;
+                packet.SourceMoveItem = oldSourceMoveItemInfo;
+                packet.DestinationMoveItem = oldSourceMoveItemInfo;
                 player.Session.Send(packet);
                 return;
             }
@@ -555,7 +556,8 @@ namespace Server
             if(sourceStorage == null)
             {
                 packet.IsSuccess = false;
-                packet.SourceMoveItem = sourceMoveItemInfo;
+                packet.SourceMoveItem = oldSourceMoveItemInfo;
+                packet.DestinationMoveItem = oldSourceMoveItemInfo;
                 player.Session.Send(packet);
                 return;
             }
@@ -564,7 +566,8 @@ namespace Server
             if(false == isDelete)
             {
                 packet.IsSuccess = false;
-                packet.SourceMoveItem = sourceMoveItemInfo;
+                packet.SourceMoveItem = oldSourceMoveItemInfo;
+                packet.DestinationMoveItem = oldSourceMoveItemInfo;
                 player.Session.Send(packet);
             }
 
@@ -587,7 +590,8 @@ namespace Server
                 sourceStorage.InsertItem(sourceMovelItem);
 
                 packet.IsSuccess = false;
-                packet.SourceMoveItem = sourceMoveItemInfo;
+                packet.SourceMoveItem = oldSourceMoveItemInfo;
+                packet.DestinationMoveItem = sourceMovelItem.ConvertItemInfo(player.Id);
                 player.Session.Send(packet);
             }
 
@@ -622,7 +626,7 @@ namespace Server
                         transaction.Commit();
 
                         packet.IsSuccess = true;
-                        packet.SourceMoveItem = sourceMoveItemInfo;
+                        packet.SourceMoveItem = oldSourceMoveItemInfo;
                         packet.DestinationMoveItem = moveItem.ConvertItemInfo(player.Id);
                         player.Session.Send(packet);
                     }
@@ -635,7 +639,8 @@ namespace Server
                         sourceStorage.InsertItem(sourceMovelItem);
 
                         packet.IsSuccess = false;
-                        packet.SourceMoveItem = sourceMoveItemInfo;
+                        packet.SourceMoveItem = oldSourceMoveItemInfo;
+                        packet.DestinationMoveItem = sourceMovelItem.ConvertItemInfo(player.Id);
                         player.Session.Send(packet);
                     }
                 }
