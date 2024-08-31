@@ -108,17 +108,15 @@ namespace Server
                     enterPacket.Player = player.info;
 
                     player.gear = new Gear(player);
-  
+                    foreach (PS_GearInfo item in player.gear.GetPartItems(player.Id))
+                    {
+                        enterPacket.GearInfos.Add(item);
+                    }
+
                     player.inventory = new Inventory(player, player.uid);
                     foreach (PS_ItemInfo item in player.inventory.storage.GetItems(player.Id))
                     {
                         enterPacket.ItemInfos.Add(item);
-                    }
-
-                    Gear gear = player.gear;
-                    foreach (PS_GearInfo item in gear.GetPartItems(player.Id))
-                    {
-                        enterPacket.GearInfos.Add(item);
                     }
 
                     player.Session.Send(enterPacket);

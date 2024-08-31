@@ -97,20 +97,26 @@ namespace Server.Database.Game
         {
             var query = this.GetQueryFactory();
 
-            DB_Unit unit = item.Unit;
-            int result = await query.Query("unit_attributes").
-                Where("unit_attributes_id", unit.storage.unit_attributes_id).
-                DeleteAsync(transaction);
-
             var values = new Dictionary<string, object>()
             {
                 { "uid"  , uid },
                 { "part" , part },
             };
 
-            return await query.Query("gear")
+            int result = await query.Query("gear")
                 .Where(values)
                 .DeleteAsync(transaction);
+
+            if(result == 0)
+            {
+                return 0;
+            }
+
+            DB_Unit unit = item.Unit;
+            return await query.Query("unit_attributes").
+                Where("unit_attributes_id", unit.storage.unit_attributes_id).
+                DeleteAsync(transaction);
+
         }
 
         public async Task<int> UpdateGear(int uid, ItemObject oldItem, ItemObject newItem, string part, IDbTransaction transaction = null)

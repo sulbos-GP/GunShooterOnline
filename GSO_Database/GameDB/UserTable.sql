@@ -18,6 +18,17 @@ CREATE TABLE IF NOT EXISTS user (
      UNIQUE KEY (nickname)
 );
 
+CREATE TABLE IF NOT EXISTS user_reward (
+    uid					INT 			NOT NULL								COMMENT '유저 아이디',
+    reward_id			INT 			NOT NULL								COMMENT '보상 아이디',
+    received			BOOLEAN  		NOT NULL	DEFAULT FALSE				COMMENT '수령 확인',
+    received_date 		DATETIME  		NOT NULL								COMMENT '수령 확인 날짜',
+    
+	PRIMARY KEY (`uid`),
+    CONSTRAINT FK_user_reward_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+	CONSTRAINT FK_user_reward_master_reward_base_reward_id FOREIGN KEY (`reward_id`) REFERENCES master_database.master_reward_base(`reward_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
 #유저 인증
 #CREATE TABLE IF NOT EXISTS user_auth (
 #    uid					INT 			NOT NULL								COMMENT '유저 아이디',
