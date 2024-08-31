@@ -540,17 +540,14 @@ namespace Server
             packet.DestinationObjectId = destinationObjectId;
 
             ItemObject sourceMovelItem = ObjectManager.Instance.Find<ItemObject>(sourceMoveItemId);
-            PS_ItemInfo oldSourceMoveItemInfo = sourceMovelItem.ConvertItemInfo(player.Id);
-
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourceMovelItem);
             if(sourceStorage == null)
             {
                 packet.IsSuccess = false;
-                packet.SourceMoveItem = oldSourceMoveItemInfo;
-                packet.DestinationMoveItem = oldSourceMoveItemInfo;
                 player.Session.Send(packet);
                 return;
             }
+            PS_ItemInfo oldSourceMoveItemInfo = sourceMovelItem.ConvertItemInfo(player.Id);
 
             Storage destinationStorage = GetStorage(player, destinationObjectId);
             if(sourceStorage == null)
