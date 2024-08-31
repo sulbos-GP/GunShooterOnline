@@ -68,7 +68,7 @@ public class EquipSlot : MonoBehaviour
 
 
     // 아이템 장착 해제(장착된 슬롯을 클릭)
-    public void UnequipItem()
+    public void UnEquipItem()
     {
         if (equippedItem != null)
         {

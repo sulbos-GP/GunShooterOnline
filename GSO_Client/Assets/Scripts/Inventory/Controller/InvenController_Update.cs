@@ -5,21 +5,19 @@ using Vector2 = System.Numerics.Vector2;
 
 public partial class InventoryController
 {
-    
-
     private void Update()
     {
-        if (!isActive) // UI°¡ ºñÈ°¼ºÈ­¶ó¸é ¸®ÅÏ
+        if (!isActive) // UIï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             return;
 
         if (isDivideInterfaceOn)
         {
-            return; //³ª´©±â ÀÎÅÍÆäÀÌ½º°¡ ÄÑÁ®ÀÖ´Ù¸é ¾Æ·¡ÀÇ ¾ÆÀÌÅÛ ÀÌº¥Æ®¸¦ ÁøÇà½ÃÅ°Áö ¾ÊÀ½
+            return; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ö´Ù¸ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Å°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
 
         if (isPress && !isItemSelected && (isEquipSelected || isGridSelected))
         {
-            ItemEvent(); // ¾ÆÀÌÅÛ ÀÌº¥Æ®¿¡¼­ ¾ÆÀÌÅÛÀ» µé±â ½ÇÇà
+            ItemEvent(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
 
         DragObject();
@@ -28,7 +26,7 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» µé°í ÀÖ°Å³ª µå·¡±ë ÁßÀÌ¶ó¸é ÇØ´ç UIÀÇ ·ºÆ®ÀÇ À§Ä¡¸¦ ¸¶¿ì½ºÀÇ À§Ä¡·Î °è¼Ó ¾÷µ¥ÀÌÆ®
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö°Å³ï¿½ ï¿½å·¡ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ ï¿½Ø´ï¿½ UIï¿½ï¿½ ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     /// </summary>
     private void DragObject()
     {
@@ -36,29 +34,37 @@ public partial class InventoryController
         {
             selectedRect.position = new UnityEngine.Vector2(mousePosInput.X, mousePosInput.Y);
 
-            // ¸ÕÀú Á¶°ÇÀ» °Ë»çÇÏ¿© Á¶±â ¸®ÅÏÀ» ÅëÇØ ÄÚµåÀÇ ±íÀÌ¸¦ ÁÙÀÔ´Ï´Ù
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½Ô´Ï´ï¿½
             if (dontCheckDivide || isDivideMode || selectedItem.ItemAmount <= 1)
             {
                 return;
             }
 
-            // ¾ÆÀÌÅÛÀÇ À§Ä¡³ª ±×¸®µå°¡ º¯°æµÇ¾ú´ÂÁö È®ÀÎÇÕ´Ï´Ù
-            bool itemMoved = selectedItem.backUpItemPos != gridPosition;
+            bool itemMoved = false;
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½×¸ï¿½ï¿½å°¡ ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Õ´Ï´ï¿½
+            if(selectedItem.backUpParentId > 0 || selectedItem.backUpParentId <= 7)
+            {
+                itemMoved = selectedItem.backUpParentId != selectedItem.parentObjId;
+            }
+            else
+            {
+                itemMoved = selectedItem.backUpItemPos != gridPosition;
+            }
 
             if (itemMoved)
             {
-                Debug.Log("¿òÁ÷ÀÓ");
-                dontCheckDivide = true; // ³ªÁß¿¡ ³ª´©±â ¸ðµå¸¦ È®ÀÎÇÏÁö ¾Êµµ·Ï ¼³Á¤
-                return; // Á¶°ÇÀ» ¸¸Á·ÇßÀ¸¹Ç·Î ÇÔ¼ö Á¾·á
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
+                dontCheckDivide = true; // ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½å¸¦ È®ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Êµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                return; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ç·ï¿½ ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
 
             dragTime += Time.deltaTime;
 
             if (dragTime >= maxDragTime)
             {
-                Debug.Log("³ª´©±â ¸ðµå On");
-                CreateItemPreview(); // ¾ÆÀÌÅÛ ¹Ì¸®º¸±â »ý¼º
-                isDivideMode = true; // ³ª´©±â ¸ðµå È°¼ºÈ­
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ On");
+                CreateItemPreview(); // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                isDivideMode = true; // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ È°ï¿½ï¿½È­
             }
         }
     }
@@ -75,7 +81,7 @@ public partial class InventoryController
 
             if (previewRect != null)
             {
-                // ¾ÆÀÌÅÛÀÇ Å©±â, À§Ä¡, È¸Àü ¼³Á¤
+                // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å©ï¿½ï¿½, ï¿½ï¿½Ä¡, È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                 previewRect.sizeDelta = selectedRect.sizeDelta;
 
                 Vector2 imagePos = new Vector2(gridPosition.x * GridObject.WidthOfTile + GridObject.WidthOfTile * selectedItem.Width
@@ -95,7 +101,7 @@ public partial class InventoryController
             return;
         }
 
-        if (!isGridSelected) // ±×¸®µå ¹Û¿¡ ÀÖÀ» °æ¿ì
+        if (!isGridSelected) // ï¿½×¸ï¿½ï¿½ï¿½ ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         {
             if (isItemSelected)
             {
@@ -103,18 +109,18 @@ public partial class InventoryController
                 {
                     HighlightForDelete();
                 }
-                else if (isEquipSelected)
+                else if(isEquipSelected)
                 {
                     HighlightForEquip();
                 }
                 else
                 {
-                    invenHighlight.Show(false); // ÇÏÀÌ¶óÀÌÆ® ¾ø¾Ú
+                    invenHighlight.Show(false); // ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
                 }
             }
             return;
         }
-        else //Æ÷ÀÎÅÍ°¡ ±×¸®µå ¾È¿¡ ÀÖÀ½
+        else //ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½
         {
             HighlightForGrid();
             return;
@@ -134,14 +140,14 @@ public partial class InventoryController
     {
         invenHighlight.Show(true);
 
-        // ÀåÂøÄ­ÀÇ ¾ÆÀÌÅÛ Å¸ÀÔÀÌ ´Ù¸£¸é »¡°£»ö ÇÏÀÌ¶óÀÌÆ®
+        // ï¿½ï¿½ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½Æ®
         if (selectedItem.itemData.item_type != selectedEquip.allowedItemType)
         {
             invenHighlight.SetColor(HighlightColor.Red);
         }
         else
         {
-            // ÀåÂø °¡´É: ÀÌ¹Ì ÀåÂøµÈ ¾ÆÀÌÅÛÀÌ ÀÖÀ¸¸é ³ë¶û, ¾øÀ¸¸é ÃÊ·Ï
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½: ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê·ï¿½
             invenHighlight.SetColor(selectedEquip.equippedItem != null ? HighlightColor.Yellow : HighlightColor.Green);
         }
         invenHighlight.SetSize(selectedItem);
@@ -171,23 +177,23 @@ public partial class InventoryController
         Color32 highlightColor = selectedGrid.PlaceCheckInGridHighLight(selectedItem, gridPosition.x, gridPosition.y, ref overlapItem);
         invenHighlight.SetColor(highlightColor);
 
-        HandleHighlight();
+        GridHighlight();
 
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ¿¡ ¸¶¿ì½º¸¦ °¡Á®´ë¸é ÇÏÀÌ¶óÀÌÆ® È¿°ú
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½Æ® È¿ï¿½ï¿½
     /// </summary>
-    private void HandleHighlight()
+    private void GridHighlight()
     {
-        //ÀÌ¹Ì isGridSelected°¡ trueÀÏ¶§¸¸ È£ÃâµÊ
+        //ï¿½Ì¹ï¿½ isGridSelectedï¿½ï¿½ trueï¿½Ï¶ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½
         if (gridPosition == null)
         {
             invenHighlight.Show(false);
             return;
         }
 
-        //°°ÀºÀ§Ä¡¿¡ ¹Ýº¹½ÇÇàÀ» ¸·À½
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ýºï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         if (HighlightPosition == gridPosition && invenHighlight.gameObject.activeSelf)
         {
             return;
@@ -197,7 +203,7 @@ public partial class InventoryController
 
         if (isItemSelected)
         {
-            //¾ÆÀÌÅÛÀ» µé°í ÀÖ´Ù¸é ±× ¾ÆÀÌÅÛÀÌ À§Ä¡ÇÑ °÷¿¡ ÇÏÀÌ¶óÀÌÆÃ
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ö´Ù¸ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¶ï¿½ï¿½ï¿½ï¿½ï¿½
             invenHighlight.Show(true);
             invenHighlight.SetSize(selectedItem);
             invenHighlight.SetParent(selectedGrid);
