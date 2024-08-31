@@ -16,4 +16,4 @@ CREATE TABLE IF NOT EXISTS gear (
 );
 
 SELECT * FROM gear;
-DELETE FROM gear WHERE gear_id = 12
+SELECT * FROM gear WHERE uid=1 AND part='main_weapon';

@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS master_item_base (
 );
 
 
-#아이템 정보
+#아이템 - 가방
 CREATE TABLE IF NOT EXISTS master_item_backpack (
     item_id						INT 			NOT NULL	COMMENT '아이템 아이디',
     total_scale_x				INT				NOT NULL	COMMENT '가방 x크기',
@@ -54,4 +54,17 @@ CREATE TABLE IF NOT EXISTS master_item_backpack (
         
     PRIMARY KEY (item_id),
 	CONSTRAINT FK_master_item_backpack_item_id_master_item_base_item_id FOREIGN KEY (`item_id`) REFERENCES master_item_base(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
-)
+);
+
+#아이템 - 사용
+CREATE TABLE IF NOT EXISTS master_item_use (
+    item_id						INT 			NOT NULL	COMMENT '아이템 아이디',
+    power				INT				NOT NULL	COMMENT '가방 x크기',
+	active_time				INT				NOT NULL	COMMENT '가방 y크기',
+	duration				INT				NOT NULL	COMMENT '가방 무게',
+	effect				INT				NOT NULL	COMMENT '가방 무게',
+	cool_time				INT				NOT NULL	COMMENT '가방 무게',
+    
+    PRIMARY KEY (item_id),
+	CONSTRAINT FK_master_item_backpack_item_id_master_item_base_item_id FOREIGN KEY (`item_id`) REFERENCES master_item_base(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+);

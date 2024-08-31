@@ -17,21 +17,21 @@ using Vector2 = System.Numerics.Vector2;
 public partial class InventoryController
 {
     /// <summary>
-    /// ÁÂÅ¬¸¯½Ã ¾ÆÀÌÅÛÀ» Áý°Å³ª ³»·Á ³õ±â
+    /// ï¿½ï¿½Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void ItemEvent()
     {
-        if (isItemSelected) //¾ÆÀÌÅÛÀ» ¹èÄ¡ÇØ¾ßÇÏ´Â°æ¿ì
+        if (isItemSelected) //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ø¾ï¿½ï¿½Ï´Â°ï¿½ï¿½
         {
-            //Æ÷ÀÎÅÍ°¡ ÀåÂø ½½·Ô¿¡ ÀÖÀ»°æ¿ì
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (SelectedEquip != null)
             {
-                ItemReleaseInEquip();
-                ResetSelection(); //¾ÆÀÌÅÛÀ» ³õÀº »óÅÂ¶ó¸é selection ¸®¼Â
+                ItemReleaseInEquip(selectedItem, selectedEquip);
+                ResetSelection(); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ selection ï¿½ï¿½ï¿½ï¿½
                 return;
             }
 
-            //Æ÷ÀÎÅÍ°¡ ÈÞÁöÅë Ä­¿¡ ÀÖÀ»°æ¿ì
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             if (isOnDelete)
             {
                 ItemReleaseInDelete();
@@ -39,7 +39,7 @@ public partial class InventoryController
                 return;
             }
 
-            //Æ÷ÀÎÅÍ°¡ ÀÎº¥Åä¸® ±×¸®µå¿¡ À§Ä¡
+            //ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½Îºï¿½ï¿½ä¸® ï¿½×¸ï¿½ï¿½å¿¡ ï¿½ï¿½Ä¡
             if (isGridSelected)
             {
                 gridPosition = WorldToGridPos();
@@ -48,22 +48,22 @@ public partial class InventoryController
                 return;
             }
 
-            //¾î¶² °æ¿ìµµ ¸¸Á·ÇÏÁö ¸øÇÒ°æ¿ì ¹èÄ¡ ½ÇÆÐ
-            UndoGridSlot(SelectedItem);
+            //ï¿½î¶² ï¿½ï¿½ìµµ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ò°ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
+            UndoSlot(SelectedItem);
             UndoItem(SelectedItem);
             ResetSelection();
-            Debug.Log("¾ÆÀÌÅÛ ¹èÄ¡ ½ÇÆÐ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½");
 
         }
-        else//¾ÆÀÌÅÛÀ» ÇÈ¾÷ ÇØ¾ßÇÏ´Â °æ¿ì
+        else//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½È¾ï¿½ ï¿½Ø¾ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½
         {
             if (isEquipSelected)
             {
                 if (selectedEquip.equippedItem != null)
                 {
-                    //ÀåÂøµÈ ¾ÆÀÌÅÛÀÌ ÀÖÀ¸¸é ÇØ´ç ¾ÆÀÌÅÛ ÀåÂø ÇØÁ¦
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     SelectedItem = selectedEquip.equippedItem;
-                    selectedEquip.UnequipItem();
+                    selectedEquip.UnEquipItem();
                     SetSelectedObjectToLastSibling(selectedItem.transform);
                 }
                 return;
@@ -75,9 +75,9 @@ public partial class InventoryController
                 gridPosition = WorldToGridPos();
                 
                 ItemObject clickedItem = selectedGrid.GetItem(gridPosition.x, gridPosition.y);
-                if (clickedItem == null) { Debug.Log("ÇØ´ç À§Ä¡¿¡ ¾ÆÀÌÅÛÀÌ ¾øÀ½");  return; }
+                if (clickedItem == null) { Debug.Log("ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");  return; }
 
-                //Å¬¸¯ÇÑ ¾ÆÀÌÅÛÀÌ ¼û°ÜÁø °æ¿ì¿¡´Â ¼û±èÀ» ÇØÁ¦ÇÏ°í ¾Æ´Ï¸é ¾ÆÀÌÅÛÀ» µë
+                //Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
                 if (clickedItem.isHide == true)
                 {
                     if (!clickedItem.isOnSearching)
@@ -99,36 +99,87 @@ public partial class InventoryController
 
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» Áý´Â ½Ãµµ.
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ãµï¿½.
     /// </summary>
     private void ItemGet(Vector2Int pos)
     {
         if (!isGridSelected) { return; }
         SelectedItem = selectedGrid.PickUpItem(pos.x, pos.y);
 
-        //¾ÆÀÌÅÛÀÌ ±×¸®µå¿¡ °¡·ÁÁö´Â°ÍÀ» ¹æÁö
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½å¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         SetSelectedObjectToLastSibling(selectedRect);
     }
 
-    private void ItemDivideInGrid(ItemObject item, Vector2Int gridPosition)
+    private void ItemDivide(ItemObject item,Vector2Int gridPosition)
     {
-        //¹èÄ¡°¡ ºÒ°¡´ÉÇÏ°Å³ª ¿ø·¡ ÀÚ¸®¶ó¸é Undo
+        //ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½ï¿½Ï°Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¸ï¿½ï¿½ï¿½ï¿½ Undo
         if (item.parentObjId == selectedGrid.objectId && item.itemData.pos == gridPosition || !itemPlaceableInGrid)
         {
-            UndoGridSlot(item);
+            UndoSlot(item);
             UndoItem(item);
             return;
         }
 
-        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",item.transform.parent).GetComponent<DivideInterface>(); //±×¸®µå ¿ÀºêÁ§Æ®ÀÇ ÀÚ½ÄÀ¸·Î »ý¼º
+        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",item.transform.parent).GetComponent<DivideInterface>(); //ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         divideInterface.SetInterfacePos(item);
-        divideInterface.SetAmountIndex(item, gridPosition,selectedGrid,overlapItem);
+        divideInterface.SetAmountIndex(item, gridPosition, overlapItem);
         
     }
 
+    /// <summary>
+    /// ï¿½ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½
+    /// </summary>
+    private void ItemReleaseInEquip(ItemObject item, EquipSlot slot)
+    {
+        if (slot.allowedItemType == item.itemData.item_type)
+        {
+
+            if (isDivideMode)
+            {
+                ItemDivide(selectedItem, gridPosition);
+            }
+            else
+            {
+                if (slot.equippedItem != null)
+                {
+                    if (CheckAbleToMerge(item, slot.equippedItem))
+                    {
+                        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                        int needAmount = selectedItem.ItemAmount + slot.equippedItem.ItemAmount <= ItemObject.maxItemMergeAmount
+                            ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - slot.equippedItem.ItemAmount;
+
+                        SendMergeItemPacket(item, slot.equippedItem, needAmount);
+                    }
+                    else
+                    {
+                        UndoSlot(SelectedItem);
+                        UndoItem(SelectedItem);
+                    }
+                }
+                else
+                {
+                    SendMoveItemPacket(item);
+                }
+            } 
+        }
+        else
+        {
+            UndoSlot(item);
+            UndoItem(item);
+        }
+    }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ³õ´Â ½Ãµµ.
+    /// ï¿½ï¿½ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½Ò°ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½
+    /// </summary>
+    private void ItemReleaseInDelete()
+    {
+        SendDeleteItemPacket(selectedItem);
+    }
+
+    
+    /// <summary>
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ãµï¿½.
     /// </summary>
     private void ItemReleaseInGrid(ItemObject item, Vector2Int pos)
     {
@@ -138,141 +189,14 @@ public partial class InventoryController
         }
         else
         {
-            UndoGridSlot(item);
+            UndoSlot(item);
             UndoItem(item);
         }
 
     }
 
-    
-    
     /// <summary>
-    /// ÀåºñÄ­¿¡ ¾ÆÀÌÅÛÀ» ¹èÄ¡ÇÒ °æ¿ì
-    /// </summary>
-    private void ItemReleaseInEquip()
-    {
-        if (SelectedEquip.allowedItemType == SelectedItem.itemData.item_type)
-        {
-            if (SelectedEquip.equippedItem == null)//Å¸ÀÔÀÌ ÀÏÄ¡ÇÏ°í ÀåÂøÄ­¿¡ ¾ÆÀÌÅÛÀÌ ¾øÀ»°æ¿ì -> ÇØ´ç ÀåÂøÄ­¿¡ ¾ÆÀÌÅÛ ÀåÂø
-            {
-                SendMoveItemPacket(SelectedItem);
-            }
-            else //Å¸ÀÔÀÌ ÀÏÄ¡ÇÏ³ª ÀåÂøÄ­¿¡ ¾ÆÀÌÅÛÀÌ ÀÖÀ½
-            {
-                /*
-                if (SelectedItem.backUpItemGrid != null)
-                { //±×¸®µå -> ÀåÂøÄ­
-                    SwapWithGrid();
-                }
-                else
-                { //ÀåÂøÄ­ -> ÀåÂøÄ­
-                    SwapBetweenEquipSlots();
-                }*/
-            }
-        }
-        else //Å¸ÀÔÀÌ ÀÏÄ¡ÇÏÁö ¾ÊÀ» °æ¿ì -> ÀåÂø °ÅºÎ. ³ÖÀ¸·Á´Â ¾ÆÀÌÅÛÀ» ¿ø·¡ ÀÖ´ø ÀÚ¸®·Î ±ÍÈ¯½ÃÅ´
-        {
-            //RejectEquipItem(selectedItem);
-        }
-    }
-
-    /*
-    /// <summary>
-    /// ÀåºñÃ¢ÀÇ ¾ÆÀÌÅÛÀ» ±×¸®µå¿¡ ³Ö°í ¼±ÅÃÇÑ ¾ÆÀÌÅÛÀ» ÀåºñÃ¢¿¡ ¹èÄ¡ È¤Àº ¼±ÅÃµÈ ¾ÆÀÌÅÛ undo 
-    /// </summary>
-    private void SwapWithGrid()
-    {
-        ItemObject toSlotItem = SelectedItem;
-        ItemObject toGridItem = SelectedEquip.equippedItem;
-        EquipSlot targetEquip = SelectedEquip;
-        GridObject playerGrid = playerInvenUI.instantGrid; //¸¸¾à ÀÎº¥ ÇÏ³ª¿¡ ±×¸®µå°¡ ¿©·¯°³°¡ µÈ´Ù¸é ¼öÁ¤ÇØ¾ßÇÔ
-
-        Vector2Int? findSpacePos = playerGrid.FindSpaceForObject(toGridItem);
-        if(findSpacePos == null)
-        {
-            toGridItem.RotateRight();
-            findSpacePos = playerGrid.FindSpaceForObject(toGridItem);
-        }
-
-        if (findSpacePos != null)
-        {
-            toGridItem.curItemGrid = playerGrid;
-            toGridItem.curEquipSlot = null;
-            toGridItem.backUpEquipSlot = null;
-            //ÀÎº¥Åä¸®¿¡ ±âÁ¸ÀÇ ¾ÆÀÌÅÛÀ» ³ÖÀ»¼ö ÀÖÀ½ -> ±³È¯
-            toGridItem.backUpItemGrid = playerGrid;
-            targetEquip.UnequipItem();
-
-            toSlotItem.backUpEquipSlot = targetEquip;
-            targetEquip.EquipItem(toSlotItem);
-
-            if (toSlotItem.backUpItemGrid != null)
-            {
-                toSlotItem.backUpItemGrid = null;
-            }
-        }
-        else
-        {
-            if(toGridItem.itemData.rotate != 0)
-            {
-                toGridItem.itemData.rotate = 0;
-                toGridItem.Rotate(toGridItem.itemData.rotate);
-            }
-            //ÀÚ¸® ¾øÀ½ ¹èÄ¡ ½ÇÆÐ-> ¿ø·¡ À§Ä¡·Î
-            UndoGridSlot(SelectedItem);
-            UndoItem(SelectedItem);
-        }
-    }*/
-
-    /*
-    /// <summary>
-    /// ÀåºñÃ¢¿¡¼­ ÀåºñÃ¢À¸·Î ±³È¯ ÇÒ°æ¿ì
-    /// </summary>
-    private void SwapBetweenEquipSlots()
-    {
-        if (selectedItem.backUpEquipSlot == null) { Debug.Log("Something Wrong In Equip to Equip"); return; }
-        ItemObject targetItem = SelectedEquip.equippedItem;
-        EquipSlot targetSlot = targetItem.backUpEquipSlot;
-
-        SelectedItem.backUpEquipSlot.UnequipItem(); //Å×½ºÆ®ÇØº¸±â
-        targetSlot.UnequipItem();
-
-        SelectedItem.backUpEquipSlot.EquipItem(targetItem); //¼±ÅÃÇÑ ¾ÆÀÌÅÛÀÌ ÀÖ´ø ÀåÂøÄ­¿¡ ÀåÂøÇÏ·Á´Â Ä­¿¡ ÀÖ´Â ¾ÆÀÌÅÛ ¹èÄ¡
-        targetSlot.EquipItem(selectedItem);
-        SelectedItem = null;
-    }*/
-
-    /*
-    /// <summary>
-    /// ÀåºñÄ­¿¡ ¹èÄ¡°¡ ºÒ°¡´ÉÇÒ°æ¿ì Undo
-    /// </summary>
-    public void RejectEquipItem(ItemObject item)
-    {
-        //±×¸®µå¿¡¼­ ½ÃµµÇÒ°æ¿ì
-        if (item.backUpItemGrid != null)
-        {
-            UndoGridSlot(item);
-            UndoItem(item);
-        }
-        else if (item.backUpEquipSlot != null)
-        {//ÀåÂøÄ­¿¡¼­ ½ÃµµÇÒ°æ¿ì
-            item.curEquipSlot = item.backUpEquipSlot;
-            item.backUpEquipSlot.EquipItem(item);
-            item = null;
-        }
-    }*/
-
-
-    /// <summary>
-    /// »èÁ¦Ä­¿¡ ¹èÄ¡ÇÒ°æ¿ì -> ¾ÆÀÌÅÛ »èÁ¦Ã³¸®
-    /// </summary>
-    private void ItemReleaseInDelete()
-    {
-        SendDeleteItemPacket(selectedItem);
-    }
-
-    /// <summary>
-    /// ¾ÆÀÌÅÛ ¹èÄ¡ ¼º°ø. º´ÇÕ ¹× ¾ÆÀÌÅÛ ¹èÄ¡ ½ÇÇà
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="item"></param>
     /// <param name="pos"></param>
@@ -280,7 +204,7 @@ public partial class InventoryController
     {
         if (isDivideMode)
         {
-            ItemDivideInGrid(selectedItem, gridPosition);
+            ItemDivide(item, pos);
         }
         else
         {
@@ -288,15 +212,16 @@ public partial class InventoryController
             {
                 if (CheckAbleToMerge(item, overlapItem))
                 {
-                    //¾ÆÀÌÅÛÀÇ ¸ÓÁö°¡ °¡´ÉÇÔ
-                    int needAmount = selectedItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
-                        ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                    int needAmount = item.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
+                        ? item.ItemAmount 
+                        : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
 
                     SendMergeItemPacket(item, overlapItem, needAmount);
                 }
                 else
                 {
-                    UndoGridSlot(SelectedItem);
+                    UndoSlot(SelectedItem);
                     UndoItem(SelectedItem);
                 }
             }
@@ -308,7 +233,7 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// ¿À¹ö·¦ ¾ÆÀÌÅÛ Á¸ÀçÇÒ¶§ ¸ÓÁö°¡ °¡´ÉÇÑÁö Ã¼Å©
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò¶ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¼Å©
     /// </summary>
     public bool CheckAbleToMerge(ItemObject item, ItemObject _overlapItem)
     {
@@ -318,10 +243,8 @@ public partial class InventoryController
                !_overlapItem.isHide;
     }
 
-    
-
     /// <summary>
-    /// ÄÁÆ®·Ñ·¯ »ó¿¡¼­ »èÁ¦ Ã³¸®
+    /// ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ ï¿½ó¿¡¼ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½
     /// </summary>
     public void DestroyItem(ItemObject targetItem)
     {
@@ -329,24 +252,6 @@ public partial class InventoryController
         targetItem.DestroyItem();
     }
 
-    /* »ç¿ë¾ÈÇÔ
-    /// <summary>
-    /// ±×¸®µå¿¡ ¹èÄ¡¸¦ ¼º°øÇÔ 
-    /// </summary>
-    public void CompleteItemPlacement(ItemObject item, Vector2Int pos)
-    {
-        if(item.parentObjId == 0)
-        {
-            playerInvenUI.instantGrid.PlaceItem(item, pos.x, pos.y);
-        }
-        else
-        {
-            otherInvenUI.instantGrid.PlaceItem(item, pos.x, pos.y);
-        }
-    
-        ResetSelection();
-
-    }*/
 }
 
 
