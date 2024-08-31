@@ -65,7 +65,7 @@ internal class PacketHandler
             player.MaxHp = Stats.MaxHp;
 
             //Collider Line 작성
-            //player.SetDrawLine(info.Shape.Width,info.Shape.Height);
+            player.SetDrawLine(info.Shape.Width,info.Shape.Height);
              
         }
         //Debug.Log("S_SpawnHandler");*/

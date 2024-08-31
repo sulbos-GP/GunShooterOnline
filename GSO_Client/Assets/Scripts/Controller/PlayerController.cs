@@ -10,6 +10,8 @@ public class PlayerController : CreatureController
 
     protected float _width;
     protected float _height;
+
+    public LineRenderer lineRenderer;
     public struct Rectangle
     {
         public Vector2 topLeft;
@@ -31,19 +33,26 @@ public class PlayerController : CreatureController
 
     public void SetDrawLine(float width , float height)
     {
+        lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
-        rect = new Rectangle(width,height,gameObject.transform);
+
+        rect = new Rectangle(width, height, gameObject.transform);
+        // LineRenderer 설정
+        lineRenderer.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
+        lineRenderer.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+
+
+        // LineRenderer의 점 위치 설정
+        lineRenderer.SetPosition(0, rect.topLeft);
+        lineRenderer.SetPosition(1, rect.topRight);
+        lineRenderer.SetPosition(2, rect.bottomRight);
+        lineRenderer.SetPosition(3, rect.bottomLeft);
+        lineRenderer.SetPosition(4, rect.topLeft);
     }
 
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(rect.topLeft, rect.topRight);
-        Gizmos.DrawLine(rect.topRight, rect.bottomRight);
-        Gizmos.DrawLine(rect.bottomRight, rect.bottomLeft);
-        Gizmos.DrawLine(rect.bottomLeft, rect.topLeft);
-    }
 
     protected void UpdateDrawLine()
     {
@@ -158,7 +167,7 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-        rig.MovePosition(rig.position + newVec2);
+        //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;
         //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
