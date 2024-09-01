@@ -1,5 +1,6 @@
 using Google.Protobuf.Protocol;
 using NPOI.HPSF;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
@@ -32,24 +33,27 @@ public class ItemData
         amount = itemInfo.Amount;
 
         isSearched = itemInfo.IsSearched;
-
-        foreach(ItemData dbData in ItemDB.items) //서버를 통한 데이터베이스 검색으로 변경할것
-        {
-            if(dbData.itemId == itemId)
-            {
-                item_name = dbData.item_name;
-                item_weight = dbData.item_weight; //아이템의 무게
-                item_type = dbData.item_type;
-                item_string_value = dbData.item_string_value;
-                item_purchase_price = dbData.item_purchase_price;
-                item_sell_price = dbData.item_sell_price;
-                item_searchTime = dbData.item_searchTime;
-                width = dbData.width;
-                height = dbData.height;
-                isItemConsumeable = dbData.isItemConsumeable;
-                break;
-            }
+        Data_Item itemDB = Data_Item.GetData(itemId);
+        item_name = itemDB.name;
+        item_weight = Math.Round(itemDB.weight,2); //아이템의 무게
+        
+        switch (itemDB.type) {
+            case eITEM_TYPE.Weapone: item_type = ItemType.Weapon; break;
+            case eITEM_TYPE.Defensive: item_type = ItemType.Defensive; break;
+            case eITEM_TYPE.Bag: item_type = ItemType.Bag; break;
+            case eITEM_TYPE.Recovery: item_type = ItemType.Recovery; break;
+            case eITEM_TYPE.Bullet: item_type = ItemType.Bullet; break;
+            case eITEM_TYPE.Spoil: item_type = ItemType.Spoil; break;
         }
+
+        item_string_value = itemDB.description;
+        item_purchase_price = itemDB.purchase_price;
+        item_sell_price = itemDB.sell_price;
+        item_searchTime = itemDB.inquiry_time;
+        width = itemDB.scale_x;
+        height = itemDB.scale_y;
+        isItemConsumeable = itemDB.type == eITEM_TYPE.Recovery || itemDB.type == eITEM_TYPE.Bullet;
+        icon = itemDB.icon;
     }
 
     /// <summary>
@@ -76,10 +80,8 @@ public class ItemData
     public int amount; // 아이템의 개수(소모품만 64개까지)
     public bool isSearched; // 이 아이템을 조회한 플레이어의 아이디
 
-    [Header("임시 사용변수")]
-    //임시변수(아이템 코드를 통해 데이터베이스에서 불러오기가 가능할때까지)
     public string item_name;
-    public double item_weight; //아이템의 무게
+    public double item_weight;
     public ItemType item_type;
     public int item_string_value;
     public int item_purchase_price;
@@ -87,6 +89,7 @@ public class ItemData
     public float item_searchTime;
     public int width;
     public int height;
+
     public bool isItemConsumeable; //임시(아이템 타입으로 유추가능, 아이템 머지에 소모품인지 판단함. 이후 코드를 통해 조회로 변경)
-    //public Sprite itemSprite;
+    public string icon;
 }

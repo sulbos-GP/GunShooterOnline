@@ -16,43 +16,85 @@ using Vector2 = System.Numerics.Vector2;
 public partial class InventoryController
 {
     /// <summary>
-    /// ÇØ´ç ¾ÆÀÌÅÛÀÇ ¹èÄ¡µÈ ±×¸®µå ¿ÀºêÁ§Æ®ÀÇ ¾ÆÀÌÅÛ½½·ÔÀ» ¹é¾÷ÇÔ. ÀÌ°Å Àü¿¡ backupitemÀ» ¸ÕÀú ÇÒ°Í
+    /// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Û½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ backupitemï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ò°ï¿½
     /// </summary>
-    public void BackUpGridSlot(ItemObject item)
+    public void BackUpSlot(ItemObject item)
     {
-        item.backUpItemGrid.UpdateBackUpSlot();
+        if (item.parentObjId > 0 && item.parentObjId <= 7)
+        {
+            return;
+        }
+
+        if (item.backUpParentId == 0) 
+        { 
+            playerInvenUI.instantGrid.UpdateBackUpSlot();
+        }
+        else
+        {
+            otherInvenUI.instantGrid.UpdateBackUpSlot();
+        }
+        
+        
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ »óÅÂ¿Í À§Ä¡¸¦ ¹é¾÷ÇÔ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void BackUpItem(ItemObject item)
     {
-        item.backUpItemPos = item.itemData.pos; //ÇöÀç À§Ä¡
-        item.backUpItemRotate = item.itemData.rotate; //ÇöÀç È¸Àü
-        item.backUpItemGrid = item.curItemGrid; //ÇöÀç ±×¸®µå
+        item.backUpItemPos = item.itemData.pos; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+        item.backUpItemRotate = item.itemData.rotate; //ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½
+
+        item.backUpParentId = item.parentObjId;
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ ¹è¿­À» ÀÌÀü ¹è¿­·Î µÇµ¹¸².
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½è¿­ï¿½ï¿½ ï¿½Çµï¿½ï¿½ï¿½.
     /// </summary>
-    public void UndoGridSlot(ItemObject item)
+    public void UndoSlot(ItemObject item)
     {
-        item.backUpItemGrid.UndoItemSlot();
+        if(item.backUpParentId > 0 && item.backUpParentId <= 7)
+        {
+            //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+            EquipSlot UndoEquipSlot = EquipSlot.GetEquipSlot(item.backUpParentId);
+            UndoEquipSlot.EquipItem(item);
+            return;
+        }
+
+        if (item.backUpParentId == 0)
+        {
+            playerInvenUI.instantGrid.UndoItemSlot(); ;
+        }
+        else
+        {
+            otherInvenUI.instantGrid.UndoItemSlot();
+        }
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» µé¾ú´ø À§Ä¡¿Í °¢µµ·Î µÇµ¹¸² selectedItem ÇØÁ¦µÇ´Ï ÁÖÀÇ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Çµï¿½ï¿½ï¿½ selectedItem ï¿½ï¿½ï¿½ï¿½ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void UndoItem(ItemObject item)
     {
-        //ÇöÀç ¾ÆÀÌÅÛ ¿ÀºêÁ§Æ®ÀÇ º¯¼ö¸¦ ¹é¾÷ÇÑ º¯¼öÀÇ °ªÀ¸·Î ·Ñ¹é
         item.itemData.pos = item.backUpItemPos;
         item.itemData.rotate = item.backUpItemRotate;
-        item.curItemGrid = item.backUpItemGrid;
         item.Rotate(item.itemData.rotate);
 
-        item.backUpItemGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
+        item.parentObjId = item.backUpParentId;
+
+        if(item.parentObjId >0 && item.parentObjId <= 7)
+        {
+            EquipSlot targetSlot = EquipSlot.GetEquipSlot(item.parentObjId);
+            targetSlot.EquipItem(item);
+        }
+        else if(item.parentObjId == 0)
+        {
+            playerInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
+        }
+        else
+        {
+            otherInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
+        }
     }
 
 

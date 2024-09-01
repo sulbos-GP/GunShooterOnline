@@ -9,8 +9,8 @@ public class Box : InteractableObject
 {
     private OtherInventoryUI invenUI;
 
-    private Vector2Int size;
-    private double weight;
+    public Vector2Int size;
+    public double weight;
 
     public bool interactable;
     private void Awake()
@@ -27,10 +27,10 @@ public class Box : InteractableObject
     }
 
 
-    public void SetBox(long x, long y, double weight)
+    public void SetBox(int x, int y, double weight)
     {
-        this.size.x = (int)x;
-        this.size.y = (int)y;
+        size.x = x;
+        size.y = y;
         this.weight = weight;
     }
 
@@ -40,20 +40,18 @@ public class Box : InteractableObject
         Collider.radius = interactRange;
     }
 
-    //��Ŷ���� ���� �ٲ� �κ������� �ݿ�
-
-    //�÷��̾ ��ȣ�ۿ� Ű�� �������� ����� ����
+ 
     [ContextMenu("box interact")]
     public override void Interact()
     {
         if (interactable)
         {
-            InventoryController.invenInstance.SendLoadInvenPacket(0);  //�÷��̾�� ���� ���ɼ��� ���⿡ �÷��̾� �κ� ����
+            InventoryController.invenInstance.SendLoadInvenPacket(0);
             InventoryController.invenInstance.SendLoadInvenPacket(objectId);
         }
         else
         {
-            Debug.Log("�Ұ���");
+            Debug.Log("불가");
         }
     }
 

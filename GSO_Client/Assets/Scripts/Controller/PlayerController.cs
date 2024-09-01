@@ -8,7 +8,56 @@ public class PlayerController : CreatureController
     protected Coroutine _coSkill;
     protected bool _rangedSkill = false;
 
+    protected float _width;
+    protected float _height;
+
+    public LineRenderer lineRenderer;
+    public struct Rectangle
+    {
+        public Vector2 topLeft;
+        public Vector2 topRight;
+        public Vector2 bottomLeft;
+        public Vector2 bottomRight;
+
+        public Rectangle(float width, float height,Transform trans)
+        {
+            topLeft = new Vector2(trans.position.x - (width / 2), trans.position.y + (height / 2));
+            topRight = new Vector2(trans.position.x + (width / 2), trans.position.y - (height / 2));
+            bottomLeft = new Vector2(trans.position.x - (width / 2), trans.position.y - (height / 2));
+            bottomRight = new Vector2(trans.position.x + (width / 2), trans.position.y + (height / 2));
+        }
+    };
+
+    public Rectangle rect;
    //private SkillType skillType = SkillType.None; //애니메이션용
+
+    public void SetDrawLine(float width , float height)
+    {
+        lineRenderer = GetComponent<LineRenderer>();
+        _width = width;
+        _height = height;
+
+        rect = new Rectangle(width, height, gameObject.transform);
+        // LineRenderer 설정
+        lineRenderer.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
+        lineRenderer.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+
+
+        // LineRenderer의 점 위치 설정
+        lineRenderer.SetPosition(0, rect.topLeft);
+        lineRenderer.SetPosition(1, rect.topRight);
+        lineRenderer.SetPosition(2, rect.bottomRight);
+        lineRenderer.SetPosition(3, rect.bottomLeft);
+        lineRenderer.SetPosition(4, rect.topLeft);
+    }
+
+
+    protected void UpdateDrawLine()
+    {
+
+    }
 
 
     protected override void Init()
@@ -101,6 +150,7 @@ public class PlayerController : CreatureController
 
     public void UpdatePosInfo(PositionInfo info)
     {
+        Debug.Log("Update PosInfo");
         Dir = new Vector2(info.DirX, info.DirY);
         gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
         gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
@@ -113,10 +163,11 @@ public class PlayerController : CreatureController
         //else
         //    transform.position = Vector3.Lerp(transform.position, CellPos, Time.deltaTime * 10);
 
+        Debug.Log("Update Moving");
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-        rig.MovePosition(rig.position + newVec2);
+        //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;
         //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));

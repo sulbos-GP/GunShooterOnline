@@ -14,8 +14,6 @@ public class OtherInventoryUI : InventoryUI
     public override void InventorySet()
     {
         base.InventorySet();
-
-        //생성된 그리드를 초기세팅하고 들어있는 아이템
-        instantGrid.InitializeGrid(new Vector2Int(5, 5)); // 가방의 크기로 바꿀것
+        
     }
 }

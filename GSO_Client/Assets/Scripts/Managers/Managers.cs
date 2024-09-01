@@ -80,10 +80,12 @@ internal class Managers : MonoBehaviour
             s_instance = go.GetComponent<Managers>();
 
             //s_instance._data.InventorySet();
-
+            
             s_instance._pool.Init();
-            s_instance._Data.Init();
+            //s_instance._Data.Init();
             //s_instance._sound.InventorySet();
+
+            ExcelReader.ReadExcel();
         }
     }
 
@@ -108,13 +110,13 @@ internal class Managers : MonoBehaviour
     private readonly NetworkManager _network = new();
     private readonly WebManager _web = new();
     private readonly MapManager _map = new();
-    private readonly DataManager _Data = new();
+    //private readonly DataManager _Data = new();
     private readonly SkillManager _skill = new();
 
     public static NetworkManager Network => Instance._network;
     public static WebManager Web => Instance._web;
     public static MapManager Map => Instance._map;
-    public static DataManager Data => Instance._Data;
+    //public static DataManager Data => Instance._Data;
     public static SkillManager Skill => Instance._skill;
 
     #endregion
@@ -126,18 +128,18 @@ internal class Managers : MonoBehaviour
     private readonly SceneManagerEx _scene = new();
     private readonly ResourceManager _resource = new();
     private readonly ObjectManager _obj = new();
-
     public static ObjectManager Object => Instance._obj;
     public static PoolManager Pool => Instance._pool;
     public static ResourceManager Resource => Instance._resource;
     public static SceneManagerEx Scene => Instance._scene;
+
 
     #endregion
 
     #region Logger
 
     //private readonly SystemLogManager _systemLog = new();
-    
+
     //public static SystemLogManager SystemLog => Instance._systemLog;
 
     #endregion

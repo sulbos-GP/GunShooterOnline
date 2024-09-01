@@ -15,8 +15,12 @@ public class DivideInterface : MonoBehaviour
     public int splitAmountIndex;
     public int maxAmountIndex;
 
+    public int objectId;
     public Vector2Int targetPos;
+
     public ItemObject targetItem;
+    private ItemObject overlapItem;
+
     private void Awake()
     {
         scrollBar = transform.GetChild(0).GetComponent<Scrollbar>();
@@ -28,15 +32,17 @@ public class DivideInterface : MonoBehaviour
         targetItem = null;
     }
 
-    public void SetAmountIndex(ItemObject item, Vector2Int gridPos)
+    public void SetAmountIndex(ItemObject item, Vector2Int pos, ItemObject overlapItem)
     {
         InventoryController.invenInstance.isDivideInterfaceOn = true;
-        targetPos = gridPos;
+        targetPos = pos;
         targetItem = item;
+        objectId = item.parentObjId;
+        this.overlapItem = overlapItem != null ? overlapItem : null;
 
-        if(targetItem == null)
+        if (targetItem == null)
         {
-            Debug.Log("¾ÆÀÌÅÛÀ» ¹ÞÁö ¸øÇÔ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
         splitAmountIndex = 0;
@@ -46,12 +52,13 @@ public class DivideInterface : MonoBehaviour
         scrollBar.value = splitAmountIndex/maxAmountIndex;
 
         AddButtonHandler();
+
     }
 
     public void SetInterfacePos(ItemObject item)
     {
-        //todo : º¯°æ ÇÊ¿ä½Ã º¯°æ
-        //ÇöÀç´Â ±×³É ÇØ´ç Å¸°Ù ±×¸®µå ¿ÀºêÁ§Æ®ÀÇ Áß¾Ó¿¡ ¹èÄ¡µÇµµ·Ï ¼³Á¤
+        //todo : ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½Ø´ï¿½ Å¸ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½Ä¡ï¿½Çµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
@@ -76,18 +83,62 @@ public class DivideInterface : MonoBehaviour
 
     private void OnScrollbarValueChanged(float value)
     {
+        InventoryController inven = InventoryController.invenInstance;
+        GridObject playerGridObj = inven.playerInvenUI.instantGrid;
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 1)) + 1;
         UpdateCountText();
 
-        if (InventoryController.invenInstance.SelectedItem.curItemGrid.objectId == 0)
+        if(objectId > 0 && objectId <= 7)
         {
-            GridObject playerGrid = InventoryController.invenInstance.SelectedGrid;
-            double result = Math.Round(playerGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
-            InventoryController.invenInstance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
+            //ìž¥ë¹„ì¹¸ì— ì•„ì´í…œì˜ ë¬´ê²Œë¥¼ ì¶”ê°€í•œë‹¤ê³  í–ˆë‚˜?
+            double result = Math.Round(playerGridObj.GridWeight,2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
+        }
 
-            if (result > playerGrid.limitWeight)
+        if (objectId == 0) //ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Ï·ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½
+        {
+            if (targetItem.backUpParentId == 0)
             {
-                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.red;
+                //ï¿½ï¿½ -> ï¿½ï¿½ = ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½
+                double result = Math.Round(playerGridObj.GridWeight,2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
+            }
+            else
+            {   //ï¿½ï¿½ -> ï¿½ï¿½ 
+                double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
+
+                if (result > playerGridObj.limitWeight)
+                {
+                    inven.playerInvenUI.weightText.color = Color.red;
+                }
+                else
+                {
+                    inven.playerInvenUI.weightText.color = Color.white;
+                }
+            }
+        }
+        else 
+        {
+            if (targetItem.backUpParentId == 0)
+            {
+                //ï¿½ï¿½ -> ï¿½ï¿½ = ï¿½ï¿½ï¿½ï¿½
+                double result = Math.Round(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex, 2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
+
+                if (result > playerGridObj.limitWeight)
+                {
+                    inven.playerInvenUI.weightText.color = Color.red;
+                }
+                else
+                {
+                    inven.playerInvenUI.weightText.color = Color.white;
+                }
+            }
+            else
+            {   //ï¿½ï¿½ -> ï¿½ï¿½ = ï¿½ï¿½È­ï¿½ï¿½ï¿½ï¿½
+                double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight,2);
+                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
             }
         }
     }
@@ -100,7 +151,7 @@ public class DivideInterface : MonoBehaviour
 
     private void OnCancelButtonClicked()
     {
-        InventoryController.invenInstance.UndoGridSlot(targetItem);
+        InventoryController.invenInstance.UndoSlot(targetItem);
         InventoryController.invenInstance.UndoItem(targetItem);
         DestroyInterface();
     }
@@ -108,9 +159,13 @@ public class DivideInterface : MonoBehaviour
 
     public void OnConfirmButtonClicked()
     {
-        
-        Debug.Log("¾ÆÀÌÅÛÀ» " + splitAmountIndex + "°³·Î ºÐ¸®ÇÕ´Ï´Ù.");
-        if(splitAmountIndex == targetItem.ItemAmount)
+        Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ " + splitAmountIndex + "ï¿½ï¿½ï¿½ï¿½ ï¿½Ð¸ï¿½ï¿½Õ´Ï´ï¿½.");
+
+        if (overlapItem != null)
+        {
+            InventoryController.invenInstance.SendMergeItemPacket(targetItem, overlapItem, splitAmountIndex);
+        }
+        else if (splitAmountIndex == targetItem.ItemAmount)
         {
             InventoryController.invenInstance.SendMoveItemPacket(targetItem, targetPos);
         }
@@ -119,6 +174,7 @@ public class DivideInterface : MonoBehaviour
             InventoryController.invenInstance.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
         }
 
+        InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
         DestroyInterface();
     }
 

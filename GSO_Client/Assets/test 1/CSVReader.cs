@@ -7,11 +7,11 @@ public class CSVReader : MonoBehaviour
 {
     public string csvFilePath;
 
-    void Start()
+    void Awake()
     {
         ExcelReader.ReadExcel();
         Debug.Log("success Read");
-        Debug.Log(Data_Item.GetData(1).name);
+        Debug.Log(Data_Item.GetData(101).name);
         //List<Data_TestItem> playerDataList = ReadCSVFile(csvFilePath);
         //foreach (Data_TestItem player in playerDataList)
         //{
