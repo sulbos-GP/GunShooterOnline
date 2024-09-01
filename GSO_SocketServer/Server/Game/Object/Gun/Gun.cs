@@ -107,7 +107,6 @@ namespace Server.Game
         {
             if (gunState == GunState.Shootable && ExtensionMethod.time >= _lastFireTime + 1 / gunData.fireRate)
             {
-                Console.WriteLine("FireSuccess");
                 /*
                  발사 코드 작성.
                  총알을 발사하든 레이케스트로 충돌감지를 하든
