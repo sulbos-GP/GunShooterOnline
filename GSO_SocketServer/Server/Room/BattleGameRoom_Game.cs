@@ -639,53 +639,60 @@ namespace Server
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
-             attacker.gun.Fire(attacker,pos, dir, length);   
-
-
-
-
-/*    삭제
-            RaycastHit2D hit2D = RaycastManager.Raycast(pos+ pos*dir *0.5f ,dir, length);
-            
-            if(hit2D.Collider == null)
+             bool t =  attacker.gun.Fire(attacker,pos, dir, length);   
+            if(t == true)
             {
-                return;
+                Console.WriteLine("FireSuccess");
+
             }
-
-            GameObject hitObject = hit2D.Collider.Parent;
-            if (hitObject == null)
+            else
             {
-                Console.WriteLine("HandleRayCast null");
-                return;
+                Console.WriteLine("Fail");
             }
 
 
-            if(hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster)
-            {
-                CreatureObj creatureObj = hitObject as CreatureObj;
+            /*    삭제
+                        RaycastHit2D hit2D = RaycastManager.Raycast(pos+ pos*dir *0.5f ,dir, length);
+
+                        if(hit2D.Collider == null)
+                        {
+                            return;
+                        }
+
+                        GameObject hitObject = hit2D.Collider.Parent;
+                        if (hitObject == null)
+                        {
+                            Console.WriteLine("HandleRayCast null");
+                            return;
+                        }
 
 
-                //TODO : 공격력  attacker 밑에 넣기 240814지승현
-                creatureObj.OnDamaged(attacker, 3);
-
-                S_ChangeHp ChangeHpPacket = new S_ChangeHp();
-                ChangeHpPacket.ObjectId = hitObject.Id;
-                ChangeHpPacket.Hp = creatureObj.Hp;
-
-                Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hitObject.Id + "HIT Hp : "+ hitObject.Hp);
-
-                BroadCast(ChangeHpPacket);
-            }
-
-            S_RaycastHit packet = new S_RaycastHit();
-            packet.HitObjectId = hitObject.Id;
-            packet.RayId = hit2D.rayID;
-            packet.Distance = hit2D.distance;
-            packet.HitPointX = hit2D.hitPoint.Value.X;
-            packet.HitPointY = hit2D.hitPoint.Value.Y;
+                        if(hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster)
+                        {
+                            CreatureObj creatureObj = hitObject as CreatureObj;
 
 
-            BroadCast(packet);*/
+                            //TODO : 공격력  attacker 밑에 넣기 240814지승현
+                            creatureObj.OnDamaged(attacker, 3);
+
+                            S_ChangeHp ChangeHpPacket = new S_ChangeHp();
+                            ChangeHpPacket.ObjectId = hitObject.Id;
+                            ChangeHpPacket.Hp = creatureObj.Hp;
+
+                            Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hitObject.Id + "HIT Hp : "+ hitObject.Hp);
+
+                            BroadCast(ChangeHpPacket);
+                        }
+
+                        S_RaycastHit packet = new S_RaycastHit();
+                        packet.HitObjectId = hitObject.Id;
+                        packet.RayId = hit2D.rayID;
+                        packet.Distance = hit2D.distance;
+                        packet.HitPointX = hit2D.hitPoint.Value.X;
+                        packet.HitPointY = hit2D.hitPoint.Value.Y;
+
+
+                        BroadCast(packet);*/
 
         }
 
