@@ -22,7 +22,7 @@ namespace Server.Game
         //발사된 위치
         private Vector3 _startPos;
 
-        private void Awake()
+       /* private void Awake()
         {
             if (_bulletStat != null)
             {
@@ -59,7 +59,7 @@ namespace Server.Game
                 Debug.Log($"{collision.gameObject.name} 에게 {_damage}의 데미지를 줌"); //충돌체의 스텟에서 hp감소로 교체
                 Destroy(gameObject); //오브젝트 풀링 활용?
             }
-        }
+        }*/
     }
 
 }

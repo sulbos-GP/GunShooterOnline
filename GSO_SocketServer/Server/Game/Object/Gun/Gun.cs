@@ -15,6 +15,8 @@ namespace Server.Game
 {
     public class Gun
     {
+        public Player ownerPlayer;
+
         public GunState gunState { get; private set; }
 
         public GunData gunData { get; private set; }
@@ -26,19 +28,15 @@ namespace Server.Game
 
         public bool isBulletPrefShoot = false;
 
-        //총알궤적 라인 렌더러 (디버깅 라인을 라인렌더러로 표현)
-        private LineRenderer bulletLine;
-        private LineRenderer rangeLine;
-        private Transform _fireStartPos;
+        //총알 private LineRenderer bulletLine;
+        //private LineRenderer rangeLine;
+        private Vector3 _fireStartPos;//궤적 라인 렌더러 (디버깅 라인을 라인렌더러로 표현)
+       
         private Vector3 _direction;      // Ray가 향하는 방향
 
         CoroutineManager coroutineManager = new();
 
-        private void Awake()
-        {
-            ExtensionMethod.Start();
-            Init();
-        }
+      
 
         public void SetGunStat(GunStat gunStat)
         {
@@ -58,29 +56,31 @@ namespace Server.Game
             return gunData;
         }
 
-        private void Init()
+        public void Init(Player p)
         {
+            ExtensionMethod.Start();
+
             //Debug Line
-            bulletLine = GetComponent<LineRenderer>();
+            /*bulletLine = GetComponent<LineRenderer>();
             rangeLine = transform.GetChild(0).GetComponent<LineRenderer>();
             bulletLine.positionCount = 2;
-            rangeLine.positionCount = 5;
+            rangeLine.positionCount = 5;*/
 
             //게임 시작시 실행할 루틴
             SetGunStat(_gunStat);
             _curAmmo = gunData.ammo;
             gunState = GunState.Shootable;
-            _fireStartPos = transform.GetChild(0);
+            //_fireStartPos = transform.GetChild(0);
 
-
+            ownerPlayer = p;
         }
 
-        private void Update()
+       /* private void Update()
         {
             SetFireLine();
-        }
+        }*/
 
-        private void SetFireLine()
+        /*private void SetFireLine()
         {
             //발사범위 선 2개 긋기
             if (_fireStartPos == null) return;
@@ -100,10 +100,10 @@ namespace Server.Game
             rangeLine.SetPosition(2, _fireStartPos.position);
             rangeLine.SetPosition(3, endPoint2);
             rangeLine.SetPosition(4, _fireStartPos.position);
-        }
+        }*/
 
         //발사버튼 누를시
-        public bool Fire()
+        public bool Fire(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
             if (gunState == GunState.Shootable && ExtensionMethod.time >= _lastFireTime + 1 / gunData.fireRate)
             {
@@ -120,34 +120,56 @@ namespace Server.Game
                 float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
                 float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
                 float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
-                Vector3 direction = ExtensionMethod.Quaternion.Euler(0, 0, randomAngle) * _fireStartPos.up;
+                //Vector3 direction = ExtensionMethod.Quaternion.Euler(0, 0, randomAngle) *_fireStartPos.up;
 
                 //레이캐스트를 사용한 방법
-                RaycastHit2D hit = Physics2D.Raycast(_fireStartPos.position, direction, gunData.range);
+               // RaycastHit2D hit = Physics2D.Raycast(_fireStartPos.position, direction, gunData.range);
 
-                if (hit.collider != null)
-                {
-                    // 충돌 위치까지 LineRenderer 설정
-                    bulletLine.SetPosition(0, _fireStartPos.position);
-                    bulletLine.SetPosition(1, hit.point);
 
-                    // 패킷 전송
-                    var cRay = new C_RaycastShoot
-                    {
-                        StartPosX = _fireStartPos.position.x,
-                        StartPosY = _fireStartPos.position.y,
-                        DirX = direction.x,
-                        DirY = direction.y,
-                        Length = Vector3.Distance(_fireStartPos.position, hit.point)  // 실제 충돌 위치까지의 거리
-                    };
-                }
-                else
+                RaycastHit2D hit2D = RaycastManager.Raycast(pos + pos * dir * 0.5f, dir, length);
+
+
+
+                if (hit2D.Collider == null)
                 {
-                    // 충돌이 없으면 최대 사거리까지 LineRenderer 설정
-                    Vector3 endPos = _fireStartPos.position + direction * gunData.range;
-                    bulletLine.SetPosition(0, _fireStartPos.position);
-                    bulletLine.SetPosition(1, endPos);
+                    return false;
                 }
+
+                GameObject hitObject = hit2D.Collider.Parent;
+                if (hitObject == null)
+                {
+                    Console.WriteLine("hit is null");
+                    return false;
+                }
+
+                if (hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster)
+                {
+                    CreatureObj creatureObj = hitObject as CreatureObj;
+
+
+                    //TODO : 공격력  attacker 밑에 넣기 240814지승현
+                    creatureObj.OnDamaged(attacker, 3);
+
+                    S_ChangeHp ChangeHpPacket = new S_ChangeHp();
+                    ChangeHpPacket.ObjectId = hitObject.Id;
+                    ChangeHpPacket.Hp = creatureObj.Hp;
+
+                    Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hitObject.Id + "HIT Hp : " + hitObject.Hp);
+
+                    ownerPlayer.gameRoom.BroadCast(ChangeHpPacket);
+                }
+
+                S_RaycastHit packet = new S_RaycastHit();
+                packet.HitObjectId = hitObject.Id;
+                packet.RayId = hit2D.rayID;
+                packet.Distance = hit2D.distance;
+                packet.HitPointX = hit2D.hitPoint.Value.X;
+                packet.HitPointY = hit2D.hitPoint.Value.Y;
+
+
+                ownerPlayer.gameRoom.BroadCast(packet);
+
+                
 
                 if (isBulletPrefShoot)
                 {

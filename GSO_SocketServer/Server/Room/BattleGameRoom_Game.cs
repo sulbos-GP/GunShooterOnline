@@ -639,9 +639,12 @@ namespace Server
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
+             attacker.gun.Fire(attacker,pos, dir, length);   
 
-            // TODO : 삭제,  일단 레이를 좀 앞에서 쓰기
 
+
+
+/*    삭제
             RaycastHit2D hit2D = RaycastManager.Raycast(pos+ pos*dir *0.5f ,dir, length);
             
             if(hit2D.Collider == null)
@@ -682,7 +685,7 @@ namespace Server
             packet.HitPointY = hit2D.hitPoint.Value.Y;
 
 
-            BroadCast(packet);
+            BroadCast(packet);*/
 
         }
 
