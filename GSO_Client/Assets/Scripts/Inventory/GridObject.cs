@@ -1,4 +1,5 @@
 using NPOI.SS.Formula.Functions;
+using Org.BouncyCastle.Bcpg;
 using System;
 using System.Collections.Generic;
 using UnityEditor.UIElements;
@@ -46,7 +47,7 @@ public class GridObject : MonoBehaviour
     /// <summary>
     /// 인벤토리에서 그리드를 생성할때 사용
     /// </summary>
-    public void InitializeGrid(Vector2Int _gridSize, float gridWeigth = 30f)
+    public void InitializeGrid(Vector2Int _gridSize, double gridWeigth = 30f)
     {
         if (gridRect == null) gridRect = GetComponent<RectTransform>();
 
@@ -92,7 +93,6 @@ public class GridObject : MonoBehaviour
             }
         }
 
-        
         UpdateBackUpSlot();
     }
 
@@ -113,7 +113,7 @@ public class GridObject : MonoBehaviour
         //아이템 백업 변수에 현재 정보 백업
         itemObj.backUpItemPos = itemObj.itemData.pos; //현재 위치
         itemObj.backUpItemRotate = itemObj.itemData.rotate; //현재 회전
-        itemObj.backUpItemGrid = itemObj.curItemGrid; //현재 그리드
+        itemObj.backUpParentId = itemObj.parentObjId; //현재 그리드
         return itemObj;
     }
 
@@ -160,13 +160,16 @@ public class GridObject : MonoBehaviour
             }
         }
 
-
-        //무게에 의해 배치가 불가능할 경우 취소
-        if (!CheckGridWeight(placeItem,overlapItem))
+        if(objectId == 0) //플레이어의 인벤토리에서만 무게 적용
         {
-            Debug.Log("weight error");
-            return HighlightColor.Red;
+            //무게에 의해 배치가 불가능할 경우 취소
+            if (!CheckGridWeight(placeItem, overlapItem))
+            {
+                Debug.Log("weight error");
+                return HighlightColor.Red;
+            }
         }
+        
 
         InventoryController.invenInstance.itemPlaceableInGrid = true;
         return HighlightColor.Green;
@@ -206,7 +209,7 @@ public class GridObject : MonoBehaviour
         }
 
 
-        if (placeItem.backUpItemGrid.objectId == 0)
+        if (placeItem.backUpParentId == 0) //체크
         {
             itemWeight = 0;
         }
@@ -220,6 +223,10 @@ public class GridObject : MonoBehaviour
             if (result > playerGrid.limitWeight)
             {
                 InventoryController.invenInstance.playerInvenUI.weightText.color = Color.red;
+            }
+            else
+            {
+                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
             }
         }
         
@@ -294,7 +301,7 @@ public class GridObject : MonoBehaviour
             }
         }
 
-        item.curItemGrid = this;
+        item.parentObjId = objectId;
         UpdateBackUpSlot();
         UpdateItemPosition(item, posX, posY);
     }

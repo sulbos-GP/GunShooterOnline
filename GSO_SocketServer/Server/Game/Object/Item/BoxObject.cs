@@ -29,9 +29,9 @@ namespace Server.Game.Object.Item
 
             info.Box = new BoxInfo()
             {
-                X = 5,
-                Y = 5,
-                Weight = 40,
+                X = 6,
+                Y = 6,
+                Weight = 50,
             };
 
         }
@@ -56,42 +56,74 @@ namespace Server.Game.Object.Item
             //임의의 아이템
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
-            DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(1);
-            DB_UnitAttributes colt45Att = new DB_UnitAttributes()
+            DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(101);
+            DB_Unit colt45 = new DB_Unit()
             {
-                item_id = colt45Data.item_id,
-                durability = 0,
-                unit_storage_id = null,
-                amount = 1
-            };
-
-            ItemObject colt45Item = new ItemObject(0, 0, 0, colt45Att);
-            storage.InsertItem(colt45Item);
-
-            DB_ItemBase akData = DatabaseHandler.Context.ItemBase.Get(2);
-            DB_UnitAttributes akAtt = new DB_UnitAttributes()
-            {
-                item_id = akData.item_id,
-                durability = 0,
-                unit_storage_id = null,
-                amount = 1
-            };
-
-            ItemObject akItem = new ItemObject(3, 0, 1, akAtt);
-            storage.InsertItem(akItem);
-
-            DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(11);
-            for(int i = 0; i < 5; ++i)
-            {
-                DB_UnitAttributes bandAtt = new DB_UnitAttributes()
+                storage = new DB_StorageUnit()
                 {
-                    item_id = bandData.item_id,
+                    grid_x = 0,
+                    grid_y = 0,
+                    rotation = 0,
+                    unit_attributes_id = 0
+                },
+
+                attributes = new DB_UnitAttributes()
+                {
+                    item_id = colt45Data.item_id,
                     durability = 0,
                     unit_storage_id = null,
-                    amount = 1 + (i * 5)
-                };
+                    amount = 1
+                }
+            };
+            ItemObject colt45Item = new ItemObject(colt45);
+            storage.InsertItem(colt45Item);
 
-                ItemObject bandItem = new ItemObject(i, 4, 0, bandAtt);
+            //
+            DB_ItemBase akData = DatabaseHandler.Context.ItemBase.Get(102);
+            DB_Unit ak47 = new DB_Unit()
+            {
+                storage = new DB_StorageUnit()
+                {
+                    grid_x = 3,
+                    grid_y = 0,
+                    rotation = 1,
+                    unit_attributes_id = 0
+                },
+
+                attributes = new DB_UnitAttributes()
+                {
+                    item_id = akData.item_id,
+                    durability = 0,
+                    unit_storage_id = null,
+                    amount = 1
+                }
+            };
+            ItemObject akItem = new ItemObject(ak47);
+            storage.InsertItem(akItem);
+
+            //
+            DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(402);
+            for(int i = 0; i < 5; ++i)
+            {
+                DB_Unit band = new DB_Unit()
+                {
+                    storage = new DB_StorageUnit()
+                    {
+                        grid_x = i,
+                        grid_y = 4,
+                        rotation = 0,
+                        unit_attributes_id = 0
+                    },
+
+                    attributes = new DB_UnitAttributes()
+                    {
+                        item_id = bandData.item_id,
+                        durability = 0,
+                        unit_storage_id = null,
+                        amount = 1 + (i * 5)
+                    }
+                };
+                ItemObject bandItem = new ItemObject(band);
                 storage.InsertItem(bandItem);
             }
 

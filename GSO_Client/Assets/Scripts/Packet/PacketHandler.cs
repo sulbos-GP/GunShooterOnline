@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 
 using System.Runtime.CompilerServices;
+using System.Security.Cryptography.Xml;
 using UnityEditor;
 using UnityEngine;
 using static UnityEditor.Progress;
@@ -46,6 +47,7 @@ internal class PacketHandler
 
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
+        // 1번째 : 적 Spawn 정보 2번째 : box 정보 3번째 : 로컬 플레이어 정보?
         var spawnPacket = (S_Spawn)packet;
         
         foreach (var info in spawnPacket.Objects)
@@ -55,10 +57,16 @@ internal class PacketHandler
             var type = (info.ObjectId >> 24) & 0x7f;
             if ((GameObjectType)type != GameObjectType.Player)
                 continue;
+
+            //체력 STAT 주입
             var Stats = info.StatInfo;
             var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
+
+            //Collider Line 작성
+            player.SetDrawLine(info.Shape.Width,info.Shape.Height);
+             
         }
         //Debug.Log("S_SpawnHandler");*/
     }
@@ -169,8 +177,7 @@ internal class PacketHandler
             packetItemList.Add(convertItem);
         }
 
-        Debug.Log($"{packet.SourceObjectId}의 아이템 설정");
-
+        //인벤토리 불러오기
         if(packet.SourceObjectId == 0)
         {
             //플레이어의 인벤토리
@@ -183,14 +190,31 @@ internal class PacketHandler
             playerGrid.UpdateGridWeight();
             playerInvenUI.WeightTextSet(playerGrid.GridWeight, playerGrid.limitWeight);
             playerGrid.PrintInvenContents();
+
+            //장착칸 불러오기
+            foreach (PS_GearInfo packetItem in packet.GearInfos)
+            {
+                ItemData convertItem = new ItemData();
+                convertItem.SetItemData(packetItem.Item);
+
+                EquipSlot targetSlot = EquipSlot.GetEquipSlot((int)packetItem.Part);
+
+                ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
+                InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);
+                newItem.SetItem(convertItem);
+                newItem.parentObjId = targetSlot.slotId;
+                targetSlot.EquipItem(newItem);
+            }
         }
         else
         {
             GameObject target = Managers.Object.FindById(packet.SourceObjectId);
-            target.GetComponent<Box>().interactable = false;
+            Box box = target.GetComponent<Box>();
+            box.interactable = false;
 
             OtherInventoryUI otherInvenUI = InventoryController.invenInstance.otherInvenUI;
             otherInvenUI.InventorySet();
+            otherInvenUI.instantGrid.InitializeGrid(box.size, box.weight);
             GridObject boxGrid = otherInvenUI.instantGrid;
 
             boxGrid.objectId = packet.SourceObjectId;
@@ -282,6 +306,25 @@ internal class PacketHandler
         InventoryController.invenInstance.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
     }
 
+    private static void AssignEquipOrGrid(int objectId, ref EquipSlot equipSlot, ref GridObject gridObject)
+    {
+
+        if (objectId > 0 && objectId <= 7)
+        {
+            equipSlot = EquipSlot.GetEquipSlot(objectId);
+        }
+        else
+        {
+            gridObject = GetGridObject(objectId);
+        }
+    }
+
+    private static GridObject GetGridObject(int objectId)
+    {
+
+        return objectId == 0 ? InventoryController.invenInstance.playerInvenUI.instantGrid : InventoryController.invenInstance.otherInvenUI.instantGrid;
+    }
+
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
     {
         /*
@@ -306,42 +349,41 @@ internal class PacketHandler
             return;
         }
 
-        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
-        GridObject destinationGrid = packet.DestinationObjectId == 0 ? invenInstance.playerInvenUI.instantGrid : invenInstance.otherInvenUI.instantGrid;
+        GridObject sourceGrid = null;
+        GridObject destinationGrid = null;
+        EquipSlot sourceEquip = null;
+        EquipSlot destinationEquip = null;
+
+        AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
+        AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
+
+        //Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
 
         if (packet.IsSuccess)
         {
-            Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
-            
+            if (packet.DestinationObjectId > 0 && packet.DestinationObjectId <= 7)
+            {
+                //도착지점이 장착칸 -> 해당 아이템을 장착칸에 장착
+                destinationEquip.EquipItem(targetItem);
+            }
+            else
+            {
+                //도착지점이 인벤칸 -> 해당 아이템을 인벤토리에 배치
+                destinationGrid.PlaceItem(targetItem, packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
+                targetItem.Rotate(packet.DestinationMoveItem.Rotate); //주어진 회전도로 회전
+            }
 
-            destinationGrid.PlaceItem(targetItem, packet.DestinationMoveItem.X, packet.DestinationMoveItem.Y);
-            targetItem.Rotate(packet.DestinationMoveItem.Rotate);
-
-            ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
-
-            targetItem.curItemGrid.PrintInvenContents();
-            targetItem.backUpItemGrid.PrintInvenContents();
-            invenInstance.BackUpGridSlot(targetItem); //Undo 외에 옮긴 후에는 아이템 오브젝트 백업 필수
+            invenInstance.BackUpSlot(targetItem);
             invenInstance.BackUpItem(targetItem);
         }
         else
         {
-            Debug.Log("S_MoveItem 실패");
-            Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
-
-            ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
-            invenInstance.UndoGridSlot(targetItem);
+            invenInstance.UndoSlot(targetItem);
             invenInstance.UndoItem(targetItem);
-
-            targetItem.curItemGrid.PrintInvenContents();
-            targetItem.backUpItemGrid.PrintInvenContents();
-
         }
 
-        //패킷종료시 플레이어 인벤토리의 무게 텍스트 업데이트
-        sourceGrid.UpdateGridWeight();
-        destinationGrid.UpdateGridWeight();
-
+        ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
+        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
         invenInstance.playerInvenUI.WeightTextSet(
                 invenInstance.playerInvenUI.instantGrid.GridWeight,
                 invenInstance.playerInvenUI.instantGrid.limitWeight);
@@ -369,25 +411,23 @@ internal class PacketHandler
             return;
         }
 
-        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
+        GridObject sourceGrid = null;
+        EquipSlot sourceEquip = null;
+        AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
+
 
         if (packet.IsSuccess) {
-
             Debug.Log("S_DeleteItem 성공");
-            
-
-            sourceGrid.CleanItemSlot(targetItem);
             invenInstance.DestroyItem(targetItem);
-
         }
         else
         {
             Debug.Log("S_DeleteItem 실패");
-            invenInstance.UndoGridSlot(targetItem);
+            invenInstance.UndoSlot(targetItem);
             invenInstance.UndoItem(targetItem);
         }
 
-        sourceGrid.UpdateGridWeight();
+        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
         InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
                 InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
@@ -401,6 +441,7 @@ internal class PacketHandler
             Debug.Log("패킷이 없음");
             return;
         }
+
         Debug.Log($"합쳐지는 아이템 아이디 = {packet.MergedItem.ObjectId}, 합치기 위한 아이디 = {packet.CombinedItem.ObjectId}");
         InventoryController invenInstance = InventoryController.invenInstance;
 
@@ -415,36 +456,40 @@ internal class PacketHandler
             return;
         }
 
-        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
-        GridObject destinationGrid = packet.DestinationObjectId == 0 ? invenInstance.playerInvenUI.instantGrid : invenInstance.otherInvenUI.instantGrid;
+        GridObject sourceGrid = null;
+        GridObject destinationGrid = null;
+        EquipSlot sourceEquip = null;
+        EquipSlot destinationEquip = null;
+
+        AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
+        AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
 
 
         if (packet.IsSuccess)
         {
+            //각각 변화한 아이템 양 적용
             mergedItem.ItemAmount = packet.MergedItem.Amount;
+            combinedItem.ItemAmount = packet.CombinedItem.Amount;
 
-            if(packet.CombinedItem.Amount == 0)
+            //옮긴 아이템의 양이 0개가 되면 파괴 아니면 원래 위치로 이동
+            if (packet.CombinedItem.Amount == 0)
             {
                 invenInstance.DestroyItem(combinedItem);
             }
             else
             {
-                invenInstance.UndoGridSlot(combinedItem);
+                invenInstance.UndoSlot(combinedItem);
                 invenInstance.UndoItem(combinedItem);
-                
-                combinedItem.ItemAmount = packet.CombinedItem.Amount;
             }
-
         }
         else
         {
             Debug.Log("S_MergeItem 실패");
-            InventoryController.invenInstance.UndoGridSlot(combinedItem);
+            InventoryController.invenInstance.UndoSlot(combinedItem);
             InventoryController.invenInstance.UndoItem(combinedItem);
         }
 
-        sourceGrid.UpdateGridWeight();
-        destinationGrid.UpdateGridWeight();
+        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
 
         InventoryController.invenInstance.playerInvenUI.WeightTextSet(
                 InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
@@ -472,33 +517,47 @@ internal class PacketHandler
             return;
         }
 
-        GridObject sourceGrid = packet.SourceObjectId == 0 ? sourceGrid = invenInstance.playerInvenUI.instantGrid : sourceGrid = invenInstance.otherInvenUI.instantGrid;
-        GridObject destinationGrid = packet.DestinationObjectId == 0 ? destinationGrid = invenInstance.playerInvenUI.instantGrid : destinationGrid = invenInstance.otherInvenUI.instantGrid;
-        
+        GridObject sourceGrid = null;
+        GridObject destinationGrid = null;
+        EquipSlot sourceEquip = null;
+        EquipSlot destinationEquip = null;
+
+        AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
+        AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
+
         if (packet.IsSuccess)
         {
             Debug.Log($"원래 아이디 = {packet.SourceItem.ObjectId}, 새로 생성된 아이디 = {packet.DestinationItem.ObjectId}");
-            invenInstance.UndoGridSlot(sourceItem);
+            invenInstance.UndoSlot(sourceItem); //원래 아이템은 원위치로 이동후 나눈 만큼 아이템 감소
             invenInstance.UndoItem(sourceItem);
-            sourceItem.ItemAmount = packet.SourceItem.Amount; //원래 있던 아이템은 원래위치로 되돌린뒤 개수 업데이트(나뉜만큼 개수 감소)
+            sourceItem.ItemAmount = packet.SourceItem.Amount; 
 
-            //새로운 아이템을 생성하여 나눈 아이템 생성
-            ItemData newData = new ItemData();
-            newData.SetItemData(packet.DestinationItem);
+            if (packet.DestinationObjectId > 0 && packet.DestinationObjectId <= 7)
+            {
+                //도착지점이 장착칸 -> 이 경우는 소모품의 경우 
+                destinationEquip.EquipItem(sourceItem);
+            }
+            else
+            {
+                //도착지점이 인벤칸 -> 새로운 아이템을 생성하여 나눈 아이템 생성
+                ItemData newData = new ItemData();
+                newData.SetItemData(packet.DestinationItem);
 
-            destinationGrid.CreateItemObjAndPlace(newData);
+                destinationGrid.CreateItemObjAndPlace(newData);
+            }
+
+            invenInstance.BackUpSlot(sourceItem);
+            invenInstance.BackUpItem(sourceItem);
         }
         else
         {
             //실패할경우 로직
             Debug.Log("S_Divide 실패");
-            invenInstance.UndoGridSlot(sourceItem);
+            invenInstance.UndoSlot(sourceItem);
             invenInstance.UndoItem(sourceItem);
         }
 
-        sourceGrid.UpdateGridWeight();
-        destinationGrid.UpdateGridWeight();
-
+        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
         invenInstance.playerInvenUI.WeightTextSet(
                 invenInstance.playerInvenUI.instantGrid.GridWeight,
                 invenInstance.playerInvenUI.instantGrid.limitWeight);
@@ -554,26 +613,11 @@ internal class PacketHandler
         //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
         if (packet.PlayerId == Managers.Object.MyPlayer.Id)
         {
+            //플레이어는 자신의 장착칸과 인벤토리의 내용을 서버에 전송?
             return;
         }
 
-        //플레이어와 해당 플레이어 가진 아이템 그리드 데이터 삭제할것\
         var player = Managers.Object.FindById(packet.PlayerId);
-
-        /* 다른 플레이어는 클라에서 인벤토리를 가지지 않음
-        InvenData targetInvenData = player.GetComponent<PlayerInventory>().InputInvenData;
-        if (targetInvenData == null) {
-            Debug.Log("인벤데이터를 찾지 못함");
-        }
-
-        //해당 플레이어의 인벤토리의 그리드와 아이템을 오브젝트 매니저의 딕셔너리에서 제거
-        foreach (GridData grid in targetInvenData.grid) {
-            Managers.Object.RemoveGridDic(grid.gridId);
-            foreach (ItemData item in grid.itemList)
-            {
-                Managers.Object.RemoveItemDic(item.objectId);
-            }
-        }*/
 
         Managers.Resource.Destroy(player);
         Managers.Object.Remove(packet.PlayerId);

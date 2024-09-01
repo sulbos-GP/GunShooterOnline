@@ -12,7 +12,7 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
-//¿ÀºêÁ§Æ® id°¡ myPlayerÀÇ ÀÎº¥Åä¸®¸é ¹«Á¶°Ç 0
+//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® idï¿½ï¿½ myPlayerï¿½ï¿½ ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ 0
 public partial class InventoryController
 {
     public void SendLoadInvenPacket(int objectId)
@@ -20,7 +20,7 @@ public partial class InventoryController
         C_LoadInventory packet = new C_LoadInventory();
         packet.SourceObjectId = objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_SendLoadInven : {objectId}ÀÇ ¾ÆÀÌÅÛ ¿äÃ» ");
+        Debug.Log($"C_SendLoadInven : {objectId}ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ");
     }
 
     public void SendCloseInvenPacket(int objectId = 0)
@@ -28,7 +28,7 @@ public partial class InventoryController
         C_CloseInventory packet = new C_CloseInventory();
         packet.SourceObjectId = objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_SendLoadInven : {objectId}ÀÇ ÀÎº¥Åä¸® ´ÝÀ½ ");
+        Debug.Log($"C_SendLoadInven : {objectId}ï¿½ï¿½ ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ ");
     }
 
     public void SendSearchItemPacket(int objectId, ItemObject item)
@@ -37,24 +37,26 @@ public partial class InventoryController
         packet.SourceObjectId = objectId;
         packet.SourceItemId = item.itemData.objectId; 
         Managers.Network.Send(packet);
-        Debug.Log($"C_SearchInventory : {item.itemData.objectId} ¾ÆÀÌÅÛ °Ë»ö ");
+        Debug.Log($"C_SearchInventory : {item.itemData.objectId} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ ");
     }
 
 
     /// <summary>
-    /// ±×¸®µå -> ±×¸®µå È¤Àº ÀåÂø½½·Ô -> ±×¸®µå
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ È¤ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ô¿ï¿½ ï¿½ï¿½Ä¡
     /// </summary>
-    public void SendMoveItemPacket(ItemObject item , Vector2Int pos)
+    public void SendMoveItemPacket(ItemObject item , Vector2Int pos = default)
     {
         C_MoveItem packet = new C_MoveItem();
+
+        packet.SourceObjectId = item.backUpParentId;
+        packet.DestinationObjectId = item.parentObjId;
+        packet.DestinationGridX = pos.x; //ï¿½Å±ï¿½ ï¿½ï¿½Ä¡
+        packet.DestinationGridY = pos.y; //ï¿½Å±ï¿½ ï¿½ï¿½Ä¡
+        packet.DestinationRotation = item.itemData.rotate; //ï¿½Å°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½
         
-        packet.SourceObjectId = item.backUpItemGrid.objectId;  //Ãâ¹ß ¼ÒÀ¯ÀÚ id
-        packet.DestinationObjectId = item.curItemGrid.objectId;  //µµÂø ¼ÒÀ¯ÀÚid
-        packet.SourceMoveItemId = item.itemData.objectId; //¿Å±ä ¾ÆÀÌÅÛ ¾ÆÀÌµð
-        packet.DestinationGridX = pos.x; //¿Å±ä À§Ä¡
-        packet.DestinationGridY = pos.y; //¿Å±ä À§Ä¡
-        packet.DestinationRotation = item.itemData.rotate; //¿Å°åÀ»¶§ÀÇ È¸Àü
-        Debug.Log($"C_MoveItem : {item.itemData.objectId} ¾ÆÀÌÅÛ ¿Å±è ");
+        packet.SourceMoveItemId = item.itemData.objectId; 
+
+        Debug.Log($"C_MoveItem : {item.itemData.objectId} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Å±ï¿½ ");
         Managers.Network.Send(packet);
     }
 
@@ -62,20 +64,20 @@ public partial class InventoryController
     public void SendDeleteItemPacket(ItemObject item)
     {
         C_DeleteItem packet = new C_DeleteItem();
-        packet.SourceObjectId = item.backUpItemGrid.objectId;
+        packet.SourceObjectId = item.backUpParentId;
         packet.DeleteItemId = item.itemData.objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_DeleteItem : {item.itemData.objectId} ¾ÆÀÌÅÛ »èÁ¦");
+        Debug.Log($"C_DeleteItem : {item.itemData.objectId} ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
     }
 
     
     public void SendMergeItemPacket(ItemObject selectedItem, ItemObject overlapItem,  int itemAmount)
     {
-        C_MergeItem packet = new C_MergeItem(); // merge¿¡ combined ¼ö·®À» °¹¼ö¸¸Å­ ´õÇÑ´Ù
-        packet.SourceObjectId = overlapItem.backUpItemGrid.objectId; //combined°¡ ÀÖ´Â ±×¸®µå
-        packet.DestinationObjectId = selectedItem.backUpItemGrid.objectId;  //selected¤·°¡ ÀÖ´ø ±×¸®µå
+        C_MergeItem packet = new C_MergeItem(); // mergeï¿½ï¿½ combined ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Å­ ï¿½ï¿½ï¿½Ñ´ï¿½
+        packet.SourceObjectId = overlapItem.backUpParentId; //combinedï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
+        packet.DestinationObjectId = selectedItem.backUpParentId;  //selectedï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
 
-        packet.MergedObjectId = overlapItem.itemData.objectId; //°¨¼ÒÇÏ´Â ¾ÆÀÌÅÛ
+        packet.MergedObjectId = overlapItem.itemData.objectId; //ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         packet.CombinedObjectId = selectedItem.itemData.objectId; 
         packet.MergeNumber = itemAmount;
 
@@ -86,8 +88,8 @@ public partial class InventoryController
     public void SendDivideItemPacket(ItemObject devideItem, Vector2Int pos, int amount)
     {
         C_DevideItem packet = new C_DevideItem();
-        packet.SourceObjectId = devideItem.backUpItemGrid.objectId;
-        packet.DestinationObjectId = devideItem.curItemGrid.objectId;
+        packet.SourceObjectId = devideItem.backUpParentId;
+        packet.DestinationObjectId = devideItem.backUpParentId;
 
         packet.SourceItemId = devideItem.itemData.objectId;
         packet.DestinationGridX = pos.x;
@@ -102,7 +104,7 @@ public partial class InventoryController
 
     public void SendEquipItemPacket(ItemObject item, int equipSlotCode)
     {
-        //º¸·ù
+        //ï¿½ï¿½ï¿½ï¿½
     }
 
 }

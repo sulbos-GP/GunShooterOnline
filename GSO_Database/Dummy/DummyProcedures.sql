@@ -42,7 +42,7 @@ BEGIN
         INSERT INTO storage (uid, storage_type) VALUES (null, 'backpack');
 		SET new_storage_id = LAST_INSERT_ID();
                 
-        INSERT INTO unit_attributes(item_id, unit_storage_id, amount) VALUES(8, new_storage_id, 1);
+        INSERT INTO unit_attributes(item_id, unit_storage_id, amount) VALUES(302, new_storage_id, 1);
 		SET new_attributes_id = LAST_INSERT_ID();
         
 		INSERT INTO gear (uid, part, unit_attributes_id) VALUES(new_uid, 'backpack', new_attributes_id);

@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Server.Database.Data
 {
+    public class DB_Unit()
+    {
+        public DB_StorageUnit storage = new DB_StorageUnit();
+        public DB_UnitAttributes attributes = new DB_UnitAttributes();
+    }
 
     public class DB_StorageUnit()
     {
@@ -13,8 +18,6 @@ namespace Server.Database.Data
         public int grid_y;                  
         public int rotation;                
         public int unit_attributes_id;     
-
-        public DB_UnitAttributes attributes = new DB_UnitAttributes();
     }
 
     /// <summary>
@@ -41,7 +44,7 @@ namespace Server.Database.Data
         public readonly int purchase_price;
         public readonly double inquiry_time;
         public readonly int sell_price;
-        public readonly int stack_count;
+        public readonly int amount;
         public readonly string icon;
     }
 

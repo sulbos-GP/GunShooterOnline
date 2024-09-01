@@ -29,6 +29,9 @@ public class ItemObject : MonoBehaviour
 
     //아이템 데이터 요소
     public ItemData itemData; //데이터(아이템 코드, 이름, 조회시간, 크기 , 이미지)
+    public Vector2Int backUpItemPos; //아이템의 원래 위치
+    public int backUpItemRotate; //아이템의 원래 회전도
+
     public int Width
     {
         get
@@ -67,27 +70,14 @@ public class ItemObject : MonoBehaviour
         }
     }
 
-    
-   
     //현 상태
     public bool isHide; //아이템 정보 숨겨짐
     public bool isOnSearching; //아이템 조회중
 
     public double itemWeight; //지금까지 쓰인 itemData.itme_weight를  이변수로 바꿀것
 
-    //현재 위치한 그리드
-    public GridObject curItemGrid;
-
-    //백업 변수
-    public GridObject backUpItemGrid; //아이템이 원래 보관된 그리드
-    public Vector2Int backUpItemPos; //아이템의 원래 위치
-    public int backUpItemRotate; //아이템의 원래 회전도
-
-    //현재 해당 아이템이 위치한 슬롯
-    public EquipSlot curEquipSlot;
-    //마지막으로 장착된 슬롯
-    public EquipSlot backUpEquipSlot;
-
+    public int parentObjId;
+    public int backUpParentId;
 
     private void Init()
     {
@@ -138,7 +128,7 @@ public class ItemObject : MonoBehaviour
         }
         else
         {
-            imageUI.sprite = itemSprite;
+            imageUI.sprite = itemSprite != null ?  itemSprite : hideSprite;
             isHide = false;
         }
 
@@ -160,12 +150,12 @@ public class ItemObject : MonoBehaviour
 
     private Sprite FindItemSprtie(int itemCode)
     {
-        string spritePath = $"Assets/Sprite/ItemSprite/{itemCode}.png";
-        Sprite itemSprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+
+        Sprite itemSprite = Resources.Load<Sprite>($"Sprite/Item/{itemData.icon}");
 
         if (itemSprite == null)
         {
-            Debug.LogError("스프라이트 검색 실패");
+            Debug.Log("스프라이트 검색 실패");
             return null;
         }
 
@@ -210,6 +200,7 @@ public class ItemObject : MonoBehaviour
         TextControl();
     }
     
+
     public void HideItem()
     {
         isHide = true;
