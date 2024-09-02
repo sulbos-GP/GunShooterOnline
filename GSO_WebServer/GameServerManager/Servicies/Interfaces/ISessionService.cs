@@ -1,6 +1,6 @@
 ﻿using Docker.DotNet.Models;
-using WebCommonLibrary.Error;
-using WebCommonLibrary.Models.Match;
+using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Models.Match;
 
 namespace GameServerManager.Servicies.Interfaces
 {

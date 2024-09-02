@@ -4,8 +4,6 @@ using GameServerManager.Repository.Interfaces;
 using GameServerManager.Servicies.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using System.Reflection;
-using WebCommonLibrary.Enum;
 
 namespace GameServerManager.Servicies
 {
@@ -49,7 +47,7 @@ namespace GameServerManager.Servicies
 
                 //현재 Allocate 상태만 따로 빼기
                 var allocateMatchs = matchStatus
-                    .Where(status => status.Value.state == EMatchState.Ready)
+                    .Where(status => status.Value.state == Models.EMatchState.Ready)
                     .ToDictionary(status => status.Key, status => status.Value);
 
                 if (allocateMatchs == null)

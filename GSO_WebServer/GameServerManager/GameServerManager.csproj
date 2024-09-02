@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DTO\Session\" />
     <Folder Include="Middleware\" />
   </ItemGroup>
 

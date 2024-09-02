@@ -1,4 +1,4 @@
-﻿using WebCommonLibrary.Models.GameDB;
+﻿using GSO_WebServerLibrary.Models.GameDB;
 using System.Data;
 
 namespace GSO_WebServerLibrary.Reposiotry.Interfaces

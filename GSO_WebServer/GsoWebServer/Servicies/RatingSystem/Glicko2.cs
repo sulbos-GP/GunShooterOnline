@@ -1,5 +1,5 @@
-﻿using GsoWebServer.Servicies.Interfaces;
-using WebCommonLibrary.Models.GameDB;
+﻿using GSO_WebServerLibrary.Models.GameDB;
+using GsoWebServer.Servicies.Interfaces;
 
 namespace GsoWebServer.Servicies.Matching
 {

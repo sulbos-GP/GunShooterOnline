@@ -6,6 +6,7 @@ namespace GameServerManager.Servicies
 {
     public class PortManager
     {
+        private static SpinLock mSpinLock = new SpinLock();
         private ConcurrentQueue<int> mPortQueue = new ConcurrentQueue<int>();
 
         public PortManager(int start, int end) 

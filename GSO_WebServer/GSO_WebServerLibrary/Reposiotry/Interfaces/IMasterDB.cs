@@ -1,4 +1,4 @@
-﻿using WebCommonLibrary.DTO.Middleware;
+﻿using GSO_WebServerLibrary.DTO.Middleware;
 
 namespace GSO_WebServerLibrary.Reposiotry.Interfaces
 {

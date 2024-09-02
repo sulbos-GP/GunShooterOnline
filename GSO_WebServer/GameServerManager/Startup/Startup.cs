@@ -3,8 +3,8 @@ using GameServerManager.Repository;
 using GameServerManager.Repository.Interfaces;
 using GameServerManager.Servicies;
 using GameServerManager.Servicies.Interfaces;
-using WebCommonLibrary.Config;
-using WebCommonLibrary.Error;
+using GSO_WebServerLibrary.Config;
+using GSO_WebServerLibrary.Error;
 
 namespace GameServerManager.Startup
 {

@@ -1,8 +1,16 @@
 ﻿using System;
 using System.Net;
 using WebClientCore;
+using Server.Docker;
+
 using ServerCore;
+using Server.DTO;
+using System.Threading.Tasks;
+using Server.Database.Game;
 using Server.Database.Handler;
+using Server.Database.Master;
+using Server.Database.Data;
+using System.Collections.Generic;
 
 namespace Server
 {
@@ -40,9 +48,7 @@ namespace Server
             register    = DockerUtil.GetRegister();
             backLog     = DockerUtil.GetBacklog();
 
-            var webManager = WebManager.Instance;
-            webManager.ConfigureServices();
-
+            InitWebClientService();
 #else
 
 
@@ -53,8 +59,7 @@ namespace Server
             backLog = 100;
 #endif
 
-            var database = DatabaseHandler.Instance;
-            database.InitMySQL();
+            InitDatabase().Wait();
 
             Func<Session> session = () => { return new ClientSession(); };
 
@@ -110,5 +115,64 @@ namespace Server
             //	JobTimer.Instance.Flush();
             //}
         }
+
+        static async Task InitDatabase()
+        {
+
+            /// <summary>
+            /// 데이터베이스 초기화
+            /// </summary>
+           
+            var handler = DatabaseHandler.Instance;
+#if DOCKER
+            handler.AddDatabaseConnectionPool(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+            handler.AddDatabaseConnectionPool(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+#else
+            handler.AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+            handler.AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+#endif
+
+
+            await DatabaseHandler.Context.LoadDatabaseContext();
+
+        }
+
+        static void InitWebClientService()
+        {
+            mWebClientService.AddHttpClientUri("GameServerManager", $"http://{DockerUtil.GetHostIP()}:7000");
+        }
+
+        //임시
+        static async Task RequestReady()
+        {
+            /// <summary>
+            /// 서버에서 유저를 받아줄 준비를 모두 마쳤다면 호출
+            /// </summary>
+            
+            Console.WriteLine("[RequestReady GameServer]");
+
+            RequestReadyMatchReq request = new RequestReadyMatchReq
+            {
+                container_id = DockerUtil.GetContainerId(),
+            };
+
+            var response = await mWebClientService.PostAsync<RequestReadyMatchRes>("GameServerManager", "Session/RequestReady", request);
+        }
+
+        static async Task Shutdown()
+        {
+            /// <summary>
+            /// 서버에서 유저를 받아줄 준비를 모두 마쳤다면 호출
+            /// </summary>
+            Console.WriteLine("[Shutdown GameServer]");
+
+            ShutdownMatchReq request = new ShutdownMatchReq
+            {
+                container_id = DockerUtil.GetContainerId(),
+            };
+
+            var response = await mWebClientService.PostAsync<ShutdownMatchRes>("GameServerManager", "Session/Shutdown", request);
+        }
+
     }
 }

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Options;
 using MySqlConnector;
 using SqlKata.Execution;
-using WebCommonLibrary.Config;
+using GSO_WebServerLibrary.Config;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB

@@ -20,6 +20,8 @@ namespace Server.Game
         public GunState gunState { get; private set; }
 
         public GunData gunData { get; private set; }
+
+        //private GunStat _gunStat;
         public int _curAmmo { get; private set; } //현재 장탄
 
         private float _lastFireTime;
@@ -36,18 +38,18 @@ namespace Server.Game
 
       
 
-        //public void SetGunStat(GunStat gunStat)
-        //{
-        //    gunData = new GunData();
-        //    gunData.range = gunStat.range;
-        //    gunData.ammo = gunStat.ammo;
-        //    gunData.fireRate = gunStat.fireRate;
-        //    gunData.gunType = gunStat.gunType;
-        //    gunData.bulletObj = gunStat.bulletObj;
-        //    gunData.accuracy = gunStat.accuracy;
-        //    gunData.damage = gunStat.damage;
-        //    gunData.reloadTime = gunStat.reloadTime;
-        //}
+        public void SetGunStat(GunStat gunStat)
+        {
+            gunData = new GunData();
+            gunData.range = gunStat.range;
+            gunData.ammo = gunStat.ammo;
+            gunData.fireRate = gunStat.fireRate;
+            gunData.gunType = gunStat.gunType;
+            gunData.bulletObj = gunStat.bulletObj;
+            gunData.accuracy = gunStat.accuracy;
+            gunData.damage = gunStat.damage;
+            gunData.reloadTime = gunStat.reloadTime;
+        }
 
         public GunData getGunStat()
         {
@@ -67,9 +69,9 @@ namespace Server.Game
             rangeLine.positionCount = 5;*/
 
             //게임 시작시 실행할 루틴
-            //SetGunStat(_gunStat);
-            //_curAmmo = gunData.ammo;
-            //gunState = GunState.Shootable;
+            SetGunStat(_gunStat);
+            _curAmmo = gunData.ammo;
+            gunState = GunState.Shootable;
             //_fireStartPos = transform.GetChild(0);
 
             ownerPlayer = p;
@@ -244,17 +246,5 @@ namespace Server.Game
         public GameObject bulletObj;
         public GunType gunType;
         public int reloadTime;
-
-        public GunData(float range, float fireRate, int ammo, float accuracy, int damage, GameObject bulletObj, GunType gunType, int reloadTime)
-        {
-            this.range = range;
-            this.fireRate = fireRate;
-            this.ammo = ammo;
-            this.accuracy = accuracy;
-            this.damage = damage;
-            this.bulletObj = bulletObj;
-            this.gunType = gunType;
-            this.reloadTime = reloadTime;
-        }
     }
 }
