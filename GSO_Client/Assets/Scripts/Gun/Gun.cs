@@ -98,7 +98,6 @@ public class Gun : MonoBehaviour
     {
         if(gunState == GunState.Shootable && Time.time >= _lastFireTime + 1/ gunData.fireRate )
         {
-            Debug.Log("FireSuccess");
             /*
              발사 코드 작성.
              총알을 발사하든 레이케스트로 충돌감지를 하든
@@ -121,10 +120,8 @@ public class Gun : MonoBehaviour
                 // 충돌 위치까지 LineRenderer 설정
                 bulletLine.SetPosition(0, _fireStartPos.position);
                 bulletLine.SetPosition(1, hit.point);
-                Debug.Log(hit.collider.name);
 
                 // 패킷 전송
-                Debug.Log("Hit: " + hit.collider.name);
                 var cRay = new C_RaycastShoot
                 {
                     StartPosX = _fireStartPos.position.x,
