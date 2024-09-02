@@ -1,5 +1,5 @@
-﻿using GSO_WebServerLibrary.Error;
-using GSO_WebServerLibrary.Models.GameDB;
+﻿using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDB;
 
 namespace GsoWebServer.Servicies.Interfaces
 {

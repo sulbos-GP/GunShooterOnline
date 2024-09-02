@@ -1,4 +1,6 @@
 
+using WebCommonLibrary.DTO.Matchmaker;
+
 /// <summary>
 /// 매치메이킹 서버 관련 API
 /// </summary>
@@ -34,12 +36,12 @@ public class MatchmakerResource
     /// </summary>
     /// 
 
-    public MatchJoinRequest GetMatchJoinRequest(HeaderVerfiyPlayer header, MatchmakerJoinReq body)
+    public MatchJoinRequest GetMatchJoinRequest(HeaderVerfiyPlayer header, JoinMatchReq body)
     {
         return new MatchJoinRequest(this.mService, header, body);
     }
 
-    public MatchCancleRequest GetMatchCancleRequest(HeaderVerfiyPlayer header, MatchmakerCancleReq packet)
+    public MatchCancleRequest GetMatchCancleRequest(HeaderVerfiyPlayer header, CancleMatchReq packet)
     {
         return new MatchCancleRequest(this.mService, header, packet);
     }
@@ -49,9 +51,9 @@ public class MatchmakerResource
     /// </summary>
 
     //매칭 참여
-    public class MatchJoinRequest : WebClientServiceRequest<MatchmakerJoinRes>
+    public class MatchJoinRequest : WebClientServiceRequest<JoinMatchRes>
     {
-        public MatchJoinRequest(MatchmakerService service, HeaderVerfiyPlayer header, MatchmakerJoinReq request)
+        public MatchJoinRequest(MatchmakerService service, HeaderVerfiyPlayer header, JoinMatchReq request)
         {
             this.mFromHeader = header.ToDictionary();
             this.mFromBody = request;
@@ -61,9 +63,9 @@ public class MatchmakerResource
     }
 
     //매칭 취소
-    public class MatchCancleRequest : WebClientServiceRequest<MatchmakerCancleRes>
+    public class MatchCancleRequest : WebClientServiceRequest<CancleMatchRes>
     {
-        public MatchCancleRequest(MatchmakerService service, HeaderVerfiyPlayer header, MatchmakerCancleReq request)
+        public MatchCancleRequest(MatchmakerService service, HeaderVerfiyPlayer header, CancleMatchReq request)
         {
             this.mFromHeader = header.ToDictionary();
             this.mFromBody = request;

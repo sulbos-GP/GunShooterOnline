@@ -3,6 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
+using WebCommonLibrary.DTO.Authentication;
+using WebCommonLibrary.DTO.User;
+using static UserResource;
 
 /// <summary>
 /// 로비 서버 역할의 서버
@@ -12,12 +15,14 @@ public class GsoWebService : WebClientService
 
     public AuthorizeResource mAuthorizeResource;
     public UserResource mUserResource;
+    public GameResource mGameResource;
 
     public GsoWebService()
     {
         this.mBaseUrl = Managers.EnvConfig.GetEnvironmentConfig().CenterBaseUri;
         mAuthorizeResource = new AuthorizeResource(this);
         mUserResource = new UserResource(this);
+        mGameResource = new GameResource(this);
     }
 
 }
@@ -112,7 +117,7 @@ public class AuthorizeResource
 }
 
 /// <summary>
-/// 인증 관련 서비스
+/// 유저 관련 서비스
 /// </summary>
 public class UserResource
 {
@@ -143,3 +148,59 @@ public class UserResource
         }
     }
 }
+
+/// <summary>
+/// 로드 관련 서비스
+/// </summary>
+ 
+public class LoadResource
+{
+    private readonly GsoWebService mService;
+
+    public LoadResource(GsoWebService service)
+    {
+        mService = service;
+    }
+
+
+}
+
+/// <summary>
+/// 게임 관련 서비스
+/// </summary>
+
+public class GameResource
+{
+    private readonly GsoWebService mService;
+
+    public GameResource(GsoWebService service)
+    {
+        mService = service;
+    }
+
+    /// <summary>
+    /// 빠른 정보 불러오기
+    /// </summary>
+    //public QuickInfoRequest GetQuickInfoRequest(HeaderVerfiyPlayer header, QuickInfoReq body)
+    //{
+    //    return new QuickInfoRequest(this.mService, header, body);
+    //}
+
+
+    //public class QuickInfoRequest : WebClientServiceRequest<QuickInfoRes>
+    //{
+    //    public QuickInfoRequest(GsoWebService service, HeaderVerfiyPlayer header, QuickInfoReq request)
+    //    {
+    //        this.mFromBody = header.ToDictionary();
+    //        this.mFromBody = request;
+    //        this.mEndPoint = service.mBaseUrl + "/api/Game/QuickInfo";
+    //        this.mMethod = ERequestMethod.POST;
+    //    }
+    //}
+
+}
+
+
+/// <summary>
+/// 장비 관련 서비스
+/// </summary>

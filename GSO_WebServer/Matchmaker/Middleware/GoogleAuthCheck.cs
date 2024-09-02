@@ -1,7 +1,6 @@
-﻿using GSO_WebServerLibrary.DTO;
-using GSO_WebServerLibrary.Error;
-using Matchmaker.DTO;
-using System.Text.Json;
+﻿using System.Text.Json;
+using WebCommonLibrary.DTO;
+using WebCommonLibrary.Error;
 
 namespace Matchmaker.Middleware
 {

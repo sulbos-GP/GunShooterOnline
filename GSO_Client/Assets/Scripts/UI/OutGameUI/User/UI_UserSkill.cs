@@ -22,9 +22,9 @@ public class UI_UserSkill : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UserSkillInfo info = Managers.Web.mUserInfo.SkillInfo;
-        rating.text = info.rating.ToString();
-        deviation.text = info.deviation.ToString();
-        volatility.text = info.volatility.ToString();
+        //UserSkillInfo info = Managers.Web.mUserInfo.SkillInfo;
+        //rating.text = info.rating.ToString();
+        //deviation.text = info.deviation.ToString();
+        //volatility.text = info.volatility.ToString();
     }
 }

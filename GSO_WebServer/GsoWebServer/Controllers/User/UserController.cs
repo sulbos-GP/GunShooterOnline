@@ -1,11 +1,9 @@
-﻿using GSO_WebServerLibrary.Error;
-using GSO_WebServerLibrary.Utils;
-using GSO_WebServerLibrary.DTO;
-using GsoWebServer.DTO.Authentication;
-using GsoWebServer.DTO.User;
+﻿using GSO_WebServerLibrary.Utils;
+using GsoWebServer.DTO;
 using GsoWebServer.Servicies.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WebCommonLibrary.DTO.User;
+using WebCommonLibrary.Error;
 
 namespace GsoWebServer.Controllers.User
 {

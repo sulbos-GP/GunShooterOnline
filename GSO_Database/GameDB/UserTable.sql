@@ -1,14 +1,15 @@
 USE game_database;
 
-DROP TABLE IF EXISTS user_metadata;
-DROP TABLE IF EXISTS user_skill;
-DROP TABLE IF EXISTS user;
+#DROP TABLE IF EXISTS user_metadata;
+#DROP TABLE IF EXISTS user_skill;
+#DROP TABLE IF EXISTS user;
 
 #유저 정보
 CREATE TABLE IF NOT EXISTS user (
     uid 				INT 			NOT NULL 	AUTO_INCREMENT 				COMMENT '유저 아이디',
     player_id 			VARCHAR(256) 	NOT NULL 								COMMENT '플레이어 아이디',
     nickname			VARCHAR(10) 	NULL 		DEFAULT NULL 				COMMENT '닉네임',
+	experience 			INT 			NOT NULL	DEFAULT 0					COMMENT '경험치',
     service 			VARCHAR(32) 	NOT NULL								COMMENT '서비스',
     refresh_token 		VARCHAR(512) 	NULL 		DEFAULT NULL				COMMENT '갱신 토큰',	#TODO NotNull로 교채
 	create_dt           DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '생성 일시', 
@@ -17,12 +18,13 @@ CREATE TABLE IF NOT EXISTS user (
 	 PRIMARY KEY (uid),
      UNIQUE KEY (nickname)
 );
+#ALTER TABLE user ADD COLUMN experience INT NOT NULL DEFAULT 1 AFTER nickname;
 
 CREATE TABLE IF NOT EXISTS user_reward (
     uid					INT 			NOT NULL								COMMENT '유저 아이디',
     reward_id			INT 			NOT NULL								COMMENT '보상 아이디',
     received			BOOLEAN  		NOT NULL	DEFAULT FALSE				COMMENT '수령 확인',
-    received_date 		DATETIME  		NOT NULL								COMMENT '수령 확인 날짜',
+    received_date 		DATETIME  		NULL		DEFAULT NULL				COMMENT '수령 확인 날짜',
     
 	PRIMARY KEY (`uid`),
     CONSTRAINT FK_user_reward_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
