@@ -244,5 +244,17 @@ namespace Server.Game
         public GameObject bulletObj;
         public GunType gunType;
         public int reloadTime;
+
+        public GunData(float range, float fireRate, int ammo, float accuracy, int damage, GameObject bulletObj, GunType gunType, int reloadTime)
+        {
+            this.range = range;
+            this.fireRate = fireRate;
+            this.ammo = ammo;
+            this.accuracy = accuracy;
+            this.damage = damage;
+            this.bulletObj = bulletObj;
+            this.gunType = gunType;
+            this.reloadTime = reloadTime;
+        }
     }
 }
