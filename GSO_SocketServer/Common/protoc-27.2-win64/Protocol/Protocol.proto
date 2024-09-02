@@ -296,8 +296,10 @@ message S_RaycastHit // 17
     //GameObject hitObj;
     float distance = 3;
     //Vector2 normal;
-    float hitPointX = 4;
-    float hitPointY = 5;
+    float StartPosX = 4;
+    float StartPosY = 5;
+    float hitPointX = 6;
+    float hitPointY = 7;
 }
 
 
@@ -359,15 +361,22 @@ message BoxInfo
 // Caustion : must sync Collision.Shapes.Shape.ShapeType Enum
 message ShapeInfo{
     ShapeType ShpapeType    = 1;
-    float PosX          = 2;
-    float PosY          = 3;
+    float CenterPosX          = 2;
+    float CenterPosY          = 3;
     float Roatation     = 4;
     float Radius        = 5;// circle;
     float Left           = 6;//Rectangle
     float Bottom          = 7;//Rectangle
     float Width         = 8;//Rectangle
-    float Height        = 9;//Rectangle
+    float Height        = 9;//
+    
 }
+
+
+/*message  Vector2Info{
+    float PosX          = 1;
+    float PosY          = 2;
+}*/
 
 
 message PS_ItemInfo{

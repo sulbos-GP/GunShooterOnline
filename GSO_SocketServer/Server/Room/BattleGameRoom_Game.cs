@@ -6,6 +6,7 @@ using Server.Database.Handler;
 using Server.Game;
 using Server.Game.Object.Gear;
 using Server.Game.Object.Item;
+using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.Tracing;

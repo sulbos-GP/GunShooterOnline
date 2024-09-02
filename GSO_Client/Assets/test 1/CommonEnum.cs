@@ -19,12 +19,13 @@ public enum eSTAT
 public enum eITEM_TYPE
 {
     None,
-    weapone,
-    defensive,
-    bag,
-    recovery,
-    bullet,
-    spoil
+    Weapone,
+    Defensive,
+    Bag,
+    Recovery,
+    Bullet,
+    Spoil
+}
 public enum GunState
 {
     Shootable,

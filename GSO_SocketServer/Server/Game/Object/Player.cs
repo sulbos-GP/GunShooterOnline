@@ -42,7 +42,11 @@ public class Player : CreatureObj
 
         currentShape = rectangle;
 
+
         gun.Init(this);
+
+
+
     }
 
     public ClientSession Session { get; set; }
