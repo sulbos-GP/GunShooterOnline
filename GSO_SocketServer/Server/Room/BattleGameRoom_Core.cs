@@ -19,7 +19,7 @@ namespace Server
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
 
-        public Map map { get; } 
+        public Map map { get; }
         public BattleGameRoom()
         {
             map = new Map(r: this);
@@ -60,16 +60,16 @@ namespace Server
 
         public override void BroadCast(IMessage message)
         {
-            foreach (Player player in _playerDic.Values) 
-                player.Session.Send(message,DeliveryMethod.ReliableSequenced);
+            foreach (Player player in _playerDic.Values)
+                player.Session.Send(message, DeliveryMethod.ReliableSequenced);
 
         }
-        
+
         public override void EnterGame(object obj)
         {
             GameObject gameObject = (GameObject)obj;
 
-            if (gameObject == null) 
+            if (gameObject == null)
                 return;
 
             var type = ObjectManager.GetObjectTypeById(gameObject.Id);
@@ -79,7 +79,7 @@ namespace Server
             {
                 var player = gameObject as Player;
                 player.gameRoom = this;
-                
+
 
 
                 //player.RefreshAddtionalStat();
@@ -95,9 +95,9 @@ namespace Server
                 //    if (Map.ApplyMove(player, new Vector2Int(player.CellPos.x, player.CellPos.y)) == true)
                 //        break;
                 //}
-/*
-                if (mMap.SetPosAndRoomtsId(player) == false) 
-                    Console.WriteLine("맵 스폰 오류");*/
+                /*
+                                if (mMap.SetPosAndRoomtsId(player) == false) 
+                                    Console.WriteLine("맵 스폰 오류");*/
 
                 //mMap.AddObject(player);
 
@@ -167,10 +167,15 @@ namespace Server
                 spawnpacket.Objects.Add(gameObject.info);
                 BroadCast(spawnpacket);
 
-                var ChangePacket = new S_ChangeHp();
-                ChangePacket.ObjectId = gameObject.Id;
-                ChangePacket.Hp = gameObject.Hp;
-                BroadCast(ChangePacket);
+                CreatureObj creatureObj = gameObject as CreatureObj;
+                if(creatureObj != null)
+                {
+                    var ChangePacket = new S_ChangeHp();
+                    ChangePacket.ObjectId = creatureObj.Id;
+                    ChangePacket.Hp = creatureObj.Hp;
+                    BroadCast(ChangePacket);
+                }
+               
             }
         }
 
@@ -201,16 +206,16 @@ namespace Server
 
             enterPlayer.Session.Send(spawnPacket);
         }
-        
+
 
         public override void LeaveGame(int id)
         {
-            
+
         }
-        
+
         public Player GetPlayer(int id)
         {
-            return _playerDic.TryGetValue(id , out var player) ? player : null;
+            return _playerDic.TryGetValue(id, out var player) ? player : null;
         }
     }
 }

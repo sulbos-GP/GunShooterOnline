@@ -26,3 +26,17 @@ public enum eITEM_TYPE
     Bullet,
     Spoil
 }
+public enum GunState
+{
+    Shootable,
+    Empty,
+    Reloading
+}
+
+public enum GunType
+{
+    Pistol,
+    AssultRifle,
+    ShotGun,
+    Sniper
+}
