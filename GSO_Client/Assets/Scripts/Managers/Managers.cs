@@ -28,6 +28,12 @@ internal class Managers : MonoBehaviour
         Init();
     }
 
+    private void Start()
+    {
+        s_instance._environment.InitEnviromentSetting(EEnvironmentState.Emulator);
+    }
+
+
     private void Update()
     {
         _network.Update(); //네트워크
@@ -73,10 +79,8 @@ internal class Managers : MonoBehaviour
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
 
-            s_instance._environment.InitEnviromentSetting(EEnvironmentState.Emulator);
-
             //s_instance._data.InventorySet();
-
+            
             s_instance._pool.Init();
             //s_instance._Data.Init();
             //s_instance._sound.InventorySet();

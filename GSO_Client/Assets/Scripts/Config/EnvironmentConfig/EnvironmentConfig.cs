@@ -26,7 +26,6 @@ public class EnvironmentConfig : ScriptableObject
 
 public class EnvironmentSetting
 {
-
     private EnvironmentConfig config;
 
     public void InitEnviromentSetting(EEnvironmentState state)
@@ -48,6 +47,10 @@ public class EnvironmentSetting
             default:
                 break;
         }
+
+        //SystemLogManager.Instance.LogMessage($"Enviroment setting [{state.ToString()}]");
+
+        //SystemLogManager.Instance.LogMessage($"Enviroment setting [{config.CenterBaseUri}]");
     }
 
     public EnvironmentConfig GetEnvironmentConfig()

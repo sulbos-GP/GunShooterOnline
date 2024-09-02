@@ -6,8 +6,8 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.UI;
-using WebCommonLibrary.DTO.Matchmaker;
-using WebCommonLibrary.Error;
+using static AuthorizeResource;
+using static MatchmakerHub;
 using static MatchmakerResource;
 
 public class UI_Match : MonoBehaviour
@@ -72,7 +72,7 @@ public class UI_Match : MonoBehaviour
                 access_token = Managers.Web.mCredential.access_token,
             };
 
-            var body = new JoinMatchReq
+            var body = new MatchmakerJoinReq
             {
                 world = "Forest",
                 region = "asia"
@@ -93,10 +93,10 @@ public class UI_Match : MonoBehaviour
     /// <summary>
     /// 매칭 참여 응답
     /// </summary>
-    private void OnProcessMatchJoin(JoinMatchRes response)
+    private void OnProcessMatchJoin(MatchmakerJoinRes response)
     {
         mIsProcessMatch = false;
-        if (response.error_code == WebErrorCode.None)
+        if (response.error_code == 0)
         {
             SystemLogManager.Instance.LogMessage("매칭 참여 요청 성공");
 
@@ -125,11 +125,11 @@ public class UI_Match : MonoBehaviour
 
             var header = new HeaderVerfiyPlayer
             {
-                uid = Convert.ToString(Managers.Web.mCredential.uid),
+                uid = Managers.Web.mCredential.uid,
                 access_token = Managers.Web.mCredential.access_token,
             };
 
-            var body = new CancleMatchReq
+            var body = new MatchmakerCancleReq
             {
                 world = "Forest",
                 region = "asia"
@@ -149,10 +149,10 @@ public class UI_Match : MonoBehaviour
     /// <summary>
     /// 매칭 취소 응답
     /// </summary>
-    private void OnProcessMatchCancle(CancleMatchRes response)
+    private void OnProcessMatchCancle(MatchmakerCancleRes response)
     {
         mIsProcessMatch = false;
-        if (response.error_code == WebErrorCode.None)
+        if (response.error_code == 0)
         {
             SystemLogManager.Instance.LogMessage("매칭 취소 요청 성공");
 

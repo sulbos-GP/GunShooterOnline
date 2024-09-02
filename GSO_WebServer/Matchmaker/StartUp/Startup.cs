@@ -1,4 +1,5 @@
-﻿using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
+﻿using GSO_WebServerLibrary.Config;
+using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 using Matchmaker.Hubs;
 using Matchmaker.Repository;
@@ -6,7 +7,8 @@ using Matchmaker.Repository.Interface;
 using Matchmaker.Service;
 using Matchmaker.Service.Background;
 using Matchmaker.Service.Interfaces;
-using WebCommonLibrary.Config;
+using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace Matchmaker.Startup
 {

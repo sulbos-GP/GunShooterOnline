@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections;
 using UnityEngine;
-using WebCommonLibrary.Models.Match;
 
 public class MatchmakerHub : ClientHub
 {

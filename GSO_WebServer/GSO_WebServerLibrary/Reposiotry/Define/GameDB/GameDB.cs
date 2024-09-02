@@ -4,8 +4,8 @@ using MySqlConnector;
 using SqlKata.Execution;
 using GSO_WebServerLibrary;
 using System.Data.Common;
+using GSO_WebServerLibrary.Config;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
-using WebCommonLibrary.Config;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {

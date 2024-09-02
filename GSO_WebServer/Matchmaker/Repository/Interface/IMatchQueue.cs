@@ -1,6 +1,6 @@
 ﻿using CloudStructures.Structures;
-using WebCommonLibrary.Error;
-using WebCommonLibrary.Models.Match;
+using GSO_WebServerLibrary.Error;
+using Matchmaker.Models;
 
 namespace Matchmaker.Repository.Interface
 {

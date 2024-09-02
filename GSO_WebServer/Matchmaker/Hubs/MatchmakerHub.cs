@@ -1,4 +1,4 @@
-﻿using WebCommonLibrary.DTO.Matchmaker;
+﻿using Matchmaker.DTO.Matchmaker;
 using Matchmaker.Service;
 using Matchmaker.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;

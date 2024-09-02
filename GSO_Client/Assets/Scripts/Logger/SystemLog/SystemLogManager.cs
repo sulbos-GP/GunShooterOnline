@@ -110,15 +110,4 @@ public class SystemLogManager : MonoBehaviour
         UpdateLogDisplay();
     }
 
-    /// <summary>
-    /// 로그 메세지 보여주기
-    /// </summary>
-    public void ShowLogMessage(string message)
-    {
-        mSystemLogMessages.Add(message);
-        UpdateLogDisplay();
-
-
-    }
-
 }

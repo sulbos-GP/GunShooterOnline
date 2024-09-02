@@ -2,7 +2,7 @@
 using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Auth.OAuth2;
 using Newtonsoft.Json.Linq;
-using WebCommonLibrary.Error;
+using GSO_WebServerLibrary.Error;
 using GSO_WebServerLibrary.Servicies.Interfaces;
 
 namespace GSO_WebServerLibrary.Servicies.Google

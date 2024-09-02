@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6660fd6b61bb141ba0e22f8cfce448, type: 3}
   m_Name: Emulator
   m_EditorClassIdentifier: 
-  GameServerIp: 10.0.2.2
+  GameServerIp: 127.0.0.1
   GameServerPort: 7777
   AuthorizationBaseUri: http://10.0.2.2:5000
   CenterBaseUri: http://10.0.2.2:5000

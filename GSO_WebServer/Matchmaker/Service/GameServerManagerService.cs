@@ -1,9 +1,10 @@
-﻿using Matchmaker.Service.Interfaces;
+﻿using GSO_WebServerLibrary.DTO.Match;
+using GSO_WebServerLibrary.Error;
+using GSO_WebServerLibrary.Models.Match;
+using Matchmaker.Models;
+using Matchmaker.Service.Interfaces;
 using System.Text.Json;
 using System.Text;
-using WebCommonLibrary.Error;
-using WebCommonLibrary.Models.Match;
-using WebCommonLibrary.DTO.Matchmaker;
 
 namespace Matchmaker.Service
 {

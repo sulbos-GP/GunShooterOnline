@@ -1,6 +1,13 @@
-﻿using WebCommonLibrary.Models.GameDB;
+﻿using GSO_WebServerLibrary.Models.GameDB;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using SqlKata;
 using SqlKata.Execution;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {

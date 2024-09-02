@@ -1,6 +1,5 @@
-﻿using WebCommonLibrary.Enum;
-using WebCommonLibrary.Error;
-using WebCommonLibrary.Models.Match;
+﻿using GameServerManager.Models;
+using GSO_WebServerLibrary.Error;
 
 namespace GameServerManager.Repository.Interfaces
 {

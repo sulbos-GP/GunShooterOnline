@@ -19,12 +19,12 @@ public class PlayerController : CreatureController
         public Vector2 bottomLeft;
         public Vector2 bottomRight;
 
-        public Rectangle(float width, float height)
+        public Rectangle(float width, float height,Transform trans)
         {
-            topLeft = new Vector2(-width / 2, -height / 2);
-            topRight = new Vector2(+width / 2, -height / 2);
-            bottomLeft = new Vector2(-width / 2, +height / 2);
-            bottomRight = new Vector2(+width / 2, +height / 2);
+            topLeft = new Vector2(trans.position.x - (width / 2), trans.position.y + (height / 2));
+            topRight = new Vector2(trans.position.x + (width / 2), trans.position.y - (height / 2));
+            bottomLeft = new Vector2(trans.position.x - (width / 2), trans.position.y - (height / 2));
+            bottomRight = new Vector2(trans.position.x + (width / 2), trans.position.y + (height / 2));
         }
     };
 
@@ -37,34 +37,26 @@ public class PlayerController : CreatureController
         _width = width;
         _height = height;
 
-        rect = new Rectangle(width, height);
+        rect = new Rectangle(width, height, gameObject.transform);
         // LineRenderer 설정
         lineRenderer.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
         lineRenderer.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.
         lineRenderer.startWidth = 0.1f;
         lineRenderer.endWidth = 0.1f;
-        lineRenderer.startColor = Color.red;
-        lineRenderer.endColor = Color.red;
+
 
         // LineRenderer의 점 위치 설정
-        UpdateDrawLine();
+        lineRenderer.SetPosition(0, rect.topLeft);
+        lineRenderer.SetPosition(1, rect.topRight);
+        lineRenderer.SetPosition(2, rect.bottomRight);
+        lineRenderer.SetPosition(3, rect.bottomLeft);
+        lineRenderer.SetPosition(4, rect.topLeft);
     }
 
-    public void UpdateDrawLine()
-    {
-        lineRenderer.SetPosition(0, (Vector2)gameObject.transform.position + rect.topLeft * 2);
-        lineRenderer.SetPosition(1, (Vector2)gameObject.transform.position + rect.topRight * 2);
-        lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight * 2);
-        lineRenderer.SetPosition(3, (Vector2)gameObject.transform.position + rect.bottomLeft * 2);
-        lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft * 2);
-    }
 
-    public void SpawnPlayer()
+    protected void UpdateDrawLine()
     {
-        //임의 위치 값
-        gameObject.transform.position = new Vector2(0, 0);
-        
-        //Spawn Particle
+
     }
 
 

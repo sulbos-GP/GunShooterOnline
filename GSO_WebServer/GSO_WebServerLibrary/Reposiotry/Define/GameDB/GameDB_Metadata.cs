@@ -1,5 +1,7 @@
-﻿using WebCommonLibrary.Models.GameDB;
+﻿using GSO_WebServerLibrary;
+using GSO_WebServerLibrary.Models.GameDB;
 using SqlKata.Execution;
+using static System.Net.Mime.MediaTypeNames;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB

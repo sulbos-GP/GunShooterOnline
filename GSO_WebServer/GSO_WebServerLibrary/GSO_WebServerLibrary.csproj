@@ -19,7 +19,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebCommonLibrary\WebCommonLibrary.csproj" />
+    <Folder Include="DTO\Inventory\" />
+    <Folder Include="Logger\" />
+    <Folder Include="Models\MasterDB\" />
   </ItemGroup>
 
 </Project>

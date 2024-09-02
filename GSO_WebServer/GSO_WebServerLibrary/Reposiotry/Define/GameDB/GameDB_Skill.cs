@@ -1,5 +1,5 @@
 ﻿using GSO_WebServerLibrary;
-using WebCommonLibrary.Models.GameDB;
+using GSO_WebServerLibrary.Models.GameDB;
 using SqlKata.Execution;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 

@@ -30,13 +30,4 @@
     <PackageReference Include="SqlKata.Execution" Version="2.4.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="GSO_WebServerLibrary">
-      <HintPath>..\..\GSO_WebServer\GSO_WebServerLibrary\obj\Release\net8.0\GSO_WebServerLibrary.dll</HintPath>
-    </Reference>
-    <Reference Include="WebCommonLibrary">
-      <HintPath>bin\Debug\net8.0\WebCommonLibrary.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-
 </Project>
