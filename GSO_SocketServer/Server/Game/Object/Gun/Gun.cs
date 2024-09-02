@@ -36,18 +36,18 @@ namespace Server.Game
 
       
 
-        public void SetGunStat(GunStat gunStat)
-        {
-            gunData = new GunData();
-            gunData.range = gunStat.range;
-            gunData.ammo = gunStat.ammo;
-            gunData.fireRate = gunStat.fireRate;
-            gunData.gunType = gunStat.gunType;
-            gunData.bulletObj = gunStat.bulletObj;
-            gunData.accuracy = gunStat.accuracy;
-            gunData.damage = gunStat.damage;
-            gunData.reloadTime = gunStat.reloadTime;
-        }
+        //public void SetGunStat(GunStat gunStat)
+        //{
+        //    gunData = new GunData();
+        //    gunData.range = gunStat.range;
+        //    gunData.ammo = gunStat.ammo;
+        //    gunData.fireRate = gunStat.fireRate;
+        //    gunData.gunType = gunStat.gunType;
+        //    gunData.bulletObj = gunStat.bulletObj;
+        //    gunData.accuracy = gunStat.accuracy;
+        //    gunData.damage = gunStat.damage;
+        //    gunData.reloadTime = gunStat.reloadTime;
+        //}
 
         public GunData getGunStat()
         {
@@ -65,7 +65,7 @@ namespace Server.Game
             rangeLine.positionCount = 5;*/
 
             //게임 시작시 실행할 루틴
-            SetGunStat(_gunStat);
+            //SetGunStat(_gunStat);
             _curAmmo = gunData.ammo;
             gunState = GunState.Shootable;
             //_fireStartPos = transform.GetChild(0);
