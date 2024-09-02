@@ -1,12 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
-using Matchmaker.Models;
-using Matchmaker.Repository.Interface;
+﻿using System.Diagnostics;
 using Matchmaker.Service.Interfaces;
-using Matchmaker.DTO.Matchmaker;
-using GSO_WebServerLibrary.Error;
-using Humanizer;
-using CloudStructures.Structures;
+using WebCommonLibrary.Models.Match;
+using WebCommonLibrary.Error;
 
 namespace Matchmaker.Service.Background
 {

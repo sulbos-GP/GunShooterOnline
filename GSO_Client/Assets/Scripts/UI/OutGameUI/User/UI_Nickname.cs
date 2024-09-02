@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WebCommonLibrary.DTO.User;
+using WebCommonLibrary.Error;
 using static AuthorizeResource;
 using static UserResource;
 
@@ -80,7 +82,7 @@ public class UI_Nickname : MonoBehaviour
 
     public void OnProcessSetNickname(SetNicknameRes response)
     {
-        if(response.error_code == 0)
+        if(response.error_code == WebErrorCode.None)
         {
             Managers.Web.mUserInfo.UserInfo.nickname = response.nickname;
             nicknameWindow.SetActive(false);

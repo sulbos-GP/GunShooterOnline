@@ -420,7 +420,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 6581e9a362c67f24f9c7256dec307b02, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -846,8 +846,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunStat: {fileID: 11400000, guid: f272da6bfc5ce3a4da45f529413ad926, type: 2}
-  _shooterId: 0
-  _reloadTime: 3
   isBulletPrefShoot: 0
-  bulletLine: {fileID: 0}
-  rangeLine: {fileID: 0}

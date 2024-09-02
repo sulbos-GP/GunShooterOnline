@@ -1,6 +1,5 @@
-﻿using GSO_WebServerLibrary.Error;
-using GSO_WebServerLibrary.Models.Match;
-using Matchmaker.Models;
+﻿using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.Match;
 
 namespace Matchmaker.Service.Interfaces
 {
