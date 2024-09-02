@@ -1,31 +1,70 @@
 ﻿using System;
+using System.Numerics;
 using Google.Protobuf.Protocol;
+using ServerCore;
 
 namespace Server.Game;
 
 public class CreatureObj : GameObject
 {
+
+    public CreatureObj()
+    {
+        info.StatInfo = stat;
+    }
+
     public Action<GameObject> DamageReflexAction;
 
-    public override void OnCollision(GameObject other)
+
+    public StatInfo stat { get; private set; } = new();
+
+
+   
+
+    public virtual void OnDead(GameObject attacker)
     {
-        if (other.ObjectType == GameObjectType.Projectile)
+        if (gameRoom == null)
+            return;
+
+        var diePacket = new S_Die();
+        diePacket.ObjectId = Id;
+        diePacket.AttackerId = attacker.Id;
+
+        gameRoom.BroadCast(diePacket);
+
+        var room = gameRoom;
+        room.Push(room.LeaveGame, Id);
+
+        room.Push(new Job(() =>
         {
-            //OnDamaged(other,other.Attack);
-            other.OnCollisionFeedback(this);
-        }
-       /* else if (other.ObjectType == GameObjectType.Scopeskill)
-        {
-            //할일 TODO : 장판 데이미지 일정량만 받게(일시 무적)
-            OnDamaged(other,other.Attack);
-            other.OnCollisionFeedback(this);
-        }*/
-        
-        
-        
-        
+            stat.Hp = stat.MaxHp;
+            //PosInfo.State = CreatureState.Idle;
+        }));
+
+        room.PushAfter(10, room.EnterGame, this);
     }
-    
+   
+
+
+
+    public float AttackRange
+    {
+        get => stat.AttackRange;
+        set => stat.AttackRange = value;
+    }
+
+
+    public int Hp
+    {
+        get => stat.Hp;
+        set => stat.Hp = Math.Clamp(value, 0, stat.MaxHp);
+    }
+
+
+  
+
+
+   
     /// <summary>
     /// 
     /// </summary>

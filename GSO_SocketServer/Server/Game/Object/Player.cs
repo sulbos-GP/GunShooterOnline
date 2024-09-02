@@ -12,6 +12,7 @@ public class Player : CreatureObj
     public SkillCoolDown SkillCoolDown = new();
     public Inventory inventory;
     public Gear gear;
+    public Gun gun = new();
 
     //GWANHO TEMP
     public int uid = 0;
@@ -40,6 +41,12 @@ public class Player : CreatureObj
         rectangle.Parent = this;
 
         currentShape = rectangle;
+
+
+        //gun.Init(this);
+
+
+
     }
 
     public ClientSession Session { get; set; }

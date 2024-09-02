@@ -22,10 +22,25 @@ public class Rectangle : Polygon
 
         updateBounds();
     }
-    
+
+    public Rectangle(float x, float y, float width, float height, IList<Vector> vertices) : base(x, y, vertices)
+    {
+        Left = x - width / 2;
+        Bottom = y - height / 2;
+        Width = width;
+        Height = height;
+
+        Type = ShapeType.RECTANGLE;
+
+        updateBounds();
+    }
+
+
+
+
     /** Helper generate a rectangle at x,y with a given width/height and centered state.
             Centered by default. Returns a ready made `Polygon` collision `Shape` */
-    public static Polygon rectangle(float x, float y, float width, float height, bool centered = true) {
+    public static Rectangle rectangle(float x, float y, float width, float height, bool centered = true) {
 
         var vertices = new List<Vector>();
 
@@ -45,7 +60,9 @@ public class Rectangle : Polygon
 
         }
 
-        return new Polygon(x,y,vertices);
+        return new Rectangle(x,y, width, height, vertices);
+        //return new Polygon(x,y,vertices);
+
 
     }
 }

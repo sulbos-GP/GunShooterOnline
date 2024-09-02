@@ -245,6 +245,7 @@ public class InputController : MonoBehaviour
         //Move Logic
         Vector2 newVec2 = _direction * 5.0f * Time.fixedDeltaTime;
         rig.MovePosition(rig.position + newVec2);
+        gameObject.GetComponent<MyPlayerController>().UpdateDrawLine();
         UpdateServer();
     }
 
