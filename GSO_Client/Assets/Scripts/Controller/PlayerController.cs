@@ -10,6 +10,8 @@ public class PlayerController : CreatureController
 
     protected float _width;
     protected float _height;
+
+    public LineRenderer lineRenderer;
     public struct Rectangle
     {
         public Vector2 topLeft;
@@ -17,12 +19,12 @@ public class PlayerController : CreatureController
         public Vector2 bottomLeft;
         public Vector2 bottomRight;
 
-        public Rectangle(float width, float height,Transform trans)
+        public Rectangle(float width, float height)
         {
-            topLeft = new Vector2(trans.position.x - (width / 2), trans.position.y + (height / 2));
-            topRight = new Vector2(trans.position.x + (width / 2), trans.position.y - (height / 2));
-            bottomLeft = new Vector2(trans.position.x - (width / 2), trans.position.y - (height / 2));
-            bottomRight = new Vector2(trans.position.x + (width / 2), trans.position.y + (height / 2));
+            topLeft = new Vector2(-width / 2, -height / 2);
+            topRight = new Vector2(+width / 2, -height / 2);
+            bottomLeft = new Vector2(-width / 2, +height / 2);
+            bottomRight = new Vector2(+width / 2, +height / 2);
         }
     };
 
@@ -31,23 +33,38 @@ public class PlayerController : CreatureController
 
     public void SetDrawLine(float width , float height)
     {
+        lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
-        rect = new Rectangle(width,height,gameObject.transform);
+
+        rect = new Rectangle(width, height);
+        // LineRenderer 설정
+        lineRenderer.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
+        lineRenderer.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.
+        lineRenderer.startWidth = 0.1f;
+        lineRenderer.endWidth = 0.1f;
+        lineRenderer.startColor = Color.red;
+        lineRenderer.endColor = Color.red;
+
+        // LineRenderer의 점 위치 설정
+        UpdateDrawLine();
     }
 
-    public void OnDrawGizmos()
+    public void UpdateDrawLine()
     {
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine(rect.topLeft, rect.topRight);
-        Gizmos.DrawLine(rect.topRight, rect.bottomRight);
-        Gizmos.DrawLine(rect.bottomRight, rect.bottomLeft);
-        Gizmos.DrawLine(rect.bottomLeft, rect.topLeft);
+        lineRenderer.SetPosition(0, (Vector2)gameObject.transform.position + rect.topLeft * 2);
+        lineRenderer.SetPosition(1, (Vector2)gameObject.transform.position + rect.topRight * 2);
+        lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight * 2);
+        lineRenderer.SetPosition(3, (Vector2)gameObject.transform.position + rect.bottomLeft * 2);
+        lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft * 2);
     }
 
-    protected void UpdateDrawLine()
+    public void SpawnPlayer()
     {
-
+        //임의 위치 값
+        gameObject.transform.position = new Vector2(0, 0);
+        
+        //Spawn Particle
     }
 
 
@@ -158,7 +175,7 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-        rig.MovePosition(rig.position + newVec2);
+        //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;
         //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));

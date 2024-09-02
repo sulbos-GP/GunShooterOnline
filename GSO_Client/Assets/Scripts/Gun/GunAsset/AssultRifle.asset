@@ -19,3 +19,4 @@ MonoBehaviour:
   damage: 15
   bulletObj: {fileID: 6105532122643512877, guid: e47bbd5b14bb86e4b97e34dd45c92da8, type: 3}
   gunType: 1
+  reloadTime: 3

@@ -3,17 +3,17 @@ using System.Numerics;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Data;
+using Server.Game.Object;
 using ServerCore;
 
 namespace Server.Game;
 
-public class GameObject
+public class GameObject 
 {
 
     public GameObject()
     {
         info.PositionInfo = PosInfo;
-        info.StatInfo = stat;
     }
 
     public GameObjectType ObjectType { get; protected set; } = GameObjectType.Noneobject;
@@ -29,8 +29,8 @@ public class GameObject
         set { 
             _shape = value;
             info.Shape.ShpapeType = (Google.Protobuf.Protocol.ShapeType)value.Type;
-            info.Shape.PosX      = value.position.x;
-            info.Shape.PosY      = value.position.y;
+            info.Shape.CenterPosX      = value.position.x;
+            info.Shape.CenterPosY      = value.position.y;
             info.Shape.Roatation = value.rotation;
           
             if (value.Type == Collision.Shapes.ShapeType.CIRCLE)
@@ -44,6 +44,10 @@ public class GameObject
                 info.Shape.Width = ((Rectangle)value).Width;
                 info.Shape.Height = ((Rectangle)value).Height;
             }
+            else if(value.Type == Collision.Shapes.ShapeType.POLYGON)
+            {
+                Console.WriteLine("Polygon Error");
+            }
             else if(value.Type == Collision.Shapes.ShapeType.ARCPOLY)
             {
                 //TODO : 
@@ -52,6 +56,17 @@ public class GameObject
         }
     } // 충돌때만 하면 
 
+    public PositionInfo PosInfo { get; } = new();
+
+    public Vector2 Dir
+    {
+        get => new(PosInfo.DirX, PosInfo.DirY);
+        set
+        {
+            PosInfo.DirX = value.X;
+            PosInfo.DirY = value.Y;
+        }
+    }
 
     public int Id
     {
@@ -67,8 +82,7 @@ public class GameObject
 
 
     public BattleGameRoom gameRoom { get; set; }
-    public PositionInfo PosInfo { get; } = new();
-    public StatInfo stat { get; private set; } = new();
+
 
     //public virtual int TotalAttack { get { return stat.Attack; } }
     //public virtual int TotalDefence { get { return 0; } }
@@ -77,15 +91,6 @@ public class GameObject
     //public int Exp => stat.Exp;
 
 
-    public Vector2 Dir
-    {
-        get => new(PosInfo.DirX, PosInfo.DirY);
-        set
-        {
-            PosInfo.DirX = value.X;
-            PosInfo.DirY = value.Y;
-        }
-    }
 
     /*public CreatureState State
     {
@@ -100,24 +105,11 @@ public class GameObject
         set => stat.Attack = value;
     }*/
 
-    public float AttackRange
-    {
-        get => stat.AttackRange;
-        set => stat.AttackRange = value;
-    }
-
     /*public float Speed
     {
         get => stat.Speed;
         set => stat.Speed = value;
     }*/
-
-    public int Hp
-    {
-        get => stat.Hp;
-        set => stat.Hp = Math.Clamp(value, 0, stat.MaxHp);
-    }
-
 
     public Vector2 CellPos
     {
@@ -127,7 +119,7 @@ public class GameObject
             info.PositionInfo.PosX = value.X;
             info.PositionInfo.PosY = value.Y;
 
-            if(currentShape != null)
+            if (currentShape != null)
             {
                 currentShape.x = value.X;
                 currentShape.y = value.Y;
@@ -135,35 +127,34 @@ public class GameObject
         }
     }
 
-
-  
     public virtual void Update()
     {
     }
 
-    public Vector2 GetFrontCellPos()
-    {
-        return GetFrontCellPos(new Vector2(Dir.X, Dir.Y));
-    }
+    /*  public Vector2 GetFrontCellPos()
+      {
+          return GetFrontCellPos(new Vector2(Dir.X, Dir.Y));
+      }
 
-    public Vector2 GetFrontCellPos(Vector2 dir)
-    {
-        var cellPos = CellPos;
+      public Vector2 GetFrontCellPos(Vector2 dir)
+      {
+          var cellPos = CellPos;
 
-        //Todo : dir크기를 재서 이상있으면 지우기
-        cellPos += dir;
+          //Todo : dir크기를 재서 이상있으면 지우기
+          cellPos += dir;
 
-        return cellPos;
-    }
+          return cellPos;
+      }*/
+
 
     public virtual void OnDamaged(GameObject attacker, int damage)
     {
-        Console.WriteLine(info.Name +"은"+ attacker.info.Name + "에게 데미지 받음");
+        Console.WriteLine(info.Name + "은" + attacker.info.Name + "에게 데미지 받음");
     }
     public virtual void OnCollision(GameObject other)
     {
         //상속받아 알아서 행동 ex) 스킬이면 데미지 사람이라면 충동처리
-        Console.WriteLine(info.Name +"은"+ other.info.Name + " 과 충동함");
+        Console.WriteLine(info.Name + "은" + other.info.Name + " 과 충동함");
     }
 
     /// <summary>
@@ -172,79 +163,26 @@ public class GameObject
     /// <param name="other"></param>
     public virtual void OnCollisionFeedback(GameObject other)
     {
-        
-    }
-    
-    public virtual void OnDead(GameObject attacker)
-    {
-        if (gameRoom == null)
-            return;
-        
-        var diePacket = new S_Die();
-        diePacket.ObjectId = Id;
-        diePacket.AttackerId = attacker.Id;
-
-        gameRoom.BroadCast(diePacket);
-
-        var room = gameRoom;
-        room.Push(room.LeaveGame, Id);
-
-        room.Push(new Job(() =>
+        if (other.ObjectType == GameObjectType.Projectile)
         {
-            stat.Hp = stat.MaxHp;
-            //PosInfo.State = CreatureState.Idle;
-        }));
+            //OnDamaged(other,other.Attack);
+            other.OnCollisionFeedback(this);
+        }
+        /* else if (other.ObjectType == GameObjectType.Scopeskill)
+         {
+             //할일 TODO : 장판 데이미지 일정량만 받게(일시 무적)
+             OnDamaged(other,other.Attack);
+             other.OnCollisionFeedback(this);
+         }*/
 
-        room.PushAfter(10, room.EnterGame, this);
     }
+
 
     public virtual GameObject GetOwner()
     {
         return this;
     }
 } // class
-
-public struct Vector2Int
-{
-    public int x;
-    public int y;
-
-    public Vector2Int(int x, int y)
-    {
-        this.x = x;
-        this.y = y;
-    }
-
-    public static Vector2Int up => new(0, 1);
-    public static Vector2Int down => new(0, -1);
-    public static Vector2Int left => new(-1, 0);
-    public static Vector2Int right => new(1, 0);
-
-    public static Vector2Int operator +(Vector2Int a, Vector2Int b)
-    {
-        return new Vector2Int(a.x + b.x, a.y + b.y);
-    }
-
-    public static Vector2Int operator -(Vector2Int a, Vector2Int b)
-    {
-        return new Vector2Int(a.x - b.x, a.y - b.y);
-    }
-
-    public static Vector2Int operator -(Vector2 a, Vector2Int b)
-    {
-        return new Vector2Int((int)a.X - b.x, (int)a.Y - b.y);
-    }
-
-    public float sqrMagnitude => MathF.Sqrt(sqrMagnitude);
-    public int Magnitude => x * x + y * y;
-
-    public int cellDistFromZero => Math.Abs(x) + Math.Abs(y);
-
-    public static explicit operator Vector2(Vector2Int v)
-    {
-        return new Vector2(v.x, v.y);
-    }
-}
 
 //public struct Vector2
 //{
