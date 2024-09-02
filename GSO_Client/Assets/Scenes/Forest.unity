@@ -271,7 +271,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &60280279
@@ -791,7 +791,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6405700047978222363, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6405700047978222363, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
       propertyPath: m_LocalRotation.w
@@ -959,7 +959,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &349017791
@@ -1790,6 +1790,13 @@ MonoBehaviour:
   inventoryUI: {fileID: 1095908246791057077}
   playerInvenUI: {fileID: 1095908246791057079}
   otherInvenUI: {fileID: 1095908246791057078}
+  Weapon1: {fileID: 0}
+  Weapon2: {fileID: 0}
+  Armor: {fileID: 0}
+  Bag: {fileID: 0}
+  Consume1: {fileID: 0}
+  Consume2: {fileID: 0}
+  Consume3: {fileID: 0}
   deleteUI: {fileID: 3385603023062608331}
   rotateBtn: {fileID: 1222683154}
   gridPosition: {x: 0, y: 0}
@@ -1802,9 +1809,11 @@ MonoBehaviour:
   isOnDelete: 0
   selectedEquip: {fileID: 0}
   isEquipSelected: 0
-  overlapItem: {fileID: 0}
   isActive: 0
   itemPlaceableInGrid: 0
+  isDivideMode: 0
+  isDivideInterfaceOn: 0
+  itemPreviewInstance: {fileID: 0}
 --- !u!1 &1474548943
 GameObject:
   m_ObjectHideFlags: 0
