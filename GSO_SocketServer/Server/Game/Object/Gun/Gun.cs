@@ -164,6 +164,8 @@ namespace Server.Game
                 packet.Distance = hit2D.distance;
                 packet.HitPointX = hit2D.hitPoint.Value.X;
                 packet.HitPointY = hit2D.hitPoint.Value.Y;
+                packet.StartPosX = pos.X;
+                packet.StartPosY = pos.Y;
 
 
                 ownerPlayer.gameRoom.BroadCast(packet);
