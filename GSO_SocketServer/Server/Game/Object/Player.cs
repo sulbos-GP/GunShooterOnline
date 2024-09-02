@@ -43,7 +43,7 @@ public class Player : CreatureObj
         currentShape = rectangle;
 
 
-        gun.Init(this);
+        //gun.Init(this);
 
 
 
