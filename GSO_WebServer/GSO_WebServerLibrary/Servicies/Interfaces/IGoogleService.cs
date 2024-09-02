@@ -1,6 +1,6 @@
 ﻿using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Games.v1.Data;
-using GSO_WebServerLibrary.Error;
+using WebCommonLibrary.Error;
 
 namespace GSO_WebServerLibrary.Servicies.Interfaces
 {

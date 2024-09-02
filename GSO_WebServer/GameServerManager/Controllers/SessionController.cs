@@ -1,10 +1,7 @@
-﻿using GameServerManager.Servicies;
-using GameServerManager.Servicies.Interfaces;
-using GSO_WebServerLibrary.DTO.Match;
-using GSO_WebServerLibrary.Error;
-using GSO_WebServerLibrary.Models.Match;
-using Microsoft.AspNetCore.Http;
+﻿using GameServerManager.Servicies.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using WebCommonLibrary.DTO.Matchmaker;
+using WebCommonLibrary.Error;
 
 namespace GameServerManager.Controllers
 {

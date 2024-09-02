@@ -1,8 +1,8 @@
 ﻿using CloudStructures;
 using CloudStructures.Structures;
 using Microsoft.Extensions.Options;
-using GSO_WebServerLibrary.Models.MemoryDB;
-using GSO_WebServerLibrary.Error;
+using WebCommonLibrary.Models.MemoryDB;
+using WebCommonLibrary.Error;
 using GSO_WebServerLibrary.Utils;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 

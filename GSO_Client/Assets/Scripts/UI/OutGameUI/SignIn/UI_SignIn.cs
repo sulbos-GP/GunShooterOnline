@@ -7,6 +7,8 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System;
 using System.Net.Http;
+using WebCommonLibrary.DTO.Authentication;
+using WebCommonLibrary.Error;
 
 public class SignInUI : MonoBehaviour
 {
@@ -126,7 +128,7 @@ public class SignInUI : MonoBehaviour
 
             //기존에 있던 유저라면 False
             //새로운 유저라면 True
-            bool forceRefreshToken = (response.error_code != 0);
+            bool forceRefreshToken = (response.error_code != WebErrorCode.None);
 
             //토큰을 얻기위한 일회용 Code받아오기
             PlayGamesPlatform.Instance.RequestServerSideAccess(forceRefreshToken, ProcessServerAuthCode);
@@ -176,7 +178,7 @@ public class SignInUI : MonoBehaviour
     private void ProcessAccessToken(SignInRes response)
     {
 
-        if (response.error_code != 0)
+        if (response.error_code != WebErrorCode.None)
         {
             ResultMessage($"로그인 요청 실패 : {response.error_description}");
             return;
@@ -191,7 +193,7 @@ public class SignInUI : MonoBehaviour
         {
             Managers.Web.mCredential = new WebClientCredential
             {
-                uid = response.uid.ToString(),
+                uid = Convert.ToString(response.uid),
                 access_token = response.access_token,
                 expires_in = response.expires_in,
                 scope = response.scope,

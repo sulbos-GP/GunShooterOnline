@@ -1,11 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using GsoWebServer.Servicies.Interfaces;
-using GsoWebServer.DTO.Authentication;
-using GSO_WebServerLibrary.DTO;
-using GSO_WebServerLibrary.Models.MemoryDB;
-using GSO_WebServerLibrary.Error;
 using GSO_WebServerLibrary.Utils;
-using static Google.Apis.Requests.RequestError;
+using WebCommonLibrary.DTO.Authentication;
+using WebCommonLibrary.Error;
+using GsoWebServer.DTO;
+using WebCommonLibrary.Models.MemoryDB;
 
 
 namespace AuthenticationServer.Controllers

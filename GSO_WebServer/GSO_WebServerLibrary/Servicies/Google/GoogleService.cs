@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using GSO_WebServerLibrary.Config;
+using WebCommonLibrary.Config;
 using GSO_WebServerLibrary.Servicies.Interfaces;
 
 namespace GSO_WebServerLibrary.Servicies.Google

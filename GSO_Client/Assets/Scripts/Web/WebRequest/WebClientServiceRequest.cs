@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
+using WebCommonLibrary.DTO.Authentication;
+using WebCommonLibrary.Error;
 
 public enum ERequestMethod
 {
@@ -43,8 +45,6 @@ public abstract class WebClientServiceRequest<TResponse>
 
         SystemLogManager.Instance.LogMessage($"¿• ø‰√ª [{mEndPoint}]");
 
-        Managers.Web.GetUI().Show(EWebUI.Loading);
-
         string jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(mFromBody);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStr);
 
@@ -62,8 +62,6 @@ public abstract class WebClientServiceRequest<TResponse>
         }
 
         yield return request.SendWebRequest();
-
-        Managers.Web.GetUI().Hide(EWebUI.Loading);
 
         if (request.result == UnityWebRequest.Result.Success)
         {
@@ -96,7 +94,7 @@ public abstract class WebClientServiceRequest<TResponse>
 
     public void OnProcessRefreshToken(RefreshTokenRes response)
     {
-        if (response.error_code == 0)
+        if (response.error_code == WebErrorCode.None)
         {
             Managers.Web.mCredential.access_token = response.access_token;
 

@@ -1,12 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Matchmaker.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Matchmaker.Service.Interfaces;
-using Matchmaker.DTO;
-using Matchmaker.DTO.Matchmaker;
-using GSO_WebServerLibrary.Error;
+using WebCommonLibrary.Error;
 using GSO_WebServerLibrary.Utils;
-using GSO_WebServerLibrary.DTO;
+using WebCommonLibrary.DTO.Matchmaker;
+using Matchmaker.DTO;
 
 namespace Matchmaker.Controllers
 {
