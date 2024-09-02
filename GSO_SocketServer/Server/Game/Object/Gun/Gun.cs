@@ -66,8 +66,8 @@ namespace Server.Game
 
             //게임 시작시 실행할 루틴
             //SetGunStat(_gunStat);
-            _curAmmo = gunData.ammo;
-            gunState = GunState.Shootable;
+            //_curAmmo = gunData.ammo;
+            //gunState = GunState.Shootable;
             //_fireStartPos = transform.GetChild(0);
 
             ownerPlayer = p;
