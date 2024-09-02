@@ -59,6 +59,8 @@ namespace Server.Game
         public void Init(Player p)
         {
             ExtensionMethod.Start();
+            GunDataManager.instance.Init();
+            gunData = GunDataManager.instance.gunDatas[0];
 
             //Debug Line
             /*bulletLine = GetComponent<LineRenderer>();

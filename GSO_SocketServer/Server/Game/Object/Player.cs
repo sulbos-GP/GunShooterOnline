@@ -12,7 +12,7 @@ public class Player : CreatureObj
     public SkillCoolDown SkillCoolDown = new();
     public Inventory inventory;
     public Gear gear;
-    //TODO : 0902 지승현  public Gun gun = new();
+    public Gun gun = new();
 
     //GWANHO TEMP
     public int uid = 0;
@@ -43,7 +43,7 @@ public class Player : CreatureObj
         currentShape = rectangle;
 
 
-        //TODO : 0902 지승현 gun.Init(this);
+        gun.Init(this);
 
 
 
