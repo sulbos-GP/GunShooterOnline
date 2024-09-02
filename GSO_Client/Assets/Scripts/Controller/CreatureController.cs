@@ -123,16 +123,16 @@ public class CreatureController : BaseController
 
     public virtual void OnDamaged(Transform attacker)
     {
-        var pc = attacker.GetComponent<ProjectileContoller>();
-        if (pc != null)
-        {
-            /*var hitPacket = new C_Hit
-            {
-                AttackId = pc.Id,
-                HitId = Id
-            };
-            Managers.Network.Send(hitPacket);*/
-        }
+        //var pc = attacker.GetComponent<ProjectileContoller>();
+        //if (pc != null)
+        //{
+        //    /*var hitPacket = new C_Hit
+        //    {
+        //        AttackId = pc.Id,
+        //        HitId = Id
+        //    };
+        //    Managers.Network.Send(hitPacket);*/
+        //}
 
         var cc = attacker.GetComponent<CreatureController>();
         if (cc != null)

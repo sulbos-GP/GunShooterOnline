@@ -66,7 +66,11 @@ internal class PacketHandler
 
             //Collider Line 작성
             player.SetDrawLine(info.Shape.Width,info.Shape.Height);
-             
+
+
+            //Spawn Player
+            player.SpawnPlayer();
+            Debug.Log("spawnID : " + info.ObjectId);
         }
         //Debug.Log("S_SpawnHandler");*/
     }
@@ -101,7 +105,8 @@ internal class PacketHandler
         ec.UpdatePosInfo(movePacket.PositionInfo);
         ec.UpdateMoving();
         cc.PosInfo = movePacket.PositionInfo;
-        
+
+
 
 
         //cc.State = CreatureState.Moving;
