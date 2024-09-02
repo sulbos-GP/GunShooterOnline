@@ -150,10 +150,10 @@ namespace Server.Game
                     creatureObj.OnDamaged(attacker, 3);
 
                     S_ChangeHp ChangeHpPacket = new S_ChangeHp();
-                    ChangeHpPacket.ObjectId = hitObject.Id;
+                    ChangeHpPacket.ObjectId = creatureObj.Id;
                     ChangeHpPacket.Hp = creatureObj.Hp;
 
-                    Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hitObject.Id + "HIT Hp : " + hitObject.Hp);
+                    Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + creatureObj.Id + "HIT Hp : " + creatureObj.Hp);
 
                     ownerPlayer.gameRoom.BroadCast(ChangeHpPacket);
                 }
