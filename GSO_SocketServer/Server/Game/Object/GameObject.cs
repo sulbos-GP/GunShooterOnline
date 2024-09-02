@@ -29,8 +29,8 @@ public class GameObject
         set { 
             _shape = value;
             info.Shape.ShpapeType = (Google.Protobuf.Protocol.ShapeType)value.Type;
-            info.Shape.PosX      = value.position.x;
-            info.Shape.PosY      = value.position.y;
+            info.Shape.CenterPosX      = value.position.x;
+            info.Shape.CenterPosY      = value.position.y;
             info.Shape.Roatation = value.rotation;
           
             if (value.Type == Collision.Shapes.ShapeType.CIRCLE)

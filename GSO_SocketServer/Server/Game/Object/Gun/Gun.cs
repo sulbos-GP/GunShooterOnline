@@ -21,7 +21,7 @@ namespace Server.Game
 
         public GunData gunData { get; private set; }
 
-        private GunStat _gunStat;
+        //private GunStat _gunStat;
         public int _curAmmo { get; private set; } //현재 장탄
 
         private float _lastFireTime;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Server.Game
 {
-    public class GunStat
+/*    public class GunStat
     {
         public float range;       // 사거리.
         public float fireRate;    // 연사 속도. 값과 속도가 반비례
@@ -17,4 +17,6 @@ namespace Server.Game
         public GunType gunType;
         public int reloadTime;
     }
+*/
+   
 }
