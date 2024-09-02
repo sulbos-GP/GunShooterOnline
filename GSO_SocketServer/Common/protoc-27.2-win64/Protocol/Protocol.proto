@@ -290,14 +290,14 @@ message C_RaycastShoot{ //16
 
 message S_RaycastHit // 17
 {
-    int32 RayId = 1;
+    int32 rayId = 1;
     int32 hitObjectId = 2;
     //Shape Collider;
     //GameObject hitObj;
     float distance = 3;
     //Vector2 normal;
-    float StartPosX = 4;
-    float StartPosY = 5;
+    float startPosX = 4;
+    float startPosY = 5;
     float hitPointX = 6;
     float hitPointY = 7;
 }
