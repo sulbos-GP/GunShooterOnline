@@ -213,7 +213,6 @@ public class InputController : MonoBehaviour
     {
         while (_isFiring)
         {
-            Debug.Log(_isFiring);
             Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
             playerGun.Fire(); // 발사 메서드 호출
             yield return new WaitForSeconds(1 / playerGun.GetFireRate()); // 발사 속도에 따라 대기
@@ -221,7 +220,6 @@ public class InputController : MonoBehaviour
     }
     private void OnReloadInput(InputAction.CallbackContext context)
     {
-        Debug.Log("RightClicked");
         Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
         playerGun.Reload();
     }
