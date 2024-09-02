@@ -2,17 +2,14 @@
 using GSO_WebServerLibrary.Reposiotry.Define.MasterDB;
 using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
 using GSO_WebServerLibrary.Reposiotry.Define.MemoryDB;
-
 using GSO_WebServerLibrary.Servicies.Google;
 using GSO_WebServerLibrary.Servicies.Interfaces;
-
-using GSO_WebServerLibrary.Config;
-
 using GsoWebServer.Servicies.Interfaces;
 using GsoWebServer.Servicies.Authentication;
 using GsoWebServer.Servicies.DataLoad;
 using GsoWebServer.Servicies.Game;
 using System;
+using WebCommonLibrary.Config;
 
 namespace GsoWebServer.Startup
 {

@@ -10,7 +10,6 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using UnityEditor;
 using UnityEngine;
-using static UnityEditor.Progress;
 
 
 internal class PacketHandler

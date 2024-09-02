@@ -1,10 +1,10 @@
-﻿using GSO_WebServerLibrary.Error;
-using GSO_WebServerLibrary.Utils;
-using GSO_WebServerLibrary.DTO;
-using GSO_WebServerLibrary.Models.GameDB;
-using GsoWebServer.Models.Statistic;
+﻿using GSO_WebServerLibrary.Utils;
+using GsoWebServer.DTO;
 using GsoWebServer.Servicies.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.RatingSystem;
 
 namespace StatisticServer.Controllers
 {

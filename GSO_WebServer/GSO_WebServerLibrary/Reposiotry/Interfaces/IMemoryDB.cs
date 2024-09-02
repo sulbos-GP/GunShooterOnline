@@ -1,5 +1,5 @@
-﻿using GSO_WebServerLibrary.Error;
-using GSO_WebServerLibrary.Models.MemoryDB;
+﻿using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.MemoryDB;
 
 namespace GSO_WebServerLibrary.Reposiotry.Interfaces
 {

@@ -3,7 +3,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using static AuthorizeResource;
+using WebCommonLibrary.DTO.Authentication;
+using WebCommonLibrary.DTO.DataLoad;
 
 public class WebManager
 {
@@ -11,8 +12,6 @@ public class WebManager
     private WebUIFactory mUIFactory;
 
     public WebClientCredential mCredential;
-
-    //임시
     public DataLoadUserInfo mUserInfo;
 
     private void Awake()
@@ -25,7 +24,7 @@ public class WebManager
 
     private void Start()
     {
-
+        
     }
 
     public WebUIFactory GetUI()
@@ -65,21 +64,21 @@ public class WebManager
     private void OnApplicationQuit()
     {
 
-        var header = new HeaderVerfiyPlayer
-        {
-            uid = mCredential.uid,
-            access_token = mCredential.access_token,
-        };
+        //var header = new HeaderVerfiyPlayer
+        //{
+        //    uid = mCredential.uid,
+        //    access_token = mCredential.access_token,
+        //};
 
-        var body = new SignOutReq()
-        {
-            //TODO : 마지막에 일어난 작업을 적음
-            cause = "Player OnApplicationQuit"
-        };
+        //var body = new SignOutReq()
+        //{
+        //    //TODO : 마지막에 일어난 작업을 적음
+        //    cause = "Player OnApplicationQuit"
+        //};
 
-        GsoWebService service = new GsoWebService();
-        SignOutRequest request = service.mAuthorizeResource.GetSignOutRequest(header, body);
-        request.ExecuteAsync(ProcessSignOut);
+        //GsoWebService service = new GsoWebService();
+        //SignOutRequest request = service.mAuthorizeResource.GetSignOutRequest(header, body);
+        //request.ExecuteAsync(ProcessSignOut);
     }
 
     private void ProcessSignOut(SignOutRes response)
