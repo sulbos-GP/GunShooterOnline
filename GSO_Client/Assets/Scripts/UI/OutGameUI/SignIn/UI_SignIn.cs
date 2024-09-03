@@ -9,6 +9,9 @@ using System;
 using System.Net.Http;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.Error;
+using NPOI.Util;
+using UnityEngine.SocialPlatforms;
+using System.Collections.Generic;
 
 public class SignInUI : MonoBehaviour
 {
@@ -80,9 +83,12 @@ public class SignInUI : MonoBehaviour
 
         if (status == SignInStatus.Success)
         {
-            ResultMessage("구글 플레이 서비스 인증 성공");
+            ResultMessage($"구글 플레이 서비스 인증 성공");
 
-            AuthenticationReq packet = new AuthenticationReq()
+            string userId = PlayGamesPlatform.Instance.GetUserId();
+            
+
+           AuthenticationReq packet = new AuthenticationReq()
             {
                 user_id = PlayGamesPlatform.Instance.GetUserId(),
                 service = "Google"
@@ -191,16 +197,8 @@ public class SignInUI : MonoBehaviour
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
         {
-            Managers.Web.mCredential = new WebClientCredential
-            {
-                uid = Convert.ToString(response.uid),
-                access_token = response.access_token,
-                expires_in = response.expires_in,
-                scope = response.scope,
-                token_type = response.token_type
-            };
-
-            Managers.Web.mUserInfo = response.userData;
+            Managers.Web.credential = response.credential;
+            Managers.Web.user = response.userData;
         }
 
         //로비로 이동

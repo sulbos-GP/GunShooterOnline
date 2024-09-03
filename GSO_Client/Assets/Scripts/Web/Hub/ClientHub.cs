@@ -46,11 +46,17 @@ public abstract class ClientHub : MonoBehaviour
         {
             SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버 빌드중...");
 
+            string accessToken = Managers.Web.credential.access_token;
+            if (accessToken == string.Empty)
+            {
+                throw new Exception("Access Token이 Empty입니다.");
+            }
+
             mConnection = new HubConnectionBuilder()
             .WithUrl(mConnectionUrl, options =>
             {
 
-                options.AccessTokenProvider = () => Task.FromResult(Managers.Web.mCredential.access_token);
+                options.AccessTokenProvider = () => Task.FromResult(accessToken);
                 options.SkipNegotiation = true;
                 options.Transports = HttpTransportType.WebSockets;
 
@@ -113,7 +119,7 @@ public abstract class ClientHub : MonoBehaviour
     }
     private async void C2S_VerfiyCredential()
     {
-        var credential = Managers.Web.mCredential;
+        var credential = Managers.Web.credential;
         await mConnection.InvokeAsync("VerfiyCredential", credential);
     }
 

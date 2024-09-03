@@ -141,7 +141,7 @@ public class UserResource
     {
         public SetNicknameRequest(GsoWebService service, HeaderVerfiyPlayer header, SetNicknameReq request)
         {
-            this.mFromBody = header.ToDictionary();
+            this.mFromHeader = header.ToDictionary();
             this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/api/User/SetNickname";
             this.mMethod = ERequestMethod.POST;
@@ -191,7 +191,7 @@ public class GameResource
     //{
     //    public QuickInfoRequest(GsoWebService service, HeaderVerfiyPlayer header, QuickInfoReq request)
     //    {
-    //        this.mFromBody = header.ToDictionary();
+    //        this.mFromHeader = header.ToDictionary();
     //        this.mFromBody = request;
     //        this.mEndPoint = service.mBaseUrl + "/api/Game/QuickInfo";
     //        this.mMethod = ERequestMethod.POST;
