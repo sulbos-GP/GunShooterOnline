@@ -10,12 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 4250570346833299682}
   - component: {fileID: 3625417336582395882}
-  - component: {fileID: 3449594354490883848}
   - component: {fileID: 6121294360235610042}
   - component: {fileID: -596032679407702001}
   m_Layer: 0
   m_Name: ARBullet
-  m_TagString: Untagged
+  m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +29,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.099101566, y: 0.2, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -76,7 +75,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0b9a9bb935b765943ae46a6254ee08c6, type: 3}
   m_Color: {r: 1, g: 0.9220363, b: 0, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -87,41 +86,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &3449594354490883848
-CapsuleCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6105532122643512877}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
-  m_Direction: 0
 --- !u!50 &6121294360235610042
 Rigidbody2D:
   serializedVersion: 4
@@ -163,6 +127,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _bulletStat: {fileID: 11400000, guid: d072744f9d60f8d44961f133b77dacfb, type: 2}
   _shooterId: 0
-  _damage: 0
-  _range: 0
-  _dir: {x: 0, y: 0, z: 0}
+  _damage: 15
+  _range: 6
+  _dir: {x: 0.7636199, y: 0.64566606, z: 0}
+  EndPos: {x: 0, y: 0}
+  speed: 80
