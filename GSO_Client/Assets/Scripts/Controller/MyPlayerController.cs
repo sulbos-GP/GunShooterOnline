@@ -90,10 +90,9 @@ public partial class MyPlayerController : PlayerController
     {
         //TODO : 삭제
 
-
+        gun = transform.Find("Pivot/Gun").GetComponent<Gun>();
         //base 무시
         base.Init();
-        gun = transform.Find("Pivot/Gun").GetComponent<Gun>();
 
         return;
 
