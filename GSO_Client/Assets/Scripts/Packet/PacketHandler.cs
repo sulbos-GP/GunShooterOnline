@@ -69,7 +69,8 @@ internal class PacketHandler
 
 
             //Spawn Player
-            player.SpawnPlayer();
+            Vector2 vec2 = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
+            player.SpawnPlayer(vec2);
             Debug.Log("spawnID : " + info.ObjectId);
         }
         //Debug.Log("S_SpawnHandler");*/

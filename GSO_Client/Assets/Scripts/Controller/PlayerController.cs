@@ -59,11 +59,11 @@ public class PlayerController : CreatureController
         lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft * 2);
     }
 
-    public void SpawnPlayer()
+    public void SpawnPlayer(Vector2 vec2)
     {
         //임의 위치 값
-        gameObject.transform.position = new Vector2(0, 0);
-        
+        gameObject.transform.position = vec2;
+
         //Spawn Particle
     }
 
