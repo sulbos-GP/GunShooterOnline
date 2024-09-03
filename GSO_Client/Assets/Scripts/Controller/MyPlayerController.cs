@@ -39,7 +39,7 @@ public partial class MyPlayerController : PlayerController
 
 
     //public int Attack => Stat.Attack;
-
+    public Gun gun { get; private set; }
 
     private void LateUpdate()
     {
@@ -93,6 +93,7 @@ public partial class MyPlayerController : PlayerController
 
         //base 무시
         base.Init();
+        gun = transform.Find("Pivot/Gun").GetComponent<Gun>();
 
         return;
 

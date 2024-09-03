@@ -596,16 +596,19 @@ internal class PacketHandler
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
         {
-            //TO - DO : 맞는지 모르겠음.
-            Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
-
+            //플레이어를 찾을 수 없는 곳.
+            //Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
+            
             //Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
 
 
             //Debug.DrawLine(hitObj, hitObj);
             return;
         }
-
+        Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
+        Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
+        Managers.Object.MyPlayer.gun.bulletLine.SetPosition(0, startPoint);
+        Managers.Object.MyPlayer.gun.bulletLine.SetPosition(1, hitPoint);
         //cc에서 피격 표시?
 
         //hit ID가 없으면 벽 맞는 거라         packet.HitPointX , Y이용하여 렌더링 및 이펙트 표시!! 
