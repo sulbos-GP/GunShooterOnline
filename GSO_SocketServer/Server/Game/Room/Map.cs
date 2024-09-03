@@ -253,6 +253,10 @@ public class Map
             return false;
         }
 
+
+        //TODO : 삭제
+
+
         var posInfo = gameObject.PosInfo;
 
         /*if (gameObject.gameRoom.Map != this)

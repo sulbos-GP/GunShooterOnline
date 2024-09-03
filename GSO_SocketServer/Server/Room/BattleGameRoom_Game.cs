@@ -47,7 +47,9 @@ namespace Server
             resMovePacket.ObjectId = player.info.ObjectId;
             resMovePacket.PositionInfo = packet.PositionInfo;
 
+            player.CellPos = new Vector2(packet.PositionInfo.PosX, packet.PositionInfo.PosY);
 
+            //TODO : 삭제
             map.ApplyMove(player,
                 new Vector2Int((int)Math.Round(packet.PositionInfo.PosX), (int)Math.Round(packet.PositionInfo.PosY)));
 
