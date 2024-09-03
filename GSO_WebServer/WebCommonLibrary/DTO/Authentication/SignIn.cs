@@ -1,5 +1,6 @@
 ﻿
 using WebCommonLibrary.DTO.DataLoad;
+using WebCommonLibrary.Model.GameDB;
 
 namespace WebCommonLibrary.DTO.Authentication
 {
@@ -14,15 +15,7 @@ namespace WebCommonLibrary.DTO.Authentication
 
     public class SignInRes : ErrorCodeDTO
     {
-        public int          uid { get; set; } = 0;
-
-        public string       access_token { get; set; } = string.Empty;
-
-        public long         expires_in { get; set; } = 0;
-
-        public string       scope { get; set; } = string.Empty;
-
-        public string       token_type { get; set; } = string.Empty;
+        public ClientCredential? credential { get; set; } = null;
 
         public DataLoadUserInfo? userData { get; set; } = null;
     }

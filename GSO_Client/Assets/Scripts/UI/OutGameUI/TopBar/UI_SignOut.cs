@@ -7,6 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Model.GameDB;
 using static AuthorizeResource;
 
 public class UI_SingOut : MonoBehaviour
@@ -21,10 +22,11 @@ public class UI_SingOut : MonoBehaviour
 
     private void OnClickSingOut()
     {
+        ClientCredential crediential = Managers.Web.credential;
         var header = new HeaderVerfiyPlayer
         {
-            uid = Managers.Web.mCredential.uid,
-            access_token = Managers.Web.mCredential.access_token,
+            uid = crediential.uid.ToString(),
+            access_token = crediential.access_token,
         };
 
         var packet = new SignOutReq()

@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Model.GameDB;
 
 public enum ERequestMethod
 {
@@ -82,9 +83,10 @@ public abstract class WebClientServiceRequest<TResponse>
 
     public void RequestRefreshToken()
     {
+        ClientCredential credential = Managers.Web.credential;
         var body = new RefreshTokenReq()
         {
-            uid = Convert.ToInt32(Managers.Web.mCredential.uid),
+            uid = credential.uid,
         };
 
         GsoWebService service = new GsoWebService();
@@ -96,7 +98,7 @@ public abstract class WebClientServiceRequest<TResponse>
     {
         if (response.error_code == WebErrorCode.None)
         {
-            Managers.Web.mCredential.access_token = response.access_token;
+            Managers.Web.credential.access_token = response.access_token;
 
             ReExecuteAsync();
         }

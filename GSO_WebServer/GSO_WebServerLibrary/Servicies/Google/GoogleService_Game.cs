@@ -21,13 +21,13 @@ namespace GSO_WebServerLibrary.Servicies.Google
                     ApplicationName = mGoogleConfig.Value.ApplicationName
                 });
 
-                PlayersResource.GetRequest request = service.Players.Get("me");
-                var response = await request.ExecuteAsync();
+                PlayersResource.GetRequest request = service.Players.Get(userId);
+                Player response = await request.ExecuteAsync();
 
-                if(response.GamePlayerId != userId)
-                {
-                    return (WebErrorCode.MyPlayerIdMismatch, null);
-                }
+                //if (response.GamePlayerId != userId)
+                //{
+                //    return (WebErrorCode.MyPlayerIdMismatch, null);
+                //}
 
                 return (WebErrorCode.None, response);
             }

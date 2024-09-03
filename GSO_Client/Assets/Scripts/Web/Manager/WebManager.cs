@@ -5,19 +5,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.DTO.DataLoad;
+using WebCommonLibrary.Model.GameDB;
 
 public class WebManager
 {
 
     private WebUIFactory mUIFactory;
 
-    public WebClientCredential mCredential;
-    public DataLoadUserInfo mUserInfo;
+    public ClientCredential credential;
+    public DataLoadUserInfo user;
 
     private void Awake()
     {
-        mUserInfo = new DataLoadUserInfo();
-        mCredential = new WebClientCredential();
+        user = new DataLoadUserInfo();
+        credential = new ClientCredential();
 
         mUIFactory = Managers.Instance.gameObject.AddComponent<WebUIFactory>();
     }

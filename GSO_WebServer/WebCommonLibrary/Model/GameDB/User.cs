@@ -7,6 +7,7 @@ namespace WebCommonLibrary.Models.GameDB
         public int uid { get; set; } = 0;
         public string player_id { get; set; } = string.Empty;
         public string nickname { get; set; } = string.Empty;
+        public int experience { get; set; } = 0;
         public string service { get; set; } = string.Empty;
         public string refresh_token { get; set; } = string.Empty;
         public DateTime create_dt { get; set; } = DateTime.MinValue;

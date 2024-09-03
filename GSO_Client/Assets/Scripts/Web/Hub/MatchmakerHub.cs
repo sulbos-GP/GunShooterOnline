@@ -52,8 +52,8 @@ public class MatchmakerHub : ClientHub
 
     public async void C2S_VerfiyUser()
     {
-        var credential = Managers.Web.mCredential;
-        int uid = int.Parse(credential.uid);
+        var credential = Managers.Web.credential;
+        int uid = credential.uid;
         string token = credential.access_token;
         await mConnection.InvokeAsync("C2S_VerfiyUser", uid, token);
     }

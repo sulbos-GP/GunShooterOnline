@@ -8,6 +8,7 @@ using UnityEngine.Profiling;
 using UnityEngine.UI;
 using WebCommonLibrary.DTO.Matchmaker;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Model.GameDB;
 using static MatchmakerResource;
 
 public class UI_Match : MonoBehaviour
@@ -66,10 +67,11 @@ public class UI_Match : MonoBehaviour
             SystemLogManager.Instance.LogMessage("매칭 참여 요청...");
             mIsProcessMatch = true;
 
+            ClientCredential crediential = Managers.Web.credential;
             var header = new HeaderVerfiyPlayer
             {
-                uid = Managers.Web.mCredential.uid,
-                access_token = Managers.Web.mCredential.access_token,
+                uid = crediential.uid.ToString(),
+                access_token = crediential.access_token,
             };
 
             var body = new JoinMatchReq
@@ -123,10 +125,11 @@ public class UI_Match : MonoBehaviour
             SystemLogManager.Instance.LogMessage("매칭 취소 요청...");
             mIsProcessMatch = true;
 
+            ClientCredential credential = Managers.Web.credential;
             var header = new HeaderVerfiyPlayer
             {
-                uid = Convert.ToString(Managers.Web.mCredential.uid),
-                access_token = Managers.Web.mCredential.access_token,
+                uid = credential.uid.ToString(),
+                access_token = credential.access_token,
             };
 
             var body = new CancleMatchReq

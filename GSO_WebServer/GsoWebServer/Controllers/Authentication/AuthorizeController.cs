@@ -5,6 +5,7 @@ using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.Error;
 using GsoWebServer.DTO;
 using WebCommonLibrary.Models.MemoryDB;
+using WebCommonLibrary.Model.GameDB;
 
 
 namespace AuthenticationServer.Controllers
@@ -116,10 +117,10 @@ namespace AuthenticationServer.Controllers
                 }
 
                 //해당 유저(플레이어)가 있는지 확인
-                (errorCode, var uid) = await mAuthenticationService.VerifyUser(player.GamePlayerId, request.service);
+                (errorCode, var uid) = await mAuthenticationService.VerifyUser(request.user_id, request.service);
                 if (errorCode == WebErrorCode.SignInFailUserNotExist)
                 {
-                    (errorCode, uid) = await mGameService.SingUpWithNewUserGameData(player.GamePlayerId, request.service, token.RefreshToken);
+                    (errorCode, uid) = await mGameService.SingUpWithNewUserGameData(request.user_id, request.service, token.RefreshToken);
                 }
                 
                 if (errorCode != WebErrorCode.None || uid == 0)
@@ -177,11 +178,15 @@ namespace AuthenticationServer.Controllers
                 }
 
                 response.error_code     = WebErrorCode.None;
-                response.uid            = uid;
-                response.access_token   = token.AccessToken;
-                response.expires_in     = token.ExpiresInSeconds.Value;
-                response.scope          = token.Scope;
-                response.token_type     = token.TokenType;
+                response.credential = new ClientCredential()
+                {
+                    uid = uid,
+                    access_token = token.AccessToken,
+                    expires_in = token.ExpiresInSeconds.Value,
+                    scope = token.Scope,
+                    token_type = token.TokenType,
+                };
+
                 return response;
             }
             catch (Exception ex)
