@@ -86,13 +86,15 @@ namespace Server
 
         public override void OnDisconnected(EndPoint endPoint)
         {
-            //SessionManager.Instance.Remove(this);
-            //if (Room != null)
-            //{
-            //	GameRoom room = Room;
-            //	room.Push(() => room.Leave(this));
-            //	Room = null;
-            //}
+            mSessionManager.Remove(this);
+            if (Room != null)
+            {
+            	GameRoom room = Room;
+            	room.Push(() => room.LeaveGame(SessionId));
+            	Room = null;
+            }
+
+
 
             Console.WriteLine($"OnDisconnected : {endPoint}");
         }

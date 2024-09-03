@@ -10,7 +10,7 @@ using System.Text;
 
 namespace ServerCore
 {
-	public class Listener : INetEventListener
+	public class Listener : INetEventListener, IDeliveryEventListener, INtpEventListener, IPeerAddressChangedListener
     {
         private ServerNetworkService mNetworkService;
 
@@ -30,6 +30,8 @@ namespace ServerCore
 
             mNetworkService.mSessionManager.Insert(session);
         }
+
+
 
         public void OnPeerDisconnected(NetPeer peer, DisconnectInfo disconnectInfo)
         {
@@ -103,5 +105,19 @@ namespace ServerCore
 
         }
 
+        public void OnMessageDelivered(NetPeer peer, object userData)
+        {
+            throw new NotImplementedException();
+        }
+
+        void INtpEventListener.OnNtpResponse(NtpPacket packet)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IPeerAddressChangedListener.OnPeerAddressChanged(NetPeer peer, IPEndPoint previousAddress)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

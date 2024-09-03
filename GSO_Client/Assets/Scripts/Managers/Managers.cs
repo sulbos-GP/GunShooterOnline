@@ -89,12 +89,18 @@ internal class Managers : MonoBehaviour
         }
     }
 
+    private void OnApplicationQuit()
+    {
+        Clear();
+    }
+
     public static void Clear()
     {
         //Sound.Clear();
         Scene.Clear();
         //UI.Clear();
         Pool.Clear();
+        Network.Clear();
     }
 
     #region Config

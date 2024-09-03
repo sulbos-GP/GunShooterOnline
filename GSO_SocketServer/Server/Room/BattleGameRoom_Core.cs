@@ -211,9 +211,29 @@ namespace Server
         public override void LeaveGame(int id)
         {
 
-        }
 
-        public Player GetPlayer(int id)
+            var type = ObjectManager.GetObjectTypeById(id);
+
+
+            if (type == GameObjectType.Player)
+            {
+
+                bool t =  _playerDic.Remove(id);
+
+                if(t == true)
+                {
+                    Console.WriteLine($"LeaveGame id : {id}");
+                }
+
+            }
+            else if (type == GameObjectType.Monster)
+            {
+
+
+            }
+
+        }
+            public Player GetPlayer(int id)
         {
             return _playerDic.TryGetValue(id, out var player) ? player : null;
         }
