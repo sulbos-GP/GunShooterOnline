@@ -77,7 +77,7 @@ public class Player : CreatureObj
         gameRoom.BroadCast(diePacket);
 
         var room = gameRoom;
-        room.Push(room.LeaveGame, Id);
+        //room.Push(room.LeaveGame, Id);
     }
 
     #region InGames

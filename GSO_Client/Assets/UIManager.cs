@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -38,7 +37,7 @@ public class UIManager : MonoBehaviour
         //HP
         Health.text =  HP+" / "+MaxHP;
         //GunAmmo
-        Gun playerGun = Managers.Object.MyPlayer.transform.Find("Pivot/Gun").GetComponentInChildren<Gun>();
+        Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
         if (playerGun.gunState == GunState.Reloading)
             AmmoText.text = "Reloading Gun";
         else
