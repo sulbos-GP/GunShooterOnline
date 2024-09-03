@@ -846,4 +846,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gunStat: {fileID: 11400000, guid: f272da6bfc5ce3a4da45f529413ad926, type: 2}
-  isBulletPrefShoot: 0
+  isBulletPrefShoot: 1

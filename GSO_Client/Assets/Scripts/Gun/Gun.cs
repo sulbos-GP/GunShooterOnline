@@ -18,7 +18,7 @@ public class Gun : MonoBehaviour
 
     private float _lastFireTime;
 
-    public bool isBulletPrefShoot = false;
+    public bool isBulletPrefShoot = true;
 
     //총알궤적 라인 렌더러 (디버깅 라인을 라인렌더러로 표현)
     private LineRenderer bulletLine;
@@ -144,6 +144,10 @@ public class Gun : MonoBehaviour
             {
                 //총알을 사용한 방법
                 Bullet bullet = gunData.bulletObj.GetComponent<Bullet>();
+                if(hit.point != new Vector2(0,0))
+                    bullet.EndPos = hit.point;
+                else
+                    bullet.EndPos = _fireStartPos.position + direction * gunData.range;
                 bullet._damage = gunData.damage;
                 bullet._range = gunData.range;
                 bullet._dir = direction;
