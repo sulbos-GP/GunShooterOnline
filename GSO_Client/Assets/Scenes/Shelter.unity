@@ -410,32 +410,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 59129441}
   m_CullTransparentMesh: 1
---- !u!1 &61337289 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 191436082380664689, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
-  m_PrefabInstance: {fileID: 275929576}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &61337301
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 61337289}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: d209dffd87d045c4fa6f27623e856448, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &75960017
 GameObject:
   m_ObjectHideFlags: 0
@@ -1672,38 +1646,11 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 1.8
       objectReference: {fileID: 0}
-    - target: {fileID: 8942202889006704819, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
-      propertyPath: m_FlipX
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8942202889006704819, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
-      propertyPath: m_FlipY
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8942202889006704819, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: -7525882869776839469, guid: ffbb56c427bfa5344934e937190ee2e9, type: 3}
-    - target: {fileID: 8942202889006704819, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
-      propertyPath: m_Color.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8942202889006704819, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
-      propertyPath: m_Color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8942202889006704819, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
-      propertyPath: m_Color.r
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 2813869881491738367, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 191436082380664689, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 61337301}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e835d50300b98ef4d901f2eeafd2798a, type: 3}
 --- !u!1 &326830481
 GameObject:

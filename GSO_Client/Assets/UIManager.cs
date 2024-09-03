@@ -38,7 +38,7 @@ public class UIManager : MonoBehaviour
         //HP
         Health.text =  HP+" / "+MaxHP;
         //GunAmmo
-        Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
+        Gun playerGun = Managers.Object.MyPlayer.transform.Find("Pivot/Gun").GetComponentInChildren<Gun>();
         if (playerGun.gunState == GunState.Reloading)
             AmmoText.text = "Reloading Gun";
         else
