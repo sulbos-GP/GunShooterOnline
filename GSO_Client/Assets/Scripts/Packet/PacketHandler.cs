@@ -120,7 +120,10 @@ internal class PacketHandler
         var go = Managers.Object.FindById(changeHpPacket.ObjectId);
 
         if (go != null)
+        {
             go.GetComponent<CreatureController>().Hp = changeHpPacket.Hp;
+            go.GetComponent<PlayerController>().Hit();
+        }
         else
             Debug.Log("아이디 없음");
     }
