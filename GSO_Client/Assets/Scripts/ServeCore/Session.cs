@@ -113,12 +113,16 @@ namespace ServerCore
 
 		public void Disconnect()
 		{
-			mPeer.Disconnect();
+			if(mPeer != null)
+			{
+                mPeer.Disconnect();
 
-			OnDisconnected(mPeer);
+                OnDisconnected(mPeer);
+                Clear();
 
-			Clear();
-		}
+            }
+
+        }
 
 	}
 }
