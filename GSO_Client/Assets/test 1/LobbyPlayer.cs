@@ -19,8 +19,9 @@ public class LobbyPlayer : MonoBehaviour
     private void Start()
     {
         rig = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        animator = transform.GetChild(0).GetComponent<Animator>();
+        spriteRenderer = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        spriteRenderer.color = Color.white;
     }
     // Update is called once per frame
     void FixedUpdate()
