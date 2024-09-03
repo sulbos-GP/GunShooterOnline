@@ -15,6 +15,8 @@ public class PlayerController : CreatureController
 
     private Material material;
     private SpriteRenderer sprite;
+    private Animator animator;
+    private Transform prevTrn;
     public struct Rectangle
     {
         public Vector2 topLeft;
@@ -38,6 +40,7 @@ public class PlayerController : CreatureController
     {
         //TO-DO : 임시
         sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
         lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
@@ -174,8 +177,12 @@ public class PlayerController : CreatureController
     public void UpdatePosInfo(PositionInfo info)
     {
         //적 위치 변경
-        Debug.Log("Update PosInfo");
         Dir = new Vector2(info.DirX, info.DirY);
+        var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
+        if ((nextPos - transform.position).sqrMagnitude != 0)
+            animator.SetBool("IsMove", true);
+        else
+            animator.SetBool("IsMove", false);
         gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
         gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
     }
@@ -188,7 +195,6 @@ public class PlayerController : CreatureController
         //else
         //    transform.position = Vector3.Lerp(transform.position, CellPos, Time.deltaTime * 10);
 
-        Debug.Log("Update Moving");
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
