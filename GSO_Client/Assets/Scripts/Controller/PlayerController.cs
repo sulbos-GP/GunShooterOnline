@@ -12,6 +12,9 @@ public class PlayerController : CreatureController
     protected float _height;
 
     public LineRenderer lineRenderer;
+
+    private Material material;
+    private SpriteRenderer sprite;
     public struct Rectangle
     {
         public Vector2 topLeft;
@@ -33,6 +36,8 @@ public class PlayerController : CreatureController
 
     public void SetDrawLine(float width , float height)
     {
+        //TO-DO : 임시
+        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
         lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
@@ -63,8 +68,18 @@ public class PlayerController : CreatureController
     {
         //임의 위치 값
         gameObject.transform.position = vec2;
-
+        material = sprite.material;
         //Spawn Particle
+    }
+
+    public void Hit() { StartCoroutine(HitEffect()); }
+
+    public IEnumerator HitEffect()
+    {
+        var whiteMaterial = Resources.Load<Material>("Material/FlashWhite");
+        sprite.material = whiteMaterial;
+        yield return new WaitForSeconds(0.1f);
+        sprite.material = material;
     }
 
 
@@ -158,6 +173,7 @@ public class PlayerController : CreatureController
 
     public void UpdatePosInfo(PositionInfo info)
     {
+        //적 위치 변경
         Debug.Log("Update PosInfo");
         Dir = new Vector2(info.DirX, info.DirY);
         gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
@@ -166,6 +182,7 @@ public class PlayerController : CreatureController
 
     public override void UpdateMoving()
     {
+        //플레이어 위치 변경
         //if ((CellPos - transform.position).sqrMagnitude > 10)
         //    transform.position = CellPos;
         //else
@@ -175,6 +192,7 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
+        UpdateDrawLine();
         //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;
