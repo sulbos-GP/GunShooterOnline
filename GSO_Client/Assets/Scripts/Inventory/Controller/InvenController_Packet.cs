@@ -86,7 +86,7 @@ public partial class InventoryController
     {
         C_DevideItem packet = new C_DevideItem();
         packet.SourceObjectId = devideItem.backUpParentId;
-        packet.DestinationObjectId = devideItem.backUpParentId;
+        packet.DestinationObjectId = devideItem.parentObjId;
 
         packet.SourceItemId = devideItem.itemData.objectId;
         packet.DestinationGridX = pos.x;
