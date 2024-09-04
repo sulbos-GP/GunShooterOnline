@@ -44,20 +44,14 @@ public class EquipSlot : MonoBehaviour
 
     private void AdjustRectTransform(ItemObject item)
     {
-        // 1번 RectTransform의 크기를 기준으로 0.9배 한 크기
         Vector2 slotSize = GetComponent<RectTransform>().rect.size * 0.9f;
-
-        // 2번 RectTransform의 현재 크기
         Vector2 itemSize = item.GetComponent<RectTransform>().rect.size;
 
-        // 비율에 맞게 2번 RectTransform의 크기를 조절
         float widthRatio = slotSize.x / itemSize.x;
         float heightRatio = slotSize.y / itemSize.y;
 
-        // 가장 작은 비율로 크기를 맞춤
         float minRatio = Mathf.Min(widthRatio, heightRatio);
 
-        // minRatio가 1보다 작으면 크기를 줄이고, 1보다 크면 크기를 늘림
         if (minRatio != 1f)
         {
             item.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, itemSize.x * minRatio);
@@ -67,18 +61,15 @@ public class EquipSlot : MonoBehaviour
 
 
 
-    // 아이템 장착 해제(장착된 슬롯을 클릭)
+    // 아이템 장착 해제
     public void UnEquipItem()
     {
         if (equippedItem != null)
         {
             RemoveItemEffects(equippedItem);
             //장착 해제에 성공한 경우
-
             equippedItem.GetComponent<RectTransform>().sizeDelta = originalItemSize;
             originalItemSize = Vector2.zero;
-
-            //슬롯 패킷 전송?
 
             equippedItem = null;
         }

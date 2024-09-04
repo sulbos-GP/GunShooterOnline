@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Mono.Cecil;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using ServerCore;
@@ -176,6 +177,12 @@ internal class PacketHandler
             return;
         }
 
+
+        if (!InventoryController.invenInstance.isActive) //인벤토리가 꺼져있으면 킴
+        {
+            InventoryController.invenInstance.invenUIControl();
+        }
+
         //패킷으로 받은 아이템데이터 리스트를 클라이언트 형식으로 변경
         List<ItemData> packetItemList = new List<ItemData>();
         foreach (PS_ItemInfo packetItem in packet.ItemInfos)
@@ -188,7 +195,7 @@ internal class PacketHandler
         //인벤토리 불러오기
         if(packet.SourceObjectId == 0)
         {
-            //장착칸 불러오기
+            //장착칸 불러오기 및 수정
             foreach (PS_GearInfo packetItem in packet.GearInfos)
             {
                 ItemData convertItem = new ItemData();
@@ -200,8 +207,19 @@ internal class PacketHandler
                 InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);
                 newItem.SetItem(convertItem);
                 newItem.parentObjId = targetSlot.slotId;
-                targetSlot.EquipItem(newItem);
+
+                if (targetSlot.equippedItem == null)
+                {
+                    targetSlot.EquipItem(newItem);
+                }
+                else if(targetSlot.equippedItem != newItem)
+                {
+                    targetSlot.UnEquipItem();
+                    targetSlot.EquipItem(newItem);
+                }
+                
             }
+
             //플레이어의 인벤토리
             PlayerInventoryUI playerInvenUI = InventoryController.invenInstance.playerInvenUI;
             playerInvenUI.InventorySet(); //그리드 생성됨
@@ -232,10 +250,6 @@ internal class PacketHandler
             boxGrid.PrintInvenContents();
         }
 
-        if (!InventoryController.invenInstance.isActive) //인벤토리가 꺼져있으면 킴
-        {
-            InventoryController.invenInstance.invenUIControl();
-        }
     }
 
     internal static void S_CloseInventoryHandler(PacketSession session, IMessage message)
