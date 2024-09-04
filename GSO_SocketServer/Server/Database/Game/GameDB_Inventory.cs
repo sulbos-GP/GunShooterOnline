@@ -11,6 +11,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Transactions;
+using WebCommonLibrary.Models.GameDB;
 
 namespace Server.Database.Game
 {
@@ -22,7 +23,7 @@ namespace Server.Database.Game
 
     public partial class GameDB : MySQL, IGameDatabase
     {
-        public async Task<IEnumerable<DB_Unit>> LoadInventory(int storage_id)
+        public async Task<IEnumerable<DB_ItemUnit>> LoadInventory(int storage_id)
         {
             var query = this.GetQueryFactory();
 
@@ -43,7 +44,7 @@ namespace Server.Database.Game
             .Where("storage_unit.storage_id", storage_id)
             .GetAsync();
 
-            var inventory = result.Select(row => new DB_Unit
+            var inventory = result.Select(row => new DB_ItemUnit
             {
                 storage = new DB_StorageUnit
                 {
@@ -69,7 +70,7 @@ namespace Server.Database.Game
         {
             var query = this.GetQueryFactory();
 
-            DB_Unit unit = item.Unit;
+            DB_ItemUnit unit = item.Unit;
             int unit_attributes_id = unit.storage.unit_attributes_id;
             if (unit_attributes_id == 0)
             {
@@ -115,7 +116,7 @@ namespace Server.Database.Game
                 DeleteAsync(transaction);
         }
 
-        public async Task<int> DeleteItem(int storage_id, DB_Unit unit, IDbTransaction transaction = null)
+        public async Task<int> DeleteItem(int storage_id, DB_ItemUnit unit, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
@@ -147,7 +148,7 @@ namespace Server.Database.Game
         {
             var query = this.GetQueryFactory();
 
-            DB_Unit oldUnit = oldItem.Unit;
+            DB_ItemUnit oldUnit = oldItem.Unit;
             var oldValues = new Dictionary<string, object>()
             {
                 { "storage_id"  , storage_id },
@@ -156,7 +157,7 @@ namespace Server.Database.Game
                 { "rotation"    , oldUnit.storage.rotation }
             };
 
-            DB_Unit newUnit = newItem.Unit;
+            DB_ItemUnit newUnit = newItem.Unit;
             var newValues = new Dictionary<string, object>()
             {
                 { "storage_id"  , storage_id },
@@ -174,7 +175,7 @@ namespace Server.Database.Game
         {
             var query = this.GetQueryFactory();
 
-            DB_Unit unit = item.Unit;
+            DB_ItemUnit unit = item.Unit;
             var newValues = new Dictionary<string, object>()
             {
                 { "item_id"     , unit.attributes.item_id },

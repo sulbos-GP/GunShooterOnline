@@ -16,6 +16,9 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDB;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Server.Game
@@ -99,14 +102,14 @@ namespace Server.Game
         {
             try
             {
-                IEnumerable<DB_Unit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
+                IEnumerable<DB_ItemUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
 
                 if (units == null)
                 {
                     return;
                 }
 
-                foreach (DB_Unit unit in units)
+                foreach (DB_ItemUnit unit in units)
                 {
                     ItemObject newItem = new ItemObject(owner.Id, unit);
                     if (false == storage.InsertItem(newItem))
@@ -138,7 +141,7 @@ namespace Server.Game
         /// </summary>
         public async Task<bool> DeleteItem(ItemObject item, GameDB database, IDbTransaction transaction = null)
         {
-            DB_Unit unit = item.Unit;
+            DB_ItemUnit unit = item.Unit;
             int ret = await database.DeleteItem(storage_id, unit, transaction);
             if (ret == 0)
             {

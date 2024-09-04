@@ -1,6 +1,6 @@
 ﻿
 using WebCommonLibrary.DTO.DataLoad;
-using WebCommonLibrary.Model.GameDB;
+using WebCommonLibrary.Models.GameDB;
 
 namespace WebCommonLibrary.DTO.Authentication
 {

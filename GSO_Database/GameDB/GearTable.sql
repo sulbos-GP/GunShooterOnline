@@ -16,4 +16,6 @@ CREATE TABLE IF NOT EXISTS gear (
 );
 
 SELECT * FROM gear;
-SELECT * FROM gear WHERE uid=1 AND part='main_weapon';
+
+
+SELECT * FROM gear WHERE uid=11;

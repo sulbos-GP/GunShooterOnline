@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.DTO.DataLoad;
-using WebCommonLibrary.Model.GameDB;
+using WebCommonLibrary.Models.GameDB;
 
 public class WebManager
 {

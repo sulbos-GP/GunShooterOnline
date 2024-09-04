@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebCommonLibrary.Model.GameDB
+namespace WebCommonLibrary.Models.GameDB
 {
     public class ClientCredential
     {
