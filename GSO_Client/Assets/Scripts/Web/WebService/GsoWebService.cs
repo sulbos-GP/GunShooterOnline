@@ -74,6 +74,7 @@ public class AuthorizeResource
     {
         public AuthenticationRequest(GsoWebService service, AuthenticationReq request)
         {
+            this.mFromHeader = null;
             this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/api/Authorize/Authentication";
             this.mMethod = ERequestMethod.POST;
@@ -85,6 +86,7 @@ public class AuthorizeResource
     {
         public SingInRequest(GsoWebService service, SignInReq body)
         {
+            this.mFromHeader = null;
             this.mFromBody = body;
             this.mEndPoint = service.mBaseUrl + "/api/Authorize/SignIn";
             this.mMethod = ERequestMethod.POST;
@@ -96,7 +98,7 @@ public class AuthorizeResource
     {
         public SignOutRequest(GsoWebService service, HeaderVerfiyPlayer header, SignOutReq request)
         {
-            this.mFromBody = header.ToDictionary();
+            this.mFromHeader = header.ToDictionary();
             this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/api/Authorize/SignOut";
             this.mMethod = ERequestMethod.POST;
@@ -108,7 +110,7 @@ public class AuthorizeResource
     {
         public RefreshTokenRequest(GsoWebService service, RefreshTokenReq request)
         {
-            this.mFromBody = null;
+            this.mFromHeader = null;
             this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/api/Authorize/RefreshToken";
             this.mMethod = ERequestMethod.POST;
