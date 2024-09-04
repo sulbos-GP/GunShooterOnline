@@ -68,6 +68,14 @@ public class GridObject : MonoBehaviour
         SetGridPosition();
     }
 
+    public void SetFromParentScale(RectTransform parentRect)
+    {
+        RectTransform childRect = GetComponent<RectTransform>();
+        float widthScale = parentRect.rect.width / childRect.rect.width;
+        float heightScale = parentRect.rect.height / childRect.rect.height;
+        childRect.localScale = new Vector3(widthScale, heightScale, 1);
+    }
+
     /// <summary>
     /// 그리드의 렉트를 설정
     /// </summary>
