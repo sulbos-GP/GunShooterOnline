@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 using NPOI.SS.Formula.Functions;
 using System;
 using UnityEngine.UI;
+using Doozy.Runtime.Reactor.Animators;
 
 public class InputController : MonoBehaviour
 {
@@ -33,6 +34,8 @@ public class InputController : MonoBehaviour
     public List<GameObject> interactList;
     public GameObject interactTarget;
     private Button interactBtn;
+    private Animator animator;
+    private SpriteRenderer spriteRenderer;
 
     private void Awake()
     {
@@ -48,6 +51,8 @@ public class InputController : MonoBehaviour
     {
         //Managers.Network.ConnectToGame();
         rig = GetComponent<Rigidbody2D>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        spriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
     }
 
     public void FixedUpdate()
@@ -79,7 +84,8 @@ public class InputController : MonoBehaviour
             //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
             //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
         float angle = Mathf.Atan2(lookInput.y, lookInput.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle-90f));
+        var gunTrn = transform.GetChild(0);
+        gunTrn.rotation = Quaternion.Euler(new Vector3(0, 0, angle-90f));
 
         //Fov Logic
         aimFov = GameObject.Find("AimView").GetComponent<AimFov>();
@@ -178,7 +184,20 @@ public class InputController : MonoBehaviour
         //{
         //    State = CreatureState.Idle;
         //}
+        if (callbackContext.started)
+        {
+            animator.SetBool("IsMove",true);
+        }
+        if (callbackContext.canceled)
+        {
+            animator.SetBool("IsMove", false);
+        }
         Vector2 input = callbackContext.ReadValue<Vector2>();
+        if (input.x < 0)
+            spriteRenderer.flipX = true;
+        else if (input.x > 0)
+            spriteRenderer.flipX = false;
+
         _direction = new Vector2(input.x,input.y);
     }
 
@@ -213,7 +232,6 @@ public class InputController : MonoBehaviour
     {
         while (_isFiring)
         {
-            Debug.Log(_isFiring);
             Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
             playerGun.Fire(); // 발사 메서드 호출
             yield return new WaitForSeconds(1 / playerGun.GetFireRate()); // 발사 속도에 따라 대기
@@ -221,7 +239,6 @@ public class InputController : MonoBehaviour
     }
     private void OnReloadInput(InputAction.CallbackContext context)
     {
-        Debug.Log("RightClicked");
         Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
         playerGun.Reload();
     }

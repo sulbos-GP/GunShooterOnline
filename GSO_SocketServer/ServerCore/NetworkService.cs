@@ -45,7 +45,6 @@ namespace ServerCore
 
             mCoreWorkThread.Start();
             mGameLogicTimer.Start();
-
         }
 
         public void Stop()
@@ -81,6 +80,8 @@ namespace ServerCore
                 mGameLogicTimer.Update();
                 
             }
+
+            
         }
 
     }
@@ -104,6 +105,8 @@ namespace ServerCore
             mManager = new NetManager(mListener);
             //mGameRoomManager = new GameRoomManager(this);
             mSessionManager = new SessionManager();
+
+
         }
 
         public void Init(IPEndPoint endPoint, Func<Session> sessionFactory, string acceptKey, int register, int backLog)
@@ -138,6 +141,8 @@ namespace ServerCore
             }
 
             mManager.DisconnectTimeout = 100000;
+            mManager.SimulateLatency = true;
+
 
             if (false == mManager.Start(mEndPoint.Port))
             {

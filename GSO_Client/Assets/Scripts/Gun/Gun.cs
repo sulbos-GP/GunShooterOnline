@@ -18,10 +18,10 @@ public class Gun : MonoBehaviour
 
     private float _lastFireTime;
 
-    public bool isBulletPrefShoot = false;
+    public bool isBulletPrefShoot = true;
 
     //총알궤적 라인 렌더러 (디버깅 라인을 라인렌더러로 표현)
-    private LineRenderer bulletLine;
+    public LineRenderer bulletLine;
     private LineRenderer rangeLine;
     private Transform _fireStartPos;
     private Vector3 _direction;      // Ray가 향하는 방향
@@ -98,7 +98,6 @@ public class Gun : MonoBehaviour
     {
         if(gunState == GunState.Shootable && Time.time >= _lastFireTime + 1/ gunData.fireRate )
         {
-            Debug.Log("FireSuccess");
             /*
              발사 코드 작성.
              총알을 발사하든 레이케스트로 충돌감지를 하든
@@ -119,12 +118,10 @@ public class Gun : MonoBehaviour
             if (hit.collider != null)
             {
                 // 충돌 위치까지 LineRenderer 설정
-                bulletLine.SetPosition(0, _fireStartPos.position);
-                bulletLine.SetPosition(1, hit.point);
-                Debug.Log(hit.collider.name);
+                //bulletLine.SetPosition(0, _fireStartPos.position);
+                //bulletLine.SetPosition(1, hit.point);
 
                 // 패킷 전송
-                Debug.Log("Hit: " + hit.collider.name);
                 var cRay = new C_RaycastShoot
                 {
                     StartPosX = _fireStartPos.position.x,
@@ -139,14 +136,18 @@ public class Gun : MonoBehaviour
             {
                 // 충돌이 없으면 최대 사거리까지 LineRenderer 설정
                 Vector3 endPos = _fireStartPos.position + direction * gunData.range;
-                bulletLine.SetPosition(0, _fireStartPos.position);
-                bulletLine.SetPosition(1, endPos);
+                //bulletLine.SetPosition(0, _fireStartPos.position);
+                //bulletLine.SetPosition(1, endPos);
             }
 
             if (isBulletPrefShoot)
             {
                 //총알을 사용한 방법
                 Bullet bullet = gunData.bulletObj.GetComponent<Bullet>();
+                if(hit.point != new Vector2(0,0))
+                    bullet.EndPos = hit.point;
+                else
+                    bullet.EndPos = _fireStartPos.position + direction * gunData.range;
                 bullet._damage = gunData.damage;
                 bullet._range = gunData.range;
                 bullet._dir = direction;

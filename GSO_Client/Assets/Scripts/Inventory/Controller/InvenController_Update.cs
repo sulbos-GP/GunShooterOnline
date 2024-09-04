@@ -7,17 +7,17 @@ public partial class InventoryController
 {
     private void Update()
     {
-        if (!isActive) // UI�� ��Ȱ��ȭ��� ����
+        if (!isActive)
             return;
 
         if (isDivideInterfaceOn)
         {
-            return; //������ �������̽��� �����ִٸ� �Ʒ��� ������ �̺�Ʈ�� �����Ű�� ����
+            return;
         }
 
         if (isPress && !isItemSelected && (isEquipSelected || isGridSelected))
         {
-            ItemEvent(); // ������ �̺�Ʈ���� �������� ��� ����
+            ItemEvent();
         }
 
         DragObject();
@@ -25,23 +25,18 @@ public partial class InventoryController
         HandleHighlighting();
     }
 
-    /// <summary>
-    /// �������� ��� �ְų� �巡�� ���̶�� �ش� UI�� ��Ʈ�� ��ġ�� ���콺�� ��ġ�� ��� ������Ʈ
-    /// </summary>
     private void DragObject()
     {
         if (isItemSelected)
         {
             selectedRect.position = new UnityEngine.Vector2(mousePosInput.X, mousePosInput.Y);
 
-            // ���� ������ �˻��Ͽ� ���� ������ ���� �ڵ��� ���̸� ���Դϴ�
             if (dontCheckDivide || isDivideMode || selectedItem.ItemAmount <= 1)
             {
                 return;
             }
 
             bool itemMoved = false;
-            // �������� ��ġ�� �׸��尡 ����Ǿ����� Ȯ���մϴ�
             if(selectedItem.backUpParentId > 0 || selectedItem.backUpParentId <= 7)
             {
                 itemMoved = selectedItem.backUpParentId != selectedItem.parentObjId;
@@ -53,18 +48,16 @@ public partial class InventoryController
 
             if (itemMoved)
             {
-                Debug.Log("������");
-                dontCheckDivide = true; // ���߿� ������ ��带 Ȯ������ �ʵ��� ����
-                return; // ������ ���������Ƿ� �Լ� ����
+                dontCheckDivide = true;
+                return; 
             }
 
             dragTime += Time.deltaTime;
 
             if (dragTime >= maxDragTime)
             {
-                Debug.Log("������ ��� On");
-                CreateItemPreview(); // ������ �̸����� ����
-                isDivideMode = true; // ������ ��� Ȱ��ȭ
+                CreateItemPreview();
+                isDivideMode = true;
             }
         }
     }
@@ -81,11 +74,18 @@ public partial class InventoryController
 
             if (previewRect != null)
             {
-                // �������� ũ��, ��ġ, ȸ�� ����
                 previewRect.sizeDelta = selectedRect.sizeDelta;
 
-                Vector2 imagePos = new Vector2(gridPosition.x * GridObject.WidthOfTile + GridObject.WidthOfTile * selectedItem.Width
+                Vector2 imagePos;
+                if (selectedItem.backUpParentId > 0 && selectedItem.backUpParentId <= 7) 
+                {
+                    imagePos = Vector2.Zero;
+                }
+                else
+                {
+                    imagePos = new Vector2(gridPosition.x * GridObject.WidthOfTile + GridObject.WidthOfTile * selectedItem.Width
                     / 2, -(gridPosition.y * GridObject.HeightOfTile + GridObject.HeightOfTile * selectedItem.Height / 2));
+                }
 
                 previewRect.localPosition = new UnityEngine.Vector2(imagePos.X, imagePos.Y);
                 previewRect.rotation = selectedImage.GetComponent<RectTransform>().rotation;

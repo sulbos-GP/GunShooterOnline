@@ -12,6 +12,11 @@ public class PlayerController : CreatureController
     protected float _height;
 
     public LineRenderer lineRenderer;
+
+    private Material material;
+    private SpriteRenderer sprite;
+    private Animator animator;
+    private Transform prevTrn;
     public struct Rectangle
     {
         public Vector2 topLeft;
@@ -33,6 +38,9 @@ public class PlayerController : CreatureController
 
     public void SetDrawLine(float width , float height)
     {
+        //TO-DO : 임시
+        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
         lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
@@ -59,12 +67,22 @@ public class PlayerController : CreatureController
         lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft * 2);
     }
 
-    public void SpawnPlayer()
+    public void SpawnPlayer(Vector2 vec2)
     {
         //임의 위치 값
-        gameObject.transform.position = new Vector2(0, 0);
-        
+        gameObject.transform.position = vec2;
+        material = sprite.material;
         //Spawn Particle
+    }
+
+    public void Hit() { StartCoroutine(HitEffect()); }
+
+    public IEnumerator HitEffect()
+    {
+        var whiteMaterial = Resources.Load<Material>("Material/FlashWhite");
+        sprite.material = whiteMaterial;
+        yield return new WaitForSeconds(0.1f);
+        sprite.material = material;
     }
 
 
@@ -158,23 +176,29 @@ public class PlayerController : CreatureController
 
     public void UpdatePosInfo(PositionInfo info)
     {
-        Debug.Log("Update PosInfo");
+        //적 위치 변경
         Dir = new Vector2(info.DirX, info.DirY);
+        var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
+        if ((nextPos - transform.position).sqrMagnitude != 0)
+            animator.SetBool("IsMove", true);
+        else
+            animator.SetBool("IsMove", false);
         gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
         gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
     }
 
     public override void UpdateMoving()
     {
+        //플레이어 위치 변경
         //if ((CellPos - transform.position).sqrMagnitude > 10)
         //    transform.position = CellPos;
         //else
         //    transform.position = Vector3.Lerp(transform.position, CellPos, Time.deltaTime * 10);
 
-        Debug.Log("Update Moving");
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
+        UpdateDrawLine();
         //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;
