@@ -126,12 +126,6 @@ namespace GsoWebServer.Servicies.Authentication
                 return WebErrorCode.TEMP_ERROR;
             }
 
-            error = await mSharedDB.RemoveRefreshToken(uid);
-            if (error != WebErrorCode.None)
-            {
-                return WebErrorCode.TEMP_ERROR;
-            }
-
             return WebErrorCode.None;
         }
 

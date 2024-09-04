@@ -242,14 +242,14 @@ namespace AuthenticationServer.Controllers
                     return response;
                 }
 
-                //구글에서 토큰 Revoke하여 삭제하기
-                errorCode = await mAuthenticationService.RevokeToken(user.user_id, user.access_token);
-                if (errorCode != WebErrorCode.None)
-                {
-                    response.error_code = errorCode;
-                    response.error_description = "";
-                    return response;
-                }
+                //구글에서 토큰 Revoke하여 삭제하기 (이거 로그아웃이 아니라 삭제임)
+                //errorCode = await mAuthenticationService.RevokeToken(user.user_id, user.access_token);
+                //if (errorCode != WebErrorCode.None)
+                //{
+                //    response.error_code = errorCode;
+                //    response.error_description = "";
+                //    return response;
+                //}
 
                 response.error_code = WebErrorCode.None;
                 return response;
