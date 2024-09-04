@@ -204,8 +204,8 @@ internal class PacketHandler
             {
                 ItemData convertItem = new ItemData();
                 convertItem.SetItemData(packetItem.Item);
-
-                EquipSlot targetSlot = EquipSlot.GetEquipSlot((int)packetItem.Part);
+                
+                EquipSlot targetSlot = EquipSlot.GetEquipSlotWithProto(packetItem.Part);
 
                 ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
                 InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);

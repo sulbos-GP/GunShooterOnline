@@ -95,16 +95,16 @@ public class DivideInterface : MonoBehaviour
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
         }
 
-        if (objectId == 0) //���� �̵��Ϸ��� Ÿ��
+        if (objectId == 0) 
         {
             if (targetItem.backUpParentId == 0)
             {
-                //�� -> �� = ��ȭ ����
+ 
                 double result = Math.Round(playerGridObj.GridWeight,2);
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
             }
             else
-            {   //�� -> �� 
+            {  
                 double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
 
@@ -122,7 +122,7 @@ public class DivideInterface : MonoBehaviour
         {
             if (targetItem.backUpParentId == 0)
             {
-                //�� -> �� = ����
+              
                 double result = Math.Round(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex, 2);
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
 
@@ -136,7 +136,7 @@ public class DivideInterface : MonoBehaviour
                 }
             }
             else
-            {   //�� -> �� = ��ȭ����
+            { 
                 double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight,2);
                 inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
             }
@@ -159,7 +159,8 @@ public class DivideInterface : MonoBehaviour
 
     public void OnConfirmButtonClicked()
     {
-        Debug.Log("�������� " + splitAmountIndex + "���� �и��մϴ�.");
+        Debug.Log("아이템이 " + splitAmountIndex +" 만큼 분리됨.");
+            
 
         if (overlapItem != null)
         {

@@ -12,7 +12,7 @@ using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
-//������Ʈ id�� myPlayer�� �κ��丮�� ������ 0
+
 public partial class InventoryController
 {
     public void SendLoadInvenPacket(int objectId)
@@ -20,7 +20,7 @@ public partial class InventoryController
         C_LoadInventory packet = new C_LoadInventory();
         packet.SourceObjectId = objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_SendLoadInven : {objectId}�� ������ ��û ");
+        Debug.Log($"C_SendLoadInven : {objectId}");
     }
 
     public void SendCloseInvenPacket(int objectId = 0)
@@ -28,7 +28,7 @@ public partial class InventoryController
         C_CloseInventory packet = new C_CloseInventory();
         packet.SourceObjectId = objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_SendLoadInven : {objectId}�� �κ��丮 ���� ");
+        Debug.Log($"C_SendLoadInven : {objectId}");
     }
 
     public void SendSearchItemPacket(int objectId, ItemObject item)
@@ -37,26 +37,23 @@ public partial class InventoryController
         packet.SourceObjectId = objectId;
         packet.SourceItemId = item.itemData.objectId; 
         Managers.Network.Send(packet);
-        Debug.Log($"C_SearchInventory : {item.itemData.objectId} ������ �˻� ");
+        Debug.Log($"C_SearchInventory : {item.itemData.objectId}");
     }
 
 
-    /// <summary>
-    /// �������� �׸��� Ȥ�� ���� ���Կ� ��ġ
-    /// </summary>
     public void SendMoveItemPacket(ItemObject item , Vector2Int pos = default)
     {
         C_MoveItem packet = new C_MoveItem();
 
         packet.SourceObjectId = item.backUpParentId;
         packet.DestinationObjectId = item.parentObjId;
-        packet.DestinationGridX = pos.x; //�ű� ��ġ
-        packet.DestinationGridY = pos.y; //�ű� ��ġ
-        packet.DestinationRotation = item.itemData.rotate; //�Ű������� ȸ��
+        packet.DestinationGridX = pos.x; 
+        packet.DestinationGridY = pos.y; 
+        packet.DestinationRotation = item.itemData.rotate;
         
         packet.SourceMoveItemId = item.itemData.objectId; 
 
-        Debug.Log($"C_MoveItem : {item.itemData.objectId} ������ �ű� ");
+        Debug.Log($"C_MoveItem : {item.itemData.objectId} ");
         Managers.Network.Send(packet);
     }
 
@@ -67,17 +64,17 @@ public partial class InventoryController
         packet.SourceObjectId = item.backUpParentId;
         packet.DeleteItemId = item.itemData.objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_DeleteItem : {item.itemData.objectId} ������ ����");
+        Debug.Log($"C_DeleteItem : {item.itemData.objectId}");
     }
 
     
     public void SendMergeItemPacket(ItemObject selectedItem, ItemObject overlapItem,  int itemAmount)
     {
-        C_MergeItem packet = new C_MergeItem(); // merge�� combined ������ ������ŭ ���Ѵ�
-        packet.SourceObjectId = overlapItem.backUpParentId; //combined�� �ִ� �׸���
-        packet.DestinationObjectId = selectedItem.backUpParentId;  //selected���� �ִ� �׸���
+        C_MergeItem packet = new C_MergeItem();
+        packet.SourceObjectId = overlapItem.backUpParentId;
+        packet.DestinationObjectId = selectedItem.backUpParentId;
 
-        packet.MergedObjectId = overlapItem.itemData.objectId; //�����ϴ� ������
+        packet.MergedObjectId = overlapItem.itemData.objectId; 
         packet.CombinedObjectId = selectedItem.itemData.objectId; 
         packet.MergeNumber = itemAmount;
 
@@ -100,11 +97,6 @@ public partial class InventoryController
 
         Managers.Network.Send(packet);
         Debug.Log("C_DevideItem");
-    }
-
-    public void SendEquipItemPacket(ItemObject item, int equipSlotCode)
-    {
-        //����
     }
 
 }

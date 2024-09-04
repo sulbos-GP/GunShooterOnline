@@ -125,4 +125,19 @@ public class EquipSlot : MonoBehaviour
             default: return null; // objectId가 유효하지 않은 경우 null 반환
         }
     }
+
+    public static EquipSlot GetEquipSlotWithProto(PE_GearPart proto)
+    {
+        switch (proto)
+        {
+            case PE_GearPart.MainWeapon: return InventoryController.invenInstance.Weapon1;
+            case PE_GearPart.SubWeapon: return InventoryController.invenInstance.Weapon2;
+            case PE_GearPart.Armor: return InventoryController.invenInstance.Armor;
+            case PE_GearPart.Backpack: return InventoryController.invenInstance.Bag;
+            case PE_GearPart.PocketFirst: return InventoryController.invenInstance.Consume1;
+            case PE_GearPart.PocketSecond: return InventoryController.invenInstance.Consume2;
+            case PE_GearPart.PocketThird: return InventoryController.invenInstance.Consume3;
+            default: return null; // objectId가 유효하지 않은 경우 null 반환
+        }
+    }
 }

@@ -16,22 +16,19 @@ using Vector2 = System.Numerics.Vector2;
 
 public partial class InventoryController
 {
-    /// <summary>
-    /// ��Ŭ���� �������� ���ų� ���� ����
-    /// </summary>
     private void ItemEvent()
     {
-        if (isItemSelected) //�������� ��ġ�ؾ��ϴ°��
+        if (isItemSelected) 
         {
-            //�����Ͱ� ���� ���Կ� �������
+
             if (SelectedEquip != null)
             {
                 ItemReleaseInEquip(selectedItem, selectedEquip);
-                ResetSelection(); //�������� ���� ���¶�� selection ����
+                ResetSelection();
                 return;
             }
 
-            //�����Ͱ� ������ ĭ�� �������
+
             if (isOnDelete)
             {
                 ItemReleaseInDelete();
@@ -39,7 +36,6 @@ public partial class InventoryController
                 return;
             }
 
-            //�����Ͱ� �κ��丮 �׸��忡 ��ġ
             if (isGridSelected)
             {
                 gridPosition = WorldToGridPos();
@@ -48,20 +44,18 @@ public partial class InventoryController
                 return;
             }
 
-            //� ��쵵 �������� ���Ұ�� ��ġ ����
+
             UndoSlot(SelectedItem);
             UndoItem(SelectedItem);
             ResetSelection();
-            Debug.Log("������ ��ġ ����");
-
         }
-        else//�������� �Ⱦ� �ؾ��ϴ� ���
+        else
         {
             if (isEquipSelected)
             {
                 if (selectedEquip.equippedItem != null)
                 {
-                    //������ �������� ������ �ش� ������ ���� ����
+
                     SelectedItem = selectedEquip.equippedItem;
                     selectedEquip.UnEquipItem();
                     SetSelectedObjectToLastSibling(selectedItem.transform);
@@ -75,9 +69,9 @@ public partial class InventoryController
                 gridPosition = WorldToGridPos();
                 
                 ItemObject clickedItem = selectedGrid.GetItem(gridPosition.x, gridPosition.y);
-                if (clickedItem == null) { Debug.Log("�ش� ��ġ�� �������� ����");  return; }
+                if (clickedItem == null) { Debug.Log("");  return; }
 
-                //Ŭ���� �������� ������ ��쿡�� ������ �����ϰ� �ƴϸ� �������� ��
+
                 if (clickedItem.isHide == true)
                 {
                     if (!clickedItem.isOnSearching)
@@ -96,23 +90,17 @@ public partial class InventoryController
     }
 
     
-
-
-    /// <summary>
-    /// �������� ���� �õ�.
-    /// </summary>
     private void ItemGet(Vector2Int pos)
     {
         if (!isGridSelected) { return; }
         SelectedItem = selectedGrid.PickUpItem(pos.x, pos.y);
 
-        //�������� �׸��忡 �������°��� ����
         SetSelectedObjectToLastSibling(selectedRect);
     }
 
     private void ItemDivide(ItemObject item,Vector2Int gridPosition)
     {
-        //��ġ�� �Ұ����ϰų� ���� �ڸ���� Undo
+
         if (item.parentObjId == selectedGrid.objectId && item.itemData.pos == gridPosition || !itemPlaceableInGrid)
         {
             UndoSlot(item);
@@ -126,9 +114,6 @@ public partial class InventoryController
         
     }
 
-    /// <summary>
-    /// ���ĭ�� �������� ��ġ�� ���
-    /// </summary>
     private void ItemReleaseInEquip(ItemObject item, EquipSlot slot)
     {
         if (slot.allowedItemType == item.itemData.item_type)
@@ -144,7 +129,7 @@ public partial class InventoryController
                 {
                     if (CheckAbleToMerge(item, slot.equippedItem))
                     {
-                        //�������� ������ ������
+
                         int needAmount = selectedItem.ItemAmount + slot.equippedItem.ItemAmount <= ItemObject.maxItemMergeAmount
                             ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - slot.equippedItem.ItemAmount;
 
@@ -169,18 +154,12 @@ public partial class InventoryController
         }
     }
 
-    /// <summary>
-    /// ����ĭ�� ��ġ�Ұ�� -> ������ ����ó��
-    /// </summary>
     private void ItemReleaseInDelete()
     {
         SendDeleteItemPacket(selectedItem);
     }
 
     
-    /// <summary>
-    /// �������� ���� �õ�.
-    /// </summary>
     private void ItemReleaseInGrid(ItemObject item, Vector2Int pos)
     {
         if (itemPlaceableInGrid)
@@ -196,7 +175,7 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// ������ ��ġ ����. ���� �� ������ ��ġ ����
+    /// 
     /// </summary>
     /// <param name="item"></param>
     /// <param name="pos"></param>
@@ -212,7 +191,6 @@ public partial class InventoryController
             {
                 if (CheckAbleToMerge(item, overlapItem))
                 {
-                    //�������� ������ ������
                     int needAmount = item.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
                         ? item.ItemAmount 
                         : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
@@ -232,9 +210,7 @@ public partial class InventoryController
         }
     }
 
-    /// <summary>
-    /// ������ ������ �����Ҷ� ������ �������� üũ
-    /// </summary>
+
     public bool CheckAbleToMerge(ItemObject item, ItemObject _overlapItem)
     {
         return item.itemData.isItemConsumeable &&
@@ -243,9 +219,6 @@ public partial class InventoryController
                !_overlapItem.isHide;
     }
 
-    /// <summary>
-    /// ��Ʈ�ѷ� �󿡼� ���� ó��
-    /// </summary>
     public void DestroyItem(ItemObject targetItem)
     {
         instantItemDic.Remove(targetItem.itemData.objectId);
