@@ -188,6 +188,20 @@ internal class PacketHandler
         //인벤토리 불러오기
         if(packet.SourceObjectId == 0)
         {
+            //장착칸 불러오기
+            foreach (PS_GearInfo packetItem in packet.GearInfos)
+            {
+                ItemData convertItem = new ItemData();
+                convertItem.SetItemData(packetItem.Item);
+
+                EquipSlot targetSlot = EquipSlot.GetEquipSlotWithProto(packetItem.Part);
+
+                ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
+                InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);
+                newItem.SetItem(convertItem);
+                newItem.parentObjId = targetSlot.slotId;
+                targetSlot.EquipItem(newItem);
+            }
             //플레이어의 인벤토리
             PlayerInventoryUI playerInvenUI = InventoryController.invenInstance.playerInvenUI;
             playerInvenUI.InventorySet(); //그리드 생성됨
@@ -199,20 +213,7 @@ internal class PacketHandler
             playerInvenUI.WeightTextSet(playerGrid.GridWeight, playerGrid.limitWeight);
             playerGrid.PrintInvenContents();
 
-            //장착칸 불러오기
-            foreach (PS_GearInfo packetItem in packet.GearInfos)
-            {
-                ItemData convertItem = new ItemData();
-                convertItem.SetItemData(packetItem.Item);
-                
-                EquipSlot targetSlot = EquipSlot.GetEquipSlotWithProto(packetItem.Part);
-
-                ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
-                InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);
-                newItem.SetItem(convertItem);
-                newItem.parentObjId = targetSlot.slotId;
-                targetSlot.EquipItem(newItem);
-            }
+            
         }
         else
         {
