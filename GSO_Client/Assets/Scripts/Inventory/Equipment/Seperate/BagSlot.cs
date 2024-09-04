@@ -10,6 +10,10 @@ public class BagSlot : EquipSlot
         slotId = 4;
         allowedItemType = ItemType.Bag;
     }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
 
     protected override void ApplyItemEffects(ItemObject item)
     {

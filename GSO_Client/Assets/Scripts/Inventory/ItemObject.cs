@@ -12,6 +12,29 @@ public class ItemObject : MonoBehaviour
 {
     public const int maxItemMergeAmount = 64;
 
+    /// <summary>
+    /// 아이템 데이터로 새로운 아이템 UI를 생성함
+    /// </summary>
+    public static ItemObject CreateNewItem(ItemData data, Transform parent = null)
+    {
+        ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", parent).GetComponent<ItemObject>();
+        newItem.SetItem(data);
+        InventoryController.invenInstance.instantItemDic.Add(data.objectId, newItem);
+
+        return newItem;
+    }
+
+    /// <summary>
+    /// 해당 아이템의 현재 위치, 회전, 부모의 아이디를 백업
+    /// </summary>
+    public static void BackUpItem(ItemObject item)
+    {
+        item.backUpItemPos = item.itemData.pos; //현재 위치
+        item.backUpItemRotate = item.itemData.rotate; //현재 회전
+        item.backUpParentId = item.parentObjId; //현재 부모 오브젝트
+    }
+
+
     //자식객체
     public Image imageUI;
     public TextMeshProUGUI amountText; //아이템 갯수 텍스트

@@ -11,6 +11,11 @@ public class WeaponSlot2 : EquipSlot
         allowedItemType = ItemType.Weapon;
     }
 
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
+
     protected override void ApplyItemEffects(ItemObject item)
     {
         base.ApplyItemEffects(item);

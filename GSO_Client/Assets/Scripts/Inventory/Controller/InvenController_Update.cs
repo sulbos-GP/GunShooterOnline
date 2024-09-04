@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
 
@@ -37,7 +38,8 @@ public partial class InventoryController
             }
 
             bool itemMoved = false;
-            if(selectedItem.backUpParentId > 0 || selectedItem.backUpParentId <= 7)
+            
+            if(IsEquipSlot(selectedItem.backUpParentId))
             {
                 itemMoved = selectedItem.backUpParentId != selectedItem.parentObjId;
             }
@@ -66,7 +68,22 @@ public partial class InventoryController
     {
         if (selectedItem != null)
         {
-            itemPreviewInstance = Managers.Resource.Instantiate("UI/DivideImageInstance", selectedGrid.transform);
+            GameObject parentInstance = null;
+            if(IsEquipSlot(selectedItem.parentObjId))
+            {
+                parentInstance = EquipSlot.GetEquipSlot(selectedItem.parentObjId).gameObject;
+            }
+            else
+            {
+                parentInstance = selectedGrid.gameObject;
+            }
+
+            if (parentInstance == null)
+            {
+                Debug.Log("부모 객체가 정해지지 않음");
+                return;
+            }
+            itemPreviewInstance = Managers.Resource.Instantiate("UI/DivideImageInstance", parentInstance.transform);
 
             RectTransform previewRect = itemPreviewInstance.GetComponent<RectTransform>();
             GameObject selectedImage = selectedItem.transform.GetChild(0).gameObject;
@@ -77,7 +94,7 @@ public partial class InventoryController
                 previewRect.sizeDelta = selectedRect.sizeDelta;
 
                 Vector2 imagePos;
-                if (selectedItem.backUpParentId > 0 && selectedItem.backUpParentId <= 7) 
+                if (IsEquipSlot(selectedItem.parentObjId)) 
                 {
                     imagePos = Vector2.Zero;
                 }

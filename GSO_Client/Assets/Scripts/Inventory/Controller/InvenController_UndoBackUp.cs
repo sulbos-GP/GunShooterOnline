@@ -15,19 +15,19 @@ using Vector2 = System.Numerics.Vector2;
 
 public partial class InventoryController
 {
-    /// <summary>
-    /// �ش� �������� ��ġ�� �׸��� ������Ʈ�� �����۽����� �����. �̰� ���� backupitem�� ���� �Ұ�
-    /// </summary>
     public void BackUpSlot(ItemObject item)
     {
-        if (item.parentObjId > 0 && item.parentObjId <= 7)
+        if (IsEquipSlot(item.parentObjId))
         {
             return;
         }
 
-        if (item.backUpParentId == 0) 
+        if (IsPlayerSlot(item.parentObjId)) 
         { 
             playerInvenUI.instantGrid.UpdateBackUpSlot();
+            invenInstance.playerInvenUI.WeightTextSet(
+                invenInstance.playerInvenUI.instantGrid.GridWeight,
+                invenInstance.playerInvenUI.instantGrid.limitWeight);
         }
         else
         {
@@ -37,33 +37,24 @@ public partial class InventoryController
         
     }
 
-    /// <summary>
-    /// �������� ���¿� ��ġ�� �����
-    /// </summary>
     public void BackUpItem(ItemObject item)
     {
-        item.backUpItemPos = item.itemData.pos; //���� ��ġ
-        item.backUpItemRotate = item.itemData.rotate; //���� ȸ��
-
-        item.backUpParentId = item.parentObjId;
+        ItemObject.BackUpItem(item);
     }
 
-    /// <summary>
-    /// ������ �迭�� ���� �迭�� �ǵ���.
-    /// </summary>
+
     public void UndoSlot(ItemObject item)
     {
-        if(item.backUpParentId > 0 && item.backUpParentId <= 7)
+        if(IsEquipSlot(item.backUpParentId))
         {
-            //���� �������� ������
             EquipSlot UndoEquipSlot = EquipSlot.GetEquipSlot(item.backUpParentId);
             UndoEquipSlot.EquipItem(item);
             return;
         }
 
-        if (item.backUpParentId == 0)
+        if (IsPlayerSlot(item.backUpParentId))
         {
-            playerInvenUI.instantGrid.UndoItemSlot(); ;
+            playerInvenUI.instantGrid.UndoItemSlot();
         }
         else
         {
@@ -71,9 +62,6 @@ public partial class InventoryController
         }
     }
 
-    /// <summary>
-    /// �������� ����� ��ġ�� ������ �ǵ��� selectedItem �����Ǵ� ����
-    /// </summary>
     public void UndoItem(ItemObject item)
     {
         item.itemData.pos = item.backUpItemPos;
@@ -82,19 +70,21 @@ public partial class InventoryController
 
         item.parentObjId = item.backUpParentId;
 
-        if(item.parentObjId >0 && item.parentObjId <= 7)
+        if(IsEquipSlot(item.parentObjId))
         {
             EquipSlot targetSlot = EquipSlot.GetEquipSlot(item.parentObjId);
             targetSlot.EquipItem(item);
         }
-        else if(item.parentObjId == 0)
+        else if(IsPlayerSlot(item.parentObjId))
         {
             playerInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
+
         }
         else
         {
             otherInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
         }
+
     }
 
 
