@@ -40,5 +40,15 @@ namespace GsoWebServer.Servicies.Interfaces
         /// </summary>
         public Task<WebErrorCode> UpdateUserSkill(Int32 uid, UserSkillInfo skill);
 
+        /// <summary>
+        /// 저장소의 아이템 로드
+        /// </summary>
+        public Task<(WebErrorCode, IEnumerable<DB_ItemUnit>?)> LoadInventory(int storage_id);
+
+        /// <summary>
+        /// 장비의 아이템 로드
+        /// </summary>
+        public Task<(WebErrorCode, IEnumerable<DB_GearUnit>?)> LoadGear(int uid);
+
     }
 }

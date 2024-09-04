@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.Error;
-using WebCommonLibrary.Model.GameDB;
+using WebCommonLibrary.Models.GameDB;
 using static AuthorizeResource;
 
 public class UI_SingOut : MonoBehaviour

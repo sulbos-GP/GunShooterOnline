@@ -6,7 +6,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
     public partial class GameDB : IGameDB
     {
-        public async Task<IEnumerable<DB_Gear>> LoadGear(int uid)
+        public async Task<IEnumerable<DB_GearUnit>> LoadGear(int uid)
         {
             var result = await mQueryFactory.Query("gear")
                 .Select
@@ -23,10 +23,14 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
                 .Where("gear.uid", uid)
                 .GetAsync();
 
-            var gears = result.Select(row => new DB_Gear
+            var gears = result.Select(row => new DB_GearUnit
             {
-                part = row.part,
-                unit_attributes_id = row.unit_attributes_id,
+                gear = new DB_Gear
+                {
+                    part = row.part,
+                    unit_attributes_id = row.unit_attributes_id,
+                },
+
                 attributes = new DB_UnitAttributes
                 {
                     item_id = row.item_id,
@@ -34,6 +38,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
                     unit_storage_id = row.unit_storage_id as int?,
                     amount = row.amount
                 }
+
             }).ToList();
 
             return gears;

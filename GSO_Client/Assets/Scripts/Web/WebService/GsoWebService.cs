@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.DTO.User;
+using WebCommonLibrary.DTO.Game;
 using static UserResource;
 
 /// <summary>
@@ -179,24 +180,39 @@ public class GameResource
     }
 
     /// <summary>
-    /// 빠른 정보 불러오기
+    /// 
     /// </summary>
-    //public QuickInfoRequest GetQuickInfoRequest(HeaderVerfiyPlayer header, QuickInfoReq body)
-    //{
-    //    return new QuickInfoRequest(this.mService, header, body);
-    //}
+    public LoadStorageRequest GetLoadStorageRequest(HeaderVerfiyPlayer header, LoadStorageReq body)
+    {
+        return new LoadStorageRequest(this.mService, header, body);
+    }
 
+    public class LoadStorageRequest : WebClientServiceRequest<LoadStorageRes>
+    {
+        public LoadStorageRequest(GsoWebService service, HeaderVerfiyPlayer header, LoadStorageReq body)
+        {
+            this.mFromHeader = header.ToDictionary();
+            this.mFromBody = body;
+            this.mEndPoint = service.mBaseUrl + "/api/Game/Storage/Load";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
 
-    //public class QuickInfoRequest : WebClientServiceRequest<QuickInfoRes>
-    //{
-    //    public QuickInfoRequest(GsoWebService service, HeaderVerfiyPlayer header, QuickInfoReq request)
-    //    {
-    //        this.mFromHeader = header.ToDictionary();
-    //        this.mFromBody = request;
-    //        this.mEndPoint = service.mBaseUrl + "/api/Game/QuickInfo";
-    //        this.mMethod = ERequestMethod.POST;
-    //    }
-    //}
+    public LoadGearRequest GetLoadGearRequest(HeaderVerfiyPlayer header, LoadGearReq body)
+    {
+        return new LoadGearRequest(this.mService, header, body);
+    }
+
+    public class LoadGearRequest : WebClientServiceRequest<LoadGearRes>
+    {
+        public LoadGearRequest(GsoWebService service, HeaderVerfiyPlayer header, LoadGearReq body)
+        {
+            this.mFromHeader = header.ToDictionary();
+            this.mFromBody = body;
+            this.mEndPoint = service.mBaseUrl + "/api/Game/Gear/Load";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
 
 }
 

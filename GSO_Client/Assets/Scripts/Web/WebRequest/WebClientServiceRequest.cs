@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.Error;
-using WebCommonLibrary.Model.GameDB;
+using WebCommonLibrary.Models.GameDB;
 
 public enum ERequestMethod
 {

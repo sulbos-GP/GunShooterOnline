@@ -47,3 +47,4 @@ SELECT * FROM storage_unit;
 
 #DELETE FROM storage_unit;
 #DELETE FROM unit_attributes WHERE unit_attributes_id=47;
+#SELECT * FROM storage_unit WHERE storage_id=11

@@ -6,31 +6,35 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
     public partial class GameDB : IGameDB
     {
-        public async Task<IEnumerable<DB_StorageUnit>> LoadStorageUnits(int storage_id)
+        public async Task<IEnumerable<DB_ItemUnit>> LoadInventory(int storage_id)
         {
             var result = await mQueryFactory.Query("storage_unit")
-                        .Select
-                        (
-                                "storage_unit.grid_x",
-                                "storage_unit.grid_y",
-                                "storage_unit.rotation",
-                                "storage_unit.unit_attributes_id",
+            .Select
+            (
+                    "storage_unit.grid_x",
+                    "storage_unit.grid_y",
+                    "storage_unit.rotation",
+                    "storage_unit.unit_attributes_id",
 
-                                "unit_attributes.item_id",
-                                "unit_attributes.durability",
-                                "unit_attributes.unit_storage_id",
-                                "unit_attributes.amount"
-                        )
-                        .LeftJoin("unit_attributes", "storage_unit.unit_attributes_id", "unit_attributes.unit_attributes_id")
-                        .Where("storage_unit.storage_id", storage_id)
-                        .GetAsync();
+                    "unit_attributes.item_id",
+                    "unit_attributes.durability",
+                    "unit_attributes.unit_storage_id",
+                    "unit_attributes.amount"
+            )
+            .LeftJoin("unit_attributes", "storage_unit.unit_attributes_id", "unit_attributes.unit_attributes_id")
+            .Where("storage_unit.storage_id", storage_id)
+            .GetAsync();
 
-            var inventory = result.Select(row => new DB_StorageUnit
+            var inventory = result.Select(row => new DB_ItemUnit
             {
-                grid_x = row.grid_x,
-                grid_y = row.grid_y,
-                rotation = row.rotation,
-                unit_attributes_id = row.unit_attributes_id as int?,
+                storage = new DB_StorageUnit
+                {
+                    grid_x = row.grid_x,
+                    grid_y = row.grid_y,
+                    rotation = row.rotation,
+                    unit_attributes_id = row.unit_attributes_id,
+                },
+
                 attributes = new DB_UnitAttributes
                 {
                     item_id = row.item_id,

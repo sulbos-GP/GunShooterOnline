@@ -8,7 +8,7 @@ using UnityEngine.Profiling;
 using UnityEngine.UI;
 using WebCommonLibrary.DTO.Matchmaker;
 using WebCommonLibrary.Error;
-using WebCommonLibrary.Model.GameDB;
+using WebCommonLibrary.Models.GameDB;
 using static MatchmakerResource;
 
 public class UI_Match : MonoBehaviour

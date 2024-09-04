@@ -15,6 +15,8 @@ using System.Net.Sockets;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models.GameDB;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Server
@@ -208,7 +210,7 @@ namespace Server
                 player.Session.Send(packet);
                 return;
             }
-            DB_Unit oldMergedUnit = mergedlItem.Unit;
+            DB_ItemUnit oldMergedUnit = mergedlItem.Unit;
             PS_ItemInfo oldMergedItemInfo = mergedlItem.ConvertItemInfo(player.Id);
 
             ItemObject combinedItem = ObjectManager.Instance.Find<ItemObject>(combinedObjectId);
@@ -219,7 +221,7 @@ namespace Server
                 player.Session.Send(packet);
                 return;
             }
-            DB_Unit oldCombinedUnit = combinedItem.Unit;
+            DB_ItemUnit oldCombinedUnit = combinedItem.Unit;
             PS_ItemInfo oldCombinedInfo = combinedItem.ConvertItemInfo(player.Id);
 
             //머지하는 아이템 이름이 다를경우
@@ -369,7 +371,7 @@ namespace Server
             packet.DestinationObjectId = destinationObjectId;
 
             ItemObject sourceItem = ObjectManager.Instance.Find<ItemObject>(sourceItemId);
-            DB_Unit oldSourceUnit = sourceItem.Unit;
+            DB_ItemUnit oldSourceUnit = sourceItem.Unit;
             PS_ItemInfo oldSourceItemInfo = sourceItem.ConvertItemInfo(player.Id);
 
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourceItem);
@@ -399,7 +401,7 @@ namespace Server
                     return;
                 }
 
-                DB_Unit devideUnit = new DB_Unit()
+                DB_ItemUnit devideUnit = new DB_ItemUnit()
                 {
                     attributes = new DB_UnitAttributes()
                     {
@@ -569,7 +571,7 @@ namespace Server
                 player.Session.Send(packet);
             }
 
-            DB_Unit moveUnit = new DB_Unit()
+            DB_ItemUnit moveUnit = new DB_ItemUnit()
             {
                 storage = new DB_StorageUnit()
                 { 

@@ -19,6 +19,18 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
 
         //GameDB_Skill
 
+        //GameDB_Storage
+
+        /// <summary>
+        /// 유저의 인벤토리 로드
+        /// </summary>
+        public Task<IEnumerable<DB_ItemUnit>> LoadInventory(int storage_id);
+
+        /// <summary>
+        /// 유저의 장비 로드
+        /// </summary>
+        public Task<IEnumerable<DB_GearUnit>> LoadGear(int uid);
+
         //GameDB_User
 
         /// <summary>
@@ -65,5 +77,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// 유저의 유니크 아이디로 user 스킬 업데이트
         /// </summary>
         public Task<int> UpdateUserSkill(int uid, UserSkillInfo skill);
+
+        
     }
 }

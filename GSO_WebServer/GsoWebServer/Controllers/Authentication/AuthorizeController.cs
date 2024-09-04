@@ -5,7 +5,7 @@ using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.Error;
 using GsoWebServer.DTO;
 using WebCommonLibrary.Models.MemoryDB;
-using WebCommonLibrary.Model.GameDB;
+using WebCommonLibrary.Models.GameDB;
 
 
 namespace AuthenticationServer.Controllers

@@ -11,6 +11,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using System.Transactions;
+using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models.GameDB;
 
 namespace Server.Game.Object.Gear
 {
@@ -96,23 +98,23 @@ namespace Server.Game.Object.Gear
         {
             try
             {
-                IEnumerable<DB_Gear> gears = await DatabaseHandler.GameDB.LoadGear(owner.uid);
+                IEnumerable<DB_GearUnit> gears = await DatabaseHandler.GameDB.LoadGear(owner.uid);
 
                 if (gears == null)
                 {
                     return;
                 }
 
-                foreach (DB_Gear gear in gears)
+                foreach (DB_GearUnit gear in gears)
                 {
-                    DB_Unit unit = new DB_Unit()
+                    DB_ItemUnit unit = new DB_ItemUnit()
                     {
                         storage = new DB_StorageUnit()
                         {
                             grid_x = 0,
                             grid_y = 0,
                             rotation = 0,
-                            unit_attributes_id = gear.unit_attributes_id
+                            unit_attributes_id = gear.gear.unit_attributes_id
                         },
 
                         attributes = new DB_UnitAttributes()
@@ -125,10 +127,10 @@ namespace Server.Game.Object.Gear
                     };
 
                     ItemObject item = new ItemObject(owner.Id, unit);
-                    Storage part = parts[gear.part];
+                    Storage part = parts[gear.gear.part];
                     if (false == part.InsertItem(item))
                     {
-                        throw new Exception($"장비의 파트({gear.part})가 중복되어 있음");
+                        throw new Exception($"장비의 파트({gear.gear.part})가 중복되어 있음");
                     }
                 }
 

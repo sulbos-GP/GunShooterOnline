@@ -80,3 +80,5 @@ CREATE TABLE IF NOT EXISTS user_skill (
 SELECT * FROM user;
 SELECT * FROM user_metadata;
 SELECT * FROM user_skill;
+
+UPDATE User SET nickname=null WHERE uid=11

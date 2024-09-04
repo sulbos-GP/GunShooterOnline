@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using WebCommonLibrary.DTO.User;
 using WebCommonLibrary.Error;
-using WebCommonLibrary.Model.GameDB;
+using WebCommonLibrary.Models.GameDB;
 using static AuthorizeResource;
 using static UserResource;
 

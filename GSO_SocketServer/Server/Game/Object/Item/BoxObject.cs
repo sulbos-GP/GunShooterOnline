@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDB;
 
 namespace Server.Game.Object.Item
 {
@@ -57,7 +59,7 @@ namespace Server.Game.Object.Item
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
             DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(101);
-            DB_Unit colt45 = new DB_Unit()
+            DB_ItemUnit colt45 = new DB_ItemUnit()
             {
                 storage = new DB_StorageUnit()
                 {
@@ -80,7 +82,7 @@ namespace Server.Game.Object.Item
 
             //
             DB_ItemBase akData = DatabaseHandler.Context.ItemBase.Get(102);
-            DB_Unit ak47 = new DB_Unit()
+            DB_ItemUnit ak47 = new DB_ItemUnit()
             {
                 storage = new DB_StorageUnit()
                 {
@@ -105,7 +107,7 @@ namespace Server.Game.Object.Item
             DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(402);
             for(int i = 0; i < 5; ++i)
             {
-                DB_Unit band = new DB_Unit()
+                DB_ItemUnit band = new DB_ItemUnit()
                 {
                     storage = new DB_StorageUnit()
                     {

@@ -7,12 +7,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDB;
 
 namespace Server.Game
 {
     public class ItemObject : GameObject
     {
-        private DB_Unit unit = new DB_Unit();
+        private DB_ItemUnit unit = new DB_ItemUnit();
         private Dictionary<int, DateTime> viewers = new Dictionary<int, DateTime>();
 
         public ItemObject()
@@ -26,13 +28,13 @@ namespace Server.Game
             this.viewers = other.viewers;
         }
 
-        public ItemObject(DB_Unit unit)
+        public ItemObject(DB_ItemUnit unit)
         {
             ObjectType = GameObjectType.Item;
             this.unit = unit;
         }
 
-        public ItemObject(int viewerId, DB_Unit unit) : this(unit)
+        public ItemObject(int viewerId, DB_ItemUnit unit) : this(unit)
         {
             viewers.TryAdd(viewerId, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
         }
@@ -56,11 +58,11 @@ namespace Server.Game
             }
         }
 
-        public DB_Unit Unit
+        public DB_ItemUnit Unit
         {
             get
             {
-                return new DB_Unit()
+                return new DB_ItemUnit()
                 {
                     storage = StorageUnit,
                     attributes = Attributes,
