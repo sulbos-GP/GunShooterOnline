@@ -43,7 +43,7 @@ public class Player : CreatureObj
         currentShape = rectangle;
 
 
-        //gun.Init(this);
+        gun.Init(this);
 
 
 
@@ -77,7 +77,7 @@ public class Player : CreatureObj
         gameRoom.BroadCast(diePacket);
 
         var room = gameRoom;
-        room.Push(room.LeaveGame, Id);
+        //room.Push(room.LeaveGame, Id);
     }
 
     #region InGames

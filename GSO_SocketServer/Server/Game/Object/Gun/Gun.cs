@@ -57,6 +57,8 @@ namespace Server.Game
         public void Init(Player p)
         {
             ExtensionMethod.Start();
+            GunDataManager.instance.Init();
+            gunData = GunDataManager.instance.gunDatas[0];
 
             //Debug Line
             /*bulletLine = GetComponent<LineRenderer>();
@@ -103,7 +105,7 @@ namespace Server.Game
         //발사버튼 누를시
         public bool Fire(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
-            if (gunState == GunState.Shootable && ExtensionMethod.time >= _lastFireTime + 1 / gunData.fireRate)
+            // TODO : 20240903 주석제거 if (gunState == GunState.Shootable && ExtensionMethod.time >= _lastFireTime + 1 / gunData.fireRate)
             {
                 /*
                  발사 코드 작성.
@@ -123,7 +125,7 @@ namespace Server.Game
                // RaycastHit2D hit = Physics2D.Raycast(_fireStartPos.position, direction, gunData.range);
 
 
-                RaycastHit2D hit2D = RaycastManager.Raycast(pos + pos * dir * 0.5f, dir, length);
+                RaycastHit2D hit2D = RaycastManager.Raycast(pos , dir, length); //pos * dir * 0.5f
 
 
 

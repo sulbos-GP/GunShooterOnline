@@ -33,13 +33,11 @@ public partial class InventoryController : MonoBehaviour
     public EquipSlot Consume2;
     public EquipSlot Consume3;
 
-    [Header("��������")]
     public Transform deleteUI;
     public Button rotateBtn;
 
-    [Header("����׿�")]
     [SerializeField] private Vector2 mousePosInput; 
-    [SerializeField] private Vector2Int gridPosition; //mousePosInput�� WorldToGridPos�޼���� �׸��� ���� ��ǥ�� ��ȯ�Ѱ�. �׸��尡 �����Ǿ� �־����
+    [SerializeField] private Vector2Int gridPosition;
     [SerializeField] private Vector2Int gridPositionIndex;
     public ItemObject SelectedItem
     {
@@ -62,7 +60,7 @@ public partial class InventoryController : MonoBehaviour
 
     [SerializeField] private ItemObject selectedItem;
     [SerializeField] private RectTransform selectedRect;
-    public bool isItemSelected; //���� ���õ� ��������
+    public bool isItemSelected;
 
     public GridObject SelectedGrid
     {
@@ -85,7 +83,7 @@ public partial class InventoryController : MonoBehaviour
 
     private bool isPress = false;
 
-    //���� ����
+
     public bool isOnDelete;
     public bool IsOnDelete
     {
@@ -97,7 +95,7 @@ public partial class InventoryController : MonoBehaviour
         }
     }
 
-    //���� ����
+
     [SerializeField] private EquipSlot selectedEquip;
     [SerializeField] private bool isEquipSelected;
     public EquipSlot SelectedEquip
@@ -123,25 +121,25 @@ public partial class InventoryController : MonoBehaviour
         }
     }
 
-    private ItemObject overlapItem; //�� �����Ӹ��� üũ�� ������ ������ ����
+    private ItemObject overlapItem;
 
-    //UI��Ƽ�� ����
+
     public bool isActive = false;
    
 
-    //���̶���Ʈ ���� ����
+
     private InvenHighLight invenHighlight;
-    private Vector2Int HighlightPosition; //���̶���Ʈ�� ��ġ
+    private Vector2Int HighlightPosition;
 
     public bool itemPlaceableInGrid;
 
-    public bool isDivideMode; //divide��尡 ��������
-    private bool dontCheckDivide; //�����̰��� true��� ���̻� divideüũ�� ���� ����
+    public bool isDivideMode; 
+    private bool dontCheckDivide; 
     public bool isDivideInterfaceOn;
-    public GameObject itemPreviewInstance; // ���� ������ �̸����� �ν��Ͻ�
-    private Vector2 lastDragPosition; // ������ �巡�� ��ġ
-    private float dragTime = 0f; // �巡�� �ð��� ����� �ð�
-    private const float maxDragTime = 2f; // �ִ� �巡�� ��� �ð� (��)
+    public GameObject itemPreviewInstance;
+    private Vector2 lastDragPosition;
+    private float dragTime = 0f; 
+    private const float maxDragTime = 2f;
 
 
     private void Awake()
@@ -160,7 +158,7 @@ public partial class InventoryController : MonoBehaviour
         SetEquipSlot();
 
         Button inventoryBtn = GameObject.Find("InventoryBtn").GetComponent<Button>();
-        if (inventoryBtn == null) { Debug.Log("��ư�� ã������"); }
+        if (inventoryBtn == null) { Debug.Log("인벤토리 버튼이 없음"); }
 
         inventoryBtn.onClick.RemoveAllListeners();
         inventoryBtn.onClick.AddListener(InvenBtn);
@@ -189,7 +187,9 @@ public partial class InventoryController : MonoBehaviour
         ResetSelection();
     }
 
-
+    /// <summary>
+    /// 모든 셀렉션 초기화
+    /// </summary>
     public void ResetSelection()
     {
         SelectedItem = null;
@@ -211,14 +211,11 @@ public partial class InventoryController : MonoBehaviour
 
     }
 
-    /// <summary>
-    /// Ŭ���� ������Ʈ�� ��� �θ𿡰� LastSibling�� ������. �׻� ������ ���ͷ����� rect�� ���� ������.
-    /// </summary>
     public void SetSelectedObjectToLastSibling(Transform child)
     {
         if (child == null) return;
 
-        if(child.gameObject.name == "InventoryUI") //�κ��丮 UI�� �ڽĵ� ������ ������
+        if(child.gameObject.name == "InventoryUI")
         {
             return;
         }
@@ -229,9 +226,6 @@ public partial class InventoryController : MonoBehaviour
             SetSelectedObjectToLastSibling(child.parent);
         }
     }
-    
-
-    
 }
 
 

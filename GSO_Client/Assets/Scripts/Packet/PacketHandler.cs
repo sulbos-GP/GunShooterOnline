@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Mono.Cecil;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using ServerCore;
@@ -68,7 +69,8 @@ internal class PacketHandler
 
 
             //Spawn Player
-            player.SpawnPlayer();
+            Vector2 vec2 = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
+            player.SpawnPlayer(vec2);
             Debug.Log("spawnID : " + info.ObjectId);
         }
         //Debug.Log("S_SpawnHandler");*/
@@ -118,7 +120,10 @@ internal class PacketHandler
         var go = Managers.Object.FindById(changeHpPacket.ObjectId);
 
         if (go != null)
+        {
             go.GetComponent<CreatureController>().Hp = changeHpPacket.Hp;
+            go.GetComponent<PlayerController>().Hit();
+        }
         else
             Debug.Log("아이디 없음");
     }
@@ -172,6 +177,12 @@ internal class PacketHandler
             return;
         }
 
+
+        if (!InventoryController.invenInstance.isActive) //인벤토리가 꺼져있으면 킴
+        {
+            InventoryController.invenInstance.invenUIControl();
+        }
+
         //패킷으로 받은 아이템데이터 리스트를 클라이언트 형식으로 변경
         List<ItemData> packetItemList = new List<ItemData>();
         foreach (PS_ItemInfo packetItem in packet.ItemInfos)
@@ -184,6 +195,31 @@ internal class PacketHandler
         //인벤토리 불러오기
         if(packet.SourceObjectId == 0)
         {
+            //장착칸 불러오기 및 수정
+            foreach (PS_GearInfo packetItem in packet.GearInfos)
+            {
+                ItemData convertItem = new ItemData();
+                convertItem.SetItemData(packetItem.Item);
+
+                EquipSlot targetSlot = EquipSlot.GetEquipSlotWithProto(packetItem.Part);
+
+                ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
+                InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);
+                newItem.SetItem(convertItem);
+                newItem.parentObjId = targetSlot.slotId;
+
+                if (targetSlot.equippedItem == null)
+                {
+                    targetSlot.EquipItem(newItem);
+                }
+                else if(targetSlot.equippedItem != newItem)
+                {
+                    targetSlot.UnEquipItem();
+                    targetSlot.EquipItem(newItem);
+                }
+                
+            }
+
             //플레이어의 인벤토리
             PlayerInventoryUI playerInvenUI = InventoryController.invenInstance.playerInvenUI;
             playerInvenUI.InventorySet(); //그리드 생성됨
@@ -195,20 +231,7 @@ internal class PacketHandler
             playerInvenUI.WeightTextSet(playerGrid.GridWeight, playerGrid.limitWeight);
             playerGrid.PrintInvenContents();
 
-            //장착칸 불러오기
-            foreach (PS_GearInfo packetItem in packet.GearInfos)
-            {
-                ItemData convertItem = new ItemData();
-                convertItem.SetItemData(packetItem.Item);
-
-                EquipSlot targetSlot = EquipSlot.GetEquipSlot((int)packetItem.Part);
-
-                ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
-                InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);
-                newItem.SetItem(convertItem);
-                newItem.parentObjId = targetSlot.slotId;
-                targetSlot.EquipItem(newItem);
-            }
+            
         }
         else
         {
@@ -227,10 +250,6 @@ internal class PacketHandler
             boxGrid.PrintInvenContents();
         }
 
-        if (!InventoryController.invenInstance.isActive) //인벤토리가 꺼져있으면 킴
-        {
-            InventoryController.invenInstance.invenUIControl();
-        }
     }
 
     internal static void S_CloseInventoryHandler(PacketSession session, IMessage message)
@@ -591,16 +610,19 @@ internal class PacketHandler
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
         {
-            //TO - DO : 맞는지 모르겠음.
-            Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
-
+            //플레이어를 찾을 수 없는 곳.
+            //Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
+            
             //Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
 
 
             //Debug.DrawLine(hitObj, hitObj);
             return;
         }
-
+        Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
+        Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
+        Managers.Object.MyPlayer.gun.bulletLine.SetPosition(0, startPoint);
+        Managers.Object.MyPlayer.gun.bulletLine.SetPosition(1, hitPoint);
         //cc에서 피격 표시?
 
         //hit ID가 없으면 벽 맞는 거라         packet.HitPointX , Y이용하여 렌더링 및 이펙트 표시!! 

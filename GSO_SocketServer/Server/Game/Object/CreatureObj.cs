@@ -33,7 +33,7 @@ public class CreatureObj : GameObject
         gameRoom.BroadCast(diePacket);
 
         var room = gameRoom;
-        room.Push(room.LeaveGame, Id);
+        //room.Push(room.LeaveGame, Id);
 
         room.Push(new Job(() =>
         {

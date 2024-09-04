@@ -3,9 +3,11 @@ using System.Net;
 using System.Net.Sockets;
 using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using MySqlX.XDevAPI;
 using ServerCore;
 using UnityEngine;
 using UnityEngine.PlayerLoop;
+using Session = ServerCore.Session;
 
 
 
@@ -29,6 +31,9 @@ public class NetworkManager
 
     public void SettingConnection(string ip, int port, string token)
     {
+
+        Disconnect();
+
         ipAddr = IPAddress.Parse(ip);
 
 
@@ -36,6 +41,8 @@ public class NetworkManager
         IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
 
         Func<Session> session = () => { return _session; };
+
+
 
         Debug.Log($"tryConnection to {ipAddr}");
 
@@ -46,6 +53,7 @@ public class NetworkManager
     }
    
 
+    
 
     public void ConnectToGame()
     {
@@ -91,6 +99,17 @@ public class NetworkManager
 
     }
 
+
+
+
+
+    public void Disconnect()
+    {
+        if(_session != null)
+            _session.Disconnect();
+    }
+
+
     public void Update()
     {
         _session.FlushSend();
@@ -102,5 +121,10 @@ public class NetworkManager
             if (handler != null)
                 handler.Invoke(_session, packet.Message);
         }
+    }
+
+    internal void Clear()
+    {
+        Disconnect();
     }
 }
