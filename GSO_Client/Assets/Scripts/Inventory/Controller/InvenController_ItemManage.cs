@@ -98,17 +98,16 @@ public partial class InventoryController
         SetSelectedObjectToLastSibling(selectedRect);
     }
 
-    private void ItemDivide(ItemObject item,Vector2Int gridPosition)
+    private void ItemDivide(ItemObject item)
     {
-
-        if (item.parentObjId == selectedGrid.objectId && item.itemData.pos == gridPosition || !itemPlaceableInGrid)
+        if (item.parentObjId == selectedGrid.objectId)
         {
             UndoSlot(item);
             UndoItem(item);
             return;
         }
 
-        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",item.transform.parent).GetComponent<DivideInterface>(); //�׸��� ������Ʈ�� �ڽ����� ����
+        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",item.transform.parent).GetComponent<DivideInterface>();
         divideInterface.SetInterfacePos(item);
         divideInterface.SetAmountIndex(item, gridPosition, overlapItem);
         
@@ -121,7 +120,7 @@ public partial class InventoryController
 
             if (isDivideMode)
             {
-                ItemDivide(selectedItem, gridPosition);
+                ItemDivide(selectedItem);
             }
             else
             {
@@ -183,7 +182,7 @@ public partial class InventoryController
     {
         if (isDivideMode)
         {
-            ItemDivide(item, pos);
+            ItemDivide(item);
         }
         else
         {
