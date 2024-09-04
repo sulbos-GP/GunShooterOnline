@@ -46,6 +46,9 @@ public partial class InventoryController
 
             UndoSlot(SelectedItem);
             UndoItem(SelectedItem);
+
+            UpdatePlayerWeight();
+
             ResetSelection();
         }
         else
@@ -68,7 +71,7 @@ public partial class InventoryController
                 gridPosition = WorldToGridPos();
                 
                 ItemObject clickedItem = selectedGrid.GetItem(gridPosition.x, gridPosition.y);
-                if (clickedItem == null) { Debug.Log("");  return; }
+                if (clickedItem == null) { Debug.Log("해당 위치에 아이템이없음");  return; }
 
 
                 if (clickedItem.isHide == true)
@@ -97,18 +100,39 @@ public partial class InventoryController
         SetSelectedObjectToLastSibling(selectedRect);
     }
 
-    private void ItemDivide(ItemObject item)
+    /// <summary>
+    /// 아이템을 나눌 경우
+    /// </summary>
+    private void ItemDivide(ItemObject item, Vector2Int gridPos)
     {
-        if (item.parentObjId == selectedGrid.objectId)
+        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface", item.transform.parent).GetComponent<DivideInterface>();
+        divideInterface.SetInterfacePos();
+
+        if (IsEquipSlot(item.parentObjId))
         {
-            UndoSlot(item);
-            UndoItem(item);
-            return;
+            EquipSlot target = EquipSlot.GetEquipSlot(item.parentObjId);
+            //옮긴 위치가 장착칸
+            if (item.backUpParentId == selectedEquip.slotId)
+            {
+                UndoSlot(item);
+                UndoItem(item);
+                return;
+            }
+            divideInterface.SetAmountIndex(item, Vector2Int.zero, target.equippedItem);
+        }
+        else
+        {
+            //옮긴 위치가 그리드
+            if (item.backUpParentId == selectedGrid.objectId && item.backUpItemPos == gridPos)
+            {
+                UndoSlot(item);
+                UndoItem(item);
+                return;
+            }
+
+            divideInterface.SetAmountIndex(item, gridPos, overlapItem);
         }
 
-        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface",item.transform.parent).GetComponent<DivideInterface>();
-        divideInterface.SetInterfacePos(item);
-        divideInterface.SetAmountIndex(item, gridPosition, overlapItem);
         
     }
 
@@ -119,7 +143,7 @@ public partial class InventoryController
 
             if (isDivideMode)
             {
-                ItemDivide(selectedItem);
+                ItemDivide(selectedItem, Vector2Int.zero);
             }
             else
             {
@@ -181,7 +205,7 @@ public partial class InventoryController
     {
         if (isDivideMode)
         {
-            ItemDivide(item);
+            ItemDivide(item, pos);
         }
         else
         {

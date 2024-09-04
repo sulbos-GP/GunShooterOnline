@@ -10,6 +10,10 @@ public class RecoverySlot3 : EquipSlot
         slotId = 7;
         allowedItemType = ItemType.Recovery;
     }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
 
     protected override void ApplyItemEffects(ItemObject item)
     {

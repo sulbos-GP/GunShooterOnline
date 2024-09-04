@@ -32,19 +32,24 @@ public class DivideInterface : MonoBehaviour
         targetItem = null;
     }
 
-    public void SetAmountIndex(ItemObject item, Vector2Int pos, ItemObject overlapItem)
+    private void OnDisable()
+    {
+        DestroyInterface();
+    }
+
+    public void SetAmountIndex(ItemObject item, Vector2Int pos, ItemObject overlap)
     {
         InventoryController.invenInstance.isDivideInterfaceOn = true;
         targetPos = pos;
         targetItem = item;
         objectId = item.parentObjId;
-        this.overlapItem = overlapItem != null ? overlapItem : null;
+        overlapItem = overlap != null ? overlap : null;
 
         if (targetItem == null)
         {
-            Debug.Log("�������� ���� ����");
             return;
         }
+
         splitAmountIndex = 0;
         maxAmountIndex = targetItem.ItemAmount;
 
@@ -55,10 +60,8 @@ public class DivideInterface : MonoBehaviour
 
     }
 
-    public void SetInterfacePos(ItemObject item)
+    public void SetInterfacePos()
     {
-        //todo : ���� �ʿ�� ����
-        //����� �׳� �ش� Ÿ�� �׸��� ������Ʈ�� �߾ӿ� ��ġ�ǵ��� ����
         GetComponent<RectTransform>().anchoredPosition = Vector2.zero;
     }
 
@@ -80,7 +83,6 @@ public class DivideInterface : MonoBehaviour
         scrollBar.onValueChanged.AddListener(OnScrollbarValueChanged);
     }
 
-
     private void OnScrollbarValueChanged(float value)
     {
         InventoryController inven = InventoryController.invenInstance;
@@ -88,61 +90,35 @@ public class DivideInterface : MonoBehaviour
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 1)) + 1;
         UpdateCountText();
 
-        if(objectId > 0 && objectId <= 7)
-        {
-            //장비칸에 아이템의 무게를 추가한다고 했나?
-            double result = Math.Round(playerGridObj.GridWeight,2);
-                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
-        }
+        UpdateWeightText(playerGridObj.GridWeight);
 
-        if (objectId == 0) 
+        if (InventoryController.IsPlayerSlot(objectId))
         {
-            if (targetItem.backUpParentId == 0)
+            if (!InventoryController.IsPlayerSlot(targetItem.backUpParentId))
             {
- 
-                double result = Math.Round(playerGridObj.GridWeight,2);
-                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
-            }
-            else
-            {  
-                double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight + targetItem.itemData.item_weight * splitAmountIndex, 2);
-                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGridObj.limitWeight}";
-
-                if (result > playerGridObj.limitWeight)
-                {
-                    inven.playerInvenUI.weightText.color = Color.red;
-                }
-                else
-                {
-                    inven.playerInvenUI.weightText.color = Color.white;
-                }
+                // 플레이어 그리드 -> 상대 그리드
+                UpdateWeightText(playerGridObj.GridWeight + targetItem.itemData.item_weight * splitAmountIndex);
             }
         }
-        else 
+        else
         {
-            if (targetItem.backUpParentId == 0)
+            if (InventoryController.IsPlayerSlot(targetItem.backUpParentId))
             {
-              
-                double result = Math.Round(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex, 2);
-                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
-
-                if (result > playerGridObj.limitWeight)
-                {
-                    inven.playerInvenUI.weightText.color = Color.red;
-                }
-                else
-                {
-                    inven.playerInvenUI.weightText.color = Color.white;
-                }
-            }
-            else
-            { 
-                double result = Math.Round(inven.playerInvenUI.instantGrid.GridWeight,2);
-                inven.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {inven.playerInvenUI.instantGrid.limitWeight}";
+                // 상대 그리드 -> 플레이어 그리드
+                UpdateWeightText(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex);
             }
         }
     }
 
+    private void UpdateWeightText(double currentWeight)
+    {
+        InventoryController inven = InventoryController.invenInstance;
+        GridObject playerGridObj = inven.playerInvenUI.instantGrid;
+        double roundedWeight = Math.Round(currentWeight, 2);
+        inven.playerInvenUI.weightText.text = $"WEIGHT \n{roundedWeight} / {playerGridObj.limitWeight}";
+
+        inven.playerInvenUI.weightText.color = roundedWeight > playerGridObj.limitWeight ? Color.red : Color.white;
+    }
 
     private void UpdateCountText()
     {

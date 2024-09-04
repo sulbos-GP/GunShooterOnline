@@ -18,6 +18,29 @@ public partial class InventoryController : MonoBehaviour
 {
     public static InventoryController invenInstance;
 
+    public static bool IsEquipSlot(int objectId)
+    {
+        return objectId > 0 && objectId <= 7;
+    }
+
+    public static bool IsPlayerSlot(int objectId)
+    {
+        return !(objectId > 0 && objectId <= 7) &&objectId == 0;
+    }
+
+    public static bool IsOtherSlot(int objectId)
+    {
+        return !(objectId > 0 && objectId <= 7) && objectId != 0;
+    }
+
+    public static void UpdatePlayerWeight()
+    {
+        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
+        invenInstance.playerInvenUI.WeightTextSet(
+            invenInstance.playerInvenUI.instantGrid.GridWeight,
+            invenInstance.playerInvenUI.instantGrid.limitWeight);
+    }
+
     private PlayerInput playerInput; //�÷��̾��� ���� ��ǲ
 
     public GameObject inventoryUI;
@@ -209,6 +232,15 @@ public partial class InventoryController : MonoBehaviour
 
         Debug.Log("reset");
 
+    }
+    
+    public void DebugDic()
+    {
+        Debug.Log($"itemDic");
+        foreach (ItemObject item in instantItemDic.Values)
+        {
+            Debug.Log("Key: " + item.itemData.objectId + ", Value: " + item.itemData.item_name);
+        }
     }
 
     public void SetSelectedObjectToLastSibling(Transform child)

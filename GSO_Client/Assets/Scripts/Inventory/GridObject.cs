@@ -79,6 +79,19 @@ public class GridObject : MonoBehaviour
     }
 
     /// <summary>
+    /// 그리드를 보여주기만 할경우에 부모객체에서 사용.
+    /// 주의. 그리드를 옮겨야하는 경우에 이걸로 그리드의 크기를 바꾸면 그리드간의 크기차이가 발생
+    /// </summary>
+    public void SetGridScale(RectTransform parentRect)
+    {
+        RectTransform childRect = GetComponent<RectTransform>();
+
+        float widthScale = parentRect.rect.width / childRect.rect.width;
+        float heightScale = parentRect.rect.height / childRect.rect.height;
+        childRect.localScale = new Vector3(widthScale, heightScale, 1);
+    }
+
+    /// <summary>
     /// 패킷에서 아템을 넣을것;
     /// </summary>
     /// <param name="itemData"></param>
@@ -101,18 +114,13 @@ public class GridObject : MonoBehaviour
     /// <param name="itemData"></param>
     public ItemObject CreateItemObjAndPlace(ItemData itemData)
     {
-        ItemObject itemObj = Managers.Resource.Instantiate("UI/ItemUI", transform).GetComponent<ItemObject>();
-        InventoryController.invenInstance.instantItemDic.Add(itemData.objectId,itemObj);
+        ItemObject itemObj = ItemObject.CreateNewItem(itemData, transform);
 
-        //해당 아이템에 부여된 데이터로 아이템 세팅
-        itemObj.SetItem(itemData);
         //아이템을 해당 그리드에 배치하고 아이템 객체의 위치또한 맞게 변경
         PlaceItem(itemObj, itemData.pos.x, itemData.pos.y);
 
         //아이템 백업 변수에 현재 정보 백업
-        itemObj.backUpItemPos = itemObj.itemData.pos; //현재 위치
-        itemObj.backUpItemRotate = itemObj.itemData.rotate; //현재 회전
-        itemObj.backUpParentId = itemObj.parentObjId; //현재 그리드
+        ItemObject.BackUpItem(itemObj);
         return itemObj;
     }
 
@@ -358,6 +366,7 @@ public class GridObject : MonoBehaviour
 
     public void UpdateGridWeight()
     {
+        Debug.Log($"해당 부모의 남은 아이템 갯수 : {transform.childCount}");
         double weightIndex = 0;
         foreach(Transform itemUI in transform)
         {
@@ -371,6 +380,7 @@ public class GridObject : MonoBehaviour
         }
 
         GridWeight = Math.Round(weightIndex, 2);
+        Debug.Log($"Grid weight updated: {GridWeight}");
     }
    
     /// <summary>

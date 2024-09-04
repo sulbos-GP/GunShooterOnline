@@ -13,6 +13,15 @@ public class EquipSlot : MonoBehaviour
     public ItemObject equippedItem; // 현재 장착된 아이템
     private Vector2 originalItemSize = Vector2.zero;
 
+    protected virtual void OnDisable()
+    {
+        foreach (Transform child in transform)
+        {
+            // 자식 객체를 삭제
+            Managers.Resource.Destroy(child.gameObject);
+        }
+    }
+
     //장착 슬롯에 아이템이 배치되었을 경우
     public void EquipItem(ItemObject item)
     {
@@ -25,6 +34,7 @@ public class EquipSlot : MonoBehaviour
         equippedItem.transform.SetParent(transform);
         SetEquipItemObj(item);
 
+        //todo 로드를 통해 불려와 질수 있으니 원래 장착되어 있던 아이템과 비교하여 효과 적용
         ApplyItemEffects(equippedItem);
 
 
@@ -73,7 +83,6 @@ public class EquipSlot : MonoBehaviour
         }
     }
 
-    //이건 핸들러에서 다루려나?
     protected virtual void ApplyItemEffects(ItemObject item)
     {
         //총일 경우 현재 장착 슬롯의 총 데이터 변경

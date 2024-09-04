@@ -10,6 +10,10 @@ public class ArmorSlot : EquipSlot
         slotId = 3;
         allowedItemType = ItemType.Defensive;
     }
+    protected override void OnDisable()
+    {
+        base.OnDisable();
+    }
 
     protected override void ApplyItemEffects(ItemObject item)
     {

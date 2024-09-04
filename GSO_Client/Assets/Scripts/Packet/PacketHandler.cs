@@ -177,7 +177,7 @@ internal class PacketHandler
             return;
         }
 
-
+        //먼저 켜야함. 그래야 장비창의 awake로 장비칸의 id가 적용됨
         if (!InventoryController.invenInstance.isActive) //인벤토리가 꺼져있으면 킴
         {
             InventoryController.invenInstance.invenUIControl();
@@ -203,10 +203,7 @@ internal class PacketHandler
 
                 EquipSlot targetSlot = EquipSlot.GetEquipSlotWithProto(packetItem.Part);
 
-                ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", targetSlot.transform).GetComponent<ItemObject>();
-                InventoryController.invenInstance.instantItemDic.Add(convertItem.objectId, newItem);
-                newItem.SetItem(convertItem);
-                newItem.parentObjId = targetSlot.slotId;
+                ItemObject newItem = ItemObject.CreateNewItem(convertItem, targetSlot.transform);
 
                 if (targetSlot.equippedItem == null)
                 {
@@ -227,8 +224,7 @@ internal class PacketHandler
             GridObject playerGrid = playerInvenUI.instantGrid;
             playerGrid.objectId = packet.SourceObjectId;
             playerGrid.PlaceItemInGrid(packetItemList);
-            playerGrid.UpdateGridWeight();
-            playerInvenUI.WeightTextSet(playerGrid.GridWeight, playerGrid.limitWeight);
+            InventoryController.UpdatePlayerWeight();
             playerGrid.PrintInvenContents();
 
             
@@ -245,11 +241,11 @@ internal class PacketHandler
             GridObject boxGrid = otherInvenUI.instantGrid;
 
             boxGrid.objectId = packet.SourceObjectId;
-            boxGrid.UpdateGridWeight(); //필요한가? 박스에는 무게가 의미 없음
+            //boxGrid.UpdateGridWeight(); //필요한가? 박스에는 무게가 의미 없음
             boxGrid.PlaceItemInGrid(packetItemList);
             boxGrid.PrintInvenContents();
         }
-
+        InventoryController.invenInstance.DebugDic();
     }
 
     internal static void S_CloseInventoryHandler(PacketSession session, IMessage message)
@@ -368,7 +364,7 @@ internal class PacketHandler
         invenInstance.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
         if (targetItem == null)
         {
-            Debug.Log("해당 아이템 검색 실패");
+            Debug.Log($"해당 아이템 검색 실패 {packet.SourceMoveItem.ObjectId}");
             return;
         }
 
@@ -406,10 +402,7 @@ internal class PacketHandler
         }
 
         ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
-        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
-        invenInstance.playerInvenUI.WeightTextSet(
-                invenInstance.playerInvenUI.instantGrid.GridWeight,
-                invenInstance.playerInvenUI.instantGrid.limitWeight);
+        InventoryController.UpdatePlayerWeight();
 
     }
 
@@ -450,10 +443,7 @@ internal class PacketHandler
             invenInstance.UndoItem(targetItem);
         }
 
-        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
-        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
+        InventoryController.UpdatePlayerWeight();
     }
 
     internal static void S_MergeItemHandler(PacketSession session, IMessage message)
@@ -475,7 +465,10 @@ internal class PacketHandler
 
         if (mergedItem == null || combinedItem == null)
         {
+            invenInstance.DebugDic();
             Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
+            Debug.Log($"packet.mergeItem = {packet.MergedItem.ObjectId}");
+            Debug.Log($"packet.combinedItem = {packet.CombinedItem.ObjectId}");
             return;
         }
 
@@ -512,11 +505,7 @@ internal class PacketHandler
             InventoryController.invenInstance.UndoItem(combinedItem);
         }
 
-        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
-
-        InventoryController.invenInstance.playerInvenUI.WeightTextSet(
-                InventoryController.invenInstance.playerInvenUI.instantGrid.GridWeight,
-                InventoryController.invenInstance.playerInvenUI.instantGrid.limitWeight);
+        InventoryController.UpdatePlayerWeight();
     }
 
 
@@ -539,7 +528,7 @@ internal class PacketHandler
             Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
             return;
         }
-
+        Debug.Log("S_Divide");
         GridObject sourceGrid = null;
         GridObject destinationGrid = null;
         EquipSlot sourceEquip = null;
@@ -553,12 +542,18 @@ internal class PacketHandler
             Debug.Log($"원래 아이디 = {packet.SourceItem.ObjectId}, 새로 생성된 아이디 = {packet.DestinationItem.ObjectId}");
             invenInstance.UndoSlot(sourceItem); //원래 아이템은 원위치로 이동후 나눈 만큼 아이템 감소
             invenInstance.UndoItem(sourceItem);
-            sourceItem.ItemAmount = packet.SourceItem.Amount; 
+            sourceItem.ItemAmount = packet.SourceItem.Amount;
 
             if (packet.DestinationObjectId > 0 && packet.DestinationObjectId <= 7)
             {
                 //도착지점이 장착칸 -> 이 경우는 소모품의 경우 
-                destinationEquip.EquipItem(sourceItem);
+                ItemData itemData = new ItemData();
+                itemData.SetItemData(packet.DestinationItem);
+
+                ItemObject newItem = ItemObject.CreateNewItem(itemData, destinationEquip.transform);
+                    
+
+                destinationEquip.EquipItem(newItem);
             }
             else
             {
@@ -580,10 +575,8 @@ internal class PacketHandler
             invenInstance.UndoItem(sourceItem);
         }
 
-        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
-        invenInstance.playerInvenUI.WeightTextSet(
-                invenInstance.playerInvenUI.instantGrid.GridWeight,
-                invenInstance.playerInvenUI.instantGrid.limitWeight);
+        ChangeItemObjectId(sourceItem, packet.SourceItem.ObjectId);
+        InventoryController.UpdatePlayerWeight();
     }
 
 
