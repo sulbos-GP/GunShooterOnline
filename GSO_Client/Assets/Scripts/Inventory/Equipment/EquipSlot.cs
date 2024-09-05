@@ -22,11 +22,24 @@ public class EquipSlot : MonoBehaviour
         }
     }
 
-    //장착 슬롯에 아이템이 배치되었을 경우
-    public void EquipItem(ItemObject item)
+    public virtual void Init()
     {
+
+    }
+
+    //장착 슬롯에 아이템이 배치되었을 경우
+    public bool EquipItem(ItemObject item)
+    {
+        //todo 로드를 통해 불려와 질수 있으니 원래 장착되어 있던 아이템과 비교하여 효과 적용
+        if (!ApplyItemEffects(item.itemData))
+        {
+            Debug.Log("적용실패");
+            return false;
+        }
+
         //배치에 성공 했을 경우
         equippedItem = item;
+        equippedItem.parentObjId = slotId;
         equippedItem.backUpParentId = slotId;
 
 
@@ -34,11 +47,7 @@ public class EquipSlot : MonoBehaviour
         equippedItem.transform.SetParent(transform);
         SetEquipItemObj(item);
 
-        //todo 로드를 통해 불려와 질수 있으니 원래 장착되어 있던 아이템과 비교하여 효과 적용
-        ApplyItemEffects(equippedItem);
-
-
-        //슬롯 패킷 전송?
+        return true;
     }
 
     public void SetEquipItemObj(ItemObject item)
@@ -70,21 +79,32 @@ public class EquipSlot : MonoBehaviour
 
 
     // 아이템 장착 해제
-    public void UnEquipItem()
+    public bool UnEquipItem()
     {
-        if (equippedItem != null)
+        if (equippedItem == null)
         {
-            RemoveItemEffects(equippedItem);
-            //장착 해제에 성공한 경우
-            equippedItem.GetComponent<RectTransform>().sizeDelta = originalItemSize;
-            originalItemSize = Vector2.zero;
-
-            equippedItem = null;
+            Debug.Log("이미 장착된 아이템이 없음");
+            return false;
         }
+
+        if (!RemoveItemEffects(equippedItem.itemData))
+        {
+            Debug.Log("제거실패");
+            return false;
+        }
+        //장착 해제에 성공한 경우
+        equippedItem.GetComponent<RectTransform>().sizeDelta = originalItemSize;
+        originalItemSize = Vector2.zero;
+
+        equippedItem = null;
+
+        return true;
     }
 
-    protected virtual void ApplyItemEffects(ItemObject item)
+    public virtual bool ApplyItemEffects(ItemData item)
     {
+        //로드 될때마다 장착이 일어나므로 여기서 데이터의 변화가 없다면 컷해줘야함
+
         //총일 경우 현재 장착 슬롯의 총 데이터 변경
 
         //방어구 일경우 플레이어의 방어력 증가
@@ -96,9 +116,11 @@ public class EquipSlot : MonoBehaviour
         // 가방 크기 0 : 2*3 , 1 : 3*4 , 2 : 5*5 , 3 : 7*6
 
         //회복용품일 경우 퀵슬롯에 퀵슬롯의 아이템 데이터 변경
+        Debug.Log("아이템 장착");
+        return true;
     }
 
-    protected virtual void RemoveItemEffects(ItemObject item)
+    public virtual bool RemoveItemEffects(ItemData item)
     {
         //총일 경우 현재 장착 슬롯의 총 데이터 제거
 
@@ -107,6 +129,8 @@ public class EquipSlot : MonoBehaviour
         //가방일경우 가방의 기본크기보다 아이템이 많이 들어있으면 제거 불가
 
         //회복용품일 경우 해당 퀵슬롯의 아이템 제거
+        Debug.Log("아이템 해제");
+        return true;
     }
 
     public static EquipSlot GetEquipSlot(int objectId)

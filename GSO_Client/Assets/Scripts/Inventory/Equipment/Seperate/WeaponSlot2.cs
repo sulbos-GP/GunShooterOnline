@@ -7,22 +7,32 @@ public class WeaponSlot2 : EquipSlot
 {
     private void Awake()
     {
-        slotId = 2;
-        allowedItemType = ItemType.Weapon;
+        Init();
     }
-
     protected override void OnDisable()
     {
         base.OnDisable();
     }
 
-    protected override void ApplyItemEffects(ItemObject item)
+    public override void Init()
     {
-        base.ApplyItemEffects(item);
+        slotId = 2;
+        allowedItemType = ItemType.Weapon;
     }
 
-    protected override void RemoveItemEffects(ItemObject item)
+    public override bool ApplyItemEffects(ItemData item)
+    {
+        base.ApplyItemEffects(item);
+        Debug.Log($"무기2 : {item.item_name} 장착");
+
+        return true;
+    }
+
+    public override bool RemoveItemEffects(ItemData item)
     {
         base.RemoveItemEffects(item);
+        Debug.Log($"무기2 아이템 해제");
+
+        return true;
     }
 }

@@ -35,13 +35,17 @@ public partial class InventoryController : MonoBehaviour
 
     public static void UpdatePlayerWeight()
     {
+        if (invenInstance.playerInvenUI.instantGrid == null)
+        {
+            return;
+        }
         invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
         invenInstance.playerInvenUI.WeightTextSet(
             invenInstance.playerInvenUI.instantGrid.GridWeight,
             invenInstance.playerInvenUI.instantGrid.limitWeight);
     }
 
-    private PlayerInput playerInput; //�÷��̾��� ���� ��ǲ
+    private PlayerInput playerInput; 
 
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
@@ -203,6 +207,13 @@ public partial class InventoryController : MonoBehaviour
         Consume2 = EquipSector.GetChild(5).GetComponent<EquipSlot>();
         Consume3 = EquipSector.GetChild(6).GetComponent<EquipSlot>();
 
+        Weapon1.Init();
+        Weapon2.Init();
+        Armor.Init();
+        Bag.Init();
+        Consume1.Init();
+        Consume2.Init();
+        Consume3.Init();
     }
 
     private void OnDisable()
@@ -229,7 +240,8 @@ public partial class InventoryController : MonoBehaviour
         {
             Managers.Resource.Destroy(itemPreviewInstance);
         }
-
+        
+        UpdatePlayerWeight();
         Debug.Log("reset");
 
     }

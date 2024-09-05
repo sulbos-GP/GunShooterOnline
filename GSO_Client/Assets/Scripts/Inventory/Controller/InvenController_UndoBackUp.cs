@@ -33,13 +33,14 @@ public partial class InventoryController
         {
             otherInvenUI.instantGrid.UpdateBackUpSlot();
         }
-        
-        
+
+        Debug.Log("BackupSlot");
     }
 
     public void BackUpItem(ItemObject item)
     {
         ItemObject.BackUpItem(item);
+        Debug.Log("BackupItem");
     }
 
 
@@ -60,6 +61,7 @@ public partial class InventoryController
         {
             otherInvenUI.instantGrid.UndoItemSlot();
         }
+        Debug.Log("UndoSlot");
     }
 
     public void UndoItem(ItemObject item)
@@ -84,7 +86,7 @@ public partial class InventoryController
         {
             otherInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
         }
-
+        Debug.Log("UndoItem");
     }
 
 

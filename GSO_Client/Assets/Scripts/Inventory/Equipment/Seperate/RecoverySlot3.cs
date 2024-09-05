@@ -7,21 +7,32 @@ public class RecoverySlot3 : EquipSlot
 {
     private void Awake()
     {
-        slotId = 7;
-        allowedItemType = ItemType.Recovery;
+        Init();
     }
+
     protected override void OnDisable()
     {
         base.OnDisable();
     }
 
-    protected override void ApplyItemEffects(ItemObject item)
+    public override void Init()
+    {
+        slotId = 7;
+        allowedItemType = ItemType.Recovery;
+    }
+    public override bool ApplyItemEffects(ItemData item)
     {
         base.ApplyItemEffects(item);
+        Debug.Log($"소모품3 : {item.item_name} 장착");
+
+        return true;
     }
 
-    protected override void RemoveItemEffects(ItemObject item)
+    public override bool RemoveItemEffects(ItemData item)
     {
         base.RemoveItemEffects(item);
+        Debug.Log($"소모품3 아이템 해제");
+
+        return true;
     }
 }
