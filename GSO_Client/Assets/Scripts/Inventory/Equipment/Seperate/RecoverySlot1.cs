@@ -5,23 +5,36 @@ using UnityEngine;
 
 public class RecoverySlot1 : EquipSlot
 {
+
     private void Awake()
     {
-        slotId = 5;
-        allowedItemType = ItemType.Recovery;
+        Init();
     }
+
     protected override void OnDisable()
     {
         base.OnDisable();
     }
 
-    protected override void ApplyItemEffects(ItemObject item)
+    public override void Init()
     {
-        base.ApplyItemEffects(item);
+        slotId = 5;
+        allowedItemType = ItemType.Recovery;
     }
 
-    protected override void RemoveItemEffects(ItemObject item)
+    public override bool ApplyItemEffects(ItemData item)
+    {
+        base.ApplyItemEffects(item);
+        Debug.Log($"소모품1 : {item.item_name} 장착");
+
+        return true;
+    }
+
+    public override bool RemoveItemEffects(ItemData item)
     {
         base.RemoveItemEffects(item);
+        Debug.Log($"소모품1 아이템 해제");
+
+        return true;
     }
 }

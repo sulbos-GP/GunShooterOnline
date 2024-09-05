@@ -34,14 +34,18 @@ public class PlayerInventoryUI : InventoryUI
     {
         base.InventorySet();
 
+        Vector2Int curSize = Vector2Int.zero;
+
+        switch (bagLv)
+        {
+            case 0: curSize = BagSize.level0; break;
+            case 1: curSize = BagSize.level1; break;
+            case 2: curSize = BagSize.level2; break;
+            case 3: curSize = BagSize.level3; break;
+        }
+
         //생성된 그리드를 초기세팅하고 들어있는 아이템
-        instantGrid.InitializeGrid(new Vector2Int(5,5),15f); // 가방의 크기로 바꿀것
-        //instantGrid.
+        instantGrid.InitializeGrid(curSize, 5f); // 가방의 크기로 바꿀것
     }
 
-    public void ChangeInventory()
-    {
-        //가방슬롯을 바꿨을때 인벤토리 내의 그리드의 크기와 아이템 슬롯의 크기를 증가
-
-    }
 }

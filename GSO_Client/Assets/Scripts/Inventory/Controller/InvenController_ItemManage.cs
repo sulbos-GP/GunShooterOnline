@@ -46,9 +46,6 @@ public partial class InventoryController
 
             UndoSlot(SelectedItem);
             UndoItem(SelectedItem);
-
-            UpdatePlayerWeight();
-
             ResetSelection();
         }
         else
@@ -59,7 +56,12 @@ public partial class InventoryController
                 {
 
                     SelectedItem = selectedEquip.equippedItem;
-                    selectedEquip.UnEquipItem();
+                    if (!selectedEquip.UnEquipItem())
+                    {
+                        selectedEquip.EquipItem(SelectedItem);
+                        ResetSelection();
+                        return;
+                    }
                     SetSelectedObjectToLastSibling(selectedItem.transform);
                 }
                 return;
@@ -107,6 +109,8 @@ public partial class InventoryController
     {
         DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface", item.transform.parent).GetComponent<DivideInterface>();
         divideInterface.SetInterfacePos();
+
+        //일단 divide모드에서 삭제로 갈경우에는 디바이드 적용없이 그냥 전체 아이템 삭제임
 
         if (IsEquipSlot(item.parentObjId))
         {

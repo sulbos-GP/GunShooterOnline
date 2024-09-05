@@ -26,6 +26,19 @@ internal class PacketHandler
         var Stats = enterGamePacket.Player.StatInfo;
         Managers.Object.MyPlayer.Hp = Stats.Hp;
         Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
+
+        //enterGamePacket.ItemInfos //총알을 반영하기 위함. 실제로 아이템을 생성해내지는 않음
+
+        //enterGamePacket.GearInfos //장착을 통해 장비 반영. 실제로 아이템을 생성하지 않고 장비변경만
+        foreach(PS_GearInfo gear in enterGamePacket.GearInfos)
+        {
+            EquipSlot targetSlot = EquipSlot.GetEquipSlotWithProto(gear.Part);
+
+            ItemData data = new ItemData();
+            data.SetItemData(gear.Item);
+
+            targetSlot.ApplyItemEffects(data);
+        }
     }
 
     public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
@@ -177,7 +190,7 @@ internal class PacketHandler
             return;
         }
 
-        //먼저 켜야함. 그래야 장비창의 awake로 장비칸의 id가 적용됨
+        //먼저 켜야함. 그래야 장비창의 awake로 장비칸의 id가 적용됨 -> 컨트롤러에서 Init으로 설정하도록 변경 옮겨도 됨
         if (!InventoryController.invenInstance.isActive) //인벤토리가 꺼져있으면 킴
         {
             InventoryController.invenInstance.invenUIControl();
@@ -211,6 +224,7 @@ internal class PacketHandler
                 }
                 else if(targetSlot.equippedItem != newItem)
                 {
+                    //아이템 교체 -> todo 서버와 함께 구현해야함
                     targetSlot.UnEquipItem();
                     targetSlot.EquipItem(newItem);
                 }
@@ -383,7 +397,11 @@ internal class PacketHandler
             if (packet.DestinationObjectId > 0 && packet.DestinationObjectId <= 7)
             {
                 //도착지점이 장착칸 -> 해당 아이템을 장착칸에 장착
-                destinationEquip.EquipItem(targetItem);
+                if (!destinationEquip.EquipItem(targetItem))
+                {
+                    invenInstance.UndoSlot(targetItem);
+                    invenInstance.UndoItem(targetItem);
+                }
             }
             else
             {
@@ -442,7 +460,7 @@ internal class PacketHandler
             invenInstance.UndoSlot(targetItem);
             invenInstance.UndoItem(targetItem);
         }
-
+        
         InventoryController.UpdatePlayerWeight();
     }
 
@@ -552,8 +570,11 @@ internal class PacketHandler
 
                 ItemObject newItem = ItemObject.CreateNewItem(itemData, destinationEquip.transform);
                     
-
-                destinationEquip.EquipItem(newItem);
+                if (!destinationEquip.EquipItem(newItem))
+                {
+                    invenInstance.UndoSlot(newItem);
+                    invenInstance.UndoItem(newItem);
+                }
             }
             else
             {

@@ -2,6 +2,7 @@ using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Bcpg;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography.Pkcs;
 using UnityEngine;
 using Vector2 = System.Numerics.Vector2;
 
@@ -368,17 +369,16 @@ public class GridObject : MonoBehaviour
     {
         Debug.Log($"해당 부모의 남은 아이템 갯수 : {transform.childCount}");
         double weightIndex = 0;
-        foreach(Transform itemUI in transform)
+
+        foreach(ItemObject item in InventoryController.invenInstance.instantItemDic.Values)
         {
-            ItemObject itemObject = itemUI.GetComponent<ItemObject>();
-            if (itemObject != null)
+            if(item.backUpParentId == 0)
             {
-                // itemWeight를 소수점 둘째 자리까지 반올림
-                double roundedWeight = Math.Round(itemObject.itemWeight, 2);
+                double roundedWeight = Math.Round(item.itemWeight, 2);
                 weightIndex += roundedWeight;
             }
         }
-
+        
         GridWeight = Math.Round(weightIndex, 2);
         Debug.Log($"Grid weight updated: {GridWeight}");
     }
@@ -503,4 +503,60 @@ public class GridObject : MonoBehaviour
        return null;
    }
 
+
+    /// <summary>
+    /// 그리드의 크기를 변경 및 스프라이트 재배치
+    /// </summary>
+    public void UpdateGridObject(Vector2Int size, double Weight)
+    {
+        if (gridRect == null) gridRect = GetComponent<RectTransform>();
+
+        if (size.x <= 0 || size.y <= 0)
+        {
+            Debug.LogError($"Invalid grid size: sizeX: {size.x}, sizeY: {size.y}");
+            return;
+        }
+        int width = size.x;
+        int height = size.y;
+        gridSize = size;
+        limitWeight = Weight;
+
+        ItemSlot = new ItemObject[width, height];
+        BackUpSlot = new ItemObject[width, height];
+        Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
+        gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
+
+        foreach(ItemObject item in InventoryController.invenInstance.instantItemDic.Values)
+        {
+            if(item.backUpParentId != 0)
+            {
+                continue;
+            }
+
+            PlaceItem(item, item.itemData.pos.x, item.itemData.pos.y);
+        }
+    }
+
+    /// <summary>
+    /// 바뀔 크기를 넘어가는 아이템 존재하는지
+    /// </summary>
+    public bool CheckAvailableToChange(Vector2Int changeSize)
+    {
+        ItemObject[,] testSlot = new ItemObject[changeSize.x, changeSize.y];
+
+        foreach (ItemObject item in InventoryController.invenInstance.instantItemDic.Values)
+        {
+            if (item.backUpParentId != 0)
+            {
+                continue;
+            }
+
+            if(!(item.backUpItemPos.x >= 0 && item.backUpItemPos.y >= 0 && item.backUpItemPos.x + item.Width <= changeSize.x && item.backUpItemPos.y + item.Height <= changeSize.y))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }
