@@ -71,7 +71,7 @@ public partial class InventoryController
             GameObject parentInstance = null;
             if(IsEquipSlot(selectedItem.parentObjId))
             {
-                parentInstance = EquipSlot.GetEquipSlot(selectedItem.parentObjId).gameObject;
+                parentInstance = equipSlotDic[selectedItem.parentObjId].transform.parent.gameObject;
             }
             else
             {

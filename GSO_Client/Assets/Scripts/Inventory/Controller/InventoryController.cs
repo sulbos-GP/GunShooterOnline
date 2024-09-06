@@ -2,6 +2,7 @@ using Google.Protobuf.Protocol;
 using NPOI.OpenXmlFormats.Dml.Chart;
 using NPOI.OpenXmlFormats.Dml.Diagram;
 using NPOI.SS.Formula.Eval;
+using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
@@ -17,7 +18,8 @@ using Vector2 = System.Numerics.Vector2;
 public partial class InventoryController : MonoBehaviour
 {
     public static InventoryController invenInstance;
-
+    public static Dictionary<int, EquipSlot> equipSlotDic = new Dictionary<int, EquipSlot>();
+    public static Dictionary<int, ItemObject> instantItemDic = new Dictionary<int, ItemObject>();
     public static bool IsEquipSlot(int objectId)
     {
         return objectId > 0 && objectId <= 7;
@@ -25,7 +27,7 @@ public partial class InventoryController : MonoBehaviour
 
     public static bool IsPlayerSlot(int objectId)
     {
-        return !(objectId > 0 && objectId <= 7) &&objectId == 0;
+        return !(objectId > 0 && objectId <= 7) && objectId == 0;
     }
 
     public static bool IsOtherSlot(int objectId)
@@ -45,25 +47,17 @@ public partial class InventoryController : MonoBehaviour
             invenInstance.playerInvenUI.instantGrid.limitWeight);
     }
 
-    private PlayerInput playerInput; 
+    private PlayerInput playerInput;
 
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
     public OtherInventoryUI otherInvenUI;
-    public Dictionary<int,ItemObject> instantItemDic;
 
-    public EquipSlot Weapon1;
-    public EquipSlot Weapon2;
-    public EquipSlot Armor;
-    public EquipSlot Bag;
-    public EquipSlot Consume1;
-    public EquipSlot Consume2;
-    public EquipSlot Consume3;
 
     public Transform deleteUI;
     public Button rotateBtn;
 
-    [SerializeField] private Vector2 mousePosInput; 
+    [SerializeField] private Vector2 mousePosInput;
     [SerializeField] private Vector2Int gridPosition;
     [SerializeField] private Vector2Int gridPositionIndex;
     public ItemObject SelectedItem
@@ -106,7 +100,7 @@ public partial class InventoryController : MonoBehaviour
     }
 
     [SerializeField] private GridObject selectedGrid;
-    public bool isGridSelected; 
+    public bool isGridSelected;
 
     private bool isPress = false;
 
@@ -131,7 +125,7 @@ public partial class InventoryController : MonoBehaviour
         set
         {
             selectedEquip = value;
-            if(selectedEquip != null)
+            if (selectedEquip != null)
             {
                 isEquipSelected = true;
                 if (isItemSelected)
@@ -144,7 +138,7 @@ public partial class InventoryController : MonoBehaviour
                 isEquipSelected = false;
             }
 
-            
+
         }
     }
 
@@ -152,7 +146,7 @@ public partial class InventoryController : MonoBehaviour
 
 
     public bool isActive = false;
-   
+
 
 
     private InvenHighLight invenHighlight;
@@ -160,22 +154,22 @@ public partial class InventoryController : MonoBehaviour
 
     public bool itemPlaceableInGrid;
 
-    public bool isDivideMode; 
-    private bool dontCheckDivide; 
+    public bool isDivideMode;
+    private bool dontCheckDivide;
     public bool isDivideInterfaceOn;
     public GameObject itemPreviewInstance;
     private Vector2 lastDragPosition;
-    private float dragTime = 0f; 
+    private float dragTime = 0f;
     private const float maxDragTime = 2f;
 
 
     private void Awake()
-    { 
+    {
         Debug.Log("invenInstance");
         if (invenInstance == null)
         {
             invenInstance = this;
-            
+
         }
         else
         {
@@ -192,28 +186,22 @@ public partial class InventoryController : MonoBehaviour
         rotateBtn.onClick.RemoveAllListeners();
         rotateBtn.onClick.AddListener(RotateBtn);
 
-        instantItemDic = new Dictionary<int, ItemObject>();
         invenHighlight = GetComponent<InvenHighLight>();
     }
 
     private void SetEquipSlot()
     {
         Transform EquipSector = inventoryUI.transform.GetChild(0);
-        Weapon1 = EquipSector.GetChild(0).GetComponent<EquipSlot>();
-        Weapon2 = EquipSector.GetChild(1).GetComponent<EquipSlot>();
-        Armor = EquipSector.GetChild(2).GetComponent<EquipSlot>();
-        Bag = EquipSector.GetChild(3).GetComponent<EquipSlot>();
-        Consume1 = EquipSector.GetChild(4).GetComponent<EquipSlot>();
-        Consume2 = EquipSector.GetChild(5).GetComponent<EquipSlot>();
-        Consume3 = EquipSector.GetChild(6).GetComponent<EquipSlot>();
 
-        Weapon1.Init();
-        Weapon2.Init();
-        Armor.Init();
-        Bag.Init();
-        Consume1.Init();
-        Consume2.Init();
-        Consume3.Init();
+        for (int i = 0; i < EquipSector.childCount; i++) {
+            if (EquipSector.GetChild(i).GetComponent<EquipSlot>() == null)
+            {
+                continue;
+            }
+            EquipSlot equip = EquipSector.GetChild(i).GetComponent<EquipSlot>();
+            equipSlotDic.Add(i + 1, equip);
+            equip.Init();
+        }
     }
 
     private void OnDisable()
@@ -236,16 +224,17 @@ public partial class InventoryController : MonoBehaviour
         isDivideMode = false;
         dontCheckDivide = false;
         dragTime = 0;
-        if(itemPreviewInstance != null)
+        if (itemPreviewInstance != null)
         {
             Managers.Resource.Destroy(itemPreviewInstance);
         }
-        
+
         UpdatePlayerWeight();
         Debug.Log("reset");
 
     }
-    
+
+    [ContextMenu("아이템 보기")]
     public void DebugDic()
     {
         Debug.Log($"itemDic");

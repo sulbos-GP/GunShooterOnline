@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 18236110065076002}
-  - component: {fileID: 5961796555876116867}
   - component: {fileID: 4951753452970910547}
   - component: {fileID: 2151735185809450313}
   - component: {fileID: 5589048240770995353}
@@ -41,22 +40,6 @@ Transform:
   - {fileID: 8393533796584692842}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5961796555876116867
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 191436082380664689}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c33dab8ce4f5ffb4ea8426d73d9e0905, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  aimFov: {fileID: 0}
-  basicFov: {fileID: 0}
-  playerGun: {fileID: 0}
-  isFiring: 0
 --- !u!114 &4951753452970910547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,132 +163,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 0}
   _attackableList: []
-  weapon1:
-    objectId: 0
-    itemId: 0
-    pos: {x: 0, y: 0}
-    rotate: 0
-    amount: 0
-    isSearched: 0
-    item_name: 
-    item_weight: 0
-    item_type: 0
-    item_string_value: 0
-    item_purchase_price: 0
-    item_sell_price: 0
-    item_searchTime: 0
-    width: 0
-    height: 0
-    isItemConsumeable: 0
-    icon: 
-  weapon2:
-    objectId: 0
-    itemId: 0
-    pos: {x: 0, y: 0}
-    rotate: 0
-    amount: 0
-    isSearched: 0
-    item_name: 
-    item_weight: 0
-    item_type: 0
-    item_string_value: 0
-    item_purchase_price: 0
-    item_sell_price: 0
-    item_searchTime: 0
-    width: 0
-    height: 0
-    isItemConsumeable: 0
-    icon: 
-  defensive:
-    objectId: 0
-    itemId: 0
-    pos: {x: 0, y: 0}
-    rotate: 0
-    amount: 0
-    isSearched: 0
-    item_name: 
-    item_weight: 0
-    item_type: 0
-    item_string_value: 0
-    item_purchase_price: 0
-    item_sell_price: 0
-    item_searchTime: 0
-    width: 0
-    height: 0
-    isItemConsumeable: 0
-    icon: 
-  bag:
-    objectId: 0
-    itemId: 0
-    pos: {x: 0, y: 0}
-    rotate: 0
-    amount: 0
-    isSearched: 0
-    item_name: 
-    item_weight: 0
-    item_type: 0
-    item_string_value: 0
-    item_purchase_price: 0
-    item_sell_price: 0
-    item_searchTime: 0
-    width: 0
-    height: 0
-    isItemConsumeable: 0
-    icon: 
-  recovery1:
-    objectId: 0
-    itemId: 0
-    pos: {x: 0, y: 0}
-    rotate: 0
-    amount: 0
-    isSearched: 0
-    item_name: 
-    item_weight: 0
-    item_type: 0
-    item_string_value: 0
-    item_purchase_price: 0
-    item_sell_price: 0
-    item_searchTime: 0
-    width: 0
-    height: 0
-    isItemConsumeable: 0
-    icon: 
-  recovery2:
-    objectId: 0
-    itemId: 0
-    pos: {x: 0, y: 0}
-    rotate: 0
-    amount: 0
-    isSearched: 0
-    item_name: 
-    item_weight: 0
-    item_type: 0
-    item_string_value: 0
-    item_purchase_price: 0
-    item_sell_price: 0
-    item_searchTime: 0
-    width: 0
-    height: 0
-    isItemConsumeable: 0
-    icon: 
-  recovery3:
-    objectId: 0
-    itemId: 0
-    pos: {x: 0, y: 0}
-    rotate: 0
-    amount: 0
-    isSearched: 0
-    item_name: 
-    item_weight: 0
-    item_type: 0
-    item_string_value: 0
-    item_purchase_price: 0
-    item_sell_price: 0
-    item_searchTime: 0
-    width: 0
-    height: 0
-    isItemConsumeable: 0
-    icon: 
 --- !u!120 &4631664213121812751
 LineRenderer:
   serializedVersion: 2
@@ -781,6 +638,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _gunStat: {fileID: 11400000, guid: f272da6bfc5ce3a4da45f529413ad926, type: 2}
   isBulletPrefShoot: 1
+  bulletLine: {fileID: 0}
 --- !u!1 &4630412115343097071
 GameObject:
   m_ObjectHideFlags: 0

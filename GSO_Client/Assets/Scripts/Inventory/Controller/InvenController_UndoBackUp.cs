@@ -48,7 +48,7 @@ public partial class InventoryController
     {
         if(IsEquipSlot(item.backUpParentId))
         {
-            EquipSlot UndoEquipSlot = EquipSlot.GetEquipSlot(item.backUpParentId);
+            EquipSlot UndoEquipSlot = InventoryController.equipSlotDic[item.backUpParentId];
             UndoEquipSlot.EquipItem(item);
             return;
         }
@@ -74,7 +74,7 @@ public partial class InventoryController
 
         if(IsEquipSlot(item.parentObjId))
         {
-            EquipSlot targetSlot = EquipSlot.GetEquipSlot(item.parentObjId);
+            EquipSlot targetSlot = InventoryController.equipSlotDic[item.parentObjId];
             targetSlot.EquipItem(item);
         }
         else if(IsPlayerSlot(item.parentObjId))
