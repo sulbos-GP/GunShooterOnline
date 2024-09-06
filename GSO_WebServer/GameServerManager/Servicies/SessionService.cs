@@ -24,6 +24,37 @@ namespace GameServerManager.Servicies
 
         }
 
+        public async Task<WebErrorCode> InitMatch(long limit)
+        {
+            try
+            {
+
+                await mDockerService.InitDocker();
+
+                Console.WriteLine("Init Match");
+                Console.WriteLine("{");
+                Console.WriteLine($"\tDocker container create : {limit}");
+                for (int index = 0; index < limit; ++index)
+                {
+                    var (error, match) = await CreateMatch();
+                    if (error != WebErrorCode.None || match == null)
+                    {
+                        continue;
+                    }
+
+                    Console.WriteLine($"\tNew container id : {match.ID}\n");
+                }
+                Console.WriteLine("}");
+
+                return WebErrorCode.None;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"InitMatch execption : {ex.ToString()}");
+                return WebErrorCode.TEMP_Exception;
+            }
+        }
+
         public async Task<(WebErrorCode, MatchProfile?)> FetchMatch()
         {
             try
@@ -61,34 +92,43 @@ namespace GameServerManager.Servicies
             }
         }
 
-        public async Task<WebErrorCode> InitMatch(long limit)
+        public async Task<(WebErrorCode, MatchStatus?)> GetMatchStatus(string container_id)
         {
             try
             {
-
-                await mDockerService.InitDocker();
-
-                Console.WriteLine("Init Match");
-                Console.WriteLine("{");
-                Console.WriteLine($"\tDocker container create : {limit}");
-                for (int index = 0; index < limit; ++index)
+                var matchStatus = await mSessionMemory.GetMatchStatus(container_id);
+                if (matchStatus == null)
                 {
-                    var (error, match) = await CreateMatch();
-                    if(error != WebErrorCode.None || match == null)
-                    {
-                        continue;
-                    }
-
-                    Console.WriteLine($"\tNew container id : {match.ID}\n");
+                    return (WebErrorCode.TEMP_ERROR, null);
                 }
-                Console.WriteLine("}");
+                return (WebErrorCode.None, matchStatus);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"GetMatchStatus execption : {ex.ToString()}");
+                return (WebErrorCode.TEMP_Exception, null);
+            }
+        }
+
+        public async Task<WebErrorCode> DispatchMatchPlayers(string container_id, List<int> players)
+        {
+            try
+            {
+                var matchStatus = await mSessionMemory.GetMatchStatus(container_id);
+                if (matchStatus == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+                matchStatus.players = players;
+
+                await mSessionMemory.UpdateMatchStatus(container_id, matchStatus);
 
                 return WebErrorCode.None;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"InitMatch execption : {ex.ToString()}");
-                return WebErrorCode.TEMP_Exception;
+                Console.WriteLine($"DispatchMatchPlayers execption : {ex.ToString()}");
+                return (WebErrorCode.TEMP_Exception);
             }
         }
 

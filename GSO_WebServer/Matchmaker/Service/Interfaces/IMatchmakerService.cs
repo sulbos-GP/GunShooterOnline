@@ -52,7 +52,7 @@ namespace Matchmaker.Service.Interfaces
         /// <summary>
         /// 플레이어 레이팅에 따른 매칭 찾아주고 key 리턴
         /// </summary>
-        public Task<(WebErrorCode, string[]?)> FindMatchByRating(double min, double max, int capacity);
+        public Task<(WebErrorCode, Dictionary<string, TicketInfo>?)> FindMatchByRating(double min, double max, int capacity);
 
         /// <summary>
         /// 플레이어의 레이턴시 업데이트
@@ -62,6 +62,6 @@ namespace Matchmaker.Service.Interfaces
         /// <summary>
         /// 매칭이 성사된 유저들에게 매칭이 성공했음을 알린다
         /// </summary>
-        public Task<WebErrorCode> NotifyMatchSuccess(String[] keys, MatchProfile profile);
+        public Task<WebErrorCode> NotifyMatchSuccess(TicketInfo[] tickets, MatchProfile profile);
     }
 }

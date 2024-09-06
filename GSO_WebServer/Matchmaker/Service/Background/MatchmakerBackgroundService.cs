@@ -9,7 +9,7 @@ namespace Matchmaker.Service.Background
     {
         private PeriodicTimer?  mTimer = null;
         private const double    mPeriodicSecond = 5;                        //5초마다 매칭 검색
-        private const int       mPlayerCapacity = 5;                        //최대 매치될 인원
+        private const int       mPlayerCapacity = 1;                        //최대 매치될 인원
         private const int       mMaxWaitTimeCount = 120;                    //최대로 기다릴 수 있는 시간 (X초 이상 기다린 플레이어 모두 참여)
         private const long      mExpandingRatingRangeTimeCount = 10;        //X초마다 레이팅 범위 증가
 
@@ -76,19 +76,16 @@ namespace Matchmaker.Service.Background
                     //Console.WriteLine($"{player.uid}[{count}] : max:{maxRating}, min:{minRating}");
 
                     //Capacity명의 비슷한 플레이어들 선별
-                    (error, var keys) = await mMatchmakerService.FindMatchByRating(minRating, maxRating, mPlayerCapacity);
-                    if (error != WebErrorCode.None)
+                    (error, var playerTickets) = await mMatchmakerService.FindMatchByRating(minRating, maxRating, mPlayerCapacity);
+                    if (error != WebErrorCode.None || playerTickets == null)
                     {
                         continue;
                     }
-
-                    if(keys == null)
-                    {
-                        continue;
-                    }
+                    TicketInfo[] tickets = playerTickets.Values.ToArray();
+                    string[] keys = playerTickets.Keys.ToArray();
 
                     //방 있는지 확인
-                    (error, var profile) = await mGameServerManagerService.FetchMatchInfo();
+                    (error, var profile) = await mGameServerManagerService.FetchMatchInfo(keys);
                     if(profile == null)
                     {
                         continue;
@@ -101,17 +98,19 @@ namespace Matchmaker.Service.Background
                     Console.WriteLine($"\tH_IP    : {profile.host_ip}");
                     Console.WriteLine($"\tH_PORT  : {profile.host_port}");
                     Console.WriteLine($"\tC_PORT  : {profile.container_port}");
-                    Console.WriteLine("}");
+
 
                     //해당 클라이언트에게 방 정보 전송
-                    error = await mMatchmakerService.NotifyMatchSuccess(keys, profile);
+                    error = await mMatchmakerService.NotifyMatchSuccess(tickets, profile);
                     if (error != WebErrorCode.None)
                     {
                         continue;
                     }
 
+                    Console.WriteLine("}");
+
                     //성공적으로 보냈다면 매칭 큐에서 제거 한다
-                    error = await mMatchmakerService.RemoveMatchQueue(keys);
+                    error = await mMatchmakerService.RemoveMatchQueue(keys.ToArray());
                     if (error != WebErrorCode.None)
                     {
                         continue;

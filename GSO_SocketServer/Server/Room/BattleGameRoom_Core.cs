@@ -14,6 +14,9 @@ namespace Server
 {
     public partial class BattleGameRoom : GameRoom
     {
+
+        public List<int> connectPlayer = new List<int>();
+
         Dictionary<int, Player> _playerDic = new Dictionary<int, Player>();
         Dictionary<int, CreatureObj> _monsterDic = new Dictionary<int, CreatureObj>();
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();

@@ -17,6 +17,16 @@ namespace GameServerManager.Servicies.Interfaces
         public Task<WebErrorCode> InitMatch(long limit);
 
         /// <summary>
+        /// 
+        /// </summary>
+        public Task<(WebErrorCode, MatchStatus?)> GetMatchStatus(string container_id);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public Task<WebErrorCode> DispatchMatchPlayers(string container_id, List<int> players);
+
+        /// <summary>
         /// 매치 생성
         /// </summary>
         public Task<(WebErrorCode, CreateContainerResponse?)> CreateMatch();

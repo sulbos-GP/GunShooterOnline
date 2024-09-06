@@ -270,7 +270,7 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<(WebErrorCode, string[]?)> FindMatchByRating(double min, double max, int capacity)
+        public async Task<(WebErrorCode, Dictionary<string, TicketInfo>?)> FindMatchByRating(double min, double max, int capacity)
         {
             try
             {
@@ -297,7 +297,7 @@ namespace Matchmaker.Service
                     tickets.OrderBy(ticket => ticket.Value.match_start_time).Take(capacity).ToDictionary();
                 }
 
-                return (WebErrorCode.None, tickets.Keys.ToArray());
+                return (WebErrorCode.None, tickets);
             }
             catch
             {
@@ -334,20 +334,18 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<WebErrorCode> NotifyMatchSuccess(String[] keys, MatchProfile profile)
+        public async Task<WebErrorCode> NotifyMatchSuccess(TicketInfo[] tickets, MatchProfile profile)
         {
             try
             {
-                var tickets = await mMatchQueueMDB.GetPlayerTickets(keys);
-                if (tickets == null)
-                {
-                    return WebErrorCode.TEMP_ERROR;
-                }
-
+                Console.WriteLine("\tMatchPlayers");
+                Console.WriteLine("\t{");
                 foreach (var ticket in tickets)
                 {
-                    await mMatchmakerHub.Clients.Client(ticket.Value.client_id).SendAsync("S2C_MatchComplete", profile);
+                    Console.WriteLine($"\t\tClientId : {ticket.client_id}");
+                    await mMatchmakerHub.Clients.Client(ticket.client_id).SendAsync("S2C_MatchComplete", ticket.client_id, profile);
                 }
+                Console.WriteLine("\t}");
 
                 return WebErrorCode.None;
             }

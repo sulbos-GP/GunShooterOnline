@@ -3,7 +3,9 @@ using System.Text.Json;
 using System.Text;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.Match;
+using WebCommonLibrary.DTO.GameServer;
 using WebCommonLibrary.DTO.Matchmaker;
+using GSO_WebServerLibrary.Utils;
 
 namespace Matchmaker.Service
 {
@@ -26,7 +28,7 @@ namespace Matchmaker.Service
             return mHttpClientFactory.CreateClient("GameServerManager");
         }
 
-        public async Task<(WebErrorCode, MatchProfile?)> FetchMatchInfo()
+        public async Task<(WebErrorCode, MatchProfile?)> FetchMatchInfo(string[] keys)
         {
             try
             {
@@ -37,9 +39,16 @@ namespace Matchmaker.Service
                     return (WebErrorCode.TEMP_ERROR, null);
                 }
 
+                List<int> players = new List<int>();
+                foreach (var key in keys)
+                {
+                    int uid = KeyUtils.GetUID(key);
+                    players.Add(uid);
+                }
+
                 FetchMatchReq packet = new FetchMatchReq
                 {
-
+                    players = players,
                 };
                 var content = new StringContent(JsonSerializer.Serialize(packet), Encoding.UTF8, "application/json");
 
