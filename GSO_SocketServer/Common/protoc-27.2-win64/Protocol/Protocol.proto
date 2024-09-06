@@ -38,6 +38,7 @@ enum MsgId{
   S_EXIT_GAME = 27;
   C_EXIT_GAME = 28;
 
+  C_SERVER_COMMAND = 10000; //수정해야하면 말점
 
 }
 
@@ -314,8 +315,16 @@ message C_ExitGame{   //19
    int32 exitId = 2;
 }
 
+////////////////////////////////////////////
+//                                        //
+//                COMMAND                 //
+//                                        //
+////////////////////////////////////////////
 
-
+message C_GameServerCommand
+{   
+   int32 command = 1;
+}
 
 //--------------- END message --------------------
 

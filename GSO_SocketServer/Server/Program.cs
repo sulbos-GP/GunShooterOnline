@@ -3,13 +3,19 @@ using System.Net;
 using WebClientCore;
 using ServerCore;
 using Server.Database.Handler;
+using Server.Docker;
+using Server.Web;
+using Server.Web.Service;
+using System.Threading.Tasks;
+using Server.Server;
 
 namespace Server
 {
     class Program
 	{
-		public static ServerNetworkService mNetworkService = new ServerNetworkService();
-        public static WebClientService mWebClientService = new WebClientService();
+		public static GameServer gameserver = new GameServer();
+        public static DatabaseHandler database = new DatabaseHandler();
+        public static WebServer web = new WebServer();
 
         public static ushort ServerTickCount { get; internal set; } = 0;
         public static int ServerIntervalTick { get; internal set; } = 250;
@@ -39,76 +45,31 @@ namespace Server
             acceptKey   = DockerUtil.GetContainerId();
             register    = DockerUtil.GetRegister();
             backLog     = DockerUtil.GetBacklog();
-
-            var webManager = WebManager.Instance;
-            webManager.ConfigureServices();
-
 #else
-
-
             iPAddress = IPAddress.Loopback;
             port = 7777;
             acceptKey = "SomeConnectionKey";
             register = 100;
             backLog = 100;
 #endif
-
-            var database = DatabaseHandler.Instance;
-            database.InitMySQL();
-
-            Func<Session> session = () => { return new ClientSession(); };
-
-            IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
-            mNetworkService.Init(endPoint, session, acceptKey, register, backLog);
-            
-            BattleGameRoom room = new BattleGameRoom();
-
-            //mNetworkService.Init(endPoint, "SomeConnectionKey", 100, 100);
-            //mNetworkService.SetChannel(endPoint, "SomeConnectionKey", 100, 100);
-
-
-
-            mNetworkService.Start();
-            mNetworkService.SetChannel(true, room,0);
-
-#if DOCKER
-
-            RequestReady().Wait();
-
-            int minutes = 20;
-            Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
-
-            Task.Delay(minutes * 60 * 1000).Wait();
-
-            mNetworkService.Stop();
-
-            Shutdown().Wait();
-#else
-            Console.WriteLine("q: Quit Server.");
-            while (true)
+            //게임 시작
             {
-                string input = Console.ReadLine();
-                if (input.Equals("q"))
-                {
-                    mNetworkService.Stop();
-                    break;
-                }
-            }
-#endif
+                Func<Session> session = () => { return new ClientSession(); };
 
+                IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
+                gameserver.Init(endPoint, session, acceptKey, register, backLog);
 
-            while (true)
-            {
-
+                gameserver.Start();
             }
 
-            ////FlushRoom();
-            //JobTimer.Instance.Push(FlushRoom);
+            //게임 종료
+            {
+                int minutes = 10;
+                Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
+                Task.Delay(minutes * 60 * 1000).Wait();
 
-            //while (true)
-            //{
-            //	JobTimer.Instance.Flush();
-            //}
+                gameserver.Stop();
+            }
         }
     }
 }

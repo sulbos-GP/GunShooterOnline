@@ -16,7 +16,9 @@ public class Program
 
                 webBuilder.ConfigureKestrel(serverOptions =>
                 {
+#if AWS
                     serverOptions.ListenAnyIP(7000);
+#endif
                 });
             });
 

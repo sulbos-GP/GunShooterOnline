@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
 using LiteNetLib;
+using Newtonsoft.Json;
 using Server;
 using Server.Data;
 using Server.Database.Handler;
@@ -10,8 +11,10 @@ using Server.Game.Utils;
 using ServerCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using System.Text;
+using WebCommonLibrary.Enum;
 
 class PacketHandler
 {
@@ -29,24 +32,25 @@ class PacketHandler
             p.info.Name = enterGamePacket.Name + clientSession.SessionId;
             p.info.PositionInfo.PosX = 0;
             p.info.PositionInfo.PosY = 0;
-            p.gameRoom = Program.mNetworkService.gameRoom as BattleGameRoom;
+            p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
             //바꾼 부분
 
-            ///GWANHO TEMP
-            ///TODO : LoadGear를 통해 가방의 정보를 가져오고 인벤토리의 내용을 불러와야함
-            ///현재 테스트는 uid로 통일
             
-            p.uid = ++cnt;
+
+            //이거 uid를 검사해서 올바르게 넣어주면 됨
+            p.uid = p.gameRoom.connectPlayer.ElementAt(0);
+            
+            //p.uid = ++cnt;
 
             //p.stat
 
         }
         
 
-        clientSession.Room = Program.mNetworkService.gameRoom as BattleGameRoom;
+        clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
         clientSession.MyPlayer = p;
 
-        BattleGameRoom room = (BattleGameRoom)Program.mNetworkService.gameRoom; //나중에 null로 바꿔도 참조가능
+        BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
 
         room.Push(room.EnterGame, clientSession.MyPlayer);
         ObjectManager.Instance.DebugObjectDics();
@@ -197,5 +201,18 @@ class PacketHandler
 
 
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
+    }
+
+    internal static void C_GameServerCommandHandler(PacketSession session, IMessage message)
+    {
+        ClientSession clientSession = session as ClientSession;
+        C_GameServerCommand packet = (C_GameServerCommand)message;
+        Console.WriteLine($"C_GameServerCommand");
+
+        EGameServerCommand command =  (EGameServerCommand)packet.Command;
+
+        string myString = $"ACK: {command.ToString()}";
+        byte[] bytes = Encoding.UTF8.GetBytes(myString);
+        session.mPeer.Send(bytes, DeliveryMethod.ReliableOrdered);
     }
 }

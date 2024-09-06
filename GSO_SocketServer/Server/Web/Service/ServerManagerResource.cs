@@ -2,12 +2,13 @@
 using System;
 using System.Threading.Tasks;
 using WebCommonLibrary.DTO.GameServer;
+using WebCommonLibrary.DTO.Matchmaker;
 
 namespace Server.Web.Service
 {
     public class ServerManagerResource : WebResource
     {
-        public ServerManagerResource() : base("GameServerManager")
+        public ServerManagerResource(WebServer owner, string name) : base(owner, name)
         { 
         
         }
@@ -17,12 +18,12 @@ namespace Server.Web.Service
 
             Console.WriteLine("[RequestReady GameServer]");
 
-            ShutdownMatchReq request = new ShutdownMatchReq
+            RequestReadyMatchReq request = new RequestReadyMatchReq
             {
                 container_id = DockerUtil.GetContainerId(),
             };
 
-            return await WebManager.Instance.WebClient.PostAsync<RequestReadyMatchRes>(host, "Session/RequestReady", request);
+            return await Owner.PostAsync<RequestReadyMatchRes>(Host, "Session/RequestReady", request);
         }
 
         public async Task<ShutdownMatchRes> PostShutdown()
@@ -35,7 +36,20 @@ namespace Server.Web.Service
                 container_id = DockerUtil.GetContainerId(),
             };
 
-            return await WebManager.Instance.WebClient.PostAsync<ShutdownMatchRes>(host, "Session/Shutdown", request);
+            return await Owner.PostAsync<ShutdownMatchRes>(Host, "Session/Shutdown", request);
+        }
+
+        public async Task<MatchPlayersRes> PostWaitForMatchPlayers()
+        {
+
+            Console.WriteLine("[MatchPlayers GameServer]");
+
+            MatchPlayersReq request = new MatchPlayersReq
+            {
+                container_id = DockerUtil.GetContainerId(),
+            };
+
+            return await Owner.PostAsync<MatchPlayersRes>(Host, "Session/MatchPlayers", request);
         }
     }
 }

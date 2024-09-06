@@ -24,6 +24,7 @@ namespace WebClientCore
         /// </summary>
         public void AddHttpClientUri(string name, string uri)
         {
+            Console.WriteLine($"[AddHttpClientUri] {name} : {uri}");
             mHttpClientUris.Add(name, new Uri(uri));
         }
 

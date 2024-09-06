@@ -1,5 +1,6 @@
 ﻿using Server.Docker;
 using Server.Web.Service;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,38 +10,61 @@ using WebClientCore;
 
 namespace Server.Web
 {
-    public class WebManager
+
+    public enum EWebServer
     {
-        private static WebManager instance;
-        private WebClientService webService = new WebClientService();
+        None,
+        GameServerManager,
+        Lobby,
+    }
+
+    public class WebServer : WebClientService
+    {
 
         #region Resource
-        private ServerManagerResource serverManagerResource = new ServerManagerResource();
-        #endregion
+        private ServerManagerResource serverManagerResource = null;
+        private LobbyResource lobbyResource = null;
 
-        public static WebManager Instance
+        public ServerManagerResource ServerManager
         {
             get
             {
-                if (instance == null)
-                {
-                    instance = new WebManager();
-                }
-                return instance;
+                return this.serverManagerResource;
             }
         }
 
-        public WebClientService WebClient
+        public LobbyResource Lobby
         {
             get
             {
-                return webService;
+                return this.lobbyResource;
             }
+        }
+
+
+        #endregion
+
+        public WebServer()
+        {
+
+        }
+
+        public void initializeServiceAndResource()
+        {
+            ConfigureServices();
+            ConfigureResource();
         }
 
         public void ConfigureServices()
         {
-            webService.AddHttpClientUri("GameServerManager", $"http://{DockerUtil.GetHostIP()}:7000");
+            AddHttpClientUri(EWebServer.GameServerManager.ToString(), $"http://{DockerUtil.GetHostIP()}:7000");
+            AddHttpClientUri(EWebServer.Lobby.ToString(), $"http://{DockerUtil.GetHostIP()}:5000");
+        }
+
+        public void ConfigureResource()
+        {
+            serverManagerResource = new ServerManagerResource(this, EWebServer.GameServerManager.ToString());
+            lobbyResource = new LobbyResource(this, EWebServer.Lobby.ToString());
         }
 
     }

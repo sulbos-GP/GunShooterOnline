@@ -9,11 +9,29 @@ namespace Server.Web.Service
 {
     public class WebResource
     {
-        protected string host = "";
+        private readonly string host = "";
+        private readonly WebServer owner;
 
-        public WebResource(string host) 
+        protected string Host
+        {
+            get
+            {
+                return host;
+            }
+        }
+
+        protected WebServer Owner
+        {
+            get 
+            { 
+                return owner; 
+            } 
+        }
+
+        public WebResource(WebServer owner, string host) 
         { 
             this.host = host;
+            this.owner = owner;
         }
     }
 }
