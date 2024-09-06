@@ -19,7 +19,10 @@ public class ItemObject : MonoBehaviour
     {
         ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", parent).GetComponent<ItemObject>();
         newItem.SetItem(data);
-        InventoryController.invenInstance.instantItemDic.Add(data.objectId, newItem);
+        if (!InventoryController.instantItemDic.ContainsKey(data.objectId))
+        {
+            InventoryController.instantItemDic.Add(data.objectId, newItem);
+        }
 
         return newItem;
     }
@@ -138,7 +141,7 @@ public class ItemObject : MonoBehaviour
         //아이템 데이터 업데이트
         this.itemData = itemData;
         itemRect = GetComponent<RectTransform>();
-        itemSprite = FindItemSprtie(itemData.itemId);
+        itemSprite = FindItemSprtie(itemData);
         isOnSearching = false;
         ItemAmount = itemData.amount;
         
@@ -167,14 +170,11 @@ public class ItemObject : MonoBehaviour
 
         //아이템의 위치를 설정
         itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile + 50, itemData.height * GridObject.HeightOfTile - 50);
-
-        
     }
 
-    private Sprite FindItemSprtie(int itemCode)
+    public static Sprite FindItemSprtie(ItemData itemData)
     {
-
-        Sprite itemSprite = Resources.Load<Sprite>($"Sprite/Item/{itemData.icon}");
+        Sprite itemSprite = Resources.Load<Sprite>($"Sprite/Item/{itemData.iconName}");
 
         if (itemSprite == null)
         {

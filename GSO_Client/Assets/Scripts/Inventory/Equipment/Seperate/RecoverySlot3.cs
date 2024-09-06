@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class RecoverySlot3 : EquipSlot
 {
+    public QuickSlot targetSlot;
+
     private void Awake()
     {
         Init();
@@ -24,7 +26,7 @@ public class RecoverySlot3 : EquipSlot
     {
         base.ApplyItemEffects(item);
         Debug.Log($"소모품3 : {item.item_name} 장착");
-
+        targetSlot.SetSlot(item);
         return true;
     }
 
@@ -32,7 +34,7 @@ public class RecoverySlot3 : EquipSlot
     {
         base.RemoveItemEffects(item);
         Debug.Log($"소모품3 아이템 해제");
-
+        targetSlot.ResetSlot();
         return true;
     }
 }

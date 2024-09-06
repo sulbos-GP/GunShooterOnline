@@ -114,7 +114,7 @@ public partial class InventoryController
 
         if (IsEquipSlot(item.parentObjId))
         {
-            EquipSlot target = EquipSlot.GetEquipSlot(item.parentObjId);
+            EquipSlot target =equipSlotDic[item.parentObjId];
             //¿Å±ä À§Ä¡°¡ ÀåÂøÄ­
             if (item.backUpParentId == selectedEquip.slotId)
             {

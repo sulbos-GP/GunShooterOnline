@@ -32,7 +32,7 @@ internal class PacketHandler
         //enterGamePacket.GearInfos //장착을 통해 장비 반영. 실제로 아이템을 생성하지 않고 장비변경만
         foreach(PS_GearInfo gear in enterGamePacket.GearInfos)
         {
-            EquipSlot targetSlot = EquipSlot.GetEquipSlotWithProto(gear.Part);
+            EquipSlot targetSlot = InventoryController.equipSlotDic[(int)gear.Part];
 
             ItemData data = new ItemData();
             data.SetItemData(gear.Item);
@@ -214,7 +214,7 @@ internal class PacketHandler
                 ItemData convertItem = new ItemData();
                 convertItem.SetItemData(packetItem.Item);
 
-                EquipSlot targetSlot = EquipSlot.GetEquipSlotWithProto(packetItem.Part);
+                EquipSlot targetSlot = InventoryController.equipSlotDic[(int)packetItem.Part];
 
                 ItemObject newItem = ItemObject.CreateNewItem(convertItem, targetSlot.transform);
 
@@ -296,7 +296,6 @@ internal class PacketHandler
 
         if (InventoryController.invenInstance.isActive)//인벤토리가 켜져 있으면 끔
         {
-            InventoryController.invenInstance.instantItemDic.Clear();
             InventoryController.invenInstance.invenUIControl();
         }
     }
@@ -321,7 +320,7 @@ internal class PacketHandler
         if (!packet.IsSuccess) //실패시 아이템을 다시 숨김상태로 전환
         {
             ItemObject targetItem = null;
-            InventoryController.invenInstance.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out targetItem);
+            InventoryController.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out targetItem);
             if (!targetItem.isHide || targetItem.searchingCoroutine != null)
             {
                 targetItem.HideItem();
@@ -334,9 +333,13 @@ internal class PacketHandler
     /// </summary>
     private static void ChangeItemObjectId(ItemObject targetItem, int newId)
     {
-        InventoryController.invenInstance.instantItemDic.Remove(targetItem.itemData.objectId);
+        InventoryController.instantItemDic.Remove(targetItem.itemData.objectId);
         targetItem.itemData.objectId = newId;
-        InventoryController.invenInstance.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
+        if (!InventoryController.instantItemDic.ContainsKey(targetItem.itemData.objectId))
+        {
+            InventoryController.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
+        }
+        
     }
 
     private static void AssignEquipOrGrid(int objectId, ref EquipSlot equipSlot, ref GridObject gridObject)
@@ -344,7 +347,7 @@ internal class PacketHandler
 
         if (objectId > 0 && objectId <= 7)
         {
-            equipSlot = EquipSlot.GetEquipSlot(objectId);
+            equipSlot = InventoryController.equipSlotDic[objectId];
         }
         else
         {
@@ -375,7 +378,7 @@ internal class PacketHandler
         Debug.Log("S_MoveItem");
         
         ItemObject targetItem = null;
-        invenInstance.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
+        InventoryController.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
         if (targetItem == null)
         {
             Debug.Log($"해당 아이템 검색 실패 {packet.SourceMoveItem.ObjectId}");
@@ -438,7 +441,7 @@ internal class PacketHandler
         InventoryController invenInstance = InventoryController.invenInstance;
 
         ItemObject targetItem = null;
-        invenInstance.instantItemDic.TryGetValue(packet.DeleteItem.ObjectId, out targetItem);
+        InventoryController.instantItemDic.TryGetValue(packet.DeleteItem.ObjectId, out targetItem);
         if (targetItem == null)
         {
             Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
@@ -477,9 +480,9 @@ internal class PacketHandler
         InventoryController invenInstance = InventoryController.invenInstance;
 
         ItemObject mergedItem = null;
-        invenInstance.instantItemDic.TryGetValue(packet.MergedItem.ObjectId, out mergedItem);
+        InventoryController.instantItemDic.TryGetValue(packet.MergedItem.ObjectId, out mergedItem);
         ItemObject combinedItem = null;
-        invenInstance.instantItemDic.TryGetValue(packet.CombinedItem.ObjectId, out combinedItem);
+        InventoryController.instantItemDic.TryGetValue(packet.CombinedItem.ObjectId, out combinedItem);
 
         if (mergedItem == null || combinedItem == null)
         {
@@ -539,7 +542,7 @@ internal class PacketHandler
         InventoryController invenInstance = InventoryController.invenInstance;
 
         ItemObject sourceItem = null; //원래 있던 아이템
-        invenInstance.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out sourceItem);
+        InventoryController.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out sourceItem);
 
         if (sourceItem == null )
         {

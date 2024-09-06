@@ -35,17 +35,17 @@ public class PlayerInventoryUI : InventoryUI
         base.InventorySet();
 
         Vector2Int curSize = Vector2Int.zero;
-
+        double limitWeight = 0;
         switch (bagLv)
         {
-            case 0: curSize = BagSize.level0; break;
-            case 1: curSize = BagSize.level1; break;
-            case 2: curSize = BagSize.level2; break;
-            case 3: curSize = BagSize.level3; break;
+            case 0: curSize = BagSize.level0; limitWeight = 5f; break;
+            case 1: curSize = BagSize.level1; limitWeight = 15f; break;
+            case 2: curSize = BagSize.level2; limitWeight = 20f; break;
+            case 3: curSize = BagSize.level3; limitWeight = 40f; break;
         }
 
         //생성된 그리드를 초기세팅하고 들어있는 아이템
-        instantGrid.InitializeGrid(curSize, 5f); // 가방의 크기로 바꿀것
+        instantGrid.InitializeGrid(curSize, limitWeight); // 가방의 크기로 바꿀것
     }
 
 }

@@ -370,7 +370,7 @@ public class GridObject : MonoBehaviour
         Debug.Log($"해당 부모의 남은 아이템 갯수 : {transform.childCount}");
         double weightIndex = 0;
 
-        foreach(ItemObject item in InventoryController.invenInstance.instantItemDic.Values)
+        foreach(ItemObject item in InventoryController.instantItemDic.Values)
         {
             if(item.backUpParentId == 0)
             {
@@ -526,7 +526,9 @@ public class GridObject : MonoBehaviour
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
 
-        foreach(ItemObject item in InventoryController.invenInstance.instantItemDic.Values)
+        InventoryController.UpdatePlayerWeight();
+
+        foreach (ItemObject item in InventoryController.instantItemDic.Values)
         {
             if(item.backUpParentId != 0)
             {
@@ -544,7 +546,7 @@ public class GridObject : MonoBehaviour
     {
         ItemObject[,] testSlot = new ItemObject[changeSize.x, changeSize.y];
 
-        foreach (ItemObject item in InventoryController.invenInstance.instantItemDic.Values)
+        foreach (ItemObject item in InventoryController.instantItemDic.Values)
         {
             if (item.backUpParentId != 0)
             {

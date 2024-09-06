@@ -119,6 +119,7 @@ public class BagSlot : EquipSlot
                 }
 
                 playerUI.bagLv = targetBag.level;
+                playerUI.instantGrid.limitWeight = targetBag.limitWeight;
                 //가방 레벨이 크거나 테스트 통과시 그리드의 사이즈 업데이트
                 playerUI.instantGrid.UpdateGridObject(newSize, targetBag.limitWeight);
             }
