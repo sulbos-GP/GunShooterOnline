@@ -40,3 +40,9 @@ public enum GunType
     ShotGun,
     Sniper
 }
+
+public enum BulletType
+{
+    b729mm,
+    b559mm
+}

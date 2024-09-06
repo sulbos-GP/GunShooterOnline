@@ -234,7 +234,7 @@ public class InputController : MonoBehaviour
         {
             Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
             playerGun.Fire(); // 발사 메서드 호출
-            yield return new WaitForSeconds(1 / playerGun.GetFireRate()); // 발사 속도에 따라 대기
+            yield return new WaitForSeconds(8 / playerGun.GetFireRate()); // 발사 속도에 따라 대기 9/6 : 발사속도 리뉴얼로 값 임시 수정. 나중에 더 정확한 공식 대입
         }
     }
     private void OnReloadInput(InputAction.CallbackContext context)
