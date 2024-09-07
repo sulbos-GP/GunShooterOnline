@@ -45,13 +45,23 @@ public class UIManager : MonoBehaviour
         Health.text =  HP+" / "+MaxHP;
         //GunAmmo
         Gun playerGun = myPlayer.transform.Find("Pivot/Gun").GetComponentInChildren<Gun>();
-        if (playerGun.gunState == GunState.Reloading)
+        if (playerGun.CurGunState == GunState.Reloading)
             AmmoText.text = "Reloading Gun";
         else
-            AmmoText.text = playerGun._curAmmo.ToString() + " / " + playerGun.getGunStat().ammo.ToString();
+        {
+            if(playerGun.CurGunData == null)
+            {
+                AmmoText.text = "Gun is not Equipped";
+            }
+            else
+            {
+                AmmoText.text = playerGun._curAmmo.ToString() + " / " + playerGun.getGunStat().reload_round.ToString();
+            }
+        }
+           
 
         //Reload
-        if (gun.gunState == GunState.Reloading)
+        if (gun.CurGunState == GunState.Reloading)
             reloadBtn.interactable = false;
         else
             reloadBtn.interactable = true;

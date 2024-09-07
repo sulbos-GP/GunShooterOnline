@@ -33,6 +33,11 @@ public abstract class InteractableObject : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             //플레이어의 상호작용 가능한 오브젝트 리스트에 등록
+            if (Managers.Object.MyPlayer == null)
+            {
+                Debug.Log("myplayer가 없음");
+                return;
+            }
             Managers.Object.MyPlayer.GetComponent<InputController>().interactList.Add(gameObject);
         }
     }
@@ -42,6 +47,11 @@ public abstract class InteractableObject : MonoBehaviour
         if (collision.CompareTag("Player"))
         {
             //플레이어의 상호작용 가능한 오브젝트 리스트에서 제거
+            if(Managers.Object.MyPlayer == null)
+            {
+                Debug.Log("myplayer가 없음");
+                return;
+            }
             Managers.Object.MyPlayer.GetComponent<InputController>().interactList.Remove(gameObject);
         }
     }
