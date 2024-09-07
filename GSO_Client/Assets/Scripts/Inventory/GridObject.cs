@@ -505,7 +505,7 @@ public class GridObject : MonoBehaviour
 
 
     /// <summary>
-    /// 그리드의 크기를 변경 및 스프라이트 재배치
+    /// 가방의 변화로 그리드의 크기를 변경 및 스프라이트 재배치
     /// </summary>
     public void UpdateGridObject(Vector2Int size, double Weight)
     {
@@ -530,7 +530,7 @@ public class GridObject : MonoBehaviour
 
         foreach (ItemObject item in InventoryController.instantItemDic.Values)
         {
-            if(item.backUpParentId != 0)
+            if(item.parentObjId != 0)
             {
                 continue;
             }

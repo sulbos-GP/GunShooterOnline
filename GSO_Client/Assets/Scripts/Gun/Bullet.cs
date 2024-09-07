@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    [SerializeField]
-    private BulletStat _bulletStat;
-
     //Gun에서 생성할때 업데이트
     [HideInInspector]
     public int _shooterId;
@@ -51,6 +48,7 @@ public class Bullet : MonoBehaviour
             Destroy(gameObject);
     }
 
+    /*
     private void BulletMove()
     {
         transform.Translate(_dir.normalized * _bulletStat.speed * Time.deltaTime, Space.World);
@@ -62,7 +60,7 @@ public class Bullet : MonoBehaviour
             Debug.Log($"거리로인한 파괴. 거리 = { _range }");
             Destroy(gameObject); //오브젝트 풀링 활용?
         }
-    }
+    }*/
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
