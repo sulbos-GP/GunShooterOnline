@@ -67,10 +67,10 @@ public class MatchmakerHub : ClientHub
             mMatchUI.OnMatchComplete();
 
             //½ÂÇö
-            //response.host_ip = "113.60.249.123";
+            response.host_ip = "113.60.249.123";
 
             //·ÎÄÃ ¾Ö¹Ä
-            response.host_ip = "10.0.2.2";
+            //response.host_ip = "10.0.2.2";
 
             Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
 

@@ -73,7 +73,7 @@ internal class Managers : MonoBehaviour
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
 
-            s_instance._environment.InitEnviromentSetting(EEnvironmentState.Emulator);
+            s_instance._environment.InitEnviromentSetting(EEnvironmentState.Release);
 
             //s_instance._data.InventorySet();
 
