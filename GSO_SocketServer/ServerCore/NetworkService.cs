@@ -39,13 +39,6 @@ namespace ServerCore
                 return;
             }
 
-            mManager.DisconnectTimeout = 100000;
-            mManager.SimulateLatency = true;
-            if (false == mManager.Start(mEndPoint.Port))
-            {
-                return;
-            }
-
             if (false == OnStart().Result)
             {
                 return;

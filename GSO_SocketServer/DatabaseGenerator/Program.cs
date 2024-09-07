@@ -19,7 +19,7 @@ namespace DatabaseGenerator
 
         private static void Main(string[] args)
         {
-            var json = File.ReadAllText("DatabaseContext.json");
+            var json = File.ReadAllText("../../../DatabaseContext.json");
             var contexts = JsonSerializer.Deserialize<List<Context>>(json);
 
             if (contexts == null)

@@ -14,9 +14,10 @@ namespace DatabaseGenerator
         // {3} LoadDatabaseContext
         // {4} GetDataContext
         public static string context =
-            @"using Server.Database.Data;
-using System.ComponentModel;
+            @"using System.ComponentModel;
 using System.Threading.Tasks;
+using WebCommonLibrary.Models.MasterDB;
+using WebCommonLibrary.Models.GameDB;
 
 namespace Server.Database.Handler
 {{
