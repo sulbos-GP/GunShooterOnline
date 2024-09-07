@@ -79,7 +79,10 @@ public class MatchmakerHub : ClientHub
             //Enter할때 uid 보내주셈
             C_EnterGame c_EnterGame = new C_EnterGame();
             c_EnterGame.Name = "jish";
-            //Managers.Web.credential.uid;
+            c_EnterGame.Credential = new CredentiaInfo()
+            {
+                Uid = Managers.Web.credential.uid
+            };
 
             Managers.Network.Send(c_EnterGame);
             Debug.Log("접속중");

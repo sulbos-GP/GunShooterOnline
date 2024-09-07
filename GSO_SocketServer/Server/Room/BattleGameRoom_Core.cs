@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using Server.Game.Object.Gear;
 using System.Net.Sockets;
+using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.Match;
 
 namespace Server
 {
@@ -20,6 +22,9 @@ namespace Server
         Dictionary<int, Player> _playerDic = new Dictionary<int, Player>();
         Dictionary<int, CreatureObj> _monsterDic = new Dictionary<int, CreatureObj>();
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
+
+        public List<object> Escapes = new List<object>();
+        public Dictionary<int, MatchOutcomeInfo> MatchInfo = new Dictionary<int, MatchOutcomeInfo>();
 
 
         public Map map { get; }
@@ -110,13 +115,16 @@ namespace Server
                     var enterPacket = new S_EnterGame();
                     enterPacket.Player = player.info;
 
+                    MatchInfo.Add(player.UID, new MatchOutcomeInfo());
+
+
                     player.gear = new Gear(player);
                     foreach (PS_GearInfo item in player.gear.GetPartItems(player.Id))
                     {
                         enterPacket.GearInfos.Add(item);
                     }
 
-                    player.inventory = new Inventory(player, player.uid);
+                    player.inventory = new Inventory(player, player.UID);
                     foreach (PS_ItemInfo item in player.inventory.storage.GetItems(player.Id))
                     {
                         enterPacket.ItemInfos.Add(item);
@@ -131,6 +139,7 @@ namespace Server
                     {
                         spawnPacket.Objects.Add(p.info);
                     }
+
 
                     player.Session.Send(spawnPacket);
 

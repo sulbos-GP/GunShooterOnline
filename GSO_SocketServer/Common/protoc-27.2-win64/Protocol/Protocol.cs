@@ -24,8 +24,9 @@ namespace Google.Protobuf.Protocol {
     static ProtocolReflection() {
       byte[] descriptorData = global::System.Convert.FromBase64String(
           string.Concat(
-            "Cg5Qcm90b2NvbC5wcm90bxIIUHJvdG9jb2wiGwoLQ19FbnRlckdhbWUSDAoE",
-            "bmFtZRgBIAEoCSKHAQoLU19FbnRlckdhbWUSJAoGcGxheWVyGAEgASgLMhQu",
+            "Cg5Qcm90b2NvbC5wcm90bxIIUHJvdG9jb2wiSAoLQ19FbnRlckdhbWUSDAoE",
+            "bmFtZRgBIAEoCRIrCgpjcmVkZW50aWFsGAIgASgLMhcuUHJvdG9jb2wuQ3Jl",
+            "ZGVudGlhSW5mbyKHAQoLU19FbnRlckdhbWUSJAoGcGxheWVyGAEgASgLMhQu",
             "UHJvdG9jb2wuT2JqZWN0SW5mbxIoCglpdGVtSW5mb3MYAiADKAsyFS5Qcm90",
             "b2NvbC5QU19JdGVtSW5mbxIoCglnZWFySW5mb3MYAyADKAsyFS5Qcm90b2Nv",
             "bC5QU19HZWFySW5mbyINCgtTX0xlYXZlR2FtZSIwCgdTX1NwYXduEiUKB29i",
@@ -81,53 +82,55 @@ namespace Google.Protobuf.Protocol {
             "AhIRCgloaXRQb2ludFkYByABKAIiLgoKU19FeGl0R2FtZRIQCghwbGF5ZXJJ",
             "ZBgBIAEoBRIOCgZleGl0SWQYAiABKAUiLgoKQ19FeGl0R2FtZRIQCghwbGF5",
             "ZXJJZBgBIAEoBRIOCgZleGl0SWQYAiABKAUiJgoTQ19HYW1lU2VydmVyQ29t",
-            "bWFuZBIPCgdjb21tYW5kGAEgASgFIuYBCgpPYmplY3RJbmZvEhAKCE9iamVj",
+            "bWFuZBIPCgdjb21tYW5kGAEgASgFIvMBCgpPYmplY3RJbmZvEhAKCE9iamVj",
             "dElkGAEgASgFEg8KB293bmVySWQYAiABKAUSDwoHc2tpbGxJZBgDIAEoBRIM",
             "CgRuYW1lGAQgASgJEiwKDHBvc2l0aW9uSW5mbxgFIAEoCzIWLlByb3RvY29s",
             "LlBvc2l0aW9uSW5mbxIkCghzdGF0SW5mbxgGIAEoCzISLlByb3RvY29sLlN0",
             "YXRJbmZvEiIKBXNoYXBlGAcgASgLMhMuUHJvdG9jb2wuU2hhcGVJbmZvEh4K",
-            "A2JveBgIIAEoCzIRLlByb3RvY29sLkJveEluZm8iXgoIU3RhdEluZm8SDQoF",
-            "Y2xhc3MYASABKAUSCgoCaHAYAiABKAUSDQoFbWF4SHAYAyABKAUSEwoLYXR0",
-            "YWNrUmFuZ2UYBCABKAISEwoLYXR0YWNrU3BlZWQYBSABKAIiawoMUG9zaXRp",
-            "b25JbmZvEhUKDWN1cnJlbnRSb29tSWQYASABKAUSDAoEZGlyWBgCIAEoAhIM",
-            "CgRkaXJZGAMgASgCEgwKBHBvc1gYBCABKAISDAoEcG9zWRgFIAEoAhIMCgRy",
-            "b3RaGAYgASgCIi8KB0JveEluZm8SCQoBeBgBIAEoBRIJCgF5GAIgASgFEg4K",
-            "BndlaWdodBgDIAEoAiK8AQoJU2hhcGVJbmZvEicKClNocGFwZVR5cGUYASAB",
-            "KA4yEy5Qcm90b2NvbC5TaGFwZVR5cGUSEgoKQ2VudGVyUG9zWBgCIAEoAhIS",
-            "CgpDZW50ZXJQb3NZGAMgASgCEhEKCVJvYXRhdGlvbhgEIAEoAhIOCgZSYWRp",
-            "dXMYBSABKAISDAoETGVmdBgGIAEoAhIOCgZCb3R0b20YByABKAISDQoFV2lk",
-            "dGgYCCABKAISDgoGSGVpZ2h0GAkgASgCInkKC1BTX0l0ZW1JbmZvEhAKCG9i",
-            "amVjdElkGAEgASgFEg4KBml0ZW1JZBgCIAEoBRIJCgF4GAMgASgFEgkKAXkY",
-            "BCABKAUSDgoGcm90YXRlGAUgASgFEg4KBmFtb3VudBgGIAEoBRISCgppc1Nl",
-            "YXJjaGVkGAcgASgIIlcKC1BTX0dlYXJJbmZvEiMKBHBhcnQYASABKA4yFS5Q",
-            "cm90b2NvbC5QRV9HZWFyUGFydBIjCgRpdGVtGAIgASgLMhUuUHJvdG9jb2wu",
-            "UFNfSXRlbUluZm8qkQQKBU1zZ0lkEhAKDFNfRU5URVJfR0FNRRAAEhAKDFNf",
-            "TEVBVkVfR0FNRRABEgsKB1NfU1BBV04QAhINCglTX0RFU1BBV04QAxIKCgZT",
-            "X01PVkUQBBIKCgZDX01PVkUQBRIPCgtTX0NPTk5FQ1RFRBAGEg8KC1NfQ0hB",
-            "TkdFX0hQEAcSCQoFU19ESUUQCBIQCgxDX0VOVEVSX0dBTUUQCRIUChBDX0xP",
-            "QURfSU5WRU5UT1JZEAoSFAoQU19MT0FEX0lOVkVOVE9SWRALEhUKEUNfQ0xP",
-            "U0VfSU5WRU5UT1JZEA0SFQoRU19DTE9TRV9JTlZFTlRPUlkQDhIQCgxDX01F",
-            "UkdFX0lURU0QDxIQCgxTX01FUkdFX0lURU0QEBIRCg1DX0RFVklERV9JVEVN",
-            "EBESEQoNU19ERVZJREVfSVRFTRASEg8KC0NfTU9WRV9JVEVNEBMSDwoLU19N",
-            "T1ZFX0lURU0QFBIRCg1DX0RFTEVURV9JVEVNEBUSEQoNU19ERUxFVEVfSVRF",
-            "TRAWEhEKDUNfU0VBUkNIX0lURU0QFxIRCg1TX1NFQVJDSF9JVEVNEBgSEwoP",
-            "Q19SQVlDQVNUX1NIT09UEBkSEQoNU19SQVlDQVNUX0hJVBAaEg8KC1NfRVhJ",
-            "VF9HQU1FEBsSDwoLQ19FWElUX0dBTUUQHBIVChBDX1NFUlZFUl9DT01NQU5E",
-            "EJBOKnkKDkdhbWVPYmplY3RUeXBlEg4KCk5PTkVPQkpFQ1QQABIKCgZQTEFZ",
-            "RVIQARILCgdNT05TVEVSEAISDgoKUFJPSkVDVElMRRADEg0KCUlOVkVOREFU",
-            "QRAEEgcKA0JPWBAFEggKBElURU0QBhIMCghFWElUWk9ORRAHKksKCVNoYXBl",
-            "VHlwZRIJCgVTSEFQRRAAEgoKBkNJUkNMRRABEg0KCVJFQ1RBTkdMRRACEgsK",
-            "B1BPTFlHT04QAxILCgdBUkNQT0xZEAQqUwoISXRlbVR5cGUSCgoGV0VBUE9O",
-            "EAASDQoJREVGRU5TSVZFEAESBwoDQkFHEAISDAoIUkVDT1ZFUlkQAxIKCgZC",
-            "VUxMRVQQBBIJCgVTUE9JTBAFKoMBCgtQRV9HZWFyUGFydBIICgROT05FEAAS",
-            "DgoKTWFpbldlYXBvbhABEg0KCVN1YldlYXBvbhACEgkKBUFybW9yEAMSDAoI",
-            "QmFja3BhY2sQBBIPCgtQb2NrZXRGaXJzdBAFEhAKDFBvY2tldFNlY29uZBAG",
-            "Eg8KC1BvY2tldFRoaXJkEAdCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2Nv",
-            "bGIGcHJvdG8z"));
+            "A2JveBgIIAEoCzIRLlByb3RvY29sLkJveEluZm8SCwoDdWlkGAkgASgFIl4K",
+            "CFN0YXRJbmZvEg0KBWNsYXNzGAEgASgFEgoKAmhwGAIgASgFEg0KBW1heEhw",
+            "GAMgASgFEhMKC2F0dGFja1JhbmdlGAQgASgCEhMKC2F0dGFja1NwZWVkGAUg",
+            "ASgCImsKDFBvc2l0aW9uSW5mbxIVCg1jdXJyZW50Um9vbUlkGAEgASgFEgwK",
+            "BGRpclgYAiABKAISDAoEZGlyWRgDIAEoAhIMCgRwb3NYGAQgASgCEgwKBHBv",
+            "c1kYBSABKAISDAoEcm90WhgGIAEoAiIvCgdCb3hJbmZvEgkKAXgYASABKAUS",
+            "CQoBeRgCIAEoBRIOCgZ3ZWlnaHQYAyABKAIivAEKCVNoYXBlSW5mbxInCgpT",
+            "aHBhcGVUeXBlGAEgASgOMhMuUHJvdG9jb2wuU2hhcGVUeXBlEhIKCkNlbnRl",
+            "clBvc1gYAiABKAISEgoKQ2VudGVyUG9zWRgDIAEoAhIRCglSb2F0YXRpb24Y",
+            "BCABKAISDgoGUmFkaXVzGAUgASgCEgwKBExlZnQYBiABKAISDgoGQm90dG9t",
+            "GAcgASgCEg0KBVdpZHRoGAggASgCEg4KBkhlaWdodBgJIAEoAiJ5CgtQU19J",
+            "dGVtSW5mbxIQCghvYmplY3RJZBgBIAEoBRIOCgZpdGVtSWQYAiABKAUSCQoB",
+            "eBgDIAEoBRIJCgF5GAQgASgFEg4KBnJvdGF0ZRgFIAEoBRIOCgZhbW91bnQY",
+            "BiABKAUSEgoKaXNTZWFyY2hlZBgHIAEoCCJXCgtQU19HZWFySW5mbxIjCgRw",
+            "YXJ0GAEgASgOMhUuUHJvdG9jb2wuUEVfR2VhclBhcnQSIwoEaXRlbRgCIAEo",
+            "CzIVLlByb3RvY29sLlBTX0l0ZW1JbmZvImkKDUNyZWRlbnRpYUluZm8SCwoD",
+            "dWlkGAEgASgFEhQKDGFjY2Vzc190b2tlbhgCIAEoCRISCgpleHBpcmVzX2lu",
+            "GAMgASgDEg0KBXNjb3BlGAQgASgJEhIKCnRva2VuX3R5cGUYBSABKAkqkQQK",
+            "BU1zZ0lkEhAKDFNfRU5URVJfR0FNRRAAEhAKDFNfTEVBVkVfR0FNRRABEgsK",
+            "B1NfU1BBV04QAhINCglTX0RFU1BBV04QAxIKCgZTX01PVkUQBBIKCgZDX01P",
+            "VkUQBRIPCgtTX0NPTk5FQ1RFRBAGEg8KC1NfQ0hBTkdFX0hQEAcSCQoFU19E",
+            "SUUQCBIQCgxDX0VOVEVSX0dBTUUQCRIUChBDX0xPQURfSU5WRU5UT1JZEAoS",
+            "FAoQU19MT0FEX0lOVkVOVE9SWRALEhUKEUNfQ0xPU0VfSU5WRU5UT1JZEA0S",
+            "FQoRU19DTE9TRV9JTlZFTlRPUlkQDhIQCgxDX01FUkdFX0lURU0QDxIQCgxT",
+            "X01FUkdFX0lURU0QEBIRCg1DX0RFVklERV9JVEVNEBESEQoNU19ERVZJREVf",
+            "SVRFTRASEg8KC0NfTU9WRV9JVEVNEBMSDwoLU19NT1ZFX0lURU0QFBIRCg1D",
+            "X0RFTEVURV9JVEVNEBUSEQoNU19ERUxFVEVfSVRFTRAWEhEKDUNfU0VBUkNI",
+            "X0lURU0QFxIRCg1TX1NFQVJDSF9JVEVNEBgSEwoPQ19SQVlDQVNUX1NIT09U",
+            "EBkSEQoNU19SQVlDQVNUX0hJVBAaEg8KC1NfRVhJVF9HQU1FEBsSDwoLQ19F",
+            "WElUX0dBTUUQHBIVChBDX1NFUlZFUl9DT01NQU5EEJBOKnkKDkdhbWVPYmpl",
+            "Y3RUeXBlEg4KCk5PTkVPQkpFQ1QQABIKCgZQTEFZRVIQARILCgdNT05TVEVS",
+            "EAISDgoKUFJPSkVDVElMRRADEg0KCUlOVkVOREFUQRAEEgcKA0JPWBAFEggK",
+            "BElURU0QBhIMCghFWElUWk9ORRAHKksKCVNoYXBlVHlwZRIJCgVTSEFQRRAA",
+            "EgoKBkNJUkNMRRABEg0KCVJFQ1RBTkdMRRACEgsKB1BPTFlHT04QAxILCgdB",
+            "UkNQT0xZEAQqUwoISXRlbVR5cGUSCgoGV0VBUE9OEAASDQoJREVGRU5TSVZF",
+            "EAESBwoDQkFHEAISDAoIUkVDT1ZFUlkQAxIKCgZCVUxMRVQQBBIJCgVTUE9J",
+            "TBAFKoMBCgtQRV9HZWFyUGFydBIICgROT05FEAASDgoKTWFpbldlYXBvbhAB",
+            "Eg0KCVN1YldlYXBvbhACEgkKBUFybW9yEAMSDAoIQmFja3BhY2sQBBIPCgtQ",
+            "b2NrZXRGaXJzdBAFEhAKDFBvY2tldFNlY29uZBAGEg8KC1BvY2tldFRoaXJk",
+            "EAdCG6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), typeof(global::Google.Protobuf.Protocol.ItemType), typeof(global::Google.Protobuf.Protocol.PE_GearPart), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EnterGame), global::Google.Protobuf.Protocol.C_EnterGame.Parser, new[]{ "Name" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_EnterGame), global::Google.Protobuf.Protocol.C_EnterGame.Parser, new[]{ "Name", "Credential" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_EnterGame), global::Google.Protobuf.Protocol.S_EnterGame.Parser, new[]{ "Player", "ItemInfos", "GearInfos" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_LeaveGame), global::Google.Protobuf.Protocol.S_LeaveGame.Parser, null, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_Spawn), global::Google.Protobuf.Protocol.S_Spawn.Parser, new[]{ "Objects" }, null, null, null, null),
@@ -156,13 +159,14 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ExitGame), global::Google.Protobuf.Protocol.S_ExitGame.Parser, new[]{ "PlayerId", "ExitId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_ExitGame), global::Google.Protobuf.Protocol.C_ExitGame.Parser, new[]{ "PlayerId", "ExitId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_GameServerCommand), global::Google.Protobuf.Protocol.C_GameServerCommand.Parser, new[]{ "Command" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ObjectInfo), global::Google.Protobuf.Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "OwnerId", "SkillId", "Name", "PositionInfo", "StatInfo", "Shape", "Box" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ObjectInfo), global::Google.Protobuf.Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "OwnerId", "SkillId", "Name", "PositionInfo", "StatInfo", "Shape", "Box", "Uid" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.StatInfo), global::Google.Protobuf.Protocol.StatInfo.Parser, new[]{ "Class", "Hp", "MaxHp", "AttackRange", "AttackSpeed" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PositionInfo), global::Google.Protobuf.Protocol.PositionInfo.Parser, new[]{ "CurrentRoomId", "DirX", "DirY", "PosX", "PosY", "RotZ" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.BoxInfo), global::Google.Protobuf.Protocol.BoxInfo.Parser, new[]{ "X", "Y", "Weight" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ShapeInfo), global::Google.Protobuf.Protocol.ShapeInfo.Parser, new[]{ "ShpapeType", "CenterPosX", "CenterPosY", "Roatation", "Radius", "Left", "Bottom", "Width", "Height" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PS_ItemInfo), global::Google.Protobuf.Protocol.PS_ItemInfo.Parser, new[]{ "ObjectId", "ItemId", "X", "Y", "Rotate", "Amount", "IsSearched" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PS_GearInfo), global::Google.Protobuf.Protocol.PS_GearInfo.Parser, new[]{ "Part", "Item" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.PS_GearInfo), global::Google.Protobuf.Protocol.PS_GearInfo.Parser, new[]{ "Part", "Item" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.CredentiaInfo), global::Google.Protobuf.Protocol.CredentiaInfo.Parser, new[]{ "Uid", "AccessToken", "ExpiresIn", "Scope", "TokenType" }, null, null, null, null)
           }));
     }
     #endregion
@@ -288,6 +292,7 @@ namespace Google.Protobuf.Protocol {
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public C_EnterGame(C_EnterGame other) : this() {
       name_ = other.name_;
+      credential_ = other.credential_ != null ? other.credential_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -309,6 +314,18 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
+    /// <summary>Field number for the "credential" field.</summary>
+    public const int CredentialFieldNumber = 2;
+    private global::Google.Protobuf.Protocol.CredentiaInfo credential_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.Protocol.CredentiaInfo Credential {
+      get { return credential_; }
+      set {
+        credential_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -325,6 +342,7 @@ namespace Google.Protobuf.Protocol {
         return true;
       }
       if (Name != other.Name) return false;
+      if (!object.Equals(Credential, other.Credential)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -333,6 +351,7 @@ namespace Google.Protobuf.Protocol {
     public override int GetHashCode() {
       int hash = 1;
       if (Name.Length != 0) hash ^= Name.GetHashCode();
+      if (credential_ != null) hash ^= Credential.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -355,6 +374,10 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(10);
         output.WriteString(Name);
       }
+      if (credential_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Credential);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -369,6 +392,10 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(10);
         output.WriteString(Name);
       }
+      if (credential_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Credential);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -381,6 +408,9 @@ namespace Google.Protobuf.Protocol {
       int size = 0;
       if (Name.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Name);
+      }
+      if (credential_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Credential);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -396,6 +426,12 @@ namespace Google.Protobuf.Protocol {
       }
       if (other.Name.Length != 0) {
         Name = other.Name;
+      }
+      if (other.credential_ != null) {
+        if (credential_ == null) {
+          Credential = new global::Google.Protobuf.Protocol.CredentiaInfo();
+        }
+        Credential.MergeFrom(other.Credential);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -420,6 +456,13 @@ namespace Google.Protobuf.Protocol {
             Name = input.ReadString();
             break;
           }
+          case 18: {
+            if (credential_ == null) {
+              Credential = new global::Google.Protobuf.Protocol.CredentiaInfo();
+            }
+            input.ReadMessage(Credential);
+            break;
+          }
         }
       }
     #endif
@@ -441,6 +484,13 @@ namespace Google.Protobuf.Protocol {
             break;
           case 10: {
             Name = input.ReadString();
+            break;
+          }
+          case 18: {
+            if (credential_ == null) {
+              Credential = new global::Google.Protobuf.Protocol.CredentiaInfo();
+            }
+            input.ReadMessage(Credential);
             break;
           }
         }
@@ -8207,6 +8257,7 @@ namespace Google.Protobuf.Protocol {
       statInfo_ = other.statInfo_ != null ? other.statInfo_.Clone() : null;
       shape_ = other.shape_ != null ? other.shape_.Clone() : null;
       box_ = other.box_ != null ? other.box_.Clone() : null;
+      uid_ = other.uid_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -8306,15 +8357,27 @@ namespace Google.Protobuf.Protocol {
     /// <summary>Field number for the "box" field.</summary>
     public const int BoxFieldNumber = 8;
     private global::Google.Protobuf.Protocol.BoxInfo box_;
-    /// <summary>
-    ///CreatureState state = 9;
-    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public global::Google.Protobuf.Protocol.BoxInfo Box {
       get { return box_; }
       set {
         box_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "uid" field.</summary>
+    public const int UidFieldNumber = 9;
+    private int uid_;
+    /// <summary>
+    ///CreatureState state = 9;
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Uid {
+      get { return uid_; }
+      set {
+        uid_ = value;
       }
     }
 
@@ -8341,6 +8404,7 @@ namespace Google.Protobuf.Protocol {
       if (!object.Equals(StatInfo, other.StatInfo)) return false;
       if (!object.Equals(Shape, other.Shape)) return false;
       if (!object.Equals(Box, other.Box)) return false;
+      if (Uid != other.Uid) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -8356,6 +8420,7 @@ namespace Google.Protobuf.Protocol {
       if (statInfo_ != null) hash ^= StatInfo.GetHashCode();
       if (shape_ != null) hash ^= Shape.GetHashCode();
       if (box_ != null) hash ^= Box.GetHashCode();
+      if (Uid != 0) hash ^= Uid.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -8406,6 +8471,10 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(66);
         output.WriteMessage(Box);
       }
+      if (Uid != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(Uid);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -8448,6 +8517,10 @@ namespace Google.Protobuf.Protocol {
         output.WriteRawTag(66);
         output.WriteMessage(Box);
       }
+      if (Uid != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(Uid);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -8481,6 +8554,9 @@ namespace Google.Protobuf.Protocol {
       }
       if (box_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Box);
+      }
+      if (Uid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Uid);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -8529,6 +8605,9 @@ namespace Google.Protobuf.Protocol {
           Box = new global::Google.Protobuf.Protocol.BoxInfo();
         }
         Box.MergeFrom(other.Box);
+      }
+      if (other.Uid != 0) {
+        Uid = other.Uid;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -8593,6 +8672,10 @@ namespace Google.Protobuf.Protocol {
             input.ReadMessage(Box);
             break;
           }
+          case 72: {
+            Uid = input.ReadInt32();
+            break;
+          }
         }
       }
     #endif
@@ -8654,6 +8737,10 @@ namespace Google.Protobuf.Protocol {
               Box = new global::Google.Protobuf.Protocol.BoxInfo();
             }
             input.ReadMessage(Box);
+            break;
+          }
+          case 72: {
+            Uid = input.ReadInt32();
             break;
           }
         }
@@ -10857,6 +10944,352 @@ namespace Google.Protobuf.Protocol {
               Item = new global::Google.Protobuf.Protocol.PS_ItemInfo();
             }
             input.ReadMessage(Item);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class CredentiaInfo : pb::IMessage<CredentiaInfo>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<CredentiaInfo> _parser = new pb::MessageParser<CredentiaInfo>(() => new CredentiaInfo());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<CredentiaInfo> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Google.Protobuf.Protocol.ProtocolReflection.Descriptor.MessageTypes[36]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public CredentiaInfo() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public CredentiaInfo(CredentiaInfo other) : this() {
+      uid_ = other.uid_;
+      accessToken_ = other.accessToken_;
+      expiresIn_ = other.expiresIn_;
+      scope_ = other.scope_;
+      tokenType_ = other.tokenType_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public CredentiaInfo Clone() {
+      return new CredentiaInfo(this);
+    }
+
+    /// <summary>Field number for the "uid" field.</summary>
+    public const int UidFieldNumber = 1;
+    private int uid_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Uid {
+      get { return uid_; }
+      set {
+        uid_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "access_token" field.</summary>
+    public const int AccessTokenFieldNumber = 2;
+    private string accessToken_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string AccessToken {
+      get { return accessToken_; }
+      set {
+        accessToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "expires_in" field.</summary>
+    public const int ExpiresInFieldNumber = 3;
+    private long expiresIn_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public long ExpiresIn {
+      get { return expiresIn_; }
+      set {
+        expiresIn_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "scope" field.</summary>
+    public const int ScopeFieldNumber = 4;
+    private string scope_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Scope {
+      get { return scope_; }
+      set {
+        scope_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "token_type" field.</summary>
+    public const int TokenTypeFieldNumber = 5;
+    private string tokenType_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string TokenType {
+      get { return tokenType_; }
+      set {
+        tokenType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as CredentiaInfo);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(CredentiaInfo other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Uid != other.Uid) return false;
+      if (AccessToken != other.AccessToken) return false;
+      if (ExpiresIn != other.ExpiresIn) return false;
+      if (Scope != other.Scope) return false;
+      if (TokenType != other.TokenType) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Uid != 0) hash ^= Uid.GetHashCode();
+      if (AccessToken.Length != 0) hash ^= AccessToken.GetHashCode();
+      if (ExpiresIn != 0L) hash ^= ExpiresIn.GetHashCode();
+      if (Scope.Length != 0) hash ^= Scope.GetHashCode();
+      if (TokenType.Length != 0) hash ^= TokenType.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Uid != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Uid);
+      }
+      if (AccessToken.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(AccessToken);
+      }
+      if (ExpiresIn != 0L) {
+        output.WriteRawTag(24);
+        output.WriteInt64(ExpiresIn);
+      }
+      if (Scope.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Scope);
+      }
+      if (TokenType.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(TokenType);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Uid != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(Uid);
+      }
+      if (AccessToken.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(AccessToken);
+      }
+      if (ExpiresIn != 0L) {
+        output.WriteRawTag(24);
+        output.WriteInt64(ExpiresIn);
+      }
+      if (Scope.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Scope);
+      }
+      if (TokenType.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(TokenType);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Uid != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Uid);
+      }
+      if (AccessToken.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(AccessToken);
+      }
+      if (ExpiresIn != 0L) {
+        size += 1 + pb::CodedOutputStream.ComputeInt64Size(ExpiresIn);
+      }
+      if (Scope.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Scope);
+      }
+      if (TokenType.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TokenType);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(CredentiaInfo other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Uid != 0) {
+        Uid = other.Uid;
+      }
+      if (other.AccessToken.Length != 0) {
+        AccessToken = other.AccessToken;
+      }
+      if (other.ExpiresIn != 0L) {
+        ExpiresIn = other.ExpiresIn;
+      }
+      if (other.Scope.Length != 0) {
+        Scope = other.Scope;
+      }
+      if (other.TokenType.Length != 0) {
+        TokenType = other.TokenType;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Uid = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            AccessToken = input.ReadString();
+            break;
+          }
+          case 24: {
+            ExpiresIn = input.ReadInt64();
+            break;
+          }
+          case 34: {
+            Scope = input.ReadString();
+            break;
+          }
+          case 42: {
+            TokenType = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Uid = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            AccessToken = input.ReadString();
+            break;
+          }
+          case 24: {
+            ExpiresIn = input.ReadInt64();
+            break;
+          }
+          case 34: {
+            Scope = input.ReadString();
+            break;
+          }
+          case 42: {
+            TokenType = input.ReadString();
             break;
           }
         }

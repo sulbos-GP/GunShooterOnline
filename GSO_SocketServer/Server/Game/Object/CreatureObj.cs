@@ -2,6 +2,7 @@
 using System.Numerics;
 using Google.Protobuf.Protocol;
 using ServerCore;
+using WebCommonLibrary.Models.GameDB;
 
 namespace Server.Game;
 
@@ -33,15 +34,23 @@ public class CreatureObj : GameObject
         gameRoom.BroadCast(diePacket);
 
         var room = gameRoom;
-        //room.Push(room.LeaveGame, Id);
+        room.Push(room.LeaveGame, Id);
 
-        room.Push(new Job(() =>
+        
+
+        MatchOutcomeInfo myInfo;
+        if (gameRoom.MatchInfo.TryGetValue(UID, out myInfo) == true)
+        {
+            myInfo.death += 1;
+        }
+
+
+        /*room.Push(new Job(() =>
         {
             stat.Hp = stat.MaxHp;
             //PosInfo.State = CreatureState.Idle;
         }));
-
-        room.PushAfter(10, room.EnterGame, this);
+        room.PushAfter(10, room.EnterGame, this);*/
     }
    
 
@@ -92,6 +101,16 @@ public class CreatureObj : GameObject
 
         Console.WriteLine($" attacker :{rootAttacker.Id} Damage : {damage}  stat.Hp : {stat.Hp}");
 
+
+        MatchOutcomeInfo attackerInfo;
+        if(gameRoom.MatchInfo.TryGetValue(attacker.UID, out attackerInfo) == true)
+        {
+            attackerInfo.damage += damage;
+        }
+
+
+
+
         var ChangePacket = new S_ChangeHp();
         ChangePacket.ObjectId = Id;
         ChangePacket.Hp = stat.Hp;
@@ -99,7 +118,14 @@ public class CreatureObj : GameObject
 
         if (stat.Hp <= 0)
         {
-            stat.Hp = 0;
+            if (attackerInfo != null)
+            {
+                attackerInfo.kills += 1;
+            }
+           
+
+
+                stat.Hp = 0;
             OnDead(rootAttacker);
         }
     }
