@@ -132,7 +132,7 @@ GameObject:
   m_Component:
   - component: {fileID: 46020099}
   m_Layer: 5
-  m_Name: QuickSlot
+  m_Name: WQuickSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -434,7 +434,7 @@ GameObject:
   - component: {fileID: 159599678}
   - component: {fileID: 159599677}
   m_Layer: 5
-  m_Name: QuickSlot
+  m_Name: IQuickSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3672,11 +3672,11 @@ RectTransform:
   - {fileID: 188158324}
   - {fileID: 196267536}
   - {fileID: 46020099}
+  - {fileID: 159599676}
   - {fileID: 1251449010}
   - {fileID: 664250194}
   - {fileID: 870652769}
   - {fileID: 1156740449}
-  - {fileID: 159599676}
   - {fileID: 4133662079883581554}
   - {fileID: 6402864669946907678}
   - {fileID: 1750997233}

@@ -37,6 +37,19 @@ public class QuickSlot : MonoBehaviour
         Sprite itemSprite = ItemObject.FindItemSprtie(item);
         itemImage.sprite = itemSprite;
         itemAmount.text = item.amount.ToString();
+
+        itemData.OnAmountChanged += UpdateItemAmount;
+    }
+
+    private void UpdateItemAmount(int newAmount)
+    {
+        Debug.Log("Äü½½·Ô ¾ç º¯°æ");
+        itemAmount.text = newAmount.ToString();
+        
+        if (newAmount <= 0)
+        {
+            ResetSlot();
+        }
     }
 
     /// <summary>
@@ -44,6 +57,9 @@ public class QuickSlot : MonoBehaviour
     /// </summary>
     public void ResetSlot()
     {
+        if (itemData != null) {
+            itemData.OnAmountChanged -= UpdateItemAmount;
+        }
         itemData = null;
         GetComponent<Button>().interactable = false; 
         itemImage.sprite = defaultSprite;
