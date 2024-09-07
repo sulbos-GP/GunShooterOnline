@@ -38,6 +38,7 @@ enum MsgId{
   S_EXIT_GAME = 27;
   C_EXIT_GAME = 28;
 
+  C_SERVER_COMMAND = 10000; //수정해야하면 말점
 
 }
 
@@ -95,6 +96,7 @@ enum CreatureState{
 //--------------- message --------------------
 message C_EnterGame{                                //9
     string name = 1;
+    CredentiaInfo credential = 2;
 }
 
 message S_EnterGame{                       //0
@@ -314,8 +316,16 @@ message C_ExitGame{   //19
    int32 exitId = 2;
 }
 
+////////////////////////////////////////////
+//                                        //
+//                COMMAND                 //
+//                                        //
+////////////////////////////////////////////
 
-
+message C_GameServerCommand
+{   
+   int32 command = 1;
+}
 
 //--------------- END message --------------------
 
@@ -329,6 +339,7 @@ message ObjectInfo{
     StatInfo statInfo = 6;
     ShapeInfo shape = 7;
     BoxInfo box = 8;
+    int32 uid = 9;
     //CreatureState state = 9;
 }
 
@@ -393,5 +404,15 @@ message PS_GearInfo{
     PE_GearPart part                        = 1;        // 장비 아이템 번호
     PS_ItemInfo item                        = 2;        // 아이템 정보
 }
+
+
+message CredentiaInfo{
+    int32 uid = 1;
+    string access_token = 2;
+    int64 expires_in = 3;
+    string scope = 4;
+    string token_type = 5;
+}
+
 
 //--------------- END INFO ----------------

@@ -98,7 +98,7 @@ namespace Server.Game.Object.Gear
         {
             try
             {
-                IEnumerable<DB_GearUnit> gears = await DatabaseHandler.GameDB.LoadGear(owner.uid);
+                IEnumerable<DB_GearUnit> gears = await DatabaseHandler.GameDB.LoadGear(owner.UID);
 
                 if (gears == null)
                 {
@@ -150,7 +150,7 @@ namespace Server.Game.Object.Gear
                 item.UnitStorageId = storage_id;
             }
 
-            int ret = await database.InsertGear(owner.uid, item, ConvertPartToString(part), transaction);
+            int ret = await database.InsertGear(owner.UID, item, ConvertPartToString(part), transaction);
             if (ret == 0)
             {
                 throw new Exception($"장비[{part}]에서 아이템을 삽입하지 못함");
@@ -166,7 +166,7 @@ namespace Server.Game.Object.Gear
                 await database.DeleteStorage(item.UnitStorageId, transaction);
             }
 
-            int ret = await database.DeleteGear(owner.uid, item, ConvertPartToString(part), transaction);
+            int ret = await database.DeleteGear(owner.UID, item, ConvertPartToString(part), transaction);
             if (ret == 0)
             {
                 throw new Exception($"장비[{part}]에서 아이템을 삭제하지 못함");
@@ -182,7 +182,7 @@ namespace Server.Game.Object.Gear
                 throw new Exception("인벤토리에서 아이템 업데이트 안됨");
             }
 
-            ret = await database.UpdateGear(owner.uid, oldItem, newItem, ConvertPartToString(part), transaction);
+            ret = await database.UpdateGear(owner.UID, oldItem, newItem, ConvertPartToString(part), transaction);
             if (ret == 0)
             {
                 throw new Exception("장비에서 아이템 업데이트 안됨");

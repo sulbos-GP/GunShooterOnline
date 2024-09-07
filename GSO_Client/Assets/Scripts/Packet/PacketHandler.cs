@@ -666,7 +666,12 @@ internal class PacketHandler
         Managers.Object.DebugDics();
     }
 
-    
+    internal static void S_DevideItemHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
+
+
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {

@@ -1,10 +1,11 @@
-﻿using WebCommonLibrary.Models.Match;
+﻿using System.Collections.Generic;
+using WebCommonLibrary.Models.Match;
 
 namespace WebCommonLibrary.DTO.Matchmaker
 {
     public class FetchMatchReq
     {
-
+        public List<int>? players { get; set; } = null;
     }
 
     public class FetchMatchRes : ErrorCodeDTO
@@ -12,21 +13,14 @@ namespace WebCommonLibrary.DTO.Matchmaker
         public MatchProfile? match_profile { get; set; } = null;
     }
 
-    public class RequestReadyMatchReq
+    public class DispatchMatchPlayerReq
     {
-        public string container_id { get; set; } = string.Empty;
+
     }
 
-    public class RequestReadyMatchRes : ErrorCodeDTO
+    public class DispatchMatchPlayerRes : ErrorCodeDTO
     {
+
     }
 
-    public class ShutdownMatchReq
-    {
-        public string container_id { get; set; } = string.Empty;
-    }
-
-    public class ShutdownMatchRes : ErrorCodeDTO
-    {
-    }
 }

@@ -27,5 +27,7 @@ WORKDIR /app
 # Map data 추가 - 모든 .txt 파일 복사
 COPY ./MapData/*.txt /app/MapData/
 
+COPY ./Server/app/WebCommonLibrary.dll /app/
+
 COPY --from=publish /app/publish .
 ENTRYPOINT ["dotnet", "Server.dll"]

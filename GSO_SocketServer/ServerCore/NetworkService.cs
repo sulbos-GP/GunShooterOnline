@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ServerCore
 {
@@ -28,8 +29,8 @@ namespace ServerCore
 
         }
 
-        protected abstract bool OnStart();
-        protected abstract bool OnStop();
+        protected abstract Task<bool> OnStart();
+        protected abstract Task<bool> OnStop();
 
         public void Start()
         {
@@ -38,13 +39,19 @@ namespace ServerCore
                 return;
             }
 
-            if (false == OnStart())
+            mManager.DisconnectTimeout = 100000;
+            mManager.SimulateLatency = true;
+            if (false == mManager.Start(mEndPoint.Port))
             {
                 return;
             }
 
-            mCoreWorkThread.Start();
-            mGameLogicTimer.Start();
+            if (false == OnStart().Result)
+            {
+                return;
+            }
+
+
         }
 
         public void Stop()
@@ -55,7 +62,7 @@ namespace ServerCore
                 return;
             }
 
-            if (false == OnStop())
+            if (false == OnStop().Result)
             {
                 return;
             }
@@ -132,31 +139,8 @@ namespace ServerCore
             mMaxChannelNumber = number;
         }
 
-        protected override bool OnStart()
-        {
-
-            if(mUseChannel == true)
-            {
-
-            }
-
-            mManager.DisconnectTimeout = 100000;
-            mManager.SimulateLatency = true;
-
-
-            if (false == mManager.Start(mEndPoint.Port))
-            {
-                return false;
-            }
-
-
-            return true;
-        }
-
-        protected override bool OnStop()
-        {
-            return true;
-        }
+        protected override Task<bool> OnStart() { return Task.FromResult(false); }
+        protected override Task<bool> OnStop() { return Task.FromResult(false); }
 
         public void OnLogicUpdate()
         {
@@ -186,25 +170,25 @@ namespace ServerCore
             mAcceptKey = acceptKey;
         }
 
-        protected override bool OnStart()
+        protected override Task<bool> OnStart()
         {
             if(false == mManager.Start())
             {
-                return false;
+                return Task.FromResult(false);
             }
 
             NetPeer peer = mManager.Connect(mEndPoint, mAcceptKey);
             if (peer == null)
             {
-                return false;
+                return Task.FromResult(true);
             }
 
-            return true;
+            return Task.FromResult(true);
         }
 
-        protected override bool OnStop()
+        protected override Task<bool> OnStop()
         {
-            return true;
+            return Task.FromResult(true);
         }
     }
 }
