@@ -144,9 +144,8 @@ public class ItemObject : MonoBehaviour
         itemSprite = FindItemSprtie(itemData);
         isOnSearching = false;
         ItemAmount = itemData.amount;
-        
 
-        //조회플레이어 리스트에 포함된 플레이어 여부에 따른 설정
+        //클라 입장에서 이미 조회된 데이터라면 해당 아이템의 이미지로 아니면 숨김 이미지로
         if (itemData.isSearched == false)
         {
             imageUI.sprite = hideSprite;
@@ -161,14 +160,14 @@ public class ItemObject : MonoBehaviour
         //아이템 오브젝트의 초기 크기를 지정
         //아이템의 rotate가 0일때로 먼저 생성하고 그 후에 rotate로 변경
         Vector2 size = new Vector2();
-        size.X = itemData.width * GridObject.WidthOfTile;
+        size.X = itemData.width * GridObject.WidthOfTile; //그리드 1칸의 크기 * 높이,너비
         size.Y = itemData.height * GridObject.HeightOfTile;
         itemRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
         imageUI.GetComponent<RectTransform>().sizeDelta = itemRect.sizeDelta;
 
         Rotate(itemData.rotate);
 
-        //아이템의 위치를 설정
+        //아이템의 위치를 설정. 현재 앵커가 좌상단 기준임
         itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile + 50, itemData.height * GridObject.HeightOfTile - 50);
     }
 
