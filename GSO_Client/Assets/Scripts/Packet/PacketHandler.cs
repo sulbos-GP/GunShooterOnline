@@ -1,6 +1,5 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
-using Mono.Cecil;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using ServerCore;
@@ -400,7 +399,7 @@ internal class PacketHandler
             if (packet.DestinationObjectId > 0 && packet.DestinationObjectId <= 7)
             {
                 //도착지점이 장착칸 -> 해당 아이템을 장착칸에 장착
-                if (!destinationEquip.EquipItem(targetItem))
+                if (!destinationEquip.EquipItem(targetItem)) //장착 실패시 원위치로
                 {
                     invenInstance.UndoSlot(targetItem);
                     invenInstance.UndoItem(targetItem);

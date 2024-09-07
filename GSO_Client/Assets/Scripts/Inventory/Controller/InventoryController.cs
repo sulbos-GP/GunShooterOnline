@@ -20,21 +20,33 @@ public partial class InventoryController : MonoBehaviour
     public static InventoryController invenInstance;
     public static Dictionary<int, EquipSlot> equipSlotDic = new Dictionary<int, EquipSlot>();
     public static Dictionary<int, ItemObject> instantItemDic = new Dictionary<int, ItemObject>();
+    /// <summary>
+    /// 해당 아이디가 장착칸의 아이디인지
+    /// </summary>
     public static bool IsEquipSlot(int objectId)
     {
         return objectId > 0 && objectId <= 7;
     }
 
+    /// <summary>
+    /// 해당 아이디가 플레이어의 아이디인지
+    /// </summary>
     public static bool IsPlayerSlot(int objectId)
     {
         return !(objectId > 0 && objectId <= 7) && objectId == 0;
     }
 
+    /// <summary>
+    /// 해당 아이디가 나머지(장비칸, 플레이어 제외)의 아이디인지
+    /// </summary>
     public static bool IsOtherSlot(int objectId)
     {
         return !(objectId > 0 && objectId <= 7) && objectId != 0;
     }
 
+    /// <summary>
+    /// 플레이어 인벤의 무게를 업데이트
+    /// </summary>
     public static void UpdatePlayerWeight()
     {
         if (invenInstance.playerInvenUI.instantGrid == null)
@@ -71,8 +83,12 @@ public partial class InventoryController : MonoBehaviour
 
             selectedRect = isItemSelected ? value.GetComponent<RectTransform>() : null;
 
-            if (!isItemSelected)
+            if (!isItemSelected) //아이템을 배치할때 플레이어의 인벤토리 무게 업데이트
             {
+                if(playerInvenUI.instantGrid == null)
+                {
+                    return;
+                }
                 playerInvenUI.weightText.text = $"WEIGHT \n{playerInvenUI.instantGrid.GridWeight} / {playerInvenUI.instantGrid.limitWeight}";
                 playerInvenUI.weightText.color = Color.white;
             }
@@ -178,6 +194,7 @@ public partial class InventoryController : MonoBehaviour
 
         SetEquipSlot();
 
+        invenHighlight = GetComponent<InvenHighLight>();
         Button inventoryBtn = GameObject.Find("InventoryBtn").GetComponent<Button>();
         if (inventoryBtn == null) { Debug.Log("인벤토리 버튼이 없음"); }
 
@@ -185,27 +202,16 @@ public partial class InventoryController : MonoBehaviour
         inventoryBtn.onClick.AddListener(InvenBtn);
         rotateBtn.onClick.RemoveAllListeners();
         rotateBtn.onClick.AddListener(RotateBtn);
-
-        invenHighlight = GetComponent<InvenHighLight>();
     }
 
-    private void SetEquipSlot()
-    {
-        Transform EquipSector = inventoryUI.transform.GetChild(0);
+    
 
-        for (int i = 0; i < EquipSector.childCount; i++) {
-            if (EquipSector.GetChild(i).GetComponent<EquipSlot>() == null)
-            {
-                continue;
-            }
-            EquipSlot equip = EquipSector.GetChild(i).GetComponent<EquipSlot>();
-            equipSlotDic.Add(i + 1, equip);
-            equip.Init();
-        }
-    }
+    
 
     private void OnDisable()
     {
+        instantItemDic.Clear();
+        equipSlotDic.Clear();
         ResetSelection();
     }
 
@@ -241,6 +247,22 @@ public partial class InventoryController : MonoBehaviour
         foreach (ItemObject item in instantItemDic.Values)
         {
             Debug.Log("Key: " + item.itemData.objectId + ", Value: " + item.itemData.item_name);
+        }
+    }
+
+    private void SetEquipSlot()
+    {
+        Transform EquipSector = inventoryUI.transform.GetChild(0);
+
+        for (int i = 0; i < EquipSector.childCount; i++)
+        {
+            if (EquipSector.GetChild(i).GetComponent<EquipSlot>() == null)
+            {
+                continue;
+            }
+            EquipSlot equip = EquipSector.GetChild(i).GetComponent<EquipSlot>();
+            equipSlotDic.Add(i + 1, equip);
+            equip.Init();
         }
     }
 

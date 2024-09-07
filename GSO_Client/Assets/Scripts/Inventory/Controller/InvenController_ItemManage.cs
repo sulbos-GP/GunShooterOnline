@@ -58,7 +58,7 @@ public partial class InventoryController
                     SelectedItem = selectedEquip.equippedItem;
                     if (!selectedEquip.UnEquipItem())
                     {
-                        selectedEquip.EquipItem(SelectedItem);
+                        selectedEquip.SetEquipItemObj(SelectedItem); //실패시 원위치로
                         ResetSelection();
                         return;
                     }

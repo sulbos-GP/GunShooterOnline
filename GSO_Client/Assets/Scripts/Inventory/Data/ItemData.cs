@@ -1,5 +1,6 @@
 using Google.Protobuf.Protocol;
 using NPOI.HPSF;
+using NPOI.OpenXmlFormats.Dml.Chart;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,16 +12,6 @@ using UnityEngine;
 [System.Serializable]
 public class ItemData
 {
-
-    /*
-     * 스크립터블 오브젝트로 아이템의 데이터를 정의합니다.
-     * itemId(아이템 종류에 따른 코드) , 아이템의 이름, 아이템을 검색하는 시간, 크기, 이미지
-     * 를 설정하여 아이템 프리팹에 부착됩니다.
-     * 
-     * 실제로는 컨트롤러의 리스트에 넣어 컨트롤러에서 생성할때 리스트 안의 데이터중 하나를 
-     * 부착시킵니다.
-     */
-
     /// <summary>
     /// ItemDataInfo를 해당 스크립트의 변수에 적용
     /// </summary>
@@ -72,13 +63,24 @@ public class ItemData
         return itemInfo;
     }
 
-    [Header("아이템 데이터베이스 변수")]
-    public int objectId; // 해당 아이템의 고유한 아이디  -> 오브젝트 아이디
-    public int itemId; //아이템의 종류(해당 아이템을 DB에서 조회하기 위한 코드) -> 아이템 아이디
-    public Vector2Int pos; // 아이템의 그리드 안 좌표상의 위치
-    public int rotate; // 아이템의 회전코드(rotate * 90)
-    public int amount; // 아이템의 개수(소모품만 64개까지)
-    public bool isSearched; // 이 아이템을 조회한 플레이어의 아이디
+    public event Action<int> OnAmountChanged;
+    private int _amount;
+
+    public int objectId;    // 해당 데이터의 고유하며 유일한 아이디
+    public int itemId;      // 아이템의 종류를 명시하는 코드
+    public Vector2Int pos;  // 아이템의 그리드 안 좌표상의 위치
+    public int rotate;      // 아이템의 회전코드(rotate * 90)
+    public int amount
+    {
+        get => _amount;
+        set
+        {
+            _amount = value;
+            OnAmountChanged?.Invoke(_amount); //양이 변경할 경우의 이벤트 -> 퀵슬롯의 개수 변화
+        }
+    } 
+
+    public bool isSearched; //클라입장에서 이 아이템이 검색되었는지 확인
 
     public string item_name;
     public double item_weight;
