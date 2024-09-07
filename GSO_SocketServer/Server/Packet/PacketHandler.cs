@@ -4,6 +4,7 @@ using LiteNetLib;
 using Newtonsoft.Json;
 using Server;
 using Server.Data;
+using Server.Database.Game;
 using Server.Database.Handler;
 using Server.Game;
 using Server.Game.Object;
@@ -15,6 +16,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using WebCommonLibrary.Enum;
+using WebCommonLibrary.Error;
 
 class PacketHandler
 {
@@ -35,18 +37,33 @@ class PacketHandler
             p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
             //바꾼 부분
 
-
-#if DOCKER
+            
             //이거 uid를 검사해서 올바르게 넣어주면 됨
-            p.uid = p.gameRoom.connectPlayer.ElementAt(0);
-#else
-            p.uid = ++cnt;
-#endif
+            if(p.gameRoom.connectPlayer.Count > 0 )
+            {
+                if(p.gameRoom.connectPlayer.Contains(enterGamePacket.Credential.Uid) == true)
+                {
+                    p.UID = enterGamePacket.Credential.Uid;
+                }
+                else { 
+                
+                    Console.WriteLine("connectPlayer Contains not p.UID ");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("p.gameRoom.connectPlayer.Count is 0");
+            }
+
+           
+
+            //p.uid = ++cnt;
 
             //p.stat
 
         }
-
+        
 
         clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
         clientSession.MyPlayer = p;
@@ -215,5 +232,10 @@ class PacketHandler
         string myString = $"ACK: {command.ToString()}";
         byte[] bytes = Encoding.UTF8.GetBytes(myString);
         session.mPeer.Send(bytes, DeliveryMethod.ReliableOrdered);
+    }
+
+    internal static void C_ServerCommandHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
     }
 }

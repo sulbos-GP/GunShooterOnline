@@ -114,7 +114,7 @@ namespace Server.Game
             items.Add(item);
             item.CreateItem();
 
-            PrintInvenContents();
+            //PrintInvenContents();
 
             return true;
         }
@@ -148,7 +148,7 @@ namespace Server.Game
             CurWeight -= weight;
             item.DestroyItem();
 
-            PrintInvenContents();
+            //PrintInvenContents();
             return true;
         }
 
