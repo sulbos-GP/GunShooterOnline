@@ -1,4 +1,5 @@
-﻿using Server.Database.Handler;
+﻿using Google.Protobuf.Protocol;
+using Server.Database.Handler;
 using Server.Web;
 using Server.Web.Service;
 using ServerCore;
@@ -15,15 +16,19 @@ namespace Server.Server
 {
     public class GameServer : ServerNetworkService
     {
+
+
+
         protected override async Task<bool> OnStart()
         {
             Program.database.initializeAndLoadData();
 
             BattleGameRoom room = new BattleGameRoom();
             this.SetChannel(true, room, 0);
-
+            gameRoom = room;
             mCoreWorkThread.Start();
             mGameLogicTimer.Start();
+
 
 #if DOCKER
             Program.web.initializeServiceAndResource();
@@ -59,7 +64,15 @@ namespace Server.Server
 #if DOCKER
             //게임 종료 정보
             Dictionary<int, MatchOutcomeInfo> outcome = new Dictionary<int, MatchOutcomeInfo>();
-            //await Program.web.Lobby.PostMatchOutcome();
+
+            BattleGameRoom battleGame =  gameRoom as BattleGameRoom;
+
+            if (battleGame != null)
+            {
+                await Program.web.Lobby.PostMatchOutcome(battleGame.MatchInfo);
+
+            }
+
 
             //종료 요청
             await Program.web.ServerManager.PostShutdown();
