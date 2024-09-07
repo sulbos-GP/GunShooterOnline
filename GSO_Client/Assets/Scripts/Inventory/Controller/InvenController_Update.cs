@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
 
@@ -71,7 +70,7 @@ public partial class InventoryController
             GameObject parentInstance = null;
             if(IsEquipSlot(selectedItem.parentObjId))
             {
-                parentInstance = equipSlotDic[selectedItem.parentObjId].transform.parent.gameObject;
+                parentInstance = equipSlotDic[selectedItem.parentObjId].transform.gameObject;
             }
             else
             {

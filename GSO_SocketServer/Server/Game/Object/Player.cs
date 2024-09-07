@@ -1,9 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO.Pipes;
+using System.Net.Http;
 using System.Numerics;
+using System.Security.Cryptography;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.Object.Gear;
+using WebCommonLibrary.Models.GameDB;
 
 namespace Server.Game;
 
@@ -14,8 +18,8 @@ public class Player : CreatureObj
     public Gear gear;
     public Gun gun = new();
 
-    //GWANHO TEMP
-    public int uid = 0;
+    private float SpawnTime = 0;
+
 
     public Player()
     {
@@ -34,6 +38,8 @@ public class Player : CreatureObj
 
         });
 
+
+
         float width = 0.5f;
         float left = -0.5f;
         float bottom = -0.5f;
@@ -45,7 +51,7 @@ public class Player : CreatureObj
 
         gun.Init(this);
 
-
+        SpawnTime = System.Environment.TickCount;
 
     }
 
@@ -80,9 +86,24 @@ public class Player : CreatureObj
         //room.Push(room.LeaveGame, Id);
     }
 
+
+    public void OnEscaped()
+    {
+        MatchOutcomeInfo myInfo;
+        if (gameRoom.MatchInfo.TryGetValue(UID, out myInfo) == true)
+        {
+            myInfo.survival_time =  (int)(System.Environment.TickCount - SpawnTime / 1000) ;
+            myInfo.escape = 1;
+        }
+        else{
+            Console.WriteLine("MatchInfo Error");
+        }
+    }
+
+
     #region InGames
 
-    
+
 
     #endregion
 
