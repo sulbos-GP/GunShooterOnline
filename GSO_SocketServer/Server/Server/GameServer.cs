@@ -25,10 +25,9 @@ namespace Server.Server
 
             BattleGameRoom room = new BattleGameRoom();
             this.SetChannel(true, room, 0);
-            gameRoom = room;
+
             mCoreWorkThread.Start();
             mGameLogicTimer.Start();
-
 
 #if DOCKER
             Program.web.initializeServiceAndResource();
