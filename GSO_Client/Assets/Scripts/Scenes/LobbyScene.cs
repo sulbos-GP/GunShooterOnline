@@ -25,6 +25,9 @@ public class LobbyScene : BaseScene
 #if UNITY_EDITOR
         Ip = "127.0.0.1";
 #endif
+        StartCoroutine(ExcelReader.CopyExcel());
+        ExcelReader.ReadExcel();
+        Debug.Log(Data_Item.GetData(302).name);
         SceneType = Define.Scene.Forest;
         Screen.SetResolution(1920, 1080, false);
         Debug.Log("신 초기화 로비");
