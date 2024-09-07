@@ -20,10 +20,18 @@ namespace Server.Server
             Program.database.initializeAndLoadData();
 
             BattleGameRoom room = new BattleGameRoom();
-            this.SetChannel(true, room, 0);
+
+            mManager.DisconnectTimeout = 100000;
+            mManager.SimulateLatency = true;
+            if (false == mManager.Start(mEndPoint.Port))
+            {
+                return false;
+            }
 
             mCoreWorkThread.Start();
             mGameLogicTimer.Start();
+
+            this.SetChannel(true, room, 0);
 
 #if DOCKER
             Program.web.initializeServiceAndResource();
@@ -59,7 +67,7 @@ namespace Server.Server
 #if DOCKER
             //게임 종료 정보
             Dictionary<int, MatchOutcomeInfo> outcome = new Dictionary<int, MatchOutcomeInfo>();
-            //await Program.web.Lobby.PostMatchOutcome();
+            //await Program.web.Lobby.PostMatchOutcome(outcome);
 
             //종료 요청
             await Program.web.ServerManager.PostShutdown();
