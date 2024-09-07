@@ -9,6 +9,7 @@ public class CSVReader : MonoBehaviour
 
     void Awake()
     {
+        StartCoroutine(ExcelReader.CopyExcel());
         ExcelReader.ReadExcel();
         Debug.Log("success Read");
         Debug.Log(Data_Item.GetData(101).name);
