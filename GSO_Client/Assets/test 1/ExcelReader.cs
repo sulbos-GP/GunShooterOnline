@@ -9,7 +9,7 @@ using UnityEngine;
 
 public class ExcelReader
 {
-    private const string EXCEL_PATH = "../Data/";
+    private const string EXCEL_PATH = "Data/";
 
     private static Dictionary<eTABLE_TYPE, Action<string>> _readDicData = new Dictionary<eTABLE_TYPE, Action<string>>()
     {

@@ -10,12 +10,13 @@ public enum ELobbyUI
 {
     None,
     Profile,
+    LevelReward,
 }
 
 public class LobbyUIManager : MonoBehaviour
 {
 
-    private Dictionary<ELobbyUI, LobbyUI> LobbyUIList = new Dictionary<ELobbyUI, LobbyUI>();
+    private Dictionary<ELobbyUI, LobbyUI> UIList = new Dictionary<ELobbyUI, LobbyUI>();
     private static LobbyUIManager instance = new();
 
     public static LobbyUIManager Instance
@@ -54,7 +55,7 @@ public class LobbyUIManager : MonoBehaviour
     {
         if(instance != null)
         {
-            foreach ((ELobbyUI type, LobbyUI ui) in instance.LobbyUIList)
+            foreach ((ELobbyUI type, LobbyUI ui) in instance.UIList)
             {
                 instance.UnRegisterUI(type);
             }
@@ -63,18 +64,23 @@ public class LobbyUIManager : MonoBehaviour
 
     public void RegisterUI(ELobbyUI type, LobbyUI ui)
     {
-        LobbyUIList.TryAdd(type, ui);
-        LobbyUIList[type].UpdateUI();
+        UIList.TryAdd(type, ui);
+
+        //로비에 등록된 UI가 준비 되었는지 확인
+        if (UIList.Count == Enum.GetValues(typeof(ELobbyUI)).Length - 1)
+        {
+
+        }
     }
 
     public void UnRegisterUI(ELobbyUI type)
     {
-        LobbyUIList.Remove(type);
+        UIList.Remove(type);
     }
     
     public void UpdateLobbyAllUI()
     {
-        foreach ((ELobbyUI type, LobbyUI ui) in instance.LobbyUIList)
+        foreach ((ELobbyUI type, LobbyUI ui) in instance.UIList)
         {
             ui.UpdateUI();
         }
@@ -82,7 +88,7 @@ public class LobbyUIManager : MonoBehaviour
 
     public void UpdateLobbyUI(ELobbyUI type)
     {
-        LobbyUIList[type].UpdateUI();
+        UIList[type].UpdateUI();
     }
 
 }

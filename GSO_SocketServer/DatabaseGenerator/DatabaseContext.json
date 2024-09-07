@@ -1,0 +1,11 @@
+[
+    {
+        "name": "itemBase",
+        "table": "master_item_base"
+    },
+
+    {
+        "name": "itemBackpack",
+        "table": "master_item_backpack"
+    }
+]
