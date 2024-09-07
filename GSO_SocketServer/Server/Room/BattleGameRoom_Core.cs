@@ -11,6 +11,7 @@ using Server.Game.Object.Gear;
 using System.Net.Sockets;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.Match;
+using System.Numerics;
 
 namespace Server
 {
@@ -115,7 +116,11 @@ namespace Server
                     var enterPacket = new S_EnterGame();
                     enterPacket.Player = player.info;
 
-                    MatchInfo.Add(player.UID, new MatchOutcomeInfo());
+                    if( MatchInfo.TryAdd(player.UID, new MatchOutcomeInfo()) == false)
+                    {
+                        Console.WriteLine("player.UID add same");
+                    }
+
 
 
                     player.gear = new Gear(player);
@@ -199,7 +204,7 @@ namespace Server
             //생성끝
             foreach (BoxObject box in map.rootableObjects)
             {
-                Console.WriteLine($"box id : {box.Id}");
+                Console.WriteLine($"box id : {box.Id}, x = {box.PosInfo.PosX} , y=  {box.PosInfo.PosY}");
 
                 int size = box.info.CalculateSize();
                 long x = box.info.Box.X;
@@ -210,7 +215,7 @@ namespace Server
 
             foreach (ExitZone exit in map.exitZones)
             {
-                Console.WriteLine($"exit id : {exit.Id}");
+                //Console.WriteLine($"exit id : {exit.Id}");
 
                 spawnPacket.Objects.Add(exit.info);
             }
@@ -223,7 +228,7 @@ namespace Server
         public override void LeaveGame(int id)
         {
 
-
+            Console.WriteLine("LeaveGame");
             var type = ObjectManager.GetObjectTypeById(id);
 
 
@@ -236,6 +241,12 @@ namespace Server
                 {
                     Console.WriteLine($"LeaveGame id : {id}");
                 }
+
+                if (MatchInfo.Remove(id) == false)
+                {
+                    Console.WriteLine("MatchInfo.Remove(id) == false");
+                }
+               
 
             }
             else if (type == GameObjectType.Monster)
