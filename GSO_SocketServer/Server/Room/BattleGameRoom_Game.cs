@@ -23,8 +23,7 @@ namespace Server
 {
     public partial class BattleGameRoom
     {
-        public List<object> Escapes = new List<object>();
-
+        
         public void HandleMove(Player player, C_Move packet)
         {
             if (player == null)

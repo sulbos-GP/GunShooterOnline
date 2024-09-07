@@ -19,7 +19,7 @@ public class MatchmakerHub : ClientHub
     protected override void Init()
     {
         string name = "매치메이커";
-        string url = Managers.EnvConfig.GetEnvironmentConfig().MatchmakerBaseUri;
+        string url = Managers.EnvConfig.GetEnvironmentConfig().MatchmakerBaseUri + "/MatchmakerHub";
 
         this.SetHub(name, url);
     }
@@ -27,7 +27,7 @@ public class MatchmakerHub : ClientHub
     protected override void SetOnRecivedFunc()
     {
         mConnection.On<int>("S2C_VerfiyUser", S2C_VerfiyUser);
-        mConnection.On<MatchProfile>("S2C_MatchComplete", S2C_MatchComplete);
+        mConnection.On<string, MatchProfile>("S2C_MatchComplete", S2C_MatchComplete);
     }
 
     protected override void OnConnection()
@@ -58,7 +58,7 @@ public class MatchmakerHub : ClientHub
         await mConnection.InvokeAsync("C2S_VerfiyUser", uid, token);
     }
 
-    public void S2C_MatchComplete(MatchProfile response)
+    public void S2C_MatchComplete(string client_id, MatchProfile response)
     {
         EnqueueDispatch(() =>
         {
@@ -66,16 +66,23 @@ public class MatchmakerHub : ClientHub
 
             mMatchUI.OnMatchComplete();
 
-            //로컬
-            response.host_ip = "113.60.249.123";
+            //승현
+            //response.host_ip = "113.60.249.123";
+
+            //로컬 애뮬
+            response.host_ip = "10.0.2.2";
 
             Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
-            
+
             Managers.Scene.LoadScene(Define.Scene.Forest);
 
-
+            //Enter할때 uid 보내주셈
             C_EnterGame c_EnterGame = new C_EnterGame();
             c_EnterGame.Name = "jish";
+            c_EnterGame.Credential = new CredentiaInfo()
+            {
+                Uid = Managers.Web.credential.uid
+            };
 
             Managers.Network.Send(c_EnterGame);
             Debug.Log("접속중");

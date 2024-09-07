@@ -15,22 +15,6 @@ namespace Server.Database.Handler
 
     public class DatabaseHandler
     {
-        #region Singleton
-        static DatabaseHandler instance;
-
-        public static DatabaseHandler Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new DatabaseHandler();
-                }
-                return instance;
-            }
-        }
-        #endregion
-
         private static Dictionary<EDatabase, string> databases = new Dictionary<EDatabase, string>(10);
         private static DatabaseContext context = new DatabaseContext();
 
@@ -69,19 +53,24 @@ namespace Server.Database.Handler
         }
         #endregion
 
+        public DatabaseHandler()
+        {
+
+        }
+
         public void AddMySQL<TMySQL>(EDatabase type, string connectionString) where TMySQL : MySQL, new()
         {
             databases[type] = connectionString;
         }
 
-        public void InitMySQL()
+        public void initializeAndLoadData()
         {
 #if DOCKER
-            instance.AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
-            instance.AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+            AddMySQL<GameDB>(EDatabase.Game, $"Server={Docker.DockerUtil.GetHostIP()};user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+            AddMySQL<MasterDB>(EDatabase.Master, $"Server={Docker.DockerUtil.GetHostIP()};user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
 #else
-            instance.AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
-            instance.AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+            AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+            AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
 #endif
 
             context.LoadDatabaseContext().Wait();

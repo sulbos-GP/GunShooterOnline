@@ -4,6 +4,7 @@ using GameServerManager.Repository.Interfaces;
 using GameServerManager.Servicies;
 using GameServerManager.Servicies.Interfaces;
 using WebCommonLibrary.Config;
+using WebCommonLibrary.Enum;
 using WebCommonLibrary.Error;
 
 namespace GameServerManager.Startup
@@ -75,7 +76,7 @@ namespace GameServerManager.Startup
             });
 
             //초기화
-            ISessionService session = app.ApplicationServices.GetRequiredService<ISessionService>();
+            ISessionService session =app.ApplicationServices.GetRequiredService<ISessionService>();
             if (WebErrorCode.None != await session.InitMatch(1))
             {
                 return;

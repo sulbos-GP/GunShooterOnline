@@ -48,7 +48,7 @@ namespace ServerCore
 		public abstract void OnRecvPacket(ArraySegment<byte> buffer, byte channelNumber);
 	}
 
-	public abstract class Session
+    public abstract class Session
 	{
 		public SessionManager mSessionManager;
         public NetPeer mPeer;
