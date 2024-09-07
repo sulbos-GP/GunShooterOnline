@@ -1,6 +1,5 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
-using Mono.Cecil;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using ServerCore;
@@ -667,7 +666,12 @@ internal class PacketHandler
         Managers.Object.DebugDics();
     }
 
-    
+    internal static void S_DevideItemHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
+
+
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {

@@ -58,6 +58,13 @@ public class GameObject
 
     public PositionInfo PosInfo { get; } = new();
 
+    public int UID
+    {
+        get => info.Uid;
+        set => info.Uid = value;
+    }
+
+
     public Vector2 Dir
     {
         get => new(PosInfo.DirX, PosInfo.DirY);

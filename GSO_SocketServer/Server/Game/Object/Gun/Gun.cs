@@ -17,6 +17,14 @@ namespace Server.Game
     {
         public Player ownerPlayer;
 
+        public int Damage
+        {
+            get
+            {
+                return gunData.damage;
+            }
+        }
+
         public GunState gunState { get; private set; }
 
         public GunData gunData { get; private set; }
@@ -147,7 +155,7 @@ namespace Server.Game
 
 
                     //TODO : 공격력  attacker 밑에 넣기 240814지승현
-                    creatureObj.OnDamaged(attacker, 3);
+                    creatureObj.OnDamaged(attacker, attacker.gun.Damage);
 
                     S_ChangeHp ChangeHpPacket = new S_ChangeHp();
                     ChangeHpPacket.ObjectId = creatureObj.Id;
