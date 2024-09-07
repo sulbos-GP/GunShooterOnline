@@ -37,7 +37,7 @@ class PacketHandler
             p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
             //바꾼 부분
 
-            
+#if DOCKER
             //이거 uid를 검사해서 올바르게 넣어주면 됨
             if(p.gameRoom.connectPlayer.Count > 0 )
             {
@@ -56,14 +56,15 @@ class PacketHandler
                 Console.WriteLine("p.gameRoom.connectPlayer.Count is 0");
             }
 
-           
+#else
 
-            //p.uid = ++cnt;
+            p.UID = ++cnt;
+#endif
 
             //p.stat
 
         }
-        
+
 
         clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
         clientSession.MyPlayer = p;
