@@ -25,57 +25,35 @@ public class UI_LevelReward : LobbyUI
 
     public void Awake()
     {
-        closeButton.onClick.AddListener(OnCloseButton);
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(OnClickClose);
+        }
     }
 
-    public void OnCloseButton()
+    public void OnClickClose()
     {
         this.gameObject.SetActive(false);
     }
 
     public override void InitUI()
     {
-        //임시 테스트
-        var tempList = new List<DB_RewardLevel>
+
+        Debug.Log("[UI_LevelReward:InitUI]" + Data_master_reward_base.GetData(10001));
+        Debug.Log("[UI_LevelReward:InitUI]" + Data_master_reward_level.GetData(10001));
+
+        if (Data_master_reward_level.AllData().Count == 0)
         {
-            new DB_RewardLevel
-            {
-                reward_id = 10001,
-                level = 1,
-                experience = 100,
-                name = "1000골드",
-                icon = "IconS_goldbar"
-            },
-
-            new DB_RewardLevel
-            {
-                reward_id = 10002,
-                level = 2,
-                experience = 200,
-                name = "티켓 2장",
-                icon = "IconS_solidwood"
-            },
-
-            new DB_RewardLevel
-            {
-                reward_id = 10003,
-                level = 3,
-                experience = 300,
-                name = "뽑기 5장",
-                icon = "IconS_battery"
-            }
-        };
-        IEnumerable<DB_RewardLevel> rewards = tempList;
-
-        foreach (DB_RewardLevel reward in rewards)
-        {
-            GameObject prefab = Instantiate(rewardPrefab, contentParent);
-            prefab.GetComponentInChildren<UI_LevelRewardData>().InitLevelRewardData(reward);
-            contents.Add(reward.reward_id, prefab);
+            Debug.Log("[UI_LevelReward:InitUI] : RewardLevelData is null");
+            return;
         }
 
-        this.gameObject.SetActive(false);
-
+        foreach (var reward in Data_master_reward_level.AllData())
+        {
+            GameObject prefab = Instantiate(rewardPrefab, contentParent);
+            prefab.GetComponentInChildren<UI_LevelRewardData>().InitLevelRewardData(reward.Value);
+            contents.Add(reward.Key, prefab);
+        }
     }
 
     public override void UpdateUI()
@@ -101,4 +79,18 @@ public class UI_LevelReward : LobbyUI
             }
         }
     }
+
+    public override void OnRegister()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    public override void OnUnRegister()
+    {
+        if(closeButton != null)
+        {
+            closeButton.onClick.RemoveListener(OnClickClose);
+        }
+    }
+
 }
