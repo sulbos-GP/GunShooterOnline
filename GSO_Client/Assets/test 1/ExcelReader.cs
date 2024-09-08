@@ -19,9 +19,9 @@ public class ExcelReader
         {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>},
         {eTABLE_TYPE.Item, TableExcel.ReadCSV<Data_Item> },
 
-        //{eTABLE_TYPE.RewardBase, TableExcel.ReadCSV<Data_RewardBase> },
-        //{eTABLE_TYPE.RewardLevel, TableExcel.ReadCSV<Data_RewardLevel> },
-        //{eTABLE_TYPE.RewardBox, TableExcel.ReadCSV<Data_RewardBox> }
+        {eTABLE_TYPE.RewardBase, TableExcel.ReadCSV<Data_RewardBase> },
+        {eTABLE_TYPE.RewardLevel, TableExcel.ReadCSV<Data_RewardLevel> },
+        {eTABLE_TYPE.RewardBox, TableExcel.ReadCSV<Data_RewardBox> }
     };
 
     public static IEnumerator CopyExcel()

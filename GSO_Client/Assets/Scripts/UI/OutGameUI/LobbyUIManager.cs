@@ -10,6 +10,8 @@ public enum ELobbyUI
 {
     None,
     Profile,
+    Metadata,
+    Currency,
     LevelReward,
 }
 

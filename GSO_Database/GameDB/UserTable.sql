@@ -10,6 +10,9 @@ CREATE TABLE IF NOT EXISTS user (
     player_id 			VARCHAR(256) 	NOT NULL 								COMMENT '플레이어 아이디',
     nickname			VARCHAR(10) 	NULL 		DEFAULT NULL 				COMMENT '닉네임',
 	experience 			INT 			NOT NULL	DEFAULT 0					COMMENT '경험치',
+	money 				INT 			NOT NULL	DEFAULT 0					COMMENT '돈',
+	ticket 				INT 			NOT NULL	DEFAULT 0					COMMENT '티켓',
+	gacha	 			INT 			NOT NULL	DEFAULT 0					COMMENT '가챠',
     service 			VARCHAR(32) 	NOT NULL								COMMENT '서비스',
     refresh_token 		VARCHAR(512) 	NULL 		DEFAULT NULL				COMMENT '갱신 토큰',	#TODO NotNull로 교채
 	create_dt           DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '생성 일시', 
@@ -18,7 +21,7 @@ CREATE TABLE IF NOT EXISTS user (
 	 PRIMARY KEY (uid),
      UNIQUE KEY (nickname)
 );
-#ALTER TABLE user ADD COLUMN experience INT NOT NULL DEFAULT 1 AFTER nickname;
+#ALTER TABLE user ADD COLUMN gacha INT NOT NULL DEFAULT 0 AFTER ticket;
 
 CREATE TABLE IF NOT EXISTS user_level_reward (
     uid					INT 			NOT NULL								COMMENT '유저 아이디',
