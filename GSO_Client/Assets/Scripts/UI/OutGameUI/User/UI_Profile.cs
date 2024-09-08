@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,10 +29,10 @@ public class UI_Profile : LobbyUI
     private Slider experienceBar;
 
     [SerializeField]
-    private Button profileButton;
+    private Button metaDataButton;
 
     [SerializeField]
-    private GameObject profileObject;
+    private GameObject metaDataObject;
 
     [SerializeField]
     private Button levelRewardButton;
@@ -41,13 +42,14 @@ public class UI_Profile : LobbyUI
 
     public void Awake()
     {
-        profileButton.onClick.AddListener(OnProfileButton);
+        metaDataButton.onClick.AddListener(OnProfileButton);
         levelRewardButton.onClick.AddListener(OnLevelRewardButton);
     }
 
     public void OnProfileButton()
     {
-
+        metaDataObject.SetActive(true);
+        LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Metadata);
     }
 
     public void OnLevelRewardButton()
@@ -67,26 +69,32 @@ public class UI_Profile : LobbyUI
 
         this.nickname.text = profile.nickname;
 
-        int curLevel                = ((profile.experience / 100) + 1);
+        int curLevel                = (profile.experience == 0) ? 0 : ((profile.experience / 100) + 1);
+        int nextLevel               = curLevel + 1;
         this.level.text             = curLevel.ToString();
-        this.nextLevel.text         = (curLevel + 1).ToString();
+        this.nextLevel.text         = $"다음 보상 랭크 : {nextLevel}";
 
-        int curExperience           = (profile.experience % 100) / 100;
-        this.experience.text        = $"{curExperience} / {(curLevel + 1) * 100}";
-        this.experienceBar.value    = curExperience;
+        int curExperience           = (profile.experience % 100);
+        this.experience.text        = $"{curExperience} / {100}";
+        this.experienceBar.value    = (profile.experience == 0) ? 0 : curExperience / 100;
 
-        //임시
-        //아이콘 마스터데이터베이스 가져와서 다음 레벨과 동일한 아이콘 불러오기
-        var reward = new DB_RewardLevel
+        foreach (var reward in Data_master_reward_level.AllData())
         {
-            reward_id = 10001,
-            level = 1,
-            experience = 100,
-            name = "1000골드",
-            icon = "IconS_goldbar"
-        };
+            if(reward.Value.level == nextLevel)
+            {
+                nextRewardIcon.sprite = Resources.Load<Sprite>($"Sprite/Item/{reward.Value.icon}");
+                break;
+            }
+        }
+    }
 
-        nextRewardIcon.sprite = Resources.Load<Sprite>($"Sprite/Item/{reward.icon}");
+    public override void OnRegister()
+    {
+        
+    }
+
+    public override void OnUnRegister()
+    {
 
     }
 }

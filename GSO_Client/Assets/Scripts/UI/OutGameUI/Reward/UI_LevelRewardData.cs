@@ -28,7 +28,7 @@ public class UI_LevelRewardData : MonoBehaviour
     [SerializeField]
     private TMP_Text    receivedText;
 
-    public void InitLevelRewardData(DB_RewardLevel reward)
+    public void InitLevelRewardData(Data_master_reward_level reward)
     {
         levelText.text          = reward.level.ToString();
         experienceText.text     = reward.experience.ToString();

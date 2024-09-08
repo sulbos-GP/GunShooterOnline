@@ -19,7 +19,7 @@ public class ExcelReader
         {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>},
         {eTABLE_TYPE.master_item_base, TableExcel.ReadCSV<Data_master_item_base> },
         {eTABLE_TYPE.master_item_backpack, TableExcel.ReadCSV<Data_master_item_backpack>},
-        {eTABLE_TYPE.RewardBase, TableExcel.ReadCSV<Data_master_reward_base> },
+        {eTABLE_TYPE.master_reward_base, TableExcel.ReadCSV<Data_master_reward_base> },
         {eTABLE_TYPE.master_reward_level, TableExcel.ReadCSV<Data_master_reward_level> },
         {eTABLE_TYPE.master_reward_box, TableExcel.ReadCSV<Data_master_reward_box> }
     };
