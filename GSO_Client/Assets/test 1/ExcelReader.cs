@@ -17,11 +17,11 @@ public class ExcelReader
     private static Dictionary<eTABLE_TYPE, Action<string>> _readDicData = new Dictionary<eTABLE_TYPE, Action<string>>()
     {
         {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>},
-        {eTABLE_TYPE.Item, TableExcel.ReadCSV<Data_master_item_base> },
+        {eTABLE_TYPE.master_item_base, TableExcel.ReadCSV<Data_master_item_base> },
         {eTABLE_TYPE.master_item_backpack, TableExcel.ReadCSV<Data_master_item_backpack>},
-        {eTABLE_TYPE.master_reward_base, TableExcel.ReadCSV<Data_RewardBase> },
-        {eTABLE_TYPE.master_reward_level, TableExcel.ReadCSV<Data_RewardLevel> },
-        {eTABLE_TYPE.master_reward_box, TableExcel.ReadCSV<Data_RewardBox> }
+        {eTABLE_TYPE.RewardBase, TableExcel.ReadCSV<Data_master_reward_base> },
+        {eTABLE_TYPE.master_reward_level, TableExcel.ReadCSV<Data_master_reward_level> },
+        {eTABLE_TYPE.master_reward_box, TableExcel.ReadCSV<Data_master_reward_box> }
     };
 
     public static IEnumerator CopyExcel()
