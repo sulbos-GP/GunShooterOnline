@@ -32,7 +32,7 @@ public class UI_LevelRewardData : MonoBehaviour
     {
         levelText.text          = reward.level.ToString();
         experienceText.text     = reward.experience.ToString();
-        //rewardIcon = 
+        rewardIcon.sprite       = Resources.Load<Sprite>($"Sprite/Item/{reward.icon}");
         rewardText.text         = reward.name.ToString();
         receivedText.text       = "Å‰µæ";
         receivedButton.interactable = false;

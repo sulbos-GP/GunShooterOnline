@@ -1,9 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDB;
 
 public class UI_Profile : LobbyUI
 {
@@ -23,10 +22,39 @@ public class UI_Profile : LobbyUI
     private TMP_Text experience;
 
     [SerializeField]
-    private ProgressBar experienceBar;
+    private Image nextRewardIcon;
 
     [SerializeField]
-    private Image nextRewardIcon;
+    private Slider experienceBar;
+
+    [SerializeField]
+    private Button profileButton;
+
+    [SerializeField]
+    private GameObject profileObject;
+
+    [SerializeField]
+    private Button levelRewardButton;
+
+    [SerializeField]
+    private GameObject LevelRewardObject;
+
+    public void Awake()
+    {
+        profileButton.onClick.AddListener(OnProfileButton);
+        levelRewardButton.onClick.AddListener(OnLevelRewardButton);
+    }
+
+    public void OnProfileButton()
+    {
+
+    }
+
+    public void OnLevelRewardButton()
+    {
+        LevelRewardObject.SetActive(true);
+        LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.LevelReward);
+    }
 
     public override void InitUI()
     {
@@ -47,6 +75,18 @@ public class UI_Profile : LobbyUI
         this.experience.text        = curExperience.ToString();
         this.experienceBar.value    = curExperience;
 
+        //임시
         //아이콘 마스터데이터베이스 가져와서 다음 레벨과 동일한 아이콘 불러오기
+        var reward = new DB_RewardLevel
+        {
+            reward_id = 10001,
+            level = 1,
+            experience = 100,
+            name = "1000골드",
+            icon = "IconS_goldbar"
+        };
+
+        nextRewardIcon.sprite = Resources.Load<Sprite>($"Sprite/Item/{reward.icon}");
+
     }
 }

@@ -15691,59 +15691,8 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8147102258852155761, guid: ab403c682ff089b4b9a139c8264e6524, type: 3}
-      insertIndex: 2
-      addedObject: {fileID: 6654044460496747490}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ab403c682ff089b4b9a139c8264e6524, type: 3}
---- !u!114 &6654044460496747486 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1134614969563000925, guid: ab403c682ff089b4b9a139c8264e6524, type: 3}
-  m_PrefabInstance: {fileID: 6654044460496747485}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!224 &6654044460496747487 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 7623617900876985260, guid: ab403c682ff089b4b9a139c8264e6524, type: 3}
-  m_PrefabInstance: {fileID: 6654044460496747485}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6654044460496747488 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5106030210949650715, guid: ab403c682ff089b4b9a139c8264e6524, type: 3}
-  m_PrefabInstance: {fileID: 6654044460496747485}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &6654044460496747489 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8147102258852155761, guid: ab403c682ff089b4b9a139c8264e6524, type: 3}
-  m_PrefabInstance: {fileID: 6654044460496747485}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &6654044460496747490
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6654044460496747489}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67aafeb6dbfd4e1429e6f7a38377b92a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rewardPrefab: {fileID: 6512415684443405019, guid: 397a331642c9c9843885012f77e52378, type: 3}
-  scrollRect: {fileID: 6654044460496747488}
-  contentParent: {fileID: 6654044460496747487}
-  closeButton: {fileID: 6654044460496747486}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
