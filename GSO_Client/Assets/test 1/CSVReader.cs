@@ -9,10 +9,13 @@ public class CSVReader : MonoBehaviour
 
     void Awake()
     {
+#if UNITY_ANDROID
         StartCoroutine(ExcelReader.CopyExcel());
+#endif
         ExcelReader.ReadExcel();
         Debug.Log("success Read");
-        Debug.Log(Data_Item.GetData(101).name);
+        Debug.Log(Data_master_item_base.GetData(101).name);
+        Debug.Log(Data_master_item_base.AllData());
         //List<Data_TestItem> playerDataList = ReadCSVFile(csvFilePath);
         //foreach (Data_TestItem player in playerDataList)
         //{

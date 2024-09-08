@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using WebCommonLibrary.Models.MasterDB;
 
-public class Data_Item : BaseData<Data_Item>
+public class Data_master_item_base : BaseData<Data_master_item_base>
 {
     public string code;
     public string name;
@@ -19,20 +19,28 @@ public class Data_Item : BaseData<Data_Item>
     public string icon;
 }
 
+public class Data_master_item_backpack : BaseData<Data_master_item_backpack>
+{
+    public int total_scale_x;
+    public int total_scale_y;
+    public int total_weight;
+}
+
 public class Data_RewardBase : BaseData<Data_RewardBase>
 {
-    public int money { get; set; } = 0;
-    public int ticket { get; set; } = 0;
-    public int gacha { get; set; } = 0;
-    public int? reward_box_id { get; set; } = null;
+    public int money;
+    public int ticket;
+    public int gacha;
+    //TO-DO : 추후에 타입 변경 가능성 있음.
+    public int reward_box_id;
 }
 
 public class Data_RewardLevel : BaseData<Data_RewardLevel>
 {
-    public int level { get; set; } = 0;
-    public int experience { get; set; } = 0;
-    public string name { get; set; } = string.Empty;
-    public string icon { get; set; } = string.Empty;
+    public int level;
+    public int experience;
+    public string name;
+    public string icon;
 }
 
 public class Data_RewardBox : BaseData<Data_RewardBox>
