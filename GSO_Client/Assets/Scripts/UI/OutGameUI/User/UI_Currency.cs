@@ -36,4 +36,14 @@ public class UI_Currency : LobbyUI
         gacha.text  = info.gacha.ToString();
 
     }
+
+    public override void OnRegister()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    public override void OnUnRegister()
+    {
+
+    }
 }

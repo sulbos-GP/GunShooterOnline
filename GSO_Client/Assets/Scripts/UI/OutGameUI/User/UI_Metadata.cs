@@ -7,11 +7,14 @@ public class UI_Metadata : LobbyUI
 {
     protected override ELobbyUI type => ELobbyUI.Metadata;
 
+    [SerializeField]
+    private Button closeButton;
+
     /// <summary>
     /// Metadata
     /// </summary>
     [SerializeField]
-    private TMP_Text total_games;
+    private TMP_Text totalGames;
 
     [SerializeField]
     private TMP_Text kills;
@@ -29,7 +32,7 @@ public class UI_Metadata : LobbyUI
     private TMP_Text escape;
 
     [SerializeField]
-    private TMP_Text survival_time;
+    private TMP_Text survivalTime;
 
     /// <summary>
     /// Skills
@@ -42,6 +45,19 @@ public class UI_Metadata : LobbyUI
 
     [SerializeField]
     private TMP_Text volatility;
+
+    public void Awake()
+    {
+        if (closeButton != null)
+        {
+            closeButton.onClick.AddListener(OnClickClose);
+        }
+    }
+
+    public void OnClickClose()
+    {
+        this.gameObject.SetActive(false);
+    }
 
     public override void InitUI()
     {
@@ -56,13 +72,13 @@ public class UI_Metadata : LobbyUI
             return;
         }
 
-        total_games.text    = metadata.total_games.ToString();
-        kills.text          = (metadata.kills / metadata.total_games).ToString();
-        deaths.text         = (metadata.deaths / metadata.total_games).ToString();
-        damage.text         = (metadata.damage / metadata.total_games).ToString();
-        farming.text        = (metadata.farming / metadata.total_games).ToString();
-        escape.text         = (metadata.escape / metadata.total_games).ToString();
-        survival_time.text  = (metadata.survival_time / metadata.total_games).ToString();
+        totalGames.text     = metadata.total_games.ToString();
+        kills.text          = (metadata.kills == 0) ? "0" : (metadata.kills / metadata.total_games).ToString();
+        deaths.text         = (metadata.kills == 0) ? "0" : (metadata.deaths / metadata.total_games).ToString();
+        damage.text         = (metadata.kills == 0) ? "0" : (metadata.damage / metadata.total_games).ToString();
+        farming.text        = (metadata.kills == 0) ? "0" : (metadata.farming / metadata.total_games).ToString();
+        escape.text         = (metadata.kills == 0) ? "0" : (metadata.escape / metadata.total_games).ToString();
+        survivalTime.text   = (metadata.kills == 0) ? "0" : (metadata.survival_time / metadata.total_games).ToString();
 
         UserSkillInfo skill = Managers.Web.user.SkillInfo;
         if(skill == null)
@@ -73,5 +89,18 @@ public class UI_Metadata : LobbyUI
         rating.text         = skill.rating.ToString();
         deviation.text      = skill.deviation.ToString();
         volatility.text     = skill.volatility.ToString();
+    }
+
+    public override void OnRegister()
+    {
+        this.gameObject.SetActive(false);
+    }
+
+    public override void OnUnRegister()
+    {
+        if(closeButton != null)
+        {
+            closeButton.onClick.RemoveListener(OnClickClose);
+        }
     }
 }
