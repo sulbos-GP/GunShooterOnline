@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebCommonLibrary.Model.MasterDB
+namespace WebCommonLibrary.Models.MasterDB
 {
-    public class RewardBase
+    public class DB_RewardBase
     {
         public int reward_id { get; set; } = 0;
         public int money { get; set; } = 0;
@@ -13,14 +13,13 @@ namespace WebCommonLibrary.Model.MasterDB
         public int? reward_box_id { get; set; } = null;
     }
 
-    public class RewardBox
+    public class DB_RewardBox
     {
         public int reward_box_id { get; set; } = 0;
     }
 
-    public class LevelReward
+    public class DB_RewardLevel
     {
-        public int reward_level_id { get; set; } = 0;
         public int reward_id { get; set; } = 0;
         public int level { get; set; } = 0;
         public int experience { get; set; } = 0;

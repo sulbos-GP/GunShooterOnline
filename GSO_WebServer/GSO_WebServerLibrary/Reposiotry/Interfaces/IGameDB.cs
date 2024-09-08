@@ -74,6 +74,11 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         public Task<UserSkillInfo?> GetUserSkillByUid(int uid);
 
         /// <summary>
+        /// 유저의 유니크 아이디로 user 레벨 보상 불러오기
+        /// </summary>
+        public Task<IEnumerable<UserLevelReward>?> GetUserLevelRewardByUid(int uid, bool? received, int? reward_level_id);
+
+        /// <summary>
         /// 유저의 유니크 아이디로 user 스킬 업데이트
         /// </summary>
         public Task<int> UpdateUserSkill(int uid, UserSkillInfo skill);

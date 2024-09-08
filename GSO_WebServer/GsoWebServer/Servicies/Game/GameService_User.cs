@@ -121,7 +121,25 @@ namespace GsoWebServer.Servicies.Game
             }
             catch /*(Exception e)*/
             {
-                return (WebErrorCode.AuthTokenFailSetNx, null);
+                return (WebErrorCode.TEMP_Exception, null);
+            }
+        }
+
+        public async Task<(WebErrorCode, List<UserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id)
+        {
+            try
+            {
+                IEnumerable<UserLevelReward>? list = await mGameDB.GetUserLevelRewardByUid(uid, received, reward_level_id);
+                if (list == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR, null);
+                }
+
+                return (WebErrorCode.None, list.ToList());
+            }
+            catch /*(Exception e)*/
+            {
+                return (WebErrorCode.TEMP_Exception, null);
             }
         }
 

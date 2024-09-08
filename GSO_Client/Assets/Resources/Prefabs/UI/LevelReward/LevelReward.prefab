@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.3137255, g: 0.3137255, b: 0.3137255, a: 1}
+  m_Color: {r: 0.41960788, g: 0.42352945, b: 0.427451, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -749,6 +749,7 @@ GameObject:
   - component: {fileID: 2643295866711224596}
   - component: {fileID: 1516167708701591128}
   - component: {fileID: 1454866921119411768}
+  - component: {fileID: 7750299761483866237}
   m_Layer: 5
   m_Name: LevelReward
   m_TagString: Untagged
@@ -817,6 +818,24 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7750299761483866237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6512415684443405019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8da3bfa92f95fb741a3f77cea8099f94, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelText: {fileID: 1354871224395416709}
+  experienceText: {fileID: 7827121242988550962}
+  rewardIcon: {fileID: 5324912018024058796}
+  rewardText: {fileID: 1870131937935224742}
+  receivedButton: {fileID: 8943861441613961217}
+  receivedText: {fileID: 1525238797145028996}
 --- !u!1 &8720783175558563679
 GameObject:
   m_ObjectHideFlags: 0
