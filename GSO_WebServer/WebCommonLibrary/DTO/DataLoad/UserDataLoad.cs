@@ -1,4 +1,5 @@
-﻿using WebCommonLibrary.Models.GameDB;
+﻿using System.Collections.Generic;
+using WebCommonLibrary.Models.GameDB;
 
 namespace WebCommonLibrary.DTO.DataLoad
 {
@@ -12,5 +13,6 @@ namespace WebCommonLibrary.DTO.DataLoad
         public UserInfo? UserInfo { get; set; } = null;
         public UserSkillInfo? SkillInfo { get; set; } = null;
         public UserMetadataInfo? MetadataInfo { get; set; } = null;
+        public List<UserLevelReward>? LevelReward { get; set; } = null;
     }
 }

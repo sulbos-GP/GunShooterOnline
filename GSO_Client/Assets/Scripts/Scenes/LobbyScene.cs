@@ -30,7 +30,7 @@ public class LobbyScene : BaseScene
         Debug.Log("신 초기화 로비");
         //Managers.Network.ConnectToGame("ec2-3-36-85-125.ap-northeast-2.compute.amazonaws.com");
 
-        Managers.Network.SettingConnection(Ip, 7777, "SomeConnectionKey");
+        Managers.Network.SettingConnection("113.60.249.123", 7777, "SomeConnectionKey");
         //Managers.Network.ConnectToGame();
     }
 

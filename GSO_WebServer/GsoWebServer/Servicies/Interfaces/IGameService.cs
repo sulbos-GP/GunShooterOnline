@@ -31,6 +31,11 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<(WebErrorCode, UserSkillInfo?)> GetSkillInfo(int uid);
 
         /// <summary>
+        /// 유저 레벨 보상 정보 가져오기
+        /// </summary>
+        public Task<(WebErrorCode, List<UserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id);
+
+        /// <summary>
         /// 유저 메타데이터 정보 업데이트
         /// </summary>
         public Task<WebErrorCode> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata);

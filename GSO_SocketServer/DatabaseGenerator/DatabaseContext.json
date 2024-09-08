@@ -7,5 +7,22 @@
     {
         "name": "itemBackpack",
         "table": "master_item_backpack"
+    },
+
+    {
+        "name": "rewardBase",
+        "table": "master_reward_base"
+    },
+
+    {
+        "name": "rewardBox",
+        "table": "master_reward_box"
+    },
+
+    {
+        "name": "rewardLevel",
+        "table": "master_reward_level"
     }
+
+
 ]
