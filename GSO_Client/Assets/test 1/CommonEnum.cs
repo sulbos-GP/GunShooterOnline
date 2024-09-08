@@ -6,7 +6,10 @@ public enum eTABLE_TYPE
 {
     None,
     TestItem,
-    Item
+    Item,
+    RewardBase,
+    RewardLevel,
+    RewardBox,
 }
 
 public enum eSTAT

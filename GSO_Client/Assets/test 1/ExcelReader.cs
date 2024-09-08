@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.Networking;
+using WebCommonLibrary.Models.MasterDB;
 
 public class ExcelReader
 {
@@ -16,7 +17,11 @@ public class ExcelReader
     private static Dictionary<eTABLE_TYPE, Action<string>> _readDicData = new Dictionary<eTABLE_TYPE, Action<string>>()
     {
         {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>},
-        {eTABLE_TYPE.Item, TableExcel.ReadCSV<Data_Item> }
+        {eTABLE_TYPE.Item, TableExcel.ReadCSV<Data_Item> },
+
+        //{eTABLE_TYPE.RewardBase, TableExcel.ReadCSV<Data_RewardBase> },
+        //{eTABLE_TYPE.RewardLevel, TableExcel.ReadCSV<Data_RewardLevel> },
+        //{eTABLE_TYPE.RewardBox, TableExcel.ReadCSV<Data_RewardBox> }
     };
 
     public static IEnumerator CopyExcel()

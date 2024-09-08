@@ -64,7 +64,10 @@ public class LobbyUIManager : MonoBehaviour
 
     public void RegisterUI(ELobbyUI type, LobbyUI ui)
     {
-        UIList.TryAdd(type, ui);
+        if(false == UIList.TryAdd(type, ui))
+        {
+            Debug.Log($"{type.ToString()}로비 UI가 초기화에 실패하였습니다.");
+        }
 
         //로비에 등록된 UI가 준비 되었는지 확인
         if (UIList.Count == Enum.GetValues(typeof(ELobbyUI)).Length - 1)

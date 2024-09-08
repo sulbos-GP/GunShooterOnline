@@ -25,7 +25,6 @@ public class UI_LevelReward : LobbyUI
 
     public void Awake()
     {
-        this.gameObject.SetActive(false);
         closeButton.onClick.AddListener(OnCloseButton);
     }
 
@@ -36,12 +35,46 @@ public class UI_LevelReward : LobbyUI
 
     public override void InitUI()
     {
+        //임시 테스트
+        var tempList = new List<DB_RewardLevel>
+        {
+            new DB_RewardLevel
+            {
+                reward_id = 10001,
+                level = 1,
+                experience = 100,
+                name = "1000골드",
+                icon = "IconS_goldbar"
+            },
+
+            new DB_RewardLevel
+            {
+                reward_id = 10002,
+                level = 2,
+                experience = 200,
+                name = "티켓 2장",
+                icon = "IconS_solidwood"
+            },
+
+            new DB_RewardLevel
+            {
+                reward_id = 10003,
+                level = 3,
+                experience = 300,
+                name = "뽑기 5장",
+                icon = "IconS_battery"
+            }
+        };
+        IEnumerable<DB_RewardLevel> rewards = tempList;
+
         foreach (DB_RewardLevel reward in rewards)
         {
             GameObject prefab = Instantiate(rewardPrefab, contentParent);
             prefab.GetComponentInChildren<UI_LevelRewardData>().InitLevelRewardData(reward);
-            contents.Add();
+            contents.Add(reward.reward_id, prefab);
         }
+
+        this.gameObject.SetActive(false);
 
     }
 
@@ -57,7 +90,15 @@ public class UI_LevelReward : LobbyUI
         foreach (UserLevelReward reward in rewards)
         {
             contents.TryGetValue(reward.reward_id, out var prefab);
-            prefab.GetComponentInChildren<UI_LevelRewardData>().UpdateLevelRewardData(reward);
+
+            if(prefab != null)
+            {
+                prefab.GetComponentInChildren<UI_LevelRewardData>().UpdateLevelRewardData(reward);
+            }
+            else
+            {
+                Debug.Log($"레벨 [{reward.reward_id}]의 프리펩이 존재하지 않습니다.");
+            }
         }
     }
 }
