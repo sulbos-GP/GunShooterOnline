@@ -21,15 +21,21 @@ public class Data_Item : BaseData<Data_Item>
 
 public class Data_RewardBase : BaseData<Data_RewardBase>
 {
-    public DB_RewardBase data;
+    public int money { get; set; } = 0;
+    public int ticket { get; set; } = 0;
+    public int gacha { get; set; } = 0;
+    public int? reward_box_id { get; set; } = null;
 }
 
-public class Data_RewardLevel : BaseDataMulti<Data_RewardLevel>
+public class Data_RewardLevel : BaseData<Data_RewardLevel>
 {
-    public DB_RewardLevel data;
+    public int level { get; set; } = 0;
+    public int experience { get; set; } = 0;
+    public string name { get; set; } = string.Empty;
+    public string icon { get; set; } = string.Empty;
 }
 
 public class Data_RewardBox : BaseData<Data_RewardBox>
 {
-    public DB_RewardBox data;
+
 }

@@ -72,7 +72,7 @@ public class UI_Profile : LobbyUI
         this.nextLevel.text         = (curLevel + 1).ToString();
 
         int curExperience           = (profile.experience % 100) / 100;
-        this.experience.text        = curExperience.ToString();
+        this.experience.text        = $"{curExperience} / {(curLevel + 1) * 100}";
         this.experienceBar.value    = curExperience;
 
         //юс╫ц
