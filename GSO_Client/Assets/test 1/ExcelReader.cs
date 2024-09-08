@@ -12,20 +12,21 @@ using WebCommonLibrary.Models.MasterDB;
 
 public class ExcelReader
 {
-    private const string EXCEL_PATH = "/Data/";
+    private const string EXCEL_PATH = "/StreamingAssets/";
 
     private static Dictionary<eTABLE_TYPE, Action<string>> _readDicData = new Dictionary<eTABLE_TYPE, Action<string>>()
     {
         {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>},
-        {eTABLE_TYPE.Item, TableExcel.ReadCSV<Data_Item> },
-
-        {eTABLE_TYPE.RewardBase, TableExcel.ReadCSV<Data_RewardBase> },
-        {eTABLE_TYPE.RewardLevel, TableExcel.ReadCSV<Data_RewardLevel> },
-        {eTABLE_TYPE.RewardBox, TableExcel.ReadCSV<Data_RewardBox> }
+        {eTABLE_TYPE.Item, TableExcel.ReadCSV<Data_master_item_base> },
+        {eTABLE_TYPE.master_item_backpack, TableExcel.ReadCSV<Data_master_item_backpack>},
+        {eTABLE_TYPE.master_reward_base, TableExcel.ReadCSV<Data_RewardBase> },
+        {eTABLE_TYPE.master_reward_level, TableExcel.ReadCSV<Data_RewardLevel> },
+        {eTABLE_TYPE.master_reward_box, TableExcel.ReadCSV<Data_RewardBox> }
     };
 
     public static IEnumerator CopyExcel()
     {
+        //TO-DO : 추후에 텍스트 파일로 엑셀 이름 관리.
         string filePath = Path.Combine(Application.streamingAssetsPath, "Item.xlsx");
         string filePerPath = Path.Combine(Application.persistentDataPath, "Item.xlsx");
 
@@ -59,15 +60,13 @@ public class ExcelReader
         //Debug.Log("File copied to: " + filePerPath);
 
 
-
+#if UNITY_ANDROID
         string filePerPath = Path.Combine(Application.persistentDataPath, "Item.xlsx");
         string[] fileList = { filePerPath };
-//#if UNITY_EDITOR
-        //fileList = Directory.GetFiles(Application.dataPath+EXCEL_PATH, "*.xlsx", SearchOption.TopDirectoryOnly);
-//#elif UNITY_ANDROID
-//        string filePath = Path.Combine(Application.streamingAssetsPath, "Data/item.xlsx");
-//        fileList = Directory.GetFiles(Application.streamingAssetsPath+EXCEL_PATH, "*.xlsx", SearchOption.TopDirectoryOnly);
-//#endif
+#endif
+#if UNITY_EDITOR
+        fileList = Directory.GetFiles(Application.dataPath + EXCEL_PATH, "*.xlsx", SearchOption.TopDirectoryOnly);
+#endif
         List<ISheet> sheetList = GetSheet(fileList);
         for (int i = 0; i < sheetList.Count; i++)
         {
@@ -84,7 +83,6 @@ public class ExcelReader
 
                 string csvData = SheetToCSV(sheetList[i]);
                 _readDicData[tableType](csvData);
-                Debug.Log(_readDicData.Count.ToString());
             }
             catch (Exception e)
             {

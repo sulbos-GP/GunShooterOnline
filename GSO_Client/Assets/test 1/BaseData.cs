@@ -11,6 +11,12 @@ public abstract class BaseData<T> where T : BaseData<T>, new()
     private static Dictionary<int, T> _dic = new Dictionary<int, T>();
     private static List<T> _list;
 
+    public static List<KeyValuePair<int,T>> AllData()
+    {
+        List<KeyValuePair<int,T>> dicList = new List<KeyValuePair<int,T>>(_dic);
+        return dicList;
+    }
+
     // List ÀÐ±â.
     public static void ReadList(List<T> list)
     {
