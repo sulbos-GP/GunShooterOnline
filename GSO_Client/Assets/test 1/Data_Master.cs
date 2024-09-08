@@ -26,7 +26,7 @@ public class Data_master_item_backpack : BaseData<Data_master_item_backpack>
     public int total_weight;
 }
 
-public class Data_RewardBase : BaseData<Data_RewardBase>
+public class Data_master_reward_base : BaseData<Data_master_reward_base>
 {
     public int money;
     public int ticket;
@@ -35,7 +35,7 @@ public class Data_RewardBase : BaseData<Data_RewardBase>
     public int reward_box_id;
 }
 
-public class Data_RewardLevel : BaseData<Data_RewardLevel>
+public class Data_master_reward_level : BaseData<Data_master_reward_level>
 {
     public int level;
     public int experience;
@@ -43,7 +43,7 @@ public class Data_RewardLevel : BaseData<Data_RewardLevel>
     public string icon;
 }
 
-public class Data_RewardBox : BaseData<Data_RewardBox>
+public class Data_master_reward_box : BaseData<Data_master_reward_box>
 {
 
 }

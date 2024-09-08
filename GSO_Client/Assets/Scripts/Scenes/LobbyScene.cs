@@ -30,6 +30,7 @@ public class LobbyScene : BaseScene
 #endif
         ExcelReader.ReadExcel();
         Debug.Log(Data_master_item_base.GetData(302).name);
+        Debug.Log(Data_master_reward_base.GetData(10001));
         SceneType = Define.Scene.Forest;
         Screen.SetResolution(1920, 1080, false);
         Debug.Log("신 초기화 로비");
