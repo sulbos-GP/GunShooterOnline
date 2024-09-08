@@ -194,6 +194,8 @@ public class SignInUI : MonoBehaviour
             ResultMessage("로그인 요청 성공");
         }
 
+        ExcelReader.CopyExcel();
+        StartCoroutine(ExcelReader.CopyExcel());
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
         {
