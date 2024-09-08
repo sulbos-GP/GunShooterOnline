@@ -12,6 +12,7 @@ using WebCommonLibrary.Error;
 using NPOI.Util;
 using UnityEngine.SocialPlatforms;
 using System.Collections.Generic;
+using System.IO;
 
 public class SignInUI : MonoBehaviour
 {
@@ -194,8 +195,9 @@ public class SignInUI : MonoBehaviour
             ResultMessage("로그인 요청 성공");
         }
 
-        ExcelReader.CopyExcel();
-        StartCoroutine(ExcelReader.CopyExcel());
+        BetterStreamingAssets.Initialize();
+        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+        ExcelReader.CopyExcel(files);
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
         {

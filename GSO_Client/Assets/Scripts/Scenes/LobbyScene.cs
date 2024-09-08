@@ -1,3 +1,4 @@
+using System.IO;
 using System.Linq;
 using System.Net;
 using Google.Protobuf.Protocol;
@@ -24,11 +25,12 @@ public class LobbyScene : BaseScene
         base.Init();
 #if UNITY_EDITOR
         Ip = "127.0.0.1";
+
+#elif UNITY_ANDROID
+        BetterStreamingAssets.Initialize();
+        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+        ExcelReader.CopyExcel(files);
 #endif
-#if UNITY_ANDROID
-        StartCoroutine(ExcelReader.CopyExcel());
-#endif
-        ExcelReader.ReadExcel();
         Debug.Log(Data_master_item_base.GetData(302).name);
         Debug.Log(Data_master_reward_base.GetData(10001));
         SceneType = Define.Scene.Forest;

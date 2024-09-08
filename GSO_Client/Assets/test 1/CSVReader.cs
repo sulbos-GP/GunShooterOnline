@@ -9,10 +9,12 @@ public class CSVReader : MonoBehaviour
 
     void Awake()
     {
+
 #if UNITY_ANDROID
-        StartCoroutine(ExcelReader.CopyExcel());
+        BetterStreamingAssets.Initialize();
+        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+        ExcelReader.CopyExcel(files);
 #endif
-        ExcelReader.ReadExcel();
         Debug.Log("success Read");
         Debug.Log(Data_master_item_base.GetData(101).name);
         Debug.Log(Data_master_item_base.AllData());

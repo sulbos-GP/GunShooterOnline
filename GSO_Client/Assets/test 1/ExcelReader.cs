@@ -19,36 +19,29 @@ public class ExcelReader
         {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>},
         {eTABLE_TYPE.master_item_base, TableExcel.ReadCSV<Data_master_item_base> },
         {eTABLE_TYPE.master_item_backpack, TableExcel.ReadCSV<Data_master_item_backpack>},
-        {eTABLE_TYPE.RewardBase, TableExcel.ReadCSV<Data_master_reward_base> },
+        {eTABLE_TYPE.master_reward_base, TableExcel.ReadCSV<Data_master_reward_base> },
         {eTABLE_TYPE.master_reward_level, TableExcel.ReadCSV<Data_master_reward_level> },
         {eTABLE_TYPE.master_reward_box, TableExcel.ReadCSV<Data_master_reward_box> }
     };
 
-    public static IEnumerator CopyExcel()
+    public static void CopyExcel(string[] files)
     {
-        //TO-DO : 추후에 텍스트 파일로 엑셀 이름 관리.
-        string filePath = Path.Combine(Application.streamingAssetsPath, "Item.xlsx");
-        string filePerPath = Path.Combine(Application.persistentDataPath, "Item.xlsx");
-
-        UnityWebRequest request = UnityWebRequest.Get(filePath);
-        yield return request.SendWebRequest();
-
-        if (request.result != UnityWebRequest.Result.Success)
+        foreach (var file in files)
         {
-            Debug.LogError("Error reading file from StreamingAssets: " + request.error);
-            yield break;
-        }
-        File.WriteAllBytes(filePerPath, request.downloadHandler.data);
-        if (File.Exists(filePerPath))
-        {
-            Debug.Log("File successfully copied to: " + filePerPath);
-            // 복사된 파일을 읽어 처리할 수 있습니다
-        }
-        else
-        {
-            Debug.LogError("File not found after copying: " + filePerPath);
-        }
+            //TO-DO : 추후에 텍스트 파일로 엑셀 이름 관리.
+            string filePath = Path.Combine(Application.streamingAssetsPath, file);
+            string filePerPath = Path.Combine(Application.persistentDataPath, file);
 
+            byte[] fileData = BetterStreamingAssets.ReadAllBytes(file);
+
+            string destinationPath = Path.Combine(Application.persistentDataPath, file);
+
+            string directoryPath = Path.GetDirectoryName(destinationPath);
+
+            File.WriteAllBytes(destinationPath, fileData);
+            Debug.Log($"Copied file to: {destinationPath} {fileData}");
+        }
+        ReadExcel();
     }
 
     public static void ReadExcel()
@@ -59,14 +52,16 @@ public class ExcelReader
         //File.WriteAllBytes(filePerPath, request.downloadHandler.data);
         //Debug.Log("File copied to: " + filePerPath);
 
-
-#if UNITY_ANDROID
-        string filePerPath = Path.Combine(Application.persistentDataPath, "Item.xlsx");
-        string[] fileList = { filePerPath };
-#endif
+        string[] fileList;
 #if UNITY_EDITOR
         fileList = Directory.GetFiles(Application.dataPath + EXCEL_PATH, "*.xlsx", SearchOption.TopDirectoryOnly);
+        Debug.Log("유니티 에디터");
+#elif UNITY_ANDROID
+        //string filePerPath = Path.Combine(Application.persistentDataPath, "Item.xlsx");
+        fileList =  Directory.GetFiles(Application.persistentDataPath,"*.xlsx", SearchOption.TopDirectoryOnly);
+        Debug.Log("유니티 안드로이드");
 #endif
+
         List<ISheet> sheetList = GetSheet(fileList);
         for (int i = 0; i < sheetList.Count; i++)
         {
