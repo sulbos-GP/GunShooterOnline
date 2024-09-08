@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 18236110065076002}
   - component: {fileID: 4951753452970910547}
-  - component: {fileID: 5589048240770995353}
   - component: {fileID: 3562629690575237209}
   - component: {fileID: 4282537680480379708}
   - component: {fileID: 1097808506283602639}
@@ -67,22 +66,6 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
---- !u!114 &5589048240770995353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 191436082380664689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a47a8fb1aeecfb34497a3e4f858f68b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _guns:
-  - {fileID: 11400000, guid: f272da6bfc5ce3a4da45f529413ad926, type: 2}
-  - {fileID: 11400000, guid: 34d6c693aec7dd54aa9c6f39c1c3bc4b, type: 2}
-  CurGun: 0
 --- !u!50 &3562629690575237209
 Rigidbody2D:
   serializedVersion: 4
