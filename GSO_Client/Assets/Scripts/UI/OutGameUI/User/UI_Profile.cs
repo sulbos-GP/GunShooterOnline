@@ -69,14 +69,14 @@ public class UI_Profile : LobbyUI
 
         this.nickname.text = profile.nickname;
 
-        int curLevel                = (profile.experience == 0) ? 0 : ((profile.experience / 100) + 1);
+        int curLevel                = (profile.experience < 100) ? 1 : profile.experience / 100;
         int nextLevel               = curLevel + 1;
         this.level.text             = curLevel.ToString();
         this.nextLevel.text         = $"다음 보상 랭크 : {nextLevel}";
 
         int curExperience           = (profile.experience % 100);
-        this.experience.text        = $"{curExperience} / {100}";
-        this.experienceBar.value    = (profile.experience == 0) ? 0 : curExperience / 100;
+        this.experience.text        = $"{curExperience} / 100";
+        this.experienceBar.value    = (curExperience == 0) ? 0 : curExperience / 100;
 
         foreach (var reward in Data_master_reward_level.AllData())
         {

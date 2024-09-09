@@ -55,5 +55,15 @@ namespace GsoWebServer.Servicies.Interfaces
         /// </summary>
         public Task<(WebErrorCode, IEnumerable<DB_GearUnit>?)> LoadGear(int uid);
 
+        /// <summary>
+        /// 유저 레벨업
+        /// </summary>
+        public Task<WebErrorCode> UpdateLevel(Int32 uid, Int32 experience);
+
+        /// <summary>
+        /// 유저 레벨 보상 받기
+        /// </summary>
+        public Task<WebErrorCode> UpdateLevelReward(Int32 uid, Int32 level);
+
     }
 }

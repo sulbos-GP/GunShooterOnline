@@ -37,7 +37,6 @@ namespace GsoWebServer.Startup
             services.Configure<GoogleConfig>(Configuration.GetSection(nameof(GoogleConfig)));
 
             // Add services to the container.
-            services.AddTransient<IMasterDB, MasterDB>();
             services.AddTransient<IGameDB, GameDB>();
 
             services.AddTransient<IGoogleService, GoogleService>();
@@ -45,6 +44,7 @@ namespace GsoWebServer.Startup
             services.AddTransient<IDataLoadService, DataLoadService>();
             services.AddTransient<IGameService, GameService>();
 
+            services.AddSingleton<IMasterDB, MasterDB>();
             services.AddSingleton<IMemoryDB, MemoryDB>();
 
         }
@@ -57,16 +57,9 @@ namespace GsoWebServer.Startup
                 app.UseDeveloperExceptionPage();
             }
 
-            // 마스터 DB가 등록이 안되어 있다면 없으면 반드시 에러
-            //IMasterDB masterDB = app.ApplicationServices.GetRequiredService<IMasterDB>();
-            //if(!await masterDB.LoadMasterData())
-            //{
-            //    return;
-            //}
-
             // Add middleware to the container.
-            //app.UseMiddleware<GsoWebServer.Middleware.VersionCheck>();
-            app.UseMiddleware<GsoWebServer.Middleware.CheckUserAuth>();
+            app.UseMiddleware<GsoWebServer.Middleware.GSO_VersionCheck>();
+            app.UseMiddleware<GsoWebServer.Middleware.GSO_CheckUserAuth>();
 
             app.UseHttpsRedirection();
 
@@ -79,6 +72,9 @@ namespace GsoWebServer.Startup
                 endpoints.MapControllers();
             });
 
+            // 마스터 DB가 등록이 안되어 있다면 없으면 반드시 에러
+            IMasterDB masterDB = app.ApplicationServices.GetRequiredService<IMasterDB>();
+            await masterDB.LoadMasterDatabase();
         }
     }
 }

@@ -38,16 +38,6 @@ public class UI_LevelReward : LobbyUI
 
     public override void InitUI()
     {
-
-        Debug.Log("[UI_LevelReward:InitUI]" + Data_master_reward_base.GetData(10001));
-        Debug.Log("[UI_LevelReward:InitUI]" + Data_master_reward_level.GetData(10001));
-
-        if (Data_master_reward_level.AllData().Count == 0)
-        {
-            Debug.Log("[UI_LevelReward:InitUI] : RewardLevelData is null");
-            return;
-        }
-
         foreach (var reward in Data_master_reward_level.AllData())
         {
             GameObject prefab = Instantiate(rewardPrefab, contentParent);

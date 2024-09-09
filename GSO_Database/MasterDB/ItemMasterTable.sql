@@ -1,26 +1,6 @@
 USE master_database;
 
-
 DROP TABLE IF EXISTS master_item_base;
-
-DROP TABLE IF EXISTS app_version;
-DROP TABLE IF EXISTS data_version;
-
-#앱 버전
-CREATE TABLE IF NOT EXISTS app_version
-(
-    major            			INT         NOT NULL    COMMENT '앱 버전', 
-	minor            			INT         NOT NULL    COMMENT '신규 기능', 
-	patch            			INT         NOT NULL    COMMENT '버그 수정'
-);
-
-#데이터 버전
-CREATE TABLE IF NOT EXISTS data_version
-(
-    major            			INT         NOT NULL    COMMENT '데이터 버전', 
-	minor            			INT         NOT NULL    COMMENT '신규 데이터', 
-	patch            			INT         NOT NULL    COMMENT '데이터 수정'
-);
 
 #아이템 정보
 CREATE TABLE IF NOT EXISTS master_item_base (

@@ -40,7 +40,7 @@ namespace GsoWebServer.Controllers.User
 
             //이전 닉네임과 일치하는지 DB에서 체크
             var error = await mAuthenticationService.VerifyNickname(header.uid, request.new_nickname);
-            if(error != WebErrorCode.None)
+            if (error != WebErrorCode.None)
             {
                 response.error_code = error;
                 response.error_description = "이전 닉네임과 일치 합니다.";
@@ -60,5 +60,7 @@ namespace GsoWebServer.Controllers.User
             response.nickname = nickname;
             return response;
         }
+
+
     }
 }

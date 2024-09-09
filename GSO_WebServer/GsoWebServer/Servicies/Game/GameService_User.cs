@@ -161,5 +161,66 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
+        public async Task<WebErrorCode> UpdateLevel(Int32 uid, Int32 experience)
+        {
+            var transaction = mGameDB.GetConnection().BeginTransaction();
+            try
+            {
+                var user =  await mGameDB.GetUserByUid(uid, transaction);
+                if (user == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                int oldLevel = (user.experience < 100) ? 1 : (user.experience / 100);
+                int curLevel = (user.experience < 100) ? 1 : (user.experience + experience) / 100;
+
+                if(0 == await mGameDB.UpdateLevel(uid, user.experience + experience, transaction))
+                {
+                    throw new Exception("레벨이 업데이트 되지 못했습니다.");
+                }
+
+                for(int level = oldLevel; level < curLevel; ++level)
+                {
+                    if(0 == await mGameDB.InsertLevelReward(uid, level, transaction))
+                    {
+                        throw new Exception("레벨업은 하였지만 보상을 추가하지는 못했습니다.");
+                    }
+                }
+
+                transaction.Commit();
+                return (WebErrorCode.None);
+            }
+            catch /*(Exception e)*/
+            {
+                transaction.Rollback();
+                return (WebErrorCode.TEMP_Exception);
+            }
+            finally
+            {
+                transaction.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// 유저 레벨 보상 받기
+        /// </summary>
+        public async Task<WebErrorCode> UpdateLevelReward(Int32 uid, Int32 level)
+        {
+            try
+            {
+                if (0 == await mGameDB.UpdateLevelReward(uid, level, true))
+                {
+                    throw new Exception("레벨이 보상을 받지 못했습니다.");
+                }
+
+                return (WebErrorCode.None);
+            }
+            catch /*(Exception e)*/
+            {
+                return (WebErrorCode.TEMP_Exception);
+            }
+        }
+
     }
 }

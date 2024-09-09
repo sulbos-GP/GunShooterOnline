@@ -2,12 +2,13 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System.Reflection;
+using SqlKata.Execution;
 using WebCommonLibrary.Models.MasterDB;
 using WebCommonLibrary.Models.GameDB;
+using GSO_WebServerLibrary.Reposiotry.Interfaces;
 
-namespace Server.Database.Handler
+namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
 {
-    
     public class DatabaseTable<T> where T : class
     {
 
@@ -38,11 +39,19 @@ namespace Server.Database.Handler
         {
             return datas;
         }
+
+        public bool IsValid()
+        {
+            return datas.Count != 0;
+        }
     }
 
-    public class DatabaseContext
+    public partial class MasterDB : IMasterDB
     {
-	    #region DatabaseTables 
+	    #region DatabaseTable 
+        private DB_Version appVersion = new DB_Version();
+        private DB_Version dataVersion = new DB_Version();
+        
         private DatabaseTable<DB_ItemBase> itemBase = new DatabaseTable<DB_ItemBase>();
         private DatabaseTable<DB_ItemBackpack> itemBackpack = new DatabaseTable<DB_ItemBackpack>();
         private DatabaseTable<DB_RewardBase> rewardBase = new DatabaseTable<DB_RewardBase>();
@@ -50,9 +59,20 @@ namespace Server.Database.Handler
         private DatabaseTable<DB_RewardLevel> rewardLevel = new DatabaseTable<DB_RewardLevel>();
 	    #endregion
 
-        public DatabaseContext()
+        public DB_Version AppVersion
         {
+            get
+            {
+                return appVersion;
+            }
+        }
             
+        public DB_Version DataVersion
+        {
+            get
+            {
+                return dataVersion;
+            }
         }
 
         
@@ -97,23 +117,57 @@ namespace Server.Database.Handler
         }
             
 
-        public async Task LoadDatabaseContext()
-        { 
+        public async Task<bool> LoadMasterTables()
+        {
+            appVersion = await LoadLatestAppVersion();
+            dataVersion = await LoadLatestDataVersion();
+            
+            
             itemBase = await LoadTable<DB_ItemBase>("master_item_base");
             itemBackpack = await LoadTable<DB_ItemBackpack>("master_item_backpack");
             rewardBase = await LoadTable<DB_RewardBase>("master_reward_base");
             rewardBox = await LoadTable<DB_RewardBox>("master_reward_box");
             rewardLevel = await LoadTable<DB_RewardLevel>("master_reward_level");
+
+            return ValidateMasterData();
+        }
+
+        private bool ValidateMasterData()
+        {
+
+            if(
+        itemBase == null ||
+        itemBackpack == null ||
+        rewardBase == null ||
+        rewardBox == null ||
+        rewardLevel == null ||
+        appVersion == null ||
+        dataVersion == null)
+            {
+                return false;  
+            }
+
+            return true;
         }
 
         private async Task<DatabaseTable<T>> LoadTable<T>(string name) where T : class
         {
             DatabaseTable<T> table = new DatabaseTable<T>();
-            var datas = await DatabaseHandler.MasterDB.LoadTable<T>(name);
+            var datas = await mQueryFactory.Query(name).GetAsync<T>();
             table.LoadTable(datas);
             return table;
         }
-        
+
+        public DB_Version GetAppVersion()
+        {
+            return AppVersion;
+        }
+
+        public DB_Version GetDataVersion()
+        {
+            return DataVersion;
+        }
+
         
         public DB_ItemBase GetItemBase(int id)
         {
@@ -140,7 +194,7 @@ namespace Server.Database.Handler
             return RewardLevel.Get(id);
         }
             
-
+    
         
         public Dictionary<int, DB_ItemBase> GetItemBaseList()
         {
@@ -167,6 +221,5 @@ namespace Server.Database.Handler
             return RewardLevel.GetList();
         }
             
-
     }
 }
