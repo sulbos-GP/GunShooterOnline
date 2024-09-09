@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using MySqlConnector;
@@ -17,6 +18,7 @@ public class MySQLToExcel : MonoBehaviour
 
     private MySqlConnection connection;
 
+    private string mysqlPath = "/StreamingAssets/";
 
     void Start()
     {
@@ -27,8 +29,10 @@ public class MySQLToExcel : MonoBehaviour
             connection.Open();
             Debug.Log("MySQL 데이터베이스에 성공적으로 연결되었습니다.");
 
+            List<string> tables = GetTableName();
             // MySQL에서 데이터를 가져와 엑셀에 저장
-            ExportDataToExcel();
+            foreach(var table in tables)
+                ExportDataToExcel(table);
         }
         catch (Exception ex)
         {
@@ -36,10 +40,31 @@ public class MySQLToExcel : MonoBehaviour
         }
     }
 
-    void ExportDataToExcel()
+    private List<string> GetTableName()
+    {
+        List<string> tableNames = new List<string>();
+
+        using (MySqlCommand cmd = new MySqlCommand("SHOW TABLES;", connection))
+        {
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    if (reader.GetString(0).Contains("version"))
+                        continue;
+                    // 테이블 이름을 리스트에 추가
+                    tableNames.Add(reader.GetString(0));
+                }
+            }
+        }
+
+        return tableNames;
+    }
+
+    void ExportDataToExcel(string table)
     {
         // MySQL 쿼리 실행
-        string query = "SELECT * FROM master_item_base"; // your_table_name을 실제 테이블 이름으로 변경
+        string query = "SELECT * FROM "+ table; // your_table_name을 실제 테이블 이름으로 변경
         MySqlCommand command = new MySqlCommand(query, connection);
         MySqlDataReader reader = command.ExecuteReader();
 
@@ -49,7 +74,7 @@ public class MySQLToExcel : MonoBehaviour
         reader.Close();
 
         // 엑셀 파일 생성 또는 업데이트
-        string filePath = Path.Combine("C:\\GunShooterOnline\\Data", "Item.xlsx");
+        string filePath = Path.Combine(Application.dataPath+ mysqlPath, table+".xlsx");
 
         // 엑셀 워크북 및 시트 생성
         IWorkbook workbook;
@@ -61,14 +86,14 @@ public class MySQLToExcel : MonoBehaviour
             using (FileStream file = new FileStream(filePath, FileMode.Open, FileAccess.Read))
             {
                 workbook = new XSSFWorkbook(file);
-                sheet = workbook.GetSheet("Item") ?? workbook.CreateSheet("Item");
+                sheet = workbook.GetSheet(table) ?? workbook.CreateSheet(table);
             }
         }
         else
         {
             // 새 파일 생성
             workbook = new XSSFWorkbook();
-            sheet = workbook.CreateSheet("Item");
+            sheet = workbook.CreateSheet(table);
         }
 
         // DataTable 데이터를 엑셀 시트에 쓰기

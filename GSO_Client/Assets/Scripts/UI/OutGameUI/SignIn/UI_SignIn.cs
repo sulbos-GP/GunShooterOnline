@@ -12,6 +12,7 @@ using WebCommonLibrary.Error;
 using NPOI.Util;
 using UnityEngine.SocialPlatforms;
 using System.Collections.Generic;
+using System.IO;
 
 public class SignInUI : MonoBehaviour
 {
@@ -160,6 +161,12 @@ public class SignInUI : MonoBehaviour
         {
             ResultMessage("로그인 요청 시도...");
 
+            var header = new HeaderCheackVersion
+            {
+                app = "1.0.0",
+                data = "1.0.0",
+            };
+
             var body = new SignInReq()
             {
                 user_id = PlayGamesPlatform.Instance.GetUserId(),
@@ -168,7 +175,7 @@ public class SignInUI : MonoBehaviour
             };
 
             GsoWebService service = new GsoWebService();
-            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(body);
+            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(header, body);
             request.ExecuteAsync(ProcessAccessToken);
         }
         catch (HttpRequestException error)
@@ -194,6 +201,9 @@ public class SignInUI : MonoBehaviour
             ResultMessage("로그인 요청 성공");
         }
 
+        BetterStreamingAssets.Initialize();
+        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+        ExcelReader.CopyExcel(files);
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
         {

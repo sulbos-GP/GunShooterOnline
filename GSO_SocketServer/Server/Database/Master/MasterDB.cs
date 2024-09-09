@@ -21,9 +21,7 @@ namespace Server.Database.Master
         public async Task<IEnumerable<T>> LoadTable<T>(string table)
         {
             var query = this.GetQueryFactory();
-
-            return await query.Query(table)
-                .GetAsync<T>();
+            return await query.Query(table).GetAsync<T>();
         }
 
     }

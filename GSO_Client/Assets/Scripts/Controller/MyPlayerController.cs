@@ -172,7 +172,6 @@ public partial class MyPlayerController : PlayerController
     private void Movement_Canceled(InputAction.CallbackContext context)
     {
         Dir = Vector2.zero;
-
         //State = CreatureState.Idle;
     }
 

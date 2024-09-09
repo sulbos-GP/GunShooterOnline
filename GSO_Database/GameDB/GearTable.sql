@@ -16,6 +16,4 @@ CREATE TABLE IF NOT EXISTS gear (
 );
 
 SELECT * FROM gear;
-
-
 SELECT * FROM gear WHERE uid=11;

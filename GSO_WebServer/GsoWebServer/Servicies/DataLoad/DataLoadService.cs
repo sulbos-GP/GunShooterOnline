@@ -40,6 +40,12 @@ namespace GsoWebServer.Servicies.DataLoad
                 return (errorCode, null);
             }
 
+            (errorCode, loadData.LevelReward) = await mGameService.GetUserLevelReward(uid, null, null);
+            if (errorCode != WebErrorCode.None)
+            {
+                return (errorCode, null);
+            }
+
             return (WebErrorCode.None, loadData);
         }
 

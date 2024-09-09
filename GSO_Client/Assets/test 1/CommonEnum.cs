@@ -6,7 +6,12 @@ public enum eTABLE_TYPE
 {
     None,
     TestItem,
-    Item
+    Item,
+    master_item_base,
+    master_item_backpack,
+    master_reward_base,
+    master_reward_box,
+    master_reward_level
 }
 
 public enum eSTAT

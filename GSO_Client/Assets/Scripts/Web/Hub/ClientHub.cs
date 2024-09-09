@@ -44,9 +44,15 @@ public abstract class ClientHub : MonoBehaviour
     {
         try
         {
+
             SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버 빌드중...");
 
-            string accessToken = "dummy";//Managers.Web.credential.access_token;
+            if(Managers.Web.credential.access_token == string.Empty)
+            {
+                throw new Exception("Client credential 정보가 없습니다.");
+            }
+
+            string accessToken = Managers.Web.credential.access_token;
             mConnection = new HubConnectionBuilder()
             .WithUrl(mConnectionUrl, options =>
             {

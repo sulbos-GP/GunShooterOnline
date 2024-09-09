@@ -1,11 +1,10 @@
 @GsoWebServer_HostAddress = http://localhost:5000/api
 
-POST {{GsoWebServer_HostAddress}}/Authorize/SignIn
+POST {{GsoWebServer_HostAddress}}/Authorize/Authentication
 Content-Type: application/json
 
 {
     "user_id":"a_1",
-    "server_code":"a0983694-050c-4230-c576-bf863afc066c",
     "service":"Google"
 }
 

@@ -18,7 +18,7 @@ namespace Matchmaker.Startup
                     {
                         serverOptions.ListenAnyIP(5200);
 #if AWS
-                        serverOptions.ListenAnyIP(5200);
+                    serverOptions.ListenAnyIP(5200);
 #endif
                     });
                 });

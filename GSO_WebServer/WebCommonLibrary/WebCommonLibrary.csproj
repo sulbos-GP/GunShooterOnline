@@ -3,10 +3,11 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
+    <Configurations>Debug;Release;Multi;Aws</Configurations>
   </PropertyGroup>
 
 	<Target Name="PostBuild" AfterTargets="PostBuildEvent">
-		<Exec Command="xcopy /Y /R &quot;$(TargetDir)WebCommonLibrary.dll&quot; &quot;$(SolutionDir)..\GSO_Client\Assets\Plugins\&quot;&#xD;&#xA;&#xD;&#xA;if &quot;$(Configuration)&quot; == &quot;Debug&quot; (&#xD;&#xA; xcopy /Y /R &quot;$(TargetDir)WebCommonLibrary.dll&quot; &quot;$(SolutionDir)..\GSO_SocketServer\Server\bin\Debug\net8.0\&quot;&#xD;&#xA;) else if &quot;$(Configuration)&quot; == &quot;Release&quot; (&#xD;&#xA; xcopy /Y /R &quot;$(TargetDir)WebCommonLibrary.dll&quot; &quot;$(SolutionDir)..\GSO_SocketServer\Server\bin\Release\net8.0\&quot;&#xD;&#xA; xcopy /Y /R &quot;$(TargetDir)WebCommonLibrary.dll&quot; &quot;$(SolutionDir)..\GSO_SocketServer\Server\bin\Docker\net8.0\&quot;&#xD;&#xA;)" />
+		<Exec Command="xcopy /Y /R &quot;$(TargetDir)WebCommonLibrary.dll&quot; &quot;$(SolutionDir)..\GSO_Client\Assets\Plugins\&quot;&#xD;&#xA;xcopy /Y /R &quot;$(TargetDir)WebCommonLibrary.dll&quot; &quot;$(SolutionDir)..\GSO_SocketServer\Server\app\&quot;" />
 	</Target>
 
 </Project>

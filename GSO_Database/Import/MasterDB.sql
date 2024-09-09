@@ -25,7 +25,8 @@ DROP TABLE IF EXISTS `app_version`;
 CREATE TABLE `app_version` (
   `major` int(11) NOT NULL COMMENT '앱 버전',
   `minor` int(11) NOT NULL COMMENT '신규 기능',
-  `patch` int(11) NOT NULL COMMENT '버그 수정'
+  `patch` int(11) NOT NULL COMMENT '버그 수정',
+  UNIQUE KEY `major` (`major`,`minor`,`patch`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -35,6 +36,7 @@ CREATE TABLE `app_version` (
 
 LOCK TABLES `app_version` WRITE;
 /*!40000 ALTER TABLE `app_version` DISABLE KEYS */;
+INSERT INTO `app_version` VALUES (1,0,0);
 /*!40000 ALTER TABLE `app_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,7 +50,8 @@ DROP TABLE IF EXISTS `data_version`;
 CREATE TABLE `data_version` (
   `major` int(11) NOT NULL COMMENT '데이터 버전',
   `minor` int(11) NOT NULL COMMENT '신규 데이터',
-  `patch` int(11) NOT NULL COMMENT '데이터 수정'
+  `patch` int(11) NOT NULL COMMENT '데이터 수정',
+  UNIQUE KEY `major` (`major`,`minor`,`patch`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -58,6 +61,7 @@ CREATE TABLE `data_version` (
 
 LOCK TABLES `data_version` WRITE;
 /*!40000 ALTER TABLE `data_version` DISABLE KEYS */;
+INSERT INTO `data_version` VALUES (1,0,0);
 /*!40000 ALTER TABLE `data_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,6 +127,86 @@ LOCK TABLES `master_item_base` WRITE;
 INSERT INTO `master_item_base` VALUES (101,'W001','Colt45',2,'Weapone',101,2,2,400,1.2,100,1,'IconW_colt'),(102,'W002','Ak47',7,'Weapone',102,4,2,2200,1.8,500,1,'IconW_ak'),(103,'W003','Aug',6,'Weapone',103,4,2,2300,1.8,440,1,'IconW_aug'),(201,'D001','경찰조끼',3,'Defensive',201,2,3,1100,1.5,550,1,'IconD_police'),(202,'D002','방탄조끼',4,'Defensive',202,2,3,1500,1.5,750,1,'IconD_proof'),(203,'D003','군용조끼',5,'Defensive',203,2,3,1700,1.5,850,1,'IconD_military'),(301,'B001','의약품가방',3,'Bag',301,2,2,500,1.4,250,1,'IconB_medical'),(302,'B002','군대가방',3,'Bag',302,2,2,1500,1.4,750,1,'IconB_army'),(303,'B003','군용더블백',4,'Bag',303,2,2,2500,1.4,1300,1,'IconB_double'),(401,'R001','의약품상자',1,'Recovery',401,1,1,500,0.7,200,1,'IconR_medical'),(402,'R002','밴드',0.2,'Recovery',402,1,1,100,0.7,50,64,'IconR_band'),(403,'R003','아드레날린',0.2,'Recovery',403,1,1,1000,0.7,600,1,'IconR_Adrenaline'),(404,'R004','알약',0.2,'Recovery',404,1,1,500,0.7,300,64,'IconR_pill'),(501,'E001','5.59mm',0.3,'Bullet',501,1,1,10,0.4,0,64,'IconE_5.59'),(502,'E002','7.29mm',0.3,'Bullet',502,1,1,10,0.4,0,64,'IconE_7.29'),(601,'S001','타이어휠',10,'Spoil',601,4,4,0,2.2,2000,1,'IconS_spoil'),(602,'S002','1.5볼트건전지',2,'Spoil',602,1,2,0,1.2,600,1,'IconS_battery'),(603,'S003','밧줄한묶음',6,'Spoil',603,1,3,0,1.3,500,1,'IconS_rope'),(604,'S004','은도금톱니바퀴',8,'Spoil',604,3,3,0,1.8,200,1,'IconS_wheel'),(605,'S005','금괴',5,'Spoil',605,2,1,0,1.2,2000,1,'IconS_goldbar'),(606,'S006','통나무',3,'Spoil',606,2,2,0,1.2,250,1,'IconS_solidwood');
 /*!40000 ALTER TABLE `master_item_base` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `master_reward_base`
+--
+
+DROP TABLE IF EXISTS `master_reward_base`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `master_reward_base` (
+  `reward_id` int(11) NOT NULL COMMENT '보상 아이디',
+  `money` int(11) NOT NULL DEFAULT 0 COMMENT '돈',
+  `ticket` int(11) NOT NULL DEFAULT 0 COMMENT '티켓',
+  `gacha` int(11) NOT NULL DEFAULT 0 COMMENT '가챠',
+  `reward_box_id` int(11) DEFAULT NULL COMMENT '보상 박스 아이디',
+  PRIMARY KEY (`reward_id`),
+  KEY `FK_reward_box_id_master_reward_box_id` (`reward_box_id`),
+  CONSTRAINT `FK_reward_box_id_master_reward_box_id` FOREIGN KEY (`reward_box_id`) REFERENCES `master_reward_box` (`reward_box_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `master_reward_base`
+--
+
+LOCK TABLES `master_reward_base` WRITE;
+/*!40000 ALTER TABLE `master_reward_base` DISABLE KEYS */;
+INSERT INTO `master_reward_base` VALUES (10001,1000,0,0,NULL),(10002,0,2,0,NULL),(10003,0,0,5,NULL);
+/*!40000 ALTER TABLE `master_reward_base` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `master_reward_box`
+--
+
+DROP TABLE IF EXISTS `master_reward_box`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `master_reward_box` (
+  `reward_box_id` int(11) NOT NULL COMMENT '보상 박스 아이디',
+  PRIMARY KEY (`reward_box_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `master_reward_box`
+--
+
+LOCK TABLES `master_reward_box` WRITE;
+/*!40000 ALTER TABLE `master_reward_box` DISABLE KEYS */;
+/*!40000 ALTER TABLE `master_reward_box` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `master_reward_level`
+--
+
+DROP TABLE IF EXISTS `master_reward_level`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `master_reward_level` (
+  `reward_id` int(11) NOT NULL COMMENT '보상 정보',
+  `level` int(11) NOT NULL COMMENT '레벨',
+  `experience` int(11) NOT NULL COMMENT '경험치',
+  `name` varchar(50) NOT NULL COMMENT '보상 이름',
+  `icon` varchar(50) NOT NULL COMMENT '보상 아이콘',
+  PRIMARY KEY (`reward_id`),
+  UNIQUE KEY `level` (`level`),
+  CONSTRAINT `FK_master_reward_level_reward_id_master_reward_base_reward_id` FOREIGN KEY (`reward_id`) REFERENCES `master_reward_base` (`reward_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `master_reward_level`
+--
+
+LOCK TABLES `master_reward_level` WRITE;
+/*!40000 ALTER TABLE `master_reward_level` DISABLE KEYS */;
+INSERT INTO `master_reward_level` VALUES (10001,1,100,'1000골드','IconS_goldbar'),(10002,2,200,'티켓 2장','IconS_solidwood'),(10003,3,300,'뽑기 5장','IconS_battery');
+/*!40000 ALTER TABLE `master_reward_level` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -133,4 +217,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-08-29 19:23:21
+-- Dump completed on 2024-09-09 20:39:33

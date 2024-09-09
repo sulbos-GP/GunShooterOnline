@@ -31,6 +31,11 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<(WebErrorCode, UserSkillInfo?)> GetSkillInfo(int uid);
 
         /// <summary>
+        /// 유저 레벨 보상 정보 가져오기
+        /// </summary>
+        public Task<(WebErrorCode, List<UserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id);
+
+        /// <summary>
         /// 유저 메타데이터 정보 업데이트
         /// </summary>
         public Task<WebErrorCode> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata);
@@ -49,6 +54,16 @@ namespace GsoWebServer.Servicies.Interfaces
         /// 장비의 아이템 로드
         /// </summary>
         public Task<(WebErrorCode, IEnumerable<DB_GearUnit>?)> LoadGear(int uid);
+
+        /// <summary>
+        /// 유저 레벨업
+        /// </summary>
+        public Task<WebErrorCode> UpdateLevel(Int32 uid, Int32 experience);
+
+        /// <summary>
+        /// 유저 레벨 보상 받기
+        /// </summary>
+        public Task<WebErrorCode> UpdateLevelReward(Int32 uid, Int32 level);
 
     }
 }

@@ -8,52 +8,10 @@ namespace DatabaseGenerator
 {
     internal class Format
     {
-        // {0} ContextEnum
-        // {1} ContextRegion
-        // {2} GetContext
-        // {3} LoadDatabaseContext
-        // {4} GetDataContext
-        public static string context =
-            @"using System.ComponentModel;
-using System.Threading.Tasks;
-using WebCommonLibrary.Models.MasterDB;
-using WebCommonLibrary.Models.GameDB;
-
-namespace Server.Database.Handler
-{{
-    
-    //**** Context 확인용 ****//
-    public enum EDatabaseTable
-    {{ {0}
-    }}
-
-    public class DatabaseContext
-    {{
-	    #region DatabaseTable {1}
-	    #endregion
-
-        public DatabaseContext()
-        {{
-            
-        }}
-
-        {2}
-
-        public async Task LoadDatabaseContext()
-        {{ {3}
-        }}
-        
-        {4}
-
-    }}
-}}";
-
         // {0} 테이블 이름
-        // {1} 대문자 이름
         public static string ContextEnum =
             @"
-        [Description (""{0}"")]
-        {1},
+        {0},
 ";
 
         // {0} 데이터 구조체
@@ -76,12 +34,12 @@ namespace Server.Database.Handler
         }}
             ";
 
-        // {0} 대문자 이름
+        // {0} 소문자 이름
         // {1} 데이터 구조
         // {2} 테이블 이름
         public static string LoadDatabaseContext =
             @"
-            {0}.LoadTable(await DatabaseHandler.MasterDB.LoadTable<{1}>(""{2}""));";
+            {0} = await LoadTable<{1}>(""{2}"");";
 
         // {0} 데이터 구조체
         // {1} 대문자 이름
@@ -92,6 +50,31 @@ namespace Server.Database.Handler
             return {1}.Get(id);
         }}
             ";
+
+        // {0} 데이터 구조체
+        // {1} 대문자 이름
+        public static string GetDataListContext =
+            @"
+        public Dictionary<int, {0}> Get{1}List()
+        {{
+            return {1}.GetList();
+        }}
+            ";
+
+        public static string GetDataFuncContext =
+    @"
+        public {0} Get{1}(int id);";
+
+        // {0} 데이터 구조체
+        // {1} 대문자 이름
+        public static string GetDataListFuncContext =
+            @"
+        public Dictionary<int, {0}> Get{1}List();";
+
+        // {0} 소문자 이름
+        public static string GetValidateContext =
+            @"
+        {0} == null ||";
 
     }
 }

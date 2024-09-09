@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-    <Configurations>Debug;Release;Aws</Configurations>
+    <Configurations>Debug;Release;Aws;Multi</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,6 +15,7 @@
     <PackageReference Include="SqlKata" Version="2.4.0" />
     <PackageReference Include="SqlKata.Execution" Version="2.4.0" />
     <PackageReference Include="ZLogger" Version="2.5.4" />
+	<FrameworkReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
