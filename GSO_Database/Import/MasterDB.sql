@@ -25,7 +25,8 @@ DROP TABLE IF EXISTS `app_version`;
 CREATE TABLE `app_version` (
   `major` int(11) NOT NULL COMMENT '앱 버전',
   `minor` int(11) NOT NULL COMMENT '신규 기능',
-  `patch` int(11) NOT NULL COMMENT '버그 수정'
+  `patch` int(11) NOT NULL COMMENT '버그 수정',
+  UNIQUE KEY `major` (`major`,`minor`,`patch`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -35,6 +36,7 @@ CREATE TABLE `app_version` (
 
 LOCK TABLES `app_version` WRITE;
 /*!40000 ALTER TABLE `app_version` DISABLE KEYS */;
+INSERT INTO `app_version` VALUES (1,0,0);
 /*!40000 ALTER TABLE `app_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -48,7 +50,8 @@ DROP TABLE IF EXISTS `data_version`;
 CREATE TABLE `data_version` (
   `major` int(11) NOT NULL COMMENT '데이터 버전',
   `minor` int(11) NOT NULL COMMENT '신규 데이터',
-  `patch` int(11) NOT NULL COMMENT '데이터 수정'
+  `patch` int(11) NOT NULL COMMENT '데이터 수정',
+  UNIQUE KEY `major` (`major`,`minor`,`patch`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -58,6 +61,7 @@ CREATE TABLE `data_version` (
 
 LOCK TABLES `data_version` WRITE;
 /*!40000 ALTER TABLE `data_version` DISABLE KEYS */;
+INSERT INTO `data_version` VALUES (1,0,0);
 /*!40000 ALTER TABLE `data_version` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -213,4 +217,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-08 21:12:17
+-- Dump completed on 2024-09-09 20:39:33
