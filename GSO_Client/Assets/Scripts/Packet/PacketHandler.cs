@@ -507,6 +507,16 @@ internal class PacketHandler
             mergedItem.ItemAmount = packet.MergedItem.Amount;
             combinedItem.ItemAmount = packet.CombinedItem.Amount;
 
+            if (sourceEquip != null)
+            {
+                sourceEquip.GetComponent<RecoverySlot>().UpdateQuickSlotAmount(mergedItem.ItemAmount);
+            }
+
+            if (destinationEquip != null)
+            {
+                destinationEquip.GetComponent<RecoverySlot>().UpdateQuickSlotAmount(combinedItem.ItemAmount);
+            }
+
             //옮긴 아이템의 양이 0개가 되면 파괴 아니면 원래 위치로 이동
             if (packet.CombinedItem.Amount == 0)
             {
@@ -529,7 +539,7 @@ internal class PacketHandler
     }
 
 
-    internal static void S_DivideItemHandler(PacketSession session, IMessage message)
+    internal static void S_DevideItemHandler(PacketSession session, IMessage message)
     {
         S_DevideItem packet = message as S_DevideItem;
         if (packet == null)
@@ -665,12 +675,6 @@ internal class PacketHandler
         Managers.Object.Remove(packet.PlayerId);
         Managers.Object.DebugDics();
     }
-
-    internal static void S_DevideItemHandler(PacketSession session, IMessage message)
-    {
-        throw new NotImplementedException();
-    }
-
 
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
