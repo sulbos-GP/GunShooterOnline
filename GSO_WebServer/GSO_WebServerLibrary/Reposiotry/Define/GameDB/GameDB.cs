@@ -15,13 +15,16 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
         private readonly SqlKata.Compilers.MySqlCompiler mCompiler;
         private readonly QueryFactory mQueryFactory;
 
-        public GameDB(IOptions<DatabaseConfig> dbConfig)
+        readonly IMasterDB mMasterDB;
+
+        public GameDB(IOptions<DatabaseConfig> dbConfig, IMasterDB masterDB)
         {
             mConnection = new MySqlConnection(dbConfig.Value.GameDB);
             Open();
 
             mCompiler = new SqlKata.Compilers.MySqlCompiler();
             mQueryFactory = new QueryFactory(mConnection, mCompiler);
+            this.mMasterDB = masterDB;
         }
 
         public void Dispose()

@@ -161,6 +161,12 @@ public class SignInUI : MonoBehaviour
         {
             ResultMessage("로그인 요청 시도...");
 
+            var header = new HeaderCheackVersion
+            {
+                app = "1.0.0",
+                data = "1.0.0",
+            };
+
             var body = new SignInReq()
             {
                 user_id = PlayGamesPlatform.Instance.GetUserId(),
@@ -169,7 +175,7 @@ public class SignInUI : MonoBehaviour
             };
 
             GsoWebService service = new GsoWebService();
-            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(body);
+            SingInRequest request = service.mAuthorizeResource.GetSignInRequest(header, body);
             request.ExecuteAsync(ProcessAccessToken);
         }
         catch (HttpRequestException error)

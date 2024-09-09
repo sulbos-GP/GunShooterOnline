@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using UnityEngine;
+using WebCommonLibrary.Models.MasterDB;
 
 ///////////////////////////////////
 ///                             ///
@@ -18,12 +19,15 @@ public abstract class HeaderDTO
 
 public class HeaderCheackVersion : HeaderDTO
 {
-    public Version app { get; set; } = null;
-    public Version data { get; set; } = null;
+    public string app { get; set; } = string.Empty;
+    public string data { get; set; } = string.Empty;
 
     public override Dictionary<string, string> ToDictionary()
     {
-        return new Dictionary<string, string>();
+        var header = new Dictionary<string, string>();
+        header["AppVersion"] = app;
+        header["MasterDataVersion"] = data;
+        return header;
     }
 }
 

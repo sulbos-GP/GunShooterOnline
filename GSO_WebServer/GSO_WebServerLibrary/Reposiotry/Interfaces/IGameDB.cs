@@ -41,7 +41,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// <summary>
         /// 유저의 유니크 아이디로 user정보 불러오기
         /// </summary>
-        public Task<UserInfo?> GetUserByUid(int uid);
+        public Task<UserInfo?> GetUserByUid(int uid, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 닉네임으로 user정보 불러오기
@@ -83,6 +83,19 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// </summary>
         public Task<int> UpdateUserSkill(int uid, UserSkillInfo skill);
 
-        
+        /// <summary>
+        /// 유저의 유니크 아이디로 level 업데이트
+        /// </summary>
+        public Task<int> UpdateLevel(int uid, int experience, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 유니크 아이디로 level 보상 추가
+        /// </summary>
+        public Task<int> InsertLevelReward(int uid, int level, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 유니크 아이디로 level 보상 추가
+        /// </summary>
+        public Task<int> UpdateLevelReward(int uid, int level, bool received);
     }
 }

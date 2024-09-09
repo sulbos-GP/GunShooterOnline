@@ -1,22 +1,25 @@
 ﻿using GSO_WebServerLibrary.Reposiotry.Interfaces;
-using GsoWebServer.Servicies.Interfaces;
 using System.Text.Json;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.DTO.Middleware;
 using WebCommonLibrary.Models.MemoryDB;
+using GSO_WebServerLibrary.Servicies.Interfaces;
+using Microsoft.AspNetCore.Http;
 
-namespace GsoWebServer.Middleware
+namespace GSO_WebServerLibrary.Middleware
 {
     public class CheckUserAuth
     {
-        readonly IAuthenticationService authenticationService;
-        readonly IMemoryDB mMemoryDB;
-        readonly IGameDB mGameDB;
-        readonly RequestDelegate mNext;
+        private readonly IGoogleService mGoogleService;
+        private readonly IMemoryDB mMemoryDB;
+        private readonly IGameDB mGameDB;
+        private readonly RequestDelegate mNext;
 
-        public CheckUserAuth(RequestDelegate next, IMemoryDB memoryDb, IGameDB gameDB, IAuthenticationService authcationService)
+        protected List<string> mIgnoreEndPoints = new List<string>();
+
+        public CheckUserAuth(RequestDelegate next, IMemoryDB memoryDb, IGameDB gameDB, IGoogleService googleService)
         {
-            authenticationService = authcationService;
+            mGoogleService = googleService;
             mMemoryDB = memoryDb;
             mGameDB = gameDB;
             mNext = next;
@@ -32,13 +35,14 @@ namespace GsoWebServer.Middleware
                 return;
             }
 
-            //로그인은 제외
             var formString = context.Request.Path.Value;
-            if (formString.EndsWith("/Authentication", StringComparison.OrdinalIgnoreCase) == true ||
-                formString.EndsWith("/SignIn", StringComparison.OrdinalIgnoreCase) == true)
+            foreach(string endPoint in mIgnoreEndPoints)
             {
-                await mNext(context);
-                return;
+                if (formString.EndsWith(endPoint, StringComparison.OrdinalIgnoreCase) == true)
+                {
+                    await mNext(context);
+                    return;
+                }
             }
 
             //Header에 access_token가 포함되어 있는지 확인
@@ -61,7 +65,7 @@ namespace GsoWebServer.Middleware
             var userData = await mGameDB.GetUserByUid(uid);
             if (userData == null)
             {
-                await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, WebErrorCode.TEMP_ERROR);
+                await SendMiddlewareResponse(context, StatusCodes.Status404NotFound, WebErrorCode.TEMP_ERROR);
                 return;
             }
 
@@ -71,28 +75,22 @@ namespace GsoWebServer.Middleware
             {
 
                 //갱신 토큰을 이용하여 엑세스 토큰 갱신하기
-                //(error, var refreshTokenData) = await mMemoryDB.ValidateAndGetRefreshToken(uid);
-                (error, var accessTokenData) = await authenticationService.RefreshToken(userData.player_id, userData.refresh_token);
+                (error, var accessTokenData) = await mGoogleService.RefreshToken(userData.player_id, userData.refresh_token);
                 if (accessTokenData == null || accessTokenData.ExpiresInSeconds == null)
                 {
-                    await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, error);
+                    await SendMiddlewareResponse(context, StatusCodes.Status404NotFound, error);
                     return;
                 }
 
                 error = await mMemoryDB.RegisterAuthUserData(uid, userData.player_id, accessTokenData.AccessToken, accessTokenData.ExpiresInSeconds.Value);
                 if (error != WebErrorCode.None)
                 {
-                    await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, error);
+                    await SendMiddlewareResponse(context, StatusCodes.Status404NotFound, error);
                     return;
                 }
 
-                user = new AuthUserDataInfo
-                {
-                    uid = uidstr,
-                    user_id = userData.player_id,
-                    access_token = accessTokenData.AccessToken,
-                };
-
+                await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, WebErrorCode.AccessTokenIsExpries);
+                return;
             }
 
             //이번 api 호출 끝날 때까지 redis키 잠금
@@ -122,32 +120,6 @@ namespace GsoWebServer.Middleware
             });
             await context.Response.WriteAsync(errorJsonResponse);
         }
-
-        //async Task SendRefreshTokenResponse(HttpContext context, int uid, WebErrorCode error)
-        //{
-
-        //    HttpClient client = mHttpClientFactory.CreateClient("Authorization");
-
-        //    RefreshTokenReq body = new RefreshTokenReq
-        //    {
-        //        uid = uid
-        //    };
-        //    var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
-
-        //    var response = await client.PostAsync("api/Authorize/RefreshToken", content);
-        //    response.EnsureSuccessStatusCode();
-
-        //    var newToken = await response.Content.ReadFromJsonAsync<RefreshTokenRes>();
-        //    if (newToken == null)
-        //    {
-        //        await SendMiddlewareResponse(context, StatusCodes.Status403Forbidden, WebErrorCode.FailedRefreshToken);
-        //    }else
-        //    {
-        //        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        //        var errorJsonResponse = JsonSerializer.Serialize(newToken);
-        //        await context.Response.WriteAsync(errorJsonResponse);
-        //    }
-        //}
 
         private string? GetValueOrNull(string key, HttpContext context)
         {

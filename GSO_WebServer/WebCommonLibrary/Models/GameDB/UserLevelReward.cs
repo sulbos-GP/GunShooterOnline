@@ -8,6 +8,6 @@ namespace WebCommonLibrary.Models.GameDB
     {
         public int reward_id { get; set; } = 0;
         public bool received { get; set; } = false;
-        public DateTime received_dt { get; set; } = DateTime.MinValue;
+        public DateTime? received_dt { get; set; } = null;
     }
 }
