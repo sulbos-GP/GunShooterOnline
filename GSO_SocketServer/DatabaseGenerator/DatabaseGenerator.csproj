@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy /Y /R &quot;$(TargetDir)DatabaseContext.cs&quot; &quot;$(TargetDir)..\..\..\..\Server\Database\Handler\DatabaseContext.cs&quot;" />
+    <Exec Command="xcopy /Y /R &quot;$(TargetDir)DatabaseContext.cs&quot; &quot;$(TargetDir)..\..\..\..\Server\Database\Handler\DatabaseContext.cs&quot;&#xD;&#xA;xcopy /Y /R &quot;$(TargetDir)MasterDB_Load.cs&quot; &quot;$(TargetDir)..\..\..\..\..\GSO_WebServer\GSO_WebServerLibrary\Reposiotry\Define\MasterDB\MasterDB_Load.cs&quot;&#xD;&#xA;xcopy /Y /R &quot;$(TargetDir)IMasterDataDB.cs&quot; &quot;$(TargetDir)..\..\..\..\..\GSO_WebServer\GSO_WebServerLibrary\Reposiotry\Interfaces\IMasterDataDB.cs&quot;" />
   </Target>
 
 </Project>

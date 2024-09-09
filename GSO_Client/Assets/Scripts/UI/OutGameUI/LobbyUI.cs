@@ -17,11 +17,14 @@ public abstract class LobbyUI : MonoBehaviour
 
         LobbyUIManager.Instance.RegisterUI(type, this);
 
+        OnRegister();
     }
 
     public void OnDestroy()
     {
         LobbyUIManager.Instance.UnRegisterUI(type);
+
+        OnUnRegister();
     }
 
     /// <summary>
@@ -33,4 +36,14 @@ public abstract class LobbyUI : MonoBehaviour
     /// 지속적으로 업데이트 해야하는 UI 부분
     /// </summary>
     public abstract void UpdateUI();
+
+    /// <summary>
+    /// 등록 이후에 해야하는 부분
+    /// </summary>
+    public abstract void OnRegister();
+
+    /// <summary>
+    /// 등록 해제 이후에 해야하는 부분
+    /// </summary>
+    public abstract void OnUnRegister();
 }

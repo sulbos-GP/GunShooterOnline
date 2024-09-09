@@ -1,9 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDB;
 
 public class UI_Profile : LobbyUI
 {
@@ -23,10 +23,40 @@ public class UI_Profile : LobbyUI
     private TMP_Text experience;
 
     [SerializeField]
-    private ProgressBar experienceBar;
+    private Image nextRewardIcon;
 
     [SerializeField]
-    private Image nextRewardIcon;
+    private Slider experienceBar;
+
+    [SerializeField]
+    private Button metaDataButton;
+
+    [SerializeField]
+    private GameObject metaDataObject;
+
+    [SerializeField]
+    private Button levelRewardButton;
+
+    [SerializeField]
+    private GameObject LevelRewardObject;
+
+    public void Awake()
+    {
+        metaDataButton.onClick.AddListener(OnProfileButton);
+        levelRewardButton.onClick.AddListener(OnLevelRewardButton);
+    }
+
+    public void OnProfileButton()
+    {
+        metaDataObject.SetActive(true);
+        LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Metadata);
+    }
+
+    public void OnLevelRewardButton()
+    {
+        LevelRewardObject.SetActive(true);
+        LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.LevelReward);
+    }
 
     public override void InitUI()
     {
@@ -39,14 +69,32 @@ public class UI_Profile : LobbyUI
 
         this.nickname.text = profile.nickname;
 
-        int curLevel                = ((profile.experience / 100) + 1);
+        int curLevel                = (profile.experience < 100) ? 1 : profile.experience / 100;
+        int nextLevel               = curLevel + 1;
         this.level.text             = curLevel.ToString();
-        this.nextLevel.text         = (curLevel + 1).ToString();
+        this.nextLevel.text         = $"다음 보상 랭크 : {nextLevel}";
 
-        int curExperience           = (profile.experience % 100) / 100;
-        this.experience.text        = curExperience.ToString();
-        this.experienceBar.value    = curExperience;
+        int curExperience           = (profile.experience % 100);
+        this.experience.text        = $"{curExperience} / 100";
+        this.experienceBar.value    = (curExperience == 0) ? 0 : curExperience / 100;
 
-        //아이콘 마스터데이터베이스 가져와서 다음 레벨과 동일한 아이콘 불러오기
+        foreach (var reward in Data_master_reward_level.AllData())
+        {
+            if(reward.Value.level == nextLevel)
+            {
+                nextRewardIcon.sprite = Resources.Load<Sprite>($"Sprite/Item/{reward.Value.icon}");
+                break;
+            }
+        }
+    }
+
+    public override void OnRegister()
+    {
+        
+    }
+
+    public override void OnUnRegister()
+    {
+
     }
 }

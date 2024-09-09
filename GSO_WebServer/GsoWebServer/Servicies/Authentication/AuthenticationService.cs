@@ -86,11 +86,6 @@ namespace GsoWebServer.Servicies.Authentication
                     return (WebErrorCode.None);
                 }
 
-                if(userInfo.nickname == nickname)
-                {
-                    return (WebErrorCode.SetNicknameFailSameNickname);
-                }
-
                 return (WebErrorCode.None);
             }
             catch /*(Exception ex)*/

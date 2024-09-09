@@ -1,4 +1,5 @@
 ﻿using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
+using GSO_WebServerLibrary.Reposiotry.Define.MasterDB;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 using Matchmaker.Hubs;
 using Matchmaker.Repository;
@@ -66,7 +67,7 @@ namespace Matchmaker.Startup
             //services.Configure<GoogleConfig>(Configuration.GetSection(nameof(GoogleConfig)));
 
             // Add services to the container.
-            //services.AddTransient<IMasterDB, MasterDB>();
+            services.AddSingleton<IMasterDB, MasterDB>();
             services.AddTransient<IGameDB, GameDB>();
 
             services.AddHostedService<MatchmakerBackgroundService>();

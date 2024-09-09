@@ -9,9 +9,15 @@ public class CSVReader : MonoBehaviour
 
     void Awake()
     {
-        ExcelReader.ReadExcel();
+
+#if UNITY_ANDROID
+        BetterStreamingAssets.Initialize();
+        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+        ExcelReader.CopyExcel(files);
+#endif
         Debug.Log("success Read");
-        Debug.Log(Data_Item.GetData(101).name);
+        Debug.Log(Data_master_item_base.GetData(101).name);
+        Debug.Log(Data_master_item_base.AllData());
         //List<Data_TestItem> playerDataList = ReadCSVFile(csvFilePath);
         //foreach (Data_TestItem player in playerDataList)
         //{

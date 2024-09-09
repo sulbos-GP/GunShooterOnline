@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RecoverySlot3 : EquipSlot
+public class RecoverySlot3 : RecoverySlot
 {
-    public QuickSlot targetSlot;
 
     private void Awake()
     {
@@ -36,5 +35,10 @@ public class RecoverySlot3 : EquipSlot
         Debug.Log($"소모품3 아이템 해제");
         targetSlot.ResetSlot();
         return true;
+    }
+    public override void UpdateQuickSlotAmount(int amount)
+    {
+        base.UpdateQuickSlotAmount(amount);
+        targetSlot.UpdateItemAmount(amount);
     }
 }

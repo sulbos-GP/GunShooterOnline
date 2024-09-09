@@ -50,9 +50,9 @@ public class AuthorizeResource
         return new AuthenticationRequest(this.mService, packet);
     }
 
-    public SingInRequest GetSignInRequest(SignInReq body)
+    public SingInRequest GetSignInRequest(HeaderCheackVersion header, SignInReq body)
     {
-        return new SingInRequest(this.mService, body);
+        return new SingInRequest(this.mService, header, body);
     }
 
     public SignOutRequest GetSignOutRequest(HeaderVerfiyPlayer header, SignOutReq body)
@@ -84,9 +84,9 @@ public class AuthorizeResource
     //로그인 요청
     public class SingInRequest : WebClientServiceRequest<SignInRes>
     {
-        public SingInRequest(GsoWebService service, SignInReq body)
+        public SingInRequest(GsoWebService service, HeaderCheackVersion header, SignInReq body)
         {
-            this.mFromHeader = null;
+            this.mFromHeader = header.ToDictionary();
             this.mFromBody = body;
             this.mEndPoint = service.mBaseUrl + "/api/Authorize/SignIn";
             this.mMethod = ERequestMethod.POST;
@@ -212,6 +212,21 @@ public class GameResource
             this.mFromHeader = header.ToDictionary();
             this.mFromBody = body;
             this.mEndPoint = service.mBaseUrl + "/api/Game/Gear/Load";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
+
+    public ReceivedLevelRewardRequest GetReceivedLevelRewardRequest(HeaderVerfiyPlayer header, ReceivedLevelRewardReq body)
+    {
+        return new ReceivedLevelRewardRequest(this.mService, header, body);
+    }
+    public class ReceivedLevelRewardRequest : WebClientServiceRequest<ReceivedLevelRewardRes>
+    {
+        public ReceivedLevelRewardRequest(GsoWebService service, HeaderVerfiyPlayer header, ReceivedLevelRewardReq request)
+        {
+            this.mFromHeader = header.ToDictionary();
+            this.mFromBody = request;
+            this.mEndPoint = service.mBaseUrl + "/api/Game/Received/LevelReward";
             this.mMethod = ERequestMethod.POST;
         }
     }

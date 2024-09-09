@@ -121,6 +121,12 @@ public class CreatureController : BaseController
 
     }
 
+    public virtual void OnHealed(int healAmount)
+    {
+        Debug.Log($"{gameObject.name}가 {healAmount}만큼 회복");
+        Hp = Mathf.Min(Hp+healAmount , MaxHp);
+    }
+
     public virtual void OnDamaged(Transform attacker)
     {
         //var pc = attacker.GetComponent<ProjectileContoller>();

@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.Text.Json" Version="8.0.4" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /Y /R &quot;$(TargetDir)DatabaseContext.cs&quot; &quot;$(TargetDir)..\..\..\..\Server\Database\Handler\DatabaseContext.cs&quot;&#xD;&#xA;xcopy /Y /R &quot;$(TargetDir)MasterDB_Load.cs&quot; &quot;$(TargetDir)..\..\..\..\..\GSO_WebServer\GSO_WebServerLibrary\Reposiotry\Define\MasterDB\MasterDB_Load.cs&quot;" />
+  </Target>
+
+</Project>
+

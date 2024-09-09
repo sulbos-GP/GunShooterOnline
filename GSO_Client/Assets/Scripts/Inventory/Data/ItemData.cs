@@ -24,7 +24,7 @@ public class ItemData
         amount = itemInfo.Amount;
 
         isSearched = itemInfo.IsSearched;
-        Data_Item itemDB = Data_Item.GetData(itemId);
+        Data_master_item_base itemDB = Data_master_item_base.GetData(itemId);
         item_name = itemDB.name;
         item_weight = Math.Round(itemDB.weight,2); //아이템의 무게
         

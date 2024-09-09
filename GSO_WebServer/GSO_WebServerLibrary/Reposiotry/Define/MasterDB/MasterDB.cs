@@ -4,6 +4,8 @@ using MySqlConnector;
 using SqlKata.Execution;
 using WebCommonLibrary.Config;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using WebCommonLibrary.Models.MasterDB;
+using WebCommonLibrary.Error;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
 {
@@ -21,6 +23,21 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
 
             mCompiler = new SqlKata.Compilers.MySqlCompiler();
             mQueryFactory = new QueryFactory(mDbConn, mCompiler);
+        }
+
+        public async Task<bool> LoadMasterDatabase()
+        {
+            if(false == await LoadMasterTables())
+            {
+                return false;
+            }
+
+            if (WebErrorCode.None != await LoadUserRating())
+            {
+                return false;
+            }
+
+            return true;
         }
 
         public void Dispose()
