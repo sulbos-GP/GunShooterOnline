@@ -5,6 +5,9 @@ using WebCommonLibrary.DTO.Middleware;
 using WebCommonLibrary.Models.MemoryDB;
 using GSO_WebServerLibrary.Servicies.Interfaces;
 using Microsoft.AspNetCore.Http;
+using Google.Apis.Auth.OAuth2.Responses;
+using WebCommonLibrary.DTO.Authentication;
+using Newtonsoft.Json.Linq;
 
 namespace GSO_WebServerLibrary.Middleware
 {
@@ -89,7 +92,7 @@ namespace GSO_WebServerLibrary.Middleware
                     return;
                 }
 
-                await SendMiddlewareResponse(context, StatusCodes.Status401Unauthorized, WebErrorCode.AccessTokenIsExpries);
+                await SendRefreshResponse(context, uid, accessTokenData, StatusCodes.Status401Unauthorized, WebErrorCode.AccessTokenIsExpries);
                 return;
             }
 
@@ -117,6 +120,29 @@ namespace GSO_WebServerLibrary.Middleware
             var errorJsonResponse = JsonSerializer.Serialize(new MiddlewareResponse
             {
                 error_code = error
+            });
+            await context.Response.WriteAsync(errorJsonResponse);
+        }
+
+        async Task SendRefreshResponse(HttpContext context, int uid, TokenResponse token, int statusCode, WebErrorCode error)
+        {
+
+            if(!token.ExpiresInSeconds.HasValue)
+            {
+                return;
+            }
+
+            context.Response.StatusCode = statusCode;
+            var errorJsonResponse = JsonSerializer.Serialize(new RefreshTokenRes
+            {
+                error_code = error,
+                error_description = "토큰을 재 발급하였습니다.",
+
+                uid = uid,
+                access_token = token.AccessToken,
+                expires_in = token.ExpiresInSeconds.Value,
+                scope = token.Scope,
+                token_type = token.TokenType,
             });
             await context.Response.WriteAsync(errorJsonResponse);
         }

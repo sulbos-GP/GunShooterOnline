@@ -31,6 +31,8 @@ namespace Matchmaker.Hubs
             string connectionId = Context.ConnectionId;
             Console.WriteLine($"Client disconnected: {connectionId}");
 
+            var error = await mMatchmakerService.RemoveMatchTicket(connectionId);
+
             await base.OnDisconnectedAsync(exception);
         }
         
@@ -41,12 +43,6 @@ namespace Matchmaker.Hubs
 
             var error = await mMatchmakerService.AddMatchTicket(uid, connectionId);
             await Clients.Caller.SendAsync("S2C_VerfiyUser", error);
-        }
-
-        public async Task C2S_DisConnectMatchHub(int uid)
-        {
-            string connectionId = Context.ConnectionId;
-            var error = await mMatchmakerService.RemoveMatchTicket(uid);
         }
 
         //임시
