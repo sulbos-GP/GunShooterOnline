@@ -45,7 +45,7 @@ public abstract class ClientHub : MonoBehaviour
         try
         {
 
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버 빌드중...");
+            Managers.SystemLog.Message($"{mConnectionName} 서버 빌드중...");
 
             if(Managers.Web.credential.access_token == string.Empty)
             {
@@ -70,7 +70,7 @@ public abstract class ClientHub : MonoBehaviour
         }
         catch (Exception ex)
         {
-            SystemLogManager.Instance.LogMessage($"서버 빌드중 에러 발생 :  {ex}");
+            Managers.SystemLog.Message($"서버 빌드중 에러 발생 :  {ex}");
         }
     }
 
@@ -87,34 +87,34 @@ public abstract class ClientHub : MonoBehaviour
 
     public void StartHub()
     {
-        SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결중...");
+        Managers.SystemLog.Message($"{mConnectionName} 서버와 연결중...");
         mConnection.StartAsync().Wait();
 
         if (mConnection.State == HubConnectionState.Connected)
         {
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결되었습니다.");
+            Managers.SystemLog.Message($"{mConnectionName} 서버와 연결되었습니다.");
             //SendCredential();
             OnConnection();
         }
         else
         {
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결에 실패하였습니다.");
+            Managers.SystemLog.Message($"{mConnectionName} 서버와 연결에 실패하였습니다.");
         }
     }
 
     public void StoptHub()
     {
-        SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결 해제중...");
+        Managers.SystemLog.Message($"{mConnectionName} 서버와 연결 해제중...");
         mConnection.StopAsync().Wait();
 
         if (mConnection.State == HubConnectionState.Disconnected)
         {
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결이 해제 되었습니다.");
+            Managers.SystemLog.Message($"{mConnectionName} 서버와 연결이 해제 되었습니다.");
             OnDisConnection();
         }
         else
         {
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결이 해제에 실패하였습니다.");
+            Managers.SystemLog.Message($"{mConnectionName} 서버와 연결이 해제에 실패하였습니다.");
         }
 
     }

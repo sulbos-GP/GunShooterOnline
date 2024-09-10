@@ -13,7 +13,7 @@ namespace Matchmaker.Service.Interfaces
         /// <summary>
         /// 플레이어 티켓 대기열에서 삭제
         /// </summary>
-        public Task<WebErrorCode> RemoveMatchTicket(Int32 uid);
+        public Task<WebErrorCode> RemoveMatchTicket(String uid);
 
         /// <summary>
         /// 플레이어 레이팅 대기열에 추가 및 정보 업데이트
