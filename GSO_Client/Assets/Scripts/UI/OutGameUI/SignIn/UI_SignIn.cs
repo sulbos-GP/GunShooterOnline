@@ -25,6 +25,7 @@ public class SignInUI : MonoBehaviour
     private void Awake()
     {
         mSingInButton.onClick.AddListener(OnClickSignIn);
+        mSingInButton.gameObject.SetActive(false);
     }
 
     void Start()
@@ -47,6 +48,7 @@ public class SignInUI : MonoBehaviour
         }
         catch (Exception error)
         {
+            mSingInButton.gameObject.SetActive(true);
             ResultMessage($"자동 인증 실패 : {error.Message}");
         }
     }
@@ -113,11 +115,13 @@ public class SignInUI : MonoBehaviour
         else if (status == SignInStatus.InternalError)
         {
             //구글 플레이 로그인 에러
+            mSingInButton.gameObject.SetActive(true);
             ResultMessage("인증 도중 에러가 발생하였습니다.");
         }
         else if (status == SignInStatus.Canceled)
         {
             //모바일로 실행을 안할 경우
+            mSingInButton.gameObject.SetActive(true);
             ResultMessage("인증이 취소 되었습니다.");
         }
 
@@ -221,7 +225,7 @@ public class SignInUI : MonoBehaviour
     private void ResultMessage(string message)
     {
         mResultText.text = message;
-        SystemLogManager.Instance.LogMessage(message);
+        Managers.SystemLog.Message(message);
     }
     
 }

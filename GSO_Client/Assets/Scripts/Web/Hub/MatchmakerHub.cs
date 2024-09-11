@@ -62,7 +62,7 @@ public class MatchmakerHub : ClientHub
     {
         EnqueueDispatch(() =>
         {
-            SystemLogManager.Instance.LogMessage($"매치가 생성되었습니다 {response.host_ip}:{response.host_port}");
+            Managers.SystemLog.Message($"매치가 생성되었습니다 {response.host_ip}:{response.host_port}");
 
             mMatchUI.OnMatchComplete();
 
@@ -97,11 +97,11 @@ public class MatchmakerHub : ClientHub
         {
             if (error == 0)
             {
-                SystemLogManager.Instance.LogMessage($"매치메이커 인증에 성공하였습니다.");
+                Managers.SystemLog.Message($"매치메이커 인증에 성공하였습니다.");
             }
             else
             {
-                SystemLogManager.Instance.LogMessage($"매치메이커 인증에 실패하였습니다.");
+                Managers.SystemLog.Message($"매치메이커 인증에 실패하였습니다.");
             }
         });
     }

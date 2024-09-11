@@ -7,6 +7,7 @@ using WebCommonLibrary.Models.Match;
 using Matchmaker.Repository.Interface;
 using Matchmaker.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;
+using WebCommonLibrary.Models.MasterDB;
 
 namespace Matchmaker.Service
 {
@@ -45,11 +46,22 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<WebErrorCode> RemoveMatchTicket(Int32 uid)
+        public async Task<WebErrorCode> RemoveMatchTicket(String clientId)
         {
             try
             {
-                WebErrorCode error = await mMatchQueueMDB.RemoveMatchTicket(uid);
+                var matchTickets = await mMatchQueueMDB.GetAllMatchTicket();
+                if(matchTickets == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+                string uidStr = matchTickets.FirstOrDefault(r => r.Value.client_id == clientId).Key;
+                if (uidStr == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                WebErrorCode error = await mMatchQueueMDB.RemoveMatchTicket(KeyUtils.GetUID(uidStr));
                 if (error != WebErrorCode.None)
                 {
                     return WebErrorCode.TEMP_ERROR;
