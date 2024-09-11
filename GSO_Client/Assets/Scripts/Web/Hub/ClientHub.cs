@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using TMPro;
 using System.Threading.Tasks;
+using WebCommonLibrary.Models.GameDB;
 
 public abstract class ClientHub : MonoBehaviour
 {
@@ -47,12 +48,13 @@ public abstract class ClientHub : MonoBehaviour
 
             Managers.SystemLog.Message($"{mConnectionName} 서버 빌드중...");
 
-            if(Managers.Web.credential.access_token == string.Empty)
+            ClientCredential credential = Managers.Web.Credential;
+            if (credential == null)
             {
-                throw new Exception("Client credential 정보가 없습니다.");
+                return;
             }
 
-            string accessToken = Managers.Web.credential.access_token;
+            string accessToken = credential.access_token;
             mConnection = new HubConnectionBuilder()
             .WithUrl(mConnectionUrl, options =>
             {
@@ -120,7 +122,12 @@ public abstract class ClientHub : MonoBehaviour
     }
     private async void C2S_VerfiyCredential()
     {
-        var credential = Managers.Web.credential;
+        ClientCredential credential = Managers.Web.Credential;
+        if (credential == null)
+        {
+            return;
+        }
+
         await mConnection.InvokeAsync("VerfiyCredential", credential);
     }
 

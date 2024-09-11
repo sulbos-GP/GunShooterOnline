@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using WebCommonLibrary.DTO.Game;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDB;
 using static AuthorizeResource;
 using static GameResource;
 using static UnityEngine.UI.CanvasScaler;
@@ -37,10 +38,16 @@ public class UI_QuckInfo : MonoBehaviour
             return;
         }
 
+        ClientCredential crediential = Managers.Web.Credential;
+        if (crediential == null)
+        {
+            return;
+        }
+
         var header = new HeaderVerfiyPlayer
         {
-            uid = Managers.Web.credential.uid.ToString(),
-            access_token = Managers.Web.credential.access_token,
+            uid = crediential.uid.ToString(),
+            access_token = crediential.access_token,
         };
 
         var body = new LoadGearReq
@@ -78,10 +85,16 @@ public class UI_QuckInfo : MonoBehaviour
             if(unit.gear.part == "backpack")
             {
 
+                ClientCredential crediential = Managers.Web.Credential;
+                if (crediential == null)
+                {
+                    return;
+                }
+
                 var header = new HeaderVerfiyPlayer
                 {
-                    uid = Managers.Web.credential.uid.ToString(),
-                    access_token = Managers.Web.credential.access_token,
+                    uid = crediential.uid.ToString(),
+                    access_token = crediential.access_token,
                 };
 
                 var body = new LoadStorageReq

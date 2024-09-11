@@ -41,7 +41,12 @@ public class UI_LevelRewardData : MonoBehaviour
 
     public void OnClickReceived()
     {
-        ClientCredential crediential = Managers.Web.credential;
+        ClientCredential crediential = Managers.Web.Credential;
+        if (crediential == null)
+        {
+            return;
+        }
+
         var header = new HeaderVerfiyPlayer
         {
             uid = crediential.uid.ToString(),
