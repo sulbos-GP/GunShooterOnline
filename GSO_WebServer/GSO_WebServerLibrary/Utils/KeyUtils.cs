@@ -17,6 +17,7 @@ namespace GSO_WebServerLibrary.Utils
             UID,
             UIDLock,
             REFRESH,
+            Rating,
             MATCH,
             MATCHLock,
             SESSION,
