@@ -55,7 +55,7 @@ namespace Matchmaker.Controllers
         public async Task<CancleMatchRes> Cancle([FromHeader] HeaderDTO header, [FromBody] CancleMatchReq request)
         {
 
-            Console.WriteLine($"[Join] uid:{header.uid} world:{request.world} region:{request.region}");
+            Console.WriteLine($"[Cancle] uid:{header.uid} world:{request.world} region:{request.region}");
             var response = new CancleMatchRes();
 
             if (!WebUtils.IsValidModelState(request))

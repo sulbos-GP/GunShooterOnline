@@ -41,7 +41,7 @@ public class UI_Match : MonoBehaviour
     {
         if(mIsProcessMatch)
         {
-            SystemLogManager.Instance.LogMessage("매칭 작업이 진행중 입니다. 조금 뒤에 다시 시도해 주세요");
+            Managers.SystemLog.Message("매칭 작업이 진행중 입니다. 조금 뒤에 다시 시도해 주세요");
             return;
         }
 
@@ -64,7 +64,7 @@ public class UI_Match : MonoBehaviour
         try
         {
             mMatchStateText.text = "매칭 참여 중...";
-            SystemLogManager.Instance.LogMessage("매칭 참여 요청...");
+            Managers.SystemLog.Message("매칭 참여 요청...");
             mIsProcessMatch = true;
 
             ClientCredential crediential = Managers.Web.credential;
@@ -87,7 +87,7 @@ public class UI_Match : MonoBehaviour
         catch (HttpRequestException error)
         {
             mMatchStateText.text = "매칭 참여 실패";
-            SystemLogManager.Instance.LogMessage($"매칭 참여 실패 : {error.Message}");
+            Managers.SystemLog.Message($"매칭 참여 실패 : {error.Message}");
         }
 
     }
@@ -100,7 +100,7 @@ public class UI_Match : MonoBehaviour
         mIsProcessMatch = false;
         if (response.error_code == WebErrorCode.None)
         {
-            SystemLogManager.Instance.LogMessage("매칭 참여 요청 성공");
+            Managers.SystemLog.Message("매칭 참여 요청 성공");
 
             mMatchStateText.text = "게임 매칭 중...";
             mIsJoin = false;
@@ -110,7 +110,7 @@ public class UI_Match : MonoBehaviour
         }
         else
         {
-            SystemLogManager.Instance.LogMessage("매칭 참여 요청 실패");
+            Managers.SystemLog.Message("매칭 참여 요청 실패");
         }
     }
 
@@ -122,7 +122,7 @@ public class UI_Match : MonoBehaviour
         try
         {
             mMatchStateText.text = "매칭 취소 중...";
-            SystemLogManager.Instance.LogMessage("매칭 취소 요청...");
+            Managers.SystemLog.Message("매칭 취소 요청...");
             mIsProcessMatch = true;
 
             ClientCredential credential = Managers.Web.credential;
@@ -145,7 +145,7 @@ public class UI_Match : MonoBehaviour
         catch (HttpRequestException error)
         {
             mMatchStateText.text = "매칭 취소 실패";
-            SystemLogManager.Instance.LogMessage($"매칭 취소 실패 : {error.Message}");
+            Managers.SystemLog.Message($"매칭 취소 실패 : {error.Message}");
         }
     }
 
@@ -157,7 +157,7 @@ public class UI_Match : MonoBehaviour
         mIsProcessMatch = false;
         if (response.error_code == WebErrorCode.None)
         {
-            SystemLogManager.Instance.LogMessage("매칭 취소 요청 성공");
+            Managers.SystemLog.Message("매칭 취소 요청 성공");
 
             mIsJoin = true;
 
@@ -166,7 +166,7 @@ public class UI_Match : MonoBehaviour
         }
         else
         {
-            SystemLogManager.Instance.LogMessage("매칭 취소 요청 실패");
+            Managers.SystemLog.Message("매칭 취소 요청 실패");
         }
     }
 

@@ -5,6 +5,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 using WebCommonLibrary.DTO.Authentication;
+using WebCommonLibrary.DTO.Middleware;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
 
@@ -21,6 +22,7 @@ public abstract class WebClientServiceRequest<TResponse>
     protected string mEndPoint = null;
     protected ERequestMethod mMethod = ERequestMethod.None;
     protected Action<TResponse> mAction = null;
+    protected int retry = 1;
 
     public void ExecuteAsync(Action<TResponse> callback)
     {
@@ -38,13 +40,16 @@ public abstract class WebClientServiceRequest<TResponse>
 
     private void ReExecuteAsync()
     {
-        Managers.Instance.StartCoroutine(CoExecuteAsync(mAction));
+        if(retry++ < 3)
+        {
+            Managers.Instance.StartCoroutine(CoExecuteAsync(mAction));
+        }
     }
 
     private IEnumerator CoExecuteAsync(Action<TResponse> callback)
     {
 
-        SystemLogManager.Instance.LogMessage($"웹 요청 [{mEndPoint}]");
+        Managers.SystemLog.Message($"웹 요청 [{mEndPoint}]");
 
         string jsonStr = Newtonsoft.Json.JsonConvert.SerializeObject(mFromBody);
         byte[] bodyRaw = Encoding.UTF8.GetBytes(jsonStr);
@@ -71,40 +76,43 @@ public abstract class WebClientServiceRequest<TResponse>
         }
         else if (request.responseCode == 401)
         {
-            RequestRefreshToken();
+            //토큰 다시 발행
+            RefreshTokenRes response = Newtonsoft.Json.JsonConvert.DeserializeObject<RefreshTokenRes>(request.downloadHandler.text);
+            OnProcessRefreshToken(response);
+        }
+        else if (request.responseCode == 426)
+        {
+            //버전 업그레이드 필요
         }
         else
         {
-            SystemLogManager.Instance.LogMessage($"웹 요청 실패 : {request.error}");
+            Managers.SystemLog.Message($"웹 요청 실패 : {request.error}");
             throw new NotImplementedException($"웹 요청 실패 : {request.error}");
         }
 
     }
 
-    public void RequestRefreshToken()
-    {
-        ClientCredential credential = Managers.Web.credential;
-        var body = new RefreshTokenReq()
-        {
-            uid = credential.uid,
-        };
-
-        GsoWebService service = new GsoWebService();
-        var request = service.mAuthorizeResource.GetRefreshTokenRequest(body);
-        request.ExecuteAsync(OnProcessRefreshToken);
-    }
-
     public void OnProcessRefreshToken(RefreshTokenRes response)
     {
-        if (response.error_code == WebErrorCode.None)
+        if(response.error_code == WebErrorCode.None)
         {
+
+            Managers.Web.credential.uid = response.uid;
             Managers.Web.credential.access_token = response.access_token;
+            Managers.Web.credential.expires_in = response.expires_in;
+            Managers.Web.credential.scope = response.scope;
+            Managers.Web.credential.token_type = response.token_type;
 
             ReExecuteAsync();
         }
-        else
+    }
+
+    public void OnProcessUpgradeVersion(UpgradeVersionRes response)
+    {
+        if (response.error_code == WebErrorCode.None)
         {
-            throw new NotImplementedException($"토큰 재인증 실패");
+            
+            
         }
     }
 

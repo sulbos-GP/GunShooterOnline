@@ -25,12 +25,13 @@ public class LobbyScene : BaseScene
         base.Init();
 #if UNITY_EDITOR
         Ip = "127.0.0.1";
+        string[] files = null;
 
 #elif UNITY_ANDROID
         BetterStreamingAssets.Initialize();
         string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
-        ExcelReader.CopyExcel(files);
 #endif
+        ExcelReader.CopyExcel(files);
         Debug.Log(Data_master_item_base.GetData(302).name);
         Debug.Log(Data_master_reward_base.GetData(10001));
         SceneType = Define.Scene.Forest;
