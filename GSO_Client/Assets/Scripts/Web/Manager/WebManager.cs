@@ -7,12 +7,29 @@ using static AuthorizeResource;
 
 public class WebManager
 {
-    public ClientCredential credential = new ClientCredential();
+    private ClientCredential credential = new ClientCredential();
     public DataLoadUserInfo user = new DataLoadUserInfo();
 
     private void Awake()
     {
 
+    }
+
+    public ClientCredential Credential
+    {
+        get
+        {
+            if(credential.uid == 0 || credential.access_token == string.Empty)
+            {
+                return null;
+            }
+
+            return credential;
+        }
+        set
+        {
+            credential = value;
+        }
     }
 
     /// <summary>
@@ -22,6 +39,11 @@ public class WebManager
     public void OnSignOut(string cause)
     {
         ClientCredential crediential = Managers.Web.credential;
+        if(crediential.uid == 0 || crediential.access_token == string.Empty)
+        {
+            return;
+        }
+
         var header = new HeaderVerfiyPlayer
         {
             uid = crediential.uid.ToString(),

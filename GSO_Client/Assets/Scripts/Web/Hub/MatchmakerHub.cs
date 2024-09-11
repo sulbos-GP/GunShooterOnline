@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections;
 using UnityEngine;
+using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.Match;
 
 public class MatchmakerHub : ClientHub
@@ -52,7 +53,12 @@ public class MatchmakerHub : ClientHub
 
     public async void C2S_VerfiyUser()
     {
-        var credential = Managers.Web.credential;
+        ClientCredential credential = Managers.Web.Credential;
+        if (credential == null)
+        {
+            return;
+        }
+
         int uid = credential.uid;
         string token = credential.access_token;
         await mConnection.InvokeAsync("C2S_VerfiyUser", uid, token);
@@ -76,12 +82,18 @@ public class MatchmakerHub : ClientHub
 
             Managers.Scene.LoadScene(Define.Scene.Forest);
 
+            ClientCredential credential = Managers.Web.Credential;
+            if (credential == null)
+            {
+                return;
+            }
+
             //Enter할때 uid 보내주셈
             C_EnterGame c_EnterGame = new C_EnterGame();
             c_EnterGame.Name = "jish";
             c_EnterGame.Credential = new CredentiaInfo()
             {
-                Uid = Managers.Web.credential.uid
+                Uid = credential.uid
             };
 
             Managers.Network.Send(c_EnterGame);

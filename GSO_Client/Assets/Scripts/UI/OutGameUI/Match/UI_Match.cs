@@ -67,7 +67,12 @@ public class UI_Match : MonoBehaviour
             Managers.SystemLog.Message("매칭 참여 요청...");
             mIsProcessMatch = true;
 
-            ClientCredential crediential = Managers.Web.credential;
+            ClientCredential crediential = Managers.Web.Credential;
+            if (crediential == null)
+            {
+                return;
+            }
+
             var header = new HeaderVerfiyPlayer
             {
                 uid = crediential.uid.ToString(),
@@ -125,7 +130,12 @@ public class UI_Match : MonoBehaviour
             Managers.SystemLog.Message("매칭 취소 요청...");
             mIsProcessMatch = true;
 
-            ClientCredential credential = Managers.Web.credential;
+            ClientCredential credential = Managers.Web.Credential;
+            if (credential == null)
+            {
+                return;
+            }
+
             var header = new HeaderVerfiyPlayer
             {
                 uid = credential.uid.ToString(),

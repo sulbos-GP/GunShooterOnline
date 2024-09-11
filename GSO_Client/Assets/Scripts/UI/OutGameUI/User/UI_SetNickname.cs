@@ -57,7 +57,12 @@ public class UI_SetNickname : MonoBehaviour
             return;
         }
 
-        ClientCredential crediential = Managers.Web.credential;
+        ClientCredential crediential = Managers.Web.Credential;
+        if (crediential == null)
+        {
+            return;
+        }
+
         var header = new HeaderVerfiyPlayer
         {
             uid = crediential.uid.ToString(),
