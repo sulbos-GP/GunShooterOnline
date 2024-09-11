@@ -5,6 +5,9 @@ namespace Matchmaker.Service.Interfaces
 {
     public interface IMatchmakerService : IDisposable
     {
+
+        public Task ClearMatch();
+
         /// <summary>
         /// 플레이어 티켓 대기열에 추가
         /// </summary>
@@ -27,41 +30,27 @@ namespace Matchmaker.Service.Interfaces
         /// <summary>
         /// 플레이어 레이팅 및 티겟 삭제
         /// </summary>
-        public Task<WebErrorCode> RemoveMatchQueue(Int32 uid);
+        public Task<WebErrorCode> RemoveMatchQueue(string key);
 
         /// <summary>
-        /// 플레이어 레이팅 및 티겟 삭제
+        /// 가장 오래 기달린 플레이어
         /// </summary>
-        public Task<WebErrorCode> RemoveMatchQueue(String[] keys);
-
-        /// <summary>
-        /// 모든 플레이어 조회
-        /// </summary>
-        public Task<(WebErrorCode, Dictionary<int, PlayerInfo>?)> ScanPlayers();
-
-        /// <summary>
-        /// 플레이어 잠금
-        /// </summary>
-        public Task<WebErrorCode> LockPlayers(String id);
-
-        /// <summary>
-        /// 플레이어 잠금 해제
-        /// </summary>
-        public Task<WebErrorCode> UnLockPlayers(String id);
+        public Task<(WebErrorCode, PlayerInfo?)> GetLongestWaitingPlayer();
 
         /// <summary>
         /// 플레이어 레이팅에 따른 매칭 찾아주고 key 리턴
         /// </summary>
-        public Task<(WebErrorCode, Dictionary<string, TicketInfo>?)> FindMatchByRating(double min, double max, int capacity);
+        public Task<(WebErrorCode, Dictionary<string, Ticket>?)> FindMatchByRating(double min, double max, int capacity);
+
+        /// <summary>
+        /// 매칭이 성사된 유저들에게 매칭이 성공했음을 알린다
+        /// </summary>
+        public Task NotifyMatchSuccess(Ticket ticket, MatchProfile profile);
+
 
         /// <summary>
         /// 플레이어의 레이턴시 업데이트
         /// </summary>
         public Task<WebErrorCode> UpdateLatency(Int32 uid, Int64 latency);
-
-        /// <summary>
-        /// 매칭이 성사된 유저들에게 매칭이 성공했음을 알린다
-        /// </summary>
-        public Task<WebErrorCode> NotifyMatchSuccess(TicketInfo[] tickets, MatchProfile profile);
     }
 }

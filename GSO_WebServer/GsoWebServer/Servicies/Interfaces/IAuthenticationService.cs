@@ -6,6 +6,7 @@ namespace GsoWebServer.Servicies.Interfaces
 {
     public interface IAuthenticationService : IDisposable
     {
+        public Task ClearAuthentiaction();
 
         public Task<(WebErrorCode, TokenResponse?)> ExchangeToken(String userId, String serverCode);
         public Task<(WebErrorCode, TokenResponse?)> RefreshToken(String userId, String refreshToken);

@@ -29,6 +29,8 @@ namespace GameServerManager.Servicies
             try
             {
 
+                await mDockerService.ClearContainer();
+
                 await mDockerService.InitDocker();
 
                 Console.WriteLine("Init Match");

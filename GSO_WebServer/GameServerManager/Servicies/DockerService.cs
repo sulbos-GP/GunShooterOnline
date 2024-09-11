@@ -64,6 +64,15 @@ namespace GameServerManager.Servicies
 
         }
 
+        public async Task ClearContainer()
+        {
+            var containers = await GetAllContainerList();
+            foreach (var container in containers)
+            {
+                await KillContainer(container.ID);
+            }
+        }
+
         public async Task DockerDispose()
         {
             try

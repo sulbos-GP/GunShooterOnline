@@ -66,6 +66,10 @@ public class UI_Profile : LobbyUI
     public override void UpdateUI()
     {
         UserInfo profile = Managers.Web.user.UserInfo;
+        if (profile == null)
+        {
+            return;
+        }
 
         this.nickname.text = profile.nickname;
 
