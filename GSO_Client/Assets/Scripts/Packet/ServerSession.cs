@@ -67,6 +67,8 @@ public class ServerSession : PacketSession
         //C2S_Chat chat = new C2S_Chat();
         //chat.chat = "Hello";
         //this.Send(chat.Write(), DeliveryMethod.ReliableOrdered);
+        
+        //TODO : 서버 접속 코드
     }
 
     public override void OnDisconnected(EndPoint endPoint)

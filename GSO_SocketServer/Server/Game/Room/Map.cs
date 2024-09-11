@@ -9,6 +9,7 @@ using Server.Data;
 using Server.Game;
 using ServerCore;
 using Server.Game.Object.Item;
+using Server.Game.Object;
 
 namespace Server.Game;
 
@@ -76,6 +77,8 @@ public class Map
 
     private int roomSize;
 
+    public List<ExitZone> Escapes = new List<ExitZone>();
+    public List<SpawnZone> Spawns = new List<SpawnZone>();
 
     public Vector2Int Bleft { get; private set; }
     public Vector2Int Tright { get; private set; }
@@ -92,6 +95,47 @@ public class Map
     public readonly List<ExitZone> exitZones = new List<ExitZone>();
 
     #endregion
+
+
+
+
+
+
+    public void SpawnPlayer()
+    {
+        // 전체 항목 리스트
+  
+
+        // 랜덤 객체 생성
+        Random random = new Random();
+
+        // 선택된 항목을 저장할 리스트
+        List<int> selectedItems = new List<int>();
+
+        // 3개의 항목을 랜덤으로 선택
+        while (selectedItems.Count < 3)
+        {
+            int index = random.Next(Spawns.Count); // 0부터 items.Count - 1 사이의 랜덤 인덱스 생성
+            int selectedItem = Spawns[index];
+
+            // 중복된 항목이 아니라면 선택된 리스트에 추가
+            if (!selectedItems.Contains(selectedItem))
+            {
+                selectedItems.Add(selectedItem);
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public Map(BattleGameRoom r)
     {
@@ -242,6 +286,31 @@ public class Map
 
         return true;
     }
+
+    private bool SpawnPlayers()
+    {
+
+        int sCount = Spawns.Count;
+        int pCount = battleRoom.connectPlayer.Count;
+        List<List<SpawnZone>> combinations = new List<List<SpawnZone>>();
+
+        GetCombinations(Spawns, new List<SpawnZone>(), 0, pCount, combinations);
+
+        Random random = new Random();
+        int randomIndex = random.Next(combinations.Count);
+
+        List<SpawnZone> selectedCombination = combinations[randomIndex];
+
+
+        int t = 0;
+        foreach (SpawnZone spawn in selectedCombination)
+        {
+            battleRoom._playerDic[t++].CellPos = spawn.CellPos;
+
+        }
+
+    }
+
 
     public bool ApplyMove(GameObject gameObject, Vector2Int dest, bool cheakObjects = true, bool collision = true)
     {
@@ -529,4 +598,24 @@ public class Map
     }
 
     #endregion
+
+
+
+    static void GetCombinations(List<SpawnZone> items, List<SpawnZone> tempCombination, int start, int combinationSize, List<List<SpawnZone>> result)
+    {
+        // 조합의 크기가 원하는 크기일 경우 결과 리스트에 추가
+        if (tempCombination.Count == combinationSize)
+        {
+            result.Add(new List<SpawnZone>(tempCombination));
+            return;
+        }
+
+        // 재귀적으로 조합 생성
+        for (int i = start; i < items.Count; i++)
+        {
+            tempCombination.Add(items[i]);
+            GetCombinations(items, tempCombination, i + 1, combinationSize, result);
+            tempCombination.RemoveAt(tempCombination.Count - 1); // 마지막 요소 제거 (백트래킹)
+        }
+    }
 }

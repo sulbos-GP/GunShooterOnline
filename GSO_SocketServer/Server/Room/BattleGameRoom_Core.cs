@@ -17,14 +17,14 @@ namespace Server
 {
     public partial class BattleGameRoom : GameRoom
     {
-
+        //GameServer Onstart에서 받아옴
         public List<int> connectPlayer = new List<int>();
 
         Dictionary<int, Player> _playerDic = new Dictionary<int, Player>();
         Dictionary<int, CreatureObj> _monsterDic = new Dictionary<int, CreatureObj>();
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
-        public List<object> Escapes = new List<object>();
+
         public Dictionary<int, MatchOutcomeInfo> MatchInfo = new Dictionary<int, MatchOutcomeInfo>();
 
 
