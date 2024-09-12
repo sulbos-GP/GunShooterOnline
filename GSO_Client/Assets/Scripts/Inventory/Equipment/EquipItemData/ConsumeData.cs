@@ -9,7 +9,7 @@ public enum EffectType
     Buff
 }
 
-public class Consume
+public class ConsumeData
 {
     public int item_id;
     public int energe;
@@ -17,21 +17,19 @@ public class Consume
     public double duration;
     public EffectType effect;
     public double cooltime;
-
-    
 }
 
 public class ConsumeDB
 {
-    public static Dictionary<int, Consume> consumeDB = new Dictionary<int, Consume>();
+    public static Dictionary<int, ConsumeData> consumeDB = new Dictionary<int, ConsumeData>();
 
     static ConsumeDB()
     {
-        GunDataInit();
+        ConsumeDBInit();
     }
 
 
-    private static Consume medikit = new Consume
+    private static ConsumeData medikit = new ConsumeData
     {
         item_id = 401,
         energe = 70,
@@ -42,7 +40,7 @@ public class ConsumeDB
 
     };
 
-    private static Consume band = new Consume
+    private static ConsumeData band = new ConsumeData
     {
         item_id = 402,
         energe = 10,
@@ -53,7 +51,7 @@ public class ConsumeDB
 
     };
 
-    private static Consume adrenaline = new Consume
+    private static ConsumeData adrenaline = new ConsumeData
     {
         item_id = 403,
         energe = 3,
@@ -64,7 +62,7 @@ public class ConsumeDB
 
     };
 
-    private static Consume pill = new Consume
+    private static ConsumeData pill = new ConsumeData
     {
         item_id = 404,
         energe = 1,
@@ -75,7 +73,7 @@ public class ConsumeDB
 
     };
 
-    public static void GunDataInit()
+    public static void ConsumeDBInit()
     {
         consumeDB.Clear();
         consumeDB.Add(medikit.item_id, medikit);
@@ -85,7 +83,7 @@ public class ConsumeDB
 
     }
 
-    public static Consume GetConsumeData(int itemId)
+    public static ConsumeData GetConsumeData(int itemId)
     {
         if (consumeDB.ContainsKey(itemId))
         {

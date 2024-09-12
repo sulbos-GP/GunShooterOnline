@@ -243,7 +243,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("NONE")] None = 0,
     [pbr::OriginalName("MainWeapon")] MainWeapon = 1,
     [pbr::OriginalName("SubWeapon")] SubWeapon = 2,
-    [pbr::OriginalName("Armor")] Armor = 3,
+    [pbr::OriginalName("DefensiveData")] Armor = 3,
     [pbr::OriginalName("Backpack")] Backpack = 4,
     [pbr::OriginalName("PocketFirst")] PocketFirst = 5,
     [pbr::OriginalName("PocketSecond")] PocketSecond = 6,
@@ -10328,7 +10328,7 @@ namespace Google.Protobuf.Protocol {
       }
     }
 
-    /// <summary>Field number for the "itemId" field.</summary>
+    /// <summary>Field number for the "item_id" field.</summary>
     public const int ItemIdFieldNumber = 2;
     private int itemId_;
     /// <summary>

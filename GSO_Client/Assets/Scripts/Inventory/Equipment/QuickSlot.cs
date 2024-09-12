@@ -15,7 +15,7 @@ public class QuickSlot : MonoBehaviour
     private Image itemImage;
     private TextMeshProUGUI itemAmount;
     private RectTransform cooltimeRect;
-    private Consume consumeData;
+    private ConsumeData consumeData;
 
     public bool isReady;
     private Coroutine cooltimer;
@@ -49,7 +49,7 @@ public class QuickSlot : MonoBehaviour
         Sprite itemSprite = ItemObject.FindItemSprtie(item);
         itemImage.sprite = itemSprite;
         itemAmount.text = item.amount.ToString();
-        consumeData = new Consume();
+        consumeData = new ConsumeData();
         if (!ConsumeDB.consumeDB.TryGetValue(item.itemId, out consumeData))
         {
             Debug.Log($"ConsumeDB에서 해당 아이템을 찾지 못함 {item.itemId}");
@@ -129,7 +129,7 @@ public class QuickSlot : MonoBehaviour
         }
     }
 
-    public bool UseConsume(Consume consume)
+    public bool UseConsume(ConsumeData consume)
     {
         MyPlayerController myPlayer = Managers.Object.MyPlayer;
 
@@ -168,7 +168,7 @@ public class QuickSlot : MonoBehaviour
         return true;
     }
 
-    private IEnumerator OnBuff(CreatureController target, Consume consume)
+    private IEnumerator OnBuff(CreatureController target, ConsumeData consume)
     {
         float elapsedTime = 0f;
 

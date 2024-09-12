@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ArmorSlot : EquipSlot
+public class DefensiveSlot : EquipSlot
 {
     private void Awake()
     {
@@ -25,6 +25,8 @@ public class ArmorSlot : EquipSlot
     {
         base.ApplyItemEffects(item);
         Debug.Log($"아머 : {item.item_name} 장착");
+
+        //얘는 따로 수정할 요소 없음 기껏해야 피격시 내구도만 업데이트 하면 됨
 
         return true;
     }
