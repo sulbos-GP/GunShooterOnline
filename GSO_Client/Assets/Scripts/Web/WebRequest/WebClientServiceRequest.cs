@@ -97,11 +97,14 @@ public abstract class WebClientServiceRequest<TResponse>
         if(response.error_code == WebErrorCode.None)
         {
 
-            Managers.Web.credential.uid = response.uid;
-            Managers.Web.credential.access_token = response.access_token;
-            Managers.Web.credential.expires_in = response.expires_in;
-            Managers.Web.credential.scope = response.scope;
-            Managers.Web.credential.token_type = response.token_type;
+            Managers.Web.Models.Credential = new ClientCredential
+            {
+                uid = response.uid,
+                access_token = response.access_token,
+                expires_in = response.expires_in,
+                scope = response.scope,
+                token_type = response.token_type,
+            };
 
             ReExecuteAsync();
         }

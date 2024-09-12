@@ -31,8 +31,8 @@ public class UI_SetNickname : MonoBehaviour
 
     public void Start()
     {
-        string nickname = Managers.Web.user.UserInfo.nickname;
-        this.gameObject.SetActive((nickname == string.Empty));
+        var user = Managers.Web.Models.User;
+        this.gameObject.SetActive((user == null));
     }
 
     public void OnChangeNicknameValue(string value)
@@ -57,7 +57,12 @@ public class UI_SetNickname : MonoBehaviour
             return;
         }
 
-        ClientCredential crediential = Managers.Web.credential;
+        ClientCredential crediential = Managers.Web.Models.Credential;
+        if (crediential == null)
+        {
+            return;
+        }
+
         var header = new HeaderVerfiyPlayer
         {
             uid = crediential.uid.ToString(),
@@ -88,7 +93,7 @@ public class UI_SetNickname : MonoBehaviour
     {
         if(response.error_code == WebErrorCode.None)
         {
-            Managers.Web.user.UserInfo.nickname = response.nickname;
+            Managers.Web.Models.User.nickname = response.nickname;
             LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Profile);
             this.gameObject.SetActive(false);
         }
