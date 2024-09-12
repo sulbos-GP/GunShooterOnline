@@ -13529,6 +13529,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: NicknameWindow
       objectReference: {fileID: 0}
+    - target: {fileID: 5834417790168453309, guid: ba28535ec3706cf45baa06818929be22, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6664168909433921201, guid: ba28535ec3706cf45baa06818929be22, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

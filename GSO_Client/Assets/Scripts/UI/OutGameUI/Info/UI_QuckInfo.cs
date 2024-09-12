@@ -38,7 +38,7 @@ public class UI_QuckInfo : MonoBehaviour
             return;
         }
 
-        ClientCredential crediential = Managers.Web.Credential;
+        ClientCredential crediential = Managers.Web.Models.Credential;
         if (crediential == null)
         {
             return;
@@ -55,17 +55,10 @@ public class UI_QuckInfo : MonoBehaviour
 
         };
 
-        try
-        {
-            GsoWebService service = new GsoWebService();
-            LoadGearRequest request = service.mGameResource.GetLoadGearRequest(header, body);
-            request.ExecuteAsync(OnProcessLoadGear);
-        }
-        catch (Exception ex)
-        {
 
-        }
-
+        GsoWebService service = new GsoWebService();
+        LoadGearRequest request = service.mGameResource.GetLoadGearRequest(header, body);
+        request.ExecuteAsync(OnProcessLoadGear);
     }
 
     /// <summary>
@@ -85,7 +78,7 @@ public class UI_QuckInfo : MonoBehaviour
             if(unit.gear.part == "backpack")
             {
 
-                ClientCredential crediential = Managers.Web.Credential;
+                ClientCredential crediential = Managers.Web.Models.Credential;
                 if (crediential == null)
                 {
                     return;
@@ -102,16 +95,10 @@ public class UI_QuckInfo : MonoBehaviour
                     storage_id = unit.attributes.unit_storage_id.Value,
                 };
 
-                try
-                {
-                    GsoWebService service = new GsoWebService();
-                    LoadStorageRequest request = service.mGameResource.GetLoadStorageRequest(header, body);
-                    request.ExecuteAsync(OnProcessLoadStorage);
-                }
-                catch (Exception ex)
-                {
 
-                }
+                GsoWebService service = new GsoWebService();
+                LoadStorageRequest request = service.mGameResource.GetLoadStorageRequest(header, body);
+                request.ExecuteAsync(OnProcessLoadStorage);
             }
         }
 
