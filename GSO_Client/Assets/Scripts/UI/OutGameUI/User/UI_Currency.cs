@@ -25,7 +25,7 @@ public class UI_Currency : LobbyUI
 
     public override void UpdateUI()
     {
-        UserInfo info = Managers.Web.user.UserInfo;
+        UserInfo info = Managers.Web.Models.User;
         if(info == null)
         {
             return;

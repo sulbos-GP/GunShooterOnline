@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 
 internal class Managers : MonoBehaviour
 {
-    private static Managers s_instance = new();
+    private static Managers s_instance;
 
  
 
@@ -101,7 +101,7 @@ internal class Managers : MonoBehaviour
 
     private void OnSceneUnloaded(Scene scene)
     {
-
+        SystemLog.DestroySystemWindow();
     }
 
     /// <summary>

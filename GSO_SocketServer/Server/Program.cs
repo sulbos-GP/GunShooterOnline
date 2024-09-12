@@ -68,6 +68,8 @@ namespace Server
                 Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
                 Task.Delay(minutes * 60 * 1000).Wait();
 
+                Console.WriteLine("Stop game server");
+
                 gameserver.Stop();
             }
         }
