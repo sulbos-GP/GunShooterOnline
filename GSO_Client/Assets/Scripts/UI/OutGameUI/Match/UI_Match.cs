@@ -67,7 +67,7 @@ public class UI_Match : MonoBehaviour
             Managers.SystemLog.Message("매칭 참여 요청...");
             mIsProcessMatch = true;
 
-            ClientCredential crediential = Managers.Web.Credential;
+            ClientCredential crediential = Managers.Web.Models.Credential;
             if (crediential == null)
             {
                 return;
@@ -130,7 +130,7 @@ public class UI_Match : MonoBehaviour
             Managers.SystemLog.Message("매칭 취소 요청...");
             mIsProcessMatch = true;
 
-            ClientCredential credential = Managers.Web.Credential;
+            ClientCredential credential = Managers.Web.Models.Credential;
             if (credential == null)
             {
                 return;

@@ -48,10 +48,9 @@ public class UI_LevelReward : LobbyUI
 
     public override void UpdateUI()
     {
-        List<UserLevelReward> rewards = Managers.Web.user.LevelReward;
+        List<UserLevelReward> rewards = Managers.Web.Models.LevelReward;
         if (rewards == null || rewards.Count == 0)
         {
-            Debug.Log("레벨 보상이 존재하지 않거나 개수가 0입니다.");
             return;
         }
 

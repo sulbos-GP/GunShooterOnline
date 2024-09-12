@@ -211,8 +211,8 @@ public class SignInUI : MonoBehaviour
         //WebClientService 값 넣어주기
         //UserData는 지속적으로 들고 있을 것
         {
-            Managers.Web.Credential = response.credential;
-            Managers.Web.user = response.userData;
+            Managers.Web.Models.Credential = response.credential;
+            Managers.Web.Models.Data = response.userData;
         }
 
         //로비로 이동

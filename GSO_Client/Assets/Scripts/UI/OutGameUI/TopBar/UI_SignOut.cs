@@ -22,7 +22,7 @@ public class UI_SingOut : MonoBehaviour
 
     private void OnClickSingOut()
     {
-        ClientCredential crediential = Managers.Web.Credential;
+        ClientCredential crediential = Managers.Web.Models.Credential;
         if (crediential == null)
         {
             return;

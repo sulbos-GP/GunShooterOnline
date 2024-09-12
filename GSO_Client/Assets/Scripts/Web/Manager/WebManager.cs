@@ -7,28 +7,24 @@ using static AuthorizeResource;
 
 public class WebManager
 {
+    private WebModels models = new WebModels();
     private ClientCredential credential = new ClientCredential();
-    public DataLoadUserInfo user = new DataLoadUserInfo();
+    private DataLoadUserInfo user = new DataLoadUserInfo();
 
     private void Awake()
     {
 
     }
 
-    public ClientCredential Credential
+    public WebModels Models
     {
         get
         {
-            if(credential.uid == 0 || credential.access_token == string.Empty)
-            {
-                return null;
-            }
-
-            return credential;
+            return models;
         }
         set
         {
-            credential = value;
+            models = value;
         }
     }
 

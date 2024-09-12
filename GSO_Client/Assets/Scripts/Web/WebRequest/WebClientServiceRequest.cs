@@ -97,7 +97,7 @@ public abstract class WebClientServiceRequest<TResponse>
         if(response.error_code == WebErrorCode.None)
         {
 
-            Managers.Web.Credential = new ClientCredential
+            Managers.Web.Models.Credential = new ClientCredential
             {
                 uid = response.uid,
                 access_token = response.access_token,

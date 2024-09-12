@@ -27,7 +27,6 @@ public class MatchmakerHub : ClientHub
 
     protected override void SetOnRecivedFunc()
     {
-        mConnection.On<int>("S2C_VerfiyUser", S2C_VerfiyUser);
         mConnection.On<string, MatchProfile>("S2C_MatchComplete", S2C_MatchComplete);
     }
 
@@ -53,7 +52,7 @@ public class MatchmakerHub : ClientHub
 
     public async void C2S_VerfiyUser()
     {
-        ClientCredential credential = Managers.Web.Credential;
+        ClientCredential credential = Managers.Web.Models.Credential;
         if (credential == null)
         {
             return;
@@ -82,7 +81,7 @@ public class MatchmakerHub : ClientHub
 
             Managers.Scene.LoadScene(Define.Scene.Forest);
 
-            ClientCredential credential = Managers.Web.Credential;
+            ClientCredential credential = Managers.Web.Models.Credential;
             if (credential == null)
             {
                 return;
