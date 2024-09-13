@@ -11,6 +11,8 @@ using WebCommonLibrary.Models.MasterDB;
 using Matchmaker.Repository;
 using WebCommonLibrary.Enum;
 using Google.Apis.Games.v1.Data;
+using System.Threading;
+using System.Net.Sockets;
 
 namespace Matchmaker.Service
 {
@@ -37,12 +39,12 @@ namespace Matchmaker.Service
             await mMatchQueue.ClearRating();
         }
 
-        public async Task<WebErrorCode> AddMatchTicket(Int32 uid, String clientId)
+        public async Task<WebErrorCode> AddMatchTicket(Int32 uid, string clientId)
         {
 
             try
             {
-                //mMatchQueue.GetRedisEventLock().TryLock();
+                await mMatchQueue.TryTakeLock(uid);
 
                 //이미 티켓이 존재할 경우
                 var (error, ticket) = await mMatchQueue.GetTicketWithUid(uid);
@@ -59,18 +61,19 @@ namespace Matchmaker.Service
 
                 return WebErrorCode.None;
             }
-            catch
+            catch (Exception e)
             {
+                Console.WriteLine($"[MatchmakerService.AddMatchTicket] : {e.Message}");
                 return WebErrorCode.TEMP_Exception;
             }
             finally
             {
-                //mMatchQueue.GetRedisEventLock().ReleaseLock();
+                await mMatchQueue.ReleaseLock(uid);
             }
             
         }
 
-        public async Task<WebErrorCode> RemoveMatchTicket(String clientId)
+        public async Task<WebErrorCode> RemoveMatchTicket(string clientId)
         {
             var (error, uid) = await mMatchQueue.GetUidWithClientId(clientId);
             if (uid == 0)
@@ -78,96 +81,154 @@ namespace Matchmaker.Service
                 return error;
             }
 
-            error = await mMatchQueue.RemoveTicket(uid);
-            if (error != WebErrorCode.None)
+            try
             {
-                return error;
-            }
+                await mMatchQueue.TryTakeLock(uid);
 
-            return WebErrorCode.None;
+                error = await mMatchQueue.RemoveTicket(uid);
+                if (error != WebErrorCode.None)
+                {
+                    return error;
+                }
+
+                return WebErrorCode.None;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MatchmakerService.RemoveMatchTicket] : {e.Message}");
+                return WebErrorCode.TEMP_Exception;
+            }
+            finally
+            {
+                await mMatchQueue.ReleaseLock(uid);
+            }
         }
 
         public async Task<WebErrorCode> PushMatchQueue(Int32 uid, String world, String region)
         {
-            (WebErrorCode error, Ticket? ticket) = await mMatchQueue.GetTicketWithUid(uid);
-            if (ticket == null)
+            Console.WriteLine("[MatchmakerService.PushMatchQueue]");
+            try
             {
-                return WebErrorCode.TEMP_ERROR;
-            }
+                await mMatchQueue.TryTakeLock(uid);
 
-            UserSkillInfo? skill = await mGameDB.GetUserSkillByUid(uid);
-            if(skill == null)
+                (WebErrorCode error, Ticket? ticket) = await mMatchQueue.GetTicketWithUid(uid);
+                if (ticket == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                if (ticket.state != ETicketState.NotInQueue)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                UserSkillInfo? skill = await mGameDB.GetUserSkillByUid(uid);
+                if (skill == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                bool valid = await mMatchQueue.IsValidRatingWithUid(uid);
+                if (valid == true)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                error = await mMatchQueue.AddRating(uid, skill.rating);
+                if (error != WebErrorCode.None)
+                {
+                    return error;
+                }
+
+                {
+                    ticket.world = world;
+                    ticket.region = region;
+                    ticket.match_start_time = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
+                    ticket.state = ETicketState.InQueue;
+                    ticket.isExit = false;
+                }
+
+                bool result = await mMatchQueue.SetTicket(uid, ticket);
+                //if (result == false)
+                //{
+                //    return WebErrorCode.TEMP_ERROR;
+                //}
+
+                return WebErrorCode.None;
+            }
+            catch (Exception e)
             {
-                return WebErrorCode.TEMP_ERROR;
+                Console.WriteLine($"[MatchmakerService.PushMatchQueue] : {e.Message}");
+                return WebErrorCode.TEMP_Exception;
             }
-
-            bool valid = await mMatchQueue.IsValidRatingWithUid(uid);
-            if(valid == true)
+            finally
             {
-                return WebErrorCode.TEMP_ERROR;
+                await mMatchQueue.ReleaseLock(uid);
             }
-
-            error = await mMatchQueue.AddRating(uid, skill.rating);
-            if (error != WebErrorCode.None)
-            {
-                return error;
-            }
-
-            {
-                ticket.world = world;
-                ticket.region = region;
-                ticket.match_start_time = new DateTimeOffset(DateTime.UtcNow).ToUnixTimeSeconds();
-                ticket.state = ETicketState.Join;
-            }
-
-            bool result = await mMatchQueue.SetTicket(uid, ticket);
-            if (result == false)
-            {
-                return WebErrorCode.TEMP_ERROR;
-            }
-
-            return WebErrorCode.None;
         }
 
         public async Task<WebErrorCode> PopMatchQueue(Int32 uid)
         {
+            Console.WriteLine("[MatchmakerService.PopMatchQueue]");
 
-            (WebErrorCode error, Ticket? ticket) = await mMatchQueue.GetTicketWithUid(uid);
-            if (ticket == null)
+            try
             {
-                return WebErrorCode.TEMP_ERROR;
-            }
+    
+                (WebErrorCode error, Ticket? ticket) = await mMatchQueue.GetTicketWithUid(uid);
+                if (ticket == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
 
-            if(ticket.state != ETicketState.InQueue || ticket.state != ETicketState.Join)
-            {
-                return WebErrorCode.TEMP_ERROR;
-            }
+                if (ticket.state == ETicketState.InQueue)
+                {
+                    await mMatchQueue.TryTakeLock(uid);
 
-            error = await mMatchQueue.RemoveRating(uid);
-            if (error != WebErrorCode.None)
-            {
+                    error = await mMatchQueue.RemoveRating(uid);
+                    if (error != WebErrorCode.None)
+                    {
+                        return WebErrorCode.TEMP_ERROR;
+                    }
+
+                    {
+                        ticket.world = string.Empty;
+                        ticket.region = string.Empty;
+                        ticket.match_start_time = 0;
+                        ticket.state = ETicketState.NotInQueue;
+                        ticket.isExit = true;
+                    }
+
+                    error = WebErrorCode.None;
+
+                }
+                else
+                {
+                    ticket.isExit = true;
+                    error = WebErrorCode.PopPlayersExitRequested;
+                }
+
+                bool result = await mMatchQueue.SetTicket(uid, ticket);
+                //if (result == false)
+                //{
+                //    return WebErrorCode.TEMP_ERROR;
+                //}
+
                 return error;
             }
-
+            catch (Exception e)
             {
-                ticket.world = string.Empty;
-                ticket.region = string.Empty;
-                ticket.match_start_time = 0;
-                ticket.state = ETicketState.NotInQueue;
+                Console.WriteLine($"[MatchmakerService.PopMatchQueue] : {e.Message}");
+                return WebErrorCode.TEMP_Exception;
             }
-
-            bool result = await mMatchQueue.SetTicket(uid, ticket);
-            if (result == false)
+            finally
             {
-                return WebErrorCode.TEMP_ERROR;
+                await mMatchQueue.ReleaseLock(uid);
             }
-
-            return WebErrorCode.None;
         }
 
         public async Task<WebErrorCode> RemoveMatchQueue(string key)
         {
-
+            Console.WriteLine("[MatchmakerService.RemoveMatchQueue]");
             int uid = KeyUtils.GetUID(key);
 
             var error = await mMatchQueue.RemoveTicket(uid);
@@ -182,43 +243,109 @@ namespace Matchmaker.Service
                 return error;
             }
 
+            await mMatchQueue.ReleaseLock(uid);
+
             return WebErrorCode.None;
+        }
+
+        public async Task<WebErrorCode> LeavingMatchQueue(string key)
+        {
+            Console.WriteLine("[MatchmakerService.LeavingMatchQueue]");
+            int uid = KeyUtils.GetUID(key);
+
+            var (error , ticket) = await mMatchQueue.GetTicketWithUid(uid);
+            if(error != WebErrorCode.None || ticket == null)
+            {
+                return error;
+            }
+
+            error = await mMatchQueue.RemoveRating(uid);
+            if (error != WebErrorCode.None)
+            {
+                return error;
+            }
+
+            {
+                ticket.world = string.Empty;
+                ticket.region = string.Empty;
+                ticket.match_start_time = 0;
+                ticket.state = ETicketState.NotInQueue;
+                ticket.isExit = false;
+            }
+
+            bool result = await mMatchQueue.SetTicket(uid, ticket);
+            //if (result == false)
+            //{
+            //    return WebErrorCode.TEMP_ERROR;
+            //}
+
+            return WebErrorCode.None;
+        }
+
+        public async Task<Dictionary<string, Ticket>?> CheckPlayersLeavingQueue()
+        {
+            var (error, tickets) = await mMatchQueue.GetAllTicket();
+            if (error != WebErrorCode.None || tickets == null || tickets.Count == 0)
+            {
+                return null;
+            }
+
+            return tickets.Where(kvp => kvp.Value.isExit == true).ToDictionary();
         }
 
         public async Task<(WebErrorCode, PlayerInfo?)> GetLongestWaitingPlayer()
         {
-            var (error, tickets) = await mMatchQueue.GetAllTicket();
-            if(error != WebErrorCode.None || tickets == null)
+            while (true)
             {
-                return (error, null);
+                var (error, tickets) = await mMatchQueue.GetAllTicket();
+                if (error != WebErrorCode.None || tickets == null || tickets.Count == 0)
+                {
+                    return (WebErrorCode.TEMP_ERROR, null);
+                }
+
+                var longestWaitingPlayer = tickets.
+                                            Where(kvp => kvp.Value.state == ETicketState.InQueue).
+                                            OrderByDescending(p => p.Value.match_start_time).
+                                            FirstOrDefault();
+
+                if(longestWaitingPlayer.Value == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR, null);
+                }
+
+                string  key = longestWaitingPlayer.Key;
+                int     uid = KeyUtils.GetUID(key);
+
+                if (false == await mMatchQueue.TryTakeLock(uid, false))
+                {
+                    continue;
+                }
+
+                Ticket ticket = longestWaitingPlayer.Value;
+                ticket.state = ETicketState.WaitingForMatch;
+
+                bool result = await mMatchQueue.SetTicket(uid, ticket);
+                //if (result == false)
+                //{
+                //    return (WebErrorCode.TEMP_ERROR, null);
+                //}
+
+                double? rating = await mMatchQueue.GetRatingWithKey(key);
+                if (rating == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR, null);
+                }
+
+                var player = new PlayerInfo
+                {
+                    rating = rating.Value,
+                    ticket = ticket
+                };
+
+                await mMatchQueue.ReleaseLock(uid);
+
+                return (WebErrorCode.None, player);
             }
-
-            var longestWaitingPlayer = tickets.OrderByDescending(p => p.Value.match_start_time).FirstOrDefault();
-
-            string  key     = longestWaitingPlayer.Key;
-            int     uid     = KeyUtils.GetUID(key);
-            Ticket  ticket  = longestWaitingPlayer.Value;
-            ticket.state    = ETicketState.WaitingForMatch;
-
-            bool result = await mMatchQueue.SetTicket(uid, ticket);
-            if (result == false)
-            {
-                return (WebErrorCode.TEMP_ERROR, null);
-            }
-
-            double? rating = await mMatchQueue.GetRatingWithKey(key);
-            if (rating == null)
-            {
-                return (WebErrorCode.TEMP_ERROR, null);
-            }
-
-            var player = new PlayerInfo
-            {
-                rating = rating.Value,
-                ticket = ticket
-            };
-
-            return (WebErrorCode.None, player);
         }
 
         public async Task<(WebErrorCode, Dictionary<string, Ticket>?)> FindMatchByRating(double min, double max, int capacity)
@@ -240,18 +367,25 @@ namespace Matchmaker.Service
                 if(tickets.Count < capacity)
                 {
                     //매칭 인원수가 적다면
-                    return (WebErrorCode.TEMP_ERROR, null);
+                    return (WebErrorCode.TEMP_ERROR, tickets);
                 }
                 else if (tickets.Count > capacity)
                 {
                     //매치 시작한지 오래된 플레이어를 우선적으로 선별
-                    tickets.OrderBy(ticket => ticket.Value.match_start_time).Take(capacity).ToDictionary();
+                    var matchPlayers = tickets.
+                        Where(kvp => kvp.Value.state == ETicketState.InQueue).
+                        OrderBy(ticket => ticket.Value.match_start_time).
+                        Take(capacity).
+                        ToDictionary();
                 }
 
                 foreach (var ticket in tickets)
                 {
+                    int uid = KeyUtils.GetUID(ticket.Key);
+                    await mMatchQueue.TryTakeLock(uid);
+
                     ticket.Value.state = ETicketState.WaitingForMatch;
-                    await mMatchQueue.SetTicket(KeyUtils.GetUID(ticket.Key), ticket.Value);
+                    await mMatchQueue.SetTicket(uid, ticket.Value);
                 }
 
                 return (WebErrorCode.None, tickets);
@@ -278,10 +412,10 @@ namespace Matchmaker.Service
                 }
 
                 var result = await mMatchQueue.SetTicket(uid, ticket);
-                if (result == false)
-                {
-                    return WebErrorCode.TEMP_ERROR;
-                }
+                //if (result == false)
+                //{
+                //    return WebErrorCode.TEMP_ERROR;
+                //}
 
                 return WebErrorCode.None;
             }
@@ -294,8 +428,22 @@ namespace Matchmaker.Service
         public async Task NotifyMatchSuccess(Ticket ticket, MatchProfile profile)
         {
             Console.WriteLine($"\t\tClientId : {ticket.client_id}");
-            await mMatchmakerHub.Clients.Client(ticket.client_id).SendAsync("S2C_MatchComplete", ticket.client_id, profile);
+            await mMatchmakerHub.Clients.Client(ticket.client_id).SendAsync("S2C_MatchSuccess", ticket.client_id, profile);
 
+        }
+
+        public async Task NotifyMatchFailed(Ticket ticket, WebErrorCode error)
+        {
+            await mMatchmakerHub.Clients.Client(ticket.client_id).SendAsync("S2C_MatchFailed", error);
+        }
+
+        public async Task RollbackTicket(Int32 uid, Ticket ticket)
+        {
+            Console.WriteLine("[MatchmakerService.RollbackTicket]");
+
+            await mMatchQueue.ReleaseLock(uid);
+
+            await mMatchQueue.SetTicket(uid, ticket);
         }
 
     }

@@ -8,7 +8,17 @@ namespace Matchmaker.Repository.Interface
     public interface IMatchQueue : IDisposable
     {
 
-        public RedisEventLock GetRedisEventLock();
+        //////////////////////////////////////////////////////
+        ///                                                ///
+        ///                                                ///
+        ///                     Lock                       ///
+        ///                                                ///
+        ///                                                ///
+        //////////////////////////////////////////////////////
+
+        public Task<bool> TryTakeLock(int uid, bool isWaiting = true);
+
+        public Task ReleaseLock(int uid);
 
         //////////////////////////////////////////////////////
         ///                                                ///

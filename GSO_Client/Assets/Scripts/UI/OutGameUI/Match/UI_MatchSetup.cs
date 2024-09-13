@@ -66,12 +66,14 @@ public class UI_MatchSetup : LobbyUI
     public void OnClickSetup()
     {
         GameObject matchingHub = GameObject.Find("@MatchmakerHub");
-        if (matchingHub != null)
+        if (matchingHub == null)
         {
             return;
         }
         MatchmakerHub hub = matchingHub.GetComponent<MatchmakerHub>();
         hub.OnJoinRequest(setupText.text);
+
+        this.gameObject.SetActive(false);
     }
 
     public override void InitUI()

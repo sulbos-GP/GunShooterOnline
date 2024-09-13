@@ -15,7 +15,7 @@ namespace Matchmaker.Repository
     {
         public async Task ClearRating()
         {
-            var keys = await mMatchRating.SortAsync();
+            var keys = await mMatchRating.RangeByRankAsync();
             if(keys == null)
             {
                 return;
@@ -29,7 +29,7 @@ namespace Matchmaker.Repository
 
         public async Task<bool> IsValidRatingWithUid(Int32 uid)
         {
-            string key = KeyUtils.MakeKey(KeyUtils.EKey.Rating, uid);
+            string key = KeyUtils.MakeKey(KeyUtils.EKey.MATCH, uid);
             var ratings = await mMatchRating.RangeByRankAsync();
             return ratings.FindIndex(r => r == key) == -1 ? false : true;
         }
@@ -41,7 +41,7 @@ namespace Matchmaker.Repository
 
         public async Task<WebErrorCode> AddRating(Int32 uid, Double rating)
         {
-            string key = KeyUtils.MakeKey(KeyUtils.EKey.Rating, uid);
+            string key = KeyUtils.MakeKey(KeyUtils.EKey.MATCH, uid);
 
             var reuslt = await mMatchRating.AddAsync(key, rating, null, When.NotExists);
             if (reuslt == false)
@@ -54,7 +54,7 @@ namespace Matchmaker.Repository
 
         public async Task<WebErrorCode> RemoveRating(Int32 uid)
         {
-            string key = KeyUtils.MakeKey(KeyUtils.EKey.Rating, uid);
+            string key = KeyUtils.MakeKey(KeyUtils.EKey.MATCH, uid);
 
             bool result = await mMatchRating.RemoveAsync(key);
             if (result == false)

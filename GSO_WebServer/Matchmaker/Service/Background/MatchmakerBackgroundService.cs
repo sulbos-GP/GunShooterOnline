@@ -2,6 +2,8 @@
 using Matchmaker.Service.Interfaces;
 using WebCommonLibrary.Models.Match;
 using WebCommonLibrary.Error;
+using GSO_WebServerLibrary.Utils;
+using WebCommonLibrary.Enum;
 
 namespace Matchmaker.Service.Background
 {
@@ -9,7 +11,7 @@ namespace Matchmaker.Service.Background
     {
         private PeriodicTimer?  mTimer = null;
         private const double    mPeriodicMilliseconds = 1000;               //1초마다 매칭 검색
-        private const int       mPlayerCapacity = 4;                        //최대 매치될 인원
+        private const int       mPlayerCapacity = 1;                        //최대 매치될 인원
         private const int       mMaxWaitTimeCount = 120;                    //최대로 기다릴 수 있는 시간 (X초 이상 기다린 플레이어 모두 참여)
         private const long      mExpandingRatingRangeTimeCount = 10;        //X초마다 레이팅 범위 증가
 
@@ -34,6 +36,18 @@ namespace Matchmaker.Service.Background
             {
                 stopwatch.Restart();
 
+                //플레이어들의 상태를 체크한다
+                var leavePlayers = await mMatchmakerService.CheckPlayersLeavingQueue();
+                if (leavePlayers != null && leavePlayers.Count != 0)
+                {
+                    foreach (var (leaveKey, leaveTicket) in leavePlayers)
+                    {
+                        await mMatchmakerService.NotifyMatchFailed(leaveTicket, WebErrorCode.PopPlayersExitSuccess);
+
+                        await mMatchmakerService.LeavingMatchQueue(leaveKey);
+                    }
+                }
+
                 //가장 오래 기다린 플레이어를 선택한다
                 var (error, player) = await mMatchmakerService.GetLongestWaitingPlayer();
                 if (error != WebErrorCode.None || player == null || player.ticket == null)
@@ -51,8 +65,8 @@ namespace Matchmaker.Service.Background
 
                 //카운트 만큼 범위를 넓혀줌
                 double expanding = mExpandingRatingRange * count;
-                double maxRating = Math.Clamp(rating + expanding, rating, mMaxRating);
-                double minRating = Math.Clamp(rating - expanding, mMinRating, rating);
+                double maxRating = Math.Min(rating + expanding, mMaxRating);
+                double minRating = Math.Max(rating - expanding, mMinRating);
 
                 //일단은 max값은 증가하지 않고 60이 최대로 변경한다
                 //Rating범위 내의 X명의 상대 플레이어를 찾는다, 오래있었는지 여부에 따라 범위값이 증가한다
@@ -64,8 +78,16 @@ namespace Matchmaker.Service.Background
 
                 //Capacity명의 비슷한 플레이어들 선별
                 (error, var playerTickets) = await mMatchmakerService.FindMatchByRating(minRating, maxRating, mPlayerCapacity);
-                if (error != WebErrorCode.None || playerTickets == null)
+                if (error != WebErrorCode.None || playerTickets == null || playerTickets.Count != mPlayerCapacity)
                 {
+                    if(playerTickets != null)
+                    {
+                        foreach (var playerTicket in playerTickets)
+                        {
+                            playerTicket.Value.state = ETicketState.InQueue;
+                            await mMatchmakerService.RollbackTicket(KeyUtils.GetUID(playerTicket.Key), playerTicket.Value);
+                        }
+                    }
                     continue;
                 }
                 string[] keys = playerTickets.Keys.ToArray();
@@ -75,6 +97,11 @@ namespace Matchmaker.Service.Background
                 (error, var profile) = await mGameServerManagerService.FetchMatchInfo(keys);
                 if(profile == null)
                 {
+                    foreach (var playerTicket in playerTickets)
+                    {
+                        playerTicket.Value.state = ETicketState.InQueue;
+                        await mMatchmakerService.RollbackTicket(KeyUtils.GetUID(playerTicket.Key), playerTicket.Value);
+                    }
                     continue;
                 }
 
@@ -100,11 +127,7 @@ namespace Matchmaker.Service.Background
                 //성공적으로 보냈다면 매칭 큐에서 제거 한다
                 foreach (var k in keys)
                 {
-                    error = await mMatchmakerService.RemoveMatchQueue(k);
-                    if (error != WebErrorCode.None)
-                    {
-                        continue;
-                    }
+                    await mMatchmakerService.RemoveMatchQueue(k);
                 }
 
             }

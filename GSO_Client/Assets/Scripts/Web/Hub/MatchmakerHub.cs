@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.SignalR.Client;
 using System;
 using System.Collections;
 using System.Net.Http;
+using System.Threading.Tasks;
 using UnityEngine;
 using WebCommonLibrary.DTO.Matchmaker;
 using WebCommonLibrary.Error;
@@ -36,7 +37,8 @@ public class MatchmakerHub : ClientHub
 
     protected override void SetOnRecivedFunc()
     {
-        mConnection.On<string, MatchProfile>("S2C_MatchComplete", S2C_MatchComplete);
+        mConnection.On<string, MatchProfile>("S2C_MatchSuccess", S2C_MatchSuccess);
+        mConnection.On<WebErrorCode>("S2C_MatchFailed", S2C_MatchFailed);
     }
 
     protected override void OnConnection()
@@ -61,16 +63,7 @@ public class MatchmakerHub : ClientHub
     /// <summary>
     /// 매칭 성공
     /// </summary>
-    //public void OnMatchComplete()
-    //{
-    //    mMatchButton.interactable = false;
-    //    mMatchStateText.text = "매칭 완료";
-
-    //    mMatchTimeText.gameObject.SetActive(false);
-    //    mMatchButton.gameObject.SetActive(false);
-    //    StopTiemr();
-    //}
-    public void S2C_MatchComplete(string client_id, MatchProfile response)
+    public void S2C_MatchSuccess(string client_id, MatchProfile response)
     {
         EnqueueDispatch(() =>
         {
@@ -88,21 +81,27 @@ public class MatchmakerHub : ClientHub
 
             {
                 //승현
-                response.host_ip = "113.60.249.123";
+                //response.host_ip = "113.60.249.123";
 
                 //로컬 애뮬
-                //response.host_ip = "10.0.2.2";
+                response.host_ip = "10.0.2.2";
 
                 Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
 
                 Managers.Scene.LoadScene(Define.Scene.Forest);
+
+                ClientCredential credential = Managers.Web.Models.Credential;
+                if (credential == null)
+                {
+                    return;
+                }
 
                 //Enter할때 uid 보내주셈
                 C_EnterGame c_EnterGame = new C_EnterGame();
                 c_EnterGame.Name = "jish";
                 c_EnterGame.Credential = new CredentiaInfo()
                 {
-                    Uid = Managers.Web.credential.uid
+                    Uid = credential.uid,
                 };
 
                 Managers.Network.Send(c_EnterGame);
@@ -114,13 +113,45 @@ public class MatchmakerHub : ClientHub
     }
 
     /// <summary>
+    /// 매칭 실패 또는 참여 취소 성공
+    /// </summary>
+    public void S2C_MatchFailed(WebErrorCode error)
+    {
+        EnqueueDispatch(() =>
+        {
+            Managers.SystemLog.Message($"매치가 취소되었습니다 {error.ToString()}");
+
+            if (matchStateUI == null)
+            {
+                return;
+            }
+            UI_MatchState state = matchStateUI.GetComponentInChildren<UI_MatchState>();
+
+            if(error == WebErrorCode.PopPlayersExitSuccess)
+            {
+                state.SetStateText("매칭 취소 완료");
+                Destroy(matchStateUI);
+            }
+            else if(error == WebErrorCode.PopPlayersJoinForced)
+            {
+                //매칭을 취소하려고 했지만 이미 게임이 잡혀버림
+            }
+            else
+            {
+
+            }
+
+        });
+    }
+
+    /// <summary>
     /// 매칭 참여 요청
     /// </summary>
     public void OnJoinRequest(string name)
     {
         if(matchStatePrefab != null)
         {
-            return;
+            matchStatePrefab = Resources.Load<GameObject>("Prefabs/UI/Lobby/MatchState");
         }
 
         if(mIsProcessing == true)
@@ -139,11 +170,16 @@ public class MatchmakerHub : ClientHub
             state.SetStateText("매칭 참여 중...");
             mIsProcessing = true;
 
-            ClientCredential crediential = Managers.Web.credential;
+            ClientCredential credential = Managers.Web.Models.Credential;
+            if (credential == null)
+            {
+                return;
+            }
+
             var header = new HeaderVerfiyPlayer
             {
-                uid = crediential.uid.ToString(),
-                access_token = crediential.access_token,
+                uid = credential.uid.ToString(),
+                access_token = credential.access_token,
             };
 
             var body = new JoinMatchReq
@@ -188,6 +224,7 @@ public class MatchmakerHub : ClientHub
         else
         {
             state.SetStateText("매칭 참여 요청 실패");
+            Destroy(matchStateUI);
         }
     }
 
@@ -207,7 +244,12 @@ public class MatchmakerHub : ClientHub
             state.SetStateText("매칭 취소 중...");
             mIsProcessing = true;
 
-            ClientCredential credential = Managers.Web.credential;
+            ClientCredential credential = Managers.Web.Models.Credential;
+            if (credential == null)
+            {
+                return;
+            }
+
             var header = new HeaderVerfiyPlayer
             {
                 uid = credential.uid.ToString(),
@@ -217,7 +259,7 @@ public class MatchmakerHub : ClientHub
             var body = new CancleMatchReq
             {
                 world = world,
-                region = name
+                region = region
             };
 
             MatchmakerService service = new MatchmakerService();
@@ -250,9 +292,15 @@ public class MatchmakerHub : ClientHub
             state.StopTiemr();
             Destroy(matchStateUI);
         }
+        else if(response.error_code == WebErrorCode.PopPlayersExitRequested)
+        {
+            //매칭 큐에서 락이 걸려있어 요청만 해두고 나온 상황
+            state.SetStateText("매칭 취소 기다리는 중...");
+        }
         else
         {
             Managers.SystemLog.Message("매칭 취소 요청 실패");
+            //Destroy(matchStateUI);
         }
     }
 

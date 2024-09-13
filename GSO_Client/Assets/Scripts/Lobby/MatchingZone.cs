@@ -54,7 +54,7 @@ public class MatchingZone : MonoBehaviour
         }
 
         GameObject matchingHub = GameObject.Find("@MatchmakerHub");
-        if (matchingHub != null)
+        if (matchingHub == null)
         {
             return;
         }

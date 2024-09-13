@@ -7,7 +7,7 @@ using Matchmaker.DTO;
 
 namespace Matchmaker.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Matchmaker/[controller]")]
     [ApiController]
     public class JoinController : ControllerBase
     {
@@ -22,7 +22,6 @@ namespace Matchmaker.Controllers
         /// 매칭 참여 요청
         /// </summary>
         [HttpPost]
-        [Route("Join")]
         public async Task<JoinMatchRes> Join([FromHeader] HeaderDTO header, [FromBody] JoinMatchReq request)
         {
 

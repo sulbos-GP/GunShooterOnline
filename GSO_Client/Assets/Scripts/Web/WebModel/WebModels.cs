@@ -34,6 +34,11 @@ public class WebModels
 
             var value = property.GetValue(model);
 
+            if (property.PropertyType == typeof(int) && property.Name == "uid" && (int)value == 0)
+            {
+                return null;
+            }
+
             //value가 null인지 확인
             if (value == null)
             {

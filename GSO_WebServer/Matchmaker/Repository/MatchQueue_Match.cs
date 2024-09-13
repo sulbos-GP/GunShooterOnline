@@ -12,6 +12,7 @@ namespace Matchmaker.Repository
 {
     public partial class MatchQueue : IMatchQueue
     {
+
         public async Task<string[]?> SearchPlayerByRange(Double min, Double max)
         {
             return await mMatchRating.RangeByScoreAsync(min, max);
