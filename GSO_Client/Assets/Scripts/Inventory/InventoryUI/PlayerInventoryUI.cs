@@ -10,7 +10,7 @@ public class PlayerInventoryUI : InventoryUI
     public TextMeshProUGUI weightText;
     public TextMeshProUGUI moneyText; //돈에 대한 정보가 나올시 추가
                                       //
-    public int bagLv = 0;
+    public BagData equipBag; //현재 장착한 가방
 
     public void WeightTextSet(double GridWeigt, double limitWeight)
     {
@@ -34,18 +34,11 @@ public class PlayerInventoryUI : InventoryUI
     {
         base.InventorySet();
 
-        Vector2Int curSize = Vector2Int.zero;
-        double limitWeight = 0;
-        switch (bagLv)
-        {
-            case 0: curSize = BagSize.level0; limitWeight = 5f; break;
-            case 1: curSize = BagSize.level1; limitWeight = 15f; break;
-            case 2: curSize = BagSize.level2; limitWeight = 20f; break;
-            case 3: curSize = BagSize.level3; limitWeight = 40f; break;
-        }
+        Vector2Int newSize = new Vector2Int(equipBag.total_scale_x,equipBag.total_scale_y);
+
 
         //생성된 그리드를 초기세팅하고 들어있는 아이템
-        instantGrid.InitializeGrid(curSize, limitWeight); // 가방의 크기로 바꿀것
+        instantGrid.InitializeGrid(newSize, equipBag.total_weight); // 가방의 크기로 바꿀것
     }
 
 }

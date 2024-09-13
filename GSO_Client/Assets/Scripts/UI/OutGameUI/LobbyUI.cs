@@ -22,9 +22,8 @@ public abstract class LobbyUI : MonoBehaviour
 
     public void OnDestroy()
     {
-        LobbyUIManager.Instance.UnRegisterUI(type);
-
-        OnUnRegister();
+        //Debug.Log($"[LobbyUI.{type.ToString()}] is destroy");
+        //OnUnRegister();
     }
 
     /// <summary>

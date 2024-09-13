@@ -1,6 +1,4 @@
 ﻿using Google.Protobuf.Protocol;
-using Server.Database.Data;
-using Server.Database.Interface;
 using Server.Game;
 using Server.Game.Object.Gear;
 using SqlKata.Execution;
@@ -21,7 +19,7 @@ namespace Server.Database.Game
     ///                                         ///
     ///////////////////////////////////////////////
 
-    public partial class GameDB : MySQL, IGameDatabase
+    public partial class GameDB : MySQL
     {
         public async Task<IEnumerable<DB_ItemUnit>> LoadInventory(int storage_id)
         {
@@ -37,6 +35,7 @@ namespace Server.Database.Game
 
                     "unit_attributes.item_id",
                     "unit_attributes.durability",
+                    "unit_attributes.loaded_ammo",
                     "unit_attributes.unit_storage_id",
                     "unit_attributes.amount"
             )
@@ -58,6 +57,7 @@ namespace Server.Database.Game
                 {
                     item_id = row.item_id,
                     durability = row.durability,
+                    loaded_ammo = row.loaded_ammo,
                     unit_storage_id = row.unit_storage_id as int?,
                     amount = row.amount
                 }
@@ -79,6 +79,7 @@ namespace Server.Database.Game
                 {
                     item_id = unit.attributes.item_id,
                     durability = unit.attributes.durability,
+                    loaded_ammo = unit.attributes.loaded_ammo,
                     unit_storage_id = unit.attributes.unit_storage_id,
                     amount = unit.attributes.amount
                 }, transaction);
@@ -180,6 +181,7 @@ namespace Server.Database.Game
             {
                 { "item_id"     , unit.attributes.item_id },
                 { "durability"  , unit.attributes.durability },
+                { "loaded_ammo" , unit.attributes.loaded_ammo},
                 { "unit_storage_id"  , unit.attributes.unit_storage_id },
                 { "amount"      , unit.attributes.amount },
             };

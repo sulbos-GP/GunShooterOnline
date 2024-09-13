@@ -1,17 +1,6 @@
-using Google.Protobuf.Protocol;
-using NPOI.OpenXmlFormats.Dml.Chart;
-using NPOI.OpenXmlFormats.Dml.Diagram;
-using NPOI.SS.Formula.Eval;
-using Org.BouncyCastle.Asn1.Crmf;
-using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
 using UnityEngine.UI;
-using Random = UnityEngine.Random;
 using Vector2 = System.Numerics.Vector2;
 
 
@@ -85,7 +74,7 @@ public partial class InventoryController : MonoBehaviour
 
             if (!isItemSelected) //아이템을 배치할때 플레이어의 인벤토리 무게 업데이트
             {
-                if(playerInvenUI.instantGrid == null)
+                if (playerInvenUI.instantGrid == null)
                 {
                     return;
                 }
@@ -204,10 +193,6 @@ public partial class InventoryController : MonoBehaviour
         rotateBtn.onClick.AddListener(RotateBtn);
     }
 
-    
-
-    
-
     private void OnDisable()
     {
         instantItemDic.Clear();
@@ -252,17 +237,12 @@ public partial class InventoryController : MonoBehaviour
 
     private void SetEquipSlot()
     {
-        Transform EquipSector = inventoryUI.transform.GetChild(0);
+        EquipSlot[] slots = inventoryUI.GetComponentsInChildren<EquipSlot>();
 
-        for (int i = 0; i < EquipSector.childCount; i++)
+        for (int i = 0; i < slots.Length; i++)
         {
-            if (EquipSector.GetChild(i).GetComponent<EquipSlot>() == null)
-            {
-                continue;
-            }
-            EquipSlot equip = EquipSector.GetChild(i).GetComponent<EquipSlot>();
-            equipSlotDic.Add(i + 1, equip);
-            equip.Init();
+            equipSlotDic.Add(i + 1, slots[i]);
+            slots[i].Init();
         }
     }
 
@@ -270,7 +250,7 @@ public partial class InventoryController : MonoBehaviour
     {
         if (child == null) return;
 
-        if(child.gameObject.name == "InventoryUI")
+        if (child.gameObject.name == "InventoryUI")
         {
             return;
         }

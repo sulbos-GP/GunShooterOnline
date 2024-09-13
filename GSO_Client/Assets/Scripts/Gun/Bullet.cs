@@ -67,11 +67,77 @@ public class Bullet : MonoBehaviour
         //Destroy(gameObject); //오브젝트 풀링 활용?
         return;
         //벽 혹은 적 오브젝트와 충돌시 파괴
-        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Enemy")){
+        if (collision.gameObject.CompareTag("Wall") || collision.gameObject.CompareTag("Enemy"))
+        {
             //hit패킷 전송
 
-            Debug.Log($"{collision.gameObject.name} 에게 {_damage }의 데미지를 줌"); //충돌체의 스텟에서 hp감소로 교체
+            Debug.Log($"{collision.gameObject.name} 에게 {_damage}의 데미지를 줌"); //충돌체의 스텟에서 hp감소로 교체
             Destroy(gameObject); //오브젝트 풀링 활용?
+        }
+    }
+
+    
+}
+
+[SerializeField]
+public class BulletData
+{
+    public int item_id;
+    public float speed;
+    public BulletType bulletType;
+    public string bulletObjPath;
+
+
+
+    public void PrintBulletStatInfo()
+    {
+        Debug.Log($" Speed: {speed}, " +
+                  $" BulletType: {bulletType}");
+    }
+}
+public class BulletDB
+{
+
+    public static Dictionary<int, BulletData> bulletDB = new Dictionary<int, BulletData>();
+
+    static BulletDB()
+    {
+        BulletDataInit();
+    }
+
+
+    private static BulletData b559mm = new BulletData
+    {
+        item_id = 501,
+        speed = 30,
+        bulletType = BulletType.b559mm,
+        bulletObjPath = "Objects/BulletObjPref/5.59mm"
+    };
+
+    private static BulletData b729mm = new BulletData
+    {
+        item_id = 502,
+        speed = 40,
+        bulletType = BulletType.b729mm,
+        bulletObjPath = "Objects/BulletObjPref/7.29mm"
+    };
+
+    public static void BulletDataInit()
+    {
+        bulletDB.Clear();
+        bulletDB.Add(b559mm.item_id, b559mm);
+        bulletDB.Add(b729mm.item_id, b729mm);
+    }
+
+    public static BulletData GetBulletData(int itemId)
+    {
+        if (bulletDB.ContainsKey(itemId))
+        {
+            return bulletDB[itemId];
+        }
+        else
+        {
+            return null; // 존재하지 않는 경우 null 반환
         }
     }
 }

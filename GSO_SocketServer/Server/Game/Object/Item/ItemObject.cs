@@ -1,12 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
-using Server.Database.Data;
 using Server.Database.Handler;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDB;
 
@@ -119,6 +114,14 @@ namespace Server.Game
             get
             {
                 return unit.attributes.durability;
+            }
+        }
+
+        public int Loaded_ammo
+        {
+            get
+            {
+                return unit.attributes.loaded_ammo;
             }
         }
 
@@ -251,6 +254,13 @@ namespace Server.Game
 
         public PS_ItemInfo ConvertItemInfo(int viewerId)
         {
+
+            PS_ItemAttributes attributes = new PS_ItemAttributes()
+            {
+                Durability = Durability,
+                LoadedAmmo = Loaded_ammo,
+            };
+
             PS_ItemInfo info = new PS_ItemInfo()
             {
                 ObjectId = this.Id,
@@ -259,6 +269,7 @@ namespace Server.Game
                 Y = Y,
                 Rotate = Rotate,
                 Amount = Amount,
+                Attributes = attributes,
                 IsSearched = IsViewer(viewerId),
             };
             return info;

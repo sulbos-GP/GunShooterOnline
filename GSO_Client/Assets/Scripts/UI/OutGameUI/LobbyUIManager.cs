@@ -13,13 +13,13 @@ public enum ELobbyUI
     Metadata,
     Currency,
     LevelReward,
+    MatchSetup,
 }
 
 public class LobbyUIManager : MonoBehaviour
 {
-
     private Dictionary<ELobbyUI, LobbyUI> UIList = new Dictionary<ELobbyUI, LobbyUI>();
-    private static LobbyUIManager instance = new();
+    private static LobbyUIManager instance;
 
     public static LobbyUIManager Instance
     {
@@ -59,8 +59,9 @@ public class LobbyUIManager : MonoBehaviour
         {
             foreach ((ELobbyUI type, LobbyUI ui) in instance.UIList)
             {
-                instance.UnRegisterUI(type);
+                UIList[type].OnUnRegister();
             }
+            instance.UIList.Clear();
         }
     }
 
