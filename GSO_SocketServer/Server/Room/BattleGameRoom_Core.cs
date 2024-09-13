@@ -74,6 +74,10 @@ namespace Server
 
         }
 
+
+
+
+
         public override void EnterGame(object obj)
         {
             GameObject gameObject = (GameObject)obj;
