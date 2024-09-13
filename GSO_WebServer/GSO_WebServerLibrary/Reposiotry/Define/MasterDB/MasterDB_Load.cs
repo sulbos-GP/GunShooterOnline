@@ -54,6 +54,8 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
         
         private DatabaseTable<DB_ItemBase> itemBase = new DatabaseTable<DB_ItemBase>();
         private DatabaseTable<DB_ItemBackpack> itemBackpack = new DatabaseTable<DB_ItemBackpack>();
+        private DatabaseTable<DB_ItemUse> itemUse = new DatabaseTable<DB_ItemUse>();
+        private DatabaseTable<DB_ItemWeapon> itemWeapon = new DatabaseTable<DB_ItemWeapon>();
         private DatabaseTable<DB_RewardBase> rewardBase = new DatabaseTable<DB_RewardBase>();
         private DatabaseTable<DB_RewardBox> rewardBox = new DatabaseTable<DB_RewardBox>();
         private DatabaseTable<DB_RewardLevel> rewardLevel = new DatabaseTable<DB_RewardLevel>();
@@ -92,6 +94,22 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
             }
         }
             
+        public DatabaseTable<DB_ItemUse> ItemUse
+        {
+            get
+            {
+                return itemUse;
+            }
+        }
+            
+        public DatabaseTable<DB_ItemWeapon> ItemWeapon
+        {
+            get
+            {
+                return itemWeapon;
+            }
+        }
+            
         public DatabaseTable<DB_RewardBase> RewardBase
         {
             get
@@ -125,6 +143,8 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
             
             itemBase = await LoadTable<DB_ItemBase>("master_item_base");
             itemBackpack = await LoadTable<DB_ItemBackpack>("master_item_backpack");
+            itemUse = await LoadTable<DB_ItemUse>("master_item_use");
+            itemWeapon = await LoadTable<DB_ItemWeapon>("master_item_weapon");
             rewardBase = await LoadTable<DB_RewardBase>("master_reward_base");
             rewardBox = await LoadTable<DB_RewardBox>("master_reward_box");
             rewardLevel = await LoadTable<DB_RewardLevel>("master_reward_level");
@@ -138,6 +158,8 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
             if(
         itemBase == null ||
         itemBackpack == null ||
+        itemUse == null ||
+        itemWeapon == null ||
         rewardBase == null ||
         rewardBox == null ||
         rewardLevel == null ||
@@ -179,6 +201,16 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
             return ItemBackpack.Get(id);
         }
             
+        public DB_ItemUse GetItemUse(int id)
+        {
+            return ItemUse.Get(id);
+        }
+            
+        public DB_ItemWeapon GetItemWeapon(int id)
+        {
+            return ItemWeapon.Get(id);
+        }
+            
         public DB_RewardBase GetRewardBase(int id)
         {
             return RewardBase.Get(id);
@@ -204,6 +236,16 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
         public Dictionary<int, DB_ItemBackpack> GetItemBackpackList()
         {
             return ItemBackpack.GetList();
+        }
+            
+        public Dictionary<int, DB_ItemUse> GetItemUseList()
+        {
+            return ItemUse.GetList();
+        }
+            
+        public Dictionary<int, DB_ItemWeapon> GetItemWeaponList()
+        {
+            return ItemWeapon.GetList();
         }
             
         public Dictionary<int, DB_RewardBase> GetRewardBaseList()

@@ -34,4 +34,33 @@ namespace WebCommonLibrary.Models.MasterDB
         public int total_scale_y { get; set; } = 0;
         public double total_weight { get; set; } = 0.0;
     }
+
+    /// <summary>
+    /// 사용 아이템 정보
+    /// </summary>
+    public class DB_ItemUse
+    {
+        public int item_id { get; set; } = 0;
+        public int energy { get; set; } = 0;
+        public double active_time { get; set; } = 0.0;
+        public double duration { get; set; } = 0.0;
+        public string effect { get; set; } = string.Empty;
+        public double cool_time { get; set; } = 0.0;
+    }
+
+    /// <summary>
+    /// 무기 아이템 정보
+    /// </summary>
+    public class DB_ItemWeapon
+    {
+        public int item_id { get; set; } = 0;
+        public int attack_range { get; set; } = 0;
+        public int damage { get; set; } = 0;
+        public int distance { get; set; } = 0;
+        public int reload_round { get; set; } = 0;
+        public double attack_speed { get; set; } = 0.0;
+        public int reload_time { get; set; } = 0;
+        public string bullet { get; set; } = string.Empty;
+
+    }
 }
