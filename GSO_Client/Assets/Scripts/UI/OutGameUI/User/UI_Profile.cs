@@ -66,7 +66,7 @@ public class UI_Profile : LobbyUI
     public override void UpdateUI()
     {
         UserInfo profile = Managers.Web.Models.User;
-        if(profile == null)
+        if (profile == null)
         {
             return;
         }

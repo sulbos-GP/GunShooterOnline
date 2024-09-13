@@ -87,7 +87,7 @@ public abstract class WebClientServiceRequest<TResponse>
         else
         {
             Managers.SystemLog.Message($"웹 요청 실패 : {request.error}");
-            throw new NotImplementedException($"웹 요청 실패 : {request.error}");
+            throw new NotImplementedException($"웹 요청[{mEndPoint}] 실패 : {request.error}");
         }
 
     }

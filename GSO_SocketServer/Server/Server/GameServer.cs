@@ -30,26 +30,36 @@ namespace Server.Server
             mGameLogicTimer.Start();
 
 #if DOCKER
-            Program.web.initializeServiceAndResource();
 
-            //준비 완료 요청
-            RequestReadyMatchRes requestReady = await Program.web.ServerManager.PostRequestReady();
-            if(requestReady.error_code != WebErrorCode.None)
+            try
             {
-                return false;
-            }
-            Console.WriteLine("Server is ready");
+                Program.web.initializeServiceAndResource();
 
-            //준비 대기
-            MatchPlayersRes matchPlayer = await Program.web.ServerManager.PostWaitForMatchPlayers();
-            Console.WriteLine($"[MatchPlayer] Count : {matchPlayer.players.Count}");
-            Console.WriteLine("{");
-            foreach (int player in matchPlayer.players)
-            {
-                Console.WriteLine($"\tPlayer UID : {player}");
+                //준비 완료 요청
+                RequestReadyMatchRes requestReady = await Program.web.ServerManager.PostRequestReady();
+                if (requestReady.error_code != WebErrorCode.None)
+                {
+                    return false;
+                }
+                Console.WriteLine("Server is ready");
+
+                //준비 대기
+                MatchPlayersRes matchPlayer = await Program.web.ServerManager.PostWaitForMatchPlayers();
+                Console.WriteLine($"[MatchPlayer] Count : {matchPlayer.players.Count}");
+                Console.WriteLine("{");
+                foreach (int player in matchPlayer.players)
+                {
+                    Console.WriteLine($"\tPlayer UID : {player}");
+                }
+                Console.WriteLine("}");
+                room.connectPlayer = matchPlayer.players;
             }
-            Console.WriteLine("}");
-            room.connectPlayer = matchPlayer.players;
+            catch (Exception ex)
+            {
+                //TaskError는 GameServerManager(WEB) 에서 대기하고 있던 토큰이 취소되면서 발생
+                Console.WriteLine($"[OnStart] : {ex.Message}");
+            }
+
 
 #else
 

@@ -13,6 +13,7 @@ public enum ELobbyUI
     Metadata,
     Currency,
     LevelReward,
+    MatchSetup,
 }
 
 public class LobbyUIManager : MonoBehaviour
