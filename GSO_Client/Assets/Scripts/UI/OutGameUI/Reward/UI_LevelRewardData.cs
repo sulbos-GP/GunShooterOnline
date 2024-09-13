@@ -41,7 +41,12 @@ public class UI_LevelRewardData : MonoBehaviour
 
     public void OnClickReceived()
     {
-        ClientCredential crediential = Managers.Web.credential;
+        ClientCredential crediential = Managers.Web.Models.Credential;
+        if (crediential == null)
+        {
+            return;
+        }
+
         var header = new HeaderVerfiyPlayer
         {
             uid = crediential.uid.ToString(),
@@ -69,7 +74,7 @@ public class UI_LevelRewardData : MonoBehaviour
     {
         if(response.error_code == WebErrorCode.None)
         {
-            Managers.Web.user.LevelReward = response.LevelReward;
+            Managers.Web.Models.LevelReward = response.LevelReward;
             LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.LevelReward);
         }
     }

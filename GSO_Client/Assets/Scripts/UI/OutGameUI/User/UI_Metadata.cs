@@ -66,7 +66,7 @@ public class UI_Metadata : LobbyUI
 
     public override void UpdateUI()
     {
-        UserMetadataInfo metadata = Managers.Web.user.MetadataInfo;
+        UserMetadataInfo metadata = Managers.Web.Models.Metadata;
         if (metadata == null)
         {
             return;
@@ -80,7 +80,7 @@ public class UI_Metadata : LobbyUI
         escape.text         = (metadata.kills == 0) ? "0" : (metadata.escape / metadata.total_games).ToString();
         survivalTime.text   = (metadata.kills == 0) ? "0" : (metadata.survival_time / metadata.total_games).ToString();
 
-        UserSkillInfo skill = Managers.Web.user.SkillInfo;
+        UserSkillInfo skill = Managers.Web.Models.Rating;
         if(skill == null)
         {
             return;

@@ -10,6 +10,17 @@
     },
 
     {
+        "name": "itemUse",
+        "table": "master_item_use"
+    },
+
+    {
+        "name": "itemWeapon",
+        "table": "master_item_weapon"
+    },
+
+
+    {
         "name": "rewardBase",
         "table": "master_reward_base"
     },

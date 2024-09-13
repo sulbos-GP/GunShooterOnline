@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using TMPro;
 using System.Threading.Tasks;
+using WebCommonLibrary.Models.GameDB;
 
 public abstract class ClientHub : MonoBehaviour
 {
@@ -19,14 +20,22 @@ public abstract class ClientHub : MonoBehaviour
 
     protected void Start()
     {
+        try
+        {
+            Init();
 
-        Init();
+            if(true == CreateHubConnectionHandler())
+            {
+                SetOnRecivedFunc();
 
-        CreateHubConnectionHandler();
+                StartHub();
+            }
 
-        SetOnRecivedFunc();
-
-        StartHub();
+        }
+        catch (Exception ex)
+        {
+            Managers.SystemLog.Message($"{mConnectionName}서버 HUB 연결 중 에러 발생 : {ex.Message}");
+        }
 
     }
 
@@ -40,43 +49,40 @@ public abstract class ClientHub : MonoBehaviour
 
     protected abstract void Init();
 
-    private void CreateHubConnectionHandler()
+    private bool CreateHubConnectionHandler()
     {
-        try
+        Managers.SystemLog.Message($"{mConnectionName} 서버 빌드중...");
+
+        ClientCredential credential = Managers.Web.Models.Credential;
+        if (credential == null)
         {
-
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버 빌드중...");
-
-            if(Managers.Web.credential.access_token == string.Empty)
-            {
-                throw new Exception("Client credential 정보가 없습니다.");
-            }
-
-            string accessToken = Managers.Web.credential.access_token;
-            mConnection = new HubConnectionBuilder()
-            .WithUrl(mConnectionUrl, options =>
-            {
-
-                options.AccessTokenProvider = () => Task.FromResult(accessToken);
-                options.SkipNegotiation = true;
-                options.Transports = HttpTransportType.WebSockets;
-
-            }).ConfigureLogging(options =>
-            {
-                options.SetMinimumLevel(LogLevel.Information);
-                options.AddProvider(new HubLoggerProvider());
-            }).Build();
-
+            return false;
         }
-        catch (Exception ex)
+
+        mConnection = new HubConnectionBuilder()
+        .WithUrl(mConnectionUrl, options =>
         {
-            SystemLogManager.Instance.LogMessage($"서버 빌드중 에러 발생 :  {ex}");
-        }
+            options.Headers.Add("uid", credential.uid.ToString());
+            options.Headers.Add("access_token", credential.access_token);
+
+            options.SkipNegotiation = true;
+            options.Transports = HttpTransportType.WebSockets;
+
+        }).ConfigureLogging(options =>
+        {
+            options.SetMinimumLevel(LogLevel.Information);
+            options.AddProvider(new HubLoggerProvider());
+        }).Build();
+
+        return true;
     }
 
     protected void OnDestroy()
     {
-        StoptHub();
+        if(mConnection != null)
+        {
+            StoptHub();
+        }
     }
 
     protected void SetHub(string name, string url)
@@ -87,41 +93,45 @@ public abstract class ClientHub : MonoBehaviour
 
     public void StartHub()
     {
-        SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결중...");
+        Managers.SystemLog.Message($"{mConnectionName} 서버와 연결중...");
         mConnection.StartAsync().Wait();
 
         if (mConnection.State == HubConnectionState.Connected)
         {
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결되었습니다.");
-            //SendCredential();
+            Managers.SystemLog.Message($"{mConnectionName} 서버와 연결되었습니다.");
             OnConnection();
         }
         else
         {
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결에 실패하였습니다.");
+            Managers.SystemLog.Message($"{mConnectionName} 서버와 연결에 실패하였습니다.");
         }
     }
 
     public void StoptHub()
     {
-        SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결 해제중...");
-        mConnection.StopAsync().Wait();
+        Managers.SystemLog.Message($"{mConnectionName} 서버와 연결 해제중...");
 
+        if(mConnection == null)
+        {
+            return;
+        }
+
+        if(mConnection.State == HubConnectionState.Disconnected)
+        {
+            return;
+        }
+
+        mConnection.StopAsync().Wait();
         if (mConnection.State == HubConnectionState.Disconnected)
         {
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결이 해제 되었습니다.");
+            Managers.SystemLog.Message($"{mConnectionName} 서버와 연결이 해제 되었습니다.");
             OnDisConnection();
         }
         else
         {
-            SystemLogManager.Instance.LogMessage($"{mConnectionName} 서버와 연결이 해제에 실패하였습니다.");
+            Managers.SystemLog.Message($"{mConnectionName} 서버와 연결이 해제에 실패하였습니다.");
         }
 
-    }
-    private async void C2S_VerfiyCredential()
-    {
-        var credential = Managers.Web.credential;
-        await mConnection.InvokeAsync("VerfiyCredential", credential);
     }
 
     public void EnqueueDispatch(Action action)

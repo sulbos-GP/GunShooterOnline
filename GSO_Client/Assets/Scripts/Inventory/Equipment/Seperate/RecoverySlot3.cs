@@ -5,12 +5,6 @@ using UnityEngine;
 
 public class RecoverySlot3 : RecoverySlot
 {
-
-    private void Awake()
-    {
-        Init();
-    }
-
     protected override void OnDisable()
     {
         base.OnDisable();
@@ -18,8 +12,10 @@ public class RecoverySlot3 : RecoverySlot
 
     public override void Init()
     {
+        base.Init();
         slotId = 7;
         allowedItemType = ItemType.Recovery;
+        targetSlot = ItemQuickSlotsParent.GetChild(2).GetComponent<QuickSlot>();
     }
     public override bool ApplyItemEffects(ItemData item)
     {

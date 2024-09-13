@@ -8,6 +8,7 @@ using Matchmaker.Service;
 using Matchmaker.Service.Background;
 using Matchmaker.Service.Interfaces;
 using WebCommonLibrary.Config;
+using WebCommonLibrary.Error;
 
 namespace Matchmaker.Startup
 {
@@ -80,7 +81,7 @@ namespace Matchmaker.Startup
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public async void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -101,6 +102,9 @@ namespace Matchmaker.Startup
                 endpoints.MapControllers();
                 endpoints.MapHub<MatchmakerHub>("/MatchmakerHub");
             });
+
+            IMatchmakerService service = app.ApplicationServices.GetRequiredService<IMatchmakerService>();
+            await service.ClearMatch();
 
         }
     }

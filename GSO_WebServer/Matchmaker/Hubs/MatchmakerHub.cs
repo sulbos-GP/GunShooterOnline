@@ -19,7 +19,16 @@ namespace Matchmaker.Hubs
         {
 
             string connectionId = Context.ConnectionId;
-            Console.WriteLine($"Client connected: {connectionId}");
+            Console.WriteLine($"[MatchmakerHub] Client connected: {connectionId}");
+
+            HttpContext? context = Context.GetHttpContext();
+            if (context != null)
+            {
+                string uid = context.Request.Headers["uid"].ToString();
+                string accessToken = context.Request.Headers["access_token"].ToString();
+
+                var error = await mMatchmakerService.AddMatchTicket(Convert.ToInt32(uid), connectionId);
+            }
 
             await base.OnConnectedAsync();
 
@@ -29,24 +38,11 @@ namespace Matchmaker.Hubs
         {
 
             string connectionId = Context.ConnectionId;
-            Console.WriteLine($"Client disconnected: {connectionId}");
+            Console.WriteLine($"[MatchmakerHub] Client disconnected: {connectionId}");
+
+            var error = await mMatchmakerService.RemoveMatchTicket(connectionId);
 
             await base.OnDisconnectedAsync(exception);
-        }
-        
-        //임시
-        public async Task C2S_VerfiyUser(int uid, string accessToken)
-        {
-            string connectionId = Context.ConnectionId;
-
-            var error = await mMatchmakerService.AddMatchTicket(uid, connectionId);
-            await Clients.Caller.SendAsync("S2C_VerfiyUser", error);
-        }
-
-        public async Task C2S_DisConnectMatchHub(int uid)
-        {
-            string connectionId = Context.ConnectionId;
-            var error = await mMatchmakerService.RemoveMatchTicket(uid);
         }
 
         //임시

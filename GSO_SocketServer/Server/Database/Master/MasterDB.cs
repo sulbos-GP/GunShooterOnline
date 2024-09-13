@@ -1,6 +1,4 @@
-﻿using Server.Database.Data;
-using Server.Database.Interface;
-using Server.Game;
+﻿using Server.Game;
 using SqlKata.Execution;
 using StackExchange.Redis;
 using System;
@@ -11,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Server.Database.Master
 {
-    public partial class MasterDB : MySQL, IMasterDatabase
+    public partial class MasterDB : MySQL
     {
 
         public MasterDB() : base()

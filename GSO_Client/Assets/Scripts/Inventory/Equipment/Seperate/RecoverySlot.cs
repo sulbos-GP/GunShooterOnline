@@ -6,7 +6,7 @@ using UnityEngine;
 public class RecoverySlot : EquipSlot
 {
     public QuickSlot targetSlot;
-
+    public Transform ItemQuickSlotsParent;
 
     protected override void OnDisable()
     {
@@ -15,18 +15,19 @@ public class RecoverySlot : EquipSlot
 
     public override void Init()
     {
-
+        base.Init();
+        ItemQuickSlotsParent = GameObject.Find("IQuickSlot").transform;
     }
 
     public override bool ApplyItemEffects(ItemData item)
     {
-        
+        base.ApplyItemEffects(item);
         return true;
     }
 
     public override bool RemoveItemEffects(ItemData item)
     {
-
+        base.RemoveItemEffects(item);
         return true;
     }
 

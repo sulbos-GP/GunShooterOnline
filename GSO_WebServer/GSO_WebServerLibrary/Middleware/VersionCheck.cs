@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using WebCommonLibrary.DTO.Middleware;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.MasterDB;
 
 namespace GSO_WebServerLibrary.Middleware
 {
@@ -77,6 +78,20 @@ namespace GSO_WebServerLibrary.Middleware
             var errorJsonResponse = JsonSerializer.Serialize(new MiddlewareResponse
             {
                 error_code = error
+            });
+            await context.Response.WriteAsync(errorJsonResponse);
+        }
+
+        async Task SendVersionResponse(HttpContext context, int statusCode, WebErrorCode error)
+        {
+            context.Response.StatusCode = statusCode;
+            var errorJsonResponse = JsonSerializer.Serialize(new UpgradeVersionRes
+            {
+                error_code = error,
+                error_description = "새로운 앱 또는 버전이 존재합니다.",
+
+                appVersion = mMasterDB.GetAppVersion(),
+                dataVersion = mMasterDB.GetDataVersion()
             });
             await context.Response.WriteAsync(errorJsonResponse);
         }

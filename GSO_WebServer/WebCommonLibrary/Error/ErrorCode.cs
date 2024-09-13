@@ -90,8 +90,12 @@
         GetCharacterListFail = 3014,
 
         // Matchmaking 4000 ~
-        PushPlayerSkillIsExist,
+        PushPlayerSkillIsExist = 4000,
         PushPlayerSkillFailException,
+
+        PopPlayersExitRequested,            //Lock이 걸려있어 우선 매칭 큐에서 빠져나가기 요청
+        PopPlayersExitSuccess,              //매칭 큐에서 빠져나가는데 성공함
+        PopPlayersJoinForced,               //매칭 큐에서 빠져나오지 못하고 게임에 진입함
 
         FindMatchFailFindPossibleOpponents,
         FindMatchToFailException,

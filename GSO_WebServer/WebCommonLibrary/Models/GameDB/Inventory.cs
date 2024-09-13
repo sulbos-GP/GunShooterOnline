@@ -27,6 +27,7 @@
     {
         public int item_id { get; set; } = 0;
         public int durability { get; set; } = 0;
+        public int loaded_ammo { get; set; } = 0;
         public int? unit_storage_id { get; set; } = null;
         public int amount { get; set; } = 0;
     }

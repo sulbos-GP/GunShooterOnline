@@ -21,6 +21,9 @@ public class SceneManagerEx
 
     public void Clear()
     {
-        CurrentScene.Clear();
+        if (CurrentScene != null)
+        {
+            CurrentScene.Clear();
+        }
     }
 }

@@ -4,10 +4,11 @@ using System.Collections.Generic;
 using System.Net;
 using Server.Data;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 internal class Managers : MonoBehaviour
 {
-    private static Managers s_instance = new();
+    private static Managers s_instance;
 
  
 
@@ -25,6 +26,14 @@ internal class Managers : MonoBehaviour
 
     private void Awake()
     {
+
+        if(s_instance == null)
+        {
+            //씬 로드 이벤트 등록
+            SceneManager.sceneLoaded += OnSceneLoaded;
+            SceneManager.sceneUnloaded += OnSceneUnloaded;
+        }
+
         Init();
     }
 
@@ -85,8 +94,47 @@ internal class Managers : MonoBehaviour
         }
     }
 
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        SystemLog.CreateSystemWindow();
+    }
+
+    private void OnSceneUnloaded(Scene scene)
+    {
+        SystemLog.DestroySystemWindow();
+    }
+
+    /// <summary>
+    /// Application 처음 시작시 해주고 싶은거 있으면 여기
+    /// </summary>
+    private void OnApplicationFocus(bool focus)
+    {
+        // Application 처음 시작시 (True)
+        // 이탈 False, 복귀 True
+    }
+
+    /// <summary>
+    /// Application 중간에 이탈 또는 복귀 여부
+    /// </summary>
+    private void OnApplicationPause(bool pause)
+    {
+        //이탈 True, 복귀 False
+    }
+
+    /// <summary>
+    /// Application이 종료되었을 경우
+    /// </summary>
     private void OnApplicationQuit()
     {
+
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+        SceneManager.sceneUnloaded -= OnSceneUnloaded;
+
+        if (Web != null)
+        {
+            Web.OnSignOut("OnApplicationQuit");
+        }
+
         Clear();
     }
 
@@ -140,9 +188,9 @@ internal class Managers : MonoBehaviour
 
     #region Logger
 
-    //private readonly SystemLogManager _systemLog = new();
+    private readonly SystemLogManager _systemLog = new();
 
-    //public static SystemLogManager SystemLog => Instance._systemLog;
+    public static SystemLogManager SystemLog => Instance._systemLog;
 
     #endregion
 }
