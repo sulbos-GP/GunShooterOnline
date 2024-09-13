@@ -39,12 +39,26 @@ CREATE TABLE IF NOT EXISTS master_item_backpack (
 #아이템 - 사용
 CREATE TABLE IF NOT EXISTS master_item_use (
     item_id						INT 			NOT NULL	COMMENT '아이템 아이디',
-    power				INT				NOT NULL	COMMENT '가방 x크기',
-	active_time				INT				NOT NULL	COMMENT '가방 y크기',
-	duration				INT				NOT NULL	COMMENT '가방 무게',
-	effect				INT				NOT NULL	COMMENT '가방 무게',
-	cool_time				INT				NOT NULL	COMMENT '가방 무게',
+    energy						INT				NOT NULL	COMMENT '회복 아이템의 회복량',
+	active_time					DOUBLE			NOT NULL	COMMENT '효과발동 시간',
+	duration					DOUBLE			NOT NULL	COMMENT '회복 아이템의 지속시간',
+	effect						ENUM('immediate', 'buff')	NOT NULL	COMMENT '해당 아이템의 효과 타입',
+	cool_time					DOUBLE			NOT NULL	COMMENT '재사용 대기시간',
     
     PRIMARY KEY (item_id),
-	CONSTRAINT FK_master_item_backpack_item_id_master_item_base_item_id FOREIGN KEY (`item_id`) REFERENCES master_item_base(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+	CONSTRAINT FK_master_item_use_item_id_master_item_base_item_id FOREIGN KEY (`item_id`) REFERENCES master_item_base(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+);
+
+CREATE TABLE IF NOT EXISTS master_item_weapon (
+    item_id						INT 			NOT NULL	COMMENT '아이템 아이디',
+	attack_range				INT 			NOT NULL	COMMENT '공격 범위',
+	damage						INT 			NOT NULL	COMMENT '공격 데미지',
+	distance					INT 			NOT NULL	COMMENT '공격 거리',
+	reload_round				INT 			NOT NULL	COMMENT '재장전 수',
+	attack_speed				DOUBLE 			NOT NULL	COMMENT '공격 속도',
+	reload_time					INT 			NOT NULL	COMMENT '재장전 시간',
+   	bullet						VARCHAR(6) 		NOT NULL	COMMENT '사용 탄환',
+    
+    PRIMARY KEY (item_id),
+	CONSTRAINT FK_master_item_weapon_item_id_master_item_base_item_id FOREIGN KEY (`item_id`) REFERENCES master_item_base(`item_id`) ON DELETE RESTRICT ON UPDATE RESTRICT
 );

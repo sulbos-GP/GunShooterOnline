@@ -31,8 +31,6 @@ public class SystemLogManager
             DestroySystemWindow();
         }
 
-        logMessages.Clear();
-
         if (systemLogPrefab != null)
         {
             var canvas = Managers.FindObjectOfType<Canvas>();
@@ -50,6 +48,7 @@ public class SystemLogManager
     /// </summary>
     public void DestroySystemWindow()
     {
+        logMessages.Clear();
         if (systemLogWindow != null)
         {
             Managers.Destroy(systemLogWindow);

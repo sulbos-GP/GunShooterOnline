@@ -141,7 +141,7 @@ namespace Server.Data
     //		}
     //		foreach (ItemData item in armors)
     //		{
-    //			item.itemType = ItemType.Armor;
+    //			item.itemType = ItemType.DefensiveData;
     //			dict.Add(item.id, item);
     //		}
     //		foreach (ItemData item in consumables)

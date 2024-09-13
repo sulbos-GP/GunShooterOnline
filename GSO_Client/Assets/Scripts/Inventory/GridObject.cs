@@ -47,7 +47,7 @@ public class GridObject : MonoBehaviour
     /// <summary>
     /// 인벤토리에서 그리드를 생성할때 사용
     /// </summary>
-    public void InitializeGrid(Vector2Int _gridSize, double gridWeigth = 30f)
+    public void InitializeGrid(Vector2Int _gridSize, double gridWeigth = 100f)
     {
         if (gridRect == null) gridRect = GetComponent<RectTransform>();
 
