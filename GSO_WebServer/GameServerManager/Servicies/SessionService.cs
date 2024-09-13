@@ -29,6 +29,13 @@ namespace GameServerManager.Servicies
             try
             {
 
+                var containers = await mDockerService.GetAllContainerList();
+                foreach (var container in containers)
+                {
+                    await mSessionMemory.RemoveMatchStatus(container.ID);
+                    await mDockerService.RemoveContainer(container.ID);
+                }
+
                 await mDockerService.InitDocker();
 
                 Console.WriteLine("Init Match");

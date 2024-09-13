@@ -25,13 +25,13 @@ public class UI_Currency : LobbyUI
 
     public override void UpdateUI()
     {
-        UserInfo info = Managers.Web.user.UserInfo;
+        UserInfo info = Managers.Web.Models.User;
         if(info == null)
         {
             return;
         }
 
-        ticket.text = info.ticket.ToString();
+        ticket.text = $"{info.ticket} / 10";
         money.text  = info.money.ToString();
         gacha.text  = info.gacha.ToString();
 
@@ -39,7 +39,7 @@ public class UI_Currency : LobbyUI
 
     public override void OnRegister()
     {
-        this.gameObject.SetActive(false);
+
     }
 
     public override void OnUnRegister()

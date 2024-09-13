@@ -13,7 +13,7 @@ public class Gun : MonoBehaviour
     [SerializeField]
     public GunData CurGunData { get; private set; }
 
-    public int curGunEquipSlot;
+    public int curGunEquipSlot; //사용중인 총의 데이터가 없을 경우 0 , 1슬롯 사용시 1 , 2슬롯 사용시 2
 
     [SerializeField]
     public int _curAmmo { get; private set; } //현재 장탄
@@ -35,7 +35,7 @@ public class Gun : MonoBehaviour
 
     private void Init()
     {
-        curGunEquipSlot = 0; //사용중인 총의 데이터가 없을 경우, 1슬롯 사용시 1 , 2슬롯 사용시 2
+        curGunEquipSlot = 0; 
         //Debug Line
         bulletLine = GetComponent<LineRenderer>();
         rangeLine = transform.GetChild(0).GetComponent<LineRenderer>();
@@ -63,8 +63,9 @@ public class Gun : MonoBehaviour
         CurGunData.bulletId = newGun.bulletId;
 
         //총이 정해졌을때 
-        _curAmmo = CurGunData.reload_round;
+        _curAmmo = 0;
         CurGunState = GunState.Shootable;
+        Reload();
 
         rangeLine.enabled = true;
     }
@@ -212,172 +213,31 @@ public class Gun : MonoBehaviour
     //재장전 버튼 누를시
     public void Reload()
     {
+        //조건1 현재 총알이 최대개수보다 작아야함.
+        //조건2 재장전 중이 아니어야함
+        //조건3 인벤에 맞는 총알이 있어야함 (todo)
         if(_curAmmo < CurGunData.reload_round || CurGunState != GunState.Reloading)
         {
-            StartCoroutine(Reloading());
+            //인벤에 해당 총알이 있는지 검색. -> 있다면 최대 장전량 만큼 있는지 확인. -> 그이상이 있다면 최대개수로 아니라면 해당 개수만큼 재장전
+            StartCoroutine(ReloadCoroutine(CurGunData.reload_round));//현재는 임시로 최대 개수
         }
     }
 
     //실질적인 재장전
-    private IEnumerator Reloading()
+    private IEnumerator ReloadCoroutine(int reloadAmount)
     {
         CurGunState = GunState.Reloading;
         yield return new WaitForSeconds(CurGunData.reload_time);
 
-        _curAmmo = CurGunData.reload_round;
+        _curAmmo = reloadAmount;
         CurGunState = GunState.Shootable;
+
+        //(TODO) 인벤에 총알의 양을 감소시킴
     }
 
     //FovPlayer의 코루틴에서 사용
     public float GetFireRate()
     {
         return CurGunData.attack_speed; // GunStat 클래스에서 설정한 발사 속도를 반환
-    }
-}
-
-[System.Serializable]
-public class GunData
-{
-    public int item_id;
-    public int range;          // 발사 각도(클수록 정확도 다운)
-    public int damage;         // 데미지
-    public int distance;       // 사거리
-    public int reload_round;   // 재장전 되는 탄알 수
-    public int attack_speed;   // 연사 속도
-    public int reload_time;    // 재장전 시간 
-    public int bulletId;  // 탄알 종류
-}
-
-[SerializeField]
-public class BulletData
-{
-    public int item_id;
-    public float speed;
-    public BulletType bulletType;
-    public string bulletObjPath;
-
-
-
-    public void PrintBulletStatInfo()
-    {
-        Debug.Log($" Speed: {speed}, " +
-                  $" BulletType: {bulletType}");
-    }
-}
-
-//총 데이터베이스가 나오면 제거
-public class GunDB
-{
-    public static Dictionary<int, GunData> gunDB = new Dictionary<int, GunData>();
-
-    static GunDB()
-    {
-        GunDataInit();
-    }
-
-
-    private static GunData colt45 = new GunData
-    {
-        item_id = 101,
-        range = 8,
-        damage = 10,
-        distance = 6,
-        reload_round = 8,
-        attack_speed = 8,
-        reload_time = 2,
-        bulletId = 501
-    };
-
-    private static GunData ak47 = new GunData
-    {
-        item_id = 102,
-        range = 20,
-        damage = 18,
-        distance = 10,
-        reload_round = 40,
-        attack_speed = 20,
-        reload_time = 4,
-        bulletId = 502
-    };
-
-    private static GunData aug = new GunData
-    {
-        item_id = 103,
-        range = 8,
-        damage = 10,
-        distance = 6,
-        reload_round = 8,
-        attack_speed = 21,
-        reload_time = 4,
-        bulletId = 502
-    };
-
-    public static void GunDataInit()
-    {
-        gunDB.Clear();
-        gunDB.Add(colt45.item_id, colt45);
-        gunDB.Add(ak47.item_id, ak47);
-        gunDB.Add(aug.item_id, aug);
-    }
-
-    public static GunData GetGunData(int itemId)
-    {
-        if (gunDB.ContainsKey(itemId))
-        {
-            return gunDB[itemId];
-        }
-        else
-        {
-            return null; // 존재하지 않는 경우 null 반환
-        }
-    }
-}
-
-
-
-public class BulletDB
-{
-
-    public static Dictionary<int, BulletData> bulletDB = new Dictionary<int, BulletData>();
-
-    static BulletDB()
-    {
-        BulletDataInit();
-    }
-
-
-    private static BulletData b559mm = new BulletData
-    {
-        item_id = 501,
-        speed = 30,
-        bulletType = BulletType.b559mm,
-        bulletObjPath = "Objects/BulletObjPref/5.59mm"
-    };
-
-    private static BulletData b729mm = new BulletData
-    {
-        item_id = 502,
-        speed = 40,
-        bulletType = BulletType.b729mm,
-        bulletObjPath = "Objects/BulletObjPref/7.29mm"
-    };
-
-    public static void BulletDataInit()
-    {
-        bulletDB.Clear();
-        bulletDB.Add(b559mm.item_id, b559mm);
-        bulletDB.Add(b729mm.item_id, b729mm);
-    }
-
-    public static BulletData GetBulletData(int itemId)
-    {
-        if (bulletDB.ContainsKey(itemId))
-        {
-            return bulletDB[itemId];
-        }
-        else
-        {
-            return null; // 존재하지 않는 경우 null 반환
-        }
     }
 }

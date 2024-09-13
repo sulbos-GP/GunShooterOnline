@@ -322,11 +322,6 @@ message C_ExitGame{   //19
 //                                        //
 ////////////////////////////////////////////
 
-message C_GameServerCommand
-{   
-   int32 command = 1;
-}
-
 //--------------- END message --------------------
 
 //--------------- INFO -------------------- 기생하는 친구들
@@ -389,6 +384,11 @@ message ShapeInfo{
     float PosY          = 2;
 }*/
 
+message PS_ItemAttributes
+{
+    int32       durability                  = 1;        // 방어구 내구도
+    int32       loadedAmmo                  = 2;        // 장전된 총알 개수
+}
 
 message PS_ItemInfo{
     int32       objectId                    = 1;        // 해당 아이템의 고유한 아이디
@@ -397,7 +397,8 @@ message PS_ItemInfo{
     int32       y                           = 4;        // 아이템의 그리드 안 좌표상의 Y위치
     int32       rotate                      = 5;        // 아이템의 회전코드(rotate * 90)
     int32       amount                      = 6;        // 아이템의 개수(소모품만 64개까지)
-    bool        isSearched                  = 7;        // 플레이어가 해당 아이템을 조회하였는지
+    PS_ItemAttributes attributes            = 7;        // 아이템 속성
+    bool        isSearched                  = 8;        // 플레이어가 해당 아이템을 조회하였는지
 }
 
 message PS_GearInfo{

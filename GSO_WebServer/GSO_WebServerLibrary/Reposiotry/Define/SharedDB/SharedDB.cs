@@ -164,7 +164,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MemoryDB
                 AuthUserDataInfo user = new AuthUserDataInfo();
 
                 RedisString<AuthUserDataInfo> redis = new(mRedisConn, key, null);
-                if (await redis.SetAsync(user, null, StackExchange.Redis.When.NotExists) == false) 
+                if (await redis.SetAsync(user, TimeSpan.FromSeconds(3), StackExchange.Redis.When.NotExists) == false) 
                 {
                     return WebErrorCode.TEMP_ERROR;
                 }

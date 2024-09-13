@@ -222,21 +222,4 @@ class PacketHandler
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
     }
 
-    internal static void C_GameServerCommandHandler(PacketSession session, IMessage message)
-    {
-        ClientSession clientSession = session as ClientSession;
-        C_GameServerCommand packet = (C_GameServerCommand)message;
-        Console.WriteLine($"C_GameServerCommand");
-
-        EGameServerCommand command =  (EGameServerCommand)packet.Command;
-
-        string myString = $"ACK: {command.ToString()}";
-        byte[] bytes = Encoding.UTF8.GetBytes(myString);
-        session.mPeer.Send(bytes, DeliveryMethod.ReliableOrdered);
-    }
-
-    internal static void C_ServerCommandHandler(PacketSession session, IMessage message)
-    {
-        throw new NotImplementedException();
-    }
 }

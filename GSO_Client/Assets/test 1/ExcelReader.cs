@@ -26,20 +26,23 @@ public class ExcelReader
 
     public static void CopyExcel(string[] files)
     {
-        foreach (var file in files)
+        if (!Application.isEditor)
         {
-            //TO-DO : 추후에 텍스트 파일로 엑셀 이름 관리.
-            string filePath = Path.Combine(Application.streamingAssetsPath, file);
-            string filePerPath = Path.Combine(Application.persistentDataPath, file);
+            foreach (var file in files)
+            {
+                //TO-DO : 추후에 텍스트 파일로 엑셀 이름 관리.
+                string filePath = Path.Combine(Application.streamingAssetsPath, file);
+                string filePerPath = Path.Combine(Application.persistentDataPath, file);
 
-            byte[] fileData = BetterStreamingAssets.ReadAllBytes(file);
+                byte[] fileData = BetterStreamingAssets.ReadAllBytes(file);
 
-            string destinationPath = Path.Combine(Application.persistentDataPath, file);
+                string destinationPath = Path.Combine(Application.persistentDataPath, file);
 
-            string directoryPath = Path.GetDirectoryName(destinationPath);
+                string directoryPath = Path.GetDirectoryName(destinationPath);
 
-            File.WriteAllBytes(destinationPath, fileData);
-            Debug.Log($"Copied file to: {destinationPath} {fileData}");
+                File.WriteAllBytes(destinationPath, fileData);
+                Debug.Log($"Copied file to: {destinationPath} {fileData}");
+            }
         }
         ReadExcel();
     }

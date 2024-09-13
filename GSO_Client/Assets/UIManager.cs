@@ -46,7 +46,7 @@ public class UIManager : MonoBehaviour
         //GunAmmo
         Gun playerGun = myPlayer.transform.Find("Pivot/Gun").GetComponentInChildren<Gun>();
         if (playerGun.CurGunState == GunState.Reloading)
-            AmmoText.text = "Reloading Gun";
+            AmmoText.text = "ReloadCoroutine Gun";
         else
         {
             if(playerGun.CurGunData == null)
