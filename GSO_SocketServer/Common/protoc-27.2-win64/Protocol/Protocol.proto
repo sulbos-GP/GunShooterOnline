@@ -38,6 +38,8 @@ enum MsgId{
   S_EXIT_GAME = 27;
   C_EXIT_GAME = 28;
 
+  C_LOAD_GAME = 29;
+
   C_SERVER_COMMAND = 10000; //수정해야하면 말점
 
 }
@@ -267,6 +269,13 @@ message S_DeleteItem                        //I14
     int32 sourceObjectId            = 2;    // 출발지 저장소 아이디
     PS_ItemInfo deleteItem          = 3;    // 지운 아이템의 데이터
 }
+
+
+message C_LoadGame                         // 29
+{       
+    bool isEnd = 1;                        // 클라가 전부 끝나면 실행
+}
+
 
 ////////////////////////////////////////////
 //                                        //

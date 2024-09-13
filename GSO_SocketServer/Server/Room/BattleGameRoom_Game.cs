@@ -5,6 +5,8 @@ using Server.Game.Object.Gear;
 using Server.Game.Object.Item;
 using ServerCore;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
@@ -835,7 +837,7 @@ namespace Server
 
         }
 
-        internal void HandleExitGame(Player player, int exitId)
+        private void HandleExitGame(Player player, int exitId)
         {
 
             //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
@@ -852,5 +854,32 @@ namespace Server
 
             BroadCast(packet);
         }
+
+
+
+        List<Player> p = new List<Player>();
+
+        private void HandleClientLoadGame(Player player)
+        {
+            p.Add(player);
+
+            if(connectPlayer.Count == p.Count)
+            {
+                OnGameStart();
+            }
+
+        }
+
+
+        private void OnGameStart()
+        {
+
+        }
+
+
+
+
+
+
     }
 }
