@@ -8,6 +8,7 @@ using WebCommonLibrary.Models.Match;
 using WebCommonLibrary.Config;
 using WebCommonLibrary.Error;
 using static Pipelines.Sockets.Unofficial.Threading.MutexSlim;
+using System.Diagnostics;
 
 namespace Matchmaker.Repository
 {
@@ -19,12 +20,10 @@ namespace Matchmaker.Repository
         private RedisChannel channle;
 
         private readonly string key;
-        private readonly string token;
 
-        public RedisEventLock(RedisConnection connection, string key, string token = "lock")
+        public RedisEventLock(RedisConnection connection, int uid)
         {
-            this.key = key;
-            this.token = token;
+            this.key = KeyUtils.MakeKey(KeyUtils.EKey.MATCHLock, uid);
 
             _lock = new RedisLock<string>(connection, key);
             sub = connection.GetConnection().GetSubscriber();
@@ -32,24 +31,39 @@ namespace Matchmaker.Repository
             channle = new RedisChannel("lock-released", RedisChannel.PatternMode.Literal);
         }
 
-        public async void TryLock()
+        public async Task<bool> TryLock(int uid, bool isWaiting = true)
         {
-            while (true)
+            bool result = false;
+            do
             {
+                string token = KeyUtils.MakeKey(KeyUtils.EKey.MATCHLock, uid);
                 bool isLocked = await _lock.TakeAsync(token, TimeSpan.FromSeconds(30));
                 if (isLocked)
                 {
+                    result = true; 
                     break;
                 }
                 else
                 {
-                    await sub.SubscribeAsync(channle, (channel, message) => { });
+                    if (isWaiting)
+                    {
+                        await sub.SubscribeAsync(channle, (channel, message) => { });
+                    }
+                    else
+                    {
+                        result = false;
+                        break;
+                    }
                 }
-            }
+
+            }while (true);
+
+            return result;
         }
 
-        public async void ReleaseLock()
+        public async Task ReleaseLock(int uid)
         {
+            string token = KeyUtils.MakeKey(KeyUtils.EKey.MATCHLock, uid);
             bool isRelease = await _lock.ReleaseAsync(token);
             if (isRelease)
             {
@@ -68,7 +82,7 @@ namespace Matchmaker.Repository
         public RedisConnection mRedisConn;
         private RedisSortedSet<string> mMatchRating;                //플레이어 레이팅 나열
         private RedisDictionary<string, Ticket> mMatchTickets;      //플레이어 정보(티켓)
-        private RedisEventLock redisEventLock;
+        private Dictionary<int, RedisEventLock> eventLocks;         //플레이어 락
 
         public MatchQueue(IOptions<DatabaseConfig> envConfig)
         {
@@ -76,15 +90,38 @@ namespace Matchmaker.Repository
             mRedisConn = new RedisConnection(config);
             mMatchRating = new RedisSortedSet<string>(mRedisConn, "Ratings", null);
             mMatchTickets = new RedisDictionary<string, Ticket>(mRedisConn, "Tickets", null);
-
-            redisEventLock = new RedisEventLock(mRedisConn, "MatchQueue", "lock");
+            eventLocks = new Dictionary<int, RedisEventLock>();
         }
 
-        public RedisEventLock GetRedisEventLock()
+        public async Task<bool> TryTakeLock(int uid, bool isWaiting)
         {
-            return redisEventLock;
+            eventLocks.TryGetValue(uid, out var eventLock);
+            if (eventLock == null)
+            {
+                RedisEventLock newEventLock = new RedisEventLock(mRedisConn, uid);
+                eventLocks.Add(uid, newEventLock);
+                return await newEventLock.TryLock(uid);
+            }
+
+            return await eventLock.TryLock(uid);
         }
 
+        public async Task ReleaseLock(int uid)
+        {
+            eventLocks.TryGetValue(uid, out var eventLock);
+            if (eventLock == null)
+            {
+                return;
+            }
+
+            await eventLock.ReleaseLock(uid);
+        }       
+
+        public void RemoveLock(int uid)
+        {
+            eventLocks.Remove(uid);
+        }
+        
         public void Dispose()
         {
             if (mRedisConn != null)

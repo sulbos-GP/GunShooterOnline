@@ -141,10 +141,10 @@ namespace Matchmaker.Repository
             };
 
             bool reuslt = await SetTicket(uid, ticket);
-            if (reuslt == false)
-            {
-                return WebErrorCode.TEMP_ERROR;
-            }
+            //if (reuslt == false)
+            //{
+            //    return WebErrorCode.TEMP_ERROR;
+            //}
 
             return WebErrorCode.None;
         }

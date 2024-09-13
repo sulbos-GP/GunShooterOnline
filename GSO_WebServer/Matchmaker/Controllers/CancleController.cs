@@ -8,7 +8,7 @@ using Matchmaker.DTO;
 
 namespace Matchmaker.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/Matchmaker/[controller]")]
     [ApiController]
     public class CancleController : ControllerBase
     {
@@ -23,7 +23,6 @@ namespace Matchmaker.Controllers
         /// 매칭 취소 요청
         /// </summary>
         [HttpPost]
-        [Route("Cancle")]
         public async Task<CancleMatchRes> Cancle([FromHeader] HeaderDTO header, [FromBody] CancleMatchReq request)
         {
 

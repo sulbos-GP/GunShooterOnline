@@ -24,11 +24,13 @@ public abstract class ClientHub : MonoBehaviour
         {
             Init();
 
-            CreateHubConnectionHandler();
+            if(true == CreateHubConnectionHandler())
+            {
+                SetOnRecivedFunc();
 
-            SetOnRecivedFunc();
+                StartHub();
+            }
 
-            StartHub();
         }
         catch (Exception ex)
         {
@@ -47,14 +49,14 @@ public abstract class ClientHub : MonoBehaviour
 
     protected abstract void Init();
 
-    private void CreateHubConnectionHandler()
+    private bool CreateHubConnectionHandler()
     {
         Managers.SystemLog.Message($"{mConnectionName} 서버 빌드중...");
 
-        ClientCredential credential = Managers.Web.credential;
-        if (credential.access_token == string.Empty || credential.uid == 0)
+        ClientCredential credential = Managers.Web.Models.Credential;
+        if (credential == null)
         {
-            throw new Exception("Client credential 정보가 없습니다.");
+            return false;
         }
 
         mConnection = new HubConnectionBuilder()
@@ -71,11 +73,16 @@ public abstract class ClientHub : MonoBehaviour
             options.SetMinimumLevel(LogLevel.Information);
             options.AddProvider(new HubLoggerProvider());
         }).Build();
+
+        return true;
     }
 
     protected void OnDestroy()
     {
-        StoptHub();
+        if(mConnection != null)
+        {
+            StoptHub();
+        }
     }
 
     protected void SetHub(string name, string url)
@@ -125,11 +132,6 @@ public abstract class ClientHub : MonoBehaviour
             Managers.SystemLog.Message($"{mConnectionName} 서버와 연결이 해제에 실패하였습니다.");
         }
 
-    }
-    private async void C2S_VerfiyCredential()
-    {
-        var credential = Managers.Web.credential;
-        await mConnection.InvokeAsync("VerfiyCredential", credential);
     }
 
     public void EnqueueDispatch(Action action)
