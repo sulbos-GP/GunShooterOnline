@@ -9,6 +9,8 @@ namespace GameServerManager.Servicies.Interfaces
         /// </summary>
         public Task<bool> InitDocker();
 
+        public Task ClearContainer();
+
         /// <summary>
         /// 도커 컨테이너 생성
         /// </summary>
