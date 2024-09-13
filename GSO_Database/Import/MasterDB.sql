@@ -129,6 +129,64 @@ INSERT INTO `master_item_base` VALUES (101,'W001','Colt45',2,'Weapone',101,2,2,4
 UNLOCK TABLES;
 
 --
+-- Table structure for table `master_item_use`
+--
+
+DROP TABLE IF EXISTS `master_item_use`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `master_item_use` (
+  `item_id` int(11) NOT NULL COMMENT '아이템 아이디',
+  `power` int(11) NOT NULL COMMENT '회복 아이템의 회복량',
+  `active_time` double NOT NULL COMMENT '효과발동 시간',
+  `duration` double NOT NULL COMMENT '회복 아이템의 지속시간',
+  `effect` enum('immediate','buff') NOT NULL COMMENT '해당 아이템의 효과 타입',
+  `cool_time` double NOT NULL COMMENT '재사용 대기시간',
+  PRIMARY KEY (`item_id`),
+  CONSTRAINT `FK_master_item_use_item_id_master_item_base_item_id` FOREIGN KEY (`item_id`) REFERENCES `master_item_base` (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `master_item_use`
+--
+
+LOCK TABLES `master_item_use` WRITE;
+/*!40000 ALTER TABLE `master_item_use` DISABLE KEYS */;
+/*!40000 ALTER TABLE `master_item_use` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `master_item_weapon`
+--
+
+DROP TABLE IF EXISTS `master_item_weapon`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `master_item_weapon` (
+  `item_id` int(11) NOT NULL COMMENT '아이템 아이디',
+  `attack_range` int(11) NOT NULL COMMENT '공격 범위',
+  `damage` int(11) NOT NULL COMMENT '공격 데미지',
+  `distance` int(11) NOT NULL COMMENT '공격 거리',
+  `reload_round` int(11) NOT NULL COMMENT '재장전 수',
+  `attack_speed` double NOT NULL COMMENT '공격 속도',
+  `reload_time` int(11) NOT NULL COMMENT '재장전 시간',
+  `bullet` varchar(6) NOT NULL COMMENT '사용 탄환',
+  PRIMARY KEY (`item_id`),
+  CONSTRAINT `FK_master_item_weapon_item_id_master_item_base_item_id` FOREIGN KEY (`item_id`) REFERENCES `master_item_base` (`item_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `master_item_weapon`
+--
+
+LOCK TABLES `master_item_weapon` WRITE;
+/*!40000 ALTER TABLE `master_item_weapon` DISABLE KEYS */;
+/*!40000 ALTER TABLE `master_item_weapon` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `master_reward_base`
 --
 
@@ -217,4 +275,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-09 20:39:33
+-- Dump completed on 2024-09-13 21:00:17
