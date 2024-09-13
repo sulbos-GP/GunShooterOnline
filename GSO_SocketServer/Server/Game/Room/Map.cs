@@ -101,41 +101,6 @@ public class Map
 
 
 
-    public void SpawnPlayer()
-    {
-        // 전체 항목 리스트
-  
-
-        // 랜덤 객체 생성
-        Random random = new Random();
-
-        // 선택된 항목을 저장할 리스트
-        List<int> selectedItems = new List<int>();
-
-        // 3개의 항목을 랜덤으로 선택
-        while (selectedItems.Count < 3)
-        {
-            int index = random.Next(Spawns.Count); // 0부터 items.Count - 1 사이의 랜덤 인덱스 생성
-            int selectedItem = Spawns[index];
-
-            // 중복된 항목이 아니라면 선택된 리스트에 추가
-            if (!selectedItems.Contains(selectedItem))
-            {
-                selectedItems.Add(selectedItem);
-            }
-        }
-    }
-
-
-
-
-
-
-
-
-
-
-
 
     public Map(BattleGameRoom r)
     {
@@ -287,11 +252,18 @@ public class Map
         return true;
     }
 
-    private bool SpawnPlayers()
+    public bool SpawnPlayers(Player[] players)
     {
 
         int sCount = Spawns.Count;
-        int pCount = battleRoom.connectPlayer.Count;
+        int pCount = players.Length;// battleRoom.connectPlayer.Count;
+        if(sCount < pCount)
+        {
+            //스폰 구역이 사람 수 보다 작음 == 겹쳐서 소환 가능함
+            return false;
+        }
+
+
         List<List<SpawnZone>> combinations = new List<List<SpawnZone>>();
 
         GetCombinations(Spawns, new List<SpawnZone>(), 0, pCount, combinations);
@@ -305,10 +277,11 @@ public class Map
         int t = 0;
         foreach (SpawnZone spawn in selectedCombination)
         {
-            battleRoom._playerDic[t++].CellPos = spawn.CellPos;
+            players[t++].CellPos = spawn.CellPos;
 
         }
 
+        return true;
     }
 
 
