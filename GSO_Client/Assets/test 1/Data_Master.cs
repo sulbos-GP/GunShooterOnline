@@ -26,6 +26,26 @@ public class Data_master_item_backpack : BaseData<Data_master_item_backpack>
     public int total_weight;
 }
 
+public class Data_master_item_use : BaseData<Data_master_item_use>
+{
+    public int energy;
+    public double active_time;
+    public double duration;
+    public string effect;
+    public double cool_time;
+}
+
+public class Data_master_item_weapon : BaseData<Data_master_item_weapon>
+{
+    public int attack_range;
+    public int damage;
+    public int distance;
+    public int reload_round;
+    public double attack_speed;
+    public int reload_time;
+    public string bullet;
+}
+
 public class Data_master_reward_base : BaseData<Data_master_reward_base>
 {
     public int money;
@@ -45,5 +65,16 @@ public class Data_master_reward_level : BaseData<Data_master_reward_level>
 
 public class Data_master_reward_box : BaseData<Data_master_reward_box>
 {
+    public int box_scale_x;
+    public int box_scale_y;
+}
 
+public class Data_master_reward_box_item : BaseData<Data_master_reward_box_item>
+{
+    public int reward_box_id;
+    public string item_code;
+    public int x;
+    public int y;
+    public int rotation;
+    public int amount;
 }
