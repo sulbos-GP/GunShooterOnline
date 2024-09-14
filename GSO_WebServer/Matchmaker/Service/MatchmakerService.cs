@@ -180,40 +180,17 @@ namespace Matchmaker.Service
                     return WebErrorCode.TEMP_ERROR;
                 }
 
-                if (ticket.state == ETicketState.InQueue)
-                {
-                    await mMatchQueue.TryTakeLock(uid);
-
-                    error = await mMatchQueue.RemoveRating(uid);
-                    if (error != WebErrorCode.None)
-                    {
-                        return WebErrorCode.TEMP_ERROR;
-                    }
-
-                    {
-                        ticket.world = string.Empty;
-                        ticket.region = string.Empty;
-                        ticket.match_start_time = 0;
-                        ticket.state = ETicketState.NotInQueue;
-                        ticket.isExit = true;
-                    }
-
-                    error = WebErrorCode.None;
-
-                }
-                else
                 {
                     ticket.isExit = true;
-                    error = WebErrorCode.PopPlayersExitRequested;
                 }
-
+             
                 bool result = await mMatchQueue.SetTicket(uid, ticket);
                 //if (result == false)
                 //{
                 //    return WebErrorCode.TEMP_ERROR;
                 //}
 
-                return error;
+                return WebErrorCode.PopPlayersExitRequested;
             }
             catch (Exception e)
             {

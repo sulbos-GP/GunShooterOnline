@@ -1,19 +1,20 @@
 ﻿using WebCommonLibrary.Models.GameDB;
 using SqlKata.Execution;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using System.Data;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
     public partial class GameDB : IGameDB
     {
-        public async Task<UserMetadataInfo?> GetUserMetadataByUid(Int32 uid)
+        public async Task<UserMetadataInfo?> GetUserMetadataByUid(Int32 uid, IDbTransaction? transaction)
         {
             return await mQueryFactory.Query("user_metadata")
                 .Where("uid", uid).
-                FirstOrDefaultAsync<UserMetadataInfo>();
+                FirstOrDefaultAsync<UserMetadataInfo>(transaction);
         }
 
-        public async Task<int> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata)
+        public async Task<int> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata, IDbTransaction? transaction)
         {
             return await mQueryFactory.Query("user_metadata")
                 .Where("uid", uid)
@@ -26,7 +27,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
                     farming         = matadata.farming,
                     escape          = matadata.escape,
                     survival_time   = matadata.survival_time,
-                });
+                }, transaction);
         }
     }
 }
