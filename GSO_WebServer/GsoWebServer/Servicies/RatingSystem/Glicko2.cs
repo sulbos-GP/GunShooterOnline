@@ -6,6 +6,9 @@ namespace GsoWebServer.Servicies.Matching
     /// <summary>
     /// Glicko2 매치메이킹 알고리즘
     /// http://www.glicko.net/glicko/glicko2.pdf
+    /// 
+    /// 점수 계산기
+    /// https://docs.google.com/spreadsheets/d/1E-Tq8eq5zx1t6U4R81rYf2sN-d7kuzv7RSchauXSQgE/edit?gid=0#gid=0
     /// </summary>
     public class Glicko2
     {
@@ -21,24 +24,24 @@ namespace GsoWebServer.Servicies.Matching
         /// 0.25 - 탈출 X 킬 ∆ 파밍 ∆
         /// 0.00 - 탈출 X 킬 X 파밍 X
         /// </summary>
-        private long mKillPoint = +2;   //킬
-        private long mDeathPoint = -5;   //데스
-        private long mDamagePoint = +1;   //체력100 = 1대미지
-        private long mFarmingPoint = +1;   //레어급 파밍
-        private long mEscapePoint = +5;   //탈출
-        private long mSurvialPoint = +1;   //1분 = 1생존
+        private long mKillPoint     = +5;       //킬
+        private long mDeathPoint    = -20;      //데스
+        private long mDamagePoint   = +3;       //체력100 = 1대미지
+        private long mFarmingPoint  = +4;       //레어급 파밍
+        private long mEscapePoint   = +20;      //탈출
+        private long mSurvialPoint  = +2;       //1분 = 1생존
 
         /// <summary>
         /// 플레이어의 매치 결과에 따른 퍼포먼스 값
         /// </summary>
         private double GetPlayerPerformance(MatchOutcome outcome)
         {
-            long kill = outcome.kills * mKillPoint;
-            long death = outcome.death * mDeathPoint;
-            long damage = outcome.damage / 100 * mDamagePoint;
-            long farming = outcome.farming * mFarmingPoint;
-            long escape = outcome.escape * mEscapePoint;
-            long survial = outcome.survival_time * mSurvialPoint;
+            long kill       = outcome.kills * mKillPoint;
+            long death      = outcome.death * mDeathPoint;
+            long damage     = (outcome.damage == 0) ? 0 : outcome.damage / 100 * mDamagePoint;
+            long farming    = outcome.farming * mFarmingPoint;
+            long escape     = outcome.escape * mEscapePoint;
+            long survial    = outcome.survival_time * mSurvialPoint;
 
 
             long performance = kill + death + damage + farming + escape + survial;
@@ -101,6 +104,14 @@ namespace GsoWebServer.Servicies.Matching
         {
             double expX = Math.Exp(x);
             return expX * (Math.Pow(delta, 2) - Math.Pow(rd, 2) - variance - expX) / (2 * Math.Pow(Math.Pow(rd, 2) + variance + expX, 2)) - (x - a) / Math.Pow(tau, 2);
+        }
+        
+        /// <summary>
+        /// 결과에 따른 플레이어 경험치 계산
+        /// </summary>
+        public int CalculateExperience(MatchOutcome outcome)
+        {
+            return (int)(GetPlayerPerformance(outcome) * 1.2);
         }
 
         /// <summary>

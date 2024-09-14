@@ -63,7 +63,7 @@ namespace GsoWebServer.Servicies.Interfaces
         /// <summary>
         /// 유저 레벨 보상 받기
         /// </summary>
-        public Task<WebErrorCode> UpdateLevelReward(Int32 uid, Int32 level);
+        public Task<WebErrorCode> RecvLevelReward(Int32 uid, Int32 level);
 
 
     }

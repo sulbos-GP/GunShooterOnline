@@ -12,6 +12,8 @@ public enum ELobbyUI
     Profile,
     Metadata,
     Currency,
+    Notice,
+    Mail,
     LevelReward,
     MatchSetup,
 }

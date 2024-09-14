@@ -12,11 +12,13 @@ namespace GsoWebServer.Controllers.Performance
     [ApiController]
     public class PlayerStatsController : ControllerBase
     {
-        private readonly IPlayerPerformanceService mRatingSystem;
+        private readonly IGameService mGameService;
+        private readonly IPlayerPerformanceService mPerformanceService;
 
-        public PlayerStatsController(IPlayerPerformanceService ratingSystem)
+        public PlayerStatsController(IGameService gameService, IPlayerPerformanceService performanceService)
         {
-            mRatingSystem = ratingSystem;
+            mGameService = gameService;
+            mPerformanceService = performanceService;
         }
 
         [HttpPost]
@@ -33,10 +35,19 @@ namespace GsoWebServer.Controllers.Performance
                 return response;
             }
 
-            var errorCode = await mRatingSystem.UpdatePlayerStats(header.uid, request.outcome);
-            if (errorCode != WebErrorCode.None)
+            var error = await mPerformanceService.UpdatePlayerStats(header.uid, request.outcome);
+            if (error != WebErrorCode.None)
             {
-                response.error_code = errorCode;
+                response.error_code = error;
+                return response;
+            }
+
+            var experience = mPerformanceService.CalculateExperience(request.outcome);
+
+            error = await mGameService.UpdateLevel(header.uid, experience);
+            if (error != WebErrorCode.None)
+            {
+                response.error_code = error;
                 return response;
             }
 

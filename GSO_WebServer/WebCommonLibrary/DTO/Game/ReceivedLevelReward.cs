@@ -13,5 +13,6 @@ namespace WebCommonLibrary.DTO.Game
     public class ReceivedLevelRewardRes : ErrorCodeDTO
     {
         public List<UserLevelReward>? LevelReward { get; set; } = null;
+        public UserInfo? user { get; set; } = null;
     }
 }

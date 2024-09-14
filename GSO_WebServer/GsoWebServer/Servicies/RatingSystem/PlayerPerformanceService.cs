@@ -54,6 +54,20 @@ namespace GsoWebServer.Servicies.RatingSystem
             }
         }
 
+        public int CalculateExperience(MatchOutcome outcome)
+        {
+            try
+            {
+                Glicko2 glicko2 = new Glicko2();
+                return glicko2.CalculateExperience(outcome);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"[CalculateExperience] : {ex.Message}");
+                return 0;
+            }
+        }
+
         public async Task<WebErrorCode> UpdatePlayerRating(Dictionary<int, MatchOutcome> outcomes)
         {
 

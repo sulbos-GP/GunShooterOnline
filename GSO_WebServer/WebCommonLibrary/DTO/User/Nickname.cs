@@ -1,4 +1,5 @@
 ﻿using WebCommonLibrary;
+using WebCommonLibrary.Models.GameDB;
 
 namespace WebCommonLibrary.DTO.User
 {
@@ -9,6 +10,6 @@ namespace WebCommonLibrary.DTO.User
 
     public class SetNicknameRes : ErrorCodeDTO
     {
-        public string nickname { get; set; } = string.Empty;
+        public UserInfo? user { get; set; } = null;
     }
 }
