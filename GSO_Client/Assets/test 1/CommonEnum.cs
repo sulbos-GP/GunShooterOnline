@@ -7,11 +7,16 @@ public enum eTABLE_TYPE
     None,
     TestItem,
     Item,
+
     master_item_base,
     master_item_backpack,
+    master_item_use,
+    master_item_weapon,
+
     master_reward_base,
     master_reward_box,
-    master_reward_level
+    master_reward_level,
+    master_reward_box_item
 }
 
 public enum eSTAT
