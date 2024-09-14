@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS user (
      UNIQUE KEY (nickname)
 );
 #ALTER TABLE user MODIFY COLUMN experience INT NOT NULL DEFAULT 100;
-#UPDATE user SET experience=100 WHERE uid=12;
+#UPDATE user SET money=0 WHERE uid=12;
 
 CREATE TABLE IF NOT EXISTS user_level_reward (
     reward_level_id		INT 			NOT NULL	AUTO_INCREMENT				COMMENT '레벨 보상 아이디',
@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS user_level_reward (
     CONSTRAINT FK_user_reward_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
 	CONSTRAINT FK_user_level_reward_master_reward_level_id FOREIGN KEY (`reward_id`) REFERENCES master_database.master_reward_level(`reward_id`) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+#DELETE FROM user_level_reward;
 
 #유저 인증
 #CREATE TABLE IF NOT EXISTS user_auth (
@@ -84,4 +85,4 @@ SELECT * FROM user;
 SELECT * FROM user_metadata;
 SELECT * FROM user_skill;
 
-UPDATE User SET nickname=null WHERE uid=11
+UPDATE User SET nickname=null WHERE uid=12

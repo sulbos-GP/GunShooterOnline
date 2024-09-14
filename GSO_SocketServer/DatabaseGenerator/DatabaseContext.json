@@ -31,6 +31,11 @@
     },
 
     {
+        "name": "rewardBoxItem",
+        "table": "master_reward_box_item"
+    },
+
+    {
         "name": "rewardLevel",
         "table": "master_reward_level"
     }
