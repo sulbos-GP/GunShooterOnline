@@ -239,15 +239,17 @@ namespace GsoWebServer.Servicies.Game
                 }
 
                 //경험치 보상이 포함되어 있을 경우
-                //if (reward.experience != 0)
-                //{
-                //    if(0 == await mGameDB.UpdateLevel(uid, reward.experience, transaction))
-                //    {
-                //        throw new Exception("보상에 있는 경험치를 업데이트 할 수 없습니다.");
-                //    }
-                //}
+                if (reward.experience != 0)
+                {
+                    user.experience += reward.experience;
+                    if(0 == await mGameDB.UpdateLevel(uid, user.experience, transaction))
+                    {
+                        throw new Exception("보상에 있는 경험치를 업데이트 할 수 없습니다.");
+                    }
+                }
 
                 //통화에 대한 보상이 있을 경우
+                if(reward.money != 0 || user.ticket != 0 || user.gacha != 0)
                 {
                     user.money += reward.money;
                     user.ticket += reward.ticket;

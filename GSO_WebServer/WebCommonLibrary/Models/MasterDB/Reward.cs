@@ -10,19 +10,32 @@ namespace WebCommonLibrary.Models.MasterDB
         public int money { get; set; } = 0;
         public int ticket { get; set; } = 0;
         public int gacha { get; set; } = 0;
+        public int experience { get; set; } = 0;
         public int? reward_box_id { get; set; } = null;
     }
 
     public class DB_RewardBox
     {
         public int reward_box_id { get; set; } = 0;
+        public int box_scale_x { get; set; } = 0;
+        public int box_scale_y { get; set; } = 0;
+    }
+
+    public class DB_RewardBoxItem
+    {
+        public int reward_box_item_id { get; set; } = 0;
+        public int reward_box_id { get; set; } = 0;
+        public string item_code { get; set; } = string.Empty;
+        public int x { get; set; } = 0;
+        public int y { get; set; } = 0;
+        public int rotation { get; set; } = 0;
+        public int amount { get; set; } = 0;
     }
 
     public class DB_RewardLevel
     {
         public int reward_id { get; set; } = 0;
         public int level { get; set; } = 0;
-        public int experience { get; set; } = 0;
         public string name { get; set; } = string.Empty;
         public string icon { get; set; } = string.Empty;
     }

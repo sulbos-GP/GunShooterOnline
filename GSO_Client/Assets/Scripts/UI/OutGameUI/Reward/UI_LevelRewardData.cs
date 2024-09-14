@@ -86,7 +86,7 @@ public class UI_LevelRewardData : MonoBehaviour
     public void InitLevelRewardData(Data_master_reward_level reward)
     {
         levelText.text          = reward.level.ToString();
-        experienceText.text     = reward.experience.ToString();
+        experienceText.text     = (reward.level * 100).ToString();
         rewardIcon.sprite       = Resources.Load<Sprite>($"Sprite/Item/{reward.icon}");
         rewardText.text         = reward.name.ToString();
         receivedText.text       = "มฆวั";
