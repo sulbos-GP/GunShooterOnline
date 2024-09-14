@@ -12,11 +12,11 @@ namespace GsoWebServer.Controllers.Performance
     [ApiController]
     public class PlayerRatingController : ControllerBase
     {
-        private readonly IPlayerPerformanceService mRatingSystem;
+        private readonly IPlayerPerformanceService mPerformanceService;
 
-        public PlayerRatingController(IPlayerPerformanceService ratingSystem)
+        public PlayerRatingController(IPlayerPerformanceService performanceService)
         {
-            mRatingSystem = ratingSystem;
+            mPerformanceService = performanceService;
         }
 
 
@@ -34,7 +34,7 @@ namespace GsoWebServer.Controllers.Performance
                 return response;
             }
 
-            var error = await mRatingSystem.UpdatePlayerRating(request.outcomes);
+            var error = await mPerformanceService.UpdatePlayerRating(request.outcomes);
             if (error != WebErrorCode.None)
             {
                 response.error_code = error;

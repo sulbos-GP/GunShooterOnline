@@ -84,17 +84,20 @@ public class UI_SetNickname : MonoBehaviour
         }
         catch (Exception ex)
         {
-            ShowDescription($"Error : {ex.ToString()}");
+            ShowDescription($"Login Falied : {ex.ToString()}");
         }
 
     }
 
     public void OnProcessSetNickname(SetNicknameRes response)
     {
-        if(response.error_code == WebErrorCode.None)
+        if(response.error_code == WebErrorCode.None || response.user != null)
         {
-            Managers.Web.Models.User.nickname = response.nickname;
-            LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Profile);
+            ShowDescription(response.error_description);
+
+            Managers.Web.Models.User = response.user;
+            LobbyUIManager.Instance.UpdateLobbyAllUI();
+
             this.gameObject.SetActive(false);
         }
         else

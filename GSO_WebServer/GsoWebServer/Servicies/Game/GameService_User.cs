@@ -1,6 +1,7 @@
 ﻿using GsoWebServer.Servicies.Interfaces;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDB;
 
 namespace GsoWebServer.Servicies.Game
 {
@@ -51,22 +52,25 @@ namespace GsoWebServer.Servicies.Game
         {
             try
             {
+                // 닉네임이 존재할 경우 리턴
                 var user = await mGameDB.GetUserByNickname(newNickname);
-                if (user is not null)
+                if (user != null)
                 {
                     return (WebErrorCode.AuthTokenFailSetNx, string.Empty);
                 }
 
-                var rowCount = await mGameDB.UpdateNickname(uid, newNickname);
-                if (rowCount != 1)
+                //닉네임을 변경 못했을 경우 리턴
+                var result = await mGameDB.UpdateNickname(uid, newNickname);
+                if (result == 0)
                 {
                     return (WebErrorCode.AuthTokenFailSetNx, string.Empty);
                 }
 
                 return (WebErrorCode.None, newNickname);
             }
-            catch /*(Exception e)*/
+            catch (Exception e)
             {
+                Console.WriteLine($"[UpdateNickname] : {e.Message}");
                 return (WebErrorCode.CheckAuthFailException, string.Empty);
             }
         }
@@ -205,20 +209,74 @@ namespace GsoWebServer.Servicies.Game
         /// <summary>
         /// 유저 레벨 보상 받기
         /// </summary>
-        public async Task<WebErrorCode> UpdateLevelReward(Int32 uid, Int32 level)
+        public async Task<WebErrorCode> RecvLevelReward(Int32 uid, Int32 level)
         {
+            var transaction = mGameDB.GetConnection().BeginTransaction();
             try
             {
-                if (0 == await mGameDB.UpdateLevelReward(uid, level, true))
+
+                var user = await mGameDB.GetUserByUid(uid, transaction);
+                if(user == null)
+                {
+                    throw new Exception("유저가 존재하지 않습니다.");
+                }
+
+                if (0 == await mGameDB.RecivedLevelReward(uid, level, true, transaction))
                 {
                     throw new Exception("레벨이 보상을 받지 못했습니다.");
                 }
 
+                int reward_id = mMasterDB.GetRewardLevelList().Where(reward => reward.Value.level == level).FirstOrDefault().Key;
+                if(reward_id == 0)
+                {
+                    throw new Exception($"{level}레벨에 대한 아이디가 존재하지 않습니다.");
+                }
+
+                DB_RewardBase reward = mMasterDB.GetRewardBaseList().Where(reward => reward.Key == reward_id).FirstOrDefault().Value;
+                if (reward == null)
+                {
+                    throw new Exception($"{level}레벨에 대한 보상이 존재하지 않습니다.");
+                }
+
+                //경험치 보상이 포함되어 있을 경우
+                //if (reward.experience != 0)
+                //{
+                //    if(0 == await mGameDB.UpdateLevel(uid, reward.experience, transaction))
+                //    {
+                //        throw new Exception("보상에 있는 경험치를 업데이트 할 수 없습니다.");
+                //    }
+                //}
+
+                //통화에 대한 보상이 있을 경우
+                {
+                    user.money += reward.money;
+                    user.ticket += reward.ticket;
+                    user.gacha += reward.gacha;
+
+                    if (0 == await mGameDB.UpdateCurrency(uid, user.money, user.ticket, user.gacha, transaction))
+                    {
+                        throw new Exception("보상에 있는 경험치를 업데이트 할 수 없습니다.");
+                    }
+                }
+
+                //박스로된 보상이 포함되어 있을 경우
+                if(reward.reward_box_id != null)
+                {
+
+                }
+
+                transaction.Commit();
                 return (WebErrorCode.None);
             }
-            catch /*(Exception e)*/
+            catch (Exception e)
             {
+                Console.WriteLine($"[UpdateLevelReward] : {e.Message}");
+                transaction.Rollback();
                 return (WebErrorCode.TEMP_Exception);
+            }
+            finally
+            {
+                transaction.Dispose(); 
             }
         }
 

@@ -76,6 +76,10 @@ public class UI_LevelRewardData : MonoBehaviour
         {
             Managers.Web.Models.LevelReward = response.LevelReward;
             LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.LevelReward);
+
+            Managers.Web.Models.User = response.user;
+            LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Profile);
+            LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Currency);
         }
     }
 
@@ -85,7 +89,7 @@ public class UI_LevelRewardData : MonoBehaviour
         experienceText.text     = reward.experience.ToString();
         rewardIcon.sprite       = Resources.Load<Sprite>($"Sprite/Item/{reward.icon}");
         rewardText.text         = reward.name.ToString();
-        receivedText.text       = "Å‰µæ";
+        receivedText.text       = "Á¦ÇÑ";
         receivedButton.interactable = false;
     }
 

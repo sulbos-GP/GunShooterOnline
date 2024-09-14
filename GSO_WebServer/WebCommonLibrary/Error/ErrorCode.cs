@@ -25,21 +25,6 @@
         AuthTokenFailWrongAuthToken = 1006,
         IsNotValidModelState = 1500,
 
-
-        // Authentication 2000 ~
-        ServerCodeNotFound = 2007,
-
-        IsNotValidateServerCode = 2200,
-
-        MyPlayerIdMismatch,
-        MyPlayerFailException,
-
-        SignInFailUserNotExist,
-        SignInFailMismatchService,
-
-        SetNicknameInitNickname,
-        SetNicknameFailSameNickname,
-
         // Account 2000 ~
         CreateAccountFailException = 2001,
         LoginFailException = 2002,
@@ -57,6 +42,20 @@
         CheckAuthFailNotExist = 2015,
         CheckAuthFailNotMatch = 2016,
         CheckAuthFailException = 2017,
+
+        // Authentication 2500 ~
+        ServerCodeNotFound = 2501,
+
+        IsNotValidateServerCode,
+
+        MyPlayerIdMismatch,
+        MyPlayerFailException,
+
+        SignInFailUserNotExist,
+        SignInFailMismatchService,
+
+        SetNicknameInitNickname,
+        SetNicknameFailSameNickname,
 
         // Character 3000 ~
         CreateCharacterRollbackFail = 3001,

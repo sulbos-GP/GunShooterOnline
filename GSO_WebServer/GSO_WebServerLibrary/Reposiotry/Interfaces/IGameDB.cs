@@ -96,6 +96,32 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// <summary>
         /// 유저의 유니크 아이디로 level 보상 추가
         /// </summary>
-        public Task<int> UpdateLevelReward(int uid, int level, bool received);
+        public Task<int> RecivedLevelReward(int uid, int level, bool received, IDbTransaction? transaction = null);
+
+        ///////////////////////////////////////
+        ///                                 ///
+        ///           currency              ///
+        ///                                 ///
+        ///////////////////////////////////////
+
+        /// <summary>
+        /// 유저의 통화 업데이트
+        /// </summary>
+        public Task<int> UpdateCurrency(int uid, int money, int ticket, int gacha, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 돈 업데이트
+        /// </summary>
+        public Task<int> UpdateMoney(int uid, int money, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 돈 업데이트
+        /// </summary>
+        public Task<int> UpdateTicket(int uid, int ticket, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 돈 업데이트
+        /// </summary>
+        public Task<int> UpdateGacha(int uid, int gacha, IDbTransaction? transaction = null);
     }
 }

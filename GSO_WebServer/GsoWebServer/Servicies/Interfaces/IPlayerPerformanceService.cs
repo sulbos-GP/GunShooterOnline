@@ -11,6 +11,11 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<WebErrorCode> UpdatePlayerStats(int uid, MatchOutcome outcome);
 
         /// <summary>
+        /// 플레이어의 게임 결과 경험치 반영
+        /// </summary>
+        public int CalculateExperience(MatchOutcome outcome);
+
+        /// <summary>
         /// 플레이어의 게임 결과 레이팅 반영
         /// </summary>
         public Task<WebErrorCode> UpdatePlayerRating(Dictionary<int, MatchOutcome> outcomes);
