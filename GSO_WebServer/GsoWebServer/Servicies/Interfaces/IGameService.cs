@@ -65,5 +65,6 @@ namespace GsoWebServer.Servicies.Interfaces
         /// </summary>
         public Task<WebErrorCode> UpdateLevelReward(Int32 uid, Int32 level);
 
+
     }
 }

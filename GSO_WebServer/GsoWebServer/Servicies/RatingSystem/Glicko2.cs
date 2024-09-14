@@ -7,7 +7,7 @@ namespace GsoWebServer.Servicies.Matching
     /// Glicko2 매치메이킹 알고리즘
     /// http://www.glicko.net/glicko/glicko2.pdf
     /// </summary>
-    public class Glicko2 : IRatingSystemService
+    public class Glicko2
     {
 
         private const double mGlickoScale = 173.7178;
@@ -31,7 +31,7 @@ namespace GsoWebServer.Servicies.Matching
         /// <summary>
         /// 플레이어의 매치 결과에 따른 퍼포먼스 값
         /// </summary>
-        private double GetPlayerPerformance(MatchOutcomeInfo outcome)
+        private double GetPlayerPerformance(MatchOutcome outcome)
         {
             long kill = outcome.kills * mKillPoint;
             long death = outcome.death * mDeathPoint;
@@ -68,26 +68,27 @@ namespace GsoWebServer.Servicies.Matching
             return 1.0 / (1.0 + Math.Exp(-G(opponentRD) * (rating - opponentRating)));
         }
 
-        private double CalculateVariance(Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches, double rating)
+        private double CalculateVariance(Dictionary<int, UserSkillInfo> skills, double rating)
         {
             double varianceInverseSum = 0.0;
-            foreach (var match in matches)
+            foreach ((int uid, UserSkillInfo skill) in skills)
             {
-                UserSkillInfo skill = match.Value.Item1;
-
                 double e = E(rating, skill.rating, skill.deviation);
                 varianceInverseSum += Math.Pow(G(skill.deviation), 2) * e * (1.0 - e);
             }
             return 1.0 / varianceInverseSum;
         }
 
-        private double CalculateDelta(Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches, double rating, double variance)
+        private double CalculateDelta(Dictionary<int, UserSkillInfo> skills, Dictionary<int, MatchOutcome> outcoms, double rating, double variance)
         {
             double deltaSum = 0.0;
-            foreach (var match in matches)
+            foreach ((int uid, MatchOutcome outcome) in outcoms)
             {
-                UserSkillInfo skill = match.Value.Item1;
-                MatchOutcomeInfo outcome = match.Value.Item2;
+                skills.TryGetValue(uid, out var skill);
+                if(skill == null)
+                {
+                    return 0.0;
+                }
 
                 double g = G(skill.deviation);
                 double e = E(rating, skill.rating, skill.deviation);
@@ -107,14 +108,14 @@ namespace GsoWebServer.Servicies.Matching
         /// </summary>
         /// <param name="player">  업데이트할 플레이어</param>
         /// <param name="matches"> 게임에 참여한 플레이어들의 실력과 결과 </param>
-        public UserSkillInfo UpdatePlayerRating(UserSkillInfo skill, Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches)
+        public UserSkillInfo UpdatePlayerRating(UserSkillInfo skill, Dictionary<int, UserSkillInfo> skills, Dictionary<int, MatchOutcome> outcoms)
         {
             double rating = skill.rating;                                       // r
             double deviation = skill.deviation;                                 // φ
             double volatility = skill.volatility;                               // σ
 
-            double variance = CalculateVariance(matches, rating);               // v
-            double delta = CalculateDelta(matches, rating, variance);           // ∆
+            double variance = CalculateVariance(skills, rating);                // v
+            double delta = CalculateDelta(skills, outcoms, rating, variance);   // ∆
 
             double a = Math.Log(Math.Pow(volatility, 2));                       // ln(σ^2)
             double tau = mGlickoSystemConst;                                    // τ
@@ -172,11 +173,6 @@ namespace GsoWebServer.Servicies.Matching
             };
 
             return newSkillInfo;
-        }
-
-        public void Dispose()
-        {
-
         }
 
     }
