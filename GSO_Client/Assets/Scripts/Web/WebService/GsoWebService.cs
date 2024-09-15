@@ -146,7 +146,7 @@ public class UserResource
         {
             this.mFromHeader = header.ToDictionary();
             this.mFromBody = request;
-            this.mEndPoint = service.mBaseUrl + "/api/User/SetNickname";
+            this.mEndPoint = service.mBaseUrl + "/api/User/Nickname/Update";
             this.mMethod = ERequestMethod.POST;
         }
     }

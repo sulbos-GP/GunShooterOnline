@@ -9,12 +9,12 @@ namespace GsoWebServer.Controllers.User
 {
     [Route("api/User/[controller]")]
     [ApiController]
-    public class SetNicknameController : ControllerBase
+    public class NicknameController : ControllerBase
     {
         private readonly IAuthenticationService mAuthenticationService;
         private readonly IGameService mGameService;
 
-        public SetNicknameController(IAuthenticationService auth, IGameService game)
+        public NicknameController(IAuthenticationService auth, IGameService game)
         {
             mAuthenticationService = auth;
             mGameService = game;
@@ -24,9 +24,10 @@ namespace GsoWebServer.Controllers.User
         /// 닉네임 변경
         /// </summary>
         [HttpPost]
-        public async Task<SetNicknameRes> SetNickname([FromHeader] HeaderDTO header, [FromBody] SetNicknameReq request)
+        [Route("Update")]
+        public async Task<SetNicknameRes> Update([FromHeader] HeaderDTO header, [FromBody] SetNicknameReq request)
         {
-            Console.WriteLine($"[SetNickname] uid:{header.uid} new:{request.new_nickname}");
+            Console.WriteLine($"[user.Nickname.Update] uid:{header.uid} new:{request.new_nickname}");
 
             var response = new SetNicknameRes();
 
