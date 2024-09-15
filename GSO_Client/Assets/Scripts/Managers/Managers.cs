@@ -119,6 +119,12 @@ internal class Managers : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         //이탈 True, 복귀 False
+
+        if (Web != null)
+        {
+            Web.OnPuase(pause);
+        }
+
     }
 
     /// <summary>
@@ -129,11 +135,6 @@ internal class Managers : MonoBehaviour
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
-
-        if (Web != null)
-        {
-            Web.OnSignOut("OnApplicationQuit");
-        }
 
         Clear();
     }

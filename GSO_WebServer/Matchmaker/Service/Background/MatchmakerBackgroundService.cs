@@ -119,6 +119,13 @@ namespace Matchmaker.Service.Background
                 Console.WriteLine("\t{");
                 foreach (var t in tickets)
                 {
+
+                    //여기는 안잡힐거임
+                    if(t.isExit == true)
+                    {
+                        await mMatchmakerService.NotifyMatchFailed(t, WebErrorCode.PopPlayersJoinForced);
+                    }
+
                     await mMatchmakerService.NotifyMatchSuccess(t, profile);
                 }
                 Console.WriteLine("\t}");
