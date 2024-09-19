@@ -49,6 +49,7 @@ namespace Server.Database.Handler
         private DatabaseTable<DB_ItemWeapon> itemWeapon = new DatabaseTable<DB_ItemWeapon>();
         private DatabaseTable<DB_RewardBase> rewardBase = new DatabaseTable<DB_RewardBase>();
         private DatabaseTable<DB_RewardBox> rewardBox = new DatabaseTable<DB_RewardBox>();
+        private DatabaseTable<DB_RewardBoxItem> rewardBoxItem = new DatabaseTable<DB_RewardBoxItem>();
         private DatabaseTable<DB_RewardLevel> rewardLevel = new DatabaseTable<DB_RewardLevel>();
 	    #endregion
 
@@ -106,6 +107,14 @@ namespace Server.Database.Handler
             }
         }
             
+        public DatabaseTable<DB_RewardBoxItem> RewardBoxItem
+        {
+            get
+            {
+                return rewardBoxItem;
+            }
+        }
+            
         public DatabaseTable<DB_RewardLevel> RewardLevel
         {
             get
@@ -123,6 +132,7 @@ namespace Server.Database.Handler
             itemWeapon = await LoadTable<DB_ItemWeapon>("master_item_weapon");
             rewardBase = await LoadTable<DB_RewardBase>("master_reward_base");
             rewardBox = await LoadTable<DB_RewardBox>("master_reward_box");
+            rewardBoxItem = await LoadTable<DB_RewardBoxItem>("master_reward_box_item");
             rewardLevel = await LoadTable<DB_RewardLevel>("master_reward_level");
         }
 
@@ -165,6 +175,11 @@ namespace Server.Database.Handler
             return RewardBox.Get(id);
         }
             
+        public DB_RewardBoxItem GetRewardBoxItem(int id)
+        {
+            return RewardBoxItem.Get(id);
+        }
+            
         public DB_RewardLevel GetRewardLevel(int id)
         {
             return RewardLevel.Get(id);
@@ -200,6 +215,11 @@ namespace Server.Database.Handler
         public Dictionary<int, DB_RewardBox> GetRewardBoxList()
         {
             return RewardBox.GetList();
+        }
+            
+        public Dictionary<int, DB_RewardBoxItem> GetRewardBoxItemList()
+        {
+            return RewardBoxItem.GetList();
         }
             
         public Dictionary<int, DB_RewardLevel> GetRewardLevelList()

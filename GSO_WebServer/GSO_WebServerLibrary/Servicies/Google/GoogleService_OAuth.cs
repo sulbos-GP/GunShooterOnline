@@ -11,6 +11,7 @@ namespace GSO_WebServerLibrary.Servicies.Google
     {
         public async Task<WebErrorCode> ValidateToken(String userId, String accessToken)
         {
+
             try
             {
                 var client = new HttpClient();
@@ -23,6 +24,7 @@ namespace GSO_WebServerLibrary.Servicies.Google
 
                     long expiresIn = tokenInfo.Value<long>("expires_in");
 
+                    Console.WriteLine("[GoogleService.ValidateToken] : Success");
                     return (WebErrorCode.None);
                 }
                 else
@@ -32,11 +34,13 @@ namespace GSO_WebServerLibrary.Servicies.Google
                     string? error               = errorInfo.Value<string>("error");
                     string? errorDescription    = errorInfo.Value<string>("error_description");
 
+                    Console.WriteLine("[GoogleService.ValidateToken] : Failed");
                     return (WebErrorCode.TEMP_ERROR);
                 }
             }
             catch /*(Exception ex)*/
             {
+                Console.WriteLine("[GoogleService.ValidateToken] : Exception");
                 return (WebErrorCode.IsNotValidateServerCode);
             }
         }

@@ -39,8 +39,11 @@ public class WebModels
                 return null;
             }
 
-            //value가 null인지 확인
-            if (value == null)
+            //value가 null타입 인지 확인
+            bool isNullable = Nullable.GetUnderlyingType(property.PropertyType) != null;
+
+            //value가 null인 경우
+            if (!isNullable && value == null)
             {
                 InputLog($"[{name}.{property.Name}] value is Null");
                 return null;
@@ -117,7 +120,14 @@ public class WebModels
     {
         get
         {
-            return GetModelOrDefaultNull("UserLevelReward", data.LevelReward);
+            foreach (var item in data.LevelReward)
+            {
+                if(null == GetModelOrDefaultNull("UserLevelReward", item))
+                {
+                    return null;
+                }
+            }
+            return data.LevelReward;
         }
         set
         {

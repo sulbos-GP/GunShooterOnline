@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebCommonLibrary.Models.GameDB;
-using WebCommonLibrary.Models.RatingSystem;
+using WebCommonLibrary.DTO.Performance;
 
 namespace Server.Web.Service
 {
@@ -16,18 +16,38 @@ namespace Server.Web.Service
 
         }
 
-        public async Task<MatchOutComeRes> PostMatchOutcome(Dictionary<int, MatchOutcomeInfo> outcomes)
+        /// <summary>
+        /// 플레이어의 개인 기록에 대한 평가 반영
+        /// </summary>
+        public async Task<PlayerStatsRes> PostPlayerStats(MatchOutcome outcome)
         {
 
-            Console.WriteLine("[MatchOutcome Lobby]");
+            Console.WriteLine("[Post PlayerStats to lobby]");
 
-            MatchOutComeReq request = new MatchOutComeReq
+            PlayerStatsReq request = new PlayerStatsReq
+            {
+                room_token = DockerUtil.GetContainerId(),
+                outcome = outcome,
+            };
+
+            return await Owner.PostAsync<PlayerStatsRes>(Host, "Performance/PlayerRating", request);
+        }
+
+        /// <summary>
+        /// 전체 게임에서 플레이어의 레이팅 평가 반영
+        /// </summary>
+        public async Task<PlayerRatingRes> PostPlayerRating(Dictionary<int, MatchOutcome> outcomes)
+        {
+
+            Console.WriteLine("[Post PlayerRating to lobby]");
+
+            PlayerRatingReq request = new PlayerRatingReq
             {
                 room_token = DockerUtil.GetContainerId(),
                 outcomes = outcomes,
             };
 
-            return await Owner.PostAsync<MatchOutComeRes>(Host, "Match/Outcome", request);
+            return await Owner.PostAsync<PlayerRatingRes>(Host, "Performance/PlayerRating", request);
         }
     }
 }

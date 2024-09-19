@@ -198,6 +198,7 @@ CREATE TABLE `master_reward_base` (
   `money` int(11) NOT NULL DEFAULT 0 COMMENT '돈',
   `ticket` int(11) NOT NULL DEFAULT 0 COMMENT '티켓',
   `gacha` int(11) NOT NULL DEFAULT 0 COMMENT '가챠',
+  `experience` int(11) NOT NULL DEFAULT 0 COMMENT '경험치',
   `reward_box_id` int(11) DEFAULT NULL COMMENT '보상 박스 아이디',
   PRIMARY KEY (`reward_id`),
   KEY `FK_reward_box_id_master_reward_box_id` (`reward_box_id`),
@@ -211,7 +212,7 @@ CREATE TABLE `master_reward_base` (
 
 LOCK TABLES `master_reward_base` WRITE;
 /*!40000 ALTER TABLE `master_reward_base` DISABLE KEYS */;
-INSERT INTO `master_reward_base` VALUES (10001,1000,0,0,NULL),(10002,0,2,0,NULL),(10003,0,0,5,NULL);
+INSERT INTO `master_reward_base` VALUES (10001,1000,0,0,0,NULL),(10002,0,2,0,0,NULL),(10003,0,0,5,0,NULL),(10004,2000,0,0,0,NULL),(10005,0,4,0,0,NULL),(10006,0,0,10,0,NULL),(10007,3000,0,0,0,NULL),(10008,0,6,0,0,NULL),(10009,0,0,15,0,NULL),(20001,1000,1,0,500,NULL),(20002,0,0,0,1200,1),(20003,500,0,0,500,NULL),(20004,0,0,0,2000,2),(30001,500,0,0,500,NULL),(30002,0,0,0,500,3),(30003,2000,0,0,0,NULL),(30004,0,0,0,2000,NULL),(40001,0,1,1,1000,4),(40002,0,1,1,1000,5);
 /*!40000 ALTER TABLE `master_reward_base` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -224,6 +225,8 @@ DROP TABLE IF EXISTS `master_reward_box`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_reward_box` (
   `reward_box_id` int(11) NOT NULL COMMENT '보상 박스 아이디',
+  `box_scale_x` int(11) NOT NULL COMMENT '박스 x크기',
+  `box_scale_y` int(11) NOT NULL COMMENT '박스 y크기',
   PRIMARY KEY (`reward_box_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -234,7 +237,40 @@ CREATE TABLE `master_reward_box` (
 
 LOCK TABLES `master_reward_box` WRITE;
 /*!40000 ALTER TABLE `master_reward_box` DISABLE KEYS */;
+INSERT INTO `master_reward_box` VALUES (1,2,2),(2,2,3),(3,1,0),(4,4,2),(5,4,3);
 /*!40000 ALTER TABLE `master_reward_box` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `master_reward_box_item`
+--
+
+DROP TABLE IF EXISTS `master_reward_box_item`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `master_reward_box_item` (
+  `reward_box_item_id` int(11) NOT NULL COMMENT '보상 박스 아이템 아이디',
+  `reward_box_id` int(11) NOT NULL COMMENT '보상 박스 아이디',
+  `item_code` varchar(50) NOT NULL COMMENT '아이템 코드',
+  `x` int(11) NOT NULL COMMENT '아이템 x 위치',
+  `y` int(11) NOT NULL COMMENT '아이템 y 위치',
+  `rotation` int(11) NOT NULL COMMENT '아이템 회전',
+  `amount` int(11) NOT NULL COMMENT '아이템 수량',
+  PRIMARY KEY (`reward_box_item_id`),
+  KEY `FK_master_reward_box_item_master_reward_box_id` (`reward_box_id`),
+  KEY `FK_master_reward_box_item_master_item_base_id` (`item_code`),
+  CONSTRAINT `FK_master_reward_box_item_master_item_base_id` FOREIGN KEY (`item_code`) REFERENCES `master_item_base` (`code`) ON DELETE CASCADE,
+  CONSTRAINT `FK_master_reward_box_item_master_reward_box_id` FOREIGN KEY (`reward_box_id`) REFERENCES `master_reward_box` (`reward_box_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `master_reward_box_item`
+--
+
+LOCK TABLES `master_reward_box_item` WRITE;
+/*!40000 ALTER TABLE `master_reward_box_item` DISABLE KEYS */;
+/*!40000 ALTER TABLE `master_reward_box_item` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -247,12 +283,10 @@ DROP TABLE IF EXISTS `master_reward_level`;
 CREATE TABLE `master_reward_level` (
   `reward_id` int(11) NOT NULL COMMENT '보상 정보',
   `level` int(11) NOT NULL COMMENT '레벨',
-  `experience` int(11) NOT NULL COMMENT '경험치',
   `name` varchar(50) NOT NULL COMMENT '보상 이름',
   `icon` varchar(50) NOT NULL COMMENT '보상 아이콘',
   PRIMARY KEY (`reward_id`),
-  UNIQUE KEY `level` (`level`),
-  CONSTRAINT `FK_master_reward_level_reward_id_master_reward_base_reward_id` FOREIGN KEY (`reward_id`) REFERENCES `master_reward_base` (`reward_id`) ON DELETE CASCADE
+  UNIQUE KEY `level` (`level`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -262,7 +296,7 @@ CREATE TABLE `master_reward_level` (
 
 LOCK TABLES `master_reward_level` WRITE;
 /*!40000 ALTER TABLE `master_reward_level` DISABLE KEYS */;
-INSERT INTO `master_reward_level` VALUES (10001,1,100,'1000골드','IconS_goldbar'),(10002,2,200,'티켓 2장','IconS_solidwood'),(10003,3,300,'뽑기 5장','IconS_battery');
+INSERT INTO `master_reward_level` VALUES (10001,2,'1000 골드','IconS_goldore'),(10002,3,'연료 2개','IconR_fueltank'),(10003,4,'건전지 5개','IconS_battery'),(10004,5,'2000 골드','IconS_goldore'),(10005,6,'연료 4개','IconR_fueltank'),(10006,7,'건전지 10개','IconS_battery'),(10007,8,'3000 골드','IconS_goldore'),(10008,9,'연료 6개','IconR_fueltank'),(10009,10,'건전지 15개','IconS_battery');
 /*!40000 ALTER TABLE `master_reward_level` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -275,4 +309,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-13 21:00:17
+-- Dump completed on 2024-09-14 19:31:30

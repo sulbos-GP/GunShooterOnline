@@ -42,22 +42,30 @@ namespace GsoWebServer.Controllers.Game
                 return response;
             }
 
-            var errorCode = await mGameService.UpdateLevelReward(header.uid, request.level);
-            if (errorCode != WebErrorCode.None)
+            var error = await mGameService.RecvLevelReward(header.uid, request.level);
+            if (error != WebErrorCode.None)
             {
-                response.error_code = errorCode;
+                response.error_code = error;
                 return response;
             }
 
-            (errorCode, var levelReward) = await mGameService.GetUserLevelReward(header.uid, null, null);
-            if (errorCode != WebErrorCode.None)
+            (error, var levelReward) = await mGameService.GetUserLevelReward(header.uid, null, null);
+            if (error != WebErrorCode.None)
             {
-                response.error_code = errorCode;
+                response.error_code = error;
+                return response;
+            }
+
+            (error, var user) = await mGameService.GetUserInfo(header.uid);
+            if (error != WebErrorCode.None)
+            {
+                response.error_code = error;
                 return response;
             }
 
             response.error_code = WebErrorCode.None;
             response.LevelReward = levelReward;
+            response.user = user;
             return response;
         }
     }
