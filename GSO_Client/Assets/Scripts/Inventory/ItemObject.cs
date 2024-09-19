@@ -6,6 +6,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
+using static System.TimeZoneInfo;
 using Vector2 = System.Numerics.Vector2;
 
 public class ItemObject : MonoBehaviour
@@ -289,6 +290,39 @@ public class ItemObject : MonoBehaviour
         {
             amountText.gameObject.SetActive(false);
         }
+    }
+
+    public Coroutine blinkCoroutine = null;
+
+    public void StartBlink()
+    {
+        if(blinkCoroutine != null)
+        {
+            StopBlink();
+        }
+
+        blinkCoroutine = StartCoroutine(BlinkEffect());
+    }
+
+    public void StopBlink()
+    {
+        StopCoroutine(blinkCoroutine);
+        blinkCoroutine = null;
+    }
+    public IEnumerator BlinkEffect()
+    {
+        float elapsedTime = 0f;
+        float transitionTime = 1f;
+        imageUI.color = Color.red;
+        while (elapsedTime < transitionTime)
+        {
+            // 경과 시간에 따라 색상 변화
+            imageUI.color = Color.Lerp(Color.red, Color.white, elapsedTime / transitionTime);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        imageUI.color = Color.white;
     }
 
     public void DestroyItem()
