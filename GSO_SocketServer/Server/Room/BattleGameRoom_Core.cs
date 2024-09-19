@@ -25,7 +25,7 @@ namespace Server
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
         public List<object> Escapes = new List<object>();
-        public Dictionary<int, MatchOutcomeInfo> MatchInfo = new Dictionary<int, MatchOutcomeInfo>();
+        public Dictionary<int, MatchOutcome> MatchInfo = new Dictionary<int, MatchOutcome>();
 
 
         public Map map { get; }
@@ -116,7 +116,7 @@ namespace Server
                     var enterPacket = new S_EnterGame();
                     enterPacket.Player = player.info;
 
-                    if( MatchInfo.TryAdd(player.UID, new MatchOutcomeInfo()) == false)
+                    if( MatchInfo.TryAdd(player.UID, new MatchOutcome()) == false)
                     {
                         Console.WriteLine("player.UID add same");
                     }

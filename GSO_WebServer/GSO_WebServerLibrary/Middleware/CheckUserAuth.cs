@@ -73,8 +73,15 @@ namespace GSO_WebServerLibrary.Middleware
             }
 
             //uid와 token을 통해 정보가 있는지 확인
-            var (error, user) = await mMemoryDB.ValidateAndGetUserData(uid);
-            if (user == null)
+
+            var error = await mGoogleService.ValidateToken(userData.player_id, token);
+            AuthUserDataInfo? user = null;
+            if (error == WebErrorCode.None)
+            {
+                (error, user) = await mMemoryDB.ValidateAndGetUserData(uid);
+            }
+
+            if (error != WebErrorCode.None || user == null)
             {
 
                 //갱신 토큰을 이용하여 엑세스 토큰 갱신하기

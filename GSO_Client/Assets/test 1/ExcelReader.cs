@@ -19,9 +19,13 @@ public class ExcelReader
         {eTABLE_TYPE.TestItem, TableExcel.ReadCSV<Data_TestItem>},
         {eTABLE_TYPE.master_item_base, TableExcel.ReadCSV<Data_master_item_base> },
         {eTABLE_TYPE.master_item_backpack, TableExcel.ReadCSV<Data_master_item_backpack>},
+        {eTABLE_TYPE.master_item_use, TableExcel.ReadCSV<Data_master_item_use>},
+        {eTABLE_TYPE.master_item_weapon, TableExcel.ReadCSV<Data_master_item_weapon>},
+
         {eTABLE_TYPE.master_reward_base, TableExcel.ReadCSV<Data_master_reward_base> },
         {eTABLE_TYPE.master_reward_level, TableExcel.ReadCSV<Data_master_reward_level> },
-        {eTABLE_TYPE.master_reward_box, TableExcel.ReadCSV<Data_master_reward_box> }
+        {eTABLE_TYPE.master_reward_box, TableExcel.ReadCSV<Data_master_reward_box> },
+        {eTABLE_TYPE.master_reward_box_item, TableExcel.ReadCSV<Data_master_reward_box> }
     };
 
     public static void CopyExcel(string[] files)

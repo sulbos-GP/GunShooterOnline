@@ -61,27 +61,27 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// <summary>
         /// 유저의 유니크 아이디로 user 메타데이터 불러오기
         /// </summary>
-        public Task<UserMetadataInfo?> GetUserMetadataByUid(int uid);
+        public Task<UserMetadataInfo?> GetUserMetadataByUid(int uid, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user 메타데이터 업데이트
         /// </summary>
-        public Task<int> UpdateUserMetadata(int uid, UserMetadataInfo matadata);
+        public Task<int> UpdateUserMetadata(int uid, UserMetadataInfo matadata, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user 스킬 불러오기
         /// </summary>
-        public Task<UserSkillInfo?> GetUserSkillByUid(int uid);
+        public Task<UserSkillInfo?> GetUserSkillByUid(int uid, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 유니크 아이디로 user 스킬 업데이트
+        /// </summary>
+        public Task<int> UpdateUserSkill(int uid, UserSkillInfo skill, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user 레벨 보상 불러오기
         /// </summary>
         public Task<IEnumerable<UserLevelReward>?> GetUserLevelRewardByUid(int uid, bool? received, int? reward_level_id);
-
-        /// <summary>
-        /// 유저의 유니크 아이디로 user 스킬 업데이트
-        /// </summary>
-        public Task<int> UpdateUserSkill(int uid, UserSkillInfo skill);
 
         /// <summary>
         /// 유저의 유니크 아이디로 level 업데이트
@@ -96,6 +96,32 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// <summary>
         /// 유저의 유니크 아이디로 level 보상 추가
         /// </summary>
-        public Task<int> UpdateLevelReward(int uid, int level, bool received);
+        public Task<int> RecivedLevelReward(int uid, int level, bool received, IDbTransaction? transaction = null);
+
+        ///////////////////////////////////////
+        ///                                 ///
+        ///           currency              ///
+        ///                                 ///
+        ///////////////////////////////////////
+
+        /// <summary>
+        /// 유저의 통화 업데이트
+        /// </summary>
+        public Task<int> UpdateCurrency(int uid, int money, int ticket, int gacha, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 돈 업데이트
+        /// </summary>
+        public Task<int> UpdateMoney(int uid, int money, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 돈 업데이트
+        /// </summary>
+        public Task<int> UpdateTicket(int uid, int ticket, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 돈 업데이트
+        /// </summary>
+        public Task<int> UpdateGacha(int uid, int gacha, IDbTransaction? transaction = null);
     }
 }

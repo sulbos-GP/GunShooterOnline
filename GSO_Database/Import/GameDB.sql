@@ -166,7 +166,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'a_1','a_1',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(2,'a_2','a_2',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(3,'a_3','a_3',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(4,'a_4','a_4',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(5,'a_5','a_5',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(6,'a_6','a_6',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(7,'a_7','a_7',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(8,'a_8','a_8',1,0,0,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41'),(9,'a_9','a_9',1,0,0,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41'),(10,'a_10','a_10',1,0,0,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41'),(11,'111273423436160748486','장송',1,0,0,0,'Google','1//0eB5OREZb-rkmCgYIARAAGA4SNwF-L9Irx1Dzyy1HfroA0GW3-1vNWj420SUp11-UMDRBClbmN9yzFtRvtWlMhSSyVAg8cYOdNHM','2024-09-03 15:54:25','2024-09-04 17:48:34'),(12,'a_4003771818344972651','테스트1',100,0,0,0,'Google','1//0eHJmnKKtHgK8CgYIARAAGA4SNwF-L9IrCbicAPbqk9-Xwurgu2ifLckSxIkoTrs4_UiSMq00mPum_eIKFNXo8CXRZ6qMxvvi9hA','2024-09-04 17:54:48','2024-09-13 15:52:02');
+INSERT INTO `user` VALUES (1,'a_1','a_1',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(2,'a_2','a_2',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(3,'a_3','a_3',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(4,'a_4','a_4',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(5,'a_5','a_5',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(6,'a_6','a_6',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(7,'a_7','a_7',1,0,0,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40'),(8,'a_8','a_8',1,0,0,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41'),(9,'a_9','a_9',1,0,0,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41'),(10,'a_10','a_10',1,0,0,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41'),(11,'111273423436160748486',NULL,1,0,0,0,'Google','1//0eB5OREZb-rkmCgYIARAAGA4SNwF-L9Irx1Dzyy1HfroA0GW3-1vNWj420SUp11-UMDRBClbmN9yzFtRvtWlMhSSyVAg8cYOdNHM','2024-09-03 15:54:25','2024-09-04 17:48:34'),(12,'a_4003771818344972651','장송',100,1000,0,0,'Google','1//0eHJmnKKtHgK8CgYIARAAGA4SNwF-L9IrCbicAPbqk9-Xwurgu2ifLckSxIkoTrs4_UiSMq00mPum_eIKFNXo8CXRZ6qMxvvi9hA','2024-09-04 17:54:48','2024-09-14 18:52:03');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -188,7 +188,7 @@ CREATE TABLE `user_level_reward` (
   KEY `FK_user_level_reward_master_reward_level_id` (`reward_id`),
   CONSTRAINT `FK_user_level_reward_master_reward_level_id` FOREIGN KEY (`reward_id`) REFERENCES `master_database`.`master_reward_level` (`reward_id`) ON DELETE CASCADE,
   CONSTRAINT `FK_user_reward_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -197,7 +197,6 @@ CREATE TABLE `user_level_reward` (
 
 LOCK TABLES `user_level_reward` WRITE;
 /*!40000 ALTER TABLE `user_level_reward` DISABLE KEYS */;
-INSERT INTO `user_level_reward` VALUES (2,12,10001,1,'2024-09-09 20:18:39');
 /*!40000 ALTER TABLE `user_level_reward` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -268,4 +267,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-13 20:59:50
+-- Dump completed on 2024-09-14 19:31:02

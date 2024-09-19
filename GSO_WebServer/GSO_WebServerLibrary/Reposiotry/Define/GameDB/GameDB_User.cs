@@ -82,7 +82,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
                 }, transaction);
         }
 
-        public async Task<int> UpdateLevelReward(int uid, int level, bool received)
+        public async Task<int> RecivedLevelReward(int uid, int level, bool received, IDbTransaction? transaction)
         {
 
             Dictionary<int, DB_RewardLevel> rewards = mMasterDB.GetRewardLevelList();
@@ -104,7 +104,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
                 {
                     received = received,
                     received_dt = DateTime.Now,
-                });
+                }, transaction);
         }
     }
 }
