@@ -72,7 +72,7 @@ namespace Server.Server
 
 #if DOCKER
             //게임 종료 정보
-            Dictionary<int, MatchOutcomeInfo> outcome = new Dictionary<int, MatchOutcomeInfo>();
+            Dictionary<int, MatchOutcome> outcome = new Dictionary<int, MatchOutcome>();
 
             BattleGameRoom battleGame =  gameRoom as BattleGameRoom;
 
