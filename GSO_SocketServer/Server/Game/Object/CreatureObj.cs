@@ -38,7 +38,7 @@ public class CreatureObj : GameObject
 
         
 
-        MatchOutcomeInfo myInfo;
+        MatchOutcome myInfo;
         if (gameRoom.MatchInfo.TryGetValue(UID, out myInfo) == true)
         {
             myInfo.death += 1;
@@ -102,7 +102,7 @@ public class CreatureObj : GameObject
         Console.WriteLine($" attacker :{rootAttacker.Id} Damage : {damage}  stat.Hp : {stat.Hp}");
 
 
-        MatchOutcomeInfo attackerInfo;
+        MatchOutcome attackerInfo;
         if(gameRoom.MatchInfo.TryGetValue(attacker.UID, out attackerInfo) == true)
         {
             attackerInfo.damage += damage;
