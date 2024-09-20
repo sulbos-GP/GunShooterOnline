@@ -837,7 +837,7 @@ namespace Server
 
         }
 
-        private void HandleExitGame(Player player, int exitId)
+        public void HandleExitGame(Player player, int exitId)
         {
 
             //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
@@ -859,7 +859,7 @@ namespace Server
 
         List<Player> p = new List<Player>();
 
-        private void HandleClientLoadGame(Player player)
+        public void HandleClientLoadGame(Player player)
         {
             p.Add(player);
 
