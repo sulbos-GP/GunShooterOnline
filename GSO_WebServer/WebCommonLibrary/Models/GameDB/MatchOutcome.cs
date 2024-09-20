@@ -3,7 +3,7 @@
     /// <summary>
     /// 플레이어마다 매치 결과
     /// </summary>
-    public class MatchOutcomeInfo
+    public class MatchOutcome
     {
         public int kills { get; set; } = 0;
         public int death { get; set; } = 0;

@@ -9,6 +9,11 @@ namespace GSO_WebServerLibrary.Servicies.Interfaces
         /// GoogleService OAuth관련
 
         /// <summary>
+        /// 아이디와 토큰을 통해 존재하는지 확인
+        /// </summary>
+        public Task<WebErrorCode> ValidateToken(String userId, String accessToken);
+
+        /// <summary>
         /// 서버코드를 이용하여 엑세스 토큰과 정보를 얻는다
         /// </summary>
         public Task<(WebErrorCode, TokenResponse?)> ExchangeToken(string userId, string serverCode);

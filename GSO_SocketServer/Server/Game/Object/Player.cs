@@ -89,7 +89,7 @@ public class Player : CreatureObj
 
     public void OnEscaped()
     {
-        MatchOutcomeInfo myInfo;
+        MatchOutcome myInfo;
         if (gameRoom.MatchInfo.TryGetValue(UID, out myInfo) == true)
         {
             myInfo.survival_time =  (int)(System.Environment.TickCount - SpawnTime / 1000) ;

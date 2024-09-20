@@ -419,7 +419,6 @@ MonoBehaviour:
     itemId: 0
     pos: {x: 0, y: 0}
     rotate: 0
-    amount: 0
     isSearched: 0
     item_name: 
     item_weight: 0
@@ -431,10 +430,11 @@ MonoBehaviour:
     width: 0
     height: 0
     isItemConsumeable: 0
-  isHide: 0
-  curItemGrid: {fileID: 0}
-  backUpItemGrid: {fileID: 0}
+    iconName: 
   backUpItemPos: {x: 0, y: 0}
   backUpItemRotate: 0
-  curEquipSlot: {fileID: 0}
-  backUpEquipSlot: {fileID: 0}
+  isHide: 0
+  isOnSearching: 0
+  itemWeight: 0
+  parentObjId: 0
+  backUpParentId: 0

@@ -1,5 +1,4 @@
 using Google.Protobuf.Protocol;
-using Org.BouncyCastle.Asn1.Crmf;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -10,7 +9,6 @@ public class BagSlot : EquipSlot
     private void Awake()
     {
         Init();
-        
     }
 
     protected override void OnDisable()
@@ -28,78 +26,98 @@ public class BagSlot : EquipSlot
     {
         base.ApplyItemEffects(item);
 
-        // 레벨이 커질경우 -> 크기 증가
-        // 레벨이 낮아질경우 -> 크기를 줄일수 있는지(아이템칸에 겹치는지) 검사후 가능하면 감소
-
         PlayerInventoryUI playerUI = InventoryController.invenInstance.playerInvenUI;
         Debug.Log($"가방 : {item.item_name} 장착");
 
-        //아이템의 데이터 아이디를 통해 가방의 상세 데이터를 불러옴
-        BagData targetBag = new BagData();
-        bool isSuccess = BagDB.bagDB.TryGetValue(item.itemId, out targetBag);
-        if (!isSuccess)
+        // 가방 데이터 불러오기
+        if (!TryGetBagData(item.itemId, out BagData targetBag))
         {
-            Debug.Log("해당 아이디의 가방이 존재하지 않음");
             return false;
         }
 
-        
-
-        if (playerUI.instantGrid != null) //인벤토리가 열려있는 상태에서 변화
+        // 인벤토리가 열려 있는 상태에서 가방 장착
+        if (playerUI.instantGrid != null)
         {
-            if (playerUI.equipBag.item_id == targetBag.item_id) //같은 종류의 가방이라면 변화 없이 성공 처리
-            {
-                return true;
-            }
-
-            Vector2Int newSize = new Vector2Int(targetBag.total_scale_x, targetBag.total_scale_y);
-
-            if (playerUI.equipBag.total_scale_x > newSize.x || playerUI.equipBag.total_scale_y > newSize.y)
-            {
-                isSuccess = playerUI.instantGrid.CheckAvailableToChange(newSize);
-                if (!isSuccess || targetBag.total_weight < playerUI.instantGrid.GridWeight)
-                {
-                    Debug.Log("해당 가방에 놓을수 없음");
-                    return false;
-                }
-            }
-
-            playerUI.equipBag = targetBag;
-            //가방 레벨이 크거나 테스트 통과시 그리드의 사이즈 업데이트
-            playerUI.instantGrid.UpdateGridObject(newSize, targetBag.total_weight);
-        }
-        else //최초에 스폰되어 장비를 불러올때(인벤토리가 열려있지 않음)
-        {
-            playerUI.equipBag = targetBag;
+            return EquipBagInOpenInventory(playerUI, targetBag);
         }
 
+        // 최초 스폰 시 가방 장착
+        playerUI.equipBag = targetBag;
         return true;
     }
 
     public override bool RemoveItemEffects(ItemData item)
     {
-        base.RemoveItemEffects(item); //무조건 인벤토리가 열린 상태에서만 호출됨
-
+        base.RemoveItemEffects(item);
         Debug.Log($"가방 아이템 해제");
+
         PlayerInventoryUI playerUI = InventoryController.invenInstance.playerInvenUI;
 
-        BagData basicBag = new BagData();
-        bool isSuccess = BagDB.bagDB.TryGetValue(-1,out basicBag);
-        if (!isSuccess )
+        // 기본 가방 데이터 불러오기
+        if (!TryGetBagData(-1, out BagData basicBag))
         {
-            Debug.Log("기본 가방 데이터를 찾지 못함");
             return false;
         }
 
-        if (playerUI.instantGrid.GridWeight > 5)
+        // 기본 가방 장착
+        return EquipBagInOpenInventory(playerUI, basicBag);
+    }
+
+    //인벤토리가 열려있을때 가방 교체 로직
+    private bool EquipBagInOpenInventory(PlayerInventoryUI playerUI, BagData targetBag)
+    {
+        if (IsSameBag(playerUI, targetBag)) // 같은 가방이면 변화 없이 성공
         {
-            Debug.Log("해당 가방을 해제 할수 없음");
+            return true;
+        }
+
+        Vector2Int newSize = new Vector2Int(targetBag.total_scale_x, targetBag.total_scale_y);
+
+        //가방을 빼거나 교체가 가능한지 판단
+        if (IsBagSizeReducing(playerUI.equipBag, newSize) &&
+            (!playerUI.instantGrid.CheckAvailableToChange(newSize) || !CompareChangeWeight(playerUI, targetBag)))
+        {
+            Debug.Log("해당 가방에 놓을 수 없음");
             return false;
         }
 
-        playerUI.equipBag = basicBag;
-        Vector2Int basicSize = new Vector2Int(basicBag.total_scale_x, basicBag.total_scale_y);
-        playerUI.instantGrid.UpdateGridObject(basicSize, basicBag.total_weight);
+        playerUI.equipBag = targetBag;
+        playerUI.instantGrid.UpdateGridObject(newSize, targetBag.total_weight);
         return true;
+    }
+
+    // 바꿀 가방의 무게가 현재 가지고 있는 아이템들의 무게를 감당가능한가
+    private static bool CompareChangeWeight(PlayerInventoryUI playerUI, BagData targetBag)
+    {
+        if (targetBag.total_weight < playerUI.instantGrid.GridWeight)
+        {
+            playerUI.StartBlink();
+            return false;
+        }
+        return true;
+    }
+
+
+    //가방 db에서 해당 아이디로 검색. 존재하면 true
+    private bool TryGetBagData(int itemId, out BagData bagData)
+    {
+        if (!BagDB.bagDB.TryGetValue(itemId, out bagData))
+        {
+            Debug.Log($"해당 아이디({itemId})의 가방이 존재하지 않음");
+            return false;
+        }
+        return true;
+    }
+
+    // 현재 장착한 가방과 바꿀 가방이 같으면 true
+    private bool IsSameBag(PlayerInventoryUI playerUI, BagData targetBag)
+    {
+        return playerUI.equipBag.item_id == targetBag.item_id;
+    }
+
+    // 가방의 사이즈가 줄어들면 true
+    private bool IsBagSizeReducing(BagData currentBag, Vector2Int newSize)
+    {
+        return currentBag.total_scale_x > newSize.x || currentBag.total_scale_y > newSize.y;
     }
 }
