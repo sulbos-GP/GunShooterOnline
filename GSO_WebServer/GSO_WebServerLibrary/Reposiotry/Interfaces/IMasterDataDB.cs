@@ -16,6 +16,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         public DB_ItemWeapon GetItemWeapon(int id);
         public DB_RewardBase GetRewardBase(int id);
         public DB_RewardBox GetRewardBox(int id);
+        public DB_RewardBoxItem GetRewardBoxItem(int id);
         public DB_RewardLevel GetRewardLevel(int id);
     
         
@@ -25,6 +26,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         public Dictionary<int, DB_ItemWeapon> GetItemWeaponList();
         public Dictionary<int, DB_RewardBase> GetRewardBaseList();
         public Dictionary<int, DB_RewardBox> GetRewardBoxList();
+        public Dictionary<int, DB_RewardBoxItem> GetRewardBoxItemList();
         public Dictionary<int, DB_RewardLevel> GetRewardLevelList();
     }
 }

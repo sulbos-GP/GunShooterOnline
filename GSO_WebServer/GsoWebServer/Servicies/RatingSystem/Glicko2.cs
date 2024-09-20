@@ -6,8 +6,11 @@ namespace GsoWebServer.Servicies.Matching
     /// <summary>
     /// Glicko2 매치메이킹 알고리즘
     /// http://www.glicko.net/glicko/glicko2.pdf
+    /// 
+    /// 점수 계산기
+    /// https://docs.google.com/spreadsheets/d/1E-Tq8eq5zx1t6U4R81rYf2sN-d7kuzv7RSchauXSQgE/edit?gid=0#gid=0
     /// </summary>
-    public class Glicko2 : IRatingSystemService
+    public class Glicko2
     {
 
         private const double mGlickoScale = 173.7178;
@@ -21,24 +24,24 @@ namespace GsoWebServer.Servicies.Matching
         /// 0.25 - 탈출 X 킬 ∆ 파밍 ∆
         /// 0.00 - 탈출 X 킬 X 파밍 X
         /// </summary>
-        private long mKillPoint = +2;   //킬
-        private long mDeathPoint = -5;   //데스
-        private long mDamagePoint = +1;   //체력100 = 1대미지
-        private long mFarmingPoint = +1;   //레어급 파밍
-        private long mEscapePoint = +5;   //탈출
-        private long mSurvialPoint = +1;   //1분 = 1생존
+        private long mKillPoint     = +5;       //킬
+        private long mDeathPoint    = -20;      //데스
+        private long mDamagePoint   = +3;       //체력100 = 1대미지
+        private long mFarmingPoint  = +4;       //레어급 파밍
+        private long mEscapePoint   = +20;      //탈출
+        private long mSurvialPoint  = +2;       //1분 = 1생존
 
         /// <summary>
         /// 플레이어의 매치 결과에 따른 퍼포먼스 값
         /// </summary>
-        private double GetPlayerPerformance(MatchOutcomeInfo outcome)
+        private double GetPlayerPerformance(MatchOutcome outcome)
         {
-            long kill = outcome.kills * mKillPoint;
-            long death = outcome.death * mDeathPoint;
-            long damage = outcome.damage / 100 * mDamagePoint;
-            long farming = outcome.farming * mFarmingPoint;
-            long escape = outcome.escape * mEscapePoint;
-            long survial = outcome.survival_time * mSurvialPoint;
+            long kill       = outcome.kills * mKillPoint;
+            long death      = outcome.death * mDeathPoint;
+            long damage     = (outcome.damage == 0) ? 0 : outcome.damage / 100 * mDamagePoint;
+            long farming    = outcome.farming * mFarmingPoint;
+            long escape     = outcome.escape * mEscapePoint;
+            long survial    = outcome.survival_time * mSurvialPoint;
 
 
             long performance = kill + death + damage + farming + escape + survial;
@@ -68,26 +71,27 @@ namespace GsoWebServer.Servicies.Matching
             return 1.0 / (1.0 + Math.Exp(-G(opponentRD) * (rating - opponentRating)));
         }
 
-        private double CalculateVariance(Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches, double rating)
+        private double CalculateVariance(Dictionary<int, UserSkillInfo> skills, double rating)
         {
             double varianceInverseSum = 0.0;
-            foreach (var match in matches)
+            foreach ((int uid, UserSkillInfo skill) in skills)
             {
-                UserSkillInfo skill = match.Value.Item1;
-
                 double e = E(rating, skill.rating, skill.deviation);
                 varianceInverseSum += Math.Pow(G(skill.deviation), 2) * e * (1.0 - e);
             }
             return 1.0 / varianceInverseSum;
         }
 
-        private double CalculateDelta(Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches, double rating, double variance)
+        private double CalculateDelta(Dictionary<int, UserSkillInfo> skills, Dictionary<int, MatchOutcome> outcoms, double rating, double variance)
         {
             double deltaSum = 0.0;
-            foreach (var match in matches)
+            foreach ((int uid, MatchOutcome outcome) in outcoms)
             {
-                UserSkillInfo skill = match.Value.Item1;
-                MatchOutcomeInfo outcome = match.Value.Item2;
+                skills.TryGetValue(uid, out var skill);
+                if(skill == null)
+                {
+                    return 0.0;
+                }
 
                 double g = G(skill.deviation);
                 double e = E(rating, skill.rating, skill.deviation);
@@ -101,20 +105,28 @@ namespace GsoWebServer.Servicies.Matching
             double expX = Math.Exp(x);
             return expX * (Math.Pow(delta, 2) - Math.Pow(rd, 2) - variance - expX) / (2 * Math.Pow(Math.Pow(rd, 2) + variance + expX, 2)) - (x - a) / Math.Pow(tau, 2);
         }
+        
+        /// <summary>
+        /// 결과에 따른 플레이어 경험치 계산
+        /// </summary>
+        public int CalculateExperience(MatchOutcome outcome)
+        {
+            return (int)(GetPlayerPerformance(outcome) * 1.2);
+        }
 
         /// <summary>
         /// 플레이어의 스킬에 관한 업데이트
         /// </summary>
         /// <param name="player">  업데이트할 플레이어</param>
         /// <param name="matches"> 게임에 참여한 플레이어들의 실력과 결과 </param>
-        public UserSkillInfo UpdatePlayerRating(UserSkillInfo skill, Dictionary<int, Tuple<UserSkillInfo, MatchOutcomeInfo>> matches)
+        public UserSkillInfo UpdatePlayerRating(UserSkillInfo skill, Dictionary<int, UserSkillInfo> skills, Dictionary<int, MatchOutcome> outcoms)
         {
             double rating = skill.rating;                                       // r
             double deviation = skill.deviation;                                 // φ
             double volatility = skill.volatility;                               // σ
 
-            double variance = CalculateVariance(matches, rating);               // v
-            double delta = CalculateDelta(matches, rating, variance);           // ∆
+            double variance = CalculateVariance(skills, rating);                // v
+            double delta = CalculateDelta(skills, outcoms, rating, variance);   // ∆
 
             double a = Math.Log(Math.Pow(volatility, 2));                       // ln(σ^2)
             double tau = mGlickoSystemConst;                                    // τ
@@ -172,11 +184,6 @@ namespace GsoWebServer.Servicies.Matching
             };
 
             return newSkillInfo;
-        }
-
-        public void Dispose()
-        {
-
         }
 
     }
