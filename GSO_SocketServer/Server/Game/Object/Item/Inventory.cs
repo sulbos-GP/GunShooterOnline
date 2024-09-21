@@ -6,7 +6,6 @@ using System.Data;
 using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
-using WebCommonLibrary.Models.MasterDB;
 
 namespace Server.Game
 {
