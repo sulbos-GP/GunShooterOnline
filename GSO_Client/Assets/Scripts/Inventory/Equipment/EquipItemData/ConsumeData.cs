@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public enum EffectType
+public enum EEffect
 {
+    None,
     Immediate,
-    Buff
+    Buff,
 }
 
 public class ConsumeData
@@ -15,7 +16,7 @@ public class ConsumeData
     public int energe;
     public double active_time;
     public double duration;
-    public EffectType effect;
+    public EEffect effect;
     public double cooltime;
 }
 
@@ -35,7 +36,7 @@ public class ConsumeDB
         energe = 70,
         active_time = 0,
         duration = 0,
-        effect = EffectType.Immediate,
+        effect = EEffect.Immediate,
         cooltime = 4,
 
     };
@@ -46,7 +47,7 @@ public class ConsumeDB
         energe = 10,
         active_time = 0,
         duration = 0,
-        effect = EffectType.Immediate,
+        effect = EEffect.Immediate,
         cooltime = 2,
 
     };
@@ -57,7 +58,7 @@ public class ConsumeDB
         energe = 3,
         active_time = 2,
         duration = 40,
-        effect = EffectType.Buff,
+        effect = EEffect.Buff,
         cooltime = 4,
 
     };
@@ -68,7 +69,7 @@ public class ConsumeDB
         energe = 1,
         active_time = 2,
         duration = 40,
-        effect = EffectType.Buff,
+        effect = EEffect.Buff,
         cooltime = 2,
 
     };
