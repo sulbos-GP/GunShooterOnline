@@ -9,3 +9,5 @@ CREATE TABLE IF NOT EXISTS master_version_data
 
 	UNIQUE(major, minor, patch)
 );
+
+INSERT INTO master_version_data (major, minor, patch) VALUES (1, 0, 0);
