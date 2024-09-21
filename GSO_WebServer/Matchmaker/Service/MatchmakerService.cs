@@ -7,7 +7,6 @@ using WebCommonLibrary.Models.Match;
 using Matchmaker.Repository.Interface;
 using Matchmaker.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using WebCommonLibrary.Models.MasterDB;
 using Matchmaker.Repository;
 using WebCommonLibrary.Enum;
 using Google.Apis.Games.v1.Data;

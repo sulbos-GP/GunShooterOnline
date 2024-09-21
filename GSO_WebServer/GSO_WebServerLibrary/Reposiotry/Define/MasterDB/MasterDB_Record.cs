@@ -1,7 +1,6 @@
 ﻿using SqlKata.Execution;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 using WebCommonLibrary.DTO.Middleware;
-using WebCommonLibrary.Models.MasterDB;
 using WebCommonLibrary.Error;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
