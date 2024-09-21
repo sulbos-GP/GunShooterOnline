@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Reposiotry.MasterDatabase;
 
 namespace Server.Database.Master
 {
@@ -14,6 +15,7 @@ namespace Server.Database.Master
 
         public MasterDB() : base()
         {
+
         }
 
         public async Task<IEnumerable<T>> LoadTable<T>(string table)

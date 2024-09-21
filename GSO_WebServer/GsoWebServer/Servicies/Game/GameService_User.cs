@@ -1,6 +1,7 @@
 ﻿using GsoWebServer.Servicies.Interfaces;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDatabase;
 using WebCommonLibrary.Models.MasterDB;
 
 namespace GsoWebServer.Servicies.Game
@@ -226,13 +227,13 @@ namespace GsoWebServer.Servicies.Game
                     throw new Exception("레벨이 보상을 받지 못했습니다.");
                 }
 
-                int reward_id = mMasterDB.GetRewardLevelList().Where(reward => reward.Value.level == level).FirstOrDefault().Key;
+                int reward_id = mMasterDB.Context.MasterRewardLevel.Where(reward => reward.Value.level == level).FirstOrDefault().Key;
                 if(reward_id == 0)
                 {
                     throw new Exception($"{level}레벨에 대한 아이디가 존재하지 않습니다.");
                 }
 
-                DB_RewardBase reward = mMasterDB.GetRewardBaseList().Where(reward => reward.Key == reward_id).FirstOrDefault().Value;
+                FMasterRewardBase reward = mMasterDB.Context.MasterRewardBase.Where(reward => reward.Key == reward_id).FirstOrDefault().Value;
                 if (reward == null)
                 {
                     throw new Exception($"{level}레벨에 대한 보상이 존재하지 않습니다.");

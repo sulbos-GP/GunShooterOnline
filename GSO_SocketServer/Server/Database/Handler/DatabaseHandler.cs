@@ -3,6 +3,7 @@ using Server.Database.Master;
 using Server.Web;
 using System;
 using System.Collections.Generic;
+using WebCommonLibrary.Reposiotry.MasterDatabase;
 
 namespace Server.Database.Handler
 {
@@ -16,7 +17,7 @@ namespace Server.Database.Handler
     public class DatabaseHandler
     {
         private static Dictionary<EDatabase, string> databases = new Dictionary<EDatabase, string>(10);
-        private static DatabaseContext context = new DatabaseContext();
+        private static MasterDatabaseContext context;
 
         #region Database
         public static GameDB GameDB 
@@ -29,9 +30,9 @@ namespace Server.Database.Handler
             } 
         }
 
-        public static MasterDB MasterDB 
-        { 
-            get 
+        public static MasterDB MasterDB
+        {
+            get
             {
                 MasterDB database = new MasterDB();
                 database.Open(databases[EDatabase.Master]);
@@ -39,14 +40,9 @@ namespace Server.Database.Handler
             }
         }
 
-        #endregion
-
-
-        #region Context
-
-        public static DatabaseContext Context
-        {
-            get
+        public static MasterDatabaseContext Context 
+        { 
+            get 
             {
                 return context;
             }
@@ -71,9 +67,9 @@ namespace Server.Database.Handler
 #else
             AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
             AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
-#endif
 
-            context.LoadDatabaseContext().Wait();
+            context = new MasterDatabaseContext(databases[EDatabase.Master]);
+#endif
         }
 
         public void RemoveMySQL()
