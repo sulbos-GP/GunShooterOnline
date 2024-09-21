@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using WebCommonLibrary.Models.MasterDatabase;
-using WebCommonLibrary.Models.MasterDB;
 
 namespace WebCommonLibrary.DTO.Middleware
 {

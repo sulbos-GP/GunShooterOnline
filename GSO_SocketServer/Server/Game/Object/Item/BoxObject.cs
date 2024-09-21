@@ -2,7 +2,6 @@
 using Google.Protobuf.Protocol;
 using Server.Database.Handler;
 using WebCommonLibrary.Models.GameDB;
-using WebCommonLibrary.Models.MasterDB;
 
 namespace Server.Game.Object.Item
 {

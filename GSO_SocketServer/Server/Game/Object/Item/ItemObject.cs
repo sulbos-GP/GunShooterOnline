@@ -3,7 +3,7 @@ using Server.Database.Handler;
 using System;
 using System.Collections.Generic;
 using WebCommonLibrary.Models.GameDB;
-using WebCommonLibrary.Models.MasterDB;
+using WebCommonLibrary.Models.MasterDatabase;
 
 namespace Server.Game
 {
@@ -45,11 +45,11 @@ namespace Server.Game
             ObjectManager.Instance.Remove(this.Id);
         }
 
-        public DB_ItemBase Data
+        public FMasterItemBase Data
         {
             get
             {
-                return DatabaseHandler.Context.ItemBase.Get(ItemId);
+                return DatabaseHandler.Context.MasterItemBase.Find(ItemId);
             }
         }
 
