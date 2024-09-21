@@ -11,7 +11,7 @@ public class Gun : MonoBehaviour
     public GunState CurGunState { get; private set; }
 
     [SerializeField]
-    public GunData CurGunData { get; private set; }
+    public Data_master_item_weapon CurGunData { get; private set; }
 
     public int curGunEquipSlot; //사용중인 총의 데이터가 없을 경우 0 , 1슬롯 사용시 1 , 2슬롯 사용시 2
 
@@ -47,20 +47,21 @@ public class Gun : MonoBehaviour
         ResetGun();
     }
 
-    public void SetGunStat(GunData newGun)
+    public void SetGunStat(Data_master_item_weapon newGun)
     {
         if(CurGunData == null)
         {
-            CurGunData = new GunData(); 
+            CurGunData = new Data_master_item_weapon(); 
         }
-        CurGunData.item_id = newGun.item_id;
-        CurGunData.range = newGun.range;
+
+        CurGunData.Key = newGun.Key;
+        CurGunData.attack_range = newGun.attack_range;
         CurGunData.damage = newGun.damage;
         CurGunData.distance = newGun.distance;
         CurGunData.reload_round = newGun.reload_round;
         CurGunData.attack_speed = newGun.attack_speed;
         CurGunData.reload_time = newGun.reload_time;
-        CurGunData.bulletId = newGun.bulletId;
+        CurGunData.bullet = newGun.bullet;
 
         //총이 정해졌을때 
         _curAmmo = 0;
@@ -79,7 +80,7 @@ public class Gun : MonoBehaviour
         rangeLine.enabled = false;
     }
 
-    public GunData getGunStat()
+    public Data_master_item_weapon getGunStat()
     {
         return CurGunData;
     }
@@ -97,7 +98,7 @@ public class Gun : MonoBehaviour
         //발사범위 선 2개 긋기
         if (_fireStartPos == null) return;
 
-        float halfAngle = CurGunData.range * 0.5f;
+        float halfAngle = CurGunData.attack_range * 0.5f;
 
         Vector3 direction1 = Quaternion.Euler(0, 0, halfAngle) * _fireStartPos.up;
         Vector3 endPoint1 = _fireStartPos.position + direction1 * CurGunData.distance;
@@ -133,7 +134,7 @@ public class Gun : MonoBehaviour
              */
 
             //정규분포를 사용한 발사
-            float halfAccuracyRange = CurGunData.range / 2f;
+            float halfAccuracyRange = CurGunData.attack_range / 2f;
 
             float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
             float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
@@ -171,7 +172,7 @@ public class Gun : MonoBehaviour
             if (isBulletPrefShoot)
             {
                 //총알을 사용한 방법
-                Bullet bullet = Resources.Load<GameObject>($"Prefabs/{BulletDB.bulletDB[CurGunData.bulletId].bulletObjPath}").GetComponent<Bullet>();
+                Bullet bullet = Resources.Load<GameObject>($"Prefabs/{CurGunData.bullet}").GetComponent<Bullet>();
                 if(bullet == null)
                 {
                     Debug.Log("리소스에서 총알 로드 실패");

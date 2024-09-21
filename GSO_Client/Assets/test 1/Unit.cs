@@ -8,13 +8,13 @@ using UnityEngine.UI;
 public class Unit : MonoBehaviour
 {
     [SerializeField]
-    private GunData equipSlot1;
+    private Data_master_item_weapon equipSlot1;
     [SerializeField]
-    private GunData equipSlot2;
+    private Data_master_item_weapon equipSlot2;
 
     public Gun usingGun;
 
-    public GunData SetSlot1
+    public Data_master_item_weapon SetSlot1
     {
         get => equipSlot1;
         set
@@ -44,7 +44,7 @@ public class Unit : MonoBehaviour
         }
     }
 
-    public GunData SetSlot2
+    public Data_master_item_weapon SetSlot2
     {
         get => equipSlot2;
         set
@@ -114,7 +114,7 @@ public class Unit : MonoBehaviour
         unitStat.Init();
     }
 
-    private void SetGunSlot1(GunData gunData)
+    private void SetGunSlot1(Data_master_item_weapon gunData)
     {
         if(equipSlot1 == null)
         {
@@ -123,7 +123,7 @@ public class Unit : MonoBehaviour
         usingGun.SetGunStat(gunData);
         usingGun.curGunEquipSlot = 1;
     }
-    private void SetGunSlot2(GunData gunData)
+    private void SetGunSlot2(Data_master_item_weapon gunData)
     {
         if (equipSlot2 == null)
         {
