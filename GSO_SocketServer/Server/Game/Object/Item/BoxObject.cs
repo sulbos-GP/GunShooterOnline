@@ -2,6 +2,7 @@
 using Google.Protobuf.Protocol;
 using Server.Database.Handler;
 using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDatabase;
 
 namespace Server.Game.Object.Item
 {
@@ -51,7 +52,7 @@ namespace Server.Game.Object.Item
             //임의의 아이템
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
-            DB_ItemBase colt45Data = DatabaseHandler.Context.ItemBase.Get(101);
+            FMasterItemBase colt45Data = DatabaseHandler.Context.MasterItemBase.Find(101);
             DB_ItemUnit colt45 = new DB_ItemUnit()
             {
                 storage = new DB_StorageUnit()
@@ -74,7 +75,7 @@ namespace Server.Game.Object.Item
             storage.InsertItem(colt45Item);
 
             //
-            DB_ItemBase akData = DatabaseHandler.Context.ItemBase.Get(102);
+            FMasterItemBase akData = DatabaseHandler.Context.MasterItemBase.Find(102);
             DB_ItemUnit ak47 = new DB_ItemUnit()
             {
                 storage = new DB_StorageUnit()
@@ -97,8 +98,9 @@ namespace Server.Game.Object.Item
             storage.InsertItem(akItem);
 
             //
-            DB_ItemBase bandData = DatabaseHandler.Context.ItemBase.Get(402);
-            for(int i = 0; i < 5; ++i)
+            FMasterItemBase bandData = DatabaseHandler.Context.MasterItemBase.Find(402);
+
+            for (int i = 0; i < 5; ++i)
             {
                 DB_ItemUnit band = new DB_ItemUnit()
                 {
