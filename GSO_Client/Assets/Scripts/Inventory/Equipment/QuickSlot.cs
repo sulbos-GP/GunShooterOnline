@@ -152,13 +152,13 @@ public class QuickSlot : MonoBehaviour
         }
 
 
-        if (consume.effect == EffectType.Immediate)
+        if (consume.effect == EEffect.Immediate)
         {
             isReady = false;
             myPlayer.OnHealed(consume.energe);
             cooltimer = StartCoroutine(OnCooltime(consume.cooltime));
         }
-        else if (consume.effect == EffectType.Buff)
+        else if (consume.effect == EEffect.Buff)
         {
             isReady = false;
             myPlayer.OnHealed(consume.energe);

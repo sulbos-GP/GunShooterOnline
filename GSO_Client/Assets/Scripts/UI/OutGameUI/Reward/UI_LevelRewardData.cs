@@ -8,7 +8,7 @@ using WebCommonLibrary.DTO.Game;
 using WebCommonLibrary.DTO.User;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
-using WebCommonLibrary.Models.MasterDB;
+
 using static GameResource;
 using static UserResource;
 

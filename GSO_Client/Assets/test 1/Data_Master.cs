@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using WebCommonLibrary.Models.MasterDB;
 
 public class Data_master_item_base : BaseData<Data_master_item_base>
 {
@@ -29,10 +28,10 @@ public class Data_master_item_backpack : BaseData<Data_master_item_backpack>
 public class Data_master_item_use : BaseData<Data_master_item_use>
 {
     public int energy;
-    public double active_time;
-    public double duration;
-    public string effect;
-    public double cool_time;
+    public float active_time;
+    public float duration;
+    public string effect; //EEffect
+    public float cool_time;
 }
 
 public class Data_master_item_weapon : BaseData<Data_master_item_weapon>
@@ -41,7 +40,7 @@ public class Data_master_item_weapon : BaseData<Data_master_item_weapon>
     public int damage;
     public int distance;
     public int reload_round;
-    public double attack_speed;
+    public float attack_speed;
     public int reload_time;
     public string bullet;
 }
@@ -53,7 +52,7 @@ public class Data_master_reward_base : BaseData<Data_master_reward_base>
     public int gacha;
     public int experience;
     //TO-DO : 추후에 타입 변경 가능성 있음.
-    public int reward_box_id;
+    public int? reward_box_id;
 }
 
 public class Data_master_reward_level : BaseData<Data_master_reward_level>
