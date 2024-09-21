@@ -74,7 +74,7 @@ public class Map
     public int Width;
     public int Height;
 
-    private int roomSize;
+    private Vector2Int roomSize;
 
 
     public Vector2Int Bleft { get; private set; }
@@ -150,29 +150,31 @@ public class Map
 
 
         Bleft = new Vector2Int(int.Parse(minIndex[0]), int.Parse(minIndex[1]));
-        roomSize = int.Parse(reader.ReadLine());
+        var size = reader.ReadLine().Split('/');
 
-        Width = roomSize;
-        Height = roomSize;
+        roomSize = new Vector2Int(int.Parse(size[0]), int.Parse(size[1]));
 
-        Tright = new Vector2Int(Bleft.x + (roomSize - 1), Bleft.y + (roomSize - 1));
+        Width = roomSize.x;
+        Height = roomSize.y;
+
+        Tright = new Vector2Int(Bleft.x + (roomSize.x - 1), Bleft.y + (roomSize.y - 1));
 
 
-        _collisions = new int[roomSize, roomSize];
+        _collisions = new int[roomSize.x, roomSize.y];
        // _objects = new GameObject[roomSize, roomSize];
 
 
         //for (var x = roomSize - 1; x >= 0; x--)
-        for (var x = 0; x < roomSize; x++)
+        for (var x = 0; x < roomSize.x; x++)
             Buffer.BlockCopy(
                 Array.ConvertAll(reader.ReadLine().Split(','), s => int.Parse(s)),
-                0, _collisions, x * roomSize * sizeof(int), roomSize * sizeof(int));
+                0, _collisions, x * roomSize.y * sizeof(int), roomSize.x );
 
         //동적 생성
-        for (int i = 0; i < roomSize; i++)
+        for (int i = 0; i < roomSize.x; i++)
         {
 
-            for (int j = 0; j < roomSize; j++)
+            for (int j = 0; j < roomSize.y; j++)
             {
 
                 if (_collisions[i,j]  == 2) // 박스
