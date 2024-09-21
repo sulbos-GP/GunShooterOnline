@@ -172,7 +172,7 @@ public class Gun : MonoBehaviour
             if (isBulletPrefShoot)
             {
                 //총알을 사용한 방법
-                Bullet bullet = Resources.Load<GameObject>($"Prefabs/{CurGunData.bullet}").GetComponent<Bullet>();
+                Bullet bullet = Resources.Load<GameObject>($"Prefabs/Objects/BulletObjPref/{CurGunData.bullet}").GetComponent<Bullet>();
                 if(bullet == null)
                 {
                     Debug.Log("리소스에서 총알 로드 실패");
