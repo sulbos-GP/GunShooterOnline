@@ -30,7 +30,7 @@ public class Data_master_item_use : BaseData<Data_master_item_use>
     public int energy;
     public float active_time;
     public float duration;
-    public string effect; //EEffect
+    public EEffect effect; //EEffect
     public float cool_time;
 }
 

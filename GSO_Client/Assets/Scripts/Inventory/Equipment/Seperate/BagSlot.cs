@@ -30,7 +30,7 @@ public class BagSlot : EquipSlot
         Debug.Log($"가방 : {item.item_name} 장착");
 
         // 가방 데이터 불러오기
-        if (!TryGetBagData(item.itemId, out BagData targetBag))
+        if (!TryGetBagData(item.itemId, out Data_master_item_backpack targetBag))
         {
             return false;
         }
@@ -54,7 +54,7 @@ public class BagSlot : EquipSlot
         PlayerInventoryUI playerUI = InventoryController.invenInstance.playerInvenUI;
 
         // 기본 가방 데이터 불러오기
-        if (!TryGetBagData(-1, out BagData basicBag))
+        if (!TryGetBagData(-1, out Data_master_item_backpack basicBag))
         {
             return false;
         }
@@ -64,7 +64,7 @@ public class BagSlot : EquipSlot
     }
 
     //인벤토리가 열려있을때 가방 교체 로직
-    private bool EquipBagInOpenInventory(PlayerInventoryUI playerUI, BagData targetBag)
+    private bool EquipBagInOpenInventory(PlayerInventoryUI playerUI, Data_master_item_backpack targetBag)
     {
         if (IsSameBag(playerUI, targetBag)) // 같은 가방이면 변화 없이 성공
         {
@@ -87,7 +87,7 @@ public class BagSlot : EquipSlot
     }
 
     // 바꿀 가방의 무게가 현재 가지고 있는 아이템들의 무게를 감당가능한가
-    private static bool CompareChangeWeight(PlayerInventoryUI playerUI, BagData targetBag)
+    private static bool CompareChangeWeight(PlayerInventoryUI playerUI, Data_master_item_backpack targetBag)
     {
         if (targetBag.total_weight < playerUI.instantGrid.GridWeight)
         {
@@ -99,24 +99,38 @@ public class BagSlot : EquipSlot
 
 
     //가방 db에서 해당 아이디로 검색. 존재하면 true
-    private bool TryGetBagData(int itemId, out BagData bagData)
+    private bool TryGetBagData(int itemId, out Data_master_item_backpack bagData)
     {
-        if (!BagDB.bagDB.TryGetValue(itemId, out bagData))
+        if(itemId == -1)
         {
-            Debug.Log($"해당 아이디({itemId})의 가방이 존재하지 않음");
+            Data_master_item_backpack noBag = new Data_master_item_backpack()
+            {
+                Key = -1,
+                total_scale_x = 3,
+                total_scale_y = 2,
+                total_weight = 5,
+            };
+            bagData = noBag;
+            return true;
+        }
+
+        bagData = Data_master_item_backpack.GetData(itemId);
+        if (bagData == null) 
+        {
             return false;
         }
+
         return true;
     }
 
     // 현재 장착한 가방과 바꿀 가방이 같으면 true
-    private bool IsSameBag(PlayerInventoryUI playerUI, BagData targetBag)
+    private bool IsSameBag(PlayerInventoryUI playerUI, Data_master_item_backpack targetBag)
     {
-        return playerUI.equipBag.item_id == targetBag.item_id;
+        return playerUI.equipBag.Key == targetBag.Key;
     }
 
     // 가방의 사이즈가 줄어들면 true
-    private bool IsBagSizeReducing(BagData currentBag, Vector2Int newSize)
+    private bool IsBagSizeReducing(Data_master_item_backpack currentBag, Vector2Int newSize)
     {
         return currentBag.total_scale_x > newSize.x || currentBag.total_scale_y > newSize.y;
     }
