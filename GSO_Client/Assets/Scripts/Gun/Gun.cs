@@ -124,7 +124,7 @@ public class Gun : MonoBehaviour
         }
         
 
-        if(CurGunState == GunState.Shootable && Time.time >= _lastFireTime + 8/ CurGunData.attack_speed )
+        if(CurGunState == GunState.Shootable && Time.time >= _lastFireTime + CurGunData.attack_speed )
         {
             /*
              발사 코드 작성.

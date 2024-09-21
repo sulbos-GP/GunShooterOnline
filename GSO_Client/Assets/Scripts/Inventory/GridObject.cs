@@ -545,7 +545,7 @@ public class GridObject : MonoBehaviour
     public bool CheckAvailableToChange(Vector2Int changeSize)
     {
         ItemObject[,] testSlot = new ItemObject[changeSize.x, changeSize.y];
-
+        bool isFalse = false;
         foreach (ItemObject item in InventoryController.instantItemDic.Values)
         {
             if (item.backUpParentId != 0)
@@ -555,8 +555,14 @@ public class GridObject : MonoBehaviour
 
             if(!(item.backUpItemPos.x >= 0 && item.backUpItemPos.y >= 0 && item.backUpItemPos.x + item.Width <= changeSize.x && item.backUpItemPos.y + item.Height <= changeSize.y))
             {
-                return false;
+                item.StartBlink();
+                isFalse = true;
             }
+        }
+
+        if (isFalse)
+        {
+            return false;
         }
 
         return true;

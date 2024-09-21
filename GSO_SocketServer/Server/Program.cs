@@ -46,7 +46,9 @@ namespace Server
             register    = DockerUtil.GetRegister();
             backLog     = DockerUtil.GetBacklog();
 #else
-            iPAddress = IPAddress.Loopback;
+            //iPAddress = IPAddress.Loopback;
+            iPAddress = IPAddress.Any;
+
             port = 7777;
             acceptKey = "SomeConnectionKey";
             register = 100;
