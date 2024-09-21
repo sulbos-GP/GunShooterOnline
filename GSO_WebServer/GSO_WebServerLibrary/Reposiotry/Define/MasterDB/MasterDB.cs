@@ -4,7 +4,6 @@ using MySqlConnector;
 using SqlKata.Execution;
 using WebCommonLibrary.Config;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
-using WebCommonLibrary.Models.MasterDB;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Reposiotry.MasterDatabase;
 
@@ -21,6 +20,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
         public MasterDB(IOptions<DatabaseConfig> dbConfig)
         {
             Context = new MasterDatabaseContext(dbConfig.Value.MasterDB);
+
             mDbConn = new MySqlConnection(dbConfig.Value.MasterDB);
             Open();
 

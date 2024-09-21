@@ -5,7 +5,6 @@ using System.Text.Json;
 using WebCommonLibrary.DTO.Middleware;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.MasterDatabase;
-using WebCommonLibrary.Models.MasterDB;
 
 namespace GSO_WebServerLibrary.Middleware
 {

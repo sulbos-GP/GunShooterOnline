@@ -1,12 +1,8 @@
 ﻿using GSO_WebServerLibrary;
 using WebCommonLibrary.Models.GameDB;
-using Google.Apis.Games.v1.Data;
 using SqlKata.Execution;
-using static Google.Apis.Requests.RequestError;
-using System.Transactions;
 using System.Data;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
-using WebCommonLibrary.Models.MasterDB;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
