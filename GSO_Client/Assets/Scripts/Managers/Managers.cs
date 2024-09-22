@@ -5,12 +5,11 @@ using System.Net;
 using Server.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using WebCommonLibrary.Models.MasterDatabase;
 
 internal class Managers : MonoBehaviour
 {
     private static Managers s_instance;
-
- 
 
     private readonly List<Tuple<Action, short>> _actions = new();
     private readonly object _lock = new();
@@ -151,9 +150,10 @@ internal class Managers : MonoBehaviour
     #region Config
 
     private readonly EnvironmentSetting _environment = new();
+    private readonly VersionConfig _version = new();
 
     public static EnvironmentSetting EnvConfig => Instance._environment;
-
+    public static VersionConfig VersionConfig => Instance._version;
     #endregion
 
     #region Contents
