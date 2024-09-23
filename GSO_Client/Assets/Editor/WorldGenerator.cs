@@ -15,7 +15,8 @@ public class WorldGenerator
 {
     //static int Length = 140; //무조건 짝수
 
-    static int HalfLength = 0;
+    static int HalfWidth = 0;
+    static int HalfHeigth = 0;
 
     //public static List<Tuple<Transform, Vector2Int>> Rooms = new List<Tuple<Transform, Vector2Int>>();
     public static Tuple<Transform, Vector2Int> Room;
@@ -43,7 +44,14 @@ public class WorldGenerator
         MakeMap();
     }
 
-
+    /*
+     base = 0
+     wall = 1
+     box = 2
+     exit = 3
+     spawn = 4
+     
+     */
     public static void MakeMap()
     {
 
@@ -61,9 +69,10 @@ public class WorldGenerator
 
 
 
-        Vector2 t = go.transform.Find("W_Pos").position;
+        //Vector2 t = go.transform.Find("W_Pos").position;
 
-        Room = new Tuple<Transform, Vector2Int>(go.transform, new Vector2Int(Mathf.RoundToInt(t.x), Mathf.RoundToInt(t.y)));
+        //Room = new Tuple<Transform, Vector2Int>(go.transform, new Vector2Int(Mathf.RoundToInt(t.x), Mathf.RoundToInt(t.y)));
+        Room = new Tuple<Transform, Vector2Int>(go.transform, new Vector2Int(0,0));
         //Vector2 t = tr.transform.Find("Pos").transform.Find("Center").position;
 
         // 튜플 추가
@@ -106,7 +115,7 @@ public class WorldGenerator
              Environment.NewLine
              //+ MapStr
              + min.x + '/' + min.y + Environment.NewLine
-             + map.GetLength(0) + Environment.NewLine
+             + map.GetLength(0) + "/" + map.GetLength(1) + Environment.NewLine 
              + MapToString();
 
         Debug.Log($"끝{total.Length}");
@@ -167,9 +176,11 @@ public class WorldGenerator
         if (map == null)         // ------------------------------ 맵 처음 실행시 ----------------------------------
         {
 
-            HalfLength = Math.Abs(Mathf.RoundToInt(min.x));
-            startPosTopLeft = new Vector2(-HalfLength, +HalfLength);
-            map = new int[HalfLength * 2 + 1, HalfLength * 2 + 1]; //0도 포함
+            //HalfLength = Math.Abs(Mathf.RoundToInt(min.x));
+            HalfWidth = _base.size.x / 2;
+            HalfHeigth = _base.size.y / 2;
+            startPosTopLeft = new Vector2(min.x , min.y + HalfHeigth * 2);
+            map = new int[_base.size.x, _base.size.y]; //0도 포함
 
             for (int i = 0; i < map.GetLength(0); i++)
             {
@@ -194,6 +205,7 @@ public class WorldGenerator
         Tilemap _wall = null;
         Tilemap _box = null;
         Tilemap _exit = null;
+        Tilemap _spawn = null;
         foreach (Transform _tr in tr)
         {
             if (_tr.name.Contains("base") == true)
@@ -212,6 +224,10 @@ public class WorldGenerator
             {
                 _exit = _tr.GetComponent<Tilemap>();
             }
+            else if (_tr.name.Contains("SpawnZone") == true)
+            {
+                _spawn = _tr.GetComponent<Tilemap>();
+            }
         }
 
         //------------------------ _base 찾기 ------------------------
@@ -225,17 +241,21 @@ public class WorldGenerator
         }
 
         Vector2 _min = _base.CellToWorld(new Vector3Int(_base.cellBounds.xMin, _base.cellBounds.yMin));
-        Vector2Int min = new Vector2Int(Mathf.RoundToInt(_min.x + calculateOffset) + HalfLength, Mathf.RoundToInt(_min.y + calculateOffset) + HalfLength);
+        Vector2Int ArrayMin = new Vector2Int(0, 0);
+       // Vector2Int ArrayMin = new Vector2Int(Mathf.RoundToInt(_min.x + HalfWidth), Mathf.RoundToInt(_min.y + HalfHeigth));
+        //Vector2Int min = new Vector2Int(Mathf.RoundToInt(_min.x ), Mathf.RoundToInt(_min.y ));
+
+        Console.WriteLine("min : " + ArrayMin);
 
         //Vector2 _max = _base.CellToWorld(new Vector3Int(_base.cellBounds.xMax, _base.cellBounds.yMax));
         //Vector2Int max = new Vector2Int(Mathf.RoundToInt(_max.x + distance) + HalfLength, Mathf.RoundToInt(_max.y + distance) + HalfLength);
 
-        Vector2Int currnet = min;
+        Vector2Int currnet = ArrayMin;
 
         for (int y = _base.cellBounds.yMin; y <= _base.cellBounds.yMax; y++)
         //for (int y = _base.cellBounds.yMax - 1; y >= _base.cellBounds.yMin ; y--)
         {
-            currnet.x = min.x;
+            currnet.x = ArrayMin.x;
 
             for (int x = _base.cellBounds.xMin; x <= _base.cellBounds.xMax; x++)
             {
@@ -244,6 +264,7 @@ public class WorldGenerator
                 TileBase wallTile = _wall.GetTile(new Vector3Int(x, y, 0));
                 TileBase boxTile = _box.GetTile(new Vector3Int(x, y, 0));
                 TileBase exitTile = _exit.GetTile(new Vector3Int(x, y, 0));
+                TileBase spawnTile = _spawn.GetTile(new Vector3Int(x, y, 0));
 
                 if (wallTile != null)
                 {
@@ -265,6 +286,11 @@ public class WorldGenerator
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 3;
+                }
+                else if(spawnTile != null)
+                {
+                    if (map[currnet.x, currnet.y] == 0)
+                        map[currnet.x, currnet.y] = 4;
                 }
                 else
                 {

@@ -6,7 +6,6 @@ using static Google.Apis.Requests.RequestError;
 using System.Transactions;
 using System.Data;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
-using WebCommonLibrary.Models.MasterDB;
 using static Humanizer.In;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB

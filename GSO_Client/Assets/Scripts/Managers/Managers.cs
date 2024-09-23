@@ -5,12 +5,11 @@ using System.Net;
 using Server.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using WebCommonLibrary.Models.MasterDatabase;
 
 internal class Managers : MonoBehaviour
 {
     private static Managers s_instance;
-
- 
 
     private readonly List<Tuple<Action, short>> _actions = new();
     private readonly object _lock = new();
@@ -82,6 +81,7 @@ internal class Managers : MonoBehaviour
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
 
+            //s_instance._version.SetAppVersion(Application.version);
             s_instance._environment.InitEnviromentSetting(EEnvironmentState.Emulator);
 
             //s_instance._data.InventorySet();
@@ -119,6 +119,12 @@ internal class Managers : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         //이탈 True, 복귀 False
+
+        if (Web != null)
+        {
+            Web.OnPuase(pause);
+        }
+
     }
 
     /// <summary>
@@ -129,11 +135,6 @@ internal class Managers : MonoBehaviour
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;
-
-        if (Web != null)
-        {
-            Web.OnSignOut("OnApplicationQuit");
-        }
 
         Clear();
     }
@@ -150,9 +151,10 @@ internal class Managers : MonoBehaviour
     #region Config
 
     private readonly EnvironmentSetting _environment = new();
+    private readonly VersionConfig _version = new();
 
     public static EnvironmentSetting EnvConfig => Instance._environment;
-
+    public static VersionConfig VersionConfig => Instance._version;
     #endregion
 
     #region Contents

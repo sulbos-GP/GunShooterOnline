@@ -6,7 +6,7 @@ using System.Data;
 using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
-using WebCommonLibrary.Models.MasterDB;
+using WebCommonLibrary.Models.MasterDatabase;
 
 namespace Server.Game
 {
@@ -67,7 +67,7 @@ namespace Server.Game
                 else
                 {
                     //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기
-                    DB_ItemBackpack backpackData = DatabaseHandler.Context.ItemBackpack.Get(backpackItem.ItemId);
+                    FMasterItemBackpack backpackData = DatabaseHandler.Context.MasterItemBackpack.Find(backpackItem.ItemId);
                     scaleX = backpackData.total_scale_x;
                     scaleY = backpackData.total_scale_y;
                     weight = backpackData.total_weight;

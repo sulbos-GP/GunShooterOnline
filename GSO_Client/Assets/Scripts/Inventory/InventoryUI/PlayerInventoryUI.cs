@@ -11,7 +11,7 @@ public class PlayerInventoryUI : InventoryUI
     public TextMeshProUGUI weightText;
     public TextMeshProUGUI moneyText; //돈에 대한 정보가 나올시 추가
                                       //
-    public BagData equipBag; //현재 장착한 가방
+    public Data_master_item_backpack equipBag; //현재 장착한 가방
 
     public void WeightTextSet(double GridWeigt, double limitWeight)
     {

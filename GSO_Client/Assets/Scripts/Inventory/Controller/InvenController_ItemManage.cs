@@ -1,17 +1,4 @@
-using Google.Protobuf.Protocol;
-using NPOI.OpenXmlFormats.Dml.Diagram;
-using NPOI.SS.Formula.Eval;
-using System;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
-using Vector2 = System.Numerics.Vector2;
-
 
 public partial class InventoryController
 {
@@ -80,7 +67,7 @@ public partial class InventoryController
                 {
                     if (!clickedItem.isOnSearching)
                     {
-                        SendSearchItemPacket(clickedItem.backUpParentId, clickedItem);
+                        InventoryPacket.SendSearchItemPacket(clickedItem.backUpParentId, clickedItem);
                         clickedItem.UnhideItem();
                     }
                 }
@@ -107,7 +94,7 @@ public partial class InventoryController
     /// </summary>
     private void ItemDivide(ItemObject item, Vector2Int gridPos)
     {
-        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/DivideItemInterface", item.transform.parent).GetComponent<DivideInterface>();
+        DivideInterface divideInterface = Managers.Resource.Instantiate("UI/InvenUI/DivideItemInterface", item.transform.parent).GetComponent<DivideInterface>();
         divideInterface.SetInterfacePos();
 
         //일단 divide모드에서 삭제로 갈경우에는 디바이드 적용없이 그냥 전체 아이템 삭제임
@@ -159,7 +146,7 @@ public partial class InventoryController
                         int needAmount = selectedItem.ItemAmount + slot.equippedItem.ItemAmount <= ItemObject.maxItemMergeAmount
                             ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - slot.equippedItem.ItemAmount;
 
-                        SendMergeItemPacket(item, slot.equippedItem, needAmount);
+                        InventoryPacket.SendMergeItemPacket(item, slot.equippedItem, needAmount);
                     }
                     else
                     {
@@ -169,7 +156,7 @@ public partial class InventoryController
                 }
                 else
                 {
-                    SendMoveItemPacket(item);
+                    InventoryPacket.SendMoveItemPacket(item);
                 }
             } 
         }
@@ -182,7 +169,7 @@ public partial class InventoryController
 
     private void ItemReleaseInDelete()
     {
-        SendDeleteItemPacket(selectedItem);
+        InventoryPacket.SendDeleteItemPacket(selectedItem);
     }
 
     
@@ -221,7 +208,7 @@ public partial class InventoryController
                         ? item.ItemAmount 
                         : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
 
-                    SendMergeItemPacket(item, overlapItem, needAmount);
+                    InventoryPacket.SendMergeItemPacket(item, overlapItem, needAmount);
                 }
                 else
                 {
@@ -231,7 +218,7 @@ public partial class InventoryController
             }
             else
             {
-                SendMoveItemPacket(item, pos);
+                InventoryPacket.SendMoveItemPacket(item, pos);
             }
         }
     }

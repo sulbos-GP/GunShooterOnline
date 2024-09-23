@@ -7,7 +7,6 @@ using WebCommonLibrary.Models.Match;
 using Matchmaker.Repository.Interface;
 using Matchmaker.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;
-using WebCommonLibrary.Models.MasterDB;
 using Matchmaker.Repository;
 using WebCommonLibrary.Enum;
 using Google.Apis.Games.v1.Data;
@@ -110,6 +109,17 @@ namespace Matchmaker.Service
             try
             {
                 await mMatchQueue.TryTakeLock(uid);
+
+                var user = await mGameDB.GetUserByUid(uid);
+                if (user == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                if(user.ticket <= 0)
+                {
+                    //return WebErrorCode.PushPlayerNoTicket;
+                }
 
                 (WebErrorCode error, Ticket? ticket) = await mMatchQueue.GetTicketWithUid(uid);
                 if (ticket == null)
@@ -281,7 +291,7 @@ namespace Matchmaker.Service
                 }
 
                 var longestWaitingPlayer = tickets.
-                                            Where(kvp => kvp.Value.state == ETicketState.InQueue).
+                                            Where(kvp => kvp.Value.state == ETicketState.InQueue && kvp.Value.isExit != true).
                                             OrderByDescending(p => p.Value.match_start_time).
                                             FirstOrDefault();
 
@@ -350,7 +360,7 @@ namespace Matchmaker.Service
                 {
                     //매치 시작한지 오래된 플레이어를 우선적으로 선별
                     var matchPlayers = tickets.
-                        Where(kvp => kvp.Value.state == ETicketState.InQueue).
+                        Where(kvp => kvp.Value.state == ETicketState.InQueue && kvp.Value.isExit != true).
                         OrderBy(ticket => ticket.Value.match_start_time).
                         Take(capacity).
                         ToDictionary();

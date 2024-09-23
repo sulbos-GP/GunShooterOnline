@@ -13,10 +13,10 @@ enum MsgId{
   S_DESPAWN = 3;
   S_MOVE = 4;
   C_MOVE = 5;
-  S_CONNECTED = 6;
+  S_CONNECTED = 6; 
   S_CHANGE_HP = 7;
   S_DIE = 8;
-  C_ENTER_GAME = 9;
+  C_ENTER_GAME = 9; // (인게임)1명 입장 패킷
 
   C_LOAD_INVENTORY = 10;
   S_LOAD_INVENTORY = 11;
@@ -38,8 +38,11 @@ enum MsgId{
   S_EXIT_GAME = 27;
   C_EXIT_GAME = 28;
 
-  C_LOAD_GAME = 29;
-
+  C_JOIN_SERVER = 29; //접속 요청
+  S_JOIN_SERVER = 30; // 접속 응답
+  S_GAME_START = 31;  //사람이 아직 안모임
+  S_WAITING_STATUS = 32; //32  모두 모임
+   
   C_SERVER_COMMAND = 10000; //수정해야하면 말점
 
 }
@@ -96,12 +99,10 @@ enum CreatureState{
 //--------------- END ENUM --------------------
 
 //--------------- message --------------------
-message C_EnterGame{                                //9
-    string name = 1;
-    CredentiaInfo credential = 2;
-}
 
-message S_EnterGame{                       //0
+
+
+message S_EnterGame{                       //0  1명 게임 접속 패킷
     ObjectInfo player = 1;
     repeated PS_ItemInfo itemInfos = 2;
     repeated PS_GearInfo gearInfos = 3;
@@ -130,6 +131,7 @@ message S_Move{                              //4
 message C_Move{                               //5
   PositionInfo positionInfo = 1;
 }
+
 message S_Connected{                         //6 
 
 }
@@ -143,6 +145,11 @@ message S_ChangeHp{                           //7
 message S_Die{                                //8
   int32 objectId = 1;
   int32 attackerId = 2;
+}
+
+message C_EnterGame{                       //9  (인게임)입장 요청
+    string name = 1;
+    CredentiaInfo credential = 2;
 }
 
 
@@ -270,13 +277,6 @@ message S_DeleteItem                        //I14
     PS_ItemInfo deleteItem          = 3;    // 지운 아이템의 데이터
 }
 
-
-message C_LoadGame                         // 29
-{       
-    bool isEnd = 1;                        // 클라가 전부 끝나면 실행
-}
-
-
 ////////////////////////////////////////////
 //                                        //
 //                  Gear                  //
@@ -324,6 +324,31 @@ message C_ExitGame{   //19
    int32 playerId = 1;
    int32 exitId = 2;
 }
+
+message C_JOINSERVER{   // 29  접속 요청
+   CredentiaInfo credential = 1;
+}
+
+
+message  S_JOINSERVER{   //30 접속 응답
+    bool connected = 1;
+}  
+
+message S_WaitingStatus {   //31 사람이 아직 안모임
+    int32 currentPlayers = 1;  // 현재 대기 중인 플레이어 수
+    int32 requiredPlayers = 2; // 게임 시작에 필요한 최소 인원
+}
+
+message S_GameStart {     //32  모두 모임
+    string roomId = 1; // 게임이 시작된 방의 ID
+    string startTime = 2;   // 게임 시작 시간
+
+    repeated ObjectInfo objects = 3;
+    repeated PS_ItemInfo itemInfos = 4;
+    repeated PS_GearInfo gearInfos = 5;
+}
+
+
 
 ////////////////////////////////////////////
 //                                        //

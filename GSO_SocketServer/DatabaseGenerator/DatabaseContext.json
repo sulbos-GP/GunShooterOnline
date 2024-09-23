@@ -1,7 +1,27 @@
 [
     {
         "name": "itemBase",
-        "table": "master_item_base"
+        "table": "master_item_base",
+        "Columns": {
+            "item_id": {
+                "type": "int",
+                "nullable": "false",
+                "default": "0"
+            },
+            
+            "effect": {
+                "type": "enum",
+                "nullable": "false",
+                "default" : ""
+            },
+            
+            "code":
+            {
+                "type": "string",
+                "null": "true",
+                "default": "null"
+            }
+        }
     },
 
     {
