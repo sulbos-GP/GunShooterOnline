@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using System.Text.Json;
 using WebCommonLibrary.DTO.Middleware;
 using WebCommonLibrary.Error;
-using WebCommonLibrary.Models.MasterDB;
+using WebCommonLibrary.Models.MasterDatabase;
 
 namespace GSO_WebServerLibrary.Middleware
 {
@@ -53,13 +53,17 @@ namespace GSO_WebServerLibrary.Middleware
                         return;
                     }
 
-                    if (!app.Equals(mMasterDB.GetAppVersion().ToString()))
+                    FMasterVersionApp masterVersionApp = mMasterDB.Context.MasterVersionApp.FirstOrDefault().Value;
+                    string leastVersionAppString = masterVersionApp.major.ToString() + "." + masterVersionApp.minor.ToString() + "." + masterVersionApp.patch.ToString();
+                    if (!app.Equals(leastVersionAppString))
                     {
                         await SendMiddlewareResponse(context, StatusCodes.Status426UpgradeRequired, WebErrorCode.InValidAppVersion);
                         return;
                     }
 
-                    if (!data.Equals(mMasterDB.GetDataVersion().ToString()))
+                    FMasterVersionData masterVersionData = mMasterDB.Context.MasterVersionData.FirstOrDefault().Value;
+                    string masterVersionDataString = masterVersionData.major.ToString() + "." + masterVersionApp.minor.ToString() + "." + masterVersionApp.patch.ToString();
+                    if (!data.Equals(masterVersionDataString))
                     {
                         await SendMiddlewareResponse(context, StatusCodes.Status426UpgradeRequired, WebErrorCode.InValidAppVersion);
                         return;
@@ -90,8 +94,8 @@ namespace GSO_WebServerLibrary.Middleware
                 error_code = error,
                 error_description = "새로운 앱 또는 버전이 존재합니다.",
 
-                appVersion = mMasterDB.GetAppVersion(),
-                dataVersion = mMasterDB.GetDataVersion()
+                appVersion = mMasterDB.Context.MasterVersionApp.FirstOrDefault().Value,
+                dataVersion = mMasterDB.Context.MasterVersionData.FirstOrDefault().Value,
             });
             await context.Response.WriteAsync(errorJsonResponse);
         }

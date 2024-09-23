@@ -15,7 +15,7 @@ public class QuickSlot : MonoBehaviour
     private Image itemImage;
     private TextMeshProUGUI itemAmount;
     private RectTransform cooltimeRect;
-    private ConsumeData consumeData;
+    private Data_master_item_use consumeData;
 
     public bool isReady;
     private Coroutine cooltimer;
@@ -49,13 +49,15 @@ public class QuickSlot : MonoBehaviour
         Sprite itemSprite = ItemObject.FindItemSprtie(item);
         itemImage.sprite = itemSprite;
         itemAmount.text = item.amount.ToString();
-        consumeData = new ConsumeData();
-        if (!ConsumeDB.consumeDB.TryGetValue(item.itemId, out consumeData))
+        consumeData = new Data_master_item_use();
+
+        consumeData = Data_master_item_use.GetData(item.itemId);
+        if (consumeData == null)
         {
             Debug.Log($"ConsumeDB에서 해당 아이템을 찾지 못함 {item.itemId}");
             return;
         }
-        cooltimer = StartCoroutine(OnCooltime(consumeData.cooltime));
+        cooltimer = StartCoroutine(OnCooltime(consumeData.cool_time));
         itemData.OnAmountChanged += UpdateItemAmount;
     }
 
@@ -129,7 +131,7 @@ public class QuickSlot : MonoBehaviour
         }
     }
 
-    public bool UseConsume(ConsumeData consume)
+    public bool UseConsume(Data_master_item_use consume)
     {
         MyPlayerController myPlayer = Managers.Object.MyPlayer;
 
@@ -152,23 +154,23 @@ public class QuickSlot : MonoBehaviour
         }
 
 
-        if (consume.effect == EffectType.Immediate)
+        if (consume.effect == EEffect.immediate)
         {
             isReady = false;
-            myPlayer.OnHealed(consume.energe);
-            cooltimer = StartCoroutine(OnCooltime(consume.cooltime));
+            myPlayer.OnHealed(consume.energy);
+            cooltimer = StartCoroutine(OnCooltime(consume.cool_time));
         }
-        else if (consume.effect == EffectType.Buff)
+        else if (consume.effect == EEffect.buff)
         {
             isReady = false;
-            myPlayer.OnHealed(consume.energe);
+            myPlayer.OnHealed(consume.energy);
             StartCoroutine(OnBuff(myPlayer, consume));
         }
 
         return true;
     }
 
-    private IEnumerator OnBuff(CreatureController target, ConsumeData consume)
+    private IEnumerator OnBuff(CreatureController target, Data_master_item_use consume)
     {
         float elapsedTime = 0f;
 
@@ -176,15 +178,15 @@ public class QuickSlot : MonoBehaviour
         {
             if (target.Hp >= target.MaxHp)
             {
-                target.OnHealed(consume.energe);
+                target.OnHealed(consume.energy);
             }
 
-            yield return new WaitForSeconds((float)consume.active_time);
+            yield return new WaitForSeconds(consume.active_time);
 
-            elapsedTime += (float)consume.active_time;
+            elapsedTime += consume.active_time;
         }
 
-        cooltimer = StartCoroutine(OnCooltime(consume.cooltime));
+        cooltimer = StartCoroutine(OnCooltime(consume.cool_time));
     }
 
 
@@ -202,7 +204,7 @@ public class QuickSlot : MonoBehaviour
         // 쿨타임이 끝날 때까지 반복
         while (elapseTime > 0)
         {
-            float remainingTimeRatio = elapseTime / (float)consumeData.cooltime;
+            float remainingTimeRatio = elapseTime / (float)consumeData.cool_time;
 
             float newSize = initialSize.y * remainingTimeRatio;
             cooltimeRect.sizeDelta = new Vector2(initialSize.x, newSize);

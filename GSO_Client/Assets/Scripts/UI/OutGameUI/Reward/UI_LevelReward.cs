@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using WebCommonLibrary.Models.GameDB;
-using WebCommonLibrary.Models.MasterDB;
+
 
 public class UI_LevelReward : LobbyUI
 {

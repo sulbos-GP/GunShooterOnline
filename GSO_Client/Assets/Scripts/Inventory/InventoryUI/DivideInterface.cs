@@ -140,15 +140,15 @@ public class DivideInterface : MonoBehaviour
 
         if (overlapItem != null)
         {
-            InventoryController.invenInstance.SendMergeItemPacket(targetItem, overlapItem, splitAmountIndex);
+            InventoryPacket.SendMergeItemPacket(targetItem, overlapItem, splitAmountIndex);
         }
         else if (splitAmountIndex == targetItem.ItemAmount)
         {
-            InventoryController.invenInstance.SendMoveItemPacket(targetItem, targetPos);
+            InventoryPacket.SendMoveItemPacket(targetItem, targetPos);
         }
         else if(splitAmountIndex < targetItem.ItemAmount)
         {
-            InventoryController.invenInstance.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
+            InventoryPacket.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
         }
 
         InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;

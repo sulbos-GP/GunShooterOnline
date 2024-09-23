@@ -91,6 +91,7 @@
         // Matchmaking 4000 ~
         PushPlayerSkillIsExist = 4000,
         PushPlayerSkillFailException,
+        PushPlayerNoTicket,                 //참여할 티켓이 없음
 
         PopPlayersExitRequested,            //Lock이 걸려있어 우선 매칭 큐에서 빠져나가기 요청
         PopPlayersExitSuccess,              //매칭 큐에서 빠져나가는데 성공함

@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using WebCommonLibrary.Models.MasterDB;
+using WebCommonLibrary.Models.MasterDatabase;
 
 namespace WebCommonLibrary.DTO.Middleware
 {
     public class UpgradeVersionRes : ErrorCodeDTO
     {
-        public DB_Version? appVersion { get; set; } = null;
-        public DB_Version? dataVersion { get; set; } = null;
+        public FMasterVersionApp? appVersion { get; set; } = null;
+        public FMasterVersionData? dataVersion { get; set; } = null;
     }
 }

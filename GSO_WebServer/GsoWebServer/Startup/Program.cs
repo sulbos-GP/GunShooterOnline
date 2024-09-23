@@ -24,7 +24,6 @@ namespace GsoWebServer.Startup
                     webBuilder.ConfigureKestrel(serverOptions =>
                     {
 
-                        serverOptions.ListenAnyIP(5000);
 #if AWS
                         serverOptions.ListenAnyIP(5000);
 #endif

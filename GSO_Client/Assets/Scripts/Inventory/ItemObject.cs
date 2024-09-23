@@ -18,7 +18,7 @@ public class ItemObject : MonoBehaviour
     /// </summary>
     public static ItemObject CreateNewItem(ItemData data, Transform parent = null)
     {
-        ItemObject newItem = Managers.Resource.Instantiate("UI/ItemUI", parent).GetComponent<ItemObject>();
+        ItemObject newItem = Managers.Resource.Instantiate("UI/InvenUI/ItemUI", parent).GetComponent<ItemObject>();
         newItem.SetItem(data);
         if (!InventoryController.instantItemDic.ContainsKey(data.objectId))
         {

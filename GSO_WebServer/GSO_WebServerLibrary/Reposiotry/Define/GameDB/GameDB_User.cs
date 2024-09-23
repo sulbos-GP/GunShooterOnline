@@ -1,12 +1,8 @@
 ﻿using GSO_WebServerLibrary;
 using WebCommonLibrary.Models.GameDB;
-using Google.Apis.Games.v1.Data;
 using SqlKata.Execution;
-using static Google.Apis.Requests.RequestError;
-using System.Transactions;
 using System.Data;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
-using WebCommonLibrary.Models.MasterDB;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
@@ -67,8 +63,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
         public async Task<int> InsertLevelReward(int uid, int level, IDbTransaction? transaction = null)
         {
 
-            Dictionary<int, DB_RewardLevel> rewards = mMasterDB.GetRewardLevelList();
-            int reward_id = rewards.FirstOrDefault(r => r.Value.level == level).Key;
+            var reward_id = mMasterDB.Context.MasterRewardLevel.FirstOrDefault(r => r.Value.level == level).Key;
             if (reward_id == 0)
             {
                 return 0;
@@ -85,8 +80,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
         public async Task<int> RecivedLevelReward(int uid, int level, bool received, IDbTransaction? transaction)
         {
 
-            Dictionary<int, DB_RewardLevel> rewards = mMasterDB.GetRewardLevelList();
-            int reward_id = rewards.FirstOrDefault(r => r.Value.level == level).Key;
+            var reward_id = mMasterDB.Context.MasterRewardLevel.FirstOrDefault(r => r.Value.level == level).Key;
             if (reward_id == 0)
             {
                 return 0;

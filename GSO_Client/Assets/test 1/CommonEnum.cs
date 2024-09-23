@@ -56,3 +56,10 @@ public enum BulletType
     b729mm,
     b559mm
 }
+
+public enum EEffect
+{
+    None,
+    immediate,
+    buff,
+}
