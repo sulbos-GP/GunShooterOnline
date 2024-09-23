@@ -45,6 +45,8 @@ class PacketManager
 		_handler.Add((ushort)MsgId.CRaycastShoot, PacketHandler.C_RaycastShootHandler);		
 		_onRecv.Add((ushort)MsgId.CExitGame, MakePacket<C_ExitGame>);
 		_handler.Add((ushort)MsgId.CExitGame, PacketHandler.C_ExitGameHandler);		
+		_onRecv.Add((ushort)MsgId.CServerCommand, MakePacket<C_ServerCommand>);
+		_handler.Add((ushort)MsgId.CServerCommand, PacketHandler.C_ServerCommandHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
