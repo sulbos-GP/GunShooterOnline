@@ -222,17 +222,21 @@ class PacketHandler
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
     }
 
-    internal static void C_LoadGameHandler(PacketSession session, IMessage message)
+   
+
+    internal static void C_JoinServerHandler(PacketSession session, IMessage message)
     {
         ClientSession clientSession = session as ClientSession;
-        C_LoadGame packet = (C_LoadGame)message;
+        C_JoinServer packet = (C_JoinServer)message;
+
         Console.WriteLine($"C_LoadGameHandler");
 
 
         Player player = clientSession.MyPlayer;
 
-        player.gameRoom.Push(player.gameRoom.HandleClientLoadGame, player, packet.ExitId);
+        // TODO : Credential 확인 작업 , packet.Credential.Uid
 
 
+        player.gameRoom.Push(player.gameRoom.HandleClientLoadGame, player); 
     }
 }

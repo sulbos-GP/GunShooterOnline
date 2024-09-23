@@ -81,9 +81,9 @@ namespace Google.Protobuf.Protocol {
             "c1gYBCABKAISEQoJc3RhcnRQb3NZGAUgASgCEhEKCWhpdFBvaW50WBgGIAEo",
             "AhIRCgloaXRQb2ludFkYByABKAIiLgoKU19FeGl0R2FtZRIQCghwbGF5ZXJJ",
             "ZBgBIAEoBRIOCgZleGl0SWQYAiABKAUiLgoKQ19FeGl0R2FtZRIQCghwbGF5",
-            "ZXJJZBgBIAEoBRIOCgZleGl0SWQYAiABKAUiOwoMQ19KT0lOU0VSVkVSEisK",
+            "ZXJJZBgBIAEoBRIOCgZleGl0SWQYAiABKAUiOwoMQ19Kb2luU2VydmVyEisK",
             "CmNyZWRlbnRpYWwYASABKAsyFy5Qcm90b2NvbC5DcmVkZW50aWFJbmZvIiEK",
-            "DFNfSk9JTlNFUlZFUhIRCgljb25uZWN0ZWQYASABKAgiQgoPU19XYWl0aW5n",
+            "DFNfSm9pblNlcnZlchIRCgljb25uZWN0ZWQYASABKAgiQgoPU19XYWl0aW5n",
             "U3RhdHVzEhYKDmN1cnJlbnRQbGF5ZXJzGAEgASgFEhcKD3JlcXVpcmVkUGxh",
             "eWVycxgCIAEoBSKrAQoLU19HYW1lU3RhcnQSDgoGcm9vbUlkGAEgASgJEhEK",
             "CXN0YXJ0VGltZRgCIAEoCRIlCgdvYmplY3RzGAMgAygLMhQuUHJvdG9jb2wu",
@@ -169,8 +169,8 @@ namespace Google.Protobuf.Protocol {
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_RaycastHit), global::Google.Protobuf.Protocol.S_RaycastHit.Parser, new[]{ "RayId", "HitObjectId", "Distance", "StartPosX", "StartPosY", "HitPointX", "HitPointY" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_ExitGame), global::Google.Protobuf.Protocol.S_ExitGame.Parser, new[]{ "PlayerId", "ExitId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_ExitGame), global::Google.Protobuf.Protocol.C_ExitGame.Parser, new[]{ "PlayerId", "ExitId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_JOINSERVER), global::Google.Protobuf.Protocol.C_JOINSERVER.Parser, new[]{ "Credential" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_JOINSERVER), global::Google.Protobuf.Protocol.S_JOINSERVER.Parser, new[]{ "Connected" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.C_JoinServer), global::Google.Protobuf.Protocol.C_JoinServer.Parser, new[]{ "Credential" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_JoinServer), global::Google.Protobuf.Protocol.S_JoinServer.Parser, new[]{ "Connected" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_WaitingStatus), global::Google.Protobuf.Protocol.S_WaitingStatus.Parser, new[]{ "CurrentPlayers", "RequiredPlayers" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.S_GameStart), global::Google.Protobuf.Protocol.S_GameStart.Parser, new[]{ "RoomId", "StartTime", "Objects", "ItemInfos", "GearInfos" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Google.Protobuf.Protocol.ObjectInfo), global::Google.Protobuf.Protocol.ObjectInfo.Parser, new[]{ "ObjectId", "OwnerId", "SkillId", "Name", "PositionInfo", "StatInfo", "Shape", "Box", "Uid" }, null, null, null, null),
@@ -8051,16 +8051,16 @@ namespace Google.Protobuf.Protocol {
   /// 29  접속 요청
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class C_JOINSERVER : pb::IMessage<C_JOINSERVER>
+  public sealed partial class C_JoinServer : pb::IMessage<C_JoinServer>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<C_JOINSERVER> _parser = new pb::MessageParser<C_JOINSERVER>(() => new C_JOINSERVER());
+    private static readonly pb::MessageParser<C_JoinServer> _parser = new pb::MessageParser<C_JoinServer>(() => new C_JoinServer());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<C_JOINSERVER> Parser { get { return _parser; } }
+    public static pb::MessageParser<C_JoinServer> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -8076,7 +8076,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_JOINSERVER() {
+    public C_JoinServer() {
       OnConstruction();
     }
 
@@ -8084,15 +8084,15 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_JOINSERVER(C_JOINSERVER other) : this() {
+    public C_JoinServer(C_JoinServer other) : this() {
       credential_ = other.credential_ != null ? other.credential_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public C_JOINSERVER Clone() {
-      return new C_JOINSERVER(this);
+    public C_JoinServer Clone() {
+      return new C_JoinServer(this);
     }
 
     /// <summary>Field number for the "credential" field.</summary>
@@ -8110,12 +8110,12 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as C_JOINSERVER);
+      return Equals(other as C_JoinServer);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(C_JOINSERVER other) {
+    public bool Equals(C_JoinServer other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -8188,7 +8188,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(C_JOINSERVER other) {
+    public void MergeFrom(C_JoinServer other) {
       if (other == null) {
         return;
       }
@@ -8261,16 +8261,16 @@ namespace Google.Protobuf.Protocol {
   ///30 접속 응답
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class S_JOINSERVER : pb::IMessage<S_JOINSERVER>
+  public sealed partial class S_JoinServer : pb::IMessage<S_JoinServer>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<S_JOINSERVER> _parser = new pb::MessageParser<S_JOINSERVER>(() => new S_JOINSERVER());
+    private static readonly pb::MessageParser<S_JoinServer> _parser = new pb::MessageParser<S_JoinServer>(() => new S_JoinServer());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<S_JOINSERVER> Parser { get { return _parser; } }
+    public static pb::MessageParser<S_JoinServer> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -8286,7 +8286,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_JOINSERVER() {
+    public S_JoinServer() {
       OnConstruction();
     }
 
@@ -8294,15 +8294,15 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_JOINSERVER(S_JOINSERVER other) : this() {
+    public S_JoinServer(S_JoinServer other) : this() {
       connected_ = other.connected_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public S_JOINSERVER Clone() {
-      return new S_JOINSERVER(this);
+    public S_JoinServer Clone() {
+      return new S_JoinServer(this);
     }
 
     /// <summary>Field number for the "connected" field.</summary>
@@ -8320,12 +8320,12 @@ namespace Google.Protobuf.Protocol {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as S_JOINSERVER);
+      return Equals(other as S_JoinServer);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(S_JOINSERVER other) {
+    public bool Equals(S_JoinServer other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -8398,7 +8398,7 @@ namespace Google.Protobuf.Protocol {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(S_JOINSERVER other) {
+    public void MergeFrom(S_JoinServer other) {
       if (other == null) {
         return;
       }
