@@ -42,9 +42,6 @@ enum MsgId{
   S_JOIN_SERVER = 30; // 접속 응답
   S_GAME_START = 31;  //사람이 아직 안모임
   S_WAITING_STATUS = 32; //32  모두 모임
-   
-  C_SERVER_COMMAND = 10000; //수정해야하면 말점
-
 }
 
 enum GameObjectType{
