@@ -1,28 +1,17 @@
-using Google.Protobuf.Protocol;
-using NPOI.OpenXmlFormats.Dml.Diagram;
-using NPOI.SS.Formula.Eval;
-using System;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.EnhancedTouch;
-using UnityEngine.UI;
-using Random = UnityEngine.Random;
-using Vector2 = System.Numerics.Vector2;
-
 
 public partial class InventoryController
 {
+    /// <summary>
+    /// 그리드의 백업 변수들을 업데이트함
+    /// </summary>
     public void BackUpSlot(ItemObject item)
     {
-        if (IsEquipSlot(item.parentObjId))
+        if (IsEquipSlot(item.parentObjId)) 
         {
             return;
         }
-
-        if (IsPlayerSlot(item.parentObjId)) 
+        else if (IsPlayerSlot(item.parentObjId)) 
         { 
             playerInvenUI.instantGrid.UpdateBackUpSlot();
             invenInstance.playerInvenUI.WeightTextSet(
@@ -33,27 +22,28 @@ public partial class InventoryController
         {
             otherInvenUI.instantGrid.UpdateBackUpSlot();
         }
-
-        Debug.Log("BackupSlot");
     }
 
+    /// <summary>
+    /// 아이템 오브젝트의 백업 변수를 업데이트
+    /// </summary>
     public void BackUpItem(ItemObject item)
     {
         ItemObject.BackUpItem(item);
-        Debug.Log("BackupItem");
     }
 
-
+    /// <summary>
+    /// 아이템을 옮기기전의 위치로 되돌림. 장착칸의 경우 다시 장착. 그리드의 경우 백업변수로 되돌림
+    /// </summary>
     public void UndoSlot(ItemObject item)
     {
         if(IsEquipSlot(item.backUpParentId))
         {
-            EquipSlot UndoEquipSlot = InventoryController.equipSlotDic[item.backUpParentId];
+            EquipSlot UndoEquipSlot = equipSlotDic[item.backUpParentId];
             UndoEquipSlot.EquipItem(item);
             return;
         }
-
-        if (IsPlayerSlot(item.backUpParentId))
+        else if (IsPlayerSlot(item.backUpParentId))
         {
             playerInvenUI.instantGrid.UndoItemSlot();
         }
@@ -64,6 +54,10 @@ public partial class InventoryController
         Debug.Log("UndoSlot");
     }
 
+    /// <summary>
+    /// 해당 아이템의 정보를 백업된 정보로 되돌림
+    /// </summary>
+    /// <param name="item"></param>
     public void UndoItem(ItemObject item)
     {
         item.itemData.pos = item.backUpItemPos;
@@ -74,7 +68,7 @@ public partial class InventoryController
 
         if(IsEquipSlot(item.parentObjId))
         {
-            EquipSlot targetSlot = InventoryController.equipSlotDic[item.parentObjId];
+            EquipSlot targetSlot = equipSlotDic[item.parentObjId];
             targetSlot.EquipItem(item);
         }
         else if(IsPlayerSlot(item.parentObjId))
@@ -86,8 +80,5 @@ public partial class InventoryController
         {
             otherInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
         }
-        Debug.Log("UndoItem");
     }
-
-
 }
