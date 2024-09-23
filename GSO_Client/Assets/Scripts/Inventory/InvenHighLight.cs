@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Vector2 = System.Numerics.Vector2;
@@ -15,23 +12,6 @@ public struct HighlightColor
 
 public class InvenHighLight : MonoBehaviour
 {
-    /*
-     * 이 코드는 인벤토리 컨트롤러에 부착되며 하이라이트 UI 오브젝트를 관리합니다.
-     * 하이라이트UI 오브젝트가 게임 내에 없다면 생성합니다.
-     * 
-     * 1. Show함수는 하이라이트의 액티브 여부를 받아 setActive
-     * 
-     * 2. SetSize함수는 아이템의 크기에 맞춰 하이라이트의 사이즈를 조절합니다
-     * 
-     * 3. SetPosition과 SetPositionByPos는 하이라이트의 위치를 이동시켜주며 SetPosition은 
-     *    selectedItem이 없을때 SetPositionByPos는는 selectedItem이 있을때 사용합니다.
-     *    
-     * 4. SetParent함수는 하이라이트를 가져다댄 그리드의 부모객체에 위치하게 하여 항상 그리드 위에
-     *    나오도록 합니다.(그리드 뒤에 하이라이트가 생기는것을 방지)
-     * 
-     * 5. SetColor함수는 매개변수로 받은 색으로 하이라이트의 이미지 색을 지정합니다.
-     * 
-     */
     public static GameObject highlightObj;
 
     private RectTransform highlighter;
@@ -39,7 +19,7 @@ public class InvenHighLight : MonoBehaviour
     
     public void InstantHighlighter()
     {
-        highlightObj = Managers.Resource.Instantiate("UI/Highlight");
+        highlightObj = Managers.Resource.Instantiate("UI/InvenUI/Highlight");
         highlighter = highlightObj.GetComponent<RectTransform>();
         highlighter.GetComponent<Image>().raycastTarget = false;
     }
@@ -81,7 +61,7 @@ public class InvenHighLight : MonoBehaviour
     /// </summary>
     public void SetPositionOnGrid(GridObject targetGrid, ItemObject targetItem)
     {
-        SetParent(targetGrid);
+        SetParent(targetGrid.gameObject);
 
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem,
             targetItem.itemData.pos.x, targetItem.itemData.pos.y);
@@ -102,15 +82,15 @@ public class InvenHighLight : MonoBehaviour
     /// <summary>
     /// 하이라이트의 부모UI 지정.
     /// </summary>
-    /// <param name="targetGrid"></param>
-    public void SetParent(GridObject targetGrid)
+    public void SetParent(GameObject target)
     {
-        if (targetGrid == null)
+        if (target == null)
         {
+            highlighter.SetParent(GameObject.Find("Canvas").transform);
             return;
         }
 
-        highlighter.SetParent(targetGrid.GetComponent<RectTransform>());
+        highlighter.SetParent(target.transform);
     }
 
     internal void SetColor(Color32 color)

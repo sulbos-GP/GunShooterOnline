@@ -31,14 +31,13 @@ public partial class InventoryController
 
     private void OnMouseRightClickInput(InputAction.CallbackContext context)
     {
-        //임시
-        //마우스 우클릭시. 선택된 아이템 여부에 따라 새 아이템 생성 혹은 아이템 회전
+        //에디터 디버그 용
         RotateItemRight();
     }
 
     private void InvenUIControlInput(InputAction.CallbackContext context)
     {
-        InvenBtn();
+        InvenOnOffBtn();
     }
 
     #endregion
@@ -124,18 +123,18 @@ public partial class InventoryController
 
     
 
-    public void InvenBtn()
+    public void InvenOnOffBtn()
     {
         //자신의 인벤토리 요청
         if (!isActive) {
             //인벤토리를 킬 경우
-            SendLoadInvenPacket(0);
+            InventoryPacket.SendLoadInvenPacket(0);
         }
         else
         {
             //인벤토리를 닫을 경우
-            if (otherInvenUI.instantGrid != null) { SendCloseInvenPacket(otherInvenUI.instantGrid.objectId); return; }
-            if (playerInvenUI.instantGrid != null) { SendCloseInvenPacket(); }
+            if (otherInvenUI.instantGrid != null) { InventoryPacket.SendCloseInvenPacket(otherInvenUI.instantGrid.objectId); return; }
+            if (playerInvenUI.instantGrid != null) { InventoryPacket.SendCloseInvenPacket(); }
         }
     }
 

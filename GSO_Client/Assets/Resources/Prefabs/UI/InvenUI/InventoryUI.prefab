@@ -971,16 +971,16 @@ RectTransform:
   m_GameObject: {fileID: 4476393320153271777}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.96466, y: 0.96466, z: 0.96466}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9055854614738211748}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 528, y: -973}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 1, y: 0}
 --- !u!222 &3616475105700956816
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1441,7 +1441,6 @@ MonoBehaviour:
   instantGrid: {fileID: 0}
   weightText: {fileID: 3922469310769476411}
   moneyText: {fileID: 2481836951039716009}
-  bagLv: 0
 --- !u!1 &5082691577051066455
 GameObject:
   m_ObjectHideFlags: 0
@@ -2004,7 +2003,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &6010234835040452517
 RectTransform:
   m_ObjectHideFlags: 0
