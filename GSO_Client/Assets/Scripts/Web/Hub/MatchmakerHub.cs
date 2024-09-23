@@ -223,7 +223,7 @@ public class MatchmakerHub : ClientHub
         }
         else
         {
-            state.SetStateText("매칭 참여 요청 실패");
+            state.SetStateText($"매칭 참여 요청 실패 : {response.error_code.ToString()}");
             Destroy(matchStateUI);
         }
     }

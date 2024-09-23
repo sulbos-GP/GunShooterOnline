@@ -118,7 +118,7 @@ namespace Matchmaker.Service
 
                 if(user.ticket <= 0)
                 {
-                    return WebErrorCode.PushPlayerNoTicket;
+                    //return WebErrorCode.PushPlayerNoTicket;
                 }
 
                 (WebErrorCode error, Ticket? ticket) = await mMatchQueue.GetTicketWithUid(uid);

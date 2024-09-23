@@ -10,4 +10,5 @@ CREATE TABLE IF NOT EXISTS master_version_app
     UNIQUE(major, minor, patch)
 );
 
+DELETE FROM master_version_app;
 INSERT INTO master_version_app (major, minor, patch) VALUES (1, 0, 0);
