@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: master_database
 -- ------------------------------------------------------
--- Server version	8.0.39
+-- Server version	5.5.5-10.4.19-MariaDB
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -16,56 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `app_version`
---
-
-DROP TABLE IF EXISTS `app_version`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `app_version` (
-  `major` int NOT NULL COMMENT '앱 버전',
-  `minor` int NOT NULL COMMENT '신규 기능',
-  `patch` int NOT NULL COMMENT '버그 수정',
-  UNIQUE KEY `major` (`major`,`minor`,`patch`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `app_version`
---
-
-LOCK TABLES `app_version` WRITE;
-/*!40000 ALTER TABLE `app_version` DISABLE KEYS */;
-INSERT INTO `app_version` VALUES (1,0,0);
-/*!40000 ALTER TABLE `app_version` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `data_version`
---
-
-DROP TABLE IF EXISTS `data_version`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `data_version` (
-  `major` int NOT NULL COMMENT '데이터 버전',
-  `minor` int NOT NULL COMMENT '신규 데이터',
-  `patch` int NOT NULL COMMENT '데이터 수정',
-  UNIQUE KEY `major` (`major`,`minor`,`patch`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `data_version`
---
-
-LOCK TABLES `data_version` WRITE;
-/*!40000 ALTER TABLE `data_version` DISABLE KEYS */;
-INSERT INTO `data_version` VALUES (1,0,0);
-/*!40000 ALTER TABLE `data_version` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `master_item_backpack`
 --
 
@@ -73,13 +23,13 @@ DROP TABLE IF EXISTS `master_item_backpack`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_item_backpack` (
-  `item_id` int NOT NULL DEFAULT '0' COMMENT '아이템 아이디',
-  `total_scale_x` int NOT NULL DEFAULT '0' COMMENT '가방 x크기',
-  `total_scale_y` int NOT NULL DEFAULT '0' COMMENT '가방 y크기',
-  `total_weight` double NOT NULL DEFAULT '0' COMMENT '가방 무게',
+  `item_id` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 아이디',
+  `total_scale_x` int(11) NOT NULL DEFAULT 0 COMMENT '가방 x크기',
+  `total_scale_y` int(11) NOT NULL DEFAULT 0 COMMENT '가방 y크기',
+  `total_weight` double NOT NULL DEFAULT 0 COMMENT '가방 무게',
   PRIMARY KEY (`item_id`),
   CONSTRAINT `FK_master_item_backpack_item_id_master_item_base_item_id` FOREIGN KEY (`item_id`) REFERENCES `master_item_base` (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,22 +50,22 @@ DROP TABLE IF EXISTS `master_item_base`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_item_base` (
-  `item_id` int NOT NULL DEFAULT '0' COMMENT '아이템 아이디',
+  `item_id` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 아이디',
   `code` varchar(50) NOT NULL DEFAULT '' COMMENT '아이템 코드',
   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '아이템 이름',
-  `weight` double NOT NULL DEFAULT '0' COMMENT '아이템 무게',
+  `weight` double NOT NULL DEFAULT 0 COMMENT '아이템 무게',
   `type` varchar(50) NOT NULL DEFAULT '' COMMENT '아이템 타입',
-  `description` int NOT NULL DEFAULT '0' COMMENT '아이템 설명',
-  `scale_x` int NOT NULL DEFAULT '0' COMMENT '아이템 가로 크기',
-  `scale_y` int NOT NULL DEFAULT '0' COMMENT '아이템 세로 크기',
-  `purchase_price` int NOT NULL DEFAULT '0' COMMENT '아이템 구매 가격',
-  `inquiry_time` double NOT NULL DEFAULT '0' COMMENT '아이템 조회 시간',
-  `sell_price` int NOT NULL DEFAULT '0' COMMENT '아이템 판매 가격',
-  `amount` int NOT NULL DEFAULT '0' COMMENT '수량',
+  `description` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 설명',
+  `scale_x` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 가로 크기',
+  `scale_y` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 세로 크기',
+  `purchase_price` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 구매 가격',
+  `inquiry_time` double NOT NULL DEFAULT 0 COMMENT '아이템 조회 시간',
+  `sell_price` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 판매 가격',
+  `amount` int(11) NOT NULL DEFAULT 0 COMMENT '수량',
   `icon` varchar(50) NOT NULL DEFAULT '' COMMENT '아이템 아이콘 경로',
   PRIMARY KEY (`item_id`),
   UNIQUE KEY `code` (`code`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -136,15 +86,15 @@ DROP TABLE IF EXISTS `master_item_use`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_item_use` (
-  `item_id` int NOT NULL DEFAULT '0' COMMENT '아이템 아이디',
-  `energy` int NOT NULL DEFAULT '0' COMMENT '회복 아이템의 회복량',
-  `active_time` double NOT NULL DEFAULT '0' COMMENT '효과발동 시간',
-  `duration` double NOT NULL DEFAULT '0' COMMENT '회복 아이템의 지속시간',
+  `item_id` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 아이디',
+  `energy` int(11) NOT NULL DEFAULT 0 COMMENT '회복 아이템의 회복량',
+  `active_time` double NOT NULL DEFAULT 0 COMMENT '효과발동 시간',
+  `duration` double NOT NULL DEFAULT 0 COMMENT '회복 아이템의 지속시간',
   `effect` enum('immediate','buff') NOT NULL DEFAULT 'immediate' COMMENT '해당 아이템의 효과 타입',
-  `cool_time` double NOT NULL DEFAULT '0' COMMENT '재사용 대기시간',
+  `cool_time` double NOT NULL DEFAULT 0 COMMENT '재사용 대기시간',
   PRIMARY KEY (`item_id`),
   CONSTRAINT `FK_master_item_use_item_id_master_item_base_item_id` FOREIGN KEY (`item_id`) REFERENCES `master_item_base` (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -165,17 +115,17 @@ DROP TABLE IF EXISTS `master_item_weapon`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_item_weapon` (
-  `item_id` int NOT NULL DEFAULT '0' COMMENT '아이템 아이디',
-  `attack_range` int NOT NULL DEFAULT '0' COMMENT '공격 범위',
-  `damage` int NOT NULL DEFAULT '0' COMMENT '공격 데미지',
-  `distance` int NOT NULL DEFAULT '0' COMMENT '공격 거리',
-  `reload_round` int NOT NULL DEFAULT '0' COMMENT '재장전 수',
-  `attack_speed` double NOT NULL DEFAULT '0' COMMENT '공격 속도',
-  `reload_time` int NOT NULL DEFAULT '0' COMMENT '재장전 시간',
+  `item_id` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 아이디',
+  `attack_range` int(11) NOT NULL DEFAULT 0 COMMENT '공격 범위',
+  `damage` int(11) NOT NULL DEFAULT 0 COMMENT '공격 데미지',
+  `distance` int(11) NOT NULL DEFAULT 0 COMMENT '공격 거리',
+  `reload_round` int(11) NOT NULL DEFAULT 0 COMMENT '재장전 수',
+  `attack_speed` double NOT NULL DEFAULT 0 COMMENT '공격 속도',
+  `reload_time` int(11) NOT NULL DEFAULT 0 COMMENT '재장전 시간',
   `bullet` varchar(20) NOT NULL DEFAULT '' COMMENT '사용 탄환',
   PRIMARY KEY (`item_id`),
   CONSTRAINT `FK_master_item_weapon_item_id_master_item_base_item_id` FOREIGN KEY (`item_id`) REFERENCES `master_item_base` (`item_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -196,16 +146,16 @@ DROP TABLE IF EXISTS `master_reward_base`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_reward_base` (
-  `reward_id` int NOT NULL DEFAULT '0' COMMENT '보상 아이디',
-  `money` int NOT NULL DEFAULT '0' COMMENT '돈',
-  `ticket` int NOT NULL DEFAULT '0' COMMENT '티켓',
-  `gacha` int NOT NULL DEFAULT '0' COMMENT '가챠',
-  `experience` int NOT NULL DEFAULT '0' COMMENT '경험치',
-  `reward_box_id` int DEFAULT NULL COMMENT '보상 박스 아이디',
+  `reward_id` int(11) NOT NULL DEFAULT 0 COMMENT '보상 아이디',
+  `money` int(11) NOT NULL DEFAULT 0 COMMENT '돈',
+  `ticket` int(11) NOT NULL DEFAULT 0 COMMENT '티켓',
+  `gacha` int(11) NOT NULL DEFAULT 0 COMMENT '가챠',
+  `experience` int(11) NOT NULL DEFAULT 0 COMMENT '경험치',
+  `reward_box_id` int(11) DEFAULT NULL COMMENT '보상 박스 아이디',
   PRIMARY KEY (`reward_id`),
   KEY `FK_reward_box_id_master_reward_box_id` (`reward_box_id`),
   CONSTRAINT `FK_reward_box_id_master_reward_box_id` FOREIGN KEY (`reward_box_id`) REFERENCES `master_reward_box` (`reward_box_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -226,11 +176,11 @@ DROP TABLE IF EXISTS `master_reward_box`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_reward_box` (
-  `reward_box_id` int NOT NULL DEFAULT '0' COMMENT '보상 박스 아이디',
-  `box_scale_x` int NOT NULL DEFAULT '0' COMMENT '박스 x크기',
-  `box_scale_y` int NOT NULL DEFAULT '0' COMMENT '박스 y크기',
+  `reward_box_id` int(11) NOT NULL DEFAULT 0 COMMENT '보상 박스 아이디',
+  `box_scale_x` int(11) NOT NULL DEFAULT 0 COMMENT '박스 x크기',
+  `box_scale_y` int(11) NOT NULL DEFAULT 0 COMMENT '박스 y크기',
   PRIMARY KEY (`reward_box_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -251,19 +201,19 @@ DROP TABLE IF EXISTS `master_reward_box_item`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_reward_box_item` (
-  `reward_box_item_id` int NOT NULL DEFAULT '0' COMMENT '보상 박스 아이템 아이디',
-  `reward_box_id` int NOT NULL DEFAULT '0' COMMENT '보상 박스 아이디',
+  `reward_box_item_id` int(11) NOT NULL DEFAULT 0 COMMENT '보상 박스 아이템 아이디',
+  `reward_box_id` int(11) NOT NULL DEFAULT 0 COMMENT '보상 박스 아이디',
   `item_code` varchar(50) NOT NULL DEFAULT '' COMMENT '아이템 코드',
-  `x` int NOT NULL DEFAULT '0' COMMENT '아이템 x 위치',
-  `y` int NOT NULL DEFAULT '0' COMMENT '아이템 y 위치',
-  `rotation` int NOT NULL DEFAULT '0' COMMENT '아이템 회전',
-  `amount` int NOT NULL DEFAULT '0' COMMENT '아이템 수량',
+  `x` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 x 위치',
+  `y` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 y 위치',
+  `rotation` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 회전',
+  `amount` int(11) NOT NULL DEFAULT 0 COMMENT '아이템 수량',
   PRIMARY KEY (`reward_box_item_id`),
   KEY `FK_master_reward_box_item_master_reward_box_id` (`reward_box_id`),
   KEY `FK_master_reward_box_item_master_item_base_id` (`item_code`),
   CONSTRAINT `FK_master_reward_box_item_master_item_base_id` FOREIGN KEY (`item_code`) REFERENCES `master_item_base` (`code`) ON DELETE CASCADE,
   CONSTRAINT `FK_master_reward_box_item_master_reward_box_id` FOREIGN KEY (`reward_box_id`) REFERENCES `master_reward_box` (`reward_box_id`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -284,13 +234,13 @@ DROP TABLE IF EXISTS `master_reward_level`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_reward_level` (
-  `reward_id` int NOT NULL DEFAULT '0' COMMENT '보상 정보',
-  `level` int NOT NULL DEFAULT '0' COMMENT '레벨',
+  `reward_id` int(11) NOT NULL DEFAULT 0 COMMENT '보상 정보',
+  `level` int(11) NOT NULL DEFAULT 0 COMMENT '레벨',
   `name` varchar(50) NOT NULL DEFAULT '' COMMENT '보상 이름',
   `icon` varchar(50) NOT NULL DEFAULT '' COMMENT '보상 아이콘',
   PRIMARY KEY (`reward_id`),
   UNIQUE KEY `level` (`level`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -311,11 +261,11 @@ DROP TABLE IF EXISTS `master_version_app`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_version_app` (
-  `major` int NOT NULL DEFAULT '0' COMMENT '앱 버전',
-  `minor` int NOT NULL DEFAULT '0' COMMENT '신규 기능',
-  `patch` int NOT NULL DEFAULT '0' COMMENT '버그 수정',
+  `major` int(11) NOT NULL DEFAULT 0 COMMENT '앱 버전',
+  `minor` int(11) NOT NULL DEFAULT 0 COMMENT '신규 기능',
+  `patch` int(11) NOT NULL DEFAULT 0 COMMENT '버그 수정',
   UNIQUE KEY `major` (`major`,`minor`,`patch`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -336,11 +286,11 @@ DROP TABLE IF EXISTS `master_version_data`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_version_data` (
-  `major` int NOT NULL DEFAULT '0' COMMENT '데이터 버전',
-  `minor` int NOT NULL DEFAULT '0' COMMENT '신규 데이터',
-  `patch` int NOT NULL DEFAULT '0' COMMENT '데이터 수정',
+  `major` int(11) NOT NULL DEFAULT 0 COMMENT '데이터 버전',
+  `minor` int(11) NOT NULL DEFAULT 0 COMMENT '신규 데이터',
+  `patch` int(11) NOT NULL DEFAULT 0 COMMENT '데이터 수정',
   UNIQUE KEY `major` (`major`,`minor`,`patch`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -362,4 +312,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-22 18:00:51
+-- Dump completed on 2024-09-23 14:03:14
