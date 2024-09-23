@@ -67,12 +67,15 @@ namespace Server.Database.Handler
 #else
             AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
             AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+#endif
 
             context = new MasterDatabaseContext(databases[EDatabase.Master]);
 
-            bool t=  context.IsValidContext();
-            
-#endif
+            bool ret = context.IsValidContext();
+            if(ret == false)
+            {
+                Console.WriteLine("마스터 데이터베이스 초기화 실패");
+            }
         }
 
         public void RemoveMySQL()

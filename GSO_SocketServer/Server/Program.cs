@@ -61,7 +61,12 @@ namespace Server
                 IPEndPoint endPoint = new IPEndPoint(iPAddress, port);
                 gameserver.Init(endPoint, session, acceptKey, register, backLog);
 
-                gameserver.Start();
+                if(false == gameserver.Start())
+                {
+                    Console.WriteLine("게임 실행 중 에러 발생");
+                    return;
+                }
+
             }
 
             //게임 종료
