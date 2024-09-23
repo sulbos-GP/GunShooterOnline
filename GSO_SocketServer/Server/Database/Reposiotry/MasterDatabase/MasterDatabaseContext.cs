@@ -15,11 +15,11 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
 
         #region DatabaseContext
         public DbTable<FMasterItemBackpack> MasterItemBackpack { get; }
-        public DbTable<FMasterItemWeapon> MasterItemWeapon { get; }
         public DbTable<FMasterItemBase> MasterItemBase { get; }
         public DbTable<FMasterItemUse> MasterItemUse { get; }
-        public DbTable<FMasterRewardBox> MasterRewardBox { get; }
+        public DbTable<FMasterItemWeapon> MasterItemWeapon { get; }
         public DbTable<FMasterRewardBase> MasterRewardBase { get; }
+        public DbTable<FMasterRewardBox> MasterRewardBox { get; }
         public DbTable<FMasterRewardBoxItem> MasterRewardBoxItem { get; }
         public DbTable<FMasterRewardLevel> MasterRewardLevel { get; }
         public DbTable<FMasterVersionApp> MasterVersionApp { get; }
@@ -31,11 +31,11 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
             _connectionString = connectionString;
             
             MasterItemBackpack = LoadMasterItemBackpack().Result;
-            MasterItemWeapon = LoadMasterItemWeapon().Result;
             MasterItemBase = LoadMasterItemBase().Result;
             MasterItemUse = LoadMasterItemUse().Result;
-            MasterRewardBox = LoadMasterRewardBox().Result;
+            MasterItemWeapon = LoadMasterItemWeapon().Result;
             MasterRewardBase = LoadMasterRewardBase().Result;
+            MasterRewardBox = LoadMasterRewardBox().Result;
             MasterRewardBoxItem = LoadMasterRewardBoxItem().Result;
             MasterRewardLevel = LoadMasterRewardLevel().Result;
             MasterVersionApp = LoadMasterVersionApp().Result;
@@ -54,12 +54,6 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
             return await LoadDatabaseTable<FMasterItemBackpack>(_connectionString, query);
         }
             
-        private async Task<DbTable<FMasterItemWeapon>> LoadMasterItemWeapon()
-        {
-            string query = "SELECT item_id, attack_range, damage, distance, reload_round, attack_speed, reload_time, bullet FROM master_item_weapon;";
-            return await LoadDatabaseTable<FMasterItemWeapon>(_connectionString, query);
-        }
-            
         private async Task<DbTable<FMasterItemBase>> LoadMasterItemBase()
         {
             string query = "SELECT item_id, code, name, weight, type, description, scale_x, scale_y, purchase_price, inquiry_time, sell_price, amount, icon FROM master_item_base;";
@@ -72,16 +66,22 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
             return await LoadDatabaseTable<FMasterItemUse>(_connectionString, query);
         }
             
-        private async Task<DbTable<FMasterRewardBox>> LoadMasterRewardBox()
+        private async Task<DbTable<FMasterItemWeapon>> LoadMasterItemWeapon()
         {
-            string query = "SELECT reward_box_id, box_scale_x, box_scale_y FROM master_reward_box;";
-            return await LoadDatabaseTable<FMasterRewardBox>(_connectionString, query);
+            string query = "SELECT item_id, attack_range, damage, distance, reload_round, attack_speed, reload_time, bullet FROM master_item_weapon;";
+            return await LoadDatabaseTable<FMasterItemWeapon>(_connectionString, query);
         }
             
         private async Task<DbTable<FMasterRewardBase>> LoadMasterRewardBase()
         {
             string query = "SELECT reward_id, money, ticket, gacha, experience, reward_box_id FROM master_reward_base;";
             return await LoadDatabaseTable<FMasterRewardBase>(_connectionString, query);
+        }
+            
+        private async Task<DbTable<FMasterRewardBox>> LoadMasterRewardBox()
+        {
+            string query = "SELECT reward_box_id, box_scale_x, box_scale_y FROM master_reward_box;";
+            return await LoadDatabaseTable<FMasterRewardBox>(_connectionString, query);
         }
             
         private async Task<DbTable<FMasterRewardBoxItem>> LoadMasterRewardBoxItem()
@@ -114,11 +114,11 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
         {
             if ( 
                 MasterItemBackpack.IsValid() == false || 
-                MasterItemWeapon.IsValid() == false || 
                 MasterItemBase.IsValid() == false || 
                 MasterItemUse.IsValid() == false || 
-                MasterRewardBox.IsValid() == false || 
+                MasterItemWeapon.IsValid() == false || 
                 MasterRewardBase.IsValid() == false || 
+                MasterRewardBox.IsValid() == false || 
                 MasterRewardBoxItem.IsValid() == false || 
                 MasterRewardLevel.IsValid() == false || 
                 MasterVersionApp.IsValid() == false || 

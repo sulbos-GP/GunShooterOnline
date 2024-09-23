@@ -7,11 +7,11 @@ namespace WebCommonLibrary.Models.MasterDatabase
         {
             None,
             MasterItemBackpack,
-            MasterItemWeapon,
             MasterItemBase,
             MasterItemUse,
-            MasterRewardBox,
+            MasterItemWeapon,
             MasterRewardBase,
+            MasterRewardBox,
             MasterRewardBoxItem,
             MasterRewardLevel,
             MasterVersionApp,
