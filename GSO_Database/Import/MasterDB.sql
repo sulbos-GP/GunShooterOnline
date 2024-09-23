@@ -299,7 +299,7 @@ CREATE TABLE `master_version_data` (
 
 LOCK TABLES `master_version_data` WRITE;
 /*!40000 ALTER TABLE `master_version_data` DISABLE KEYS */;
-INSERT INTO `master_version_data` VALUES (1,0,0),(1,0,1),(1,0,2);
+INSERT INTO `master_version_data` VALUES (1,0,2);
 /*!40000 ALTER TABLE `master_version_data` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -312,4 +312,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-23 14:03:14
+-- Dump completed on 2024-09-23 16:30:10

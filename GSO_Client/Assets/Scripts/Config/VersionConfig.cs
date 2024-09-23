@@ -6,19 +6,19 @@ using WebCommonLibrary.Models.MasterDatabase;
 
 public class VersionConfig
 {
-    private FMasterVersionApp _versionApp;
-    private FMasterVersionData _versionData;
+    private FMasterVersionApp _app;
+    private FMasterVersionData _data;
 
     public VersionConfig()
     {
-        SetAppVersion(Application.version);
+        
     }
 
-    public FMasterVersionApp APP
+    public FMasterVersionApp App
     {
         get 
         { 
-            return _versionApp; 
+            return _app; 
         } 
     }
 
@@ -26,7 +26,27 @@ public class VersionConfig
     {
         get
         {
-            return _versionData;
+            return _data;
+        }
+    }
+
+    public string AppName
+    {
+        get
+        {
+            return _app.major.ToString() +
+                _app.minor.ToString() +
+                _app.patch.ToString();
+        }
+    }
+
+    public string DataName
+    {
+        get
+        {
+            return _data.major.ToString() +
+                _data.minor.ToString() +
+                _data.patch.ToString();
         }
     }
 
@@ -41,18 +61,27 @@ public class VersionConfig
 
     public void SetAppVersion(int major, int minor, int patch)
     {
-        _versionApp = new FMasterVersionApp();
-        _versionApp.major = major;
-        _versionApp.minor = minor;
-        _versionApp.patch = patch;
+        _app = new FMasterVersionApp();
+        _app.major = major;
+        _app.minor = minor;
+        _app.patch = patch;
+    }
+
+    public void SetDataVersion(string versionName)
+    {
+        string[] version = versionName.Split('.');
+        int major = int.Parse(version[0]);
+        int minor = int.Parse(version[1]);
+        int patch = int.Parse(version[2]);
+        SetDataVersion(major, minor, patch);
     }
 
     public void SetDataVersion(int major, int minor, int patch)
     {
-        _versionData = new FMasterVersionData();
-        _versionData.major = major;
-        _versionData.minor = minor;
-        _versionData.patch = patch;
+        _data = new FMasterVersionData();
+        _data.major = major;
+        _data.minor = minor;
+        _data.patch = patch;
     }
 
 }

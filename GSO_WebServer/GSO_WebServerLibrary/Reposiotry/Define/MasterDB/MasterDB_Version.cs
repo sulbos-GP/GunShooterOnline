@@ -8,13 +8,13 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.MasterDB
     {
         public async Task<FMasterVersionApp> LoadLatestAppVersion()
         {
-            return await mQueryFactory.Query("app_version").
+            return await mQueryFactory.Query("master_version_app").
                 FirstOrDefaultAsync<FMasterVersionApp>();
         }
 
         public async Task<FMasterVersionData> LoadLatestDataVersion()
         {
-            return await mQueryFactory.Query("data_version").
+            return await mQueryFactory.Query("master_version_data").
                 FirstOrDefaultAsync<FMasterVersionData>();
         }
     }

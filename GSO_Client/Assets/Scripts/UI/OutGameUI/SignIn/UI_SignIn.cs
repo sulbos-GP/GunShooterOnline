@@ -89,27 +89,25 @@ public class SignInUI : MonoBehaviour
             ResultMessage($"구글 플레이 서비스 인증 성공");
 
             string userId = PlayGamesPlatform.Instance.GetUserId();
-            
+            AuthenticationReq packet = new AuthenticationReq()
+             {
+                 user_id = userId,
+                 service = "Google"
+             };
 
-           AuthenticationReq packet = new AuthenticationReq()
-            {
-                user_id = PlayGamesPlatform.Instance.GetUserId(),
-                service = "Google"
-            };
+             try
+             {
 
-            try
-            {
+                 ResultMessage("유저 확인 요청...");
 
-                ResultMessage("유저 확인 요청...");
-
-                GsoWebService service = new GsoWebService();
-                AuthenticationRequest request = service.mAuthorizeResource.GetAuthenticationRequest(packet);
-                request.ExecuteAsync(OnProcessAuthentication);
-            }
-            catch (HttpRequestException error)
-            {
-                ResultMessage($"유저 확인 실패 : {error.Message}");
-            }
+                 GsoWebService service = new GsoWebService();
+                 AuthenticationRequest request = service.mAuthorizeResource.GetAuthenticationRequest(packet);
+                 request.ExecuteAsync(OnProcessAuthentication);
+             }
+             catch (HttpRequestException error)
+             {
+                 ResultMessage($"유저 확인 실패 : {error.Message}");
+             }
 
         }
         else if (status == SignInStatus.InternalError)

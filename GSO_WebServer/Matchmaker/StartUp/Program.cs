@@ -16,7 +16,6 @@ namespace Matchmaker.Startup
 
                     webBuilder.ConfigureKestrel(serverOptions =>
                     {
-                        serverOptions.ListenAnyIP(5200);
 #if AWS
                     serverOptions.ListenAnyIP(5200);
 #endif
