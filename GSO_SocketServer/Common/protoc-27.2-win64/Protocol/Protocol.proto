@@ -325,12 +325,12 @@ message C_ExitGame{   //19
    int32 exitId = 2;
 }
 
-message C_JOINSERVER{   // 29  접속 요청
+message C_JoinServer{   // 29  접속 요청
    CredentiaInfo credential = 1;
 }
 
 
-message  S_JOINSERVER{   //30 접속 응답
+message  S_JoinServer{   //30 접속 응답
     bool connected = 1;
 }  
 
