@@ -23,56 +23,22 @@ class PacketHandler
     //GWANHO TEMP
     private static int cnt = 0;
 
+
+  
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
     {
-        Console.WriteLine("C_EnterGameHandler");
+        // (인게임)1명 입장 패킷
         ClientSession clientSession = session as ClientSession;
         C_EnterGame enterGamePacket = (C_EnterGame)message;
-        Player p = ObjectManager.Instance.Add<Player>();
-        {
-            p.Session = clientSession;
-            p.info.Name = enterGamePacket.Name + clientSession.SessionId;
-            p.info.PositionInfo.PosX = 0;
-            p.info.PositionInfo.PosY = 0;
-            p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
-            //바꾼 부분
-
-#if DOCKER
-            //이거 uid를 검사해서 올바르게 넣어주면 됨
-            if(p.gameRoom.connectPlayer.Count > 0 )
-            {
-                if(p.gameRoom.connectPlayer.Contains(enterGamePacket.Credential.Uid) == true)
-                {
-                    p.UID = enterGamePacket.Credential.Uid;
-                }
-                else { 
-                
-                    Console.WriteLine("connectPlayer Contains not p.UID ");
-                }
-
-            }
-            else
-            {
-                Console.WriteLine("p.gameRoom.connectPlayer.Count is 0");
-            }
-
-#else
-
-            p.UID = ++cnt;
-#endif
-
-            //p.stat
-
-        }
+        Console.WriteLine($"C_EnterGameHandler");
 
 
-        clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
-        clientSession.MyPlayer = p;
+        Player player = clientSession.MyPlayer;
 
-        BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
+        // TODO : Credential 확인 작업 , packet.Credential.Uid
 
-        room.Push(room.EnterGame, clientSession.MyPlayer);
-        ObjectManager.Instance.DebugObjectDics();
+
+        player.gameRoom.Push(player.gameRoom.HandleClientLoadGame, player);
     }
 
     /*public static void C2S_ChatHandler(PacketSession session, IPacket packet)
@@ -226,17 +192,70 @@ class PacketHandler
 
     internal static void C_JoinServerHandler(PacketSession session, IMessage message)
     {
+        Console.WriteLine("C_JoinServerHandler");
+
+        //접속 요청
         ClientSession clientSession = session as ClientSession;
         C_JoinServer packet = (C_JoinServer)message;
 
-        Console.WriteLine($"C_LoadGameHandler");
+        //인증 과정
 
 
-        Player player = clientSession.MyPlayer;
+      
+        Player p = ObjectManager.Instance.Add<Player>();
+        {
+            p.Session = clientSession;
+            p.info.Name = packet.Name + clientSession.SessionId;
+            p.info.PositionInfo.PosX = 0;
+            p.info.PositionInfo.PosY = 0;
+            p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+            //바꾼 부분
 
-        // TODO : Credential 확인 작업 , packet.Credential.Uid
+#if DOCKER
+            //이거 uid를 검사해서 올바르게 넣어주면 됨
+            if(p.gameRoom.connectPlayer.Count > 0 )
+            {
+                if(p.gameRoom.connectPlayer.Contains(packet.Credential.Uid) == true)
+                {
+                    p.UID = packet.Credential.Uid;
+                }
+                else { 
+                
+                    Console.WriteLine("connectPlayer Contains not p.UID ");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("p.gameRoom.connectPlayer.Count is 0");
+            }
+
+#else
+
+            p.UID = ++cnt;
+#endif
+
+            //p.stat
+
+        }
 
 
-        player.gameRoom.Push(player.gameRoom.HandleClientLoadGame, player); 
+        clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
+        clientSession.MyPlayer = p;
+
+        BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
+
+        room.Push(room.EnterGame, clientSession.MyPlayer);
+        ObjectManager.Instance.DebugObjectDics();
     }
+
+
+
+
+
+
+
+
+
+
 }

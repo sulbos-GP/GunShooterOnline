@@ -857,22 +857,95 @@ namespace Server
 
 
 
-        List<Player> p = new List<Player>();
+        List<Player> tempPlayer = new List<Player>();
 
         public void HandleClientLoadGame(Player player)
         {
-            p.Add(player);
+            //들어올게
+            tempPlayer.Add(player);
 
-            if(connectPlayer.Count == p.Count)
+
+
+            if(connectPlayer.Count == tempPlayer.Count)
             {
-                OnGameStart();
+                //전부 모임
+                GameStart();
+            }
+            else
+            {
+               //아직 다 못모임
+                S_WaitingStatus status = new S_WaitingStatus()
+                {
+                    CurrentPlayers = tempPlayer.Count,
+                    RequiredPlayers = connectPlayer.Count
+                };
+
+                BroadCast(status);
             }
 
         }
 
 
-        private void OnGameStart()
+        private void GameStart()
         {
+            foreach(Player p in tempPlayer)
+            {
+                if(_playerDic.TryAdd(p.Id, p) == false)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine("GameStart ERROR");
+                }
+
+            }
+
+
+
+            S_GameStart s_GameStart = new S_GameStart()
+            {
+                RoomId = this.RoomId,
+                StartTime = System.Environment.TickCount,
+
+            };
+
+            foreach (var p in _playerDic.Values)
+            {
+                s_GameStart.Objects.Add(p.info);
+            }
+
+            foreach (var m in _monsterDic.Values)
+            {
+                s_GameStart.Objects.Add(m.info);
+            }
+
+            foreach (var s in _skillObjDic.Values)
+            {
+                s_GameStart.Objects.Add(s.info);
+            }
+
+            BroadCast(s_GameStart);
+
+            IsGameStarted = true;
+
+
+        }
+
+
+
+
+        public void HandleJoin(CredentiaInfo credentiaInfo, ClientSession s)
+        {
+            //s 와 인증 확인
+
+            S_JoinServer joinServer = new S_JoinServer()
+            {
+                Connected = true,
+            };
+
+            s.Send(joinServer);
+
 
         }
 
