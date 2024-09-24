@@ -861,7 +861,7 @@ namespace Server
 
         public void HandleClientLoadGame(Player player)
         {
-            //들어올게
+            //로드 끝났어
             tempPlayer.Add(player);
 
 
@@ -880,7 +880,11 @@ namespace Server
                     RequiredPlayers = connectPlayer.Count
                 };
 
-                BroadCast(status);
+
+                foreach (var t in tempPlayer)
+                {
+                    t.Session.Send(status);
+                }
             }
 
         }
