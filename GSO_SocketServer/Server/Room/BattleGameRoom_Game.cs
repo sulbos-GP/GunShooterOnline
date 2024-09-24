@@ -864,6 +864,8 @@ namespace Server
             //로드 끝났어
             tempPlayer.Add(player);
 
+            if(connectPlayer.Count == 0)
+                GameStart();
 
 
             if(connectPlayer.Count == tempPlayer.Count)
@@ -894,14 +896,14 @@ namespace Server
         {
             foreach(Player p in tempPlayer)
             {
-                if(_playerDic.TryAdd(p.Id, p) == false)
+                /*if(_playerDic.TryAdd(p.Id, p) == false)
                 {
 
                 }
                 else
                 {
                     Console.WriteLine("GameStart ERROR");
-                }
+                }*/
 
             }
 
