@@ -114,7 +114,7 @@ namespace Google.Protobuf.Protocol {
             "AiABKAsyFS5Qcm90b2NvbC5QU19JdGVtSW5mbyJpCg1DcmVkZW50aWFJbmZv",
             "EgsKA3VpZBgBIAEoBRIUCgxhY2Nlc3NfdG9rZW4YAiABKAkSEgoKZXhwaXJl",
             "c19pbhgDIAEoAxINCgVzY29wZRgEIAEoCRISCgp0b2tlbl90eXBlGAUgASgJ",
-            "Kt8ECgVNc2dJZBIQCgxTX0VOVEVSX0dBTUUQABIQCgxTX0xFQVZFX0dBTUUQ",
+            "KsgECgVNc2dJZBIQCgxTX0VOVEVSX0dBTUUQABIQCgxTX0xFQVZFX0dBTUUQ",
             "ARILCgdTX1NQQVdOEAISDQoJU19ERVNQQVdOEAMSCgoGU19NT1ZFEAQSCgoG",
             "Q19NT1ZFEAUSDwoLU19DT05ORUNURUQQBhIPCgtTX0NIQU5HRV9IUBAHEgkK",
             "BVNfRElFEAgSEAoMQ19FTlRFUl9HQU1FEAkSFAoQQ19MT0FEX0lOVkVOVE9S",
@@ -127,17 +127,17 @@ namespace Google.Protobuf.Protocol {
             "SE9PVBAZEhEKDVNfUkFZQ0FTVF9ISVQQGhIPCgtTX0VYSVRfR0FNRRAbEg8K",
             "C0NfRVhJVF9HQU1FEBwSEQoNQ19KT0lOX1NFUlZFUhAdEhEKDVNfSk9JTl9T",
             "RVJWRVIQHhIQCgxTX0dBTUVfU1RBUlQQHxIUChBTX1dBSVRJTkdfU1RBVFVT",
-            "ECASFQoQQ19TRVJWRVJfQ09NTUFORBCQTip5Cg5HYW1lT2JqZWN0VHlwZRIO",
-            "CgpOT05FT0JKRUNUEAASCgoGUExBWUVSEAESCwoHTU9OU1RFUhACEg4KClBS",
-            "T0pFQ1RJTEUQAxINCglJTlZFTkRBVEEQBBIHCgNCT1gQBRIICgRJVEVNEAYS",
-            "DAoIRVhJVFpPTkUQBypLCglTaGFwZVR5cGUSCQoFU0hBUEUQABIKCgZDSVJD",
-            "TEUQARINCglSRUNUQU5HTEUQAhILCgdQT0xZR09OEAMSCwoHQVJDUE9MWRAE",
-            "KlMKCEl0ZW1UeXBlEgoKBldFQVBPThAAEg0KCURFRkVOU0lWRRABEgcKA0JB",
-            "RxACEgwKCFJFQ09WRVJZEAMSCgoGQlVMTEVUEAQSCQoFU1BPSUwQBSqDAQoL",
-            "UEVfR2VhclBhcnQSCAoETk9ORRAAEg4KCk1haW5XZWFwb24QARINCglTdWJX",
-            "ZWFwb24QAhIJCgVBcm1vchADEgwKCEJhY2twYWNrEAQSDwoLUG9ja2V0Rmly",
-            "c3QQBRIQCgxQb2NrZXRTZWNvbmQQBhIPCgtQb2NrZXRUaGlyZBAHQhuqAhhH",
-            "b29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
+            "ECAqeQoOR2FtZU9iamVjdFR5cGUSDgoKTk9ORU9CSkVDVBAAEgoKBlBMQVlF",
+            "UhABEgsKB01PTlNURVIQAhIOCgpQUk9KRUNUSUxFEAMSDQoJSU5WRU5EQVRB",
+            "EAQSBwoDQk9YEAUSCAoESVRFTRAGEgwKCEVYSVRaT05FEAcqSwoJU2hhcGVU",
+            "eXBlEgkKBVNIQVBFEAASCgoGQ0lSQ0xFEAESDQoJUkVDVEFOR0xFEAISCwoH",
+            "UE9MWUdPThADEgsKB0FSQ1BPTFkQBCpTCghJdGVtVHlwZRIKCgZXRUFQT04Q",
+            "ABINCglERUZFTlNJVkUQARIHCgNCQUcQAhIMCghSRUNPVkVSWRADEgoKBkJV",
+            "TExFVBAEEgkKBVNQT0lMEAUqgwEKC1BFX0dlYXJQYXJ0EggKBE5PTkUQABIO",
+            "CgpNYWluV2VhcG9uEAESDQoJU3ViV2VhcG9uEAISCQoFQXJtb3IQAxIMCghC",
+            "YWNrcGFjaxAEEg8KC1BvY2tldEZpcnN0EAUSEAoMUG9ja2V0U2Vjb25kEAYS",
+            "DwoLUG9ja2V0VGhpcmQQB0IbqgIYR29vZ2xlLlByb3RvYnVmLlByb3RvY29s",
+            "YgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), typeof(global::Google.Protobuf.Protocol.ItemType), typeof(global::Google.Protobuf.Protocol.PE_GearPart), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -232,17 +232,13 @@ namespace Google.Protobuf.Protocol {
     /// </summary>
     [pbr::OriginalName("S_JOIN_SERVER")] SJoinServer = 30,
     /// <summary>
-    ///모두 모임
+    ///사람이 아직 안모임
     /// </summary>
     [pbr::OriginalName("S_GAME_START")] SGameStart = 31,
     /// <summary>
-    ///32 사람이 아직 안모임
+    ///32  모두 모임
     /// </summary>
     [pbr::OriginalName("S_WAITING_STATUS")] SWaitingStatus = 32,
-    /// <summary>
-    ///수정해야하면 말점
-    /// </summary>
-    [pbr::OriginalName("C_SERVER_COMMAND")] CServerCommand = 10000,
   }
 
   public enum GameObjectType {
