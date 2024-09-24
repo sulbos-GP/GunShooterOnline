@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd6660fd6b61bb141ba0e22f8cfce448, type: 3}
   m_Name: Standard
   m_EditorClassIdentifier: 
-  GameServerIp: 127.0.0.1
+  GameServerIp: 10.0.2.2
   GameServerPort: 7777
-  AuthorizationBaseUri: http://127.0.0.1:5000
-  CenterBaseUri: http://127.0.0.1:5000
-  MatchmakerBaseUri: http://127.0.0.1:5200
-  GameServerManagerBaseUri: http://127.0.0.1:7000
+  AuthorizationBaseUri: http://10.0.2.2:5000
+  CenterBaseUri: http://10.0.2.2:5000
+  MatchmakerBaseUri: http://10.0.2.2:5200
+  GameServerManagerBaseUri: http://10.0.2.2:7000
+  LobbyName: Lobby

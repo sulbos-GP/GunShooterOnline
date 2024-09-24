@@ -18,3 +18,4 @@ MonoBehaviour:
   CenterBaseUri: http://10.0.2.2:5000
   MatchmakerBaseUri: http://10.0.2.2:5200
   GameServerManagerBaseUri: http://10.0.2.2:7000
+  LobbyName: Shelter
