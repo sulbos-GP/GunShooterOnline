@@ -479,7 +479,7 @@ namespace Matchmaker.Service
             }
             catch (Exception e)
             {
-                Console.WriteLine($"[MatchmakerService.RemoveMatchTicket] : {e.Message}");
+                Console.WriteLine($"[MatchmakerService.RollbackTicket] : {e.Message}");
             }
             finally
             {
