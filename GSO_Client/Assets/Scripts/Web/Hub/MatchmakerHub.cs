@@ -98,7 +98,6 @@ public class MatchmakerHub : ClientHub
 
                 //Enter할때 uid 보내주셈
                 C_EnterGame c_EnterGame = new C_EnterGame();
-                c_EnterGame.Name = "jish";
                 c_EnterGame.Credential = new CredentiaInfo()
                 {
                     Uid = credential.uid,
