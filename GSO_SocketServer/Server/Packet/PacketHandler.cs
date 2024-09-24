@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WebCommonLibrary.DTO.GameServer;
 using WebCommonLibrary.DTO.Performance;
@@ -36,7 +37,10 @@ class PacketHandler
         C_EnterGame enterGamePacket = (C_EnterGame)message;
         Console.WriteLine($"C_EnterGameHandler");
 
-
+        if (clientSession.MyPlayer == null)
+        {
+            Thread.Sleep(1000);
+        }
         Player player = clientSession.MyPlayer;
 
         // TODO : Credential 확인 작업 , packet.Credential.Uid
