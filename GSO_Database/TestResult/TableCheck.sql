@@ -1,13 +1,9 @@
 SELECT
-    TABLE_NAME AS `Table`,
-    COLUMN_NAME AS `Column`,
-    COLUMN_TYPE AS `Type`,
-    IS_NULLABLE AS `Nullable`,
-    COLUMN_DEFAULT AS `Default`
+    *
 FROM
     INFORMATION_SCHEMA.COLUMNS
 WHERE
-    TABLE_SCHEMA = 'master_database'
+    TABLE_SCHEMA = 'game_database'
 ORDER BY
     TABLE_NAME,
     ORDINAL_POSITION;
