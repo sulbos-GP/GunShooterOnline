@@ -54,7 +54,7 @@ namespace GSO_WebServerLibrary.Middleware
                     }
 
                     FMasterVersionApp masterVersionApp = mMasterDB.Context.MasterVersionApp.FirstOrDefault().Value;
-                    string leastVersionAppString = masterVersionApp.major.ToString() + "." + masterVersionApp.minor.ToString() + "." + masterVersionApp.patch.ToString();
+                    string leastVersionAppString = "1.0.0";//masterVersionApp.major.ToString() + "." + masterVersionApp.minor.ToString() + "." + masterVersionApp.patch.ToString();
                     if (!app.Equals(leastVersionAppString))
                     {
                         await SendMiddlewareResponse(context, StatusCodes.Status426UpgradeRequired, WebErrorCode.InValidAppVersion);
@@ -62,7 +62,7 @@ namespace GSO_WebServerLibrary.Middleware
                     }
 
                     FMasterVersionData masterVersionData = mMasterDB.Context.MasterVersionData.FirstOrDefault().Value;
-                    string masterVersionDataString = masterVersionData.major.ToString() + "." + masterVersionApp.minor.ToString() + "." + masterVersionApp.patch.ToString();
+                    string masterVersionDataString = "1.0.0";//masterVersionData.major.ToString() + "." + masterVersionApp.minor.ToString() + "." + masterVersionApp.patch.ToString();
                     if (!data.Equals(masterVersionDataString))
                     {
                         await SendMiddlewareResponse(context, StatusCodes.Status426UpgradeRequired, WebErrorCode.InValidAppVersion);

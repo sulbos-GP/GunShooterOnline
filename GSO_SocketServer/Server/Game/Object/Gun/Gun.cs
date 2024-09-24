@@ -200,7 +200,7 @@ namespace Server.Game
                 }
                 return true;
             }
-            return false; //발사 성공 여부
+            //return false; //발사 성공 여부
         }
 
         public float GetRandomNormalDistribution(float mean, float standard)

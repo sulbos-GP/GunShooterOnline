@@ -32,26 +32,26 @@ namespace ServerCore
         protected abstract Task<bool> OnStart();
         protected abstract Task<bool> OnStop();
 
-        public void Start()
+        public bool Start()
         {
             if (true == mManager.IsRunning)
             {
-                return;
+                return false;
             }
 
             mManager.DisconnectTimeout = 100000;
             mManager.SimulateLatency = true;
             if (false == mManager.Start(mEndPoint.Port))
             {
-                return;
+                return false;
             }
 
             if (false == OnStart().Result)
             {
-                return;
+                return false;
             }
 
-
+            return true;
         }
 
         public void Stop()
