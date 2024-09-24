@@ -1,7 +1,5 @@
 USE game_database;
 
-DROP TABLE IF EXISTS gear;
-
 #유저의 무장(장비)
 CREATE TABLE IF NOT EXISTS gear (
 	gear_id					INT 							NOT NULL 	AUTO_INCREMENT					COMMENT '장비 아이디',
@@ -14,6 +12,3 @@ CREATE TABLE IF NOT EXISTS gear (
 	CONSTRAINT FK_gear_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT,
 	CONSTRAINT FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id FOREIGN KEY (`unit_attributes_id`) REFERENCES unit_attributes(`unit_attributes_id`) ON DELETE CASCADE ON UPDATE RESTRICT
 );
-
-SELECT * FROM gear;
-SELECT * FROM gear WHERE uid=11;
