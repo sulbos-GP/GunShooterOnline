@@ -83,6 +83,8 @@ public abstract class WebClientServiceRequest<TResponse>
         else if (request.responseCode == 426)
         {
             //버전 업그레이드 필요
+            UpgradeVersionRes response = Newtonsoft.Json.JsonConvert.DeserializeObject<UpgradeVersionRes>(request.downloadHandler.text);
+            OnProcessUpgradeVersion(response);
         }
         else
         {
@@ -114,8 +116,18 @@ public abstract class WebClientServiceRequest<TResponse>
     {
         if (response.error_code == WebErrorCode.None)
         {
-            
-            
+           
+        }
+        else if(response.error_code == WebErrorCode.DiscrepancyAppVersion)
+        {
+
+        }
+        else if(response.error_code == WebErrorCode.DiscrepancyDataVersion)
+        {
+            MySQLToExcel excel = new MySQLToExcel(); // TO-DO 추후에 객체 -> STATIC 화 진행 예정.
+            excel.Connect();
+            Managers.VersionConfig.SetDataVersion(excel.GetDataVersion()); // x.x.x Type
+            excel.DisConnect();
         }
     }
 
