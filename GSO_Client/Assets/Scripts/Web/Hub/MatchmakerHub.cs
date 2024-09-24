@@ -96,15 +96,28 @@ public class MatchmakerHub : ClientHub
                     return;
                 }
 
-                //Enter�Ҷ� uid �����ּ�
-                C_EnterGame c_EnterGame = new C_EnterGame();
-                //c_EnterGame.Name = "jish";
-                c_EnterGame.Credential = new CredentiaInfo()
+                /* //Enter�Ҷ� uid �����ּ�
+                 C_EnterGame c_EnterGame = new C_EnterGame();
+                 //c_EnterGame.Name = "jish";
+                 c_EnterGame.Credential = new CredentiaInfo()
+                 {
+                     Uid = credential.uid,
+                 };
+
+                 Managers.Network.Send(c_EnterGame);
+
+                 */
+
+
+                C_JoinServer c_JoinServer = new C_JoinServer();
+                c_JoinServer.Name = "jish";
+                c_JoinServer.Credential = new CredentiaInfo()
                 {
                     Uid = credential.uid,
                 };
+                Managers.Network.Send(c_JoinServer);
 
-                Managers.Network.Send(c_EnterGame);
+
                 Debug.Log("������");
             }
 

@@ -75,6 +75,23 @@ public class LobbyScene : BaseScene
     {
         Managers.Scene.LoadScene(Define.Scene.Forest);
 
+
+
+        C_JoinServer c_JoinServer = new C_JoinServer();
+        c_JoinServer.Name = "jish";
+        /*c_JoinServer.Credential = new CredentiaInfo()
+        {
+            Uid = credential.uid,
+        };*/
+        Managers.Network.Send(c_JoinServer);
+
+
+
+
+
+
+
+
         //C_JoinServer c_JoinServer = new C_JoinServer();
         //c_JoinServer.Name = "jish";
         ////c_JoinServer.credential
