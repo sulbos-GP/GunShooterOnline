@@ -75,12 +75,12 @@ public class LobbyScene : BaseScene
     {
         Managers.Scene.LoadScene(Define.Scene.Forest);
 
-       /* C_JoinServer c_JoinServer = new C_JoinServer();
-        c_JoinServer.Name = "jish";
-        //c_JoinServer.credential
-        Managers.Network.Send(c_JoinServer);*/
+        //C_JoinServer c_JoinServer = new C_JoinServer();
+        //c_JoinServer.Name = "jish";
+        ////c_JoinServer.credential
+        //Managers.Network.Send(c_JoinServer);
 
-        Debug.Log("Send C_JoinServer in LobbyScene"); 
+        //Debug.Log("Send C_JoinServer in LobbyScene"); 
 
         /*
         C_EnterGame c_EnterGame = new C_EnterGame();
