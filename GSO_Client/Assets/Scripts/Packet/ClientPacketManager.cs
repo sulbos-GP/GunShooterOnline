@@ -60,9 +60,9 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SJoinServer, MakePacket<S_JOINSERVER>);
 		_handler.Add((ushort)MsgId.SJoinServer,PacketHandler.S_JoinServerHandler);
         _onRecv.Add((ushort)MsgId.SWaitingStatus, MakePacket<S_WaitingStatus>);
-        _handler.Add((ushort)MsgId.SWaitingStatus, PacketHandler.S_WaitingStatus);
+        _handler.Add((ushort)MsgId.SWaitingStatus, PacketHandler.S_WaitingStatusHandler);
         _onRecv.Add((ushort)MsgId.SGameStart, MakePacket<S_GameStart>);
-        _handler.Add((ushort)MsgId.SGameStart, PacketHandler.S_GameStart);
+        _handler.Add((ushort)MsgId.SGameStart, PacketHandler.S_GameStartHandler);
 
     }
 
