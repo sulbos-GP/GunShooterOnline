@@ -11,7 +11,7 @@ public partial class MyPlayerController : PlayerController
 {
     [SerializeField] private List<BaseController> _attackableList = new();
 
-    private ButtonSkill _butnSkill;
+    //private ButtonSkill _butnSkill;
     private GameInfoBar _gameInfoBar; // HP+ Exp + Info
     
     private Coroutine _coskillCoolTime;
@@ -122,10 +122,10 @@ public partial class MyPlayerController : PlayerController
 
         //----------------------------------------------------------------------------------------
 
-        _butnSkill = FindObjectOfType<ButtonSkill>();
-        if (_butnSkill == null)
-            _butnSkill = Managers.Resource.Instantiate("UI/SkillBtns").GetOrAddComponent<ButtonSkill>();
-        _butnSkill.Init(Stat);
+        //_butnSkill = FindObjectOfType<ButtonSkill>();
+        //if (_butnSkill == null)
+        //    _butnSkill = Managers.Resource.Instantiate("UI/SkillBtns").GetOrAddComponent<ButtonSkill>();
+        //_butnSkill.Init(Stat);
 
         //----------------------------------------------------------------------------------------
         AutoUpdatedFlag();
