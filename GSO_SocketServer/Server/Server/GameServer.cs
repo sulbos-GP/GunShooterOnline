@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WebCommonLibrary.DTO.GameServer;
+using WebCommonLibrary.DTO.Performance;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
 
@@ -16,8 +17,6 @@ namespace Server.Server
 {
     public class GameServer : ServerNetworkService
     {
-
-
 
         protected override async Task<bool> OnStart()
         {
@@ -30,7 +29,6 @@ namespace Server.Server
             mGameLogicTimer.Start();
 
 #if DOCKER
-
             try
             {
                 Program.web.initializeServiceAndResource();
@@ -58,11 +56,10 @@ namespace Server.Server
             {
                 //TaskError는 GameServerManager(WEB) 에서 대기하고 있던 토큰이 취소되면서 발생
                 Console.WriteLine($"[OnStart] : {ex.Message}");
+                return false;
             }
-
-
 #else
-
+            await Task.Yield();
 #endif
 
             return true;
@@ -75,18 +72,22 @@ namespace Server.Server
             Dictionary<int, MatchOutcome> outcome = new Dictionary<int, MatchOutcome>();
 
             BattleGameRoom battleGame =  gameRoom as BattleGameRoom;
-
-            if (battleGame != null)
+            if (battleGame == null)
             {
-                await Program.web.Lobby.PostMatchOutcome(battleGame.MatchInfo);
-
+                Console.WriteLine("게임 룸의 정보가 없습니다.");
             }
 
+            //플레이어 레이팅 집계 요청
+            PlayerRatingRes playerRating = await Program.web.Lobby.PostPlayerRating(battleGame.MatchInfo);
+            if(playerRating.error_code != WebErrorCode.None)
+            {
+                Console.WriteLine("플레이어의 레이팅이 집계되지 못하였습니다.");
+            }
 
             //종료 요청
             await Program.web.ServerManager.PostShutdown();
 #else
-
+            await Task.Yield();
 #endif
 
             return true;

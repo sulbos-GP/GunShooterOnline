@@ -7,7 +7,6 @@ using UnityEngine.Rendering;
 using NPOI.SS.Formula.Functions;
 using System;
 using UnityEngine.UI;
-using Doozy.Runtime.Reactor.Animators;
 
 public class InputController : MonoBehaviour
 {

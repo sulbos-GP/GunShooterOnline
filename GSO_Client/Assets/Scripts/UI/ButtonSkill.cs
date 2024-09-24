@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Doozy.Runtime.UIManager.Components;
 using Google.Protobuf.Protocol;
 using Server.Data;
 using UnityEngine;
@@ -79,14 +78,14 @@ public class ButtonSkill : MonoBehaviour
     {
         if (num == 0)
         {
-            MainBtn.GetComponent<UIButton>().interactable = active;
+            //MainBtn.GetComponent<UIButton>().interactable = active;
             return true;
         }
 
         num--;
         if (skillBtns.Count > num)
         {
-            skillBtns[num].GetComponent<UIButton>().interactable = active;
+            //skillBtns[num].GetComponent<UIButton>().interactable = active;
             return true;
         }
 

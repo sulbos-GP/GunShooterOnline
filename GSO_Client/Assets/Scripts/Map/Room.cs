@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Doozy.Runtime.UIManager.Components;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
@@ -77,8 +76,8 @@ public class Room : MonoBehaviour
             {
                 Debug.Log($"{OwnerPlayer?.name}{TryOwnerPlayer.name},{_tryOwnerProgress}");
                 
-                occupationBar.GetComponent<UIScrollbar>().size = _tryOwnerProgress;
-                occupationBar.GetComponent<UIScrollbar>().colors = new ColorBlock(){normalColor = Color.magenta};
+                //occupationBar.GetComponent<UIScrollbar>().size = _tryOwnerProgress;
+                //occupationBar.GetComponent<UIScrollbar>().colors = new ColorBlock(){normalColor = Color.magenta};
             }
             
             
