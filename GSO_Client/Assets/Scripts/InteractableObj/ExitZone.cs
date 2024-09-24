@@ -121,7 +121,16 @@ public class ExitZone : InteractableObject
         Managers.Object.DebugDics();
 
         // 게임 씬을 로비로
-        Managers.Scene.LoadScene(Define.Scene.Lobby);
+        var evniorment = Managers.EnvConfig.GetEnvironmentConfig();
+        if(evniorment.LobbyName == "Shelter")
+        {
+            Managers.Scene.LoadScene(Define.Scene.Shelter);
+        }
+        else
+        {
+            Managers.Scene.LoadScene(Define.Scene.Lobby);
+        }
+
 
         isExiting = false; // 탈출 종료
     }
