@@ -678,12 +678,14 @@ internal class PacketHandler
 
     internal static void S_JoinServerHandler(PacketSession session, IMessage message)
     {
-        S_JOINSERVER packet = message as S_JOINSERVER;
+        S_JoinServer packet = message as S_JoinServer;
 
         if (!packet.Connected)
             return;
 
         //접속 완료
+
+        Debug.Log("서버에 접속 완료");
     }
 
     internal static void S_WaitingStatusHandler(PacketSession session, IMessage message)
@@ -695,6 +697,7 @@ internal class PacketHandler
 
         //참가시 인원 증감시 호출
 
+        Debug.Log($"접속 인원 : {packet.CurrentPlayers} / {packet.RequiredPlayers}");
     }
 
     internal static void S_GameStartHandler(PacketSession session, IMessage message)
@@ -704,7 +707,36 @@ internal class PacketHandler
         if (packet == null)
             return;
 
-        //캐릭터 정보랑 가방 정보 가져오는거 같음.
+
+
+        //자신의 플레이어 외에 다른 플레이어와 오브젝트의 객체 생성
+
+        foreach(ObjectInfo obj in packet.Objects)
+        {
+            Managers.Object.Add(obj);
+        }
+
+        //obj가 플레이어인 경우 장착칸 1번 확인해서 
+
+        //Managers.Object.Add(enterGamePacket.Player, true);
+
+        ////Use Stat
+        //var Stats = enterGamePacket.Player.StatInfo;
+        //Managers.Object.MyPlayer.Hp = Stats.Hp;
+        //Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
+
+        ////enterGamePacket.ItemInfos //총알을 반영하기 위함. 실제로 아이템을 생성해내지는 않음
+
+        ////enterGamePacket.GearInfos //장착을 통해 장비 반영. 실제로 아이템을 생성하지 않고 장비변경만
+        //foreach (PS_GearInfo gear in enterGamePacket.GearInfos)
+        //{
+        //    EquipSlot targetSlot = InventoryController.equipSlotDic[(int)gear.Part];
+
+        //    ItemData data = new ItemData();
+        //    data.SetItemData(gear.Item);
+
+        //    targetSlot.ApplyItemEffects(data);
+        //}
     }
 
 

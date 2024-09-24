@@ -29,7 +29,7 @@ public class MatchmakerHub : ClientHub
 
     protected override void Init()
     {
-        string name = "¸ÅÄ¡¸ÞÀÌÄ¿";
+        string name = "ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½Ä¿";
         string url = Managers.EnvConfig.GetEnvironmentConfig().MatchmakerBaseUri + "/MatchmakerHub";
 
         this.SetHub(name, url);
@@ -61,13 +61,13 @@ public class MatchmakerHub : ClientHub
     }
 
     /// <summary>
-    /// ¸ÅÄª ¼º°ø
+    /// ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void S2C_MatchSuccess(string client_id, MatchProfile response)
     {
         EnqueueDispatch(() =>
         {
-            Managers.SystemLog.Message($"¸ÅÄ¡°¡ »ý¼ºµÇ¾ú½À´Ï´Ù {response.host_ip}:{response.host_port}");
+            Managers.SystemLog.Message($"ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ {response.host_ip}:{response.host_port}");
 
             if (matchStateUI == null)
             {
@@ -75,15 +75,15 @@ public class MatchmakerHub : ClientHub
             }
             UI_MatchState state = matchStateUI.GetComponentInChildren<UI_MatchState>();
 
-            state.SetStateText("¸ÅÄª ¿Ï·á");
+            state.SetStateText("ï¿½ï¿½Äª ï¿½Ï·ï¿½");
             state.StopTiemr();
             Destroy(matchStateUI);
 
             {
-                //½ÂÇö
+                //ï¿½ï¿½ï¿½ï¿½
                 //response.host_ip = "113.60.249.123";
 
-                //·ÎÄÃ ¾Ö¹Ä
+                //ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¹ï¿½
                 response.host_ip = "10.0.2.2";
 
                 Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
@@ -96,16 +96,16 @@ public class MatchmakerHub : ClientHub
                     return;
                 }
 
-                //EnterÇÒ¶§ uid º¸³»ÁÖ¼À
+                //Enterï¿½Ò¶ï¿½ uid ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½
                 C_EnterGame c_EnterGame = new C_EnterGame();
-                c_EnterGame.Name = "jish";
+                //c_EnterGame.Name = "jish";
                 c_EnterGame.Credential = new CredentiaInfo()
                 {
                     Uid = credential.uid,
                 };
 
                 Managers.Network.Send(c_EnterGame);
-                Debug.Log("Á¢¼ÓÁß");
+                Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             }
 
             //Managers.Network.ConnectToGame(response.host_ip);
@@ -113,13 +113,13 @@ public class MatchmakerHub : ClientHub
     }
 
     /// <summary>
-    /// ¸ÅÄª ½ÇÆÐ ¶Ç´Â Âü¿© Ãë¼Ò ¼º°ø
+    /// ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½ ï¿½Ç´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void S2C_MatchFailed(WebErrorCode error)
     {
         EnqueueDispatch(() =>
         {
-            Managers.SystemLog.Message($"¸ÅÄ¡°¡ Ãë¼ÒµÇ¾ú½À´Ï´Ù {error.ToString()}");
+            Managers.SystemLog.Message($"ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ÒµÇ¾ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ {error.ToString()}");
 
             if (matchStateUI == null)
             {
@@ -129,12 +129,12 @@ public class MatchmakerHub : ClientHub
 
             if(error == WebErrorCode.PopPlayersExitSuccess)
             {
-                state.SetStateText("¸ÅÄª Ãë¼Ò ¿Ï·á");
+                state.SetStateText("ï¿½ï¿½Äª ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½");
                 Destroy(matchStateUI);
             }
             else if(error == WebErrorCode.PopPlayersJoinForced)
             {
-                //¸ÅÄªÀ» Ãë¼ÒÇÏ·Á°í ÇßÁö¸¸ ÀÌ¹Ì °ÔÀÓÀÌ ÀâÇô¹ö¸²
+                //ï¿½ï¿½Äªï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             }
             else
             {
@@ -145,7 +145,7 @@ public class MatchmakerHub : ClientHub
     }
 
     /// <summary>
-    /// ¸ÅÄª Âü¿© ¿äÃ»
+    /// ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
     /// </summary>
     public void OnJoinRequest(string name)
     {
@@ -167,7 +167,7 @@ public class MatchmakerHub : ClientHub
 
         try
         {
-            state.SetStateText("¸ÅÄª Âü¿© Áß...");
+            state.SetStateText("ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½...");
             mIsProcessing = true;
 
             ClientCredential credential = Managers.Web.Models.Credential;
@@ -195,12 +195,12 @@ public class MatchmakerHub : ClientHub
         catch (HttpRequestException error)
         {
             mIsProcessing = false;
-            state.SetStateText($"¸ÅÄª Âü¿© ½ÇÆÐ : {error.Message}");
+            state.SetStateText($"ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : {error.Message}");
         }
     }
 
     /// <summary>
-    /// ¸ÅÄª Âü¿© ÀÀ´ä
+    /// ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void OnProcessMatchJoin(JoinMatchRes response)
     {
@@ -215,21 +215,21 @@ public class MatchmakerHub : ClientHub
         if (response.error_code == WebErrorCode.None)
         {
 
-            state.SetStateText("¸ÅÄª ¿äÃ» ¼º°ø");
+            state.SetStateText("ï¿½ï¿½Äª ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½");
 
             state.StartTimer();
 
-            state.SetStateText("°ÔÀÓ ¸ÅÄª Áß...");
+            state.SetStateText("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Äª ï¿½ï¿½...");
         }
         else
         {
-            state.SetStateText($"¸ÅÄª Âü¿© ¿äÃ» ½ÇÆÐ : {response.error_code.ToString()}");
+            state.SetStateText($"ï¿½ï¿½Äª ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½ : {response.error_code.ToString()}");
             Destroy(matchStateUI);
         }
     }
 
     /// <summary>
-    /// ¸ÅÄª Ãë¼Ò ¿äÃ»
+    /// ï¿½ï¿½Äª ï¿½ï¿½ï¿½ ï¿½ï¿½Ã»
     /// </summary>
     public void OnCancleRequeset()
     {
@@ -241,7 +241,7 @@ public class MatchmakerHub : ClientHub
 
         try
         {
-            state.SetStateText("¸ÅÄª Ãë¼Ò Áß...");
+            state.SetStateText("ï¿½ï¿½Äª ï¿½ï¿½ï¿½ ï¿½ï¿½...");
             mIsProcessing = true;
 
             ClientCredential credential = Managers.Web.Models.Credential;
@@ -269,12 +269,12 @@ public class MatchmakerHub : ClientHub
         catch (HttpRequestException error)
         {
             mIsProcessing = false;
-            state.SetStateText($"¸ÅÄª Ãë¼Ò ½ÇÆÐ : {error.Message}");
+            state.SetStateText($"ï¿½ï¿½Äª ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ : {error.Message}");
         }
     }
 
     /// <summary>
-    /// ¸ÅÄª Ãë¼Ò ÀÀ´ä
+    /// ï¿½ï¿½Äª ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void OnProcessMatchCancle(CancleMatchRes response)
     {
@@ -288,18 +288,18 @@ public class MatchmakerHub : ClientHub
 
         if (response.error_code == WebErrorCode.None)
         {
-            state.SetStateText("¸ÅÄª Ãë¼Ò ¿äÃ» ¼º°ø");
+            state.SetStateText("ï¿½ï¿½Äª ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½");
             state.StopTiemr();
             Destroy(matchStateUI);
         }
         else if(response.error_code == WebErrorCode.PopPlayersExitRequested)
         {
-            //¸ÅÄª Å¥¿¡¼­ ¶ôÀÌ °É·ÁÀÖ¾î ¿äÃ»¸¸ ÇØµÎ°í ³ª¿Â »óÈ²
-            state.SetStateText("¸ÅÄª Ãë¼Ò ±â´Ù¸®´Â Áß...");
+            //ï¿½ï¿½Äª Å¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½É·ï¿½ï¿½Ö¾ï¿½ ï¿½ï¿½Ã»ï¿½ï¿½ ï¿½ØµÎ°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È²
+            state.SetStateText("ï¿½ï¿½Äª ï¿½ï¿½ï¿½ ï¿½ï¿½Ù¸ï¿½ï¿½ï¿½ ï¿½ï¿½...");
         }
         else
         {
-            Managers.SystemLog.Message("¸ÅÄª Ãë¼Ò ¿äÃ» ½ÇÆÐ");
+            Managers.SystemLog.Message("ï¿½ï¿½Äª ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½");
             //Destroy(matchStateUI);
         }
     }
