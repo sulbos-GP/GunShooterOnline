@@ -55,7 +55,7 @@ public class UIManager : MonoBehaviour
             }
             else
             {
-                AmmoText.text = playerGun._curAmmo.ToString() + " / " + playerGun.getGunStat().reload_round.ToString();
+                AmmoText.text = playerGun.CurAmmo.ToString() + " / " + playerGun.getGunStat().reload_round.ToString();
             }
         }
            

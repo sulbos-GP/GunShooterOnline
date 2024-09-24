@@ -707,12 +707,16 @@ internal class PacketHandler
         if (packet == null)
             return;
 
+
+
         //자신의 플레이어 외에 다른 플레이어와 오브젝트의 객체 생성
 
         foreach(ObjectInfo obj in packet.Objects)
         {
-            Managers.Object.Add(obj, true);
+            Managers.Object.Add(obj);
         }
+
+        //obj가 플레이어인 경우 장착칸 1번 확인해서 
 
         //Managers.Object.Add(enterGamePacket.Player, true);
 
