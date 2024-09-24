@@ -686,7 +686,7 @@ internal class PacketHandler
         //접속 완료
     }
 
-    internal static void S_WaitingStatus(PacketSession session, IMessage message)
+    internal static void S_WaitingStatusHandler(PacketSession session, IMessage message)
     {
         S_WaitingStatus packet = message as S_WaitingStatus;
 
@@ -697,7 +697,7 @@ internal class PacketHandler
 
     }
 
-    internal static void S_GameStart(PacketSession session, IMessage message)
+    internal static void S_GameStartHandler(PacketSession session, IMessage message)
     {
         S_GameStart packet = message as S_GameStart;
 
