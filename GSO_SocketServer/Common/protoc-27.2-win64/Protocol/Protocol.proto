@@ -40,9 +40,8 @@ enum MsgId{
 
   C_JOIN_SERVER = 29; //접속 요청
   S_JOIN_SERVER = 30; // 접속 응답
-  S_GAME_START = 31;  //사람이 아직 안모임
-  S_WAITING_STATUS = 32; //32  모두 모임
-   
+  S_GAME_START = 31;  //모두 모임
+  S_WAITING_STATUS = 32; //32 사람이 아직 안모임
   C_SERVER_COMMAND = 10000; //수정해야하면 말점
 
 }
@@ -148,8 +147,8 @@ message S_Die{                                //8
 }
 
 message C_EnterGame{                       //9  (인게임)입장 요청
-    string name = 1;
-    CredentiaInfo credential = 2;
+
+    CredentiaInfo credential = 1;
 }
 
 
@@ -326,7 +325,9 @@ message C_ExitGame{   //19
 }
 
 message C_JoinServer{   // 29  접속 요청
-   CredentiaInfo credential = 1;
+   string name = 1;
+   CredentiaInfo credential = 2;
+
 }
 
 
@@ -340,8 +341,8 @@ message S_WaitingStatus {   //31 사람이 아직 안모임
 }
 
 message S_GameStart {     //32  모두 모임
-    string roomId = 1; // 게임이 시작된 방의 ID
-    string startTime = 2;   // 게임 시작 시간
+    int32 roomId = 1; // 게임이 시작된 방의 ID
+    float startTime = 2;   // 게임 시작 시간
 
     repeated ObjectInfo objects = 3;
     repeated PS_ItemInfo itemInfos = 4;

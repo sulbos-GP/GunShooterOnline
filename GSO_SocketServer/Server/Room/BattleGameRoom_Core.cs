@@ -27,6 +27,8 @@ namespace Server
         public List<object> Escapes = new List<object>();
         public Dictionary<int, MatchOutcome> MatchInfo = new Dictionary<int, MatchOutcome>();
 
+        public bool IsGameStarted { get; protected set; } = false;
+
 
         public Map map { get; }
         public BattleGameRoom()
@@ -116,11 +118,14 @@ namespace Server
 
 
                 //본인에게 정보 전송
+                
+                
+                if(IsGameStarted == true)  //나중에 다시 접속하는 player라면
                 {
                     var enterPacket = new S_EnterGame();
                     enterPacket.Player = player.info;
 
-                    if( MatchInfo.TryAdd(player.UID, new MatchOutcome()) == false)
+                    if(MatchInfo.TryAdd(player.UID, new MatchOutcome()) == false)
                     {
                         Console.WriteLine("player.UID add same");
                     }
