@@ -469,11 +469,22 @@ namespace Matchmaker.Service
 
         public async Task RollbackTicket(Int32 uid, Ticket ticket)
         {
-            Console.WriteLine("[MatchmakerService.RollbackTicket]");
+            try
+            {
+                Console.WriteLine("[MatchmakerService.RollbackTicket]");
 
-            await mMatchQueue.ReleaseLock(uid);
+                await mMatchQueue.TryTakeLock(uid);
 
-            await mMatchQueue.SetTicket(uid, ticket);
+                await mMatchQueue.SetTicket(uid, ticket);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MatchmakerService.RemoveMatchTicket] : {e.Message}");
+            }
+            finally
+            {
+                await mMatchQueue.ReleaseLock(uid);
+            }
         }
 
     }
