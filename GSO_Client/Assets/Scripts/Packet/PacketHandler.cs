@@ -676,6 +676,38 @@ internal class PacketHandler
         Managers.Object.DebugDics();
     }
 
+    internal static void S_JoinServerHandler(PacketSession session, IMessage message)
+    {
+        S_JOINSERVER packet = message as S_JOINSERVER;
+
+        if (!packet.Connected)
+            return;
+
+        //접속 완료
+    }
+
+    internal static void S_WaitingStatus(PacketSession session, IMessage message)
+    {
+        S_WaitingStatus packet = message as S_WaitingStatus;
+
+        if (packet == null)
+            return;
+
+        //참가시 인원 증감시 호출
+
+    }
+
+    internal static void S_GameStart(PacketSession session, IMessage message)
+    {
+        S_GameStart packet = message as S_GameStart;
+
+        if (packet == null)
+            return;
+
+        //캐릭터 정보랑 가방 정보 가져오는거 같음.
+    }
+
+
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
