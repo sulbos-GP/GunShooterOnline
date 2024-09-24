@@ -15,13 +15,19 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading.Tasks;
+using WebCommonLibrary.DTO.GameServer;
+using WebCommonLibrary.DTO.Performance;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDB;
 
 class PacketHandler
 {
-    //GWANHO TEMP
-    private static int cnt = 0;
+
+#if !DOCKER
+    static int cnt = 0;
+#endif
 
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
     {
@@ -57,7 +63,6 @@ class PacketHandler
             }
 
 #else
-
             p.UID = ++cnt;
 #endif
 
@@ -217,9 +222,21 @@ class PacketHandler
         Console.WriteLine($"C_ExitPacketHandler");
 
         Player player = clientSession.MyPlayer;
+        BattleGameRoom room = player.gameRoom;
 
+        MatchOutcome outcome = room.MatchInfo[player.UID];
+        ExitGameHandlerAsync(outcome).Wait();
 
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
+    }
+
+    internal static async Task ExitGameHandlerAsync(MatchOutcome outcome)
+    {
+        PlayerStatsRes playerStats = await Program.web.Lobby.PostPlayerStats(outcome);
+        if (playerStats.error_code != WebErrorCode.None)
+        {
+            Console.WriteLine("[C_ExitGameHandler] 플레이어의 통계가 집계되지 않음");
+        }
     }
 
 }

@@ -33,6 +33,7 @@ namespace GameServerManager.Servicies
                 foreach (var container in containers)
                 {
                     await mSessionMemory.RemoveMatchStatus(container.ID);
+                    await mDockerService.StopContainer(container.ID);
                     await mDockerService.RemoveContainer(container.ID);
                 }
 
