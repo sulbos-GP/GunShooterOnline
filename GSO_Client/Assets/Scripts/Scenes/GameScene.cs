@@ -8,12 +8,7 @@ public class GameScene : BaseScene
 
     private void Awake()
     {
-        //위치가 이게 맞나?
-        C_JoinServer c_JoinServer = new C_JoinServer();
-        c_JoinServer.Name = "jish";
-        //c_JoinServer.credential
-        Managers.Network.Send(c_JoinServer);
-
+        
         Debug.Log("Send C_JoinServer in GameScene");
     }
 
