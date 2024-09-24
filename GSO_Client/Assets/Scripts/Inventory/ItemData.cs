@@ -36,13 +36,17 @@ public class ItemData
             case eITEM_TYPE.Bullet: item_type = ItemType.Bullet; break;
             case eITEM_TYPE.Spoil: item_type = ItemType.Spoil; break;
         }
-
         item_string_value = itemDB.description;
         item_purchase_price = itemDB.purchase_price;
         item_sell_price = itemDB.sell_price;
         item_searchTime = itemDB.inquiry_time;
         width = itemDB.scale_x;
         height = itemDB.scale_y;
+
+        PS_ItemAttributes attribute = itemInfo.Attributes;
+        durability = attribute.Durability == default ? default : attribute.Durability;
+        loadedAmmo = attribute.LoadedAmmo == default ? default : attribute.LoadedAmmo;
+
         isItemConsumeable = itemDB.type == eITEM_TYPE.Recovery || itemDB.type == eITEM_TYPE.Bullet;
         iconName = itemDB.icon;
     }
@@ -60,6 +64,12 @@ public class ItemData
         itemInfo.Rotate = rotate;
         itemInfo.Amount = amount;
         itemInfo.IsSearched = isSearched;
+
+        PS_ItemAttributes attribute = new PS_ItemAttributes();
+        attribute.Durability = durability;
+        attribute.LoadedAmmo = loadedAmmo;
+        itemInfo.Attributes = attribute;
+
         return itemInfo;
     }
 
@@ -91,7 +101,10 @@ public class ItemData
     public float item_searchTime;
     public int width;
     public int height;
-
-    public bool isItemConsumeable; //임시(아이템 타입으로 유추가능, 아이템 머지에 소모품인지 판단함. 이후 코드를 통해 조회로 변경)
+    public bool isItemConsumeable;
     public string iconName;
+
+    //PS_ItemAttributes
+    public int durability;
+    public int loadedAmmo;
 }

@@ -25,16 +25,7 @@ public class WeaponSlot2 : EquipSlot
         base.ApplyItemEffects(item);
         Debug.Log($"무기2 : {item.item_name} 장착");
 
-        Data_master_item_weapon equipGun = new Data_master_item_weapon();
-        equipGun = Data_master_item_weapon.GetData(item.itemId);
-        if (equipGun == null)
-        {
-            Debug.Log("해당 아이템의 아이디를 가진 총이 없음");
-            return false;
-        }
-
-        Managers.Object.MyPlayer.GetComponent<Unit>().SetSlot2 = equipGun;
-
+        Managers.Object.MyPlayer.GetComponent<Unit>().Slot2 = item;
         return true;
     }
 
@@ -42,7 +33,7 @@ public class WeaponSlot2 : EquipSlot
     {
         base.RemoveItemEffects(item);
         Debug.Log($"무기2 아이템 해제");
-        Managers.Object.MyPlayer.GetComponent<Unit>().SetSlot2 = null;
+        Managers.Object.MyPlayer.GetComponent<Unit>().Slot2 = null;
         return true;
     }
 }
