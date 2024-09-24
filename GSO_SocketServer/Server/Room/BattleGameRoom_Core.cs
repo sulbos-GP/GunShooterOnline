@@ -117,15 +117,13 @@ namespace Server
                 //mMap.AddObject(player);
 
 
-                //본인에게 정보 전송
-                
-                
-                if(IsGameStarted == true)  //나중에 다시 접속하는 player라면
-                {
+
+
+                {   //본인에게 본인 데이터 정보 전송
                     var enterPacket = new S_EnterGame();
                     enterPacket.Player = player.info;
 
-                    if(MatchInfo.TryAdd(player.UID, new MatchOutcome()) == false)
+                    if (MatchInfo.TryAdd(player.UID, new MatchOutcome()) == false)
                     {
                         Console.WriteLine("player.UID add same");
                     }
@@ -146,6 +144,14 @@ namespace Server
 
                     player.Session.Send(enterPacket);
 
+                    //player.Vision.Update();
+                }
+
+
+                if (IsGameStarted == true)  //나중에 다시 접속하는 player라면
+                {
+                    
+
                     // 다른 플레이어 정보
                     var spawnPacket = new S_Spawn();
 
@@ -157,7 +163,7 @@ namespace Server
 
                     player.Session.Send(spawnPacket);
 
-                    //player.Vision.Update();
+                    
 
                     //--------------------------------------------
                     // mMap.SendMapInfo(player);

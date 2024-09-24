@@ -133,6 +133,8 @@ public class Map
 
     #endregion
 
+    float xOffset = 14;
+    float yOffset = -2;
 
 
     public void loadMap(string mapName, string pathPrefix = "")
@@ -189,7 +191,7 @@ public class Map
                 if (_collisions[i,j]  == 2) // 박스
                 {
                     BoxObject rb = ObjectManager.Instance.Add<BoxObject>();
-                    rb.CellPos = new Vector2(i + Bleft.x, j + Bleft.y);
+                    rb.CellPos = new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset);
                     rb.Init();
                     rb.info.Name = "Box";
                     rootableObjects.Add(rb);
@@ -197,7 +199,7 @@ public class Map
                 else if (_collisions[i, j] == 3) //탈출구
                 {
                     ExitZone exit = ObjectManager.Instance.Add<ExitZone>();
-                    exit.CellPos = new Vector2(i + Bleft.x, j + Bleft.y);
+                    exit.CellPos = new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset);
                     exit.info.Name = "ExitZone";
                     exitZones.Add(exit);
                 }
