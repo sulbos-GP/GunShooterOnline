@@ -145,7 +145,6 @@ message S_Die{                                //8
 }
 
 message C_EnterGame{                       //9  (인게임)입장 요청
-
     CredentiaInfo credential = 1;
 }
 
@@ -322,7 +321,7 @@ message C_ExitGame{   //19
    int32 exitId = 2;
 }
 
-message C_JoinServer{   // 29  접속 요청
+message C_JoinServer{   // 29  접속 요청  // 인벤토리
    string name = 1;
    CredentiaInfo credential = 2;
 
@@ -343,7 +342,6 @@ message S_GameStart {     //32  모두 모임
     float startTime = 2;   // 게임 시작 시간
 
     repeated ObjectInfo objects = 3;
-    repeated PS_ItemInfo itemInfos = 4;
     repeated PS_GearInfo gearInfos = 5;
 }
 
