@@ -37,6 +37,7 @@ namespace Matchmaker.Service.Interfaces
         /// </summary>
         public Task<WebErrorCode> LeavingMatchQueue(string key);
 
+        public Task<WebErrorCode> DisconnectMatch(string clientId);
 
         /// <summary>
         /// 플레이어들 중 나가고 싶은 사람이 있다면 처리

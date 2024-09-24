@@ -40,7 +40,7 @@ namespace Matchmaker.Hubs
             string connectionId = Context.ConnectionId;
             Console.WriteLine($"[MatchmakerHub] Client disconnected: {connectionId}");
 
-            var error = await mMatchmakerService.RemoveMatchTicket(connectionId);
+            var error = await mMatchmakerService.DisconnectMatch(connectionId);
 
             await base.OnDisconnectedAsync(exception);
         }
