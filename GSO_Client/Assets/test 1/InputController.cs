@@ -46,6 +46,9 @@ public class InputController : MonoBehaviour
         if(interactBtn == null) { Debug.Log("버튼을 찾지못함"); }
         interactBtn.interactable = false;
         interactBtn.onClick.AddListener(PlayerInteract);
+
+        aimFov = GameObject.Find("AimView").GetComponent<AimFov>();
+        basicFov = GameObject.Find("BasicView").GetComponent<BasicFov>();
     }
 
     public void Start()
@@ -75,6 +78,9 @@ public class InputController : MonoBehaviour
         {
             StartCoroutine(FireContinuously());
         }
+
+        
+
         //Mouse Move Logic
         //Vector3 mousePosition = lookInput;
         //mousePosition.z = -mainCamera.transform.position.z;
@@ -82,19 +88,9 @@ public class InputController : MonoBehaviour
         //mousePosition.z = 0f;
 
 
-            //Vector3 direction = mousePosition - transform.position;
-            //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
-        float angle = Mathf.Atan2(lookInput.y, lookInput.x) * Mathf.Rad2Deg;
-        var gunTrn = transform.GetChild(0);
-        gunTrn.rotation = Quaternion.Euler(new Vector3(0, 0, angle-90f));
-
-        //Fov Logic
-        aimFov = GameObject.Find("AimView").GetComponent<AimFov>();
-        basicFov = GameObject.Find("BasicView").GetComponent<BasicFov>();
-        aimFov.SetAimDirection(lookInput);
-        aimFov.SetOrigin(transform.position);
-        basicFov.SetOrigin(transform.position);
+        //Vector3 direction = mousePosition - transform.position;
+        //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
 
     }
 
@@ -205,6 +201,11 @@ public class InputController : MonoBehaviour
             playerSpriteRenderer.flipX = false;
         }
 
+        if (!_isFiring) // 총을 쏘지 않을 때는 플레이어의 이동방향을 조준
+        {
+            Aim(input);
+        }
+
         _direction = new Vector2(input.x,input.y);
     }
 
@@ -222,25 +223,39 @@ public class InputController : MonoBehaviour
             //플레이어가 이동하는 위치에따라 플레이어 스프라이트가 반전하듯 총 이미지 또한 반전시킴
             //이미지의 각도 때문에 스프라이트 객체의 각도를 조정하여 정상화 시킴.
             //즉 각도에 따라 스프라이트를 반전시킬때마다 z rotation 또한 반전시켜야함
-            if (lookInput.x > 0)
-            {
-                gunSpriteRenderer.flipX = false;
-                gunSpriteRenderer.transform.localRotation = Quaternion.Euler(0f, 0, 45f);
-                gunSpriteRenderer.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0, -45f);
-            }
-            else if (lookInput.x < 0)
-            {
-                gunSpriteRenderer.flipX = true;
-                gunSpriteRenderer.transform.localRotation = Quaternion.Euler(0f, 0, -45f);
-                gunSpriteRenderer.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0, 45f);
-            }
+            Aim(lookInput);
 
             if (Mathf.Abs(lookInput.x) + Mathf.Abs(lookInput.y) > 1.0f)
                 _isFiring = true;
         }
-        if(context.canceled)
+        if (context.canceled)
             _isFiring = false;
     }
+
+    private void Aim(Vector2 dir)
+    {
+        //pivot 회전
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        var gunTrn = transform.GetChild(0);
+        gunTrn.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+
+        aimFov.SetAimDirection(dir); //fov 회전
+        
+        //방향에 따라 총의 x회전을 플립
+        if (dir.x > 0)
+        {
+            gunSpriteRenderer.flipX = false;
+            gunSpriteRenderer.transform.localRotation = Quaternion.Euler(0f, 0, 45f);
+            gunSpriteRenderer.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0, -45f);
+        }
+        else if (dir.x < 0)
+        {
+            gunSpriteRenderer.flipX = true;
+            gunSpriteRenderer.transform.localRotation = Quaternion.Euler(0f, 0, -45f);
+            gunSpriteRenderer.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0, 45f);
+        }
+    }
+
     private void OnStartFireInput(InputAction.CallbackContext context)
     {
         _isFiring = true;
@@ -290,6 +305,10 @@ public class InputController : MonoBehaviour
         //Move Logic
         Vector2 newVec2 = _direction * 5.0f * Time.fixedDeltaTime;
         rig.MovePosition(rig.position + newVec2);
+
+        aimFov.SetOrigin(transform.position); //fov의 중심을 플레이어의 위치로 설정
+        basicFov.SetOrigin(transform.position);
+
         gameObject.GetComponent<MyPlayerController>().UpdateDrawLine();
         UpdateServer();
     }
