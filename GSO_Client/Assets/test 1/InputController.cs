@@ -7,6 +7,7 @@ using UnityEngine.Rendering;
 using NPOI.SS.Formula.Functions;
 using System;
 using UnityEngine.UI;
+using UnityEngine.Windows;
 
 public class InputController : MonoBehaviour
 {
@@ -34,7 +35,8 @@ public class InputController : MonoBehaviour
     public GameObject interactTarget;
     private Button interactBtn;
     private Animator animator;
-    private SpriteRenderer spriteRenderer;
+    private SpriteRenderer playerSpriteRenderer;
+    private SpriteRenderer gunSpriteRenderer;
 
     private void Awake()
     {
@@ -51,7 +53,8 @@ public class InputController : MonoBehaviour
         //Managers.Network.ConnectToGame();
         rig = GetComponent<Rigidbody2D>();
         animator = transform.GetChild(1).GetComponent<Animator>();
-        spriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        playerSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        gunSpriteRenderer = transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
     }
 
     public void FixedUpdate()
@@ -192,10 +195,15 @@ public class InputController : MonoBehaviour
             animator.SetBool("IsMove", false);
         }
         Vector2 input = callbackContext.ReadValue<Vector2>();
+        //움직이는 방향에 따른 플레이어의 스프라이트 반전
         if (input.x < 0)
-            spriteRenderer.flipX = true;
+        {
+            playerSpriteRenderer.flipX = true;
+        }
         else if (input.x > 0)
-            spriteRenderer.flipX = false;
+        {
+            playerSpriteRenderer.flipX = false;
+        }
 
         _direction = new Vector2(input.x,input.y);
     }
@@ -210,6 +218,23 @@ public class InputController : MonoBehaviour
         if (context.performed)
         {
             lookInput = context.ReadValue<Vector2>();
+
+            //플레이어가 이동하는 위치에따라 플레이어 스프라이트가 반전하듯 총 이미지 또한 반전시킴
+            //이미지의 각도 때문에 스프라이트 객체의 각도를 조정하여 정상화 시킴.
+            //즉 각도에 따라 스프라이트를 반전시킬때마다 z rotation 또한 반전시켜야함
+            if (lookInput.x > 0)
+            {
+                gunSpriteRenderer.flipX = false;
+                gunSpriteRenderer.transform.localRotation = Quaternion.Euler(0f, 0, 45f);
+                gunSpriteRenderer.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0, -45f);
+            }
+            else if (lookInput.x < 0)
+            {
+                gunSpriteRenderer.flipX = true;
+                gunSpriteRenderer.transform.localRotation = Quaternion.Euler(0f, 0, -45f);
+                gunSpriteRenderer.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0, 45f);
+            }
+
             if (Mathf.Abs(lookInput.x) + Mathf.Abs(lookInput.y) > 1.0f)
                 _isFiring = true;
         }
