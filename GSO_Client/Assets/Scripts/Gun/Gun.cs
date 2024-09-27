@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Gun : MonoBehaviour
 {
@@ -33,7 +34,7 @@ public class Gun : MonoBehaviour
     public LineRenderer bulletLine;
     private LineRenderer rangeLine;
     private Transform _fireStartPos;
-    private Vector3 _direction;      // Ray가 향하는 방향
+    //private Vector3 _direction;      // Ray가 향하는 방향 -> 안쓰는 변수
 
     private void Awake()
     {
@@ -57,7 +58,6 @@ public class Gun : MonoBehaviour
     public void SetGunStat(ItemData itemData)
     {
         curGunItemData = itemData;
-
         Data_master_item_weapon newGun = Data_master_item_weapon.GetData(itemData.itemId);
         if (newGun == null)
         {
@@ -77,6 +77,24 @@ public class Gun : MonoBehaviour
 
         CurGunState = CurAmmo == 0 ? GunState.Empty: GunState.Shootable;
         rangeLine.enabled = true;
+
+        SetGunSprite(itemData.iconName);
+    }
+
+    private void SetGunSprite(string iconName)
+    {
+        Sprite gunSprite = Resources.Load<Sprite>($"Sprite/Item/{iconName}");
+
+        if (gunSprite != null) 
+        { 
+            GetComponent<SpriteRenderer>().sprite = gunSprite;
+            Debug.Log("스프라이트 적용");
+        }
+        else
+        {
+            Debug.Log("스프라이트 찾지못함");
+        }
+       
     }
 
     public void ResetGun()
@@ -85,7 +103,7 @@ public class Gun : MonoBehaviour
         curGunItemData = null;
         CurAmmo = 0;
         CurGunState = GunState.Empty;
-
+        GetComponent<SpriteRenderer>().sprite = null;
         rangeLine.enabled = false;
     }
 
