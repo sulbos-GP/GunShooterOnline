@@ -105,6 +105,8 @@ public class Gun : MonoBehaviour
         CurGunState = GunState.Empty;
         GetComponent<SpriteRenderer>().sprite = null;
         rangeLine.enabled = false;
+
+        //총 제거 패킷 전송
     }
 
     public Data_master_item_weapon getGunStat()

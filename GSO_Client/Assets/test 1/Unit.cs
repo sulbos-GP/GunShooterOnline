@@ -57,8 +57,8 @@ public class Unit : MonoBehaviour
         slot1btn.onClick.RemoveAllListeners();
         slot2btn.onClick.RemoveAllListeners();
 
-        slot1btn.onClick.AddListener(() => EquipGunSlot(1));
-        slot2btn.onClick.AddListener(() => EquipGunSlot(2));
+        slot1btn.onClick.AddListener(() => UseGunInSlot(1));
+        slot2btn.onClick.AddListener(() => UseGunInSlot(2));
     }
 
     private void UpdateSlot(ref ItemData equipSlot, ItemData newSlot, Button slotButton, int slotNumber)
@@ -72,7 +72,7 @@ public class Unit : MonoBehaviour
         }
         else if (usingGun.CurGunData == null)
         {
-            EquipGunSlot(slotNumber);
+            UseGunInSlot(slotNumber);
         }
     }
 
@@ -80,11 +80,12 @@ public class Unit : MonoBehaviour
     {
         if (slotNumber == 1 && equipSlot2 != null && usingGun.curGunEquipSlot == 1)
         {
-            EquipGunSlot(2);
+            //1번을 장착해제했을때 2번에 총이 있다면 2번을 사용함
+            UseGunInSlot(2);
         }
         else if (slotNumber == 2 && equipSlot1 != null && usingGun.curGunEquipSlot == 2)
         {
-            EquipGunSlot(1);
+            UseGunInSlot(1);
         }
         else
         {
@@ -92,12 +93,13 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void EquipGunSlot(int slotNumber)
+    //해당 슬롯의 총을 사용
+    private void UseGunInSlot(int slotNumber)
     {
-        ItemData equipSlot = slotNumber == 1 ? equipSlot1 : equipSlot2;
-        if (equipSlot == null) return;
+        ItemData equipptedItem = slotNumber == 1 ? equipSlot1 : equipSlot2;
+        if (equipptedItem == null) return;
 
-        usingGun.SetGunStat(equipSlot);
+        usingGun.SetGunStat(equipptedItem);
         usingGun.curGunEquipSlot = slotNumber;
     }
 }
