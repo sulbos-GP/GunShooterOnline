@@ -19,10 +19,10 @@ TagManager:
   - 
   - Water
   - UI
-  - Object
+  - BlockView
   - Ground
-  - Mask
-  - BehindMask
+  - View
+  - HideWithoutView
   - Black
   - BulletPass
   - BackGround
