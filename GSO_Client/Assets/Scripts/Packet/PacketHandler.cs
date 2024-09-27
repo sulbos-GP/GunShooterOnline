@@ -110,6 +110,8 @@ internal class PacketHandler
             return;
         }
 
+        //타 플레이어의 움직임을 조정
+
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
             return;
@@ -372,6 +374,7 @@ internal class PacketHandler
             Debug.Log("패킷이 없음");
             return;
         }
+
         InventoryController invenInstance = InventoryController.invenInstance;
 
         Debug.Log("S_MoveItem");
