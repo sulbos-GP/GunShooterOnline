@@ -76,9 +76,8 @@ internal class PacketHandler
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
 
-            //Collider Line 작성 -> 현재 플레이어에게 라인렌더러 컴포넌트 지움
-            //player.SetDrawLine(info.Shape.Width,info.Shape.Height);
-            player.SetComponent();
+            player.SetDrawLine(info.Shape.Width,info.Shape.Height);
+            
 
             //Spawn Player
             Vector2 vec2 = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
