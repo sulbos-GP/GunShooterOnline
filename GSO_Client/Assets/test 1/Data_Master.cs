@@ -52,7 +52,7 @@ public class Data_master_reward_base : BaseData<Data_master_reward_base>
     public int gacha;
     public int experience;
     //TO-DO : 추후에 타입 변경 가능성 있음.
-    public int? reward_box_id;
+    public int reward_box_id;
 }
 
 public class Data_master_reward_level : BaseData<Data_master_reward_level>
@@ -62,7 +62,7 @@ public class Data_master_reward_level : BaseData<Data_master_reward_level>
     public string icon;
 }
 
-public class Data_master_reward_box : BaseData<Data_master_reward_box>
+public class Data_master_reward_box : BaseDataMulti<Data_master_reward_box>
 {
     public int box_scale_x;
     public int box_scale_y;
