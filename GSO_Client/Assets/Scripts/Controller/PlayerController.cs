@@ -36,11 +36,16 @@ public class PlayerController : CreatureController
     public Rectangle rect;
    //private SkillType skillType = SkillType.None; //애니메이션용
 
+    public void SetComponent()
+    {
+        sprite = GameObject.Find("ObjectSprite").GetComponent<SpriteRenderer>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
+    }
+
     public void SetDrawLine(float width , float height)
     {
         //TO-DO : 임시
-        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        animator = transform.GetChild(1).GetComponent<Animator>();
+        
         lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
@@ -60,6 +65,7 @@ public class PlayerController : CreatureController
 
     public void UpdateDrawLine()
     {
+        
         lineRenderer.SetPosition(0, (Vector2)gameObject.transform.position + rect.topLeft * 2);
         lineRenderer.SetPosition(1, (Vector2)gameObject.transform.position + rect.topRight * 2);
         lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight * 2);
@@ -198,7 +204,9 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-        UpdateDrawLine();
+
+        //라인렌더러 사용안함
+        //UpdateDrawLine();
         //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;

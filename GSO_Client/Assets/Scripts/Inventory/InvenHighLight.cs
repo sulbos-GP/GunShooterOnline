@@ -16,12 +16,18 @@ public class InvenHighLight : MonoBehaviour
 
     private RectTransform highlighter;
     public GameObject highlightPrefab;
-    
+
+    private void Awake()
+    {
+        InstantHighlighter();
+    }
+
     public void InstantHighlighter()
     {
-        highlightObj = Managers.Resource.Instantiate("UI/InvenUI/Highlight");
+        highlightObj = Managers.Resource.Instantiate("UI/InvenUI/Highlight", GameObject.Find("Canvas").transform);
         highlighter = highlightObj.GetComponent<RectTransform>();
         highlighter.GetComponent<Image>().raycastTarget = false;
+        highlightObj.SetActive(false);
     }
 
     public void DestroyHighlighter()
@@ -84,6 +90,11 @@ public class InvenHighLight : MonoBehaviour
     /// </summary>
     public void SetParent(GameObject target)
     {
+        if (!highlighter.gameObject.activeSelf)
+        {
+            return;
+        }
+
         if (target == null)
         {
             highlighter.SetParent(GameObject.Find("Canvas").transform);

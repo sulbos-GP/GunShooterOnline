@@ -238,6 +238,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: InvenManager
       objectReference: {fileID: 0}
+    - target: {fileID: 7744397172173663914, guid: a6186ec56dcb54a4bbebf30bf4f77b90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
