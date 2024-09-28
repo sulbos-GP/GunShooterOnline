@@ -846,13 +846,19 @@ namespace Server
 
             ObjectManager.Instance.Remove(player.Id);
 
-            S_ExitGame packet = new S_ExitGame()
+            S_ExitGame exitPacket = new S_ExitGame()
             {
                 PlayerId = player.Id,
                 ExitId = exitId
             };
+            BroadCast(exitPacket);
 
-            BroadCast(packet);
+            S_Despawn despawnPacket = new S_Despawn();
+            despawnPacket.ObjcetIds.Add(player.Id);
+            BroadCast(despawnPacket);
+
+
+
         }
 
 
