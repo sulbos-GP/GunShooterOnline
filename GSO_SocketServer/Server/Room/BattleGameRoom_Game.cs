@@ -772,6 +772,17 @@ namespace Server
             return storage;
         }
 
+        internal void ChangeAppearance(Player player,int targetId, int gunId)
+        {
+            S_ChangeAppearance packet = new S_ChangeAppearance()
+            {
+                ObjectId = targetId,
+                GunId = gunId
+            };
+
+            BroadCast(packet);
+        }
+
         ////////////////////////////////////////////
         //                                        //
         //               ?????????                //

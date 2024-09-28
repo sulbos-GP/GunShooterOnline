@@ -124,7 +124,7 @@ public partial class InventoryController
         else
         {
             invenHighlight.SetColor(HighlightColor.Red);
-            invenHighlight.SetParent(null);
+            invenHighlight.SetHighlightParent(null);
             InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
         }
         return;
@@ -174,7 +174,7 @@ public partial class InventoryController
         Color32 highlightColor = selectedGrid.PlaceCheckInGridHighLight(selectedItem, gridPosition.x, gridPosition.y, ref overlapItem);
         invenHighlight.SetColor(highlightColor);
 
-        invenHighlight.SetParent(selectedGrid.gameObject);
+        invenHighlight.SetHighlightParent(selectedGrid.gameObject);
         invenHighlight.SetPositionOnGridByPos(selectedGrid, selectedItem, gridPosition.x, gridPosition.y);
     }
 }

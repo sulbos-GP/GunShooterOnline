@@ -14,25 +14,21 @@ public class InvenHighLight : MonoBehaviour
 {
     public static GameObject highlightObj;
 
-    private RectTransform highlighter;
+    private RectTransform highlightRect;
     public GameObject highlightPrefab;
 
-    private void Awake()
-    {
-        InstantHighlighter();
-    }
-
+    
     public void InstantHighlighter()
     {
         highlightObj = Managers.Resource.Instantiate("UI/InvenUI/Highlight", GameObject.Find("Canvas").transform);
-        highlighter = highlightObj.GetComponent<RectTransform>();
-        highlighter.GetComponent<Image>().raycastTarget = false;
+        highlightRect = highlightObj.GetComponent<RectTransform>();
+        highlightRect.GetComponent<Image>().raycastTarget = false;
         highlightObj.SetActive(false);
     }
 
     public void DestroyHighlighter()
     {
-        highlighter = null;
+        highlightRect = null;
         Managers.Resource.Destroy(highlightObj);
     }
 
@@ -42,11 +38,11 @@ public class InvenHighLight : MonoBehaviour
     /// <param name="tf">액티브 여부</param>
     public void Show(bool tf)
     {
-        if (highlighter == null)
+        if (highlightRect == null)
         {
             InstantHighlighter();
         }
-        highlighter.gameObject.SetActive(tf);
+        highlightRect.gameObject.SetActive(tf);
     }
 
     /// <summary>
@@ -59,7 +55,7 @@ public class InvenHighLight : MonoBehaviour
         size.X = targetItem.Width * GridObject.WidthOfTile;
         size.Y = targetItem.Height* GridObject.HeightOfTile;
         
-        highlighter.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
+        highlightRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
     }
 
     /// <summary>
@@ -67,12 +63,12 @@ public class InvenHighLight : MonoBehaviour
     /// </summary>
     public void SetPositionOnGrid(GridObject targetGrid, ItemObject targetItem)
     {
-        SetParent(targetGrid.gameObject);
+        SetHighlightParent(targetGrid.gameObject);
 
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem,
             targetItem.itemData.pos.x, targetItem.itemData.pos.y);
         
-        highlighter.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
+        highlightRect.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
     }
 
     /// <summary>
@@ -82,30 +78,30 @@ public class InvenHighLight : MonoBehaviour
     {
         Vector2 pos = targetGrid.CalculatePositionOnGrid(targetItem, posX, posY);
         
-        highlighter.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
+        highlightRect.localPosition = new UnityEngine.Vector2(pos.X, pos.Y);
     }
 
     /// <summary>
     /// 하이라이트의 부모UI 지정.
     /// </summary>
-    public void SetParent(GameObject target)
+    public void SetHighlightParent(GameObject target)
     {
-        if (!highlighter.gameObject.activeSelf)
+        if (!highlightObj.activeSelf || highlightObj == null)
         {
             return;
         }
 
         if (target == null)
         {
-            highlighter.SetParent(GameObject.Find("Canvas").transform);
+            highlightObj.transform.SetParent(GameObject.Find("Canvas").transform);
             return;
         }
 
-        highlighter.SetParent(target.transform);
+        highlightObj.transform.SetParent(target.transform);
     }
 
     internal void SetColor(Color32 color)
     {
-        highlighter.gameObject.GetComponent<Image>().color = color;
+        highlightRect.gameObject.GetComponent<Image>().color = color;
     }
 }

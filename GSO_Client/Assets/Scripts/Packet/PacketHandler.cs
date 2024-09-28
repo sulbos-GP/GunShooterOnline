@@ -743,7 +743,23 @@ internal class PacketHandler
 
     internal static void S_ChangeAppearanceHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        S_ChangeAppearance packet = message as S_ChangeAppearance;
+
+        Debug.Log($"S_ChangeAppearanceHandler {packet.ObjectId}, {packet.GunId}");
+
+        if(packet.ObjectId == Managers.Object.MyPlayer.Id)
+        {
+            return;
+        }
+
+        Sprite targetSprite =Resources.Load<Sprite>(Data_master_item_base.GetData(packet.GunId).icon);
+        if(targetSprite == null)
+        {
+            Debug.Log("찾지못함");
+        }
+
+        GameObject targetObject = Managers.Object.FindById(packet.ObjectId);
+        targetObject.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = targetSprite;
     }
 
 

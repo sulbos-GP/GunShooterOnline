@@ -1,6 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
-
+using Google.Protobuf.Protocol;
 public class Unit : MonoBehaviour
 {
     [SerializeField] private ItemData equipSlot1;
@@ -101,5 +101,13 @@ public class Unit : MonoBehaviour
 
         usingGun.SetGunStat(equipptedItem);
         usingGun.curGunEquipSlot = slotNumber;
+        C_ChangeAppearance packet = new C_ChangeAppearance()
+        {
+            ObjectId = Managers.Object.MyPlayer.Id,
+            GunId = equipptedItem.itemId
+        };
+
+        Managers.Network.Send(packet);
+        Debug.Log($"C_ChangeAppearance Àü¼Û {packet.ObjectId}, {packet.GunId}");
     }
 }

@@ -94,7 +94,7 @@ public partial class InventoryController : MonoBehaviour
             selectedGrid = value;
             isGridSelected = selectedGrid != null;
 
-            invenHighlight?.SetParent(isGridSelected ? value.gameObject : null);
+            invenHighlight?.SetHighlightParent(isGridSelected ? value.gameObject : null);
 
             if (isItemSelected && isGridSelected)
             {
@@ -164,13 +164,6 @@ public partial class InventoryController : MonoBehaviour
 
         rotateBtn.onClick.RemoveAllListeners();
         rotateBtn.onClick.AddListener(RotateBtn);
-    }
-
-    private void OnDisable()
-    {
-        instantItemDic.Clear();
-        equipSlotDic.Clear();
-        ResetSelection();
     }
 
     /// <summary>
