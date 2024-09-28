@@ -42,6 +42,9 @@ enum MsgId{
   S_JOIN_SERVER = 30; // 접속 응답
   S_GAME_START = 31;  //사람이 아직 안모임
   S_WAITING_STATUS = 32; //32  모두 모임
+
+  C_CHANGE_APPEARANCE = 33;
+  S_CHANGE_APPEARANCE = 34;
 }
 
 enum GameObjectType{
@@ -53,6 +56,7 @@ enum GameObjectType{
     BOX = 5;
     ITEM = 6;
     EXITZONE = 7;
+    SPAWNZONE = 8;
 }
 
 enum ShapeType
@@ -145,8 +149,7 @@ message S_Die{                                //8
 }
 
 message C_EnterGame{                       //9  (인게임)입장 요청
-    string name = 1;
-    CredentiaInfo credential = 2;
+    CredentiaInfo credential = 1;
 }
 
 
@@ -322,12 +325,14 @@ message C_ExitGame{   //19
    int32 exitId = 2;
 }
 
-message C_JOINSERVER{   // 29  접속 요청
-   CredentiaInfo credential = 1;
+message C_JoinServer{   // 29  접속 요청  // 인벤토리
+   string name = 1;
+   CredentiaInfo credential = 2;
+
 }
 
 
-message  S_JOINSERVER{   //30 접속 응답
+message  S_JoinServer{   //30 접속 응답
     bool connected = 1;
 }  
 
@@ -337,14 +342,23 @@ message S_WaitingStatus {   //31 사람이 아직 안모임
 }
 
 message S_GameStart {     //32  모두 모임
-    string roomId = 1; // 게임이 시작된 방의 ID
-    string startTime = 2;   // 게임 시작 시간
+    int32 roomId = 1; // 게임이 시작된 방의 ID
+    float startTime = 2;   // 게임 시작 시간
 
     repeated ObjectInfo objects = 3;
-    repeated PS_ItemInfo itemInfos = 4;
     repeated PS_GearInfo gearInfos = 5;
 }
 
+
+message C_ChangeAppearance{ // 33
+    int32 objectId = 1;  // 패킷을 보낸 플레이어의 아이디
+    int32 gunId = 2; //해당 총의 마스터ID
+}
+
+message S_ChangeAppearance{ //34
+    int32 objectId = 1;  // 패킷을 보낸 플레이어의 아이디
+    int32 gunId = 2; //해당 총의 마스터ID
+}
 
 
 ////////////////////////////////////////////

@@ -16,7 +16,10 @@ public class RecoverySlot : EquipSlot
     public override void Init()
     {
         base.Init();
-        ItemQuickSlotsParent = GameObject.Find("IQuickSlot").transform;
+        if(GameObject.Find("IQuickSlot") != null)
+        {
+            ItemQuickSlotsParent = GameObject.Find("IQuickSlot").transform;
+        }
     }
 
     public override bool ApplyItemEffects(ItemData item)

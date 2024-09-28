@@ -93,7 +93,8 @@ public partial class InventoryController : MonoBehaviour
         {
             selectedGrid = value;
             isGridSelected = selectedGrid != null;
-            invenHighlight.SetParent(isGridSelected ? value.gameObject : null);
+
+            invenHighlight?.SetParent(isGridSelected ? value.gameObject : null);
 
             if (isItemSelected && isGridSelected)
             {

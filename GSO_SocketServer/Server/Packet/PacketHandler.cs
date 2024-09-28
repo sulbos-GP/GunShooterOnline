@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WebCommonLibrary.DTO.GameServer;
 using WebCommonLibrary.DTO.Performance;
@@ -24,60 +25,28 @@ using WebCommonLibrary.Models.GameDB;
 
 class PacketHandler
 {
+    //GWANHO TEMP
+    private static int cnt = 0;
 
-#if !DOCKER
-    static int cnt = 0;
-#endif
 
+  
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
     {
-        Console.WriteLine("C_EnterGameHandler");
+        // (인게임)1명 입장 패킷
         ClientSession clientSession = session as ClientSession;
         C_EnterGame enterGamePacket = (C_EnterGame)message;
-        Player p = ObjectManager.Instance.Add<Player>();
+        Console.WriteLine($"C_EnterGameHandler");
+
+        if (clientSession.MyPlayer == null)
         {
-            p.Session = clientSession;
-            p.info.Name = enterGamePacket.Name + clientSession.SessionId;
-            p.info.PositionInfo.PosX = 0;
-            p.info.PositionInfo.PosY = 0;
-            p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
-            //바꾼 부분
-
-#if DOCKER
-            //이거 uid를 검사해서 올바르게 넣어주면 됨
-            if(p.gameRoom.connectPlayer.Count > 0 )
-            {
-                if(p.gameRoom.connectPlayer.Contains(enterGamePacket.Credential.Uid) == true)
-                {
-                    p.UID = enterGamePacket.Credential.Uid;
-                }
-                else { 
-                
-                    Console.WriteLine("connectPlayer Contains not p.UID ");
-                }
-
-            }
-            else
-            {
-                Console.WriteLine("p.gameRoom.connectPlayer.Count is 0");
-            }
-
-#else
-            p.UID = ++cnt;
-#endif
-
-            //p.stat
-
+            Thread.Sleep(1000);
         }
+        Player player = clientSession.MyPlayer;
+
+        // TODO : Credential 확인 작업 , packet.Credential.Uid
 
 
-        clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
-        clientSession.MyPlayer = p;
-
-        BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
-
-        room.Push(room.EnterGame, clientSession.MyPlayer);
-        ObjectManager.Instance.DebugObjectDics();
+        player.gameRoom.Push(player.gameRoom.HandleClientLoadGame, player);
     }
 
     /*public static void C2S_ChatHandler(PacketSession session, IPacket packet)
@@ -223,20 +192,90 @@ class PacketHandler
 
         Player player = clientSession.MyPlayer;
         BattleGameRoom room = player.gameRoom;
-
         MatchOutcome outcome = room.MatchInfo[player.UID];
+
         ExitGameHandlerAsync(outcome).Wait();
+
+        Console.WriteLine("Server is ready");
 
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
     }
 
     internal static async Task ExitGameHandlerAsync(MatchOutcome outcome)
     {
+
+#if DEBUG
+        return;
+#endif
         PlayerStatsRes playerStats = await Program.web.Lobby.PostPlayerStats(outcome);
         if (playerStats.error_code != WebErrorCode.None)
         {
-            Console.WriteLine("[C_ExitGameHandler] 플레이어의 통계가 집계되지 않음");
+
         }
     }
+   
 
+    internal static void C_JoinServerHandler(PacketSession session, IMessage message)
+    {
+        Console.WriteLine("C_JoinServerHandler");
+
+        //접속 요청
+        ClientSession clientSession = session as ClientSession;
+        C_JoinServer packet = (C_JoinServer)message;
+
+        //인증 과정
+
+
+      
+        Player p = ObjectManager.Instance.Add<Player>();
+        {
+            p.Session = clientSession;
+            p.info.Name = packet.Name + clientSession.SessionId;
+            p.info.PositionInfo.PosX = 0;
+            p.info.PositionInfo.PosY = 0;
+            p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+            //바꾼 부분
+
+#if DOCKER
+            //이거 uid를 검사해서 올바르게 넣어주면 됨
+            if(p.gameRoom.connectPlayer.Count > 0 )
+            {
+                if(p.gameRoom.connectPlayer.Contains(packet.Credential.Uid) == true)
+                {
+                    p.UID = packet.Credential.Uid;
+                }
+                else { 
+                
+                    Console.WriteLine("connectPlayer Contains not p.UID ");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("p.gameRoom.connectPlayer.Count is 0");
+            }
+
+#else
+
+            p.UID = ++cnt;
+#endif
+
+            //p.stat
+
+        }
+
+
+        clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
+        clientSession.MyPlayer = p;
+
+        BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
+
+        room.Push(room.EnterGame, clientSession.MyPlayer);
+        ObjectManager.Instance.DebugObjectDics();
+    }
+
+    internal static void C_ChangeAppearanceHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
 }

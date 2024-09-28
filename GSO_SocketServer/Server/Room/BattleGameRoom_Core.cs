@@ -17,15 +17,17 @@ namespace Server
 {
     public partial class BattleGameRoom : GameRoom
     {
-
+        //GameServer Onstart에서 받아옴
         public List<int> connectPlayer = new List<int>();
 
         Dictionary<int, Player> _playerDic = new Dictionary<int, Player>();
         Dictionary<int, CreatureObj> _monsterDic = new Dictionary<int, CreatureObj>();
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
-        public List<object> Escapes = new List<object>();
+        //public List<object> Escapes = new List<object>();
         public Dictionary<int, MatchOutcome> MatchInfo = new Dictionary<int, MatchOutcome>();
+
+        public bool IsGameStarted { get; protected set; } = false;
 
 
         public Map map { get; }
@@ -74,6 +76,10 @@ namespace Server
 
         }
 
+
+
+
+
         public override void EnterGame(object obj)
         {
             GameObject gameObject = (GameObject)obj;
@@ -111,12 +117,13 @@ namespace Server
                 //mMap.AddObject(player);
 
 
-                //본인에게 정보 전송
-                {
+
+
+                {   //본인에게 본인 데이터 정보 전송
                     var enterPacket = new S_EnterGame();
                     enterPacket.Player = player.info;
 
-                    if( MatchInfo.TryAdd(player.UID, new MatchOutcome()) == false)
+                    if (MatchInfo.TryAdd(player.UID, new MatchOutcome()) == false)
                     {
                         Console.WriteLine("player.UID add same");
                     }
@@ -137,6 +144,14 @@ namespace Server
 
                     player.Session.Send(enterPacket);
 
+                    //player.Vision.Update();
+                }
+
+
+                if (IsGameStarted == true)  //나중에 다시 접속하는 player라면
+                {
+                    
+
                     // 다른 플레이어 정보
                     var spawnPacket = new S_Spawn();
 
@@ -148,7 +163,7 @@ namespace Server
 
                     player.Session.Send(spawnPacket);
 
-                    //player.Vision.Update();
+                    
 
                     //--------------------------------------------
                     // mMap.SendMapInfo(player);
@@ -255,8 +270,13 @@ namespace Server
 
             }
 
+            S_Despawn despawnPacket = new S_Despawn();
+            despawnPacket.ObjcetIds.Add(id);
+            BroadCast(despawnPacket);
+
+
         }
-            public Player GetPlayer(int id)
+        public Player GetPlayer(int id)
         {
             return _playerDic.TryGetValue(id, out var player) ? player : null;
         }

@@ -975,6 +975,71 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!1001 &488480110
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 2627771978012239254, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 12.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6405700047978222363, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6576546701697738931, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592011617684365091, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_Name
+      value: World 1
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
 --- !u!1 &565405686
 GameObject:
   m_ObjectHideFlags: 0
@@ -1032,8 +1097,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a6c3cbbba5198ae4baa31ec27a8a7305, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2004,6 +2069,8 @@ MonoBehaviour:
     height: 0
     isItemConsumeable: 0
     iconName: 
+    durability: 0
+    loadedAmmo: 0
   isReady: 0
 --- !u!114 &901308582
 MonoBehaviour:
@@ -2166,8 +2233,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a6c3cbbba5198ae4baa31ec27a8a7305, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -2616,6 +2683,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 2627771978012239254, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5260336717394988405, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6286336801601925909, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6405700047978222363, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
       propertyPath: m_LocalPosition.x
       value: 13.5
@@ -2656,9 +2735,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6576546701697738931, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7592011617684365091, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
       propertyPath: m_Name
       value: World
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592011617684365091, guid: 9f16b37eed3c1ea4496acc0019bc0e76, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3094,6 +3181,8 @@ MonoBehaviour:
     height: 0
     isItemConsumeable: 0
     iconName: 
+    durability: 0
+    loadedAmmo: 0
   isReady: 0
 --- !u!114 &1475091420
 MonoBehaviour:
@@ -3426,6 +3515,8 @@ MonoBehaviour:
     height: 0
     isItemConsumeable: 0
     iconName: 
+    durability: 0
+    loadedAmmo: 0
   isReady: 0
 --- !u!114 &1700758333
 MonoBehaviour:
@@ -3768,8 +3859,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: a6c3cbbba5198ae4baa31ec27a8a7305, type: 3}
-  m_Type: 0
+  m_Sprite: {fileID: 10917, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -5406,3 +5497,4 @@ SceneRoots:
   - {fileID: 1981516452}
   - {fileID: 1790032448}
   - {fileID: 1123966019}
+  - {fileID: 488480110}

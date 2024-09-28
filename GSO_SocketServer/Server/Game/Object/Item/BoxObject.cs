@@ -1,6 +1,7 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Database.Handler;
+using System.Numerics;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
 
@@ -47,8 +48,13 @@ namespace Server.Game.Object.Item
             return isOpen;
         }
 
-        public void Init()
+        public void Init(Vector2 pos)
         {
+
+            CellPos = pos;
+
+            info.Name = "Box" + Id;
+
             //임의의 아이템
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 

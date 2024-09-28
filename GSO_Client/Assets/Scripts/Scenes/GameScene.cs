@@ -6,6 +6,21 @@ public class GameScene : BaseScene
     //UI_GameScene _sceneUI;
     public Canvas Canvas;
 
+    private void Awake()
+    {
+        
+        Debug.Log("Send C_JoinServer in GameScene");
+    }
+
+    private void Start()
+    {
+        C_EnterGame c_EnterGame = new C_EnterGame();
+        //c_EnterGame.Credential =
+
+        Managers.Network.Send(c_EnterGame);
+        Debug.Log("Send c_EnterGame In GameScene"); 
+    }
+
     protected override void Init()
     {
         base.Init();
@@ -19,8 +34,9 @@ public class GameScene : BaseScene
         //_sceneUI = Managers.UI.ShowSceneUI<UI_GameScene>();
         Debug.Log("초기화");
         //Managers.Network.ConnectToGame();
-
     }
+
+   
 
     public override void Clear()
     {

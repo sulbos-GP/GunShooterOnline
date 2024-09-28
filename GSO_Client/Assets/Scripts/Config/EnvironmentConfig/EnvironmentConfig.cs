@@ -22,6 +22,8 @@ public class EnvironmentConfig : ScriptableObject
     public string CenterBaseUri = null;                 //중앙 서버
     public string MatchmakerBaseUri = null;             //매치메이커 서버
     public string GameServerManagerBaseUri = null;      //게임 매니저 서버
+
+    public string LobbyName = null;                     //로비 이름
 }
 
 public class EnvironmentSetting

@@ -39,8 +39,8 @@ public class PlayerController : CreatureController
     public void SetDrawLine(float width , float height)
     {
         //TO-DO : 임시
-        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        animator = transform.GetChild(1).GetComponent<Animator>();
+        sprite = GameObject.Find("ObjectSprite").GetComponent<SpriteRenderer>();
+        animator = GameObject.Find("ObjectSprite").GetComponent<Animator>();
         lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
@@ -71,7 +71,7 @@ public class PlayerController : CreatureController
     {
         //임의 위치 값
         gameObject.transform.position = vec2;
-        material = sprite.material;
+        material = sprite?.material;
         //Spawn Particle
     }
 
@@ -198,6 +198,7 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
+
         UpdateDrawLine();
         //rig.MovePosition(rig.position + newVec2);
 

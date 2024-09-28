@@ -45,6 +45,10 @@ class PacketManager
 		_handler.Add((ushort)MsgId.CRaycastShoot, PacketHandler.C_RaycastShootHandler);		
 		_onRecv.Add((ushort)MsgId.CExitGame, MakePacket<C_ExitGame>);
 		_handler.Add((ushort)MsgId.CExitGame, PacketHandler.C_ExitGameHandler);		
+		_onRecv.Add((ushort)MsgId.CJoinServer, MakePacket<C_JoinServer>);
+		_handler.Add((ushort)MsgId.CJoinServer, PacketHandler.C_JoinServerHandler);		
+		_onRecv.Add((ushort)MsgId.CChangeAppearance, MakePacket<C_ChangeAppearance>);
+		_handler.Add((ushort)MsgId.CChangeAppearance, PacketHandler.C_ChangeAppearanceHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

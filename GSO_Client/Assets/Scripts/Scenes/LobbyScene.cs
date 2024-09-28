@@ -77,11 +77,34 @@ public class LobbyScene : BaseScene
 
 
 
+        C_JoinServer c_JoinServer = new C_JoinServer();
+        c_JoinServer.Name = "jish";
+        /*c_JoinServer.Credential = new CredentiaInfo()
+        {
+            Uid = credential.uid,
+        };*/
+        Managers.Network.Send(c_JoinServer);
+
+
+
+
+
+
+
+
+        //C_JoinServer c_JoinServer = new C_JoinServer();
+        //c_JoinServer.Name = "jish";
+        ////c_JoinServer.credential
+        //Managers.Network.Send(c_JoinServer);
+
+        //Debug.Log("Send C_JoinServer in LobbyScene"); 
+
+        /*
         C_EnterGame c_EnterGame = new C_EnterGame();
         c_EnterGame.Name = "jish";
 
         Managers.Network.Send(c_EnterGame);
-        Debug.Log("Send c_EnterGame");
+        Debug.Log("Send c_EnterGame");*/
 
     }
 }

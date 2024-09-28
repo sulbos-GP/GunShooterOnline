@@ -1,10 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO.Pipes;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class Gun : MonoBehaviour
 {
@@ -12,11 +9,22 @@ public class Gun : MonoBehaviour
 
     [SerializeField]
     public Data_master_item_weapon CurGunData { get; private set; }
-
+    private ItemData curGunItemData;
     public int curGunEquipSlot; //사용중인 총의 데이터가 없을 경우 0 , 1슬롯 사용시 1 , 2슬롯 사용시 2
 
     [SerializeField]
-    public int _curAmmo { get; private set; } //현재 장탄
+    public int CurAmmo 
+    {
+        get => curGunItemData.loadedAmmo; 
+        set 
+        {
+            if (curGunItemData == null)
+            {
+                return;
+            }
+            curGunItemData.loadedAmmo = value;
+        }
+    } 
 
     private float _lastFireTime;
 
@@ -26,7 +34,7 @@ public class Gun : MonoBehaviour
     public LineRenderer bulletLine;
     private LineRenderer rangeLine;
     private Transform _fireStartPos;
-    private Vector3 _direction;      // Ray가 향하는 방향
+    //private Vector3 _direction;      // Ray가 향하는 방향 -> 안쓰는 변수
 
     private void Awake()
     {
@@ -47,13 +55,17 @@ public class Gun : MonoBehaviour
         ResetGun();
     }
 
-    public void SetGunStat(Data_master_item_weapon newGun)
+    public void SetGunStat(ItemData itemData)
     {
-        if(CurGunData == null)
+        curGunItemData = itemData;
+        Data_master_item_weapon newGun = Data_master_item_weapon.GetData(itemData.itemId);
+        if (newGun == null)
         {
-            CurGunData = new Data_master_item_weapon(); 
+            Debug.Log("해당 아이템의 아이디를 가진 총이 없음");
+            return;
         }
 
+        CurGunData = new Data_master_item_weapon();
         CurGunData.Key = newGun.Key;
         CurGunData.attack_range = newGun.attack_range;
         CurGunData.damage = newGun.damage;
@@ -63,21 +75,38 @@ public class Gun : MonoBehaviour
         CurGunData.reload_time = newGun.reload_time;
         CurGunData.bullet = newGun.bullet;
 
-        //총이 정해졌을때 
-        _curAmmo = 0;
-        CurGunState = GunState.Shootable;
-        Reload();
-
+        CurGunState = CurAmmo == 0 ? GunState.Empty: GunState.Shootable;
         rangeLine.enabled = true;
+
+        SetGunSprite(itemData.iconName);
+    }
+
+    private void SetGunSprite(string iconName)
+    {
+        Sprite gunSprite = Resources.Load<Sprite>($"Sprite/Item/{iconName}");
+
+        if (gunSprite != null) 
+        { 
+            GetComponent<SpriteRenderer>().sprite = gunSprite;
+            Debug.Log("스프라이트 적용");
+        }
+        else
+        {
+            Debug.Log("스프라이트 찾지못함");
+        }
+       
     }
 
     public void ResetGun()
     {
         CurGunData = null;
-        _curAmmo = 0;
+        curGunItemData = null;
+        CurAmmo = 0;
         CurGunState = GunState.Empty;
-
+        GetComponent<SpriteRenderer>().sprite = null;
         rangeLine.enabled = false;
+
+        //총 제거 패킷 전송
     }
 
     public Data_master_item_weapon getGunStat()
@@ -189,9 +218,9 @@ public class Gun : MonoBehaviour
             }
             _lastFireTime = Time.time;//마지막 사격 시간 업데이트
 
-            _curAmmo--; //현재 총알감소
-            _curAmmo = Mathf.Max(_curAmmo, 0);
-            if(_curAmmo == 0 )
+            CurAmmo--; //현재 총알감소
+            CurAmmo = Mathf.Max(CurAmmo, 0);
+            if(CurAmmo == 0)
             {
                 CurGunState = GunState.Empty;
             }
@@ -217,7 +246,7 @@ public class Gun : MonoBehaviour
         //조건1 현재 총알이 최대개수보다 작아야함.
         //조건2 재장전 중이 아니어야함
         //조건3 인벤에 맞는 총알이 있어야함 (todo)
-        if(_curAmmo < CurGunData.reload_round || CurGunState != GunState.Reloading)
+        if(CurAmmo < CurGunData.reload_round || CurGunState != GunState.Reloading)
         {
             //인벤에 해당 총알이 있는지 검색. -> 있다면 최대 장전량 만큼 있는지 확인. -> 그이상이 있다면 최대개수로 아니라면 해당 개수만큼 재장전
             StartCoroutine(ReloadCoroutine(CurGunData.reload_round));//현재는 임시로 최대 개수
@@ -230,7 +259,7 @@ public class Gun : MonoBehaviour
         CurGunState = GunState.Reloading;
         yield return new WaitForSeconds(CurGunData.reload_time);
 
-        _curAmmo = reloadAmount;
+        CurAmmo = reloadAmount;
         CurGunState = GunState.Shootable;
 
         //(TODO) 인벤에 총알의 양을 감소시킴

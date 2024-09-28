@@ -3,6 +3,7 @@ using Google.Protobuf.Protocol;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,16 +16,26 @@ namespace Server.Game
         public ExitZone()
         {
             ObjectType = GameObjectType.Exitzone;
-            float width = 2;
+            /*float width = 2;
             float left = 2;
-            float top = 2;
-
+            float top = 2;*/
+            float width = 1;
+            float left = 1;
+            float top = 1;
 
             Polygon rectangle = ShapeManager.CreateCenterSquare(left, top, width);
             rectangle.Parent = this;
             currentShape = rectangle;
 
         }
+
+        public void Init(Vector2 pos)
+        {
+            CellPos = pos;
+            info.Name = "ExitZone" + Id;
+
+        }
+
 
         public void Update(Player player)
         {
