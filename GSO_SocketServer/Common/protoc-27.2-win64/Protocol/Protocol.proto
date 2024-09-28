@@ -42,6 +42,9 @@ enum MsgId{
   S_JOIN_SERVER = 30; // 접속 응답
   S_GAME_START = 31;  //사람이 아직 안모임
   S_WAITING_STATUS = 32; //32  모두 모임
+
+  C_CHANGE_APPEARANCE = 33;
+  S_CHANGE_APPEARANCE = 34;
 }
 
 enum GameObjectType{
@@ -345,6 +348,16 @@ message S_GameStart {     //32  모두 모임
     repeated PS_GearInfo gearInfos = 5;
 }
 
+
+message C_ChangeAppearance{ // 33
+    int32 objectId = 1;  // 패킷을 보낸 플레이어의 아이디
+    int32 gunId = 2; //해당 총의 마스터ID
+}
+
+message S_ChangeAppearance{ //34
+    int32 objectId = 1;  // 패킷을 보낸 플레이어의 아이디
+    int32 gunId = 2; //해당 총의 마스터ID
+}
 
 
 ////////////////////////////////////////////
