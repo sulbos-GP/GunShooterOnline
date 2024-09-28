@@ -742,6 +742,11 @@ internal class PacketHandler
         //}
     }
 
+    internal static void S_ChangeAppearanceHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
+
 
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)

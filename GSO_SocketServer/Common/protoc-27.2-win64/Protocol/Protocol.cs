@@ -129,17 +129,18 @@ namespace Google.Protobuf.Protocol {
             "VBAaEg8KC1NfRVhJVF9HQU1FEBsSDwoLQ19FWElUX0dBTUUQHBIRCg1DX0pP",
             "SU5fU0VSVkVSEB0SEQoNU19KT0lOX1NFUlZFUhAeEhAKDFNfR0FNRV9TVEFS",
             "VBAfEhQKEFNfV0FJVElOR19TVEFUVVMQIBIXChNDX0NIQU5HRV9BUFBFQVJB",
-            "TkNFECESFwoTU19DSEFOR0VfQVBQRUFSQU5DRRAiKnkKDkdhbWVPYmplY3RU",
-            "eXBlEg4KCk5PTkVPQkpFQ1QQABIKCgZQTEFZRVIQARILCgdNT05TVEVSEAIS",
-            "DgoKUFJPSkVDVElMRRADEg0KCUlOVkVOREFUQRAEEgcKA0JPWBAFEggKBElU",
-            "RU0QBhIMCghFWElUWk9ORRAHKksKCVNoYXBlVHlwZRIJCgVTSEFQRRAAEgoK",
-            "BkNJUkNMRRABEg0KCVJFQ1RBTkdMRRACEgsKB1BPTFlHT04QAxILCgdBUkNQ",
-            "T0xZEAQqUwoISXRlbVR5cGUSCgoGV0VBUE9OEAASDQoJREVGRU5TSVZFEAES",
-            "BwoDQkFHEAISDAoIUkVDT1ZFUlkQAxIKCgZCVUxMRVQQBBIJCgVTUE9JTBAF",
-            "KoMBCgtQRV9HZWFyUGFydBIICgROT05FEAASDgoKTWFpbldlYXBvbhABEg0K",
-            "CVN1YldlYXBvbhACEgkKBUFybW9yEAMSDAoIQmFja3BhY2sQBBIPCgtQb2Nr",
-            "ZXRGaXJzdBAFEhAKDFBvY2tldFNlY29uZBAGEg8KC1BvY2tldFRoaXJkEAdC",
-            "G6oCGEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
+            "TkNFECESFwoTU19DSEFOR0VfQVBQRUFSQU5DRRAiKogBCg5HYW1lT2JqZWN0",
+            "VHlwZRIOCgpOT05FT0JKRUNUEAASCgoGUExBWUVSEAESCwoHTU9OU1RFUhAC",
+            "Eg4KClBST0pFQ1RJTEUQAxINCglJTlZFTkRBVEEQBBIHCgNCT1gQBRIICgRJ",
+            "VEVNEAYSDAoIRVhJVFpPTkUQBxINCglTUEFXTlpPTkUQCCpLCglTaGFwZVR5",
+            "cGUSCQoFU0hBUEUQABIKCgZDSVJDTEUQARINCglSRUNUQU5HTEUQAhILCgdQ",
+            "T0xZR09OEAMSCwoHQVJDUE9MWRAEKlMKCEl0ZW1UeXBlEgoKBldFQVBPThAA",
+            "Eg0KCURFRkVOU0lWRRABEgcKA0JBRxACEgwKCFJFQ09WRVJZEAMSCgoGQlVM",
+            "TEVUEAQSCQoFU1BPSUwQBSqDAQoLUEVfR2VhclBhcnQSCAoETk9ORRAAEg4K",
+            "Ck1haW5XZWFwb24QARINCglTdWJXZWFwb24QAhIJCgVBcm1vchADEgwKCEJh",
+            "Y2twYWNrEAQSDwoLUG9ja2V0Rmlyc3QQBRIQCgxQb2NrZXRTZWNvbmQQBhIP",
+            "CgtQb2NrZXRUaGlyZBAHQhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xi",
+            "BnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), typeof(global::Google.Protobuf.Protocol.ItemType), typeof(global::Google.Protobuf.Protocol.PE_GearPart), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -256,6 +257,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("BOX")] Box = 5,
     [pbr::OriginalName("ITEM")] Item = 6,
     [pbr::OriginalName("EXITZONE")] Exitzone = 7,
+    [pbr::OriginalName("SPAWNZONE")] Spawnzone = 8,
   }
 
   public enum ShapeType {

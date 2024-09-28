@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
+using Server.Game.Object;
 using Server.Game.Object.Item;
 
 namespace Server.Game;
@@ -16,6 +17,7 @@ internal class ObjectManager
     private readonly Dictionary<int, BoxObject> _rootable = new();
     private readonly Dictionary<int, ExitZone> _exit = new();
     private readonly Dictionary<int, ItemObject> _items = new();
+    private readonly Dictionary<int, SpawnZone> _spawn = new();
     public static ObjectManager Instance { get; } = new();
 
     public T Add<T>() where T : GameObject, new()
@@ -36,6 +38,9 @@ internal class ObjectManager
             
             else if (gameObjcet.ObjectType == GameObjectType.Exitzone)
                 _exit.Add(gameObjcet.Id, gameObjcet as ExitZone);
+            
+            else if (gameObjcet.ObjectType == GameObjectType.Spawnzone)
+                _spawn.Add(gameObjcet.Id, gameObjcet as SpawnZone);
         }
         return gameObjcet;
     }
@@ -54,7 +59,9 @@ internal class ObjectManager
             else if (obj.ObjectType == GameObjectType.Box)
                 _rootable.Add(obj.Id, obj as BoxObject);
             else if (obj.ObjectType == GameObjectType.Exitzone)
-                _exit.Add(obj.Id, obj as ExitZone);
+                _exit.Add(obj.Id, obj as ExitZone); 
+            else if (obj.ObjectType == GameObjectType.Spawnzone)
+                _spawn.Add(obj.Id, obj as SpawnZone);
         }
 
         return obj;
@@ -71,19 +78,27 @@ internal class ObjectManager
         Console.WriteLine($"rootable : ");
         foreach (BoxObject root in _rootable.Values)
         {
-            Console.WriteLine($"{root.Id} ");
+            Console.Write($"{root.Id}, ");
         }
         Console.WriteLine($"\n");
         Console.WriteLine($"Item : ");
         foreach (ItemObject item in _items.Values)
         {
-            Console.WriteLine($"{item.Id} ");
+            Console.Write($"{item.Id}, ");
         }
+
         Console.WriteLine($"\n");
         Console.WriteLine($"exitZone : ");
         foreach (ExitZone exit in _exit.Values)
         {
             Console.WriteLine($"{exit.Id} ");
+        }
+
+        Console.WriteLine($"\n");
+        Console.WriteLine($"spawnZone : ");
+        foreach (SpawnZone pawn in _spawn.Values)
+        {
+            Console.WriteLine($"{pawn.Id} ,");
         }
     }
 

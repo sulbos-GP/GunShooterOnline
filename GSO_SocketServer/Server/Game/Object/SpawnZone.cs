@@ -13,7 +13,13 @@ namespace Server.Game.Object
     public class SpawnZone : GameObject
     {
 
-        public SpawnZone(Vector2 pos)
+        public SpawnZone()
+        {
+            ObjectType = GameObjectType.Spawnzone;
+
+        }
+
+        public void Init(Vector2 pos)
         {
             CellPos = pos;
             //ObjectType = GameObjectType.S;
@@ -25,11 +31,13 @@ namespace Server.Game.Object
             rectangle.Parent = this;
             currentShape = rectangle;
 
+            info.Name = "SpawnZone" + Id;
+
         }
 
 
 
-      
+
 
 
 

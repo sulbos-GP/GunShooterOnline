@@ -274,13 +274,8 @@ class PacketHandler
         ObjectManager.Instance.DebugObjectDics();
     }
 
-
-
-
-
-
-
-
-
-
+    internal static void C_ChangeAppearanceHandler(PacketSession session, IMessage message)
+    {
+        throw new NotImplementedException();
+    }
 }

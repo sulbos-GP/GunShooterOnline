@@ -24,7 +24,7 @@ namespace Server
         Dictionary<int, CreatureObj> _monsterDic = new Dictionary<int, CreatureObj>();
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
-        public List<object> Escapes = new List<object>();
+        //public List<object> Escapes = new List<object>();
         public Dictionary<int, MatchOutcome> MatchInfo = new Dictionary<int, MatchOutcome>();
 
         public bool IsGameStarted { get; protected set; } = false;
