@@ -203,6 +203,10 @@ class PacketHandler
 
     internal static async Task ExitGameHandlerAsync(MatchOutcome outcome)
     {
+
+#if DEBUG
+        return;
+#endif
         PlayerStatsRes playerStats = await Program.web.Lobby.PostPlayerStats(outcome);
         if (playerStats.error_code != WebErrorCode.None)
         {

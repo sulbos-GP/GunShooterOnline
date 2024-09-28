@@ -71,7 +71,7 @@ public class PlayerController : CreatureController
     {
         //임의 위치 값
         gameObject.transform.position = vec2;
-        material = sprite.material;
+        material = sprite?.material;
         //Spawn Particle
     }
 
