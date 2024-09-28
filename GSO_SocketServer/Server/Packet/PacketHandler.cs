@@ -276,6 +276,16 @@ class PacketHandler
 
     internal static void C_ChangeAppearanceHandler(PacketSession session, IMessage message)
     {
-        throw new NotImplementedException();
+        //만약 서버쪽에서도 현재 들고있는 총을 참조해야할때 해당 변수의 변경은 여기서 진행
+        //(단 여기서 주는 gunId는 총의 종류만 알수 있는 마스터 코드임. 해당 총의 오브젝트 id가 필요한 경우 성훈에게 말할것)
+
+        ClientSession clientSession = session as ClientSession;
+        C_ChangeAppearance packet = (C_ChangeAppearance)message;
+        Console.WriteLine($"[C_ChangeAppearance]");
+        Console.WriteLine($"playerid : {packet.ObjectId}");
+        Console.WriteLine($"gunId : {packet.GunId}");
+        Player player = clientSession.MyPlayer;
+
+        player.gameRoom.Push(player.gameRoom.ChangeAppearance, player, packet.ObjectId, packet.GunId);
     }
 }
