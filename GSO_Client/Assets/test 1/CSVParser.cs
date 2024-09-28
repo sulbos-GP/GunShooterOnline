@@ -222,6 +222,7 @@ public class CSVParser : MonoBehaviour
         MemberInfo[] objProperties = type.GetFields(bindingFlags).Cast<MemberInfo>()
             .Concat(type.GetProperties(bindingFlags)).ToArray();
         ParseHeaderByObj(objProperties);
+        string typeName = csvText.Split(',')[0];
 
         // 파일의 헤더 추출.
         _fileFieldInfoList.Clear();
@@ -235,7 +236,7 @@ public class CSVParser : MonoBehaviour
                 if (i > cursor + 1)
                 {
                     string targetFieldName = csvText.Substring(cursor + 1, i - cursor - 1);
-                    if (targetFieldName.Contains("_id"))
+                    if (targetFieldName.Contains(typeName))
                         targetFieldName = "Key";
                     // 필드명에 해당하는 컬럼위치를 찾는 다른 방법.
                     //int targetIndex = mObjFieldNameList.FindIndex((string x) => { return x.Equals(targetFieldName, StringComparison.InvariantCultureIgnoreCase); });
