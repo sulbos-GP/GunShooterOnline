@@ -178,6 +178,10 @@ namespace Server.Game
 
                 ownerPlayer.gameRoom.BroadCast(packet);
 
+
+
+
+
                 
 
                 if (isBulletPrefShoot)

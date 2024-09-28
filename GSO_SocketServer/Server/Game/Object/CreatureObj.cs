@@ -27,16 +27,22 @@ public class CreatureObj : GameObject
         if (gameRoom == null)
             return;
 
+        var room = gameRoom;
+
+
+        room.Push(room.LeaveGame, Id);
+
+    
+
+
         var diePacket = new S_Die();
         diePacket.ObjectId = Id;
         diePacket.AttackerId = attacker.Id;
 
-        gameRoom.BroadCast(diePacket);
+        gameRoom.Push(room.BroadCast, diePacket);
 
-        var room = gameRoom;
-        room.Push(room.LeaveGame, Id);
 
-        
+
 
         MatchOutcome myInfo;
         if (gameRoom.MatchInfo.TryGetValue(UID, out myInfo) == true)
