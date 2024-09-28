@@ -62,7 +62,7 @@ public class Data_master_reward_level : BaseData<Data_master_reward_level>
     public string icon;
 }
 
-public class Data_master_reward_box : BaseDataMulti<Data_master_reward_box>
+public class Data_master_reward_box : BaseData<Data_master_reward_box>
 {
     public int box_scale_x;
     public int box_scale_y;
