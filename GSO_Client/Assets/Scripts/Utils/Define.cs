@@ -5,6 +5,7 @@ public class Define
         Unknown,
         Login,
         Lobby,
+        Shelter,
         loading,
         Forest,
         FieldOfViewTest,

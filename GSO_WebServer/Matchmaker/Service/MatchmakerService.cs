@@ -183,7 +183,7 @@ namespace Matchmaker.Service
 
             try
             {
-    
+                await mMatchQueue.TryTakeLock(uid);
                 (WebErrorCode error, Ticket? ticket) = await mMatchQueue.GetTicketWithUid(uid);
                 if (ticket == null)
                 {
@@ -233,6 +233,49 @@ namespace Matchmaker.Service
             await mMatchQueue.ReleaseLock(uid);
 
             return WebErrorCode.None;
+        }
+
+        public async Task<WebErrorCode> DisconnectMatch(string clientId)
+        {
+            var (error, uid) = await mMatchQueue.GetUidWithClientId(clientId);
+            if (uid == 0)
+            {
+                return error;
+            }
+
+            try
+            {
+                await mMatchQueue.TryTakeLock(uid);
+
+                (error, Ticket? ticket) = await mMatchQueue.GetTicketWithUid(uid);
+                if (ticket == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                {
+                    ticket.isExit = true;
+                }
+
+                bool result = await mMatchQueue.SetTicket(uid, ticket);
+
+                error = await mMatchQueue.RemoveTicket(uid);
+                if (error != WebErrorCode.None)
+                {
+                    return error;
+                }
+
+                return WebErrorCode.None;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MatchmakerService.RemoveMatchTicket] : {e.Message}");
+                return WebErrorCode.TEMP_Exception;
+            }
+            finally
+            {
+                await mMatchQueue.ReleaseLock(uid);
+            }
         }
 
         public async Task<WebErrorCode> LeavingMatchQueue(string key)
@@ -426,11 +469,22 @@ namespace Matchmaker.Service
 
         public async Task RollbackTicket(Int32 uid, Ticket ticket)
         {
-            Console.WriteLine("[MatchmakerService.RollbackTicket]");
+            try
+            {
+                Console.WriteLine("[MatchmakerService.RollbackTicket]");
 
-            await mMatchQueue.ReleaseLock(uid);
+                await mMatchQueue.TryTakeLock(uid);
 
-            await mMatchQueue.SetTicket(uid, ticket);
+                await mMatchQueue.SetTicket(uid, ticket);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MatchmakerService.RollbackTicket] : {e.Message}");
+            }
+            finally
+            {
+                await mMatchQueue.ReleaseLock(uid);
+            }
         }
 
     }

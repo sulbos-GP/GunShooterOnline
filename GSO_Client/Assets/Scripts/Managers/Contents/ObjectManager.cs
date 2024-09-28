@@ -123,7 +123,7 @@ public class ObjectManager
         }
         else if (type == GameObjectType.Box)
         {
-            var go = Managers.Resource.Instantiate($"Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
+            var go = Managers.Resource.Instantiate($"Objects/Box"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
             go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
             _objects.Add(info.ObjectId, go); //오브젝트 딕션너리에 추가
@@ -140,7 +140,7 @@ public class ObjectManager
         }
         else if (type == GameObjectType.Exitzone)
         {
-            var go = Managers.Resource.Instantiate($"Objects/{info.Name}"); //생성할 오브젝트 경로(박스)
+            var go = Managers.Resource.Instantiate($"Objects/ExitZone"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
             go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
             _objects.Add(info.ObjectId, go);

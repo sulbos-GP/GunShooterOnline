@@ -56,15 +56,16 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SRaycastHit, MakePacket<S_RaycastHit>);
 		_handler.Add((ushort)MsgId.SRaycastHit, PacketHandler.S_RaycastHitHandler);		
 		_onRecv.Add((ushort)MsgId.SExitGame, MakePacket<S_ExitGame>);
-		_handler.Add((ushort)MsgId.SExitGame, PacketHandler.S_ExitGameHandler);
-		_onRecv.Add((ushort)MsgId.SJoinServer, MakePacket<S_JOINSERVER>);
-		_handler.Add((ushort)MsgId.SJoinServer,PacketHandler.S_JoinServerHandler);
-        _onRecv.Add((ushort)MsgId.SWaitingStatus, MakePacket<S_WaitingStatus>);
-        _handler.Add((ushort)MsgId.SWaitingStatus, PacketHandler.S_WaitingStatusHandler);
-        _onRecv.Add((ushort)MsgId.SGameStart, MakePacket<S_GameStart>);
-        _handler.Add((ushort)MsgId.SGameStart, PacketHandler.S_GameStartHandler);
-
-    }
+		_handler.Add((ushort)MsgId.SExitGame, PacketHandler.S_ExitGameHandler);		
+		_onRecv.Add((ushort)MsgId.SJoinServer, MakePacket<S_JoinServer>);
+		_handler.Add((ushort)MsgId.SJoinServer, PacketHandler.S_JoinServerHandler);		
+		_onRecv.Add((ushort)MsgId.SGameStart, MakePacket<S_GameStart>);
+		_handler.Add((ushort)MsgId.SGameStart, PacketHandler.S_GameStartHandler);		
+		_onRecv.Add((ushort)MsgId.SWaitingStatus, MakePacket<S_WaitingStatus>);
+		_handler.Add((ushort)MsgId.SWaitingStatus, PacketHandler.S_WaitingStatusHandler);		
+		_onRecv.Add((ushort)MsgId.SChangeAppearance, MakePacket<S_ChangeAppearance>);
+		_handler.Add((ushort)MsgId.SChangeAppearance, PacketHandler.S_ChangeAppearanceHandler);
+	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
 	{

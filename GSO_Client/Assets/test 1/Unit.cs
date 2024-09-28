@@ -1,110 +1,41 @@
-using SixLabors.ImageSharp.Formats;
-using System.Collections;
-using System.Collections.Generic;
-using System.Configuration;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class Unit : MonoBehaviour
 {
-    [SerializeField]
-    private Data_master_item_weapon equipSlot1;
-    [SerializeField]
-    private Data_master_item_weapon equipSlot2;
+    [SerializeField] private ItemData equipSlot1;
+    [SerializeField] private ItemData equipSlot2;
 
     public Gun usingGun;
-
-    public Data_master_item_weapon SetSlot1
-    {
-        get => equipSlot1;
-        set
-        {
-            equipSlot1 = value;
-
-            if (value == null)  //총을 장착 해제 했을때 다른 장착칸에 총이 등록되어 있으면 그총으로 변경
-            {
-                slot1btn.interactable = false;
-                if(equipSlot2 != null && usingGun.curGunEquipSlot == 1)
-                {
-                    SetGunSlot2(equipSlot2);
-                }
-                else
-                {
-                    usingGun.ResetGun(); //다른 장착칸에도 총이 없다면 총을 해제함
-                }
-            }
-            else
-            {
-                slot1btn.interactable = true;
-                if (usingGun.CurGunData == null) //총을 장착할때 사용중인 총이 없다면 즉시 사용
-                {
-                    SetGunSlot1(value);
-                }
-            }
-        }
-    }
-
-    public Data_master_item_weapon SetSlot2
-    {
-        get => equipSlot2;
-        set
-        {
-            equipSlot2 = value;
-
-            if (value == null)  //총을 장착 해제 했을때 다른 장착칸에 총이 등록되어 있으면 그총으로 변경
-            {
-                slot2btn.interactable = false;
-                if (equipSlot1 != null && usingGun.curGunEquipSlot == 2)
-                {
-                    SetGunSlot1(equipSlot1);
-                }
-                else
-                {
-                    usingGun.ResetGun(); //다른 장착칸에도 총이 없다면 총을 해제함
-                }
-            }
-            else
-            {
-                slot2btn.interactable = true;
-                if (usingGun.CurGunData == null) //총을 장착할때 사용중인 총이 없다면 즉시 사용
-                {
-                    SetGunSlot2(value);
-                }
-            }
-        }
-    }
+    public int loadedAmount1;
+    public int loadedAmount2;
 
     public Button slot1btn;
     public Button slot2btn;
 
-    public int InstanceID { get;private set; }
-
-
+    public int InstanceID { get; private set; }
     public UnitStat unitStat;
-    
-    //TO-DO : Awake -> Spawn
-    public void Awake()
+
+    // Property for Slot 1
+    public ItemData Slot1
     {
-        Transform wQuickSlots = GameObject.Find("WQuickSlot").transform;
-        slot1btn = wQuickSlots.GetChild(0).GetComponent<Button>();
-        slot2btn = wQuickSlots.GetChild(1).GetComponent<Button>();
+        get => equipSlot1;
+        set => UpdateSlot(ref equipSlot1, value, slot1btn, 1);
+    }
 
-        slot1btn.interactable = false;
-        slot2btn.interactable = false;
+    // Property for Slot 2
+    public ItemData Slot2
+    {
+        get => equipSlot2;
+        set => UpdateSlot(ref equipSlot2, value, slot2btn, 2);
+    }
 
-        slot1btn.onClick.RemoveAllListeners();
-        slot2btn.onClick.RemoveAllListeners();
-        slot1btn.onClick.AddListener(() => SetGunSlot1(equipSlot1));
-        slot2btn.onClick.AddListener(() => SetGunSlot1(equipSlot2));
-
+    private void Awake()
+    {
+        InitializeButtons();
         usingGun = transform.Find("Pivot/Gun").GetComponent<Gun>();
         equipSlot1 = null;
         equipSlot2 = null;
-    }
-
-    public void Spawn()
-    {
-        Init();
     }
 
     public void Init()
@@ -114,22 +45,61 @@ public class Unit : MonoBehaviour
         unitStat.Init();
     }
 
-    private void SetGunSlot1(Data_master_item_weapon gunData)
+    private void InitializeButtons()
     {
-        if(equipSlot1 == null)
-        {
-            return;
-        }
-        usingGun.SetGunStat(gunData);
-        usingGun.curGunEquipSlot = 1;
+        Transform quickSlots = GameObject.Find("WQuickSlot").transform;
+        slot1btn = quickSlots.GetChild(0).GetComponent<Button>();
+        slot2btn = quickSlots.GetChild(1).GetComponent<Button>();
+
+        slot1btn.interactable = false;
+        slot2btn.interactable = false;
+
+        slot1btn.onClick.RemoveAllListeners();
+        slot2btn.onClick.RemoveAllListeners();
+
+        slot1btn.onClick.AddListener(() => UseGunInSlot(1));
+        slot2btn.onClick.AddListener(() => UseGunInSlot(2));
     }
-    private void SetGunSlot2(Data_master_item_weapon gunData)
+
+    private void UpdateSlot(ref ItemData equipSlot, ItemData newSlot, Button slotButton, int slotNumber)
     {
-        if (equipSlot2 == null)
+        equipSlot = newSlot;
+        slotButton.interactable = newSlot != null;
+
+        if (newSlot == null)
         {
-            return;
+            HandleGunUnequip(slotNumber);
         }
-        usingGun.SetGunStat(gunData);
-        usingGun.curGunEquipSlot = 2;
+        else if (usingGun.CurGunData == null)
+        {
+            UseGunInSlot(slotNumber);
+        }
+    }
+
+    private void HandleGunUnequip(int slotNumber)
+    {
+        if (slotNumber == 1 && equipSlot2 != null && usingGun.curGunEquipSlot == 1)
+        {
+            //1번을 장착해제했을때 2번에 총이 있다면 2번을 사용함
+            UseGunInSlot(2);
+        }
+        else if (slotNumber == 2 && equipSlot1 != null && usingGun.curGunEquipSlot == 2)
+        {
+            UseGunInSlot(1);
+        }
+        else
+        {
+            usingGun.ResetGun();
+        }
+    }
+
+    //해당 슬롯의 총을 사용
+    private void UseGunInSlot(int slotNumber)
+    {
+        ItemData equipptedItem = slotNumber == 1 ? equipSlot1 : equipSlot2;
+        if (equipptedItem == null) return;
+
+        usingGun.SetGunStat(equipptedItem);
+        usingGun.curGunEquipSlot = slotNumber;
     }
 }

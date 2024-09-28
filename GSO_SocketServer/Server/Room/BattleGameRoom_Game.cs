@@ -5,6 +5,8 @@ using Server.Game.Object.Gear;
 using Server.Game.Object.Item;
 using ServerCore;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Numerics;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
@@ -835,7 +837,7 @@ namespace Server
 
         }
 
-        internal void HandleExitGame(Player player, int exitId)
+        public void HandleExitGame(Player player, int exitId)
         {
 
             //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
@@ -844,13 +846,125 @@ namespace Server
 
             ObjectManager.Instance.Remove(player.Id);
 
-            S_ExitGame packet = new S_ExitGame()
+            S_ExitGame exitPacket = new S_ExitGame()
             {
                 PlayerId = player.Id,
                 ExitId = exitId
             };
+            BroadCast(exitPacket);
 
-            BroadCast(packet);
+            S_Despawn despawnPacket = new S_Despawn();
+            despawnPacket.ObjcetIds.Add(player.Id);
+            BroadCast(despawnPacket);
+
+
+
         }
+
+
+
+        List<Player> tempPlayer = new List<Player>();
+
+        public void HandleClientLoadGame(Player player)
+        {
+            //로드 끝났어
+            tempPlayer.Add(player);
+
+            if(connectPlayer.Count == 0)
+                GameStart();
+
+
+            if(connectPlayer.Count == tempPlayer.Count)
+            {
+                //전부 모임
+                GameStart();
+            }
+            else
+            {
+               //아직 다 못모임
+                S_WaitingStatus status = new S_WaitingStatus()
+                {
+                    CurrentPlayers = tempPlayer.Count,
+                    RequiredPlayers = connectPlayer.Count
+                };
+
+
+                foreach (var t in tempPlayer)
+                {
+                    t.Session.Send(status);
+                }
+            }
+
+        }
+
+
+        private void GameStart()
+        {
+            foreach(Player p in tempPlayer)
+            {
+                /*if(_playerDic.TryAdd(p.Id, p) == false)
+                {
+
+                }
+                else
+                {
+                    Console.WriteLine("GameStart ERROR");
+                }*/
+
+            }
+
+
+
+            S_GameStart s_GameStart = new S_GameStart()
+            {
+                RoomId = this.RoomId,
+                StartTime = System.Environment.TickCount,
+
+            };
+
+            foreach (var p in _playerDic.Values)
+            {
+                s_GameStart.Objects.Add(p.info);
+            }
+
+            foreach (var m in _monsterDic.Values)
+            {
+                s_GameStart.Objects.Add(m.info);
+            }
+
+            foreach (var s in _skillObjDic.Values)
+            {
+                s_GameStart.Objects.Add(s.info);
+            }
+
+            BroadCast(s_GameStart);
+
+            IsGameStarted = true;
+
+
+        }
+
+
+
+
+        public void HandleJoin(CredentiaInfo credentiaInfo, ClientSession s)
+        {
+            //s 와 인증 확인
+
+            S_JoinServer joinServer = new S_JoinServer()
+            {
+                Connected = true,
+            };
+
+            s.Send(joinServer);
+
+
+        }
+
+
+
+
+
+
     }
 }
