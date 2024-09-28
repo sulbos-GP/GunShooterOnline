@@ -16,13 +16,20 @@ public class RecoverySlot2 : RecoverySlot
         base.Init();
         slotId = 6;
         allowedItemType = ItemType.Recovery;
-        targetSlot = ItemQuickSlotsParent.GetChild(1).GetComponent<QuickSlot>();
+        if (targetSlot != null)
+        {
+            targetSlot = ItemQuickSlotsParent.GetChild(1).GetComponent<QuickSlot>();
+        }
+
     }
     public override bool ApplyItemEffects(ItemData item)
     {
         base.ApplyItemEffects(item);
         Debug.Log($"소모품2 : {item.item_name} 장착");
-        targetSlot.SetSlot(item);
+        if (targetSlot != null)
+        {
+            targetSlot.SetSlot(item);
+        }
         return true;
     }
 
@@ -30,12 +37,18 @@ public class RecoverySlot2 : RecoverySlot
     {
         base.RemoveItemEffects(item);
         Debug.Log($"소모품2 아이템 해제");
-        targetSlot.ResetSlot();
+        if (targetSlot != null)
+        {
+            targetSlot.ResetSlot();
+        }
         return true;
     }
     public override void UpdateQuickSlotAmount(int amount)
     {
         base.UpdateQuickSlotAmount(amount);
-        targetSlot.UpdateItemAmount(amount);
+        if (targetSlot != null)
+        {
+            targetSlot.UpdateItemAmount(amount);
+        }
     }
 }
