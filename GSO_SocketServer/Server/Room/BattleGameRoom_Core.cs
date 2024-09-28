@@ -270,8 +270,13 @@ namespace Server
 
             }
 
+            S_Despawn despawnPacket = new S_Despawn();
+            despawnPacket.ObjcetIds.Add(id);
+            BroadCast(despawnPacket);
+
+
         }
-            public Player GetPlayer(int id)
+        public Player GetPlayer(int id)
         {
             return _playerDic.TryGetValue(id, out var player) ? player : null;
         }
