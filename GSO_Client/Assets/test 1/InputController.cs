@@ -309,8 +309,8 @@ public class InputController : MonoBehaviour
         aimFov.SetOrigin(transform.position); //fov의 중심을 플레이어의 위치로 설정
         basicFov.SetOrigin(transform.position);
 
-        //라인렌더러 사용안한
-        //gameObject.GetComponent<MyPlayerController>().UpdateDrawLine();
+
+        gameObject.GetComponent<MyPlayerController>().UpdateDrawLine();
         UpdateServer();
     }
 
