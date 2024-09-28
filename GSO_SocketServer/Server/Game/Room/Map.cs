@@ -86,18 +86,15 @@ public class Map
     BattleGameRoom battleRoom;
 
 
-    #region rootableObjects
+    #region objects
     public readonly List<BoxObject> rootableObjects = new List<BoxObject>();
-    #endregion
-
-    #region EscapeObj
+ 
     //List<RootableObject> _rootableObjects = new List<RootableObject>();
     public readonly List<ExitZone> exitZones = new List<ExitZone>();
 
+    public readonly List<SpawnZone> spawnZones = new List<SpawnZone>();
+
     #endregion
-
-
-
 
 
 
@@ -165,21 +162,40 @@ public class Map
 
         roomSize = new Vector2Int(int.Parse(size[0]), int.Parse(size[1]));
 
-        Width = roomSize.x;
-        Height = roomSize.y;
+        Height = roomSize.x;
+        Width = roomSize.y;
 
         Tright = new Vector2Int(Bleft.x + (roomSize.x - 1), Bleft.y + (roomSize.y - 1));
 
 
         _collisions = new int[roomSize.x, roomSize.y];
-       // _objects = new GameObject[roomSize, roomSize];
+        // _objects = new GameObject[roomSize, roomSize];
 
 
-        //for (var x = roomSize - 1; x >= 0; x--)
+        /*   for (var t = 0; t < roomSize.x; t++)
+               Buffer.BlockCopy(
+                   Array.ConvertAll(reader.ReadLine().Split(','), s => int.Parse(s)),
+                   0, _collisions, t * roomSize.y * sizeof(int), roomSize.y);
+
+          */
+
         for (var x = 0; x < roomSize.x; x++)
-            Buffer.BlockCopy(
-                Array.ConvertAll(reader.ReadLine().Split(','), s => int.Parse(s)),
-                0, _collisions, x * roomSize.y * sizeof(int), roomSize.x );
+        {
+            // 파일에서 한 줄 읽기
+            var line = reader.ReadLine();
+            if (line == null)
+                throw new Exception("Unexpected end of file or invalid data format");
+
+            // 문자열을 ','로 구분해서 정수 배열로 변환
+            var data = Array.ConvertAll(line.Split(','), s => int.Parse(s));
+
+            // 각 열의 값들을 _collisions의 t행에 복사
+            for (var y = 0; y < roomSize.y; y++)
+            {
+                _collisions[x, y] = data[y];
+            }
+        }
+
 
         //동적 생성
         for (int i = 0; i < roomSize.x; i++)
@@ -187,40 +203,50 @@ public class Map
 
             for (int j = 0; j < roomSize.y; j++)
             {
+#if DEBUG
+                Console.Write(_collisions[i,j]);
 
-                if (_collisions[i,j]  == 2) // 박스
+#endif
+                if (_collisions[i, j] == 2) // 박스
                 {
                     BoxObject rb = ObjectManager.Instance.Add<BoxObject>();
-                    rb.CellPos = new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset);
-                    rb.Init();
-                    rb.info.Name = "Box";
+                    rb.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset));
                     rootableObjects.Add(rb);
                 }
                 else if (_collisions[i, j] == 3) //탈출구
                 {
                     ExitZone exit = ObjectManager.Instance.Add<ExitZone>();
-                    exit.CellPos = new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset);
-                    exit.info.Name = "ExitZone";
+                    exit.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset));
                     exitZones.Add(exit);
                 }
+                else if (_collisions[i, j] == 4) //스폰존
+                {
+                    SpawnZone spawn = ObjectManager.Instance.Add<SpawnZone>();
+                    spawn.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset));
+                    spawnZones.Add(spawn);
 
-
+                }
             }
+#if DEBUG
+
+            Console.WriteLine();
+#endif
         }
 
-    
 
-        Console.WriteLine("InitMap End"+ $"rootableObjects Count : {rootableObjects.Count}  , exitZones count : {exitZones.Count}");
+        Console.WriteLine("InitMap End" + $"rootableObjects Count : {rootableObjects.Count}  " +
+            $", exitZones count : {exitZones.Count}" +
+            $", SpawnZones count : {spawnZones.Count}");
 
 
 
-        //         while (true)
-        //         {
-        //	int x = int.Parse(Console.ReadLine());
-        //	int y = int.Parse(Console.ReadLine());
-        //	bool k = CanGo(new Vector2Int(x, y), false);
-        //             Console.WriteLine(k);
-        //}
+            //         while (true)
+            //         {
+            //	int x = int.Parse(Console.ReadLine());
+            //	int y = int.Parse(Console.ReadLine());
+            //	bool k = CanGo(new Vector2Int(x, y), false);
+            //             Console.WriteLine(k);
+            //}
     }
 
     public void UpdateMap()
@@ -421,7 +447,7 @@ public class Map
     }
 
 
-    public void ApplyProjectile(Vector2 pos, Vector2 dir)
+        public void ApplyProjectile(Vector2 pos, Vector2 dir)
     {
         //dir - pos
     }
