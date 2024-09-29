@@ -80,6 +80,7 @@ namespace Matchmaker.Repository
     public partial class MatchQueue : IMatchQueue
     {
         public RedisConnection mRedisConn;
+        private RedisDictionary<string, string> mMatchClient;       //플레이어 연결된 정보
         private RedisSortedSet<string> mMatchRating;                //플레이어 레이팅 나열
         private RedisDictionary<string, Ticket> mMatchTickets;      //플레이어 정보(티켓)
         private Dictionary<int, RedisEventLock> eventLocks;         //플레이어 락
@@ -88,6 +89,7 @@ namespace Matchmaker.Repository
         {
             RedisConfig config = new("MatchQueue", envConfig.Value.Redis);
             mRedisConn = new RedisConnection(config);
+            mMatchClient = new RedisDictionary<string, string>(mRedisConn, "Clients", null);
             mMatchRating = new RedisSortedSet<string>(mRedisConn, "Ratings", null);
             mMatchTickets = new RedisDictionary<string, Ticket>(mRedisConn, "Tickets", null);
             eventLocks = new Dictionary<int, RedisEventLock>();
