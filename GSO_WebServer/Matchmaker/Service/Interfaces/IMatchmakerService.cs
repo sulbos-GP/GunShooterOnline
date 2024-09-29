@@ -9,6 +9,16 @@ namespace Matchmaker.Service.Interfaces
         public Task ClearMatch();
 
         /// <summary>
+        /// 허브에 연결됨
+        /// </summary>
+        public Task<bool> ConnectedClient(int uid, string connectionId);
+
+        /// <summary>
+        /// 허브에 연결 끊김
+        /// </summary>
+        public Task<bool> DisconnectedClient(int uid, string connectionId);
+
+        /// <summary>
         /// 플레이어 티켓 대기열에 추가
         /// </summary>
         public Task<WebErrorCode> AddMatchTicket(Int32 uid, String clientId);
@@ -36,8 +46,6 @@ namespace Matchmaker.Service.Interfaces
         /// 플레이어 레이팅 삭제
         /// </summary>
         public Task<WebErrorCode> LeavingMatchQueue(string key);
-
-        public Task<WebErrorCode> DisconnectMatch(string clientId);
 
         /// <summary>
         /// 플레이어들 중 나가고 싶은 사람이 있다면 처리
@@ -70,6 +78,6 @@ namespace Matchmaker.Service.Interfaces
         /// </summary>
         public Task<WebErrorCode> UpdateLatency(Int32 uid, Int64 latency);
 
-        public Task RollbackTicket(Int32 uid, Ticket ticket);
+        public Task RollbackTicket(Int32 uid);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using CloudStructures;
 using CloudStructures.Structures;
+using GSO_WebServerLibrary.Utils;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.Match;
 
@@ -106,5 +107,21 @@ namespace Matchmaker.Repository.Interface
         /// 매칭 레이팅에서 범위에 따라 uid 리턴
         /// </summary>
         public Task<string[]?> SearchPlayerByRange(Double min, Double max);
+
+        //////////////////////////////////////////////////////
+        ///                                                ///
+        ///                                                ///
+        ///                      CLIENT                    ///
+        ///                                                ///
+        ///                                                ///
+        //////////////////////////////////////////////////////
+
+        public Task ClearClient();
+
+        public Task<string> GetClientId(int uid);
+
+        public Task<bool> AddClient(int uid, string connectionId);
+
+        public Task<bool> RemoveClient(int uid);
     }
 }

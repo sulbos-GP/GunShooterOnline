@@ -32,8 +32,13 @@ namespace GameServerManager.Servicies
                 var containers = await mDockerService.GetAllContainerList();
                 foreach (var container in containers)
                 {
+                    
                     await mSessionMemory.RemoveMatchStatus(container.ID);
-                    await mDockerService.StopContainer(container.ID);
+
+                    if(container.State != "Dead")
+                    {
+                        await mDockerService.StopContainer(container.ID);
+                    }
                     await mDockerService.RemoveContainer(container.ID);
                 }
 

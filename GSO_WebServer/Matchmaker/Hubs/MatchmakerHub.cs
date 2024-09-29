@@ -3,6 +3,7 @@ using Matchmaker.Service;
 using Matchmaker.Service.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 using ZLogger;
+using System.Collections.Generic;
 
 namespace Matchmaker.Hubs
 {
@@ -20,14 +21,14 @@ namespace Matchmaker.Hubs
 
             string connectionId = Context.ConnectionId;
             Console.WriteLine($"[MatchmakerHub] Client connected: {connectionId}");
-
+            
             HttpContext? context = Context.GetHttpContext();
             if (context != null)
             {
-                string uid = context.Request.Headers["uid"].ToString();
+                int uid = Convert.ToInt32(context.Request.Headers["uid"].ToString());
                 string accessToken = context.Request.Headers["access_token"].ToString();
 
-                var error = await mMatchmakerService.AddMatchTicket(Convert.ToInt32(uid), connectionId);
+                await mMatchmakerService.ConnectedClient(uid, connectionId);
             }
 
             await base.OnConnectedAsync();
@@ -40,7 +41,14 @@ namespace Matchmaker.Hubs
             string connectionId = Context.ConnectionId;
             Console.WriteLine($"[MatchmakerHub] Client disconnected: {connectionId}");
 
-            var error = await mMatchmakerService.DisconnectMatch(connectionId);
+            HttpContext? context = Context.GetHttpContext();
+            if (context != null)
+            {
+                int uid = Convert.ToInt32(context.Request.Headers["uid"].ToString());
+                string accessToken = context.Request.Headers["access_token"].ToString();
+
+                await mMatchmakerService.DisconnectedClient(uid, connectionId);
+            }
 
             await base.OnDisconnectedAsync(exception);
         }

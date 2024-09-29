@@ -84,8 +84,7 @@ namespace Matchmaker.Service.Background
                     {
                         foreach (var playerTicket in playerTickets)
                         {
-                            playerTicket.Value.state = ETicketState.InQueue;
-                            await mMatchmakerService.RollbackTicket(KeyUtils.GetUID(playerTicket.Key), playerTicket.Value);
+                            await mMatchmakerService.RollbackTicket(KeyUtils.GetUID(playerTicket.Key));
                         }
                     }
                     continue;
@@ -99,8 +98,7 @@ namespace Matchmaker.Service.Background
                 {
                     foreach (var playerTicket in playerTickets)
                     {
-                        playerTicket.Value.state = ETicketState.InQueue;
-                        await mMatchmakerService.RollbackTicket(KeyUtils.GetUID(playerTicket.Key), playerTicket.Value);
+                        await mMatchmakerService.RollbackTicket(KeyUtils.GetUID(playerTicket.Key));
                     }
                     continue;
                 }
