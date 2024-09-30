@@ -12,6 +12,7 @@ using WebCommonLibrary.Enum;
 using Google.Apis.Games.v1.Data;
 using System.Threading;
 using System.Net.Sockets;
+using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
 
 namespace Matchmaker.Service
 {
@@ -178,7 +179,7 @@ namespace Matchmaker.Service
 
                 if(user.ticket <= 0)
                 {
-                    //return WebErrorCode.PushPlayerNoTicket;
+                    return WebErrorCode.PushPlayerNoTicket;
                 }
 
                 string clientId = await mMatchQueue.GetClientId(uid);
@@ -287,50 +288,37 @@ namespace Matchmaker.Service
 
         public async Task<WebErrorCode> RemoveMatchQueue(string key)
         {
-            Console.WriteLine("[MatchmakerService.RemoveMatchQueue]");
             int uid = KeyUtils.GetUID(key);
-
-            var error = await mMatchQueue.RemoveTicket(uid);
-            if (error != WebErrorCode.None)
+            try
             {
-                return error;
-            }
+                Console.WriteLine("[MatchmakerService.RemoveMatchQueue]");
+                await mMatchQueue.TryTakeLock(uid);
 
-            error = await mMatchQueue.RemoveRating(uid);
-            if (error != WebErrorCode.None)
+                var error = await mMatchQueue.RemoveTicket(uid);
+                if (error != WebErrorCode.None)
+                {
+                    return error;
+                }
+
+                error = await mMatchQueue.RemoveRating(uid);
+                if (error != WebErrorCode.None)
+                {
+                    return error;
+                }
+
+                await mMatchQueue.ReleaseLock(uid);
+
+                return WebErrorCode.None;
+            }
+            catch (Exception e)
             {
-                return error;
+                Console.WriteLine($"[MatchmakerService.PopMatchQueue] : {e.Message}");
+                return WebErrorCode.TEMP_Exception;
             }
-
-            await mMatchQueue.ReleaseLock(uid);
-
-            return WebErrorCode.None;
-        }
-
-        public async Task<WebErrorCode> LeavingMatchQueue(string key)
-        {
-            Console.WriteLine("[MatchmakerService.LeavingMatchQueue]");
-            int uid = KeyUtils.GetUID(key);
-
-            var (error , ticket) = await mMatchQueue.GetTicketWithUid(uid);
-            if(error != WebErrorCode.None || ticket == null)
+            finally
             {
-                return error;
+                await mMatchQueue.ReleaseLock(uid);
             }
-
-            error = await mMatchQueue.RemoveRating(uid);
-            if (error != WebErrorCode.None)
-            {
-                return error;
-            }
-
-            error = await mMatchQueue.RemoveTicket(uid);
-            if (error != WebErrorCode.None)
-            {
-                return error;
-            }
-
-            return WebErrorCode.None;
         }
 
         public async Task<Dictionary<string, Ticket>?> CheckPlayersLeavingQueue()
@@ -476,6 +464,64 @@ namespace Matchmaker.Service
             }
         }
 
+        public async Task<WebErrorCode> MatchConfirmation(string[] keys, Ticket[] tickets, MatchProfile profile)
+        {
+            try
+            {
+                Console.WriteLine("MatchInfo");
+                Console.WriteLine("{");
+                Console.WriteLine($"\tID      : {profile.container_id}");
+                Console.WriteLine($"\tWORLD   : {profile.world}");
+                Console.WriteLine($"\tH_IP    : {profile.host_ip}");
+                Console.WriteLine($"\tH_PORT  : {profile.host_port}");
+                Console.WriteLine($"\tC_PORT  : {profile.container_port}");
+
+
+                //해당 클라이언트에게 방 정보 전송
+                Console.WriteLine("\tMatchPlayers");
+                Console.WriteLine("\t{");
+                foreach (var ticket in tickets)
+                {
+                    
+                    //이미 매치가 잡혔기 때문에 닷지 실패임
+                    if (ticket.isExit == true)
+                    {
+                        await NotifyMatchFailed(ticket, WebErrorCode.PopPlayersJoinForced);
+                    }
+
+                    await NotifyMatchSuccess(ticket, profile);
+                }
+                Console.WriteLine("\t}");
+                Console.WriteLine("}");
+
+                //성공적으로 보냈다면 티켓을 소모하며 매칭 큐에서 제거 한다
+                foreach (var key in keys)
+                {
+                    int uid = KeyUtils.GetUID(key);
+                    UserInfo? user = await mGameDB.GetUserByUid(uid);
+                    if(user == null)
+                    {
+                        throw new Exception("플레이어가 존재하지 않음");
+                    }
+
+                    int result = await mGameDB.UpdateTicket(uid, user.ticket - 1);
+                    if(result == 0)
+                    {
+                        throw new Exception("티켓이 올바르게 소모되지 않음");
+                    }
+
+                    await RemoveMatchQueue(key);
+                }
+
+                return WebErrorCode.None;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MatchmakerService.MatchConfirmation] : {e.Message}");
+                return WebErrorCode.TEMP_Exception;
+            }
+        }
+
         public async Task NotifyMatchSuccess(Ticket ticket, MatchProfile profile)
         {
             Console.WriteLine($"\t\tClientId : {ticket.client_id}");
@@ -485,6 +531,7 @@ namespace Matchmaker.Service
 
         public async Task NotifyMatchFailed(Ticket ticket, WebErrorCode error)
         {
+            Console.WriteLine($"\t\tClientId : {ticket.client_id}");
             await mMatchmakerHub.Clients.Client(ticket.client_id).SendAsync("S2C_MatchFailed", error);
         }
 

@@ -11,8 +11,9 @@ CREATE TABLE IF NOT EXISTS user (
 	gacha	 			INT 			NOT NULL	DEFAULT 0					COMMENT '가챠',
     service 			VARCHAR(32) 	NOT NULL								COMMENT '서비스',
     refresh_token 		VARCHAR(512) 	NULL 		DEFAULT NULL				COMMENT '갱신 토큰',	#TODO NotNull로 교채
-	create_dt           DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '생성 일시', 
+	create_dt           DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '생성 일시',
     recent_login_dt     DATETIME       	NOT NULL    DEFAULT CURRENT_TIMESTAMP 	COMMENT '최근 로그인 일시',
+    recent_ticket_dt 	DATETIME 		NOT NULL 	DEFAULT CURRENT_TIMESTAMP 	COMMENT '최근 티켓 사용 일시',
     
 	 PRIMARY KEY (uid),
      UNIQUE KEY (nickname)
