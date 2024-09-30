@@ -43,11 +43,6 @@ namespace Matchmaker.Service.Interfaces
         public Task<WebErrorCode> RemoveMatchQueue(string key);
 
         /// <summary>
-        /// 플레이어 레이팅 삭제
-        /// </summary>
-        public Task<WebErrorCode> LeavingMatchQueue(string key);
-
-        /// <summary>
         /// 플레이어들 중 나가고 싶은 사람이 있다면 처리
         /// </summary>
         public Task<Dictionary<string, Ticket>?> CheckPlayersLeavingQueue();
@@ -61,6 +56,8 @@ namespace Matchmaker.Service.Interfaces
         /// 플레이어 레이팅에 따른 매칭 찾아주고 key 리턴
         /// </summary>
         public Task<(WebErrorCode, Dictionary<string, Ticket>?)> FindMatchByRating(double min, double max, int capacity);
+
+        public Task<WebErrorCode> MatchConfirmation(string[] keys, Ticket[] tickets, MatchProfile profile);
 
         /// <summary>
         /// 매칭이 성사된 유저들에게 매칭이 성공했음을 알린다
