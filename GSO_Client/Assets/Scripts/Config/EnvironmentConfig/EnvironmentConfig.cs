@@ -13,6 +13,7 @@ public enum EEnvironmentState
 [CreateAssetMenu(fileName = "EnvironmentConfig", menuName = "Configuration/EnvironmentConfig")]
 public class EnvironmentConfig : ScriptableObject
 {
+    public EEnvironmentState state = EEnvironmentState.Standard;
     //소켓 서버
     public string GameServerIp = null;
     public string GameServerPort = null;
@@ -50,6 +51,7 @@ public class EnvironmentSetting
             default:
                 break;
         }
+        config.state = state;
     }
 
     public EnvironmentConfig GetEnvironmentConfig()
