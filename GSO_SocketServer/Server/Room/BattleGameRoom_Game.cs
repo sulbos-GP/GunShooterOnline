@@ -888,6 +888,9 @@ namespace Server
             if(connectPlayer.Count == tempPlayer.Count)
             {
                 //전부 모임
+
+                Console.WriteLine("All Player is Ready to Start Game");
+
                 GameStart();
             }
             else
@@ -911,7 +914,11 @@ namespace Server
 
         private void GameStart()
         {
-            foreach(Player p in tempPlayer)
+            Console.WriteLine("============ GameStart ============");
+            map.SpawnPlayers(tempPlayer.ToArray());
+
+
+            foreach (Player p in tempPlayer)
             {
                 /*if(_playerDic.TryAdd(p.Id, p) == false)
                 {
@@ -922,6 +929,10 @@ namespace Server
                     Console.WriteLine("GameStart ERROR");
                 }*/
 
+
+                
+
+                EnterGame(p); 
             }
 
 
