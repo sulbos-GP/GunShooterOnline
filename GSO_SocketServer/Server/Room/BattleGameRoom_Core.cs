@@ -172,8 +172,16 @@ namespace Server
                 //inventory
                 NewEnterSpawnData(player);
 
-                _playerDic.Add(gameObject.Id, player);
+                if (_playerDic.TryAdd(gameObject.Id, player))
+                {
+                    // 시작 때 같이 들어감
 
+                }
+                else
+                {
+                    //중간 난입
+                    Console.WriteLine($"Reconnected Game Id{gameObject.Id}");
+                }
             }
             else if (type == GameObjectType.Monster)
             {
