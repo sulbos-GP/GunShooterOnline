@@ -77,8 +77,8 @@ public class Map
 
     private Vector2Int roomSize;
 
-    public List<ExitZone> Escapes = new List<ExitZone>();
-    public List<SpawnZone> Spawns = new List<SpawnZone>();
+    //public List<ExitZone> Escapes = new List<ExitZone>();
+    //public List<SpawnZone> Spawns = new List<SpawnZone>();
 
     public Vector2Int Bleft { get; private set; }
     public Vector2Int Tright { get; private set; }
@@ -130,8 +130,8 @@ public class Map
 
     #endregion
 
-    float xOffset = 14;
-    float yOffset = -2;
+    float xOffset = 0.5f;//14;
+    float yOffset = 0.5f;// -2;
 
 
     public void loadMap(string mapName, string pathPrefix = "")
@@ -285,7 +285,7 @@ public class Map
     public bool SpawnPlayers(Player[] players)
     {
 
-        int sCount = Spawns.Count;
+        int sCount = spawnZones.Count;
         int pCount = players.Length;// battleRoom.connectPlayer.Count;
         if(sCount < pCount)
         {
@@ -296,7 +296,7 @@ public class Map
 
         List<List<SpawnZone>> combinations = new List<List<SpawnZone>>();
 
-        GetCombinations(Spawns, new List<SpawnZone>(), 0, pCount, combinations);
+        GetCombinations(spawnZones, new List<SpawnZone>(), 0, pCount, combinations);
 
         Random random = new Random();
         int randomIndex = random.Next(combinations.Count);
@@ -304,10 +304,11 @@ public class Map
         List<SpawnZone> selectedCombination = combinations[randomIndex];
 
 
-        int t = 0;
+        int t = -1;
         foreach (SpawnZone spawn in selectedCombination)
         {
-            players[t++].CellPos = spawn.CellPos;
+            players[++t].CellPos = spawn.CellPos;
+            Console.WriteLine(players[t].Id+"는 "+ spawn.CellPos+ "에 소환 됨 ");
 
         }
 

@@ -179,7 +179,7 @@ namespace Matchmaker.Service
 
                 if(user.ticket <= 0)
                 {
-                    return WebErrorCode.PushPlayerNoTicket;
+                    //return WebErrorCode.PushPlayerNoTicket;
                 }
 
                 string clientId = await mMatchQueue.GetClientId(uid);

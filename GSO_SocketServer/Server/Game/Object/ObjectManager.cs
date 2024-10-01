@@ -74,32 +74,34 @@ internal class ObjectManager
         foreach (Player player in _players.Values){
             Console.WriteLine($"{player.Id} ");
         }
-        Console.WriteLine($"\n");
+        Console.WriteLine();
         Console.WriteLine($"rootable : ");
         foreach (BoxObject root in _rootable.Values)
         {
             Console.Write($"{root.Id}, ");
         }
-        Console.WriteLine($"\n");
+        Console.WriteLine();
         Console.WriteLine($"Item : ");
         foreach (ItemObject item in _items.Values)
         {
             Console.Write($"{item.Id}, ");
         }
 
-        Console.WriteLine($"\n");
+        Console.WriteLine();
         Console.WriteLine($"exitZone : ");
         foreach (ExitZone exit in _exit.Values)
         {
-            Console.WriteLine($"{exit.Id} ");
+            Console.Write($"{exit.Id}, ");
         }
 
-        Console.WriteLine($"\n");
+        Console.WriteLine();
         Console.WriteLine($"spawnZone : ");
         foreach (SpawnZone pawn in _spawn.Values)
         {
-            Console.WriteLine($"{pawn.Id} ,");
+            Console.Write($"{pawn.Id} ,");
         }
+        Console.WriteLine();
+
     }
 
 
