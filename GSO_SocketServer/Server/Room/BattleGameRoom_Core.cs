@@ -142,6 +142,8 @@ namespace Server
                         enterPacket.ItemInfos.Add(item);
                     }
 
+
+                    player.inventory.storage.PrintInvenContents();
                     player.Session.Send(enterPacket);
 
                     //player.Vision.Update();
