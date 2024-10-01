@@ -80,11 +80,14 @@ public class MatchmakerHub : ClientHub
             Destroy(matchStateUI);
 
             {
-                //����
-                //response.host_ip = "113.60.249.123";
-
-                //���� �ֹ�
-                response.host_ip = "10.0.2.2";
+                if(Managers.EnvConfig.GetEnvironmentConfig().state == EEnvironmentState.Release)
+                {
+                    response.host_ip = "113.60.249.123";
+                }
+                else
+                {
+                    response.host_ip = "10.0.2.2";
+                }
 
                 Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
 
