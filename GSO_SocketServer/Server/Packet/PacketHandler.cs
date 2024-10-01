@@ -270,7 +270,7 @@ class PacketHandler
 
         BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
 
-        room.Push(room.EnterGame, clientSession.MyPlayer);
+        // enter로 이동 room.Push(room.EnterGame, clientSession.MyPlayer);
         ObjectManager.Instance.DebugObjectDics();
     }
 

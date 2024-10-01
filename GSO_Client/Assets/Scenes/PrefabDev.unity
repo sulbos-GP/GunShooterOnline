@@ -174,18 +174,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: World 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7863182139425953576, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7863182139425953576, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9006685801947118659, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
-      propertyPath: m_Name
-      value: W_SpawnZone
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
