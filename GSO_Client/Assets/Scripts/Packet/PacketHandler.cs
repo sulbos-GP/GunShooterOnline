@@ -16,9 +16,9 @@ internal class PacketHandler
 {
     public static void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
-        Debug.Log("S_EnterGameHandler");
+        Managers.SystemLog.Message("S_EnterGameHandler");
         var enterGamePacket = (S_EnterGame)packet;
-        Debug.Log($"{enterGamePacket.Player}");
+        Managers.SystemLog.Message($"{enterGamePacket.Player}");
         Managers.Object.Add(enterGamePacket.Player, true);
 
         //Use Stat
@@ -42,13 +42,14 @@ internal class PacketHandler
 
     public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
     {
+        Managers.SystemLog.Message("S_LeaveGameHandler");
         var leaveGamePacket = (S_LeaveGame)packet;
     }
 
     /*public static void S_ConnectedHandler(PacketSession session, IMessage packet)
     {
         //게임에 접속이되면
-        Debug.Log("S_ConnectedHandler");
+        Managers.SystemLog.Message("S_ConnectedHandler");
 
         var lobbyInfo = new C_LobbyInfo();
         lobbyInfo.DeviceId = SystemInfo.deviceUniqueIdentifier;
@@ -59,6 +60,7 @@ internal class PacketHandler
 
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
+        Managers.SystemLog.Message("S_SpawnHandler");
         // 1번째 : 적 Spawn 정보 2번째 : box 정보 3번째 : 로컬 플레이어 정보?
         var spawnPacket = (S_Spawn)packet;
         
@@ -82,13 +84,14 @@ internal class PacketHandler
             //Spawn Player
             Vector2 vec2 = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
             player.SpawnPlayer(vec2);
-            Debug.Log("spawnID : " + info.ObjectId);
+            Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + info.ObjectId);
         }
-        //Debug.Log("S_SpawnHandler");*/
+        //Managers.SystemLog.Message("S_SpawnHandler");*/
     }
 
     public static void S_DespawnHandler(PacketSession session, IMessage packet)
     {
+        Managers.SystemLog.Message("S_DespawnHandler");
         var despawn = (S_Despawn)packet;
 
         foreach (var id in despawn.ObjcetIds) Managers.Object.Remove(id);
@@ -96,8 +99,7 @@ internal class PacketHandler
 
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
-        //전투중
-        //Debug.Log("S_MoveHandler");
+        Managers.SystemLog.Message("S_MoveHandler");
         var movePacket = packet as S_Move;
 
         var go = Managers.Object.FindById(movePacket.ObjectId);
@@ -128,6 +130,7 @@ internal class PacketHandler
 
     public static void S_ChangeHpHandler(PacketSession session, IMessage message)
     {
+        Managers.SystemLog.Message("S_ChangeHpHandler");
         var changeHpPacket = message as S_ChangeHp;
 
         var go = Managers.Object.FindById(changeHpPacket.ObjectId);
@@ -138,7 +141,7 @@ internal class PacketHandler
             go.GetComponent<PlayerController>().Hit();
         }
         else
-            Debug.Log("아이디 없음");
+            Managers.SystemLog.Message("S_ChangeHpHandler : can't find ObjectId");
     }
 
     public static void S_DieHandler(PacketSession session, IMessage message)
@@ -148,12 +151,13 @@ internal class PacketHandler
         if (go != null)
             go.GetComponent<CreatureController>().OnDead(diePacket.AttackerId);
         else
-            Debug.Log("아이디 없음");
+            Managers.SystemLog.Message("S_ChangeHpHandler : can't find ObjectId");
     }
 
 
     internal static void S_RoomInfoHandler(PacketSession session, IMessage message)
     {
+        Managers.SystemLog.Message("S_RoomInfoHandler");
         /* var roomPacket = message as S_RoomInfo;
 
          if (roomPacket.RoomInfos.Count > 1)
@@ -167,22 +171,18 @@ internal class PacketHandler
     internal static void S_ConnectedHandler(PacketSession session, IMessage message)
     {
         S_Connected packet = message as S_Connected;
-        Debug.Log("S_ConnectedHandler");
+        Managers.SystemLog.Message("S_ConnectedHandler");
 
     }
 
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
+        Managers.SystemLog.Message("S_LoadInventory");
         S_LoadInventory packet = message as S_LoadInventory;
-        if (packet == null)
-        {
-            Debug.Log("S_LoadInventory 패킷이 없음");
-            return;
-        }
 
         if (!packet.IsSuccess)
         {
-            Debug.Log("S_LoadInventory 불러오기에 실패함");
+            Managers.SystemLog.Message("S_LoadInventory : fail to load");
             if (InventoryController.invenInstance.isActive)
             {
                 InventoryController.invenInstance.invenUIControl();
@@ -271,15 +271,11 @@ internal class PacketHandler
          */
         
         S_CloseInventory packet = message as S_CloseInventory;
-        if (packet == null)
-        {
-            Debug.Log("S_CloseInventory 패킷이 없음");
-            return;
-        }
-        Debug.Log("패킷받음");
+        Managers.SystemLog.Message("S_CloseInventory");
+
         if (!packet.IsSuccess)
         {
-            Debug.Log("서버에서 거부함");
+            Managers.SystemLog.Message("S_CloseInventory : didn't accepted by Server");
             return;
         }
 
@@ -288,7 +284,7 @@ internal class PacketHandler
             GameObject target = Managers.Object.FindById(packet.SourceObjectId);
             if(target == null)
             {
-                Debug.Log("타겟박스의 검색 실패");
+                Managers.SystemLog.Message($"S_CloseInventory : fail to find with ObjectId {packet.SourceObjectId}");
                 return;
             }
             target.GetComponent<Box>().interactable = true;
@@ -309,13 +305,8 @@ internal class PacketHandler
          */
 
         S_SearchItem packet = message as S_SearchItem;
-        if (packet == null)
-        {
-            Debug.Log("S_SearchInventory 패킷이 없음");
-            return;
-        }
-
-        Debug.Log($"패킷의 아이템id = {packet.SourceItem.ObjectId}");
+        
+        Managers.SystemLog.Message($"S_SearchItem : target = {packet.SourceItem.ObjectId}");
 
         if (!packet.IsSuccess) //실패시 아이템을 다시 숨김상태로 전환
         {
@@ -333,6 +324,7 @@ internal class PacketHandler
     /// </summary>
     private static void ChangeItemObjectId(ItemObject targetItem, int newId)
     {
+
         InventoryController.instantItemDic.Remove(targetItem.itemData.objectId);
         targetItem.itemData.objectId = newId;
         if (!InventoryController.instantItemDic.ContainsKey(targetItem.itemData.objectId))
@@ -367,22 +359,16 @@ internal class PacketHandler
          * isSuccess가 true면 출발지 아이템을 검색하여 삭제 및 목적지 아이템을 새로 생성하여 배치
          * false면 출발지 아이템을 원래 위치로 Undo
          */
+        Managers.SystemLog.Message("S_MoveItem");
         S_MoveItem packet = message as S_MoveItem;
-        if (packet == null)
-        {
-            Debug.Log("패킷이 없음");
-            return;
-        }
 
         InventoryController invenInstance = InventoryController.invenInstance;
-
-        Debug.Log("S_MoveItem");
         
         ItemObject targetItem = null;
         InventoryController.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
         if (targetItem == null)
         {
-            Debug.Log($"해당 아이템 검색 실패 {packet.SourceMoveItem.ObjectId}");
+            Managers.SystemLog.Message($"S_MoveItem : can't find with this ObjectId : {packet.SourceMoveItem.ObjectId}");
             return;
         }
 
@@ -394,7 +380,7 @@ internal class PacketHandler
         AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
         AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
 
-        //Debug.Log($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
+        //Managers.SystemLog.Message($"패킷의 아이템id\n옮기기전 : {packet.SourceMoveItem.ObjectId}\n옮긴후 : {packet.DestinationMoveItem.ObjectId}");
 
         if (packet.IsSuccess)
         {
@@ -432,12 +418,9 @@ internal class PacketHandler
     internal static void S_DeleteItemHandler(PacketSession session, IMessage message)
     {
         S_DeleteItem packet = message as S_DeleteItem;
-        if (packet == null)
-        {
-            Debug.Log("패킷이 없음");
-            return;
-        }
-        Debug.Log($"패킷의 아이템id = {packet.DeleteItem.ObjectId}");
+        Managers.SystemLog.Message("S_DeleteItem");
+
+        Managers.SystemLog.Message($"S_DeleteItem : targetId = {packet.DeleteItem.ObjectId}");
 
         InventoryController invenInstance = InventoryController.invenInstance;
 
@@ -445,7 +428,7 @@ internal class PacketHandler
         InventoryController.instantItemDic.TryGetValue(packet.DeleteItem.ObjectId, out targetItem);
         if (targetItem == null)
         {
-            Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
+            Managers.SystemLog.Message($"S_DeleteItem : can't find object with {packet.DeleteItem.ObjectId}");
             return;
         }
 
@@ -455,12 +438,12 @@ internal class PacketHandler
 
 
         if (packet.IsSuccess) {
-            Debug.Log("S_DeleteItem 성공");
+            Managers.SystemLog.Message("S_DeleteItem : success");
             invenInstance.DestroyItem(targetItem);
         }
         else
         {
-            Debug.Log("S_DeleteItem 실패");
+            Managers.SystemLog.Message("S_DeleteItem : failed");
             invenInstance.UndoSlot(targetItem);
             invenInstance.UndoItem(targetItem);
         }
@@ -471,13 +454,9 @@ internal class PacketHandler
     internal static void S_MergeItemHandler(PacketSession session, IMessage message)
     {
         S_MergeItem packet = message as S_MergeItem;
-        if (packet == null)
-        {
-            Debug.Log("패킷이 없음");
-            return;
-        }
+        Managers.SystemLog.Message("S_MergeItem");
 
-        Debug.Log($"합쳐지는 아이템 아이디 = {packet.MergedItem.ObjectId}, 합치기 위한 아이디 = {packet.CombinedItem.ObjectId}");
+        Managers.SystemLog.Message($"S_MergeItem : 합쳐지는 아이템 아이디 = {packet.MergedItem.ObjectId}, 합치기 위한 아이디 = {packet.CombinedItem.ObjectId}");
         InventoryController invenInstance = InventoryController.invenInstance;
 
         ItemObject mergedItem = null;
@@ -488,9 +467,9 @@ internal class PacketHandler
         if (mergedItem == null || combinedItem == null)
         {
             invenInstance.DebugDic();
-            Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
-            Debug.Log($"packet.mergeItem = {packet.MergedItem.ObjectId}");
-            Debug.Log($"packet.combinedItem = {packet.CombinedItem.ObjectId}");
+            Managers.SystemLog.Message("S_MergeItem : cant find with those item");
+            Managers.SystemLog.Message($"packet.mergeItem = {packet.MergedItem.ObjectId}");
+            Managers.SystemLog.Message($"packet.combinedItem = {packet.CombinedItem.ObjectId}");
             return;
         }
 
@@ -532,7 +511,7 @@ internal class PacketHandler
         }
         else
         {
-            Debug.Log("S_MergeItem 실패");
+            Managers.SystemLog.Message("S_MergeItem failed");
             InventoryController.invenInstance.UndoSlot(combinedItem);
             InventoryController.invenInstance.UndoItem(combinedItem);
         }
@@ -544,12 +523,7 @@ internal class PacketHandler
     internal static void S_DevideItemHandler(PacketSession session, IMessage message)
     {
         S_DevideItem packet = message as S_DevideItem;
-        if (packet == null)
-        {
-            Debug.Log("패킷이 없음");
-            return;
-        }
-        
+        Managers.SystemLog.Message("S_Divide");
         InventoryController invenInstance = InventoryController.invenInstance;
 
         ItemObject sourceItem = null; //원래 있던 아이템
@@ -557,10 +531,10 @@ internal class PacketHandler
 
         if (sourceItem == null )
         {
-            Debug.Log("해당 아이디의 아이템 오브젝트가 존재하지 않음");
+            Managers.SystemLog.Message($"S_Divide : can't find object with ObjectId {packet.SourceItem.ObjectId}");
             return;
         }
-        Debug.Log("S_Divide");
+        
         GridObject sourceGrid = null;
         GridObject destinationGrid = null;
         EquipSlot sourceEquip = null;
@@ -571,7 +545,7 @@ internal class PacketHandler
 
         if (packet.IsSuccess)
         {
-            Debug.Log($"원래 아이디 = {packet.SourceItem.ObjectId}, 새로 생성된 아이디 = {packet.DestinationItem.ObjectId}");
+            Managers.SystemLog.Message($"S_Divide : oldId = {packet.SourceItem.ObjectId}, newId = {packet.DestinationItem.ObjectId}");
             invenInstance.UndoSlot(sourceItem); //원래 아이템은 원위치로 이동후 나눈 만큼 아이템 감소
             invenInstance.UndoItem(sourceItem);
             sourceItem.ItemAmount = packet.SourceItem.Amount;
@@ -605,7 +579,7 @@ internal class PacketHandler
         else
         {
             //실패할경우 로직
-            Debug.Log("S_Divide 실패");
+            Managers.SystemLog.Message("S_Divide failed");
             invenInstance.UndoSlot(sourceItem);
             invenInstance.UndoItem(sourceItem);
         }
@@ -619,22 +593,18 @@ internal class PacketHandler
     internal static void S_RaycastHitHandler(PacketSession session, IMessage message)
     {
         S_RaycastHit packet = message as S_RaycastHit;
-        if (packet == null)
-        {
-            Debug.Log("패킷이 없음");
-            return;
-        }
-        Debug.Log("S_RaycastHit");
+       
+        Managers.SystemLog.Message("S_RaycastHit");
         //레이의 아이디를 키로 해당 패킷을 저장하는 딕셔너리
         //일단 지움 : Managers.Object._rayDic.Add(packet.RayId, packet);
 
         GameObject go = Managers.Object.FindById(packet.HitObjectId);
         if (go == null)
         {
-            Debug.Log("Wall Hit bullet");
+            Managers.SystemLog.Message("S_RaycastHit : Wall Hit bullet");
             return;
         }
-        //Debug.Log(go.GetComponent<MyPlayerController>().Id);
+        //Managers.SystemLog.Message(go.GetComponent<MyPlayerController>().Id);
         var cc = go.GetComponent<BaseController>();
         if (cc == null)
         {
@@ -659,8 +629,8 @@ internal class PacketHandler
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)
     {
         S_ExitGame packet = message as S_ExitGame;
-
-        if(Managers.Object.MyPlayer == null)
+        Managers.SystemLog.Message("S_ExitGame");
+        if (Managers.Object.MyPlayer == null)
         {
             return;
         }
@@ -681,35 +651,35 @@ internal class PacketHandler
     internal static void S_JoinServerHandler(PacketSession session, IMessage message)
     {
         S_JoinServer packet = message as S_JoinServer;
-
+        Managers.SystemLog.Message("S_JoinServer");
         if (!packet.Connected)
+        {
+            Managers.SystemLog.Message("S_JoinServer : fail");
             return;
+        }
+            
 
         //접속 완료
+        Managers.SystemLog.Message("S_JoinServer : success");
 
-        Debug.Log("서버에 접속 완료");
     }
 
     internal static void S_WaitingStatusHandler(PacketSession session, IMessage message)
     {
         S_WaitingStatus packet = message as S_WaitingStatus;
-
+        Managers.SystemLog.Message("S_WaitingStatus");
         if (packet == null)
             return;
 
         //참가시 인원 증감시 호출
 
-        Debug.Log($"접속 인원 : {packet.CurrentPlayers} / {packet.RequiredPlayers}");
+        Managers.SystemLog.Message($"S_WaitingStatus : curPlayer : {packet.CurrentPlayers} / {packet.RequiredPlayers}");
     }
 
     internal static void S_GameStartHandler(PacketSession session, IMessage message)
     {
+        Managers.SystemLog.Message("S_GameStartHandler");
         S_GameStart packet = message as S_GameStart;
-
-        if (packet == null)
-            return;
-
-
 
         //자신의 플레이어 외에 다른 플레이어와 오브젝트의 객체 생성
 
@@ -744,22 +714,25 @@ internal class PacketHandler
     internal static void S_ChangeAppearanceHandler(PacketSession session, IMessage message)
     {
         S_ChangeAppearance packet = message as S_ChangeAppearance;
-
-        Debug.Log($"S_ChangeAppearanceHandler {packet.ObjectId}, {packet.GunId}");
+        Managers.SystemLog.Message("S_ChangeAppearanceHandler");
+        Managers.SystemLog.Message($"S_ChangeAppearanceHandler {packet.ObjectId}, {packet.GunId}");
 
         if(packet.ObjectId == Managers.Object.MyPlayer.Id)
         {
             return;
         }
 
-        Sprite targetSprite =Resources.Load<Sprite>(Data_master_item_base.GetData(packet.GunId).icon);
+        Sprite targetSprite = Resources.Load<Sprite>($"Sprite/Item/{Data_master_item_base.GetData(packet.GunId).icon}");
         if(targetSprite == null)
         {
-            Debug.Log("찾지못함");
+            Managers.SystemLog.Message("S_ChangeAppearanceHandler : Can't find item with packet.GunId");
         }
+        Managers.SystemLog.Message($"S_ChangeAppearanceHandler : spriteName : {targetSprite.name}");
 
-        GameObject targetObject = Managers.Object.FindById(packet.ObjectId);
-        targetObject.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = targetSprite;
+        GameObject targetPlayer = Managers.Object.FindById(packet.ObjectId);
+        targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = targetSprite;
+        Managers.SystemLog.Message($"S_ChangeAppearanceHandler : targetPlayer : {targetPlayer.name}");
+        
     }
 
 
@@ -776,7 +749,7 @@ internal class PacketHandler
              return;
          Managers.Skill.UseSkill(cc, skillPacket); //이팩트 생성
 
-         Debug.Log("S_SkillHandler");
+         Managers.SystemLog.Message("S_SkillHandler");
      }*/
 
     /*internal static void S_StatChangeHandler(PacketSession session, IMessage message)
@@ -790,7 +763,7 @@ internal class PacketHandler
         if (cc == null)
             return;
 
-        Debug.Log($"previous : S_Stat {statpacket.ObjectId}{cc.Stat}");
+        Managers.SystemLog.Message($"previous : S_Stat {statpacket.ObjectId}{cc.Stat}");
 
         cc.Stat.MergeFrom(statpacket.StatInfo);
 
@@ -805,13 +778,13 @@ internal class PacketHandler
 
 
 
-        Debug.Log($"Next : S_Stat {statpacket.StatInfo}");
+        Managers.SystemLog.Message($"Next : S_Stat {statpacket.StatInfo}");
     }*/
 
     /*internal static void S_LobbyPlayerInfoHandler(PacketSession session, IMessage message)
     {
         //서버에서 로비에관한 정보
-        Debug.Log("S_LobbyPlayerInfoHandler");
+        Managers.SystemLog.Message("S_LobbyPlayerInfoHandler");
         var lobbyPlayerInfo = (S_LobbyPlayerInfo)message;
         GameObject.Find("LobbyScene").GetComponent<LobbyScene>().DataUpdate(lobbyPlayerInfo);
     }*/
