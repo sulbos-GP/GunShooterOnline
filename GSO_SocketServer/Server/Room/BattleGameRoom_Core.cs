@@ -33,13 +33,16 @@ namespace Server
         public Map map { get; }
         public BattleGameRoom()
         {
-            map = new Map(r: this);
-            map.Init();
+
         }
 
+        /// <summary>
+        /// 미리 배치해야하는 오브젝트를 여기에서 초기화
+        /// </summary>
         public override void Init()
         {
-
+            map = new Map(r: this);
+            map.Init();
         }
 
         public override void LogicUpdate()
