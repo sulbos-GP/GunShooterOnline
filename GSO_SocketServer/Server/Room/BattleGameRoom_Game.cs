@@ -881,8 +881,12 @@ namespace Server
             //로드 끝났어
             tempPlayer.Add(player);
 
-            if(connectPlayer.Count == 0)
+            if (connectPlayer.Count == 0)
+            {
+                Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
+
+            }
 
 
             if(connectPlayer.Count == tempPlayer.Count)
