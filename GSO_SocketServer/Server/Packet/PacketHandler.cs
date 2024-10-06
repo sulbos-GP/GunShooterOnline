@@ -195,6 +195,13 @@ class PacketHandler
         BattleGameRoom room = player.gameRoom;
         MatchOutcome outcome = room.MatchInfo[player.UID];
 
+        {
+            //파밍 계산
+            //var curInventoryAndGear = player.inventory.GetInventoryObjectIds().Union(player.gear.GetPartObjectIds()).ToList();
+            //var oldInventoryAndGear = player.inventory.GetInitInventoryObjectIds().Union(player.gear.GetInitPartObjectIds()).ToList();
+            //outcome.farming = curInventoryAndGear.Except(oldInventoryAndGear).Count();
+        }
+
         Program.web.Lobby.PostPlayerStats(player.UID, outcome).Wait();
 
         Console.WriteLine("Server is ready");
