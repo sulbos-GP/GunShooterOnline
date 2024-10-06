@@ -881,13 +881,15 @@ namespace Server
         {
 
             //로드 끝났어
-            if(tempPlayer.Contains(player) == true)
+            if (tempPlayer.Contains(player) == true)
             {
                 Console.WriteLine("Error tempPlayer conation player ");
             }
             else
             {
                 tempPlayer.Add(player);
+            }
+
 
             if (connectPlayer.Count == 0)
             {
@@ -895,10 +897,6 @@ namespace Server
                 GameStart();
 
             }
-
-
-            /*if(connectPlayer.Count == 0)
-                GameStart();*/
 
 
             if (connectPlayer.Count == tempPlayer.Count)
