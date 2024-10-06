@@ -34,7 +34,7 @@ public class Gun : MonoBehaviour
     public LineRenderer bulletLine;
     private LineRenderer rangeLine;
     private Transform _fireStartPos;
-    //private Vector3 _direction;      // Ray가 향하는 방향 -> 안쓰는 변수
+    //private Vector3 direction;      // Ray가 향하는 방향 -> 안쓰는 변수
 
     private void Awake()
     {
