@@ -12,10 +12,9 @@ Content-Type: application/json
 
 POST {{GsoWebServer_HostAddress}}/Performance/PlayerStats
 Content-Type: application/json
-uid: 3
-access_token: 1234
 {
     "room_token":"a_2"
+    "uid":0
     "outcome":null
 }
 

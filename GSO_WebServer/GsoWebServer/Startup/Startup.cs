@@ -10,6 +10,7 @@ using GsoWebServer.Servicies.DataLoad;
 using GsoWebServer.Servicies.Game;
 using System;
 using WebCommonLibrary.Config;
+using GsoWebServer.Servicies.RatingSystem;
 
 namespace GsoWebServer.Startup
 {
@@ -43,6 +44,7 @@ namespace GsoWebServer.Startup
             services.AddTransient<IAuthenticationService, AuthenticationService>();
             services.AddTransient<IDataLoadService, DataLoadService>();
             services.AddTransient<IGameService, GameService>();
+            services.AddTransient<IPlayerPerformanceService, PlayerPerformanceService>();
 
             services.AddSingleton<IMasterDB, MasterDB>();
             services.AddSingleton<IMemoryDB, MemoryDB>();
