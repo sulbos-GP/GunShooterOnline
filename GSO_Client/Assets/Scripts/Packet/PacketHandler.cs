@@ -135,10 +135,23 @@ internal class PacketHandler
 
         var go = Managers.Object.FindById(changeHpPacket.ObjectId);
 
-        if (go != null)
+        if (go != null) 
         {
             go.GetComponent<CreatureController>().Hp = changeHpPacket.Hp;
-            go.GetComponent<PlayerController>().Hit();
+            if(go.GetComponent<CreatureController>().Hp > changeHpPacket.Hp)
+            {
+                //HP가 줄었을때 
+                //기존의 HP보다 패킷의 HP가 작을때만 Hit 판정
+                go.GetComponent<PlayerController>().Hit();  //todo -> 아무리 생각해도 처음에 흰색으로 변하는 현상은 이거다. 서버 고쳐지면 테스트 진행
+            }
+            else if(go.GetComponent<CreatureController>().Hp < changeHpPacket.Hp)
+            {
+                //HP가 증가했을때 (회복 등)
+                //회복 이펙트?
+                go.GetComponent<CreatureController>().Hp = Mathf.Min(changeHpPacket.Hp, go.GetComponent<CreatureController>().MaxHp); //과치료 방지
+
+            }
+            
         }
         else
             Managers.SystemLog.Message("S_ChangeHpHandler : can't find ObjectId");
