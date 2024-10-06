@@ -4,8 +4,10 @@ using Server.Database.Handler;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 namespace Server.Game.Object.Gear
@@ -13,6 +15,7 @@ namespace Server.Game.Object.Gear
     public class Gear : GameObject
     {
         private Dictionary<string, Storage> parts = new Dictionary<string, Storage>();
+        private List<int> initPartItemIds = new List<int>();
         private Player owner;
 
         public Gear(Player owner) 
@@ -126,6 +129,7 @@ namespace Server.Game.Object.Gear
                     {
                         throw new Exception($"장비의 파트({gear.gear.part})가 중복되어 있음");
                     }
+                    initPartItemIds.Add(item.Id);
                 }
 
             }
@@ -194,6 +198,24 @@ namespace Server.Game.Object.Gear
             return true;
         }
 
+        public List<int> GetPartObjectIds()
+        {
+            List<int> itemIds = new List<int>();
+            foreach (var (part, item) in parts)
+            {
+                var items = item.GetItemObjectIds();
+                if(items.Count == 1)
+                {
+                    itemIds.Add(items[0]);
+                }
+            }
+            return itemIds;
+        }
+
+        public List<int> GetInitPartObjectIds()
+        {
+            return initPartItemIds;
+        }
 
     }
 }
