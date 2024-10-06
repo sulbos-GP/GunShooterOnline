@@ -20,7 +20,7 @@ namespace Server.Web.Service
         /// <summary>
         /// 플레이어의 개인 기록에 대한 평가 반영
         /// </summary>
-        public async Task<PlayerStatsRes> PostPlayerStats(MatchOutcome outcome)
+        public async Task<PlayerStatsRes> PostPlayerStats(int uid, MatchOutcome outcome)
         {
 
 
@@ -29,6 +29,7 @@ namespace Server.Web.Service
             PlayerStatsReq request = new PlayerStatsReq
             {
                 room_token = DockerUtil.GetContainerId(),
+                uid = uid,
                 outcome = outcome,
             };
 

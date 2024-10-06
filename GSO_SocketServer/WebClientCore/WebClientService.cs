@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Net;
 using System.Text;
 using System.Text.Json;
@@ -35,18 +36,18 @@ namespace WebClientCore
         public async Task<TResponse?> PostAsync<TResponse>(string name, string endPoint, object request) where TResponse : class
         {
 
+            if (!mHttpClientUris.TryGetValue(name, out Uri? uri))
+            {
+                return null;
+            }
+
+            if (uri == null)
+            {
+                return null;
+            }
+
             try
             {
-                if (!mHttpClientUris.TryGetValue(name, out Uri? uri))
-                {
-                    return null;
-                }
-
-                if(uri == null)
-                {
-                    return null;
-                }
-
                 StringContent content = new(JsonSerializer.Serialize(request), Encoding.UTF8, "application/json");
                 var responseMessage = await mHttpClient.PostAsync($"{uri.ToString()}api/{endPoint}", content);
 
@@ -68,7 +69,7 @@ namespace WebClientCore
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"[WebClient::PostAsync] : {ex.Message}");
+                Console.WriteLine($"[WebClient::PostAsync][{uri.ToString()}api/{endPoint}] : {ex.Message}");
                 return null;
             }
         }

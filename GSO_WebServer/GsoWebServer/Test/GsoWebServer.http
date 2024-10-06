@@ -10,12 +10,13 @@ Content-Type: application/json
 
 ###
 
-POST {{GsoWebServer_HostAddress}}/User/SetNickname
+POST {{GsoWebServer_HostAddress}}/Performance/PlayerStats
 Content-Type: application/json
 uid: 3
-
+access_token: 1234
 {
-    "new_nickname":"a_2"
+    "room_token":"a_2"
+    "outcome":null
 }
 
 ###
