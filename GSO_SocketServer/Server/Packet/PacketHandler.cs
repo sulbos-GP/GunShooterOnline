@@ -195,11 +195,7 @@ class PacketHandler
         BattleGameRoom room = player.gameRoom;
         MatchOutcome outcome = room.MatchInfo[player.UID];
 
-        //ExitGameHandlerAsync(outcome).Wait();
-        Program.web.Lobby.PostPlayerStats(outcome).Wait();
-
-
-
+        Program.web.Lobby.PostPlayerStats(player.UID, outcome).Wait();
 
         Console.WriteLine("Server is ready");
 
@@ -207,20 +203,6 @@ class PacketHandler
 
 
     }
-
-    internal static async Task ExitGameHandlerAsync(MatchOutcome outcome)
-    {
-
-#if DEBUG
-        return;
-#endif
-        PlayerStatsRes playerStats = await Program.web.Lobby.PostPlayerStats(outcome);
-        if (playerStats.error_code != WebErrorCode.None)
-        {
-
-        }
-    }
-   
 
     internal static void C_JoinServerHandler(PacketSession session, IMessage message)
     {
