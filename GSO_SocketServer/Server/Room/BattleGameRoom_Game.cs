@@ -7,6 +7,7 @@ using ServerCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
@@ -878,24 +879,36 @@ namespace Server
 
         public void HandleClientLoadGame(Player player)
         {
+
             //로드 끝났어
-            tempPlayer.Add(player);
+            if(tempPlayer.Contains(player) == true)
+            {
+                Console.WriteLine("Error tempPlayer conation player ");
+            }
+            else
+            {
+                tempPlayer.Add(player);
 
-            if(connectPlayer.Count == 0)
-                GameStart();
+            }
 
 
-            if(connectPlayer.Count == tempPlayer.Count)
+            /*if(connectPlayer.Count == 0)
+                GameStart();*/
+
+
+            if (connectPlayer.Count == tempPlayer.Count)
             {
                 //전부 모임
-
+                Console.WriteLine($"connectPlayer.Count : {connectPlayer.Count}, " +
+                    $"tempPlayer.Count : {tempPlayer.Count}");
                 Console.WriteLine("All Player is Ready to Start Game");
 
                 GameStart();
             }
             else
             {
-               //아직 다 못모임
+                Console.WriteLine("All Player is not Ready !!");
+                //아직 다 못모임
                 S_WaitingStatus status = new S_WaitingStatus()
                 {
                     CurrentPlayers = tempPlayer.Count,

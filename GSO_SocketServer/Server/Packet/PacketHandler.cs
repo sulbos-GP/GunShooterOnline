@@ -194,11 +194,17 @@ class PacketHandler
         BattleGameRoom room = player.gameRoom;
         MatchOutcome outcome = room.MatchInfo[player.UID];
 
-        ExitGameHandlerAsync(outcome).Wait();
+        //ExitGameHandlerAsync(outcome).Wait();
+        Program.web.Lobby.PostPlayerStats(outcome).Wait();
+
+
+
 
         Console.WriteLine("Server is ready");
 
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
+
+
     }
 
     internal static async Task ExitGameHandlerAsync(MatchOutcome outcome)
@@ -218,6 +224,8 @@ class PacketHandler
     internal static void C_JoinServerHandler(PacketSession session, IMessage message)
     {
         Console.WriteLine("C_JoinServerHandler");
+
+        Task.Delay(1000).Wait();
 
         //접속 요청
         ClientSession clientSession = session as ClientSession;
