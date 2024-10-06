@@ -31,7 +31,11 @@ namespace Server.Web.Service
                 room_token = DockerUtil.GetContainerId(),
                 outcome = outcome,
             };
-            return await Owner.PostAsync<PlayerStatsRes>(Host, "Performance/PlayerRating", request);
+
+            Console.WriteLine("room_token : " + DockerUtil.GetContainerId() + ", outcome : " + outcome);
+
+
+            return await Owner.PostAsync<PlayerStatsRes>(Host, "Performance/PlayerStats", request);
         }
 
         /// <summary>
