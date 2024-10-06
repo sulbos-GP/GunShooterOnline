@@ -171,14 +171,23 @@ public class Gun : MonoBehaviour
             Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * _fireStartPos.up;
 
             //레이캐스트를 사용한 방법
-            RaycastHit2D hit = Physics2D.Raycast(_fireStartPos.position, direction, CurGunData.distance);
-
-            if (hit.collider != null)
+            //10.06 박성훈 : 레이케스트가 자신의 플레이어의 콜라이더에 막히는 문제가 발생
+            // -> 모든 히트들을 받은후 히트가 자신의 플레이어면 그다음으로 넘기고 아니면 hit에 해당 히트를 넣음(나중에 관통 총알 등을 넣기에도 용이)
+            RaycastHit2D[] hits = Physics2D.RaycastAll(_fireStartPos.position, direction, CurGunData.distance);
+            RaycastHit2D hit = default;
+            foreach (RaycastHit2D _hit in hits)
             {
-                // 충돌 위치까지 LineRenderer 설정
-                //bulletLine.SetPosition(0, _fireStartPos.position);
-                //bulletLine.SetPosition(1, hit.point);
-
+                if (_hit.collider.gameObject != Managers.Object.MyPlayer.gameObject)
+                {
+                    Debug.Log($"hit Object : {_hit.collider.gameObject.name}");
+                    hit = _hit;
+                    break; 
+                }
+            }
+           
+            if (hit.collider != null )
+            {
+                //도중에 충돌할 경우 충돌 위치까지 LineRenderer 설정
                 // 패킷 전송
                 var cRay = new C_RaycastShoot
                 {
@@ -190,13 +199,7 @@ public class Gun : MonoBehaviour
                 };
                 Managers.Network.Send(cRay);
             }
-            else
-            {
-                // 충돌이 없으면 최대 사거리까지 LineRenderer 설정
-                Vector3 endPos = _fireStartPos.position + direction * CurGunData.distance;
-                //bulletLine.SetPosition(0, _fireStartPos.position);
-                //bulletLine.SetPosition(1, endPos);
-            }
+            
 
             if (isBulletPrefShoot)
             {
@@ -207,7 +210,8 @@ public class Gun : MonoBehaviour
                     Debug.Log("리소스에서 총알 로드 실패");
                     return false;
                 }
-                if(hit.point != new Vector2(0,0))
+
+                if (hit.point != new Vector2(0, 0))
                     bullet.EndPos = hit.point;
                 else
                     bullet.EndPos = _fireStartPos.position + direction * CurGunData.distance;

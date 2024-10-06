@@ -28,12 +28,11 @@ public class LobbyScene : BaseScene
         string[] files = null;
 
 #elif UNITY_ANDROID
-        BetterStreamingAssets.Initialize();
+        Ip = "10.0.2.2";
+         BetterStreamingAssets.Initialize();
         string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
 #endif
         ExcelReader.CopyExcel(files);
-        Debug.Log(Data_master_item_base.GetData(302).name);
-        Debug.Log(Data_master_reward_base.GetData(10001));
         SceneType = Define.Scene.Forest;
         Screen.SetResolution(1920, 1080, false);
         Debug.Log("신 초기화 로비");
