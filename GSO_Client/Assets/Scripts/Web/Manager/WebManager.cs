@@ -32,12 +32,12 @@ public class WebManager
 
     public void StartHearbeat()
     {
-        Managers.Instance.StartCoroutine("PostHearbeat");
+        //Managers.Instance.StartCoroutine("PostHearbeat");
     }
 
     public void StopHearbeat()
     {
-        Managers.Instance.StopCoroutine("PostHearbeat");
+        //Managers.Instance.StopCoroutine("PostHearbeat");
     }
 
     private IEnumerator PostHearbeat()
