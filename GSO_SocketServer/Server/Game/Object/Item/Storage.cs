@@ -298,6 +298,11 @@ namespace Server.Game
             return items[index];
         }
 
+        public List<int> GetItemObjectIds()
+        {
+            return items.Select(item => item.Id).ToList();
+        }
+
         public void ClearStorage()
         {
             foreach (ItemObject item in items)

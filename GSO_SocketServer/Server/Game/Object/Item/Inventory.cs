@@ -3,6 +3,7 @@ using Server.Database.Handler;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
@@ -17,6 +18,7 @@ namespace Server.Game
         public int storage_id = 0;          //가방 아이디
 
         public Storage storage = new Storage();
+        private List<int> initItemIds = new List<int>();
 
         /// <summary>
         /// 처음 접속한 이후 데이터베이스의 인벤토리 데이터 가져오기
@@ -103,6 +105,7 @@ namespace Server.Game
                     {
                         throw new Exception("인벤토리 DB로드 실패");
                     }
+                    initItemIds.Add(newItem.Id);
                 }
 
             }
@@ -161,6 +164,16 @@ namespace Server.Game
                 throw new Exception("인벤토리에서 아이템 속성 업데이트 안됨");
             }
             return true;
+        }
+
+        public List<int> GetInventoryObjectIds()
+        {
+            return storage.GetItemObjectIds().ToList();
+        }
+
+        public List<int> GetInitInventoryObjectIds()
+        {
+            return initItemIds;
         }
 
         public void ClearInventory()
