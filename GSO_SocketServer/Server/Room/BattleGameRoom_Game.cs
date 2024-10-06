@@ -889,6 +889,11 @@ namespace Server
             {
                 tempPlayer.Add(player);
 
+            if (connectPlayer.Count == 0)
+            {
+                Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
+                GameStart();
+
             }
 
 

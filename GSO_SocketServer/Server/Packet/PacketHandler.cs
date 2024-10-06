@@ -39,6 +39,7 @@ class PacketHandler
 
         if (clientSession.MyPlayer == null)
         {
+            Console.WriteLine(clientSession.MyPlayer is null);
             Thread.Sleep(1000);
         }
         Player player = clientSession.MyPlayer;

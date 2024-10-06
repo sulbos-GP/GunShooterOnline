@@ -3,118 +3,58 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
-using UnityEngine.Rendering;
-using NPOI.SS.Formula.Functions;
-using System;
 using UnityEngine.UI;
-using UnityEngine.Windows;
 
 public class InputController : MonoBehaviour
 {
+    //singleton
     public static InputController instance;
 
-    public float distance;
-
-    private Rigidbody2D rig;
-    public PlayerInput playerInput;
-    
-    private Vector2 _direction;
-    private Vector2 lookInput;
-
-    //private Unit localUnit => UnitManager.Instance.CurrentPlayer;
-    public AimFov aimFov;
-    public BasicFov basicFov;
-
-    //private CreatureState State;
-    private Vector3 lastPos;
-
-    public bool _isFiring; 
-    private bool _isRooting; 
-
-    public List<GameObject> interactList;
-    public GameObject interactTarget;
-    private Button interactBtn;
+    //Component
     private Animator animator;
     private SpriteRenderer playerSpriteRenderer;
     private SpriteRenderer gunSpriteRenderer;
+    private Button interactBtn;
 
+    //Input
+    public PlayerInput playerInput;
+    private Vector2 lookInput;
+    private Vector2 direction;
+    //private Vector3 lastPos; //didn't use
+
+    //FOV Objects
+    public AimFov aimFov;
+    public BasicFov basicFov;
+
+    //PlayerState
+    public bool isFiring; 
+    private bool isRooting; 
+
+    //Interact
+    public List<GameObject> interactList;
+    public GameObject interactTarget;
+    
+    
+
+    private bool onMove = false;
     private void Awake()
     {
         instance = this;
-        interactList = new List<GameObject>();
-        interactBtn = GameObject.Find("InteractBtn").GetComponent<Button>();
-        if(interactBtn == null) { Debug.Log("버튼을 찾지못함"); }
+
+        SetComponent();
+
+        if (interactBtn == null) {
+            Debug.Log("버튼을 찾지못함"); 
+            return; 
+        }
+
         interactBtn.interactable = false;
         interactBtn.onClick.AddListener(PlayerInteract);
-
-        aimFov = GameObject.Find("AimView").GetComponent<AimFov>();
-        basicFov = GameObject.Find("BasicView").GetComponent<BasicFov>();
     }
 
     public void Start()
     {
         //Managers.Network.ConnectToGame();
-        rig = GetComponent<Rigidbody2D>();
-        animator = transform.GetChild(1).GetComponent<Animator>();
-        playerSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        gunSpriteRenderer = transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
-    }
-
-    public void FixedUpdate()
-    {
-        UpdateState();
-        if(interactList.Count != 0)
-        {
-            interactBtn.interactable = true;
-            ChooseInteractObj();
-        }
-        else
-        {
-            interactBtn.interactable = false;
-            interactTarget = null;
-        }
-
-        if(_isFiring)
-        {
-            StartCoroutine(FireContinuously());
-        }
-
-        
-
-        //Mouse Move Logic
-        //Vector3 mousePosition = lookInput;
-        //mousePosition.z = -mainCamera.transform.position.z;
-        //mousePosition = mainCamera.ScreenToWorldPoint(mousePosition);
-        //mousePosition.z = 0f;
-
-
-        //Vector3 direction = mousePosition - transform.position;
-        //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
-
-    }
-
-    private void ChooseInteractObj()
-    {
-        float nearestDistance = 0;
-
-        for (int i = 0; i < interactList.Count; i++)
-        {
-            float distance = Vector2.Distance(gameObject.transform.position, interactList[i].gameObject.transform.position);
-
-            if (i == 0)
-            {
-                interactTarget = interactList[i].gameObject;
-                nearestDistance = distance;
-                continue;
-            }
-
-            if (nearestDistance < distance)
-            {
-                interactTarget = interactList[i].gameObject;
-                nearestDistance = distance;
-            }
-        }
     }
 
     private void OnEnable()
@@ -147,6 +87,82 @@ public class InputController : MonoBehaviour
         playerInput = null;
     }
 
+    private void SetComponent()
+    {
+        interactBtn = GameObject.Find("InteractBtn").GetComponent<Button>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        playerSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        gunSpriteRenderer = transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
+        aimFov = GameObject.Find("AimView").GetComponent<AimFov>();
+        basicFov = GameObject.Find("BasicView").GetComponent<BasicFov>();
+
+        interactList = new List<GameObject>();
+    }
+
+    public void FixedUpdate()
+    {
+        UpdateState();
+        HandleInteraction();
+        HandleFiring();
+
+        //Mouse Move Logic
+        //Vector3 mousePosition = lookInput;
+        //mousePosition.z = -mainCamera.transform.position.z;
+        //mousePosition = mainCamera.ScreenToWorldPoint(mousePosition);
+        //mousePosition.z = 0f;
+
+        //Vector3 direction = mousePosition - transform.position;
+        //float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+    }
+
+    private void HandleInteraction()
+    {
+        if (interactList.Count != 0)
+        {
+            interactBtn.interactable = true;
+            ChooseInteractObj();
+        }
+        else
+        {
+            interactBtn.interactable = false;
+            interactTarget = null;
+        }
+    }
+
+    private void HandleFiring()
+    {
+        if (isFiring)
+        {
+            StartCoroutine(FireContinuously());
+        }
+    }
+
+    private void ChooseInteractObj()
+    {
+        float nearestDistance = 0;
+
+        for (int i = 0; i < interactList.Count; i++)
+        {
+            float distance = Vector2.Distance(gameObject.transform.position, interactList[i].gameObject.transform.position);
+
+            if (i == 0)
+            {
+                interactTarget = interactList[i].gameObject;
+                nearestDistance = distance;
+                continue;
+            }
+
+            if (nearestDistance < distance)
+            {
+                interactTarget = interactList[i].gameObject;
+                nearestDistance = distance;
+            }
+        }
+    }
+
+    
+
     private void OnInteraction(InputAction.CallbackContext callbackContext)
     {
         PlayerInteract();
@@ -154,7 +170,7 @@ public class InputController : MonoBehaviour
 
     private void PlayerInteract()
     {
-        //if(!_isRooting)
+        //if(!isRooting)
         //return;
 
         if (interactTarget == null)
@@ -184,30 +200,28 @@ public class InputController : MonoBehaviour
         //}
         if (callbackContext.started)
         {
-            animator.SetBool("IsMove",true);
+            animator.SetBool("IsMove", true);
+            onMove = true;
         }
         if (callbackContext.canceled)
         {
             animator.SetBool("IsMove", false);
-        }
-        Vector2 input = callbackContext.ReadValue<Vector2>();
-        //움직이는 방향에 따른 플레이어의 스프라이트 반전
-        if (input.x < 0)
-        {
-            playerSpriteRenderer.flipX = true;
-        }
-        else if (input.x > 0)
-        {
-            playerSpriteRenderer.flipX = false;
+            onMove = false;
+            return; //여기서 리턴해줘야 방향이 초기화되지 않음
         }
 
-        if (!_isFiring) // 총을 쏘지 않을 때는 플레이어의 이동방향을 조준
+        Vector2 input = callbackContext.ReadValue<Vector2>();
+        FlipPlayerSprite(input.x);
+
+        if (!isFiring) //플레이어가 사격 조이스틱을 조정하지 않는 상태라면 이동 방향을 바라봄
         {
             Aim(input);
         }
 
-        _direction = new Vector2(input.x,input.y);
+        direction = new Vector2(input.x, input.y);
     }
+
+    
 
     private void OnMove(InputValue inputValue)
     {
@@ -220,17 +234,51 @@ public class InputController : MonoBehaviour
         {
             lookInput = context.ReadValue<Vector2>();
 
-            //플레이어가 이동하는 위치에따라 플레이어 스프라이트가 반전하듯 총 이미지 또한 반전시킴
-            //이미지의 각도 때문에 스프라이트 객체의 각도를 조정하여 정상화 시킴.
-            //즉 각도에 따라 스프라이트를 반전시킬때마다 z rotation 또한 반전시켜야함
             Aim(lookInput);
 
             if (Mathf.Abs(lookInput.x) + Mathf.Abs(lookInput.y) > 1.0f)
-                _isFiring = true;
+                isFiring = true;
         }
-        if (context.canceled)
-            _isFiring = false;
+
+        else if (context.canceled)
+        {
+            isFiring = false;
+        }
+            
     }
+
+    /*
+    private void OnStartFireInput(InputAction.CallbackContext context)
+    {
+        isFiring = true;
+        StartCoroutine(FireContinuously());
+    }
+
+    private void OnStopFireInput(InputAction.CallbackContext context)
+    {
+        isFiring = false;
+    }*/
+
+    private void OnReloadInput(InputAction.CallbackContext context)
+    {
+        Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
+        playerGun.Reload();
+    }
+
+
+    private void FlipPlayerSprite(float inputX)
+    {
+        if (inputX < 0)
+        {
+            playerSpriteRenderer.flipX = true;
+        }
+        else if (inputX > 0)
+        {
+            playerSpriteRenderer.flipX = false;
+        }
+    }
+
+
 
     private void Aim(Vector2 dir)
     {
@@ -240,15 +288,20 @@ public class InputController : MonoBehaviour
         gunTrn.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
 
         aimFov.SetAimDirection(dir); //fov 회전
-        
+
+        FlipGunSprite(dir.x);
+    }
+
+    private void FlipGunSprite(float inputX)
+    {
         //방향에 따라 총의 x회전을 플립
-        if (dir.x > 0)
+        if (inputX > 0)
         {
             gunSpriteRenderer.flipX = false;
             gunSpriteRenderer.transform.localRotation = Quaternion.Euler(0f, 0, 45f);
             gunSpriteRenderer.transform.GetChild(0).localRotation = Quaternion.Euler(0f, 0, -45f);
         }
-        else if (dir.x < 0)
+        else if (inputX < 0)
         {
             gunSpriteRenderer.flipX = true;
             gunSpriteRenderer.transform.localRotation = Quaternion.Euler(0f, 0, -45f);
@@ -256,39 +309,28 @@ public class InputController : MonoBehaviour
         }
     }
 
-    private void OnStartFireInput(InputAction.CallbackContext context)
-    {
-        _isFiring = true;
-        StartCoroutine(FireContinuously());
-    }
-
-    private void OnStopFireInput(InputAction.CallbackContext context)
-    {
-        _isFiring = false;
-    }
-
+    
     private IEnumerator FireContinuously()
     {
-        while (_isFiring)
+        while (isFiring)
         {
             Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
             if(playerGun.CurGunState != GunState.Shootable)
             {
                 break;
             }
+
             playerGun.Fire(); // 발사 메서드 호출
             yield return new WaitForSeconds(playerGun.GetFireRate());
         }
     }
-    private void OnReloadInput(InputAction.CallbackContext context)
-    {
-        Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
-        playerGun.Reload();
-    }
-
+    
     private void UpdateState()
     {
-        UpdateMove();
+        if(onMove)
+        { 
+            UpdateMove(); 
+        }
         //switch (State)
         //{
         //    case CreatureState.Moving:
@@ -303,7 +345,9 @@ public class InputController : MonoBehaviour
     private void UpdateMove()
     {
         //Move Logic
-        Vector2 newVec2 = _direction * 5.0f * Time.fixedDeltaTime;
+        Vector2 newVec2 = direction * 5.0f * Time.fixedDeltaTime;
+
+        Rigidbody2D rig = GetComponent<Rigidbody2D>();
         rig.MovePosition(rig.position + newVec2);
 
         aimFov.SetOrigin(transform.position); //fov의 중심을 플레이어의 위치로 설정
@@ -331,11 +375,11 @@ public class InputController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        _isRooting = true;
+        isRooting = true;
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        _isRooting=false;
+        isRooting=false;
     }
 }

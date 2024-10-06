@@ -25,6 +25,8 @@ namespace Server.Server
             BattleGameRoom room = new BattleGameRoom();
             this.SetChannel(true, room, 0);
 
+            room.Init();
+
             mCoreWorkThread.Start();
             mGameLogicTimer.Start();
 
@@ -72,8 +74,6 @@ namespace Server.Server
 
 #if DOCKER
             //게임 종료 정보
-            /*Dictionary<int, MatchOutcome> outcome = new Dictionary<int, MatchOutcome>();
-
             BattleGameRoom battleGame =  gameRoom as BattleGameRoom;
             if (battleGame == null)
             {
@@ -85,7 +85,7 @@ namespace Server.Server
             if(playerRating.error_code != WebErrorCode.None)
             {
                 Console.WriteLine("플레이어의 레이팅이 집계되지 못하였습니다.");
-            }*/
+            }
 
             //종료 요청
             await Program.web.ServerManager.PostShutdown();
