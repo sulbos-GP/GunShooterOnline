@@ -22,9 +22,9 @@ namespace GsoWebServer.Controllers.Performance
         }
 
         [HttpPost]
-        public async Task<PlayerStatsRes> PlayerStats([FromHeader] HeaderDTO header, [FromBody] PlayerStatsReq request)
+        public async Task<PlayerStatsRes> PlayerStats([FromBody] PlayerStatsReq request)
         {
-            Console.WriteLine($"[PlayerStats] uid:{header.uid} room:{request.room_token}");
+            Console.WriteLine($"[PlayerStats] uid:{request.uid} room:{request.room_token}");
 
             var response = new PlayerStatsRes();
 
@@ -35,7 +35,7 @@ namespace GsoWebServer.Controllers.Performance
                 return response;
             }
 
-            var error = await mPerformanceService.UpdatePlayerStats(header.uid, request.outcome);
+            var error = await mPerformanceService.UpdatePlayerStats(request.uid, request.outcome);
             if (error != WebErrorCode.None)
             {
                 response.error_code = error;
@@ -44,7 +44,7 @@ namespace GsoWebServer.Controllers.Performance
 
             var experience = mPerformanceService.CalculateExperience(request.outcome);
 
-            error = await mGameService.UpdateLevel(header.uid, experience);
+            error = await mGameService.UpdateLevel(request.uid, experience);
             if (error != WebErrorCode.None)
             {
                 response.error_code = error;

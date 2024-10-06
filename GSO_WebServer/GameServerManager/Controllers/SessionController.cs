@@ -56,7 +56,7 @@ namespace GameServerManager.Controllers
                     response.error_code = error;
                     return response;
                 }
-
+                
                 response.error_code = WebErrorCode.None;
                 response.match_profile = matchProfile;
                 return response;

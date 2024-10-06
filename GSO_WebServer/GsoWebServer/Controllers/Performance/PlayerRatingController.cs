@@ -21,9 +21,9 @@ namespace GsoWebServer.Controllers.Performance
 
 
         [HttpPost]
-        public async Task<PlayerRatingRes> PlayerRating([FromHeader] HeaderDTO header, [FromBody] PlayerRatingReq request)
+        public async Task<PlayerRatingRes> PlayerRating([FromBody] PlayerRatingReq request)
         {
-            Console.WriteLine($"[PlayerRating] uid:{header.uid} room:{request.room_token}");
+            Console.WriteLine($"[PlayerRating] room:{request.room_token}");
 
             var response = new PlayerRatingRes();
 

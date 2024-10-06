@@ -30,7 +30,7 @@ namespace Server
         public bool IsGameStarted { get; protected set; } = false;
 
 
-        public Map map { get; }
+        public Map map { get; set; }
         public BattleGameRoom()
         {
 
