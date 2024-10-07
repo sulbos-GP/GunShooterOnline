@@ -49,6 +49,7 @@ public class CreatureObj : GameObject
         {
             myInfo.death += 1;
         }
+        gameRoom.PostPlayerStats(Id);
 
 
         /*room.Push(new Job(() =>

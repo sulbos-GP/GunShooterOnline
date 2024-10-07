@@ -192,22 +192,9 @@ class PacketHandler
         Console.WriteLine($"C_ExitPacketHandler");
 
         Player player = clientSession.MyPlayer;
-        BattleGameRoom room = player.gameRoom;
-        MatchOutcome outcome = room.MatchInfo[player.UID];
-
-        {
-            //파밍 계산
-            //var curInventoryAndGear = player.inventory.GetInventoryObjectIds().Union(player.gear.GetPartObjectIds()).ToList();
-            //var oldInventoryAndGear = player.inventory.GetInitInventoryObjectIds().Union(player.gear.GetInitPartObjectIds()).ToList();
-            //outcome.farming = curInventoryAndGear.Except(oldInventoryAndGear).Count();
-        }
-
-        Program.web.Lobby.PostPlayerStats(player.UID, outcome).Wait();
-
-        Console.WriteLine("Server is ready");
+        player.gameRoom.PostPlayerStats(player.UID);
 
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
-
 
     }
 
