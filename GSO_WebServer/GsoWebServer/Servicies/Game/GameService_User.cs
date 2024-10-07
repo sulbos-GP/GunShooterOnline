@@ -302,7 +302,7 @@ namespace GsoWebServer.Servicies.Game
                     double diffMinutes = timeDiff.TotalMinutes;
 
                     int possibleTicketCount = (int)(diffMinutes / 10) + user.ticket;
-                    Math.Clamp(possibleTicketCount, 0, 10);
+                    possibleTicketCount = Math.Clamp(possibleTicketCount, 0, 10);
 
                     int updateRes = await mGameDB.UpdateTicket(uid, possibleTicketCount);
                     if (updateRes == 0)
