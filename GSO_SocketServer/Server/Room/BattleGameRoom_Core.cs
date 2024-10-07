@@ -12,6 +12,7 @@ using System.Net.Sockets;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.Match;
 using System.Numerics;
+using System.Linq;
 
 namespace Server
 {
@@ -292,6 +293,30 @@ namespace Server
         public Player GetPlayer(int id)
         {
             return _playerDic.TryGetValue(id, out var player) ? player : null;
+        }
+
+        public void PostPlayerStats(int playerId)
+        {
+            Player player = GetPlayer(playerId);
+            if (player == null)
+            {
+                return;
+            }
+
+            MatchInfo.TryGetValue(player.UID,  out MatchOutcome outcome);
+            if(outcome == null)
+            {
+                return;
+            }
+
+            //파밍 계산
+            {
+                var curInventoryAndGear = player.inventory.GetInventoryObjectIds().Union(player.gear.GetPartObjectIds()).ToList();
+                var oldInventoryAndGear = player.inventory.GetInitInventoryObjectIds().Union(player.gear.GetInitPartObjectIds()).ToList();
+                outcome.farming = curInventoryAndGear.Except(oldInventoryAndGear).Count();
+            }
+
+            Program.web.Lobby.PostPlayerStats(player.UID, outcome).Wait();
         }
     }
 }
