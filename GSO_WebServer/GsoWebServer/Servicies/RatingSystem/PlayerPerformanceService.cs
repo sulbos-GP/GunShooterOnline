@@ -32,6 +32,7 @@ namespace GsoWebServer.Servicies.RatingSystem
                     return WebErrorCode.TEMP_ERROR;
                 }
 
+                metadata.total_games += 1;
                 metadata.kills += outcome.kills;
                 metadata.deaths += outcome.death;
                 metadata.damage += outcome.damage;

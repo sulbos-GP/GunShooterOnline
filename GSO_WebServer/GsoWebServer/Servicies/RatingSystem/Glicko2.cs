@@ -46,7 +46,7 @@ namespace GsoWebServer.Servicies.Matching
 
             long performance = kill + death + damage + farming + escape + survial;
 
-            Math.Clamp(performance, 0, 100); //퍼포먼스 점수는 0 ~ 100까지
+            performance =  Math.Clamp(performance, 0, 100); //퍼포먼스 점수는 0 ~ 100까지
 
             return performance / 100.0;
         }
