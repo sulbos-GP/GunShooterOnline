@@ -79,6 +79,7 @@ namespace ServerCore
                 mGameLogicTimer.Stop();
             }
 
+            Environment.Exit(0);
         }
 
         public void OnCoreWorkLoop()
