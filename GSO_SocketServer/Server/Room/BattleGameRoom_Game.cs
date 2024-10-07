@@ -3,6 +3,7 @@ using Server.Database.Handler;
 using Server.Game;
 using Server.Game.Object.Gear;
 using Server.Game.Object.Item;
+using Server.Server;
 using ServerCore;
 using System;
 using System.Collections;
@@ -870,7 +871,10 @@ namespace Server
             BroadCast(despawnPacket);
 
 
+            //사람 전부 나가면 gameserver.Stop();
+            //gameserver.Stop();
 
+            //stop 부분에 모든 남아있는 플레이어 처리!!!!
         }
 
 
