@@ -192,7 +192,7 @@ class PacketHandler
         Console.WriteLine($"C_ExitPacketHandler");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.PostPlayerStats(player.UID);
+        player.gameRoom.PostPlayerStats(player.Id);
 
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
 
