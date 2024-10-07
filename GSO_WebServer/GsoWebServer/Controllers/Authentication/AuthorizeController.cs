@@ -159,6 +159,15 @@ namespace AuthenticationServer.Controllers
                     return response;
                 }
 
+                //티켓 업데이트
+                errorCode = await mGameService.UpdateTicketCount(uid);
+                if (errorCode != WebErrorCode.None)
+                {
+                    response.error_code = errorCode;
+                    response.error_description = "";
+                    return response;
+                }
+
                 //최근 로그인 시간 변경
                 errorCode = await mAuthenticationService.UpdateLastSignInTime(uid);
                 if (errorCode != WebErrorCode.None)

@@ -36,7 +36,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
                 .Where("uid", uid)
                 .UpdateAsync(new
                 {
-                    recent_login_dt = DateTime.Now,
+                    recent_login_dt = DateTime.UtcNow,
                 });
         }
 

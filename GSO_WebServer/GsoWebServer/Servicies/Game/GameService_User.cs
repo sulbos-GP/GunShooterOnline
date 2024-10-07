@@ -1,4 +1,5 @@
 ﻿using GsoWebServer.Servicies.Interfaces;
+using System.Transactions;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
@@ -279,6 +280,42 @@ namespace GsoWebServer.Servicies.Game
             finally
             {
                 transaction.Dispose(); 
+            }
+        }
+
+        public async Task<WebErrorCode> UpdateTicketCount(Int32 uid)
+        {
+            try
+            {
+                var user = await mGameDB.GetUserByUid(uid);
+                if (user == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                if(user.ticket < 10)
+                {
+                    DateTime now = DateTime.UtcNow;
+                    DateTime recent = user.recent_login_dt;
+
+                    TimeSpan timeDiff = now - recent;
+                    double diffMinutes = timeDiff.TotalMinutes;
+
+                    int possibleTicketCount = (int)(diffMinutes / 10) + user.ticket;
+                    Math.Clamp(possibleTicketCount, 0, 10);
+
+                    int updateRes = await mGameDB.UpdateTicket(uid, possibleTicketCount);
+                    if (updateRes == 0)
+                    {
+                        return WebErrorCode.TEMP_ERROR;
+                    }
+                }
+
+                return WebErrorCode.None;
+            }
+            catch
+            {
+                return WebErrorCode.TEMP_Exception;
             }
         }
 

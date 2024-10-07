@@ -65,6 +65,9 @@ namespace GsoWebServer.Servicies.Interfaces
         /// </summary>
         public Task<WebErrorCode> RecvLevelReward(Int32 uid, Int32 level);
 
-
+        /// <summary>
+        /// 티켓 수량 업데이트
+        /// </summary>
+        public Task<WebErrorCode> UpdateTicketCount(Int32 uid);
     }
 }

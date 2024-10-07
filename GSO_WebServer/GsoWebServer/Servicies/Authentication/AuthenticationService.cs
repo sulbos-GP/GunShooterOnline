@@ -126,21 +126,13 @@ namespace GsoWebServer.Servicies.Authentication
 
         public async Task<WebErrorCode> UpdateLastSignInTime(int uid)
         {
-            try
+            var rowCount = await mGameDB.UpdateRecentLogin(uid);
+            if (rowCount != 1)
             {
-                var rowCount = await mGameDB.UpdateRecentLogin(uid);
-
-                if (rowCount != 1)
-                {
-                    return WebErrorCode.AccountIdMismatch;
-                }
-
-                return WebErrorCode.None;
-            }
-            catch /*(Exception e)*/
-            { 
                 return WebErrorCode.AccountIdMismatch;
             }
+
+            return WebErrorCode.None;
         }
     }
 }
