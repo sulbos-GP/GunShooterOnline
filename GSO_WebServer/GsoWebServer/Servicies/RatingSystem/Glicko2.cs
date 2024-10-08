@@ -14,7 +14,7 @@ namespace GsoWebServer.Servicies.Matching
     {
 
         private const double mGlickoScale = 173.7178;
-        private const double mGlickoSystemConst = 0.3; //시스템 상수 0.3 ~ 1.2 (작을수록 변동성 측정값이 크게 변경되는 것을 방지)
+        private const double mGlickoSystemConst = 0.7; //시스템 상수 0.3 ~ 1.2 (작을수록 변동성 측정값이 크게 변경되는 것을 방지)
 
         /// <summary>
         /// 매치 결과에 따른 보너스 포인트 값 (추후 수정)
@@ -24,46 +24,56 @@ namespace GsoWebServer.Servicies.Matching
         /// 0.25 - 탈출 X 킬 ∆ 파밍 ∆
         /// 0.00 - 탈출 X 킬 X 파밍 X
         /// </summary>
-        private long mKillPoint     = +5;       //킬
-        private long mDeathPoint    = -20;      //데스
-        private long mDamagePoint   = +3;       //체력100 = 1대미지
-        private long mFarmingPoint  = +4;       //레어급 파밍
-        private long mEscapePoint   = +20;      //탈출
-        private long mSurvialPoint  = +2;       //1분 = 1생존
+        private long mKillPoint = +5;       //킬
+        private long mDeathPoint = -100;      //데스
+        private long mDamagePoint = +3;       //체력100 = 1대미지
+        private long mFarmingPoint = +4;       //레어급 파밍
+        private long mEscapePoint = +20;      //탈출
+        private long mSurvialPoint = +2;       //1분 = 1생존
 
         /// <summary>
         /// 플레이어의 매치 결과에 따른 퍼포먼스 값
         /// </summary>
         private double GetPlayerPerformance(MatchOutcome outcome)
         {
-            long kill       = outcome.kills * mKillPoint;
-            long death      = outcome.death * mDeathPoint;
-            long damage     = (outcome.damage == 0) ? 0 : outcome.damage / 100 * mDamagePoint;
-            long farming    = outcome.farming * mFarmingPoint;
-            long escape     = outcome.escape * mEscapePoint;
-            long survial    = outcome.survival_time * mSurvialPoint;
+            long kill = outcome.kills * mKillPoint;
+            long death = outcome.death * mDeathPoint;
+            long damage = (outcome.damage == 0) ? 0 : outcome.damage / 100 * mDamagePoint;
+            long farming = outcome.farming * mFarmingPoint;
+            long escape = outcome.escape * mEscapePoint;
+            long survial = outcome.survival_time * mSurvialPoint;
 
 
-            long performance = kill + death + damage + farming + escape + survial;
+            double performance = kill + death + damage + farming + escape + survial;
 
-            performance =  Math.Clamp(performance, 0, 100); //퍼포먼스 점수는 0 ~ 100까지
+            performance = Math.Clamp(performance, 0, 100); //퍼포먼스 점수는 0 ~ 100까지
 
-            return performance / 100.0;
+            return performance / 100;
         }
 
-        private double GetRatingGlicko2Scale(double rating)
+        private double GetRatingGlicko2UpScale(double rating)
         {
             return rating * mGlickoScale + 1500.0;
         }
 
-        private double GetRatingDeviationGlicko2Scale(double ratingDeviation)
+        private double GetRatingDeviationGlicko2UpScale(double ratingDeviation)
         {
             return ratingDeviation * mGlickoScale;
         }
 
+        private double GetRatingGlicko2DownScale(double rating)
+        {
+            return (rating - 1500.0) / mGlickoScale;
+        }
+
+        private double GetRatingDeviationGlicko2DownScale(double ratingDeviation)
+        {
+            return ratingDeviation / mGlickoScale;
+        }
+
         private double G(double rd)
         {
-            return 1.0 / Math.Sqrt(1.0 + 3.0 * Math.Pow(rd, 2) / Math.Pow(Math.PI, 2));
+            return 1.0 / Math.Sqrt(1.0 + (3.0 * Math.Pow(rd, 2)) / Math.Pow(Math.PI, 2));
         }
 
         private double E(double rating, double opponentRating, double opponentRD)
@@ -76,8 +86,12 @@ namespace GsoWebServer.Servicies.Matching
             double varianceInverseSum = 0.0;
             foreach ((int uid, UserSkillInfo skill) in skills)
             {
-                double e = E(rating, skill.rating, skill.deviation);
-                varianceInverseSum += Math.Pow(G(skill.deviation), 2) * e * (1.0 - e);
+                double mu = GetRatingGlicko2DownScale(skill.rating);
+                double phi = GetRatingDeviationGlicko2DownScale(skill.deviation);
+
+                double g = G(phi);
+                double e = E(rating, mu, phi);
+                varianceInverseSum += Math.Pow(g, 2) * e * (1.0 - e);
             }
             return 1.0 / varianceInverseSum;
         }
@@ -88,13 +102,15 @@ namespace GsoWebServer.Servicies.Matching
             foreach ((int uid, MatchOutcome outcome) in outcoms)
             {
                 skills.TryGetValue(uid, out var skill);
-                if(skill == null)
+                if (skill == null)
                 {
                     return 0.0;
                 }
+                double mu = GetRatingGlicko2DownScale(skill.rating);
+                double phi = GetRatingDeviationGlicko2DownScale(skill.deviation);
 
-                double g = G(skill.deviation);
-                double e = E(rating, skill.rating, skill.deviation);
+                double g = G(phi);
+                double e = E(rating, mu, phi);
                 deltaSum += g * (GetPlayerPerformance(outcome) - e);
             }
             return variance * deltaSum;
@@ -105,13 +121,14 @@ namespace GsoWebServer.Servicies.Matching
             double expX = Math.Exp(x);
             return expX * (Math.Pow(delta, 2) - Math.Pow(rd, 2) - variance - expX) / (2 * Math.Pow(Math.Pow(rd, 2) + variance + expX, 2)) - (x - a) / Math.Pow(tau, 2);
         }
-        
+
         /// <summary>
         /// 결과에 따른 플레이어 경험치 계산
         /// </summary>
         public int CalculateExperience(MatchOutcome outcome)
         {
-            return (int)(GetPlayerPerformance(outcome) * 1.2);
+            double exp = GetPlayerPerformance(outcome) * 120;
+            return Math.Min(0, (int)exp);
         }
 
         /// <summary>
@@ -119,11 +136,11 @@ namespace GsoWebServer.Servicies.Matching
         /// </summary>
         /// <param name="player">  업데이트할 플레이어</param>
         /// <param name="matches"> 게임에 참여한 플레이어들의 실력과 결과 </param>
-        public UserSkillInfo UpdatePlayerRating(UserSkillInfo skill, Dictionary<int, UserSkillInfo> skills, Dictionary<int, MatchOutcome> outcoms)
+        public UserSkillInfo UpdatePlayerRating(int uid, Dictionary<int, UserSkillInfo> skills, Dictionary<int, MatchOutcome> outcoms)
         {
-            double rating = skill.rating;                                       // r
-            double deviation = skill.deviation;                                 // φ
-            double volatility = skill.volatility;                               // σ
+            double rating = GetRatingGlicko2DownScale(skills[uid].rating);       // r
+            double deviation = GetRatingDeviationGlicko2DownScale(skills[uid].deviation);          // φ
+            double volatility = skills[uid].volatility;                         // σ
 
             double variance = CalculateVariance(skills, rating);                // v
             double delta = CalculateDelta(skills, outcoms, rating, variance);   // ∆
@@ -138,12 +155,19 @@ namespace GsoWebServer.Servicies.Matching
             {
                 B = Math.Log(Math.Pow(delta, 2) - Math.Pow(deviation, 2) - variance);
             }
-            else //(Math.Pow(delta, 2) <= Math.Pow(deviation, 2) + variance))
+            else //if(Math.Pow(delta, 2) <= Math.Pow(deviation, 2) + variance)
             {
                 double k = 1;
-                while (F(a - k * tau, a, delta, deviation, variance, tau) < 0)
+                while (true)
                 {
-                    k++;
+                    if (F(a - k * tau, a, delta, deviation, variance, tau) < 0)
+                    {
+                        k++;
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
                 B = a - k * tau;
             }
@@ -168,7 +192,7 @@ namespace GsoWebServer.Servicies.Matching
                 fB = fC;
             }
 
-            double newVolatility = Math.Exp(A / 2);
+            double newVolatility = Math.Max(0.04, Math.Exp(A / 2));
 
             double preRatingRD = Math.Sqrt(Math.Pow(deviation, 2) + Math.Pow(newVolatility, 2));
 
@@ -178,8 +202,8 @@ namespace GsoWebServer.Servicies.Matching
 
             var newSkillInfo = new UserSkillInfo
             {
-                rating = GetRatingGlicko2Scale(newRating),
-                deviation = GetRatingDeviationGlicko2Scale(newRD),
+                rating = Math.Clamp(GetRatingGlicko2UpScale(newRating), 500, 3000),
+                deviation = Math.Clamp(GetRatingDeviationGlicko2UpScale(newRD), 30, 350),
                 volatility = newVolatility,
             };
 
