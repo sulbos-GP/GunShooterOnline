@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using Google.Protobuf.Protocol;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -111,10 +113,17 @@ public class UIManager : MonoBehaviour
 
     public void LobbyScene()
     {
+        C_ExitGame cExit = new C_ExitGame
+        {
+            PlayerId = myPlayer.Id,
+            ExitId = 1
+        };
+        Managers.Network.Send(cExit);
+
 #if UNITY_EDITOR
-        SceneManager.LoadScene("Lobby");
+        Managers.Scene.LoadScene(Define.Scene.Lobby);
 #else
-        SceneManager.LoadScene("Shelter");
+        Managers.Scene.LoadScene(Define.Scene.Shelter);
 #endif
 
     }
