@@ -88,15 +88,8 @@ namespace GsoWebServer.Servicies.RatingSystem
 
                 foreach ((int uid, MatchOutcome outcome) in outcomes)
                 {
-
-                    skills.TryGetValue(uid, out var playerSkill);
-                    if (playerSkill == null)
-                    {
-                        return WebErrorCode.TEMP_ERROR;
-                    }
-
                     Glicko2 glicko2 = new Glicko2();
-                    UserSkillInfo newSkill = glicko2.UpdatePlayerRating(playerSkill, skills, outcomes);
+                    UserSkillInfo newSkill = glicko2.UpdatePlayerRating(uid, skills, outcomes);
 
                     var result = await mGameDB.UpdateUserSkill(uid, newSkill, transaction);
                     if (result == 0)
