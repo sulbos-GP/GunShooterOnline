@@ -632,8 +632,7 @@ internal class PacketHandler
         }
         Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
-        Managers.Object.MyPlayer.gun.bulletLine.SetPosition(0, startPoint);
-        Managers.Object.MyPlayer.gun.bulletLine.SetPosition(1, hitPoint);
+        Managers.Object.MyPlayer.gun.gunLine.SetBulletLine(startPoint, hitPoint);
         //cc에서 피격 표시?
 
         //hit ID가 없으면 벽 맞는 거라         packet.HitPointX , Y이용하여 렌더링 및 이펙트 표시!! 

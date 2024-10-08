@@ -139,7 +139,6 @@ public class UserResource
         return new SetNicknameRequest(this.mService, header, body);
     }
 
-
     public class SetNicknameRequest : WebClientServiceRequest<SetNicknameRes>
     {
         public SetNicknameRequest(GsoWebService service, HeaderVerfiyPlayer header, SetNicknameReq request)
@@ -147,6 +146,25 @@ public class UserResource
             this.mFromHeader = header.ToDictionary();
             this.mFromBody = request;
             this.mEndPoint = service.mBaseUrl + "/api/User/Nickname/Update";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
+
+    /// <summary>
+    /// 메타데이터 가져오기
+    /// </summary>
+    public LoadMetadataRequest GetLoadMetadataRequest(HeaderVerfiyPlayer header, LoadMetadataReq body)
+    {
+        return new LoadMetadataRequest(this.mService, header, body);
+    }
+
+    public class LoadMetadataRequest : WebClientServiceRequest<LoadMetadataRes>
+    {
+        public LoadMetadataRequest(GsoWebService service, HeaderVerfiyPlayer header, LoadMetadataReq request)
+        {
+            this.mFromHeader = header.ToDictionary();
+            this.mFromBody = request;
+            this.mEndPoint = service.mBaseUrl + "/api/User/Metadata/Load";
             this.mMethod = ERequestMethod.POST;
         }
     }
@@ -233,7 +251,3 @@ public class GameResource
 
 }
 
-
-/// <summary>
-/// 장비 관련 서비스
-/// </summary>

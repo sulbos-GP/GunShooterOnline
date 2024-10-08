@@ -27,7 +27,7 @@ public class FieldOfView : MonoBehaviour
         showView = true;
     }
 
-    public void showFov(float setFov, int setRayCount, float setViewDistance ,float setAngleOffset = 0)
+    public void ShowFov(float setFov, int setRayCount, float setViewDistance ,float setAngleOffset = 0)
     {
         float angle = startingAngle + setAngleOffset; //레이가 발사되는 각도. 
         float angleIncrease = setFov / setRayCount; //앵글의 증가량. 총
