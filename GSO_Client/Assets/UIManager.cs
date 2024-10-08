@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public static UIManager Instance;
     public TMP_Text Health;
     public TMP_Text AmmoText;
     public GameObject DieUI;
@@ -19,6 +20,8 @@ public class UIManager : MonoBehaviour
     private Button reloadBtn;
     private MyPlayerController myPlayer;
     private Gun gun;
+
+    private void Awake() { Instance = this; }
     void Start()
     {
         isDie = false;
@@ -35,9 +38,7 @@ public class UIManager : MonoBehaviour
         if(myPlayer.Hp<=0)
         {
             isDie = true;
-            DieUI.SetActive(isDie);
-            StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));
-            
+
         }
         float MaxHP = myPlayer.MaxHp;
         float HP = myPlayer.Hp;
@@ -67,6 +68,13 @@ public class UIManager : MonoBehaviour
             reloadBtn.interactable = true;
     }
 
+    public void DieMessage(string attackerName)
+    {
+        DieUI.SetActive(true);
+        DieUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text += attackerName;
+        StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));
+    }
+
     private void Init()
     {
         _init = true;
@@ -83,6 +91,8 @@ public class UIManager : MonoBehaviour
         }
         gun = myPlayer.transform.Find("Pivot/Gun").GetComponent<Gun>();
         reloadBtn.onClick.AddListener(gun.Reload);
+
+        DieUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Killer : ";
 
     }
     private IEnumerator TextAlpha(CanvasGroup group,float duration)
