@@ -99,10 +99,9 @@ internal class PacketHandler
 
     public static void S_MoveHandler(PacketSession session, IMessage packet)
     {
-        Managers.SystemLog.Message("S_MoveHandler");
         var movePacket = packet as S_Move;
-
         var go = Managers.Object.FindById(movePacket.ObjectId);
+        Managers.SystemLog.Message("S_MoveHandler : " +go.name);
         if (go == null)
             return;
 
