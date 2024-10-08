@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
 using UnityEngine.UI;
+using Unity.Burst.Intrinsics;
 
 public class InputController : MonoBehaviour
 {
@@ -48,13 +49,16 @@ public class InputController : MonoBehaviour
             return; 
         }
 
+        
         interactBtn.interactable = false;
-        interactBtn.onClick.AddListener(PlayerInteract);
+        interactBtn.onClick.AddListener(InteractOn);
     }
 
     public void Start()
     {
         //Managers.Network.ConnectToGame();
+        Aim(Vector2.up);
+        UpdateMove();
     }
 
     private void OnEnable()
@@ -90,19 +94,19 @@ public class InputController : MonoBehaviour
     private void SetComponent()
     {
         interactBtn = GameObject.Find("InteractBtn").GetComponent<Button>();
-        animator = transform.GetChild(1).GetComponent<Animator>();
-        playerSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        gunSpriteRenderer = transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
         aimFov = GameObject.Find("AimView").GetComponent<AimFov>();
         basicFov = GameObject.Find("BasicView").GetComponent<BasicFov>();
 
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        playerSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        gunSpriteRenderer = transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
+        
         interactList = new List<GameObject>();
     }
 
     public void FixedUpdate()
     {
         UpdateState();
-        HandleInteraction();
         HandleFiring();
 
         //Mouse Move Logic
@@ -116,9 +120,20 @@ public class InputController : MonoBehaviour
         //transform.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
     }
 
-    private void HandleInteraction()
+    private void HandleFiring()
     {
-        if (interactList.Count != 0)
+        if (isFiring)
+        {
+            StartCoroutine(FireContinuously());
+        }
+    }
+
+    /// <summary>
+    /// 인터렉트 가능한 오브젝트가 들어있는 리스트의 개수를 검색하고 1개 이상이면 인터렉트 실행 가능
+    /// </summary>
+    public void HandleInteraction()
+    {
+        if (interactList.Count > 0)
         {
             interactBtn.interactable = true;
             ChooseInteractObj();
@@ -130,34 +145,18 @@ public class InputController : MonoBehaviour
         }
     }
 
-    private void HandleFiring()
-    {
-        if (isFiring)
-        {
-            StartCoroutine(FireContinuously());
-        }
-    }
-
+    /// <summary>
+    /// 가장 가까운 인터렉트 가능 오브젝트를 도출
+    /// </summary>
     private void ChooseInteractObj()
     {
         float nearestDistance = 0;
 
         for (int i = 0; i < interactList.Count; i++)
         {
-            float distance = Vector2.Distance(gameObject.transform.position, interactList[i].gameObject.transform.position);
-
-            if (i == 0)
-            {
-                interactTarget = interactList[i].gameObject;
-                nearestDistance = distance;
-                continue;
-            }
-
-            if (nearestDistance < distance)
-            {
-                interactTarget = interactList[i].gameObject;
-                nearestDistance = distance;
-            }
+            float distance = Vector2.Distance(gameObject.transform.position, interactList[i].transform.position);
+            interactTarget = interactList[i].gameObject;
+            nearestDistance = distance;
         }
     }
 
@@ -165,10 +164,10 @@ public class InputController : MonoBehaviour
 
     private void OnInteraction(InputAction.CallbackContext callbackContext)
     {
-        PlayerInteract();
+        InteractOn();
     }
 
-    private void PlayerInteract()
+    private void InteractOn()
     {
         //if(!isRooting)
         //return;
@@ -178,14 +177,7 @@ public class InputController : MonoBehaviour
             return;
         }
 
-        if (interactTarget.gameObject.GetComponent<Box>() != null)
-        {
-            interactTarget.gameObject.GetComponent<Box>().Interact();
-        }
-        else if (interactTarget.gameObject.GetComponent<ExitZone>() != null)
-        {
-            interactTarget.gameObject.GetComponent<ExitZone>().Interact();
-        }
+        interactTarget.GetComponent<InteractableObject>().Interact();
     }
 
     private void OnMove(InputAction.CallbackContext callbackContext)
@@ -278,8 +270,6 @@ public class InputController : MonoBehaviour
         }
     }
 
-
-
     private void Aim(Vector2 dir)
     {
         //pivot 회전
@@ -288,7 +278,6 @@ public class InputController : MonoBehaviour
         gunTrn.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
 
         aimFov.SetAimDirection(dir); //fov 회전
-
         FlipGunSprite(dir.x);
     }
 
@@ -315,7 +304,7 @@ public class InputController : MonoBehaviour
         while (isFiring)
         {
             Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
-            if(playerGun.CurGunState != GunState.Shootable)
+            if(playerGun.UsingGunState != GunState.Shootable)
             {
                 break;
             }
