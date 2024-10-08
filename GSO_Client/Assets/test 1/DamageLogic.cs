@@ -10,7 +10,7 @@ public static  class DamageLogic
     public static void DamageApply(Unit Owner,Unit Receive)
     {
         //TO-DO : 추후에 데미지 계산 식 추가 예정
-        int damage = Owner.GetComponentInChildren<Gun>().getGunStat().damage;
+        int damage = Owner.GetComponentInChildren<Gun>().GetGunStat().damage;
         TakeDamage(damage,Receive);
     }
 
