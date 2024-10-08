@@ -155,7 +155,9 @@ public class CreatureController : BaseController
     public virtual void OnDead(int attackerId = -1)
     {
         //State = CreatureState.Dead;
-
+        if (attackerId == -1)
+            return;
+        UIManager.Instance.DieMessage(Managers.Object.FindById(attackerId).name);
         Debug.Log(transform.name + "Dead");
         //GameObject effect = Managers.Resource.Instantiate("Effect/DieEffect");
         //effect.transform.position = transform.position;

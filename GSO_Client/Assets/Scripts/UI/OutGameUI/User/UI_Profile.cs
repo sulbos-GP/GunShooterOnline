@@ -1,8 +1,15 @@
+using GooglePlayGames;
+using NPOI.SS.Formula.Functions;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WebCommonLibrary.DTO.Authentication;
+using WebCommonLibrary.DTO.User;
+using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
+using static AuthorizeResource;
+using static UserResource;
 
 public class UI_Profile : LobbyUI
 {
@@ -47,8 +54,42 @@ public class UI_Profile : LobbyUI
 
     public void OnProfileButton()
     {
-        metaDataObject.SetActive(true);
-        LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Metadata);
+
+        ClientCredential crediential = Managers.Web.Models.Credential;
+        if (crediential == null)
+        {
+            return;
+        }
+
+        var header = new HeaderVerfiyPlayer
+        {
+            uid = crediential.uid.ToString(),
+            access_token = crediential.access_token,
+        };
+
+        var body = new LoadMetadataReq()
+        {
+
+        };
+
+        GsoWebService service = new GsoWebService();
+        LoadMetadataRequest request = service.mUserResource.GetLoadMetadataRequest(header, body);
+        request.ExecuteAsync(OnLoadMetadataResponse);
+    }
+
+    public void OnLoadMetadataResponse(LoadMetadataRes response)
+    {
+        if(response.error_code == WebErrorCode.None)
+        {
+            Managers.Web.Models.Metadata = response.metadata;
+            LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Metadata);
+
+            metaDataObject.SetActive(true);
+        }
+        else
+        {
+            Managers.SystemLog.Message($"Metadata를 불러오는데 실패하였습니다. [{response.error_code}]");
+        }
     }
 
     public void OnLevelRewardButton()
