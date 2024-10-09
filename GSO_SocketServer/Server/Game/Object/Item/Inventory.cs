@@ -97,6 +97,8 @@ namespace Server.Game
 
             try
             {
+                Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 로드 시작");
+
                 IEnumerable<DB_ItemUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
                 if (units == null)
                 {
@@ -106,9 +108,14 @@ namespace Server.Game
                 foreach (DB_ItemUnit unit in units)
                 {
                     ItemObject newItem = new ItemObject(owner.Id, unit);
-                    if (true == storage.InsertItem(newItem))
+                    EStorageError error = storage.InsertItem(newItem);
+                    if (error == EStorageError.None)
                     {
                         initItemIds.Add(newItem.Id);
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 {newItem.Data.name}아이템 {error.ToString()} 실패");
                     }
                 }
 
