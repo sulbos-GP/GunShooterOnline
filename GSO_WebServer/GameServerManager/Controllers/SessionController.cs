@@ -93,6 +93,41 @@ namespace GameServerManager.Controllers
         //    return response;
         //}
 
+
+        [HttpPost]
+        [Route("StartMatch")]
+        public async Task<MatchPlayersRes> StartMatch([FromBody] MatchPlayersReq request)
+        {
+            Console.WriteLine($"[StartMatch] : ContainerId : {request.container_id}");
+
+            var response = new MatchPlayersRes();
+
+            try
+            {
+                var (error, status) = await mSessionService.GetMatchStatus(request.container_id);
+                if (error != WebErrorCode.None || status == null)
+                {
+                    response.error_code = error;
+                    return response;
+                }
+
+                if (status.players == null)
+                {
+                    response.error_code = WebErrorCode.TEMP_ERROR;
+                    return response;
+                }
+
+                response.players = status.players;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.error_code = WebErrorCode.TEMP_Exception;
+                response.error_description = ex.Message;
+                return response;
+            }
+        }
+
         /// <summary>
         /// 컨테이너 소켓 서버에서 플레이어 올때까지 대기
         /// </summary>
