@@ -73,12 +73,12 @@ public class UI_Metadata : LobbyUI
         }
 
         totalGames.text     = metadata.total_games.ToString();
-        kills.text          = (metadata.kills == 0) ? "0" : (metadata.kills / metadata.total_games).ToString();
-        deaths.text         = (metadata.kills == 0) ? "0" : (metadata.deaths / metadata.total_games).ToString();
-        damage.text         = (metadata.kills == 0) ? "0" : (metadata.damage / metadata.total_games).ToString();
-        farming.text        = (metadata.kills == 0) ? "0" : (metadata.farming / metadata.total_games).ToString();
-        escape.text         = (metadata.kills == 0) ? "0" : (metadata.escape / metadata.total_games).ToString();
-        survivalTime.text   = (metadata.kills == 0) ? "0" : (metadata.survival_time / metadata.total_games).ToString();
+        kills.text          = metadata.kills.ToString();
+        deaths.text         = metadata.deaths.ToString();
+        damage.text         = metadata.damage.ToString();
+        farming.text        = metadata.farming.ToString();
+        escape.text         = metadata.escape.ToString();
+        survivalTime.text   = metadata.survival_time.ToString();
 
         UserSkillInfo skill = Managers.Web.Models.Rating;
         if(skill == null)

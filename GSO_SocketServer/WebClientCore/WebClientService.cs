@@ -80,18 +80,18 @@ namespace WebClientCore
         /// </summary>
         public async Task<TResponse?> GetAsync<TResponse>(string name, string endPoint) where TResponse : class
         {
+            if (!mHttpClientUris.TryGetValue(name, out Uri? uri))
+            {
+                return null;
+            }
+
+            if (uri == null)
+            {
+                return null;
+            }
+
             try
             {
-                if (!mHttpClientUris.TryGetValue(name, out Uri? uri))
-                {
-                    return null;
-                }
-
-                if (uri == null)
-                {
-                    return null;
-                }
-
                 var responseMessage = await mHttpClient.GetAsync($"{uri.ToString()}/api/{endPoint}");
 
                 responseMessage.EnsureSuccessStatusCode();
@@ -113,7 +113,7 @@ namespace WebClientCore
             }
             catch (HttpRequestException ex)
             {
-                Console.WriteLine($"[WebClient::GetAsync] : {ex.Message}");
+                Console.WriteLine($"[WebClient::GetAsync][{uri.ToString()}api/{endPoint}] : {ex.Message}");
                 return null;
             }
         }

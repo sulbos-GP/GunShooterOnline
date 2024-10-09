@@ -51,5 +51,18 @@ namespace Server.Web.Service
 
             return await Owner.PostAsync<MatchPlayersRes>(Host, "Session/MatchPlayers", request);
         }
+
+        public async Task<MatchPlayersRes> PostWaitForStartMatch()
+        {
+
+            //Console.WriteLine("[StartMatch GameServer]");
+
+            MatchPlayersReq request = new MatchPlayersReq
+            {
+                container_id = DockerUtil.GetContainerId(),
+            };
+
+            return await Owner.PostAsync<MatchPlayersRes>(Host, "Session/StartMatch", request);
+        }
     }
 }

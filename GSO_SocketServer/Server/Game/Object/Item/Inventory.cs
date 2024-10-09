@@ -89,10 +89,15 @@ namespace Server.Game
         /// </summary>
         public async Task LoadInventory()
         {
+
+            if(storage_id == 0)
+            {
+                return;
+            }
+
             try
             {
                 IEnumerable<DB_ItemUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
-
                 if (units == null)
                 {
                     return;
@@ -101,12 +106,13 @@ namespace Server.Game
                 foreach (DB_ItemUnit unit in units)
                 {
                     ItemObject newItem = new ItemObject(owner.Id, unit);
-                    if (false == storage.InsertItem(newItem))
+                    if (true == storage.InsertItem(newItem))
                     {
-                        throw new Exception("인벤토리 DB로드 실패");
+                        initItemIds.Add(newItem.Id);
                     }
-                    initItemIds.Add(newItem.Id);
                 }
+
+                Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 로드 완료");
 
             }
             catch (Exception e)
