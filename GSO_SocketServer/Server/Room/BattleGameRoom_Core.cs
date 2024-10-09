@@ -46,6 +46,8 @@ namespace Server
         {
             map = new Map(r: this);
             map.Init();
+
+            playTime = new Stopwatch();
         }
 
         public override void LogicUpdate()

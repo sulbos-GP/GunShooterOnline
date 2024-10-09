@@ -162,7 +162,6 @@ namespace Server.Game
                     ChangeHpPacket.Hp = creatureObj.Hp;
 
                     Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + creatureObj.Id + "HIT Hp : " + creatureObj.Hp);
-
                     ownerPlayer.gameRoom.BroadCast(ChangeHpPacket);
                 }
 
@@ -179,10 +178,6 @@ namespace Server.Game
                 ownerPlayer.gameRoom.BroadCast(packet);
 
 
-
-
-
-                
 
                 if (isBulletPrefShoot)
                 {
