@@ -39,30 +39,32 @@ namespace Server.Web.Service
             return await Owner.PostAsync<ShutdownMatchRes>(Host, "Session/Shutdown", request);
         }
 
-        public async Task<MatchPlayersRes> PostWaitForMatchPlayers()
-        {
-
-            Console.WriteLine("[MatchPlayers GameServer]");
-
-            MatchPlayersReq request = new MatchPlayersReq
-            {
-                container_id = DockerUtil.GetContainerId(),
-            };
-
-            return await Owner.PostAsync<MatchPlayersRes>(Host, "Session/MatchPlayers", request);
-        }
-
-        public async Task<MatchPlayersRes> PostWaitForStartMatch()
+        public async Task<AllocateMatchRes> PostWaitForAllocateMatch()
         {
 
             //Console.WriteLine("[StartMatch GameServer]");
 
-            MatchPlayersReq request = new MatchPlayersReq
+            AllocateMatchReq request = new AllocateMatchReq
             {
                 container_id = DockerUtil.GetContainerId(),
             };
 
-            return await Owner.PostAsync<MatchPlayersRes>(Host, "Session/StartMatch", request);
+            return await Owner.PostAsync<AllocateMatchRes>(Host, "Session/AllocateMatch", request);
         }
+
+        public async Task<StartMatchRes> PostStartMatch()
+        {
+
+            Console.WriteLine("[StartMatch GameServer]");
+
+            StartMatchReq request = new StartMatchReq
+            {
+                container_id = DockerUtil.GetContainerId(),
+            };
+
+            return await Owner.PostAsync<StartMatchRes>(Host, "Session/StartMatch", request);
+        }
+
+
     }
 }

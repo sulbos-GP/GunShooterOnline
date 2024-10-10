@@ -21,15 +21,29 @@ namespace GameServerManager.Startup
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Add services to the config
+            services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(DatabaseConfig)));
+            services.Configure<DockerConfig>(Configuration.GetSection(nameof(DockerConfig)));
+
+            IConfigurationSection endPointConfig;
+            endPointConfig = Configuration.GetSection(nameof(LocalConfig)).GetSection(nameof(EndPointConfig));
+            services.Configure<EndPointConfig>(endPointConfig);
+
             // Add services to the http client
+            EndPointConfig? endPoint = endPointConfig.Get<EndPointConfig>();
+            if (endPoint == null)
+            {
+                return;
+            }
+
             services.AddHttpClient("GsoWebServer", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:5000/api");
+                httpclient.BaseAddress = new Uri(endPoint.Center);
             });
 
             services.AddHttpClient("Matchmaker", httpclient =>
             {
-                httpclient.BaseAddress = new Uri("http://localhost:5200/api");
+                httpclient.BaseAddress = new Uri(endPoint.Matchmaker);
             });
 
             services.AddControllers().AddJsonOptions(options =>
@@ -37,10 +51,6 @@ namespace GameServerManager.Startup
                 options.JsonSerializerOptions.PropertyNamingPolicy = null;
                 options.JsonSerializerOptions.DictionaryKeyPolicy = null;
             });
-
-            // Add services to the config
-            services.Configure<DatabaseConfig>(Configuration.GetSection(nameof(DatabaseConfig)));
-            services.Configure<DockerConfig>(Configuration.GetSection(nameof(DockerConfig)));
 
             // Add services to the container.
             services.AddTransient<ISessionService, SessionService>();

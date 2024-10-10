@@ -23,10 +23,9 @@ namespace Server.Game
         /// <summary>
         /// 처음 접속한 이후 데이터베이스의 인벤토리 데이터 가져오기
         /// </summary>
-        public Inventory(Player owner, int storage_id)
+        public Inventory(Player owner)
         {
             this.owner = owner;
-            InitInventory(storage_id);
             LoadInventory().Wait();
         }
 
@@ -35,21 +34,13 @@ namespace Server.Game
         /// </summary>
         public void MakeInventory(int storage_id)
         {
-            if(storage.ItemCount == 0)
-            {
-                //가방 처음 생성
-                InitInventory(storage_id);
-            }
-            else
-            {
-                //기존에 아이템이 있을 경우
-            }
+
         }
 
         /// <summary>
         /// 가방에 따른 인벤토리 초기화
         /// </summary>
-        public void InitInventory(int storage_id)
+        public void InitInventory()
         {
             try
             {
@@ -59,7 +50,7 @@ namespace Server.Game
                 int scaleX = 0;
                 int scaleY = 0;
                 double weight = 0.0;
-                if(backpackItem == null)
+                if(backpackItem == null || backpackItem.UnitStorageId == null)
                 {
                     //가방이 없다면 기본 제공
                     scaleX = 2;
@@ -76,7 +67,11 @@ namespace Server.Game
                 }
                 storage.Init(scaleX, scaleY, weight);
 
-                this.storage_id = storage_id;
+  
+                this.storage_id = backpackItem.UnitStorageId.Value;
+
+                Console.WriteLine($"Player.UID[{owner.UID}] 가방 아이디 {this.storage_id}");
+
             }
             catch (Exception e)
             {
@@ -89,15 +84,11 @@ namespace Server.Game
         /// </summary>
         public async Task LoadInventory()
         {
-
-            if(storage_id == 0)
-            {
-                return;
-            }
-
             try
             {
                 Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 로드 시작");
+
+                InitInventory();
 
                 IEnumerable<DB_ItemUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
                 if (units == null)
@@ -105,6 +96,7 @@ namespace Server.Game
                     return;
                 }
 
+                Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 아이템 개수 {units.Count()}");
                 foreach (DB_ItemUnit unit in units)
                 {
                     ItemObject newItem = new ItemObject(owner.Id, unit);

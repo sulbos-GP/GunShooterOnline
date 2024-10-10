@@ -1,7 +1,13 @@
 ﻿using Docker.DotNet;
 using Docker.DotNet.Models;
+using GameServerManager.Repository;
 using GameServerManager.Repository.Interfaces;
 using GameServerManager.Servicies.Interfaces;
+using GSO_WebServerLibrary.Utils;
+using System.Text;
+using System.Text.Json;
+using System.Text.RegularExpressions;
+using WebCommonLibrary.DTO.Matchmaker;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.Match;
@@ -12,11 +18,13 @@ namespace GameServerManager.Servicies
     {
         private readonly IDockerService mDockerService;
         private readonly ISessionMemory mSessionMemory;
+        private readonly IHttpClientFactory mHttpClientFactory;
 
-        public SessionService(IDockerService dockerService, ISessionMemory sessionMemory)
+        public SessionService(IDockerService dockerService, ISessionMemory sessionMemory, IHttpClientFactory httpClientFactory)
         {
             mDockerService = dockerService;
             mSessionMemory = sessionMemory;
+            mHttpClientFactory = httpClientFactory;
         }
 
         public void Dispose()
@@ -102,6 +110,48 @@ namespace GameServerManager.Servicies
             {
                 Console.WriteLine($"FetchMatch execption : {ex.ToString()}");
                 return (WebErrorCode.TEMP_Exception, null);
+            }
+        }
+
+        public async Task<WebErrorCode> StartMatch(string containerId, MatchStatus matchStatus)
+        {
+            try
+            {
+                var matchProfile = new MatchProfile();
+                matchProfile.container_id = containerId;
+                matchProfile.world = matchStatus.world;
+                matchProfile.host_ip = matchStatus.host_ip;
+                matchProfile.container_port = matchStatus.container_port;
+                matchProfile.host_port = matchStatus.host_port;
+
+
+                var MatchmakerClient = mHttpClientFactory.CreateClient("Matchmaker");
+                if (MatchmakerClient == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                NotifyStartMatchReq packet = new NotifyStartMatchReq
+                {
+                    players = matchStatus.players,
+                    match_profile = matchProfile,
+                };
+                var content = new StringContent(JsonSerializer.Serialize(packet), Encoding.UTF8, "application/json");
+
+                var response = await MatchmakerClient.PostAsync("api/Session/StartMatch", content);
+                response.EnsureSuccessStatusCode();
+
+                var responseResult = await response.Content.ReadFromJsonAsync<NotifyStartMatchRes>();
+                if(responseResult == null)
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+
+                return responseResult.error_code;
+            }
+            catch
+            {
+                return (WebErrorCode.TEMP_Exception);
             }
         }
 

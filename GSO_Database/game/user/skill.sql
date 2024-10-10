@@ -10,3 +10,7 @@ CREATE TABLE IF NOT EXISTS user_skill (
     PRIMARY KEY (`uid`),
     CONSTRAINT FK_user_skill_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
+
+UPDATE user_skill SET rating=1500 WHERE rating!=1500;
+UPDATE user_skill SET deviation=350 WHERE deviation!=350;
+UPDATE user_skill SET volatility=0.06 WHERE volatility!=0.06;

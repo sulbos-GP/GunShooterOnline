@@ -28,7 +28,7 @@ namespace Matchmaker.Service
             return mHttpClientFactory.CreateClient("GameServerManager");
         }
 
-        public async Task<(WebErrorCode, MatchProfile?)> FetchMatchInfo(string[] keys)
+        public async Task<(WebErrorCode, MatchProfile?)> FetchMatchInfo(Dictionary<string, Ticket> players)
         {
             try
             {
@@ -39,16 +39,9 @@ namespace Matchmaker.Service
                     return (WebErrorCode.TEMP_ERROR, null);
                 }
 
-                List<int> players = new List<int>();
-                foreach (var key in keys)
-                {
-                    int uid = KeyUtils.GetUID(key);
-                    players.Add(uid);
-                }
-
                 FetchMatchReq packet = new FetchMatchReq
                 {
-                    players = players,
+                    playerCount = players.Count,
                 };
                 var content = new StringContent(JsonSerializer.Serialize(packet), Encoding.UTF8, "application/json");
 
@@ -56,22 +49,59 @@ namespace Matchmaker.Service
                 response.EnsureSuccessStatusCode();
 
                 var fetchMatch = await response.Content.ReadFromJsonAsync<FetchMatchRes>();
-                if(fetchMatch == null || fetchMatch.match_profile == null)
+                if(fetchMatch == null || fetchMatch.error_code != WebErrorCode.None)
                 {
                     return (WebErrorCode.TEMP_ERROR, null);
                 }
 
-                if (fetchMatch.error_code != WebErrorCode.None)
-                {
-                    return (WebErrorCode.TEMP_ERROR, null);
-                }
-                var profile = fetchMatch.match_profile;
-
-                return (WebErrorCode.None, profile);
+                return (WebErrorCode.None, fetchMatch.match_profile);
             }
             catch
             {
                 return (WebErrorCode.TEMP_Exception, null);
+            }
+        }
+
+        public async Task<WebErrorCode> DispatchMatchPlayers(Dictionary<string, Ticket> players, MatchProfile matchProfile)
+        {
+            try
+            {
+
+                var gameServerManagerClient = GetGameServerManagerClient();
+                if (gameServerManagerClient == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+
+                List<int> playerList = new List<int>();
+                foreach (var key in players.Keys.ToList())
+                {
+                    int uid = KeyUtils.GetUID(key);
+                    playerList.Add(uid);
+                }
+
+                DispatchMatchPlayerReq packet = new DispatchMatchPlayerReq
+                {
+                    match_profile = matchProfile,
+                    players = playerList
+                };
+                var content = new StringContent(JsonSerializer.Serialize(packet), Encoding.UTF8, "application/json");
+
+                var response = await gameServerManagerClient.PostAsync("api/Session/DispatchMatchPlayers", content);
+                response.EnsureSuccessStatusCode();
+
+                var fetchMatch = await response.Content.ReadFromJsonAsync<FetchMatchRes>();
+                if (fetchMatch == null || fetchMatch.error_code != WebErrorCode.None)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                return (WebErrorCode.None);
+            }
+            catch
+            {
+                return (WebErrorCode.TEMP_Exception);
             }
         }
     }

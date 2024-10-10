@@ -29,7 +29,7 @@ namespace Server
         //public List<object> Escapes = new List<object>();
         public Dictionary<int, MatchOutcome> MatchInfo = new Dictionary<int, MatchOutcome>();
 
-        private Stopwatch playTime;
+        private Stopwatch playTime = new Stopwatch();
         public bool IsGameStarted { get; protected set; } = false;
 
 
@@ -144,7 +144,7 @@ namespace Server
                         enterPacket.GearInfos.Add(item);
                     }
 
-                    player.inventory = new Inventory(player, player.UID);
+                    player.inventory = new Inventory(player);
                     foreach (PS_ItemInfo item in player.inventory.storage.GetItems(player.Id))
                     {
                         enterPacket.ItemInfos.Add(item);

@@ -19,6 +19,11 @@ namespace Matchmaker.Service.Interfaces
         public Task<bool> DisconnectedClient(int uid, string connectionId);
 
         /// <summary>
+        /// 플레이어 티켓 검색
+        /// </summary>
+        public Task<Ticket?> GetMatchTicket(Int32 uid);
+
+        /// <summary>
         /// 플레이어 티켓 대기열에 추가
         /// </summary>
         public Task<WebErrorCode> AddMatchTicket(Int32 uid, String clientId);
@@ -57,7 +62,7 @@ namespace Matchmaker.Service.Interfaces
         /// </summary>
         public Task<(WebErrorCode, Dictionary<string, Ticket>?)> FindMatchByRating(double min, double max, int capacity);
 
-        public Task<WebErrorCode> MatchConfirmation(string[] keys, Ticket[] tickets, MatchProfile profile);
+        public Task<WebErrorCode> MatchConfirmation(Dictionary<string, Ticket> players);
 
         /// <summary>
         /// 매칭이 성사된 유저들에게 매칭이 성공했음을 알린다

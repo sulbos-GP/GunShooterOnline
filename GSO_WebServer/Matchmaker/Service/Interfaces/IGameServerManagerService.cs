@@ -8,6 +8,8 @@ namespace Matchmaker.Service.Interfaces
         /// <summary>
         /// 매칭정보에 따른 방이 있는지 확인하고 보내준다
         /// </summary>
-        public Task<(WebErrorCode, MatchProfile?)> FetchMatchInfo(string[] keys);
+        public Task<(WebErrorCode, MatchProfile?)> FetchMatchInfo(Dictionary<string, Ticket> players);
+
+        public Task<WebErrorCode> DispatchMatchPlayers(Dictionary<string, Ticket> players, MatchProfile matchProfile);
     }
 }

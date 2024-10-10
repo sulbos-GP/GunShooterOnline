@@ -11,6 +11,8 @@ namespace GameServerManager.Servicies.Interfaces
         /// </summary>
         public Task<(WebErrorCode, MatchProfile?)> FetchMatch();
 
+        public Task<WebErrorCode> StartMatch(string containerId, MatchStatus matchStatus);
+
         /// <summary>
         /// 도커 컨테이너 초기화 및 매치 생성
         /// </summary>
