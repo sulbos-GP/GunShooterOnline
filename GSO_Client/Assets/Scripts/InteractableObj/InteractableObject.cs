@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public enum InteractType{
     InventoryObj,
@@ -38,7 +39,9 @@ public abstract class InteractableObject : MonoBehaviour
                 Debug.Log("myplayer가 없음");
                 return;
             }
-            Managers.Object.MyPlayer.GetComponent<InputController>().interactList.Add(gameObject);
+            InputController playerInput = Managers.Object.MyPlayer.GetComponent<InputController>();
+            playerInput.interactList.Add(gameObject);
+            playerInput.HandleInteraction();
         }
     }
 
@@ -52,7 +55,9 @@ public abstract class InteractableObject : MonoBehaviour
                 Debug.Log("myplayer가 없음");
                 return;
             }
-            Managers.Object.MyPlayer.GetComponent<InputController>().interactList.Remove(gameObject);
+            InputController playerInput = Managers.Object.MyPlayer.GetComponent<InputController>();
+            playerInput.interactList.Remove(gameObject);
+            playerInput.HandleInteraction();
         }
     }
 

@@ -15,6 +15,12 @@ using static Humanizer.In;
 
 namespace Server.Game
 {
+    public enum EStorageError
+    {
+        None,
+        InsertFailed_DuplicateItem,
+        InsertFailed_WeightLimit,
+    }
 
     public class Storage
     {
@@ -93,21 +99,21 @@ namespace Server.Game
         /// <summary>
         /// 아이템 삽입
         /// </summary>
-        public bool InsertItem(ItemObject item)
+        public EStorageError InsertItem(ItemObject item)
         {
             //자리가 겹치는지 확인
             List<List<int>> rollback = InitRollBack();
             if (false == StorageCheack(item, true))
             {
                 OverWriteToRollBackGrid(rollback);
-                return false;
+                return EStorageError.InsertFailed_DuplicateItem;
             }
 
             double weight = item.Weight * item.Amount;
             if(MaxWeight < CurWeight + weight)
             {
                 OverWriteToRollBackGrid(rollback);
-                return false;
+                return EStorageError.InsertFailed_WeightLimit;
             }
 
             CurWeight += weight;
@@ -116,7 +122,7 @@ namespace Server.Game
 
             //PrintInvenContents();
 
-            return true;
+            return EStorageError.None;
         }
 
         /// <summary>

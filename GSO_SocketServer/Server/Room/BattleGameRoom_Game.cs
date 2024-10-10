@@ -422,7 +422,7 @@ namespace Server
                 int lessAmount = sourceStorage.DecreaseAmount(sourceItem, devideNumber);
 
                 //미리 나눠진 아이템의 공간이 확보되어 있는지 확인한다
-                if (false == destinationStorage.InsertItem(devideItem))
+                if (EStorageError.None != destinationStorage.InsertItem(devideItem))
                 {
 
                     sourceStorage.IncreaseAmount(sourceItem, devideNumber);
@@ -579,8 +579,8 @@ namespace Server
             };
             ItemObject moveItem = new ItemObject(player.Id, moveUnit);
 
-            bool isInsert = destinationStorage.InsertItem(moveItem);
-            if (false == isInsert)
+            EStorageError isInsert = destinationStorage.InsertItem(moveItem);
+            if (EStorageError.None != isInsert)
             {
                 sourceStorage.InsertItem(sourceMovelItem);
 
@@ -610,12 +610,12 @@ namespace Server
                         if (IsInventory(destinationObjectId))
                         {
                             Inventory inventory = player.inventory;
-                            isInsert = await inventory.InsertItem(moveItem, database, transaction);
+                            await inventory.InsertItem(moveItem, database, transaction);
                         }
                         else if (IsGear(destinationObjectId))
                         {
                             Gear gear = player.gear;
-                            isInsert = await gear.InsertGear((EGearPart)destinationObjectId, moveItem, database, transaction);
+                            await gear.InsertGear((EGearPart)destinationObjectId, moveItem, database, transaction);
                         }
 
                         transaction.Commit();

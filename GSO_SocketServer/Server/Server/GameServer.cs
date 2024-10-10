@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using WebCommonLibrary.DTO.GameServer;
 using WebCommonLibrary.DTO.Performance;
@@ -43,16 +44,30 @@ namespace Server.Server
                 }
                 Console.WriteLine("Server is ready");
 
+
                 //준비 대기
-                MatchPlayersRes matchPlayer = await Program.web.ServerManager.PostWaitForMatchPlayers();
-                Console.WriteLine($"[MatchPlayer] Count : {matchPlayer.players.Count}");
-                Console.WriteLine("{");
-                foreach (int player in matchPlayer.players)
+                Console.WriteLine("Wait for start match");
+                while (true)
                 {
-                    Console.WriteLine($"\tPlayer UID : {player}");
+                    MatchPlayersRes matchPlayer = await Program.web.ServerManager.PostWaitForStartMatch();
+              
+                    if (matchPlayer != null && matchPlayer.error_code == WebErrorCode.None)
+                    {
+                        Console.WriteLine($"[StartMatch] player count : {matchPlayer.players.Count}");
+                        Console.WriteLine("{");
+                        foreach (int player in matchPlayer.players)
+                        {
+                            Console.WriteLine($"\tPlayer UID : {player}");
+                        }
+                        Console.WriteLine("}");
+                        room.connectPlayer = matchPlayer.players;
+
+                        break;
+                    }
+
+                    Thread.Sleep(1000);
                 }
-                Console.WriteLine("}");
-                room.connectPlayer = matchPlayer.players;
+
             }
             catch (Exception ex)
             {

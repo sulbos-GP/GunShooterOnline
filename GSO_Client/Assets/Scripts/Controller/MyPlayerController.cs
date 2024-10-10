@@ -325,7 +325,7 @@ public partial class MyPlayerController : PlayerController
     private void AutoUpdatedFlag()
     {
         CellPos = transform.position;
-        CheakUpdatedFlag(true);
+        //CheakUpdatedFlag(true);
         Invoke(nameof(AutoUpdatedFlag), 0.25f);
     }
 

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using Google.Protobuf.Protocol;
+using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -46,23 +47,23 @@ public class UIManager : MonoBehaviour
         Health.text =  HP+" / "+MaxHP;
         //GunAmmo
         Gun playerGun = myPlayer.transform.Find("Pivot/Gun").GetComponentInChildren<Gun>();
-        if (playerGun.CurGunState == GunState.Reloading)
+        if (playerGun.UsingGunState == GunState.Reloading)
             AmmoText.text = "ReloadCoroutine Gun";
         else
         {
-            if(playerGun.CurGunData == null)
+            if(playerGun.UsingGunData == null)
             {
                 AmmoText.text = "Gun is not Equipped";
             }
             else
             {
-                AmmoText.text = playerGun.CurAmmo.ToString() + " / " + playerGun.getGunStat().reload_round.ToString();
+                AmmoText.text = playerGun.CurAmmo.ToString() + " / " + playerGun.GetGunStat().reload_round.ToString();
             }
         }
            
 
         //Reload
-        if (gun.CurGunState == GunState.Reloading)
+        if (gun.UsingGunState == GunState.Reloading)
             reloadBtn.interactable = false;
         else
             reloadBtn.interactable = true;
@@ -111,10 +112,17 @@ public class UIManager : MonoBehaviour
 
     public void LobbyScene()
     {
+        C_ExitGame cExit = new C_ExitGame
+        {
+            PlayerId = myPlayer.Id,
+            ExitId = 1
+        };
+        Managers.Network.Send(cExit);
+
 #if UNITY_EDITOR
-        SceneManager.LoadScene("Lobby");
+        Managers.Scene.LoadScene(Define.Scene.Lobby);
 #else
-        SceneManager.LoadScene("Shelter");
+        Managers.Scene.LoadScene(Define.Scene.Shelter);
 #endif
 
     }

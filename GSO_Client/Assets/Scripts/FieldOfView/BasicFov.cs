@@ -15,6 +15,6 @@ public class BasicFov : FieldOfView
 
     void Update()
     {
-        showFov(fov, rayCount, viewDistance);
+        ShowFov(fov, rayCount, viewDistance);
     }
 }
