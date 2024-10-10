@@ -40,8 +40,8 @@ enum MsgId{
 
   C_JOIN_SERVER = 29; //접속 요청
   S_JOIN_SERVER = 30; // 접속 응답
-  S_GAME_START = 31;  //사람이 아직 안모임
-  S_WAITING_STATUS = 32; //32  모두 모임
+  S_GAME_START = 31;  //32  모두 모임
+  S_WAITING_STATUS = 32; //사람이 아직 안모임
 
   C_CHANGE_APPEARANCE = 33;
   S_CHANGE_APPEARANCE = 34;
