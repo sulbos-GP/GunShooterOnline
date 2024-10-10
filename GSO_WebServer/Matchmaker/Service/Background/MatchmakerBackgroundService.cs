@@ -89,12 +89,10 @@ namespace Matchmaker.Service.Background
                     }
                     continue;
                 }
-                string[] keys = matchedPlayers.Keys.ToArray();
-                Ticket[] tickets = matchedPlayers.Values.ToArray();
 
                 //방 있는지 확인
-                (error, var profile) = await mGameServerManagerService.FetchMatchInfo(keys);
-                if(profile == null)
+                (error, var profile) = await mGameServerManagerService.FetchMatchInfo(matchedPlayers);
+                if(error != WebErrorCode.None || profile == null)
                 {
                     foreach (var matchedPlayer in matchedPlayers)
                     {
@@ -103,7 +101,18 @@ namespace Matchmaker.Service.Background
                     continue;
                 }
 
-                error = await mMatchmakerService.MatchConfirmation(keys, tickets, profile);
+                //방이 잡힌 상태
+                error = await mMatchmakerService.MatchConfirmation(matchedPlayers);
+                if (error != WebErrorCode.None)
+                {
+                    foreach (var matchedPlayer in matchedPlayers)
+                    {
+                        await mMatchmakerService.RollbackTicket(KeyUtils.GetUID(matchedPlayer.Key));
+                    }
+                    continue;
+                }
+
+                error = await mGameServerManagerService.DispatchMatchPlayers(matchedPlayers, profile);
                 if (error != WebErrorCode.None)
                 {
                     foreach (var matchedPlayer in matchedPlayers)

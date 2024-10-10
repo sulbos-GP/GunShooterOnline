@@ -13,6 +13,7 @@ using Google.Apis.Games.v1.Data;
 using System.Threading;
 using System.Net.Sockets;
 using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
+using WebCommonLibrary.Models.GameDatabase;
 
 namespace Matchmaker.Service
 {
@@ -92,6 +93,32 @@ namespace Matchmaker.Service
             {
                 Console.WriteLine($"[MatchmakerService.DisconnectedClient] : {e.Message}");
                 return false;
+            }
+            finally
+            {
+                await mMatchQueue.ReleaseLock(uid);
+            }
+        }
+
+        public async Task<Ticket?> GetMatchTicket(Int32 uid)
+        {
+            try
+            {
+                await mMatchQueue.TryTakeLock(uid);
+
+                //이미 티켓이 존재할 경우
+                var (error, ticket) = await mMatchQueue.GetTicketWithUid(uid);
+                if (ticket == null)
+                {
+                    return null;
+                }
+
+                return ticket;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"[MatchmakerService.GetMatchTicket] : {e.Message}");
+                return null;
             }
             finally
             {
@@ -425,6 +452,8 @@ namespace Matchmaker.Service
 
                     ticket.Value.state = ETicketState.WaitingForMatch;
                     await mMatchQueue.SetTicket(uid, ticket.Value);
+
+                    await mMatchQueue.ReleaseLock(uid);
                 }
 
                 return (WebErrorCode.None, tickets);
@@ -464,60 +493,42 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task<WebErrorCode> MatchConfirmation(string[] keys, Ticket[] tickets, MatchProfile profile)
+        public async Task<WebErrorCode> MatchConfirmation(Dictionary<string, Ticket> players)
         {
+
             try
             {
-                Console.WriteLine("MatchInfo");
-                Console.WriteLine("{");
-                Console.WriteLine($"\tID      : {profile.container_id}");
-                Console.WriteLine($"\tWORLD   : {profile.world}");
-                Console.WriteLine($"\tH_IP    : {profile.host_ip}");
-                Console.WriteLine($"\tH_PORT  : {profile.host_port}");
-                Console.WriteLine($"\tC_PORT  : {profile.container_port}");
-
-
-                //해당 클라이언트에게 방 정보 전송
-                Console.WriteLine("\tMatchPlayers");
-                Console.WriteLine("\t{");
-                foreach (var ticket in tickets)
+                foreach (var (key, ticket) in players)
                 {
-                    
-                    //이미 매치가 잡혔기 때문에 닷지 실패임
-                    if (ticket.isExit == true)
+                    Console.WriteLine("[MatchmakerService.MatchConfirmation]");
+
+                    int uid = KeyUtils.GetUID(key);
+                    await mMatchQueue.TryTakeLock(uid);
                     {
-                        await NotifyMatchFailed(ticket, WebErrorCode.PopPlayersJoinForced);
+                        ticket.state = ETicketState.FindMatch;
+                        await mMatchQueue.SetTicket(uid, ticket);
                     }
 
-                    await NotifyMatchSuccess(ticket, profile);
-                }
-                Console.WriteLine("\t}");
-                Console.WriteLine("}");
-
-                //성공적으로 보냈다면 티켓을 소모하며 매칭 큐에서 제거 한다
-                foreach (var key in keys)
-                {
-                    int uid = KeyUtils.GetUID(key);
                     UserInfo? user = await mGameDB.GetUserByUid(uid);
-                    if(user == null)
+                    if (user == null)
                     {
                         throw new Exception("플레이어가 존재하지 않음");
                     }
 
                     int result = await mGameDB.UpdateTicket(uid, user.ticket - 1);
-                    if(result == 0)
+                    if (result == 0)
                     {
                         throw new Exception("티켓이 올바르게 소모되지 않음");
                     }
 
-                    await RemoveMatchQueue(key);
+                    await mMatchQueue.ReleaseLock(uid);
                 }
 
                 return WebErrorCode.None;
             }
             catch (Exception e)
             {
-                Console.WriteLine($"[MatchmakerService.MatchConfirmation] : {e.Message}");
+                Console.WriteLine($"[MatchmakerService.PopMatchQueue] : {e.Message}");
                 return WebErrorCode.TEMP_Exception;
             }
         }
@@ -539,7 +550,7 @@ namespace Matchmaker.Service
         {
             try
             {
-                Console.WriteLine("[MatchmakerService.RollbackTicket]");
+                //Console.WriteLine("[MatchmakerService.RollbackTicket]");
                 await mMatchQueue.TryTakeLock(uid);
 
                 var(error, ticket) = await mMatchQueue.GetTicketWithUid(uid);

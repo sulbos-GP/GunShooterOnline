@@ -1,7 +1,7 @@
 USE game_database;
 
 #자신의 UID 검색 후 넣기
-SET @uid = 11;
+SET @uid = 12;
 
 #아이템 생성 (Main, Sub, Armor, Backpack, Pocket)
 #메인
@@ -38,7 +38,7 @@ SET @last_unit_attributes = LAST_INSERT_ID();
 INSERT INTO gear (uid, part, unit_attributes_id) VALUES (@uid, 'pocket_second', @last_unit_attributes);
 
 #포켓 3
-INSERT INTO unit_attributes (item_id, durability, amount) VALUES (602, 0, 15);
+INSERT INTO unit_attributes (item_id, durability, amount) VALUES (404, 0, 15);
 SET @last_unit_attributes = LAST_INSERT_ID();
 INSERT INTO gear (uid, part, unit_attributes_id) VALUES (@uid, 'pocket_third', @last_unit_attributes);
 
@@ -54,7 +54,7 @@ SET @last_unit_attributes = LAST_INSERT_ID();
 INSERT INTO storage_unit (storage_id, grid_x, grid_y, rotation, unit_attributes_id) VALUES (@last_storage_id, 0, 2, 0 , @last_unit_attributes);
 
 #아이템 3
-INSERT INTO unit_attributes (item_id, durability, amount) VALUES (602, 0, 15);
+INSERT INTO unit_attributes (item_id, durability, amount) VALUES (404, 0, 15);
 SET @last_unit_attributes = LAST_INSERT_ID();
-INSERT INTO storage_unit (storage_id, grid_x, grid_y, rotation, unit_attributes_id) VALUES (@last_storage_id, 2, 2, 0 , @last_unit_attributes);
+INSERT INTO storage_unit (storage_id, grid_x, grid_y, rotation, unit_attributes_id) VALUES (@last_storage_id, 2, 0, 0 , @last_unit_attributes);
 

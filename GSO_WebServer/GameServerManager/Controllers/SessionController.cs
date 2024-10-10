@@ -1,10 +1,12 @@
-﻿using GameServerManager.Servicies.Interfaces;
+﻿using GameServerManager.Servicies;
+using GameServerManager.Servicies.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading;
 using System.Threading.Tasks;
 using WebCommonLibrary.DTO.GameServer;
 using WebCommonLibrary.DTO.Matchmaker;
 using WebCommonLibrary.Error;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GameServerManager.Controllers
 {
@@ -28,20 +30,9 @@ namespace GameServerManager.Controllers
         {
             var response = new FetchMatchRes();
 
-            if (request.players == null)
-            {
-                response.error_code = WebErrorCode.IsNotValidModelState;
-                response.error_description = "플레이어가 존재하지 않습니다";
-                return response;
-            }
-
-            Console.WriteLine($"[FetchMatch] {request.players.Count}");
-
+            Console.WriteLine($"[FetchMatch] {request.playerCount}");
             try
             {
-
-
-
                 var (error, matchProfile) = await mSessionService.FetchMatch();
                 if (error != WebErrorCode.None || matchProfile == null)
                 {
@@ -49,16 +40,52 @@ namespace GameServerManager.Controllers
                     response.error_description = "매치가 존재하지 않거나 오류가 발생하였습니다.";
                     return response;
                 }
+                
+                response.error_code = WebErrorCode.None;
+                response.match_profile = matchProfile;
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.error_code = WebErrorCode.TEMP_Exception;
+                response.error_description = ex.Message;
+                return response;
+            }
 
-                error = await mSessionService.DispatchMatchPlayers(matchProfile.container_id, request.players);
+        }
+
+        [HttpPost]
+        [Route("DispatchMatchPlayers")]
+        public async Task<DispatchMatchPlayerRes> DispatchMatchPlayers([FromBody] DispatchMatchPlayerReq request)
+        {
+
+            var response = new DispatchMatchPlayerRes();
+            if (request.match_profile == null || request.players == null)
+            {
+                response.error_code = WebErrorCode.TEMP_ERROR;
+                return response;
+            }
+
+            Console.WriteLine($"[DispatchMatchPlayers] {request.match_profile.container_id}");
+            try
+            {
+
+                var (error, matchProfile) = await mSessionService.GetMatchStatus(request.match_profile.container_id);
+                if (error != WebErrorCode.None || matchProfile == null || matchProfile.players != null)
+                {
+                    response.error_code = error;
+                    response.error_description = "매치가 존재하지 않거나 오류가 발생하였습니다.";
+                    return response;
+                }
+
+                error = await mSessionService.DispatchMatchPlayers(request.match_profile.container_id, request.players);
                 if (error != WebErrorCode.None)
                 {
                     response.error_code = error;
                     return response;
                 }
-                
+
                 response.error_code = WebErrorCode.None;
-                response.match_profile = matchProfile;
                 return response;
             }
             catch (Exception ex)
@@ -95,12 +122,12 @@ namespace GameServerManager.Controllers
 
 
         [HttpPost]
-        [Route("StartMatch")]
-        public async Task<MatchPlayersRes> StartMatch([FromBody] MatchPlayersReq request)
+        [Route("AllocateMatch")]
+        public async Task<AllocateMatchRes> AllocateMatch([FromBody] AllocateMatchReq request)
         {
-            Console.WriteLine($"[StartMatch] : ContainerId : {request.container_id}");
+            Console.WriteLine($"[AllocateMatch] : ContainerId : {request.container_id}");
 
-            var response = new MatchPlayersRes();
+            var response = new AllocateMatchRes();
 
             try
             {
@@ -110,6 +137,7 @@ namespace GameServerManager.Controllers
                     response.error_code = error;
                     return response;
                 }
+
 
                 if (status.players == null)
                 {
@@ -128,47 +156,82 @@ namespace GameServerManager.Controllers
             }
         }
 
+        [HttpPost]
+        [Route("StartMatch")]
+        public async Task<StartMatchRes> StartMatch([FromBody] StartMatchReq request)
+        {
+            Console.WriteLine($"[StartMatch] : ContainerId : {request.container_id}");
+
+            var response = new StartMatchRes();
+
+            try
+            {
+                var (error, status) = await mSessionService.GetMatchStatus(request.container_id);
+                if (error != WebErrorCode.None || status == null)
+                {
+                    response.error_code = error;
+                    return response;
+                }
+
+                error = await mSessionService.StartMatch(request.container_id, status);
+                if (error != WebErrorCode.None)
+                {
+                    response.error_code = error;
+                    return response;
+                }
+
+                return response;
+            }
+            catch (Exception ex)
+            {
+                response.error_code = WebErrorCode.TEMP_Exception;
+                response.error_description = ex.Message;
+                return response;
+            }
+        }
+
         /// <summary>
         /// 컨테이너 소켓 서버에서 플레이어 올때까지 대기
         /// </summary>
-        [HttpPost]
-        [Route("MatchPlayers")]
-        public async Task<MatchPlayersRes> MatchPlayers([FromBody] MatchPlayersReq request, CancellationToken cancellationToken)
-        {
+        //[HttpPost]
+        //[Route("MatchPlayers")]
+        //public async Task<MatchPlayersRes> MatchPlayers([FromBody] MatchPlayersReq request, CancellationToken cancellationToken)
+        //{
 
-            Console.WriteLine($"[MatchPlayers] : ContainerId : {request.container_id}");
+        //    Console.WriteLine($"[MatchPlayers] : ContainerId : {request.container_id}");
 
-            var taskCompletionSource = new TaskCompletionSource<IActionResult>();
-            var response = new MatchPlayersRes();
+        //    var taskCompletionSource = new TaskCompletionSource<IActionResult>();
+        //    var response = new MatchPlayersRes();
 
-            var pollingTask = Task.Run(async () =>
-            {
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    var (error, status) = await mSessionService.GetMatchStatus(request.container_id);
-                    if (error != WebErrorCode.None || status == null)
-                    {
-                        taskCompletionSource.SetResult(NoContent());
-                        return;
-                    }
+        //    var pollingTask = Task.Run(async () =>
+        //    {
+        //        while (!cancellationToken.IsCancellationRequested)
+        //        {
+        //            var (error, status) = await mSessionService.GetMatchStatus(request.container_id);
+        //            if (error != WebErrorCode.None || status == null)
+        //            {
+        //                taskCompletionSource.SetResult(NoContent());
+        //                return;
+        //            }
 
-                    if (status.players != null)
-                    {
-                        response.players = status.players;
-                        taskCompletionSource.SetResult(Ok());
-                        break;
-                    }
+        //            if (status.players != null)
+        //            {
+        //                response.players = status.players;
+        //                taskCompletionSource.SetResult(Ok());
+        //                break;
+        //            }
 
-                    await Task.Delay(500, cancellationToken);
-                }
-            }, cancellationToken);
 
-            cancellationToken.Register(() => taskCompletionSource.SetResult(NoContent()));
+        //            await Task.Delay(500, cancellationToken);
+        //        }
+        //    }, cancellationToken);
 
-            await taskCompletionSource.Task;
+        //    cancellationToken.Register(() => taskCompletionSource.SetResult(NoContent()));
 
-            return response;
-        }
+        //    await taskCompletionSource.Task;
+
+        //    return response;
+        //}
 
         [HttpPost]
         [Route("RequestReady")]

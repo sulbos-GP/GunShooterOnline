@@ -49,23 +49,29 @@ namespace Server.Server
                 Console.WriteLine("Wait for start match");
                 while (true)
                 {
-                    MatchPlayersRes matchPlayer = await Program.web.ServerManager.PostWaitForStartMatch();
+                    AllocateMatchRes allocateMatch = await Program.web.ServerManager.PostWaitForAllocateMatch();
               
-                    if (matchPlayer != null && matchPlayer.error_code == WebErrorCode.None)
+                    if (allocateMatch != null && allocateMatch.error_code == WebErrorCode.None)
                     {
-                        Console.WriteLine($"[StartMatch] player count : {matchPlayer.players.Count}");
+                        Console.WriteLine($"[StartMatch] player count : {allocateMatch.players.Count}");
                         Console.WriteLine("{");
-                        foreach (int player in matchPlayer.players)
+                        foreach (int player in allocateMatch.players)
                         {
                             Console.WriteLine($"\tPlayer UID : {player}");
                         }
                         Console.WriteLine("}");
-                        room.connectPlayer = matchPlayer.players;
+                        room.connectPlayer = allocateMatch.players;
 
                         break;
                     }
 
                     Thread.Sleep(1000);
+                }
+
+                StartMatchRes startMatch = await Program.web.ServerManager.PostStartMatch();
+                if(startMatch.error_code != WebErrorCode.None)
+                {
+                    Console.WriteLine("게임 시작 요청에서 에러가 발생하였습니다.");
                 }
 
             }

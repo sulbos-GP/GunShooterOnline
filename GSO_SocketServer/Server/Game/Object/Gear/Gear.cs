@@ -95,6 +95,8 @@ namespace Server.Game.Object.Gear
         {
             try
             {
+                Console.WriteLine($"Player.UID[{owner.UID}] 장비 로드 시작");
+
                 IEnumerable<DB_GearUnit> gears = await DatabaseHandler.GameDB.LoadGear(owner.UID);
 
                 if (gears == null)
@@ -102,6 +104,7 @@ namespace Server.Game.Object.Gear
                     return;
                 }
 
+                Console.WriteLine($"Player.UID[{owner.UID}] 장비 아이템 개수 {gears.Count()}");
                 foreach (DB_GearUnit gear in gears)
                 {
                     DB_ItemUnit unit = new DB_ItemUnit()
@@ -129,8 +132,14 @@ namespace Server.Game.Object.Gear
                     {
                         throw new Exception($"장비의 파트({gear.gear.part})가 중복되어 있음");
                     }
+                    else
+                    {
+                        Console.WriteLine($"{gear.gear.part.ToString()}부위 {item.Data.name.ToString()}장착");
+                    }
                     initPartItemIds.Add(item.Id);
                 }
+
+                Console.WriteLine($"Player.UID[{owner.UID}] 장비 로드 완료");
 
             }
             catch (Exception e)
