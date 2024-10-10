@@ -70,7 +70,7 @@ public class Unit : MonoBehaviour
         {
             HandleGunUnequip(slotNumber);
         }
-        else if (usingGun.CurGunData == null)
+        else if (usingGun.UsingGunData == null)
         {
             UseGunInSlot(slotNumber);
         }

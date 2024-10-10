@@ -41,13 +41,9 @@ public class CreatureObj : GameObject
 
         gameRoom.Push(room.BroadCast, diePacket);
 
-
-
-
-        MatchOutcome myInfo;
-        if (gameRoom.MatchInfo.TryGetValue(UID, out myInfo) == true)
+        if (gameRoom.MatchInfo.TryGetValue(UID, out MatchOutcome outcome) == true)
         {
-            myInfo.death += 1;
+            outcome.death += 1;
         }
         gameRoom.PostPlayerStats(Id);
 

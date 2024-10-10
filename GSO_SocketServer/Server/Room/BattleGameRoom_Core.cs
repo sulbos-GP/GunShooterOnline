@@ -13,6 +13,7 @@ using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.Match;
 using System.Numerics;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Server
 {
@@ -28,6 +29,7 @@ namespace Server
         //public List<object> Escapes = new List<object>();
         public Dictionary<int, MatchOutcome> MatchInfo = new Dictionary<int, MatchOutcome>();
 
+        private Stopwatch playTime;
         public bool IsGameStarted { get; protected set; } = false;
 
 
@@ -44,6 +46,8 @@ namespace Server
         {
             map = new Map(r: this);
             map.Init();
+
+            playTime = new Stopwatch();
         }
 
         public override void LogicUpdate()
@@ -90,6 +94,8 @@ namespace Server
 
             if (gameObject == null)
                 return;
+
+            playTime.Start();
 
             var type = ObjectManager.GetObjectTypeById(gameObject.Id);
 
@@ -314,6 +320,11 @@ namespace Server
                 var curInventoryAndGear = player.inventory.GetInventoryObjectIds().Union(player.gear.GetPartObjectIds()).ToList();
                 var oldInventoryAndGear = player.inventory.GetInitInventoryObjectIds().Union(player.gear.GetInitPartObjectIds()).ToList();
                 outcome.farming = curInventoryAndGear.Except(oldInventoryAndGear).Count();
+            }
+
+            //생존 시간 계산
+            {
+                outcome.survival_time = (int)playTime.Elapsed.TotalMinutes;
             }
 
             Program.web.Lobby.PostPlayerStats(player.UID, outcome).Wait();

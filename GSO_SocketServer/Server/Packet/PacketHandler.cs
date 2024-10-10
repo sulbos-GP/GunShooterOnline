@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -192,6 +193,11 @@ class PacketHandler
         Console.WriteLine($"C_ExitPacketHandler");
 
         Player player = clientSession.MyPlayer;
+
+        if (player.gameRoom.MatchInfo.TryGetValue(player.UID, out MatchOutcome outcome) == true)
+        {
+            outcome.escape += 1;
+        }
         player.gameRoom.PostPlayerStats(player.Id);
 
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);

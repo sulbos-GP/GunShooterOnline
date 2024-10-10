@@ -125,7 +125,7 @@ namespace Server.Game.Object.Gear
 
                     ItemObject item = new ItemObject(owner.Id, unit);
                     Storage part = parts[gear.gear.part];
-                    if (false == part.InsertItem(item))
+                    if (EStorageError.None != part.InsertItem(item))
                     {
                         throw new Exception($"장비의 파트({gear.gear.part})가 중복되어 있음");
                     }

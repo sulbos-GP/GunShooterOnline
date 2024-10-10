@@ -16,6 +16,6 @@ public class AimFov : FieldOfView
     // Update is called once per frame
     private void Update()
     {
-        showFov(fov, rayCount, viewDistance, fov);
+        ShowFov(fov, rayCount, viewDistance, fov);
     }
 }
