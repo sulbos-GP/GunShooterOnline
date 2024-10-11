@@ -17,6 +17,7 @@ public class Player : CreatureObj
     public Inventory inventory;
     public Gear gear;
     public Gun gun = new();
+    public CredentiaInfo credential;
 
     private float SpawnTime = 0;
 

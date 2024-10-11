@@ -216,8 +216,11 @@ class PacketHandler
 
         //인증 과정
 
+        if(packet.Credential ==  null) {
+            Console.WriteLine("packet.Credential is null -> debug mode");
+        }
 
-      
+
         Player p = ObjectManager.Instance.Add<Player>();
         {
             p.Session = clientSession;
@@ -225,7 +228,8 @@ class PacketHandler
             p.info.PositionInfo.PosX = 0;
             p.info.PositionInfo.PosY = 0;
             p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
-            //바꾼 부분
+
+          
 
 #if DOCKER
             //이거 uid를 검사해서 올바르게 넣어주면 됨
@@ -234,6 +238,8 @@ class PacketHandler
                 if(p.gameRoom.connectPlayer.Contains(packet.Credential.Uid) == true)
                 {
                     p.UID = packet.Credential.Uid;
+                     p.credential = packet.Credential;
+            
                 }
                 else { 
                 
@@ -261,7 +267,8 @@ class PacketHandler
 
         BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
 
-        // enter로 이동 room.Push(room.EnterGame, clientSession.MyPlayer);
+        // enter로 이동
+        room.Push(room.HandleJoin, packet.Credential, clientSession.MyPlayer);
         ObjectManager.Instance.DebugObjectDics();
     }
 

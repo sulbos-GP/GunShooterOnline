@@ -174,7 +174,7 @@ public class PlayerController : CreatureController
         base.UpdateController();
     }
 
-    public void UpdatePosInfo(PositionInfo info)
+    public void UpdatePosInfo (PositionInfo info)
     {
         //적 위치 변경
         Dir = new Vector2(info.DirX, info.DirY);
