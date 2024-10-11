@@ -989,8 +989,9 @@ namespace Server
 
 
 
-        public void HandleJoin(CredentiaInfo credentiaInfo, ClientSession s)
+        public void HandleJoin(CredentiaInfo credentiaInfo, Player player)
         {
+            Console.WriteLine("HandleJoin : S_JoinServer send plater");
             //s 와 인증 확인
 
             S_JoinServer joinServer = new S_JoinServer()
@@ -998,7 +999,7 @@ namespace Server
                 Connected = true,
             };
 
-            s.Send(joinServer);
+            player.Session.Send(joinServer);
 
 
         }

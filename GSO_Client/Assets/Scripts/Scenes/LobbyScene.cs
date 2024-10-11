@@ -33,7 +33,7 @@ public class LobbyScene : BaseScene
         string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
 #endif
         ExcelReader.CopyExcel(files);
-        SceneType = Define.Scene.Forest;
+        SceneType = Define.Scene.Lobby;
         Screen.SetResolution(1920, 1080, false);
         Debug.Log("신 초기화 로비");
         //Managers.Network.ConnectToGame("ec2-3-36-85-125.ap-northeast-2.compute.amazonaws.com");

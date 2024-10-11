@@ -91,7 +91,6 @@ public class MatchmakerHub : ClientHub
 
                 Managers.Network.SettingConnection(response.host_ip, response.host_port, response.container_id);
 
-                Managers.Scene.LoadScene(Define.Scene.Forest);
 
                 ClientCredential credential = Managers.Web.Models.Credential;
                 if (credential == null)

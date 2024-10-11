@@ -668,9 +668,12 @@ internal class PacketHandler
             Managers.SystemLog.Message("S_JoinServer : fail");
             return;
         }
-            
+
 
         //접속 완료
+        Managers.Scene.LoadScene(Define.Scene.Forest);
+
+
         Managers.SystemLog.Message("S_JoinServer : success");
 
     }
