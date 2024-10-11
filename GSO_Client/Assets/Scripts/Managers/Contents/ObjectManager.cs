@@ -32,6 +32,8 @@ public class ObjectManager
         if (_objects.ContainsKey(info.ObjectId))
             return;
 
+        Managers.SystemLog.Message("spawnID : " + info.ObjectId);
+
         var type = GetObjectType(info.ObjectId);
         //GameObjectType type = GameObjectType.Player;
         if (type == GameObjectType.Player)
