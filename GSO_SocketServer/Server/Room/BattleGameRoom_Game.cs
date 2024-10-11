@@ -939,7 +939,7 @@ namespace Server
 
             foreach (Player p in tempPlayer)
             {
-                if(_playerDic.TryAdd(p.Id, p) == false)
+                if(_playerDic.TryAdd(p.Id, p) == true)
                 {
 
                 }
