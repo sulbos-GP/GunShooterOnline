@@ -36,6 +36,8 @@ public class ObjectManager
             return;
         }
 
+        Managers.SystemLog.Message("spawnID : " + info.ObjectId);
+
         var type = GetObjectType(info.ObjectId);
         //GameObjectType type = GameObjectType.Player;
         if (type == GameObjectType.Player)
