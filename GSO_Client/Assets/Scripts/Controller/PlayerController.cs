@@ -41,7 +41,6 @@ public class PlayerController : CreatureController
         //TO-DO : 임시
         sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
         animator = transform.GetChild(1).GetComponent<Animator>();
-        return;
         lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
@@ -61,6 +60,7 @@ public class PlayerController : CreatureController
 
     public void UpdateDrawLine()
     {
+        return;
         lineRenderer.SetPosition(0, (Vector2)gameObject.transform.position + rect.topLeft * 2);
         lineRenderer.SetPosition(1, (Vector2)gameObject.transform.position + rect.topRight * 2);
         lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight * 2);
