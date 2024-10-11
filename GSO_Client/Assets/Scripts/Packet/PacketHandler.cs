@@ -112,6 +112,7 @@ internal class PacketHandler
 
         //타 플레이어의 움직임을 조정
 
+
         var cc = go.GetComponent<CreatureController>();
         if (cc == null)
             return;
