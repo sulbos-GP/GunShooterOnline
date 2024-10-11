@@ -2,14 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TransparencyWall : MonoBehaviour
+public class HideCeilingByRenderer : MonoBehaviour
 {
-    private const float onAlpha = 1f;
-    private const float offAlpha = 0f;
     public SpriteRenderer wallSprite;
+
+    public float onAlpha = 1f;
+    public float offAlpha = 0f;
     public float fadeSpeed = 1f;
-    public bool isFading = false;
     private float targetAlpha = 1f;
+
+    private bool isFading = false;
 
     private void Awake()
     {

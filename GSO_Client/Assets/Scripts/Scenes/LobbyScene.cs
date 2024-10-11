@@ -3,6 +3,7 @@ using System.Linq;
 using System.Net;
 using Google.Protobuf.Protocol;
 using TMPro;
+using Ubiety.Dns.Core;
 using UnityEngine;
 
 public class LobbyScene : BaseScene
@@ -32,6 +33,12 @@ public class LobbyScene : BaseScene
          BetterStreamingAssets.Initialize();
         string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
 #endif
+
+        if (Managers.EnvConfig.GetEnvironmentConfig().state == EEnvironmentState.Release)
+        {
+            Ip = "113.60.249.123";
+        }
+
         ExcelReader.CopyExcel(files);
         SceneType = Define.Scene.Lobby;
         Screen.SetResolution(1920, 1080, false);
