@@ -39,8 +39,9 @@ public class PlayerController : CreatureController
     public void SetDrawLine(float width , float height)
     {
         //TO-DO : 임시
-        sprite = GameObject.Find("ObjectSprite").GetComponent<SpriteRenderer>();
-        animator = GameObject.Find("ObjectSprite").GetComponent<Animator>();
+        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        return;
         lineRenderer = GetComponent<LineRenderer>();
         _width = width;
         _height = height;
