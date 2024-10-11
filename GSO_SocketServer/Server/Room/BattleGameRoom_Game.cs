@@ -903,7 +903,7 @@ namespace Server
             }
 
 
-            if (tempPlayer.Count == connectPlayer.Count) //
+            if (tempPlayer.Count == connectPlayer.Count) //connectPlayer.Count
             {
                 //전부 모임
                 Console.WriteLine($"connectPlayer.Count : {connectPlayer.Count}, " +
