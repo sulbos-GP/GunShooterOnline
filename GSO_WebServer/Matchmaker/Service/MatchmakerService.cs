@@ -333,8 +333,6 @@ namespace Matchmaker.Service
                     return error;
                 }
 
-                await mMatchQueue.ReleaseLock(uid);
-
                 return WebErrorCode.None;
             }
             catch (Exception e)
