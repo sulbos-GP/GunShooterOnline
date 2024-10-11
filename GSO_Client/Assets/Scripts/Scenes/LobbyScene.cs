@@ -72,7 +72,7 @@ public class LobbyScene : BaseScene
 
     public void GamePlay()
     {
-        Managers.Scene.LoadScene(Define.Scene.Forest);
+        //Managers.Scene.LoadScene(Define.Scene.Forest);
 
 
 

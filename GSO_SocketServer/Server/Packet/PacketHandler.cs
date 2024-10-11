@@ -27,7 +27,7 @@ using WebCommonLibrary.Models.GameDB;
 class PacketHandler
 {
     //GWANHO TEMP
-    private static int cnt = 0;
+    private static int cnt = 12;
 
 
   
@@ -208,7 +208,7 @@ class PacketHandler
     {
         Console.WriteLine("C_JoinServerHandler");
 
-        Task.Delay(1000).Wait();
+        //Task.Delay(1000).Wait();
 
         //접속 요청
         ClientSession clientSession = session as ClientSession;
@@ -266,7 +266,7 @@ class PacketHandler
         clientSession.MyPlayer = p;
 
         BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
-
+        Console.WriteLine("!@#");
         // enter로 이동
         room.Push(room.HandleJoin, packet.Credential, clientSession.MyPlayer);
         ObjectManager.Instance.DebugObjectDics();

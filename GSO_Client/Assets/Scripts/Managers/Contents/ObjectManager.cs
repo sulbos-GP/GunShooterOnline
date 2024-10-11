@@ -30,7 +30,11 @@ public class ObjectManager
             return;
 
         if (_objects.ContainsKey(info.ObjectId))
+        {
+            Managers.SystemLog.Message($"{info.ObjectId} _objects Contains Key");
+
             return;
+        }
 
         var type = GetObjectType(info.ObjectId);
         //GameObjectType type = GameObjectType.Player;
@@ -41,7 +45,11 @@ public class ObjectManager
                 var go = Managers.Resource.Instantiate("Creature/Player/MyPlayer");
                 //var go = Managers.Resource.Instantiate("UnitModel");
                 go.name = info.Name;
-                _objects.Add(info.ObjectId, go);
+                if(_objects.TryAdd(info.ObjectId, go) == false)
+                {
+                    Managers.SystemLog.Message($"{info.ObjectId} _objects add fail");
+                }
+                  
 
                 MyPlayer = go.GetComponent<MyPlayerController>();
                 MyPlayer.Id = info.ObjectId;
@@ -54,7 +62,10 @@ public class ObjectManager
             {
                 var go = Managers.Resource.Instantiate("Creature/Player/Player");
                 go.name = info.Name;
-                _objects.Add(info.ObjectId, go);
+                if (_objects.TryAdd(info.ObjectId, go) == false)
+                {
+                    Managers.SystemLog.Message($"{info.ObjectId} _objects add fail");
+                }
 
                 var pc = go.GetComponent<PlayerController>();
                 pc.Id = info.ObjectId;
@@ -78,7 +89,10 @@ public class ObjectManager
             //GameObject go = Managers.Resource.Instantiate("Creature/{}");
 
             go.name = info.Name ?? "오류";
-            _objects.Add(info.ObjectId, go);
+            if (_objects.TryAdd(info.ObjectId, go) == false)
+            {
+                Managers.SystemLog.Message($"{info.ObjectId} _objects add fail");
+            }
 
             var mc = go.GetComponent<MonsterController>();
 
@@ -108,7 +122,10 @@ public class ObjectManager
             var go = Managers.Resource.Instantiate($"Objects/{info.Name}");
 
             go.name = $"{info.Name}";
-            _objects.Add(info.ObjectId, go);
+            if (_objects.TryAdd(info.ObjectId, go) == false)
+            {
+                Managers.SystemLog.Message($"{info.ObjectId} _objects add fail");
+            }
 
             var ac = go.GetComponent<ArrowController>();
             ac.Id = info.ObjectId;
@@ -126,7 +143,10 @@ public class ObjectManager
             var go = Managers.Resource.Instantiate($"Objects/Box"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
             go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
-            _objects.Add(info.ObjectId, go); //오브젝트 딕션너리에 추가
+            if (_objects.TryAdd(info.ObjectId, go) == false)
+            {
+                Managers.SystemLog.Message($"{info.ObjectId} _objects add fail");
+            } //오브젝트 딕션너리에 추가
 
             Box boxScr = go.GetComponent<Box>();
             boxScr.objectId = info.ObjectId;
@@ -143,7 +163,10 @@ public class ObjectManager
             var go = Managers.Resource.Instantiate($"Objects/ExitZone"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
             go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
-            _objects.Add(info.ObjectId, go);
+            if (_objects.TryAdd(info.ObjectId, go) == false)
+            {
+                Managers.SystemLog.Message("_objects add fail");
+            }
 
             ExitZone exitZone = go.GetComponent<ExitZone>();
             exitZone.objectId = info.ObjectId;
