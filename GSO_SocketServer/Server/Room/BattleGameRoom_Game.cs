@@ -967,11 +967,31 @@ namespace Server
             foreach (var p in _playerDic.Values)
             {
                 s_GameStart.Objects.Add(p.info);
+
+                CreatureObj creatureObj = p as CreatureObj;
+                if (creatureObj != null)
+                {
+                    var ChangePacket = new S_ChangeHp();
+                    ChangePacket.ObjectId = creatureObj.Id;
+                    ChangePacket.Hp = creatureObj.Hp;
+                    BroadCast(ChangePacket);
+                }
+
             }
 
             foreach (var m in _monsterDic.Values)
             {
                 s_GameStart.Objects.Add(m.info);
+
+
+                CreatureObj creatureObj = m as CreatureObj;
+                if (creatureObj != null)
+                {
+                    var ChangePacket = new S_ChangeHp();
+                    ChangePacket.ObjectId = creatureObj.Id;
+                    ChangePacket.Hp = creatureObj.Hp;
+                    BroadCast(ChangePacket);
+                }
             }
 
             foreach (var s in _skillObjDic.Values)
@@ -981,6 +1001,8 @@ namespace Server
 
             BroadCast(s_GameStart);
 
+
+          
             IsGameStarted = true;
 
 

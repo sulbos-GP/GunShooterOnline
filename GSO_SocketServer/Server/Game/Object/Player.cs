@@ -24,6 +24,8 @@ public class Player : CreatureObj
 
     public Player()
     {
+        Console.WriteLine("Player Init");
+
         ObjectType = GameObjectType.Player;
 
         //바꾼 부분(패킷핸들러의 C_EnterGameHandler에서 플레이어 설정)
