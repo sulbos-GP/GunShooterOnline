@@ -1,7 +1,7 @@
 USE game_database;
 
 #자신의 UID 검색 후 넣기
-SET @uid = 12;
+SET @uid = 16;
 
 #아이템 생성 (Main, Sub, Armor, Backpack, Pocket)
 #메인

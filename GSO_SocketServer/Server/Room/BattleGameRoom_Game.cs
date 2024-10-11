@@ -895,15 +895,15 @@ namespace Server
             }
 
 
-            if (connectPlayer.Count == 0)
+           /* if (connectPlayer.Count == 0)
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
 
-            }
+            }*/
 
 
-            if (connectPlayer.Count == tempPlayer.Count)
+            if (tempPlayer.Count == 3) //connectPlayer.Count
             {
                 //전부 모임
                 Console.WriteLine($"connectPlayer.Count : {connectPlayer.Count}, " +
@@ -937,24 +937,24 @@ namespace Server
             Console.WriteLine("============ GameStart ============");
             map.SpawnPlayers(tempPlayer.ToArray());
 
-
             foreach (Player p in tempPlayer)
             {
-                /*if(_playerDic.TryAdd(p.Id, p) == false)
+                if(_playerDic.TryAdd(p.Id, p) == false)
                 {
 
                 }
                 else
                 {
                     Console.WriteLine("GameStart ERROR");
-                }*/
-
-
-                
-
-                EnterGame(p); 
+                }
             }
 
+
+            foreach (Player p in tempPlayer)
+            {
+
+                EnterGame(p);
+            }
 
 
             S_GameStart s_GameStart = new S_GameStart()
@@ -991,7 +991,7 @@ namespace Server
 
         public void HandleJoin(CredentiaInfo credentiaInfo, Player player)
         {
-            Console.WriteLine("HandleJoin : S_JoinServer send plater");
+            Console.WriteLine("HandleJoin : S_JoinServer");
             //s 와 인증 확인
 
             S_JoinServer joinServer = new S_JoinServer()
