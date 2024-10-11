@@ -110,9 +110,15 @@ public class MatchmakerHub : ClientHub
 
                  */
 
+                var user = Managers.Web.Models.User;
+                string nickname = "Unknown";
+                if (user != null)
+                {
+                    nickname = Managers.Web.Models.User.nickname;
+                }
 
                 C_JoinServer c_JoinServer = new C_JoinServer();
-                c_JoinServer.Name = "jish";
+                c_JoinServer.Name = nickname;
                 c_JoinServer.Credential = new CredentiaInfo()
                 {
                     Uid = credential.uid,
