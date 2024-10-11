@@ -223,16 +223,19 @@ namespace Server
                 var spawnpacket = new S_Spawn();
                 spawnpacket.Objects.Add(gameObject.info);
                 BroadCast(spawnpacket);
+
+
+                CreatureObj creatureObj = gameObject as CreatureObj;
+                if (creatureObj != null)
+                {
+                    var ChangePacket = new S_ChangeHp();
+                    ChangePacket.ObjectId = creatureObj.Id;
+                    ChangePacket.Hp = creatureObj.Hp;
+                    BroadCast(ChangePacket);
+                }
             }
 
-            CreatureObj creatureObj = gameObject as CreatureObj;
-            if (creatureObj != null)
-            {
-                var ChangePacket = new S_ChangeHp();
-                ChangePacket.ObjectId = creatureObj.Id;
-                ChangePacket.Hp = creatureObj.Hp;
-                BroadCast(ChangePacket);
-            }
+           
         }
 
 
