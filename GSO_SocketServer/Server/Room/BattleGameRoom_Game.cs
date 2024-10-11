@@ -895,15 +895,15 @@ namespace Server
             }
 
 
-           /* if (connectPlayer.Count == 0)
+            if (connectPlayer.Count == 0)
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
 
-            }*/
+            }
 
 
-            if (tempPlayer.Count == 3) //connectPlayer.Count
+            if (tempPlayer.Count == connectPlayer.Count) //
             {
                 //전부 모임
                 Console.WriteLine($"connectPlayer.Count : {connectPlayer.Count}, " +
