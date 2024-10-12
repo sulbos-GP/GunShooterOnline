@@ -165,10 +165,11 @@ namespace Server.Game
                     ownerPlayer.gameRoom.BroadCast(ChangeHpPacket);
                 }
 
-                S_RaycastHit packet = new S_RaycastHit();
+                S_RaycastShoot packet = new S_RaycastShoot();
                 packet.HitObjectId = hitObject.Id;
-                packet.RayId = hit2D.rayID;
-                packet.Distance = hit2D.distance;
+                packet.ShootPlayerId = attacker.Id;
+                //packet.RayId = hit2D.rayID;
+                //packet.Distance = hit2D.distance;
                 packet.HitPointX = hit2D.hitPoint.Value.X;
                 packet.HitPointY = hit2D.hitPoint.Value.Y;
                 packet.StartPosX = pos.X;
