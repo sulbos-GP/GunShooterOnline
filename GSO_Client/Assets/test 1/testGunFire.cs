@@ -13,7 +13,7 @@ public class testGunFire : MonoBehaviour
         if(time>1.0f)
         {
             time -= 1.0f;
-            gameObject.GetComponentInChildren<Gun>().Fire();
+           //gameObject.GetComponentInChildren<Gun>().Fire();
         }
     }
 }

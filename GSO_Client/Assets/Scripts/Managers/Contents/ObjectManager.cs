@@ -14,7 +14,7 @@ public class ObjectManager
     //추가 : 핸들러에서 InventorySet을 할경우 각 데이터들이 추가됨
     //삭제 : 인벤토리와 그리드는 해당 객체가 사라질때, 아이템은 합쳐지거나 삭제될때
     
-    public readonly Dictionary<int, S_RaycastHit> _rayDic = new();
+    public readonly Dictionary<int, S_RaycastShoot> _rayDic = new();
     public MyPlayerController MyPlayer { get; set; }
 
 

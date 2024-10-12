@@ -153,7 +153,6 @@ namespace Server.Game
                 {
                     CreatureObj creatureObj = hitObject as CreatureObj;
 
-
                     //TODO : 공격력  attacker 밑에 넣기 240814지승현
                     creatureObj.OnDamaged(attacker, attacker.gun.Damage);
 
