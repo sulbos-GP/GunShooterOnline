@@ -60,7 +60,7 @@ public class FovPlayer : MonoBehaviour
     {
         while (isFiring)
         {
-            playerGun.Fire(); // 발사 메서드 호출
+            playerGun.Fire(lookInput); // 발사 메서드 호출
             yield return new WaitForSeconds(playerGun.GetFireRate()); // 발사 속도에 따라 대기
         }
     }

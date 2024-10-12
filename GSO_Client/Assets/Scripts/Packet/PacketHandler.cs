@@ -103,8 +103,11 @@ internal class PacketHandler
         var go = Managers.Object.FindById(movePacket.ObjectId);
         Managers.SystemLog.Message("S_MoveHandler : " +go.name);
         if (go == null)
+        {
+            Managers.SystemLog.Message("S_MoveHandler 해당 id로 대상을 찾지 못함 : " + go.name);
             return;
-
+        }
+            
         if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
         {
             return;
@@ -602,40 +605,38 @@ internal class PacketHandler
     }
 
 
-
-    internal static void S_RaycastHitHandler(PacketSession session, IMessage message)
+    //총알의 시작지점과 끝지점을 받아 총알을 발사해 궤적을 그림
+    internal static void S_RaycastShootHandler(PacketSession session, IMessage message)
     {
-        S_RaycastHit packet = message as S_RaycastHit;
-       
-        Managers.SystemLog.Message("S_RaycastHit");
-        //레이의 아이디를 키로 해당 패킷을 저장하는 딕셔너리
-        //일단 지움 : Managers.Object._rayDic.Add(packet.RayId, packet);
+        S_RaycastShoot packet = message as S_RaycastShoot;
+        Managers.SystemLog.Message("S_RaycastShoot");
 
-        GameObject go = Managers.Object.FindById(packet.HitObjectId);
-        if (go == null)
-        {
-            Managers.SystemLog.Message("S_RaycastHit : Wall Hit bullet");
-            return;
-        }
-        //Managers.SystemLog.Message(go.GetComponent<MyPlayerController>().Id);
-        var cc = go.GetComponent<BaseController>();
-        if (cc == null)
-        {
-            //플레이어를 찾을 수 없는 곳.
-            //Vector2 hitObj = new Vector2(packet.HitPointX,packet.HitPointY);
-            
-            //Debug.DrawLine(hitObj, UnitManager.Instance.CurrentPlayer.transform.position);
+        //hit으로 인한 데미지는 다른 패킷으로 줌 -> ChangeHpHandler
 
-
-            //Debug.DrawLine(hitObj, hitObj);
-            return;
-        }
         Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
-        Managers.Object.MyPlayer.gun.gunLine.SetBulletLine(startPoint, hitPoint);
-        //cc에서 피격 표시?
 
-        //hit ID가 없으면 벽 맞는 거라         packet.HitPointX , Y이용하여 렌더링 및 이펙트 표시!! 
+        Gun playerGun = Managers.Object.MyPlayer.gun;
+
+        playerGun.gunLine.SetBulletLine(startPoint, hitPoint);
+        playerGun.UseAmmo();
+        //총알 발사
+        Bullet bullet = Managers.Resource.Instantiate($"Objects/BulletObjPref/{Managers.Object.MyPlayer.gun.UsingGunData.bullet}").GetComponent<Bullet>();
+        if (bullet == null)
+        {
+            Debug.Log("리소스에서 총알 로드 실패");
+            return;
+        }
+
+        Vector2 dir = (hitPoint - startPoint).normalized;
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        bullet.transform.position = startPoint;
+        bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+        bullet.startPos = startPoint;
+        bullet.endPos = hitPoint;
+        
+        
     }
 
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)
@@ -700,7 +701,7 @@ internal class PacketHandler
 
         foreach(ObjectInfo obj in packet.Objects)
         {
-            Managers.Object.Add(obj);
+            Managers.Object.Add(obj, false);
         }
 
         //obj가 플레이어인 경우 장착칸 1번 확인해서 
@@ -749,6 +750,8 @@ internal class PacketHandler
         Managers.SystemLog.Message($"S_ChangeAppearanceHandler : targetPlayer : {targetPlayer.name}");
         
     }
+
+    
 
 
 

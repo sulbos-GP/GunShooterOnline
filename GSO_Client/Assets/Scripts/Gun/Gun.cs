@@ -6,11 +6,14 @@ using UnityEngine.UI;
 
 public class Gun : MonoBehaviour
 {
-    public GunState UsingGunState { get; private set; }
+    public GunState UsingGunState { get; private set; } //현재 총의 상태 : shootable, empty, reload
 
     [SerializeField]
-    public Data_master_item_weapon UsingGunData { get; private set; }
-    private ItemData usingGunItemData;
+    public Data_master_item_weapon UsingGunData { get; private set; } //현재 사용중인 총의 스텟 데이터
+    private ItemData usingGunItemData; //사용중인 총의 아이템 데이터(총의 오브젝트 아이디, 총알 참조)
+    private Transform _fireStartPos;
+    public AimLine gunLine;
+
     public int curGunEquipSlot; //사용중인 총의 데이터가 없을 경우 0 , 1슬롯 사용시 1 , 2슬롯 사용시 2
 
     [SerializeField]
@@ -27,11 +30,6 @@ public class Gun : MonoBehaviour
         }
     } 
 
-    private float _lastFireTime;
-    public bool isBulletPrefShoot = true;
-
-    private Transform _fireStartPos;
-    public AimLine gunLine;
 
     private void Awake()
     {
@@ -41,6 +39,7 @@ public class Gun : MonoBehaviour
     private void Init()
     {
         curGunEquipSlot = 0;
+
         //Debug Line
         gunLine = GetComponent<AimLine>();
         gunLine.Init();
@@ -112,97 +111,39 @@ public class Gun : MonoBehaviour
     }
 
     //발사버튼 누를시
-    public bool Fire()
+    public void Fire(Vector2 dir)
     {
-        if (UsingGunData == null) 
+        if (UsingGunData  == null) 
         {
             Debug.Log("현재 총을 들고 있지 않음");
-            return false;
+            return;
         }
         
 
-        if(UsingGunState == GunState.Shootable && Time.time >= _lastFireTime + UsingGunData.attack_speed )
+        if(UsingGunState == GunState.Shootable)
         {
-            /*
-             발사 코드 작성.
-             총알을 발사하든 레이케스트로 충돌감지를 하든
-             적중시 패킷을 서버에게 전달
-             */
-
-            //정규분포를 사용한 발사
-            float halfAccuracyRange = UsingGunData.attack_range / 2f;
-
-            float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
-            float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
-            float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
-            Vector3 direction = Quaternion.Euler(0, 0, randomAngle) * _fireStartPos.up;
-
-            //레이캐스트를 사용한 방법
-            //10.06 박성훈 : 레이케스트가 자신의 플레이어의 콜라이더에 막히는 문제가 발생
-            // -> 모든 히트들을 받은후 히트가 자신의 플레이어면 그다음으로 넘기고 아니면 hit에 해당 히트를 넣음(나중에 관통 총알 등을 넣기에도 용이)
-            RaycastHit2D[] hits = Physics2D.RaycastAll(_fireStartPos.position, direction, UsingGunData.distance);
-            RaycastHit2D hit = default;
-            foreach (RaycastHit2D _hit in hits)
+            var cRay = new C_RaycastShoot
             {
-                if (_hit.collider.gameObject != Managers.Object.MyPlayer.gameObject)
-                {
-                    Debug.Log($"hit Object : {_hit.collider.gameObject.name}");
-                    hit = _hit;
-                    break; 
-                }
-            }
-           
-            if (hit.collider != null )
-            {
-                //도중에 충돌할 경우 충돌 위치까지 LineRenderer 설정
-                // 패킷 전송
-                var cRay = new C_RaycastShoot
-                {
-                    StartPosX = _fireStartPos.position.x,
-                    StartPosY = _fireStartPos.position.y,
-                    DirX = direction.x,
-                    DirY = direction.y,
-                    Length = Vector3.Distance(_fireStartPos.position, hit.point)  // 실제 충돌 위치까지의 거리
-                };
-                Managers.Network.Send(cRay);
-            }
-            
+                StartPosX = _fireStartPos.position.x,
+                StartPosY = _fireStartPos.position.y,
+                DirX = dir.x,
+                DirY = dir.y,
+            };
 
-            if (isBulletPrefShoot)
-            {
-                //총알을 사용한 방법
-                Bullet bullet = Managers.Resource.Instantiate($"Objects/BulletObjPref/{UsingGunData.bullet}").GetComponent<Bullet>();
-                if (bullet == null)
-                {
-                    Debug.Log("리소스에서 총알 로드 실패");
-                    return false;
-                }
-
-                if (hit.point != new Vector2(0, 0))
-                    bullet.EndPos = hit.point;
-                else
-                    bullet.EndPos = _fireStartPos.position + direction * UsingGunData.distance;
-                bullet._damage = UsingGunData.damage;
-                bullet._range = UsingGunData.distance;
-                bullet._dir = direction;
-                bullet.transform.position = _fireStartPos.position;
-                bullet.transform.rotation = _fireStartPos.rotation;
-            }
-
-            _lastFireTime = Time.time;//마지막 사격 시간 업데이트
-            CurAmmo--; //현재 총알감소
-            CurAmmo = Mathf.Max(CurAmmo, 0);
-            if(CurAmmo == 0)
-            {
-                UsingGunState = GunState.Empty;
-            }
-
-            return true;
+            Managers.Network.Send(cRay);
         }
-        return false; //발사 성공 여부
     }
 
-    
+    public void UseAmmo()
+    {
+        CurAmmo--; //현재 총알감소
+        CurAmmo = Mathf.Max(CurAmmo, 0);
+        if (CurAmmo == 0)
+        {
+            UsingGunState = GunState.Empty;
+        }
+    }
+
     public float GetRandomNormalDistribution(float mean, float standard)   
     {
         // 정규 분포로 부터 랜덤값을 가져오는 함수
@@ -230,6 +171,11 @@ public class Gun : MonoBehaviour
     //실질적인 재장전
     private IEnumerator ReloadCoroutine(int reloadAmount)
     {
+        //재장전 패킷 전송
+        C_InputData packet = new C_InputData();
+        packet.Reload = true;
+        Managers.Network.Send(packet);
+
         UsingGunState = GunState.Reloading;
         yield return new WaitForSeconds(UsingGunData.reload_time);
 

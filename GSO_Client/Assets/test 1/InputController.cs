@@ -309,7 +309,7 @@ public class InputController : MonoBehaviour
                 break;
             }
 
-            playerGun.Fire(); // 발사 메서드 호출
+            playerGun.Fire(lookInput); // 발사 메서드 호출
             yield return new WaitForSeconds(playerGun.GetFireRate());
         }
     }

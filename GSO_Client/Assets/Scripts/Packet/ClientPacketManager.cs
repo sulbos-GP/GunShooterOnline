@@ -53,8 +53,8 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SDeleteItem, PacketHandler.S_DeleteItemHandler);		
 		_onRecv.Add((ushort)MsgId.SSearchItem, MakePacket<S_SearchItem>);
 		_handler.Add((ushort)MsgId.SSearchItem, PacketHandler.S_SearchItemHandler);		
-		_onRecv.Add((ushort)MsgId.SRaycastHit, MakePacket<S_RaycastHit>);
-		_handler.Add((ushort)MsgId.SRaycastHit, PacketHandler.S_RaycastHitHandler);		
+		_onRecv.Add((ushort)MsgId.SRaycastHit, MakePacket<S_RaycastShoot>);
+		_handler.Add((ushort)MsgId.SRaycastHit, PacketHandler.S_RaycastShootHandler);		
 		_onRecv.Add((ushort)MsgId.SExitGame, MakePacket<S_ExitGame>);
 		_handler.Add((ushort)MsgId.SExitGame, PacketHandler.S_ExitGameHandler);		
 		_onRecv.Add((ushort)MsgId.SJoinServer, MakePacket<S_JoinServer>);
