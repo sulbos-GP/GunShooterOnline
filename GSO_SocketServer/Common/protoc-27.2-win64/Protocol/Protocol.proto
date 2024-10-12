@@ -290,27 +290,25 @@ message S_DeleteItem                        //I14
 ////////////////////////////////////////////
 
 message C_RaycastShoot{ //16
-    float StartPosX = 1;
-    float StartPosY = 2;
-    float DirX = 3;
-    float DirY = 4;
-    float Length = 5;
-    
+    float startPosX = 1;
+    float startPosY = 2;
+    float dirX = 3;
+    float dirY = 4;
 }
 
 
-message S_RaycastHit // 17
+message S_RaycastShoot // 17
 {
-    int32 rayId = 1;
+    int32 shootPlayerId = 1;
     int32 hitObjectId = 2;
     //Shape Collider;
     //GameObject hitObj;
-    float distance = 3;
+    //float distance = 3;
     //Vector2 normal;
-    float startPosX = 4;
-    float startPosY = 5;
-    float hitPointX = 6;
-    float hitPointY = 7;
+    float startPosX = 3;
+    float startPosY = 4;
+    float hitPointX = 5;
+    float hitPointY = 6;
 }
 
 
@@ -359,6 +357,11 @@ message S_ChangeAppearance{ //34
     int32 objectId = 1;  // 패킷을 보낸 플레이어의 아이디
     int32 gunId = 2; //해당 총의 마스터ID
 }
+
+message C_InputData {  //35
+    bool reload = 1;
+}
+
 
 
 ////////////////////////////////////////////

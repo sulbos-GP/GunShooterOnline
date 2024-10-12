@@ -791,9 +791,10 @@ namespace Server
         //                                        //
         ////////////////////////////////////////////
 
-        internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
+        internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir)
         {
-             bool t =  attacker.gun.Fire(attacker,pos, dir, length);   
+            //TODO : 길이 값 10 바꾸기
+             bool t =  attacker.gun.Fire(attacker,pos, dir, 10);   
             if(t == true)
             {
                 Console.WriteLine("FireSuccess");
