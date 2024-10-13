@@ -2,19 +2,20 @@
 using SqlKata.Execution;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 using System.Data;
+using WebCommonLibrary.Models.GameDatabase;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
     public partial class GameDB : IGameDB
     {
-        public async Task<UserMetadataInfo?> GetUserMetadataByUid(Int32 uid, IDbTransaction? transaction)
+        public async Task<FUserMetadata?> GetUserMetadataByUid(Int32 uid, IDbTransaction? transaction)
         {
             return await mQueryFactory.Query("user_metadata")
                 .Where("uid", uid).
-                FirstOrDefaultAsync<UserMetadataInfo>(transaction);
+                FirstOrDefaultAsync<FUserMetadata>(transaction);
         }
 
-        public async Task<int> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata, IDbTransaction? transaction)
+        public async Task<int> UpdateUserMetadata(Int32 uid, FUserMetadata matadata, IDbTransaction? transaction)
         {
             return await mQueryFactory.Query("user_metadata")
                 .Where("uid", uid)

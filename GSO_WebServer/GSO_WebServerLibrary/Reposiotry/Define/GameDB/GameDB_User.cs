@@ -3,31 +3,32 @@ using WebCommonLibrary.Models.GameDB;
 using SqlKata.Execution;
 using System.Data;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using WebCommonLibrary.Models.GameDatabase;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
     public partial class GameDB : IGameDB
     {
 
-        public async Task<UserInfo?> GetUserByPlayerId(String playerId)
+        public async Task<FUser?> GetUserByPlayerId(String playerId)
         {
             return await mQueryFactory.Query("user")
                 .Where("player_id", playerId).
-                FirstOrDefaultAsync<UserInfo>();
+                FirstOrDefaultAsync<FUser>();
         }
 
-        public async Task<UserInfo?> GetUserByUid(int uid, IDbTransaction? transaction = null)
+        public async Task<FUser?> GetUserByUid(int uid, IDbTransaction? transaction = null)
         {
             return await mQueryFactory.Query("user")
                 .Where("uid", uid).
-                FirstOrDefaultAsync<UserInfo>(transaction);
+                FirstOrDefaultAsync<FUser>(transaction);
         }
 
-        public async Task<UserInfo?> GetUserByNickname(String nickname)
+        public async Task<FUser?> GetUserByNickname(String nickname)
         {
             return await mQueryFactory.Query("user")
                 .Where("nickname", nickname).
-                FirstOrDefaultAsync<UserInfo>();
+                FirstOrDefaultAsync<FUser>();
         }
         
         public async Task<int> UpdateRecentLogin(int uid)
@@ -37,6 +38,16 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
                 .UpdateAsync(new
                 {
                     recent_login_dt = DateTime.UtcNow,
+                });
+        }
+
+        public async Task<int> UpdateLastTicketTime(int uid)
+        {
+            return await mQueryFactory.Query("user")
+                .Where("uid", uid)
+                .UpdateAsync(new
+                {
+                    recent_ticket_dt = DateTime.UtcNow,
                 });
         }
 

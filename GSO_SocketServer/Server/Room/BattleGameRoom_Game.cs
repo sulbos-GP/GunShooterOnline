@@ -791,10 +791,9 @@ namespace Server
         //                                        //
         ////////////////////////////////////////////
 
-        internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir)
+        internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
         {
-            //TODO : 길이 값 10 바꾸기
-             bool t =  attacker.gun.Fire(attacker,pos, dir, 10);   
+             bool t =  attacker.gun.Fire(attacker,pos, dir, length);   
             if(t == true)
             {
                 Console.WriteLine("FireSuccess");
@@ -895,15 +894,7 @@ namespace Server
                 tempPlayer.Add(player);
             }
 
-
-            if (connectPlayer.Count == 0)
-            {
-                Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
-                GameStart();
-
-            }
-
-
+#if DOCKER
             if (tempPlayer.Count == connectPlayer.Count) //connectPlayer.Count
             {
                 //전부 모임
@@ -929,6 +920,18 @@ namespace Server
                     t.Session.Send(status);
                 }
             }
+#else
+            if (tempPlayer.Count == 1) //접속할 인원에 따라 변경
+            {
+                Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
+                GameStart();
+
+            }
+#endif
+
+
+
+
 
         }
 

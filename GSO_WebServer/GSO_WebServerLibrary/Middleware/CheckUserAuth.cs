@@ -83,6 +83,11 @@ namespace GSO_WebServerLibrary.Middleware
 
             if (error != WebErrorCode.None || user == null)
             {
+                if(userData.refresh_token == null)
+                {
+                    await SendMiddlewareResponse(context, StatusCodes.Status404NotFound, error);
+                    return;
+                }
 
                 //갱신 토큰을 이용하여 엑세스 토큰 갱신하기
                 (error, var accessTokenData) = await mGoogleService.RefreshToken(userData.player_id, userData.refresh_token);

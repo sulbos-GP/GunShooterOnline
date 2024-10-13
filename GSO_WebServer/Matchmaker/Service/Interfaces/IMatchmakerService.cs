@@ -67,7 +67,7 @@ namespace Matchmaker.Service.Interfaces
         /// <summary>
         /// 매칭이 성사된 유저들에게 매칭이 성공했음을 알린다
         /// </summary>
-        public Task NotifyMatchSuccess(Ticket ticket, MatchProfile profile);
+        public Task NotifyMatchSuccess(int uid, Ticket ticket, MatchProfile profile);
 
         /// <summary>
         /// 매칭이 성사된 유저들에게 매칭이 성공했음을 알린다

@@ -24,8 +24,8 @@ namespace WebCommonLibrary.Models.GameDatabase
         //
         public int money { get; set; } = 0;
             
-        //
-        public int ticket { get; set; } = 0;
+        //티켓
+        public int ticket { get; set; } = 5;
             
         //
         public int gacha { get; set; } = 0;
@@ -41,6 +41,9 @@ namespace WebCommonLibrary.Models.GameDatabase
             
         //최근 로그인 일시
         public DateTime recent_login_dt { get; set; } = DateTime.MinValue;
+            
+        //최근 티켓 사용 일시
+        public DateTime recent_ticket_dt { get; set; } = DateTime.MinValue;
             
     }
 

@@ -6,13 +6,14 @@ using WebCommonLibrary.Models.GameDB;
 
 namespace WebCommonLibrary.DTO.User
 {
-    public class LoadMetadataReq
+    public class UpdateTicketReq
     {
 
     }
 
-    public class LoadMetadataRes : ErrorCodeDTO
+    public class UpdateTicketRes : ErrorCodeDTO
     {
-        public FUserMetadata? metadata { get; set; } = null;
+        public FUser? User { get; set; } = null;
+        public int RemainingTime { get; set; } = 0;
     }
 }

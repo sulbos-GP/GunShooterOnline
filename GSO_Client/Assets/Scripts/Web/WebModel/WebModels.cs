@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.SqlTypes;
 using WebCommonLibrary.DTO.DataLoad;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 public class WebModels
@@ -80,7 +81,7 @@ public class WebModels
         }
     }
 
-    public UserInfo User
+    public FUser User
     {
         get
         {
@@ -92,7 +93,7 @@ public class WebModels
         }
     }
 
-    public UserSkillInfo Rating
+    public FUserSkill Rating
     {
         get
         {
@@ -104,7 +105,7 @@ public class WebModels
         }
     }
 
-    public UserMetadataInfo Metadata
+    public FUserMetadata Metadata
     {
         get
         {
@@ -116,7 +117,7 @@ public class WebModels
         }
     }
 
-    public List<UserLevelReward> LevelReward
+    public List<FUserLevelReward> LevelReward
     {
         get
         {

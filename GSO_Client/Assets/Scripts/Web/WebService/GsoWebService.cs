@@ -168,6 +168,25 @@ public class UserResource
             this.mMethod = ERequestMethod.POST;
         }
     }
+
+    /// <summary>
+    /// 티켓 업데이트
+    /// </summary>
+    public UpdateTicketRequest GetUpdateTicketRequest(HeaderVerfiyPlayer header, UpdateTicketReq body)
+    {
+        return new UpdateTicketRequest(this.mService, header, body);
+    }
+
+    public class UpdateTicketRequest : WebClientServiceRequest<UpdateTicketRes>
+    {
+        public UpdateTicketRequest(GsoWebService service, HeaderVerfiyPlayer header, UpdateTicketReq request)
+        {
+            this.mFromHeader = header.ToDictionary();
+            this.mFromBody = request;
+            this.mEndPoint = service.mBaseUrl + "/api/User/Ticket/Update";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
 }
 
 /// <summary>

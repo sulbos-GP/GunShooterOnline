@@ -1,13 +1,21 @@
-﻿using Server.Game;
+﻿using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json.Linq;
+using Server.Game;
 using Server.Game.Object.Gear;
 using SqlKata.Execution;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDatabase;
 
 namespace Server.Database.Game
 {
@@ -55,7 +63,7 @@ namespace Server.Database.Game
             return gears;
         }
 
-        public async Task<int> GetGearOfPart(int uid, string part)
+        public async Task<DB_GearUnit> GetGearOfPart(int uid, string part, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
@@ -65,10 +73,79 @@ namespace Server.Database.Game
                 { "part" , part },
             };
 
-            return await query.Query("gear")
-                .Select("item_id")
+            var result = await query.Query("gear")
+                .Select
+                (
+                        "gear.part",
+                        "gear.unit_attributes_id",
+
+                        "unit_attributes.item_id",
+                        "unit_attributes.durability",
+                        "unit_attributes.loaded_ammo",
+                        "unit_attributes.unit_storage_id",
+                        "unit_attributes.amount"
+                )
+                .LeftJoin("unit_attributes", "gear.unit_attributes_id", "unit_attributes.unit_attributes_id")
                 .Where(values)
-                .FirstOrDefaultAsync<int>();
+                .GetAsync(transaction);
+
+            DB_GearUnit gear = result.Select(row => new DB_GearUnit
+            {
+                gear = new DB_Gear
+                {
+                    part = row.part as string,
+                    unit_attributes_id = row.unit_attributes_id,
+                },
+
+                attributes = new DB_UnitAttributes
+                {
+                    item_id = row.item_id,
+                    durability = row.durability,
+                    loaded_ammo = row.loaded_ammo,
+                    unit_storage_id = row.unit_storage_id as int?,
+                    amount = row.amount
+                }
+
+            }).FirstOrDefault();
+
+            return gear;
+        }
+
+        public async Task CreateDefaultBackpack(int uid, FMasterItemBase data, IDbTransaction transaction = null)
+        {
+            var query = this.GetQueryFactory();
+
+            EGearPart part = EGearPart.Backpack;
+            FieldInfo field = part.GetType().GetField(part.ToString());
+            var attribute = field.GetCustomAttribute<DescriptionAttribute>();
+            string description = attribute?.Description ?? part.ToString();
+
+            int storge_id = await query.Query("storage").
+                InsertGetIdAsync<int>(new
+                {
+                    storage_type = description
+                }, transaction);
+
+
+            int unit_attributes_id = await query.Query("unit_attributes").
+            InsertGetIdAsync<int>(new
+            {
+                item_id = data.item_id,
+                durability = 0,
+                loaded_ammo = 0,
+                unit_storage_id = storge_id,
+                amount = 1
+            }, transaction);
+            
+
+
+            int result = await query.Query("gear").
+            InsertAsync(new
+                {
+                    uid = uid,
+                    part = description,
+                    unit_attributes_id = unit_attributes_id,
+                }, transaction);
         }
 
         public async Task<int> InsertGear(int uid, ItemObject item, string part, IDbTransaction transaction = null)

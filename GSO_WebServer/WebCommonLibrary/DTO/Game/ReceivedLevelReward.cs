@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 namespace WebCommonLibrary.DTO.Game
@@ -12,7 +13,7 @@ namespace WebCommonLibrary.DTO.Game
 
     public class ReceivedLevelRewardRes : ErrorCodeDTO
     {
-        public List<UserLevelReward>? LevelReward { get; set; } = null;
-        public UserInfo? user { get; set; } = null;
+        public List<FUserLevelReward>? LevelReward { get; set; } = null;
+        public FUser? user { get; set; } = null;
     }
 }

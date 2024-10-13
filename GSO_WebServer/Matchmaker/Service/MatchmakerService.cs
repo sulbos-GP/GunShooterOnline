@@ -14,6 +14,7 @@ using System.Threading;
 using System.Net.Sockets;
 using GSO_WebServerLibrary.Reposiotry.Define.GameDB;
 using WebCommonLibrary.Models.GameDatabase;
+using WebCommonLibrary.Models;
 
 namespace Matchmaker.Service
 {
@@ -232,7 +233,7 @@ namespace Matchmaker.Service
                     return WebErrorCode.TEMP_ERROR;
                 }
 
-                UserSkillInfo? skill = await mGameDB.GetUserSkillByUid(uid);
+                FUserSkill? skill = await mGameDB.GetUserSkillByUid(uid);
                 if (skill == null)
                 {
                     return WebErrorCode.TEMP_ERROR;
@@ -507,7 +508,7 @@ namespace Matchmaker.Service
                         await mMatchQueue.SetTicket(uid, ticket);
                     }
 
-                    UserInfo? user = await mGameDB.GetUserByUid(uid);
+                    FUser? user = await mGameDB.GetUserByUid(uid);
                     if (user == null)
                     {
                         throw new Exception("플레이어가 존재하지 않음");
@@ -517,6 +518,15 @@ namespace Matchmaker.Service
                     if (result == 0)
                     {
                         throw new Exception("티켓이 올바르게 소모되지 않음");
+                    }
+
+                    if (user.ticket - 1 < GameDefine.MAX_TICKET)
+                    {
+                        result = await mGameDB.UpdateLastTicketTime(uid);
+                        if (result == 0)
+                        {
+                            throw new Exception("티켓 시간이 초기화 되지 않음");
+                        }
                     }
 
                     await mMatchQueue.ReleaseLock(uid);
@@ -531,10 +541,17 @@ namespace Matchmaker.Service
             }
         }
 
-        public async Task NotifyMatchSuccess(Ticket ticket, MatchProfile profile)
+        public async Task NotifyMatchSuccess(int uid, Ticket ticket, MatchProfile profile)
         {
             Console.WriteLine($"\t\tClientId : {ticket.client_id}");
-            await mMatchmakerHub.Clients.Client(ticket.client_id).SendAsync("S2C_MatchSuccess", ticket.client_id, profile);
+
+            FUser? user = await mGameDB.GetUserByUid(uid);
+            if (user == null)
+            {
+                return;
+            }
+
+            await mMatchmakerHub.Clients.Client(ticket.client_id).SendAsync("S2C_MatchSuccess", ticket.client_id, user, profile);
 
         }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 
@@ -48,13 +49,13 @@ public class UI_LevelReward : LobbyUI
 
     public override void UpdateUI()
     {
-        List<UserLevelReward> rewards = Managers.Web.Models.LevelReward;
+        List<FUserLevelReward> rewards = Managers.Web.Models.LevelReward;
         if (rewards == null || rewards.Count == 0)
         {
             return;
         }
 
-        foreach (UserLevelReward reward in rewards)
+        foreach (FUserLevelReward reward in rewards)
         {
             contents.TryGetValue(reward.reward_id, out var prefab);
 

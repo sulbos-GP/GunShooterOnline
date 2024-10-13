@@ -35,5 +35,7 @@ namespace GsoWebServer.Servicies.Interfaces
         /// 최근 로그인한 시간 기록
         /// </summary>
         public Task<WebErrorCode> UpdateLastSignInTime(int uid);
+
+
     }
 }

@@ -1,12 +1,13 @@
 ﻿using WebCommonLibrary.Models.GameDB;
 using SqlKata.Execution;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
+using WebCommonLibrary.Models.GameDatabase;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
     public partial class GameDB : IGameDB
     {
-        public async Task<IEnumerable<UserLevelReward>?> GetUserLevelRewardByUid(int uid, bool? received, int? reward_level_id)
+        public async Task<IEnumerable<FUserLevelReward>?> GetUserLevelRewardByUid(int uid, bool? received, int? reward_level_id)
         {
             var where = new Dictionary<string, object>()
             {
@@ -19,7 +20,7 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 
             return await mQueryFactory.Query("user_level_reward")
                 .Where(where).
-                GetAsync<UserLevelReward>();
+                GetAsync<FUserLevelReward>();
         }
     }
 }
