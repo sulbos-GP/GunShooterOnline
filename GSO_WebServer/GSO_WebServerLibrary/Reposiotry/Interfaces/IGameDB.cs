@@ -1,5 +1,6 @@
 ﻿using WebCommonLibrary.Models.GameDB;
 using System.Data;
+using WebCommonLibrary.Models.GameDatabase;
 
 namespace GSO_WebServerLibrary.Reposiotry.Interfaces
 {
@@ -36,22 +37,24 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// <summary>
         /// 유저의 플레이어 아이디로 user정보 불러오기
         /// </summary>
-        public Task<UserInfo?> GetUserByPlayerId(string playerId);
+        public Task<FUser?> GetUserByPlayerId(string playerId);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user정보 불러오기
         /// </summary>
-        public Task<UserInfo?> GetUserByUid(int uid, IDbTransaction? transaction = null);
+        public Task<FUser?> GetUserByUid(int uid, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 닉네임으로 user정보 불러오기
         /// </summary>
-        public Task<UserInfo?> GetUserByNickname(string nickname);
+        public Task<FUser?> GetUserByNickname(string nickname);
 
         /// <summary>
         /// 유저의 최근 로그인 시간 업데이트
         /// </summary>
         public Task<int> UpdateRecentLogin(int uid);
+
+        public Task<int> UpdateLastTicketTime(int uid);
 
         /// <summary>
         /// 유저의 닉네임 변경
@@ -61,27 +64,27 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// <summary>
         /// 유저의 유니크 아이디로 user 메타데이터 불러오기
         /// </summary>
-        public Task<UserMetadataInfo?> GetUserMetadataByUid(int uid, IDbTransaction? transaction = null);
+        public Task<FUserMetadata?> GetUserMetadataByUid(int uid, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user 메타데이터 업데이트
         /// </summary>
-        public Task<int> UpdateUserMetadata(int uid, UserMetadataInfo matadata, IDbTransaction? transaction = null);
+        public Task<int> UpdateUserMetadata(int uid, FUserMetadata matadata, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user 스킬 불러오기
         /// </summary>
-        public Task<UserSkillInfo?> GetUserSkillByUid(int uid, IDbTransaction? transaction = null);
+        public Task<FUserSkill?> GetUserSkillByUid(int uid, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user 스킬 업데이트
         /// </summary>
-        public Task<int> UpdateUserSkill(int uid, UserSkillInfo skill, IDbTransaction? transaction = null);
+        public Task<int> UpdateUserSkill(int uid, FUserSkill skill, IDbTransaction? transaction = null);
 
         /// <summary>
         /// 유저의 유니크 아이디로 user 레벨 보상 불러오기
         /// </summary>
-        public Task<IEnumerable<UserLevelReward>?> GetUserLevelRewardByUid(int uid, bool? received, int? reward_level_id);
+        public Task<IEnumerable<FUserLevelReward>?> GetUserLevelRewardByUid(int uid, bool? received, int? reward_level_id);
 
         /// <summary>
         /// 유저의 유니크 아이디로 level 업데이트

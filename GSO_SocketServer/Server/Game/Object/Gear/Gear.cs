@@ -9,6 +9,10 @@ using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
+using static Humanizer.In;
+using WebCommonLibrary.Models.MasterDatabase;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Server.Game.Object.Gear
 {
@@ -139,14 +143,101 @@ namespace Server.Game.Object.Gear
                     initPartItemIds.Add(item.Id);
                 }
 
-                Console.WriteLine($"Player.UID[{owner.UID}] 장비 로드 완료");
-
             }
             catch (Exception e)
             {
                 Console.WriteLine($"[LoadGear] : {e.Message.ToString()}");
             }
+
+            ItemObject haveBackpack = GetPartItem(EGearPart.Backpack);
+            if (haveBackpack == null)
+            {
+                await CreateDefaultBackpack();
+            }
+
+            Console.WriteLine($"Player.UID[{owner.UID}] 장비 로드 완료");
         }
+
+        public async Task CreateDefaultBackpack()
+        {
+            
+            using (var database = DatabaseHandler.GameDB)
+            {
+                using (var transaction = database.GetConnection().BeginTransaction())
+                {
+                    FMasterItemBase defaultBackpackBaseData = DatabaseHandler.Context.MasterItemBase.FirstOrDefault(data => data.Value.code == "ITEM_B000").Value;
+                    if (defaultBackpackBaseData == null)
+                    {
+                        Console.WriteLine("기본 가방의 베이스 데이터를 얻을 수 없습니다.");
+                        return;
+                    }
+
+                    FMasterItemBackpack defaultBackpackData = DatabaseHandler.Context.MasterItemBackpack.Find(defaultBackpackBaseData.item_id);
+                    if (defaultBackpackData == null)
+                    {
+                        Console.WriteLine("기본 가방의 디테일 데이터를 얻을 수 없습니다.");
+                        return;
+                    }
+
+                    EGearPart type = EGearPart.Backpack;
+                    FieldInfo field = type.GetType().GetField(type.ToString());
+                    var attribute = field.GetCustomAttribute<DescriptionAttribute>();
+                    string description = attribute?.Description ?? type.ToString();
+
+                    try
+                    {
+                        await database.CreateDefaultBackpack(owner.UID, defaultBackpackBaseData, transaction);
+
+
+
+                        DB_GearUnit gear = await database.GetGearOfPart(owner.UID, description, transaction);
+
+                        DB_ItemUnit unit = new DB_ItemUnit()
+                        {
+                            storage = new DB_StorageUnit()
+                            {
+                                grid_x = 0,
+                                grid_y = 0,
+                                rotation = 0,
+                                unit_attributes_id = gear.gear.unit_attributes_id
+                            },
+
+                            attributes = new DB_UnitAttributes()
+                            {
+                                item_id = gear.attributes.item_id,
+                                durability = gear.attributes.durability,
+                                unit_storage_id = gear.attributes.unit_storage_id,
+                                amount = gear.attributes.amount,
+                            }
+                        };
+
+                        ItemObject item = new ItemObject(owner.Id, unit);
+                        Storage part = parts[gear.gear.part];
+                        if (EStorageError.None != part.InsertItem(item))
+                        {
+                            throw new Exception($"장비의 파트({gear.gear.part})가 중복되어 있음");
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{gear.gear.part.ToString()}부위 {item.Data.name.ToString()}장착");
+                        }
+                        initPartItemIds.Add(item.Id);
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[CreateDefaultBackpack] : {e.Message.ToString()}");
+                        transaction.Rollback();
+                    }
+
+
+
+                }
+            }
+            
+        }
+
 
         public async Task<bool> InsertGear(EGearPart part, ItemObject item, GameDB database, IDbTransaction transaction = null)
         {

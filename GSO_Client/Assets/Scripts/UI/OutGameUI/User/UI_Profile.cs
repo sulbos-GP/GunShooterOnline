@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using WebCommonLibrary.DTO.Authentication;
 using WebCommonLibrary.DTO.User;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 using static AuthorizeResource;
 using static UserResource;
@@ -105,7 +106,7 @@ public class UI_Profile : LobbyUI
 
     public override void UpdateUI()
     {
-        UserInfo profile = Managers.Web.Models.User;
+        FUser profile = Managers.Web.Models.User;
         if (profile == null)
         {
             return;

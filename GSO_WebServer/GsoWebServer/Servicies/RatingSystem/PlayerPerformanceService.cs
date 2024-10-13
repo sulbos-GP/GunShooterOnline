@@ -4,6 +4,7 @@ using GsoWebServer.Servicies.Interfaces;
 using GsoWebServer.Servicies.Matching;
 using System.Text.RegularExpressions;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 namespace GsoWebServer.Servicies.RatingSystem
@@ -75,7 +76,7 @@ namespace GsoWebServer.Servicies.RatingSystem
             var transaction = mGameDB.GetConnection().BeginTransaction();
             try
             {
-                Dictionary<int, UserSkillInfo> skills = new Dictionary<int, UserSkillInfo>();
+                Dictionary<int, FUserSkill> skills = new Dictionary<int, FUserSkill>();
                 foreach ((int uid, MatchOutcome outcome) in outcomes)
                 {
                     var skill = await mGameDB.GetUserSkillByUid(uid, transaction);
@@ -89,7 +90,7 @@ namespace GsoWebServer.Servicies.RatingSystem
                 foreach ((int uid, MatchOutcome outcome) in outcomes)
                 {
                     Glicko2 glicko2 = new Glicko2();
-                    UserSkillInfo newSkill = glicko2.UpdatePlayerRating(uid, skills, outcomes);
+                    FUserSkill newSkill = glicko2.UpdatePlayerRating(uid, skills, outcomes);
 
                     var result = await mGameDB.UpdateUserSkill(uid, newSkill, transaction);
                     if (result == 0)

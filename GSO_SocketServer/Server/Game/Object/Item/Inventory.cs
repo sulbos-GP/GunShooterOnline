@@ -1,11 +1,13 @@
 ﻿using Server.Database.Game;
 using Server.Database.Handler;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
 
@@ -47,28 +49,14 @@ namespace Server.Game
                 //장비에 착용되어 있는 가방을 불러옴d
                 ItemObject backpackItem = owner.gear.GetPartItem(EGearPart.Backpack);
 
-                int scaleX = 0;
-                int scaleY = 0;
-                double weight = 0.0;
-                if(backpackItem == null || backpackItem.UnitStorageId == null)
-                {
-                    //가방이 없다면 기본 제공
-                    scaleX = 2;
-                    scaleY = 3;
-                    weight = 5.0;
-                }
-                else
-                {
-                    //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기
-                    FMasterItemBackpack backpackData = DatabaseHandler.Context.MasterItemBackpack.Find(backpackItem.ItemId);
-                    scaleX = backpackData.total_scale_x;
-                    scaleY = backpackData.total_scale_y;
-                    weight = backpackData.total_weight;
-                }
-                storage.Init(scaleX, scaleY, weight);
+                //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기
+                FMasterItemBackpack backpackData = DatabaseHandler.Context.MasterItemBackpack.Find(backpackItem.ItemId);
+                int scaleX = backpackData.total_scale_x;
+                int scaleY = backpackData.total_scale_y;
+                double weight = backpackData.total_weight;
 
-  
                 this.storage_id = backpackItem.UnitStorageId.Value;
+                storage.Init(scaleX, scaleY, weight);
 
                 Console.WriteLine($"Player.UID[{owner.UID}] 가방 아이디 {this.storage_id}");
 

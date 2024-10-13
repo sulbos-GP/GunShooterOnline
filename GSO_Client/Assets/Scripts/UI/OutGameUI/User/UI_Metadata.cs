@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 public class UI_Metadata : LobbyUI
@@ -66,7 +67,7 @@ public class UI_Metadata : LobbyUI
 
     public override void UpdateUI()
     {
-        UserMetadataInfo metadata = Managers.Web.Models.Metadata;
+        FUserMetadata metadata = Managers.Web.Models.Metadata;
         if (metadata == null)
         {
             return;
@@ -80,7 +81,7 @@ public class UI_Metadata : LobbyUI
         escape.text         = metadata.escape.ToString();
         survivalTime.text   = metadata.survival_time.ToString();
 
-        UserSkillInfo skill = Managers.Web.Models.Rating;
+        FUserSkill skill = Managers.Web.Models.Rating;
         if(skill == null)
         {
             return;

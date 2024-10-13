@@ -7,6 +7,7 @@ using UnityEngine.UI;
 using WebCommonLibrary.DTO.Game;
 using WebCommonLibrary.DTO.User;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 using static GameResource;
@@ -93,7 +94,7 @@ public class UI_LevelRewardData : MonoBehaviour
         receivedButton.interactable = false;
     }
 
-    public void UpdateLevelRewardData(UserLevelReward reward)
+    public void UpdateLevelRewardData(FUserLevelReward reward)
     {
         if(reward.received == true)
         {

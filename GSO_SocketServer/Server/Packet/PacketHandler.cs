@@ -27,7 +27,7 @@ using WebCommonLibrary.Models.GameDB;
 class PacketHandler
 {
     //GWANHO TEMP
-    private static int cnt = 12;
+    private static int cnt = 1;
 
 
   
@@ -183,7 +183,7 @@ class PacketHandler
         //Console.WriteLine($"C_RaycastShootHandler0");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.Push(player.gameRoom.HandleRayCast, player, new Vector2(packet.StartPosX, packet.StartPosY), new Vector2(packet.DirX, packet.DirY));
+        //player.gameRoom.Push(player.gameRoom.HandleRayCast, player, new Vector2(packet.StartPosX, packet.StartPosY), new Vector2(packet.DirX, packet.DirY));
     }
 
     internal static void C_ExitGameHandler(PacketSession session, IMessage message)
@@ -254,7 +254,7 @@ class PacketHandler
 
 #else
 
-            p.UID = ++cnt;
+            p.UID = cnt++;
 #endif
 
             //p.stat

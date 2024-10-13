@@ -6,6 +6,7 @@ using WebCommonLibrary.Error;
 using GsoWebServer.DTO;
 using WebCommonLibrary.Models.MemoryDB;
 using WebCommonLibrary.Models.GameDB;
+using static Google.Apis.Requests.RequestError;
 
 
 namespace AuthenticationServer.Controllers
@@ -150,6 +151,13 @@ namespace AuthenticationServer.Controllers
                     return response;
                 }
 
+                if (token.RefreshToken == null)
+                {
+                    response.error_code = errorCode;
+                    response.error_description = "";
+                    return response;
+                }
+
                 //Redis에 토큰 저장
                 errorCode = await mAuthenticationService.RegisterToken(uid, player.GamePlayerId, token.AccessToken, token.RefreshToken, token.ExpiresInSeconds.Value);
                 if (errorCode != WebErrorCode.None)
@@ -161,7 +169,7 @@ namespace AuthenticationServer.Controllers
 
                 //티켓 업데이트
                 errorCode = await mGameService.UpdateTicketCount(uid);
-                if (errorCode != WebErrorCode.None)
+                if (errorCode != WebErrorCode.None && errorCode != WebErrorCode.TicketRemainingTime)
                 {
                     response.error_code = errorCode;
                     response.error_description = "";
@@ -299,6 +307,12 @@ namespace AuthenticationServer.Controllers
                     return response;
                 }
 
+                if (user.refresh_token == null)
+                {
+                    response.error_code = WebErrorCode.TEMP_ERROR;
+                    response.error_description = "";
+                    return response;
+                }
 
                 //유저의 새로운 토큰 생성
                 (error, var token) = await mAuthenticationService.RefreshToken(user.player_id, user.refresh_token);

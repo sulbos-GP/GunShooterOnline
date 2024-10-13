@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using WebCommonLibrary.DTO.Matchmaker;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.Match;
 using static MatchmakerResource;
@@ -37,7 +38,7 @@ public class MatchmakerHub : ClientHub
 
     protected override void SetOnRecivedFunc()
     {
-        mConnection.On<string, MatchProfile>("S2C_MatchSuccess", S2C_MatchSuccess);
+        mConnection.On<string, FUser, MatchProfile>("S2C_MatchSuccess", S2C_MatchSuccess);
         mConnection.On<WebErrorCode>("S2C_MatchFailed", S2C_MatchFailed);
     }
 
@@ -63,11 +64,11 @@ public class MatchmakerHub : ClientHub
     /// <summary>
     /// ��Ī ����
     /// </summary>
-    public void S2C_MatchSuccess(string client_id, MatchProfile response)
+    public void S2C_MatchSuccess(string client_id, FUser user, MatchProfile response)
     {
         EnqueueDispatch(() =>
         {
-            Managers.SystemLog.Message($"��ġ�� �����Ǿ����ϴ� {response.host_ip}:{response.host_port}");
+            Managers.SystemLog.Message($"매칭 참여 성공 {response.host_ip}:{response.host_port}");
 
             if (matchStateUI == null)
             {
@@ -75,7 +76,7 @@ public class MatchmakerHub : ClientHub
             }
             UI_MatchState state = matchStateUI.GetComponentInChildren<UI_MatchState>();
 
-            state.SetStateText("��Ī �Ϸ�");
+            state.SetStateText("매칭 참여 성공");
             state.StopTiemr();
             Destroy(matchStateUI);
 
@@ -98,23 +99,11 @@ public class MatchmakerHub : ClientHub
                     return;
                 }
 
-                /* //Enter�Ҷ� uid �����ּ�
-                 C_EnterGame c_EnterGame = new C_EnterGame();
-                 //c_EnterGame.Name = "jish";
-                 c_EnterGame.Credential = new CredentiaInfo()
-                 {
-                     Uid = credential.uid,
-                 };
-
-                 Managers.Network.Send(c_EnterGame);
-
-                 */
-
-                var user = Managers.Web.Models.User;
+                Managers.Web.Models.User = user;
                 string nickname = "Unknown";
                 if (user != null)
                 {
-                    nickname = Managers.Web.Models.User.nickname;
+                    nickname = user.nickname;
                 }
 
                 C_JoinServer c_JoinServer = new C_JoinServer();
@@ -125,8 +114,6 @@ public class MatchmakerHub : ClientHub
                 };
                 Managers.Network.Send(c_JoinServer);
 
-
-                Debug.Log("������");
             }
 
             //Managers.Network.ConnectToGame(response.host_ip);

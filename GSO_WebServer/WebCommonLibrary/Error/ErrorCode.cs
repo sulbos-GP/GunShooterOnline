@@ -43,6 +43,9 @@
         CheckAuthFailNotMatch = 2016,
         CheckAuthFailException = 2017,
 
+        TicketAlreadyMax = 2018,
+        TicketRemainingTime = 2019,
+
         // Authentication 2500 ~
         ServerCodeNotFound = 2501,
 

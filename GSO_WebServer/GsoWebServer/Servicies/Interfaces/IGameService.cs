@@ -1,4 +1,5 @@
 ﻿using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 namespace GsoWebServer.Servicies.Interfaces
@@ -18,32 +19,32 @@ namespace GsoWebServer.Servicies.Interfaces
         /// <summary>
         /// 유저 정보 가져오기
         /// </summary>
-        public Task<(WebErrorCode, UserInfo?)> GetUserInfo(int uid);
+        public Task<(WebErrorCode, FUser?)> GetUserInfo(int uid);
 
         /// <summary>
         /// 유저 메타데이터 정보 가져오기
         /// </summary>
-        public Task<(WebErrorCode, UserMetadataInfo?)> GetMetadataInfo(int uid);
+        public Task<(WebErrorCode, FUserMetadata?)> GetMetadataInfo(int uid);
 
         /// <summary>
         /// 유저 스킬(레이팅) 정보 가져오기
         /// </summary>
-        public Task<(WebErrorCode, UserSkillInfo?)> GetSkillInfo(int uid);
+        public Task<(WebErrorCode, FUserSkill?)> GetSkillInfo(int uid);
 
         /// <summary>
         /// 유저 레벨 보상 정보 가져오기
         /// </summary>
-        public Task<(WebErrorCode, List<UserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id);
+        public Task<(WebErrorCode, List<FUserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id);
 
         /// <summary>
         /// 유저 메타데이터 정보 업데이트
         /// </summary>
-        public Task<WebErrorCode> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata);
+        public Task<WebErrorCode> UpdateUserMetadata(Int32 uid, FUserMetadata matadata);
 
         /// <summary>
         /// 유저 스킬(레이팅) 정보 업데이트
         /// </summary>
-        public Task<WebErrorCode> UpdateUserSkill(Int32 uid, UserSkillInfo skill);
+        public Task<WebErrorCode> UpdateUserSkill(Int32 uid, FUserSkill skill);
 
         /// <summary>
         /// 저장소의 아이템 로드
@@ -69,5 +70,7 @@ namespace GsoWebServer.Servicies.Interfaces
         /// 티켓 수량 업데이트
         /// </summary>
         public Task<WebErrorCode> UpdateTicketCount(Int32 uid);
+
+        public Task<WebErrorCode> UpdateLastTicketTime(int uid);
     }
 }

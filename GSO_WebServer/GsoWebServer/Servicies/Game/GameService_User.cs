@@ -1,6 +1,8 @@
 ﻿using GsoWebServer.Servicies.Interfaces;
 using System.Transactions;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
 
@@ -76,7 +78,7 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
-        public async Task<(WebErrorCode, UserInfo?)> GetUserInfo(int uid)
+        public async Task<(WebErrorCode, FUser?)> GetUserInfo(int uid)
         {
             try
             {
@@ -88,7 +90,7 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
-        public async Task<(WebErrorCode, UserMetadataInfo?)> GetMetadataInfo(int uid)
+        public async Task<(WebErrorCode, FUserMetadata?)> GetMetadataInfo(int uid)
         {
             try
             {
@@ -100,7 +102,7 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
-        public async Task<WebErrorCode> UpdateUserMetadata(Int32 uid, UserMetadataInfo matadata)
+        public async Task<WebErrorCode> UpdateUserMetadata(Int32 uid, FUserMetadata matadata)
         {
             try
             {
@@ -118,7 +120,7 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
-        public async Task<(WebErrorCode, UserSkillInfo?)> GetSkillInfo(int uid)
+        public async Task<(WebErrorCode, FUserSkill?)> GetSkillInfo(int uid)
         {
             try
             {
@@ -130,11 +132,11 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
-        public async Task<(WebErrorCode, List<UserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id)
+        public async Task<(WebErrorCode, List<FUserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id)
         {
             try
             {
-                IEnumerable<UserLevelReward>? list = await mGameDB.GetUserLevelRewardByUid(uid, received, reward_level_id);
+                IEnumerable<FUserLevelReward>? list = await mGameDB.GetUserLevelRewardByUid(uid, received, reward_level_id);
                 if (list == null)
                 {
                     return (WebErrorCode.TEMP_ERROR, null);
@@ -148,7 +150,7 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
-        public async Task<WebErrorCode> UpdateUserSkill(Int32 uid, UserSkillInfo skill)
+        public async Task<WebErrorCode> UpdateUserSkill(Int32 uid, FUserSkill skill)
         {
             try
             {
@@ -293,18 +295,28 @@ namespace GsoWebServer.Servicies.Game
                     return WebErrorCode.TEMP_ERROR;
                 }
 
-                if(user.ticket < 10)
+                if(user.ticket < GameDefine.MAX_TICKET)
                 {
                     DateTime now = DateTime.UtcNow;
-                    DateTime recent = user.recent_login_dt;
+                    DateTime recent = user.recent_ticket_dt;
 
                     TimeSpan timeDiff = now - recent;
-                    double diffMinutes = timeDiff.TotalMinutes;
+                    int diffMinutes = (int)timeDiff.TotalMinutes;
+                    if (diffMinutes == 0)
+                    {
+                        return WebErrorCode.TicketRemainingTime;
+                    }
 
-                    int possibleTicketCount = (int)(diffMinutes / 10) + user.ticket;
-                    possibleTicketCount = Math.Clamp(possibleTicketCount, 0, 10);
+                    int possibleTicketCount = (diffMinutes / GameDefine.WAIT_TICKET_MINUTE) + user.ticket;
+                    possibleTicketCount = Math.Clamp(possibleTicketCount, 0, GameDefine.MAX_TICKET);
 
                     int updateRes = await mGameDB.UpdateTicket(uid, possibleTicketCount);
+                    if (updateRes == 0)
+                    {
+                        return WebErrorCode.TEMP_ERROR;
+                    }
+
+                    updateRes = await mGameDB.UpdateLastTicketTime(uid);
                     if (updateRes == 0)
                     {
                         return WebErrorCode.TEMP_ERROR;
@@ -317,6 +329,17 @@ namespace GsoWebServer.Servicies.Game
             {
                 return WebErrorCode.TEMP_Exception;
             }
+        }
+
+        public async Task<WebErrorCode> UpdateLastTicketTime(int uid)
+        {
+            var rowCount = await mGameDB.UpdateLastTicketTime(uid);
+            if (rowCount != 1)
+            {
+                return WebErrorCode.AccountIdMismatch;
+            }
+
+            return WebErrorCode.None;
         }
 
     }

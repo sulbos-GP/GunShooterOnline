@@ -1,4 +1,5 @@
 ﻿using GsoWebServer.Servicies.Interfaces;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 namespace GsoWebServer.Servicies.Matching
@@ -81,10 +82,10 @@ namespace GsoWebServer.Servicies.Matching
             return 1.0 / (1.0 + Math.Exp(-G(opponentRD) * (rating - opponentRating)));
         }
 
-        private double CalculateVariance(Dictionary<int, UserSkillInfo> skills, double rating)
+        private double CalculateVariance(Dictionary<int, FUserSkill> skills, double rating)
         {
             double varianceInverseSum = 0.0;
-            foreach ((int uid, UserSkillInfo skill) in skills)
+            foreach ((int uid, FUserSkill skill) in skills)
             {
                 double mu = GetRatingGlicko2DownScale(skill.rating);
                 double phi = GetRatingDeviationGlicko2DownScale(skill.deviation);
@@ -96,7 +97,7 @@ namespace GsoWebServer.Servicies.Matching
             return 1.0 / varianceInverseSum;
         }
 
-        private double CalculateDelta(Dictionary<int, UserSkillInfo> skills, Dictionary<int, MatchOutcome> outcoms, double rating, double variance)
+        private double CalculateDelta(Dictionary<int, FUserSkill> skills, Dictionary<int, MatchOutcome> outcoms, double rating, double variance)
         {
             double deltaSum = 0.0;
             foreach ((int uid, MatchOutcome outcome) in outcoms)
@@ -136,7 +137,7 @@ namespace GsoWebServer.Servicies.Matching
         /// </summary>
         /// <param name="player">  업데이트할 플레이어</param>
         /// <param name="matches"> 게임에 참여한 플레이어들의 실력과 결과 </param>
-        public UserSkillInfo UpdatePlayerRating(int uid, Dictionary<int, UserSkillInfo> skills, Dictionary<int, MatchOutcome> outcoms)
+        public FUserSkill UpdatePlayerRating(int uid, Dictionary<int, FUserSkill> skills, Dictionary<int, MatchOutcome> outcoms)
         {
             double rating = GetRatingGlicko2DownScale(skills[uid].rating);       // r
             double deviation = GetRatingDeviationGlicko2DownScale(skills[uid].deviation);          // φ
@@ -200,7 +201,7 @@ namespace GsoWebServer.Servicies.Matching
 
             double newRating = rating + Math.Pow(newRD, 2) * delta;
 
-            var newSkillInfo = new UserSkillInfo
+            var newSkillInfo = new FUserSkill
             {
                 rating = Math.Clamp(GetRatingGlicko2UpScale(newRating), 500, 3000),
                 deviation = Math.Clamp(GetRatingDeviationGlicko2UpScale(newRD), 30, 350),
