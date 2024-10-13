@@ -38,7 +38,7 @@ CREATE TABLE `master_item_backpack` (
 
 LOCK TABLES `master_item_backpack` WRITE;
 /*!40000 ALTER TABLE `master_item_backpack` DISABLE KEYS */;
-INSERT INTO `master_item_backpack` VALUES (301,3,4,10),(302,5,5,15),(303,7,6,20);
+INSERT INTO `master_item_backpack` VALUES (300,2,2,6),(301,3,4,10),(302,5,5,15),(303,7,6,20);
 /*!40000 ALTER TABLE `master_item_backpack` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -74,7 +74,7 @@ CREATE TABLE `master_item_base` (
 
 LOCK TABLES `master_item_base` WRITE;
 /*!40000 ALTER TABLE `master_item_base` DISABLE KEYS */;
-INSERT INTO `master_item_base` VALUES (101,'ITEM_W001','Colt45',2,'Weapone',101,2,2,400,1.2,100,1,'IconW_colt'),(102,'ITEM_W002','Ak47',7,'Weapone',102,4,2,2200,1.8,500,1,'IconW_ak'),(103,'ITEM_W003','Aug',6,'Weapone',103,4,2,2300,1.8,440,1,'IconW_aug'),(201,'ITEM_D001','경찰조끼',3,'Defensive',201,2,3,1100,1.5,550,1,'IconD_police'),(202,'ITEM_D002','방탄조끼',4,'Defensive',202,2,3,1500,1.5,750,1,'IconD_proof'),(203,'ITEM_D003','군용조끼',5,'Defensive',203,2,3,1700,1.5,850,1,'IconD_military'),(301,'ITEM_B001','의약품가방',3,'Bag',301,2,2,500,1.4,250,1,'IconB_medical'),(302,'ITEM_B002','군대가방',3,'Bag',302,2,2,1500,1.4,750,1,'IconB_army'),(303,'ITEM_B003','군용더블백',4,'Bag',303,2,2,2500,1.4,1300,1,'IconB_double'),(401,'ITEM_R001','의약품상자',1,'Recovery',401,1,1,500,0.7,200,1,'IconR_medical'),(402,'ITEM_R002','밴드',0.2,'Recovery',402,1,1,100,0.7,50,64,'IconR_band'),(403,'ITEM_R003','아드레날린',0.2,'Recovery',403,1,1,1000,0.7,600,1,'IconR_adrenaline'),(404,'ITEM_R004','알약',0.2,'Recovery',404,1,1,500,0.7,300,64,'IconR_pill'),(501,'ITEM_E001','5.59mm',0.3,'Bullet',501,1,1,10,0.4,0,64,'IconE_5.59'),(502,'ITEM_E002','7.29mm',0.3,'Bullet',502,1,1,10,0.4,0,64,'IconE_7.29'),(601,'ITEM_S001','타이어휠',10,'Spoil',601,4,4,0,2.2,2000,1,'IconS_spoil'),(602,'ITEM_S002','1.5볼트건전지',2,'Spoil',602,1,2,0,1.2,600,1,'IconS_battery'),(603,'ITEM_S003','밧줄한묶음',6,'Spoil',603,1,3,0,1.3,500,1,'IconS_rope'),(604,'ITEM_S004','은도금톱니바퀴',8,'Spoil',604,3,3,0,1.8,200,1,'IconS_wheel'),(605,'ITEM_S005','금괴',5,'Spoil',605,2,1,0,1.2,2000,1,'IconS_goldbar'),(606,'ITEM_S006','통나무',3,'Spoil',606,2,2,0,1.2,250,1,'IconS_solidwood');
+INSERT INTO `master_item_base` VALUES (101,'ITEM_W001','Colt45',2,'Weapone',101,2,2,400,1.2,100,1,'IconW_colt'),(102,'ITEM_W002','Ak47',7,'Weapone',102,4,2,2200,1.8,500,1,'IconW_ak'),(103,'ITEM_W003','Aug',6,'Weapone',103,4,2,2300,1.8,440,1,'IconW_aug'),(201,'ITEM_D001','경찰조끼',3,'Defensive',201,2,3,1100,1.5,550,1,'IconD_police'),(202,'ITEM_D002','방탄조끼',4,'Defensive',202,2,3,1500,1.5,750,1,'IconD_proof'),(203,'ITEM_D003','군용조끼',5,'Defensive',203,2,3,1700,1.5,850,1,'IconD_military'),(300,'ITEM_B000','기본가방',0,'Bag',300,0,0,0,0,0,0,'null'),(301,'ITEM_B001','의약품가방',3,'Bag',301,2,2,500,1.4,250,1,'IconB_medical'),(302,'ITEM_B002','군대가방',3,'Bag',302,2,2,1500,1.4,750,1,'IconB_army'),(303,'ITEM_B003','군용더블백',4,'Bag',303,2,2,2500,1.4,1300,1,'IconB_double'),(401,'ITEM_R001','의약품상자',1,'Recovery',401,1,1,500,0.7,200,1,'IconR_medical'),(402,'ITEM_R002','밴드',0.2,'Recovery',402,1,1,100,0.7,50,64,'IconR_band'),(403,'ITEM_R003','아드레날린',0.2,'Recovery',403,1,1,1000,0.7,600,1,'IconR_adrenaline'),(404,'ITEM_R004','알약',0.2,'Recovery',404,1,1,500,0.7,300,64,'IconR_pill'),(501,'ITEM_E001','5.59mm',0.3,'Bullet',501,1,1,10,0.4,0,64,'IconE_5.59'),(502,'ITEM_E002','7.29mm',0.3,'Bullet',502,1,1,10,0.4,0,64,'IconE_7.29'),(601,'ITEM_S001','타이어휠',10,'Spoil',601,4,4,0,2.2,2000,1,'IconS_spoil'),(602,'ITEM_S002','1.5볼트건전지',2,'Spoil',602,1,2,0,1.2,600,1,'IconS_battery'),(603,'ITEM_S003','밧줄한묶음',6,'Spoil',603,1,3,0,1.3,500,1,'IconS_rope'),(604,'ITEM_S004','은도금톱니바퀴',8,'Spoil',604,3,3,0,1.8,200,1,'IconS_wheel'),(605,'ITEM_S005','금괴',5,'Spoil',605,2,1,0,1.2,2000,1,'IconS_goldbar'),(606,'ITEM_S006','통나무',3,'Spoil',606,2,2,0,1.2,250,1,'IconS_solidwood');
 /*!40000 ALTER TABLE `master_item_base` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,4 +312,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-23 16:30:10
+-- Dump completed on 2024-10-13 14:20:53
