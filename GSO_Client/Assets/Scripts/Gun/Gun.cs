@@ -144,17 +144,6 @@ public class Gun : MonoBehaviour
         }
     }
 
-    public float GetRandomNormalDistribution(float mean, float standard)   
-    {
-        // 정규 분포로 부터 랜덤값을 가져오는 함수
-        float x1 = Random.Range(0f, 1f);
-        float x2 = Random.Range(0f, 1f);
-        float randStdNormal = Mathf.Sqrt(-2.0f * Mathf.Log(x1)) * Mathf.Sin(2.0f * Mathf.PI * x2);
-        float randNormal = mean + standard * randStdNormal; //평균 + 표준편차* 랜덤정규분포
-        return randNormal;
-    }
-
-
     //재장전 버튼 누를시
     public void Reload()
     {

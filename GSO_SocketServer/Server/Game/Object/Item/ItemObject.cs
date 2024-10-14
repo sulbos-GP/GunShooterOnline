@@ -123,6 +123,10 @@ namespace Server.Game
             {
                 return unit.attributes.loaded_ammo;
             }
+            set
+            {
+                unit.attributes.loaded_ammo = value;
+            }
         }
 
         public int? UnitStorageId

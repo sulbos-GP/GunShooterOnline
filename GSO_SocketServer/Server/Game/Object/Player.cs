@@ -37,10 +37,7 @@ public class Player : CreatureObj
             //Attack = 3,
             Hp = 20,
             MaxHp = 20,
-
-
         });
-
 
 
         float width = 0.5f;

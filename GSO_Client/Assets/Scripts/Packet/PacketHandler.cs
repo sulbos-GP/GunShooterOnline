@@ -620,6 +620,7 @@ internal class PacketHandler
 
         playerGun.gunLine.SetBulletLine(startPoint, hitPoint);
         playerGun.UseAmmo();
+
         //총알 발사
         Bullet bullet = Managers.Resource.Instantiate($"Objects/BulletObjPref/{Managers.Object.MyPlayer.gun.UsingGunData.bullet}").GetComponent<Bullet>();
         if (bullet == null)
@@ -633,6 +634,7 @@ internal class PacketHandler
 
         bullet.transform.position = startPoint;
         bullet.transform.rotation = Quaternion.Euler(0, 0, angle);
+        
         bullet.startPos = startPoint;
         bullet.endPos = hitPoint;
         
