@@ -183,7 +183,7 @@ class PacketHandler
         //Console.WriteLine($"C_RaycastShootHandler0");
 
         Player player = clientSession.MyPlayer;
-        //player.gameRoom.Push(player.gameRoom.HandleRayCast, player, new Vector2(packet.StartPosX, packet.StartPosY), new Vector2(packet.DirX, packet.DirY));
+        player.gameRoom.Push(player.gameRoom.HandleRayCast, player, new Vector2(packet.StartPosX, packet.StartPosY), new Vector2(packet.DirX, packet.DirY));
     }
 
     internal static void C_ExitGameHandler(PacketSession session, IMessage message)
@@ -281,9 +281,20 @@ class PacketHandler
         C_ChangeAppearance packet = (C_ChangeAppearance)message;
         Console.WriteLine($"[C_ChangeAppearance]");
         Console.WriteLine($"playerid : {packet.ObjectId}");
-        Console.WriteLine($"gunId : {packet.GunId}");
+        Console.WriteLine($"gunId : {packet.GunId}"); //총의 마스터 아이디 -> 아이템 오브젝트 아이디
+        Player player = clientSession.MyPlayer;
+        
+        player.gameRoom.Push(player.gameRoom.ChangeAppearance, player, packet.ObjectId, packet.GunId);
+    }
+
+    internal static void C_InputDataHandler(PacketSession session, IMessage message)
+    {
+        ClientSession clientSession = session as ClientSession;
+        C_InputData packet = (C_InputData)message;
+        Console.WriteLine($"[C_InputData]");
+
         Player player = clientSession.MyPlayer;
 
-        player.gameRoom.Push(player.gameRoom.ChangeAppearance, player, packet.ObjectId, packet.GunId);
+        player.gameRoom.Push(player.gameRoom.HandleInputData, player, packet.Reload);
     }
 }

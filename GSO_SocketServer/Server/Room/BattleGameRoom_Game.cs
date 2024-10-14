@@ -776,13 +776,23 @@ namespace Server
 
         internal void ChangeAppearance(Player player,int targetId, int gunId)
         {
+            player.gun.SetGunData(gunId);
+            
             S_ChangeAppearance packet = new S_ChangeAppearance()
             {
                 ObjectId = targetId,
-                GunId = gunId
+                GunId = player.gun.UsingGunData.item_id
             };
 
             BroadCast(packet);
+        }
+
+        internal void HandleInputData(Player player, bool isReload)
+        {
+            if (isReload)
+            {
+                player.gun.Reload();
+            }
         }
 
         ////////////////////////////////////////////
@@ -791,63 +801,9 @@ namespace Server
         //                                        //
         ////////////////////////////////////////////
 
-        internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir, float length)
+        internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir)
         {
-             bool t =  attacker.gun.Fire(attacker,pos, dir, length);   
-            if(t == true)
-            {
-                Console.WriteLine("FireSuccess");
-
-            }
-            else
-            {
-                Console.WriteLine("Fail");
-            }
-
-
-            /*    삭제
-                        RaycastHit2D hit2D = RaycastManager.Raycast(pos+ pos*dir *0.5f ,dir, length);
-
-                        if(hit2D.Collider == null)
-                        {
-                            return;
-                        }
-
-                        GameObject hitObject = hit2D.Collider.Parent;
-                        if (hitObject == null)
-                        {
-                            Console.WriteLine("HandleRayCast null");
-                            return;
-                        }
-
-
-                        if(hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster)
-                        {
-                            CreatureObj creatureObj = hitObject as CreatureObj;
-
-
-                            //TODO : 공격력  attacker 밑에 넣기 240814지승현
-                            creatureObj.OnDamaged(attacker, 3);
-
-                            S_ChangeHp ChangeHpPacket = new S_ChangeHp();
-                            ChangeHpPacket.ObjectId = hitObject.Id;
-                            ChangeHpPacket.Hp = creatureObj.Hp;
-
-                            Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + hitObject.Id + "HIT Hp : "+ hitObject.Hp);
-
-                            BroadCast(ChangeHpPacket);
-                        }
-
-                        S_RaycastHit packet = new S_RaycastHit();
-                        packet.HitObjectId = hitObject.Id;
-                        packet.RayId = hit2D.rayID;
-                        packet.Distance = hit2D.distance;
-                        packet.HitPointX = hit2D.hitPoint.Value.X;
-                        packet.HitPointY = hit2D.hitPoint.Value.Y;
-
-
-                        BroadCast(packet);*/
-
+            attacker.gun.Fire(attacker,pos, dir);   
         }
 
         public void HandleExitGame(Player player, int exitId)
@@ -1030,10 +986,6 @@ namespace Server
 
         }
 
-
-
-
-
-
+        
     }
 }

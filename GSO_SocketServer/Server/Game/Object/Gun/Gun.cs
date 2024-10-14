@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Protocol;
+using Server.Database.Handler;
 using Server.Game.Utils;
 using ServerCore;
 using StackExchange.Redis;
@@ -10,6 +11,8 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models.MasterDatabase;
 
 namespace Server.Game
 {
@@ -21,185 +24,152 @@ namespace Server.Game
         {
             get
             {
-                return gunData.damage;
+                return UsingGunData.damage;
             }
         }
 
-        public GunState gunState { get; private set; }
-
-        public GunData gunData { get; private set; }
-        public int _curAmmo { get; private set; } //현재 장탄
-
-        private float _lastFireTime;
-
-        public bool isBulletPrefShoot = false;
-
-        //총알 private LineRenderer bulletLine;
-        //private LineRenderer rangeLine;
-        private Vector3 _fireStartPos;//궤적 라인 렌더러 (디버깅 라인을 라인렌더러로 표현)
-       
-        private Vector3 _direction;      // Ray가 향하는 방향
-
-        CoroutineManager coroutineManager = new();
-
-      
-
-        //public void SetGunStat(GunStat gunStat)
-        //{
-        //    gunData = new GunData();
-        //    gunData.range = gunStat.range;
-        //    gunData.ammo = gunStat.ammo;
-        //    gunData.fireRate = gunStat.fireRate;
-        //    gunData.gunType = gunStat.gunType;
-        //    gunData.bulletObj = gunStat.bulletObj;
-        //    gunData.accuracy = gunStat.accuracy;
-        //    gunData.damage = gunStat.damage;
-        //    gunData.reloadTime = gunStat.reloadTime;
-        //}
-
-        public GunData getGunStat()
+        public GunState UsingGunState { get; private set; } //현재 총의 상태 : shootable, empty, reload
+        public FMasterItemWeapon UsingGunData { get; private set; } //현재 사용중인 총의 스텟 데이터
+        public ItemObject gunItemData;
+        public int CurAmmo
         {
-            return gunData;
+            get => gunItemData.Loaded_ammo;
+            set
+            {
+                if (gunItemData == null)
+                {
+                    return;
+                }
+                gunItemData.Loaded_ammo = value;
+            }
+        }
+        //public bool isBulletPrefShoot = false;
+
+        public FMasterItemWeapon GetCurrentGunData()
+        {
+            return UsingGunData;
         }
 
         public void Init(Player p)
         {
-            ExtensionMethod.Start();
-            GunDataManager.instance.Init();
-            gunData = GunDataManager.instance.gunDatas[0];
-
-            //Debug Line
-            /*bulletLine = GetComponent<LineRenderer>();
-            rangeLine = transform.GetChild(0).GetComponent<LineRenderer>();
-            bulletLine.positionCount = 2;
-            rangeLine.positionCount = 5;*/
-
-            //게임 시작시 실행할 루틴
-            //SetGunStat(_gunStat);
-            //_curAmmo = gunData.ammo;
-            //gunState = GunState.Shootable;
-            //_fireStartPos = transform.GetChild(0);
-
             ownerPlayer = p;
+            ResetGun();
         }
 
-       /* private void Update()
+        public void SetGunData(int gunItemId) //총의 오브젝트 ID
         {
-            SetFireLine();
-        }*/
+            gunItemData = ObjectManager.Instance.Find<ItemObject>(gunItemId);
+            UsingGunData = DatabaseHandler.Context.MasterItemWeapon.Find(gunItemData.ItemId); 
+            UsingGunState = CurAmmo == 0 ? GunState.Empty : GunState.Shootable; 
+        }
 
-        /*private void SetFireLine()
+        public void ResetGun()
         {
-            //발사범위 선 2개 긋기
-            if (_fireStartPos == null) return;
-
-            float halfAngle = gunData.accuracy * 0.5f;
-
-            Vector3 direction1 = ExtensionMethod.Quaternion.Euler(0, 0, halfAngle) * _fireStartPos.up;
-            Vector3 endPoint1 = _fireStartPos.position + direction1 * gunData.range;
-
-
-            Vector3 direction2 = ExtensionMethod.Quaternion.Euler(0, 0, -halfAngle) * _fireStartPos.up;
-            Vector3 endPoint2 = _fireStartPos.position + direction2 * gunData.range;
-
-
-            rangeLine.SetPosition(0, _fireStartPos.position);
-            rangeLine.SetPosition(1, endPoint1);
-            rangeLine.SetPosition(2, _fireStartPos.position);
-            rangeLine.SetPosition(3, endPoint2);
-            rangeLine.SetPosition(4, _fireStartPos.position);
-        }*/
+            UsingGunData = null;
+            gunItemData = null;
+            CurAmmo = 0;
+            UsingGunState = GunState.Empty;
+            //총 제거 패킷 전송
+        }
 
         //발사버튼 누를시
-        public bool Fire(Player attacker, Vector2 pos, Vector2 dir, float length)
-        {
-            // TODO : 20240903 주석제거 if (gunState == GunState.Shootable && ExtensionMethod.time >= _lastFireTime + 1 / gunData.fireRate)
+        public void Fire(Player attacker, Vector2 pos, Vector2 dir)
+        {   // TODO : 20240903 주석제거 
+            //플레이어가 착용한 총의 정보
+            if(UsingGunState != GunState.Shootable)
             {
-                /*
-                 발사 코드 작성.
-                 총알을 발사하든 레이케스트로 충돌감지를 하든
-                 적중시 패킷을 서버에게 전달
-                 */
-
-                //정규분포를 사용한 발사
-                float halfAccuracyRange = gunData.accuracy / 2f;
-
-                float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
-                float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
-                float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
-                //Vector3 direction = ExtensionMethod.Quaternion.Euler(0, 0, randomAngle) *_fireStartPos.up;
-
-                //레이캐스트를 사용한 방법
-               // RaycastHit2D hit = Physics2D.Raycast(_fireStartPos.position, direction, gunData.range);
-
-
-                RaycastHit2D hit2D = RaycastManager.Raycast(pos , dir, length); //pos * dir * 0.5f
-
-
-
-                if (hit2D.Collider == null)
-                {
-                    return false;
-                }
-
-                GameObject hitObject = hit2D.Collider.Parent;
-                if (hitObject == null)
-                {
-                    Console.WriteLine("hit is null");
-                    return false;
-                }
-
-                if (hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster)
-                {
-                    CreatureObj creatureObj = hitObject as CreatureObj;
-
-                    //TODO : 공격력  attacker 밑에 넣기 240814지승현
-                    creatureObj.OnDamaged(attacker, attacker.gun.Damage);
-
-                    S_ChangeHp ChangeHpPacket = new S_ChangeHp();
-                    ChangeHpPacket.ObjectId = creatureObj.Id;
-                    ChangeHpPacket.Hp = creatureObj.Hp;
-
-                    Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + creatureObj.Id + "HIT Hp : " + creatureObj.Hp);
-                    ownerPlayer.gameRoom.BroadCast(ChangeHpPacket);
-                }
-
-                S_RaycastShoot packet = new S_RaycastShoot();
-                packet.HitObjectId = hitObject.Id;
-                packet.ShootPlayerId = attacker.Id;
-                //packet.RayId = hit2D.rayID;
-                //packet.Distance = hit2D.distance;
-                packet.HitPointX = hit2D.hitPoint.Value.X;
-                packet.HitPointY = hit2D.hitPoint.Value.Y;
-                packet.StartPosX = pos.X;
-                packet.StartPosY = pos.Y;
-
-
-                ownerPlayer.gameRoom.BroadCast(packet);
-
-
-
-                if (isBulletPrefShoot)
-                {
-                    //총알을 사용한 방법
-                    //Bullet bullet = gunData.bulletObj;
-                    //bullet._damage = gunData.damage;
-                    //bullet._range = gunData.range;
-                    //bullet._dir = direction;
-                    ObjectManager.Instance.Add((gunData.bulletObj));
-                    //Instantiate(bullet, _fireStartPos.position, _fireStartPos.rotation);
-                }
-                _lastFireTime = ExtensionMethod.time;//마지막 사격 시간 업데이트
-
-                _curAmmo--; //현재 총알감소
-                _curAmmo = Math.Max(_curAmmo, 0);
-                if (_curAmmo == 0)
-                {
-                    gunState = GunState.Empty;
-                }
-                return true;
+                //발사 실패
+                Console.WriteLine("Gun is not Shootable State");
+                return;
             }
-            //return false; //발사 성공 여부
+
+            ItemObject mainWeapon = ownerPlayer.gear.GetPartItem(EGearPart.MainWeapon);
+            FMasterItemWeapon mainWeaponInfo = DatabaseHandler.Context.MasterItemWeapon.Find(mainWeapon.ItemId);
+
+            //정규분포를 사용한 발사
+            float halfAccuracyRange = UsingGunData.attack_range / 2f;
+            float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
+            float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
+            float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
+            Vector2 direction = randomAngle * dir; //발사할 각도
+            Vector2 endPos = Vector2.Zero;
+            float length = MathF.Sqrt(direction.X * direction.X + direction.Y * direction.Y);
+            if (length != 0)
+            {
+                endPos = pos + (direction / length) * mainWeaponInfo.distance;
+            }
+            else
+            {
+                endPos = pos;
+            }
+
+            RaycastHit2D hit2D = RaycastManager.Raycast(pos, direction, mainWeaponInfo.distance); //충돌객체 체크
+            if (hit2D.Collider == null)
+            {
+                //충돌된 객체 없음
+                S_RaycastShoot noHit = new S_RaycastShoot();
+                noHit.HitObjectId = -1;
+                noHit.ShootPlayerId = attacker.Id;
+                noHit.HitPointX = endPos.X;
+                noHit.HitPointY = endPos.Y;
+                noHit.StartPosX = pos.X;
+                noHit.StartPosY = pos.Y;
+                ownerPlayer.gameRoom.BroadCast(noHit);
+                Console.WriteLine("hit is null");
+                return;
+            }
+
+            GameObject hitObject = hit2D.Collider.Parent;
+            if (hitObject == null)
+            {
+                S_RaycastShoot noHit = new S_RaycastShoot();
+                noHit.HitObjectId = -1;
+                noHit.ShootPlayerId = attacker.Id;
+                noHit.HitPointX = endPos.X;
+                noHit.HitPointY = endPos.Y;
+                noHit.StartPosX = pos.X;
+                noHit.StartPosY = pos.Y;
+                ownerPlayer.gameRoom.BroadCast(noHit);
+                //충돌은 했는데 충돌한 객체에는 오브젝트가 없음
+                Console.WriteLine("hit is null");
+                return;
+            }
+
+            if (hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster)
+            {
+                CreatureObj creatureObj = hitObject as CreatureObj;
+
+                //TODO : 피격자의 hp 변화  attacker 밑에 넣기 240814지승현
+                creatureObj.OnDamaged(attacker, attacker.gun.Damage);
+
+                S_ChangeHp ChangeHpPacket = new S_ChangeHp();
+                ChangeHpPacket.ObjectId = creatureObj.Id;
+                ChangeHpPacket.Hp = creatureObj.Hp;
+
+                Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + creatureObj.Id + "HIT Hp : " + creatureObj.Hp);
+                ownerPlayer.gameRoom.BroadCast(ChangeHpPacket);
+            }
+
+            S_RaycastShoot hit = new S_RaycastShoot();
+            hit.HitObjectId = hitObject.Id;
+            hit.ShootPlayerId = attacker.Id;
+            hit.HitPointX = hit2D.hitPoint.Value.X;
+            hit.HitPointY = hit2D.hitPoint.Value.Y;
+            hit.StartPosX = pos.X;
+            hit.StartPosY = pos.Y;
+            ownerPlayer.gameRoom.BroadCast(hit);
+
+            DecreaseAmmo();
+        }
+
+        private void DecreaseAmmo()
+        {
+            CurAmmo--;
+            CurAmmo = Math.Max(CurAmmo, 0);
+            if (CurAmmo == 0)
+            {
+                UsingGunState = GunState.Empty;
+            }
         }
 
         public float GetRandomNormalDistribution(float mean, float standard)
@@ -216,7 +186,7 @@ namespace Server.Game
         //재장전 버튼 누를시
         public async Task Reload()
         {
-            if (_curAmmo < gunData.ammo || gunState != GunState.Reloading)
+            if (CurAmmo < UsingGunData.reload_round || UsingGunState != GunState.Reloading)
             {
                 await Reloading();
                 
@@ -226,42 +196,19 @@ namespace Server.Game
         //실질적인 재장전
         private async Task Reloading()
         {
-            gunState = GunState.Reloading;
-            await Task.Delay(gunData.reloadTime);
+            UsingGunState = GunState.Reloading;
+            await Task.Delay(UsingGunData.reload_time);
             
-            _curAmmo = gunData.ammo;
-            gunState = GunState.Shootable;
+            CurAmmo = UsingGunData.reload_round;
+            UsingGunState = GunState.Shootable;
         }
 
         //FovPlayer의 코루틴에서 사용
         public float GetFireRate()
         {
-            return gunData.fireRate; // GunStat 클래스에서 설정한 발사 속도를 반환
+            return (float)UsingGunData.attack_speed; // GunStat 클래스에서 설정한 발사 속도를 반환
         }
     }
 
-    [System.Serializable]
-    public class GunData
-    {
-        public float range;       // 사거리.
-        public float fireRate;    // 연사 속도. 값과 속도가 반비례
-        public int ammo;          // 장탄수(보유장탄)
-        public float accuracy;    // 발사 각도(정확도)
-        public int damage;        // 데미지
-        public GameObject bulletObj;
-        public GunType gunType;
-        public int reloadTime;
-
-        public GunData(float range, float fireRate, int ammo, float accuracy, int damage, GameObject bulletObj, GunType gunType, int reloadTime)
-        {
-            this.range = range;
-            this.fireRate = fireRate;
-            this.ammo = ammo;
-            this.accuracy = accuracy;
-            this.damage = damage;
-            this.bulletObj = bulletObj;
-            this.gunType = gunType;
-            this.reloadTime = reloadTime;
-        }
-    }
+    
 }

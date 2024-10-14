@@ -350,7 +350,7 @@ message S_GameStart {     //32  모두 모임
 
 message C_ChangeAppearance{ // 33
     int32 objectId = 1;  // 패킷을 보낸 플레이어의 아이디
-    int32 gunId = 2; //해당 총의 마스터ID
+    int32 gunId = 2; //해당 총의 오브젝트 ID
 }
 
 message S_ChangeAppearance{ //34

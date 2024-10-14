@@ -104,7 +104,7 @@ public class Unit : MonoBehaviour
         C_ChangeAppearance packet = new C_ChangeAppearance()
         {
             ObjectId = Managers.Object.MyPlayer.Id,
-            GunId = equipptedItem.itemId
+            GunId = equipptedItem.objectId
         };
 
         Managers.Network.Send(packet);
