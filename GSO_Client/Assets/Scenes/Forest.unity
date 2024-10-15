@@ -1036,11 +1036,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5260336717394988405, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
       propertyPath: m_ColliderPaths.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6286336801601925909, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
       propertyPath: m_ColliderPaths.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6344235287633309783, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
       propertyPath: m_IsActive
@@ -1088,7 +1088,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6576546701697738931, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
       propertyPath: m_ColliderPaths.Array.size
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7592011617684365091, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
       propertyPath: m_Name
@@ -1096,7 +1096,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7592011617684365091, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1183,6 +1183,10 @@ PrefabInstance:
       propertyPath: m_Tiles.Array.data[52].second.m_TileSpriteIndex
       value: 317
       objectReference: {fileID: 0}
+    - target: {fileID: 5260336717394988405, guid: bfca617e5649d9f41a14fc65b9515bd3, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6405700047978222363, guid: bfca617e5649d9f41a14fc65b9515bd3, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.5
@@ -1223,9 +1227,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6576546701697738931, guid: bfca617e5649d9f41a14fc65b9515bd3, type: 3}
+      propertyPath: m_ColliderPaths.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7592011617684365091, guid: bfca617e5649d9f41a14fc65b9515bd3, type: 3}
       propertyPath: m_Name
       value: World 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7592011617684365091, guid: bfca617e5649d9f41a14fc65b9515bd3, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

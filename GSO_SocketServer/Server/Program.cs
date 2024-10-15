@@ -72,7 +72,7 @@ namespace Server
 
             //게임 종료
             {
-                int minutes = 5;
+                int minutes = 20;
                 Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
                 Task.Delay(minutes * 60 * 1000).Wait();
 
