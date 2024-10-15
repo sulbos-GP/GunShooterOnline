@@ -103,7 +103,7 @@ namespace Server.Game
                 endPos = pos;
             }
 
-            RaycastHit2D hit2D = RaycastManager.Raycast(pos, direction, mainWeaponInfo.distance); //충돌객체 체크
+            RaycastHit2D hit2D = RaycastManager.Raycast(pos, direction, mainWeaponInfo.distance, new List<GameObject>() { ownerPlayer }); //충돌객체 체크
             if (hit2D.Collider == null)
             {
                 //충돌된 객체 없음

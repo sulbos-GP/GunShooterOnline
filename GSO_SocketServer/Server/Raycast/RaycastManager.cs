@@ -28,7 +28,7 @@ namespace Server
 
 
         //RaycastHit2D hit = RaycastManager.Raycast(new Vector2(transform.position.x, transform.position.y), dir, 100);
-        public static RaycastHit2D Raycast(Vector2 StartPos, Vector2 Dir, float Length)
+        public static RaycastHit2D Raycast(Vector2 StartPos, Vector2 Dir, float Length,List<GameObject> myObject)
         {
 
             #region Packet
@@ -49,14 +49,14 @@ namespace Server
             {
                 RaycastHit2D temp = raycast.Cast(shape);
 
-                if (temp == null)
+                if (temp == null || myObject.Contains(temp.Collider.Parent) )
                 {
                     continue;
 
                 }
                 else
                 {
-                    Console.WriteLine("temp is not null");
+                    Console.WriteLine($"{temp.Collider.name} is hit with {temp.distance} distance");
                 }
 
 
