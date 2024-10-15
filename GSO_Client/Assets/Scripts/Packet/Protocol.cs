@@ -247,7 +247,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("S_WAITING_STATUS")] SWaitingStatus = 32,
     [pbr::OriginalName("C_CHANGE_APPEARANCE")] CChangeAppearance = 33,
     [pbr::OriginalName("S_CHANGE_APPEARANCE")] SChangeAppearance = 34,
-    [pbr::OriginalName("C_INPUTDATA")] CInputdata = 35,
+    [pbr::OriginalName("C_INPUTDATA")] CInputData = 35,
   }
 
   public enum GameObjectType {
