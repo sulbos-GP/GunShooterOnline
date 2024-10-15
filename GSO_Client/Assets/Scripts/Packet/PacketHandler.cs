@@ -107,23 +107,33 @@ internal class PacketHandler
             Managers.SystemLog.Message("S_MoveHandler 해당 id로 대상을 찾지 못함 : " + go.name);
             return;
         }
-            
-        if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
+        var myPlayerController = go.GetComponent<MyPlayerController>();
+        if (myPlayerController != null)
         {
-            return;
+            Debug.Log("S_MOVE : " + movePacket.PositionInfo.PosX + ":" + movePacket.PositionInfo.PosY);
+            myPlayerController.UpdatePosInfo(movePacket.PositionInfo);
+            myPlayerController.UpdateMoving();
+            myPlayerController.PosInfo = movePacket.PositionInfo;
+        }
+        else
+        {
+            var enemyController = go.GetComponent<PlayerController>();
+            if (enemyController != null)
+            {
+                enemyController.UpdatePosInfo(movePacket.PositionInfo);
+                enemyController.UpdateMoving();
+                enemyController.PosInfo = movePacket.PositionInfo;
+            }
         }
 
-        //타 플레이어의 움직임을 조정
-
-
-        var cc = go.GetComponent<CreatureController>();
-        if (cc == null)
-            return;
-
-        var ec = cc.GetComponent<PlayerController>();
-        ec.UpdatePosInfo(movePacket.PositionInfo);
-        ec.UpdateMoving();
-        cc.PosInfo = movePacket.PositionInfo;
+        ////타 플레이어의 움직임을 조정
+        //var cc = go.GetComponent<CreatureController>();
+        //if (cc == null)
+        //    return;
+        //var ec = cc.GetComponent<PlayerController>();
+        //ec.UpdatePosInfo(movePacket.PositionInfo);
+        //ec.UpdateMoving();
+        //cc.PosInfo = movePacket.PositionInfo;
 
 
 

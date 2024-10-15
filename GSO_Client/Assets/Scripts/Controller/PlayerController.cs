@@ -39,9 +39,7 @@ public class PlayerController : CreatureController
     public void SetDrawLine(float width , float height)
     {
         //TO-DO : 임시
-        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        animator = transform.GetChild(1).GetComponent<Animator>();
-        lineRenderer = GetComponent<LineRenderer>();
+
         _width = width;
         _height = height;
 
@@ -90,6 +88,9 @@ public class PlayerController : CreatureController
     protected override void Init()
     {
         base.Init();
+        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        lineRenderer = GetComponent<LineRenderer>();
         Debug.Log("init");
     }
 

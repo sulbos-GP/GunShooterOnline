@@ -195,81 +195,10 @@ public partial class MyPlayerController : PlayerController
         UseSkill(number, dir: dir);
     }
 
-
-    /*protected override void UpdateController()
-    {
-        GetUIKeyInput();
-
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    Vector2 _dir = FindEnemyAndAttack();
-        //    if (_dir != Vector2.zero)
-        //    {
-        //        UseSkill(200, dir: _dir);
-        //    }
-        //}
-        //if (Input.GetKeyDown(KeyCode.J))
-        //{
-        //    UseSkill(301);
-        //}
-        //if (Input.GetKeyDown(KeyCode.P))
-        //{
-        //    UseSkill(102);
-        //} 
-        //if (Input.GetKeyDown(KeyCode.P))
-        //{
-        //    UseSkill(102);
-        //}
-
-
-        if (Dir.x == -1)
-            GetComponent<SpriteRenderer>().flipX = true;
-        else if (Dir.x == 1)
-            GetComponent<SpriteRenderer>().flipX = false;
-
-        base.UpdateController();
-    }*/
-
-
     private void OnAttack(InputValue value)
     {
         Debug.Log("OnAttack");
     }
-
-    private void GetUIKeyInput()
-    {
-        //if (Input.GetKeyDown(KeyCode.I))
-        //{
-        //	UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
-        //	UI_Inventory invenUI = gameSceneUI.InvenUI;
-
-        //	if (invenUI.gameObject.activeSelf)
-        //	{
-        //		invenUI.gameObject.SetActive(false);
-        //	}
-        //	else
-        //	{
-        //		invenUI.gameObject.SetActive(true);
-        //		invenUI.RefreshUI();
-        //	}
-        //}
-        //else if (Input.GetKeyDown(KeyCode.C))
-        //{
-        //	UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
-        //	UI_Stat statUI = gameSceneUI.StatUI;
-
-        //	if (statUI.gameObject.activeSelf)
-        //	{
-        //		statUI.gameObject.SetActive(false);
-        //	}
-        //	else
-        //	{
-        //		statUI.gameObject.SetActive(true);
-        //		statUI.RefreshUI();
-        //	}
-        //}
-    }
-
     protected override void UpdateIdle()
     {
         base.UpdateIdle();
@@ -306,21 +235,6 @@ public partial class MyPlayerController : PlayerController
 
         CheakUpdatedFlag();
     }
-
-
-    //IEnumerator CoJumpFlag()
-    //{
-    //    int t = 0;
-    //    while (t < 10)
-    //    {
-    //        CheakUpdatedFlag(isForce: true);
-    //        yield return new WaitForSeconds(.1f);
-    //        t += 1;
-    //    }
-
-    //    Debug.Log("CoUpdateFlagEnd");
-    //}
-
 
     private void AutoUpdatedFlag()
     {
@@ -385,47 +299,6 @@ public partial class MyPlayerController : PlayerController
         }
 
         Debug.Log("근처 공격 가능한 몬스터 없음");
-        return Vector2.zero;
-    }
-
-    public Vector2 AttackTarget(Transform target)
-    {
-        if (target == null)
-            return Vector2.zero;
-
-        //쿨타임
-        if (_coskillCoolTime == null)
-        {
-            Vector2 t = (target.transform.position - transform.position).normalized;
-
-
-            var temp = new int[1] { target.GetComponent<CreatureController>().Id };
-            //Debug.Log("ID =========" + target.GetComponent<CreatureController>().Id);
-
-            //  UseSkill(100, targets: temp);
-
-            return new Vector2((float)Math.Round(t.x, 2), (float)Math.Round(t.y, 2));
-
-            //C_Skill skillpacket = new C_Skill();
-            //skillpacket.Info = new SkillInfo()
-            //{
-            //    SkillId = Stat.Class + 10,
-            //    DirX = (float)Math.Round(t.x, 2),
-            //    DirY = (float)Math.Round(t.y, 2),
-            //};
-
-
-            //Server.Data.Skill skill;
-            //DataManager.SkillDict.TryGetValue(skillpacket.Info.SkillId, out skill);
-
-
-            //Managers.Network.Send(skillpacket);
-            ////bullet.GetComponent
-            //_coskillCoolTime = StartCoroutine(coInputCoolTime(skill.cooldown)); //Todo : 시간조정
-
-            //페킷 보내기
-        }
-
         return Vector2.zero;
     }
 

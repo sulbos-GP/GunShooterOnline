@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.OnScreen;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -13,6 +15,7 @@ public class UIManager : MonoBehaviour
     public TMP_Text AmmoText;
     public GameObject DieUI;
     public float Duration = 2.0f;
+    public RectTransform JoystickPos;
 
     private bool isDie;
     private bool _init;

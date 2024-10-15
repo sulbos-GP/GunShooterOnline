@@ -199,8 +199,9 @@ public class ObjectManager
     public GameObject FindById(int id)
     {
         GameObject go = null;
+        if (_objects.ContainsKey(id) == false)
+            return null;
         _objects.TryGetValue(id, out go);
-
 
         return go;
     }

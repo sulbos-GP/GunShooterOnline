@@ -34,8 +34,10 @@ public class InputController : MonoBehaviour
     //Interact
     public List<GameObject> interactList;
     public GameObject interactTarget;
-    
-    
+
+
+    private Vector3 _packetPos;
+    private InputAction inputs;
 
     private bool onMove = false;
     private void Awake()
@@ -74,6 +76,7 @@ public class InputController : MonoBehaviour
         playerInput.Player.Move.performed += OnMove;
         playerInput.Player.Move.canceled += OnMove;
         playerInput.Player.Interaction.started += OnInteraction;
+        inputs.Enable();
     }
 
     private void OnDisable()
@@ -89,6 +92,7 @@ public class InputController : MonoBehaviour
         playerInput.Player.Interaction.started -= OnInteraction;
         playerInput.Player.Disable();
         playerInput = null;
+        inputs.Disable();
     }
 
     private void SetComponent()
@@ -108,7 +112,7 @@ public class InputController : MonoBehaviour
     {
         UpdateState();
         HandleFiring();
-
+        Debug.Log(inputs);
         //Mouse Move Logic
         //Vector3 mousePosition = lookInput;
         //mousePosition.z = -mainCamera.transform.position.z;
@@ -190,10 +194,13 @@ public class InputController : MonoBehaviour
         //{
         //    State = CreatureState.Idle;
         //}
-        if (callbackContext.started)
+        Vector2 input = callbackContext.ReadValue<Vector2>();
+        if (callbackContext.started || callbackContext.performed)
         {
             animator.SetBool("IsMove", true);
             onMove = true;
+            input = callbackContext.ReadValue<Vector2>();
+            FlipPlayerSprite(input.x);
         }
         if (callbackContext.canceled)
         {
@@ -202,8 +209,8 @@ public class InputController : MonoBehaviour
             return; //여기서 리턴해줘야 방향이 초기화되지 않음
         }
 
-        Vector2 input = callbackContext.ReadValue<Vector2>();
-        FlipPlayerSprite(input.x);
+        //Vector2 input = callbackContext.ReadValue<Vector2>();
+        //FlipPlayerSprite(input.x);
 
         if (!isFiring) //플레이어가 사격 조이스틱을 조정하지 않는 상태라면 이동 방향을 바라봄
         {
@@ -211,6 +218,8 @@ public class InputController : MonoBehaviour
         }
 
         direction = new Vector2(input.x, input.y);
+
+        UpdateMove();
     }
 
     
@@ -316,10 +325,6 @@ public class InputController : MonoBehaviour
     
     private void UpdateState()
     {
-        if(onMove)
-        { 
-            UpdateMove(); 
-        }
         //switch (State)
         //{
         //    case CreatureState.Moving:
@@ -335,9 +340,9 @@ public class InputController : MonoBehaviour
     {
         //Move Logic
         Vector2 newVec2 = direction * 5.0f * Time.fixedDeltaTime;
-
         Rigidbody2D rig = GetComponent<Rigidbody2D>();
-        rig.MovePosition(rig.position + newVec2);
+        _packetPos = rig.position + newVec2;
+        //rig.MovePosition(rig.position + newVec2);
 
         aimFov.SetOrigin(transform.position); //fov의 중심을 플레이어의 위치로 설정
         basicFov.SetOrigin(transform.position);
@@ -349,14 +354,15 @@ public class InputController : MonoBehaviour
 
     private void UpdateServer()
     {
+        Debug.Log("C_MOVE : "+_packetPos);
             var movePack = new C_Move();
             movePack.PositionInfo = new PositionInfo
             {
                 CurrentRoomId = 0,
                 DirX = lookInput.x,
                 DirY = lookInput.y,
-                PosX = transform.position.x,
-                PosY = transform.position.y,
+                PosX = _packetPos.x,
+                PosY = _packetPos.y,
                 RotZ = transform.rotation.z,
             };
             Managers.Network.Send(movePack);
