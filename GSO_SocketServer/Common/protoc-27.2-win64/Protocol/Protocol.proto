@@ -45,6 +45,8 @@ enum MsgId{
 
   C_CHANGE_APPEARANCE = 33;
   S_CHANGE_APPEARANCE = 34;
+
+  C_INPUTDATA = 35;
 }
 
 enum GameObjectType{
