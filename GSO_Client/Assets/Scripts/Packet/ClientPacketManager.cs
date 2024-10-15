@@ -65,7 +65,7 @@ class PacketManager
 		_handler.Add((ushort)MsgId.SWaitingStatus, PacketHandler.S_WaitingStatusHandler);		
 		_onRecv.Add((ushort)MsgId.SChangeAppearance, MakePacket<S_ChangeAppearance>);
 		_handler.Add((ushort)MsgId.SChangeAppearance, PacketHandler.S_ChangeAppearanceHandler);
-	}
+    }
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
 	{
