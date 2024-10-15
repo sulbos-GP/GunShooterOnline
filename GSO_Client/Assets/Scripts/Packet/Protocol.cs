@@ -115,7 +115,7 @@ namespace Google.Protobuf.Protocol {
             "LlByb3RvY29sLlBFX0dlYXJQYXJ0EiMKBGl0ZW0YAiABKAsyFS5Qcm90b2Nv",
             "bC5QU19JdGVtSW5mbyJpCg1DcmVkZW50aWFJbmZvEgsKA3VpZBgBIAEoBRIU",
             "CgxhY2Nlc3NfdG9rZW4YAiABKAkSEgoKZXhwaXJlc19pbhgDIAEoAxINCgVz",
-            "Y29wZRgEIAEoCRISCgp0b2tlbl90eXBlGAUgASgJKosFCgVNc2dJZBIQCgxT",
+            "Y29wZRgEIAEoCRISCgp0b2tlbl90eXBlGAUgASgJKo0FCgVNc2dJZBIQCgxT",
             "X0VOVEVSX0dBTUUQABIQCgxTX0xFQVZFX0dBTUUQARILCgdTX1NQQVdOEAIS",
             "DQoJU19ERVNQQVdOEAMSCgoGU19NT1ZFEAQSCgoGQ19NT1ZFEAUSDwoLU19D",
             "T05ORUNURUQQBhIPCgtTX0NIQU5HRV9IUBAHEgkKBVNfRElFEAgSEAoMQ19F",
@@ -125,22 +125,22 @@ namespace Google.Protobuf.Protocol {
             "EBASEQoNQ19ERVZJREVfSVRFTRAREhEKDVNfREVWSURFX0lURU0QEhIPCgtD",
             "X01PVkVfSVRFTRATEg8KC1NfTU9WRV9JVEVNEBQSEQoNQ19ERUxFVEVfSVRF",
             "TRAVEhEKDVNfREVMRVRFX0lURU0QFhIRCg1DX1NFQVJDSF9JVEVNEBcSEQoN",
-            "U19TRUFSQ0hfSVRFTRAYEhMKD0NfUkFZQ0FTVF9TSE9PVBAZEhEKDVNfUkFZ",
-            "Q0FTVF9ISVQQGhIPCgtTX0VYSVRfR0FNRRAbEg8KC0NfRVhJVF9HQU1FEBwS",
-            "EQoNQ19KT0lOX1NFUlZFUhAdEhEKDVNfSk9JTl9TRVJWRVIQHhIQCgxTX0dB",
-            "TUVfU1RBUlQQHxIUChBTX1dBSVRJTkdfU1RBVFVTECASFwoTQ19DSEFOR0Vf",
-            "QVBQRUFSQU5DRRAhEhcKE1NfQ0hBTkdFX0FQUEVBUkFOQ0UQIhIPCgtDX0lO",
-            "UFVUREFUQRAjKogBCg5HYW1lT2JqZWN0VHlwZRIOCgpOT05FT0JKRUNUEAAS",
-            "CgoGUExBWUVSEAESCwoHTU9OU1RFUhACEg4KClBST0pFQ1RJTEUQAxINCglJ",
-            "TlZFTkRBVEEQBBIHCgNCT1gQBRIICgRJVEVNEAYSDAoIRVhJVFpPTkUQBxIN",
-            "CglTUEFXTlpPTkUQCCpLCglTaGFwZVR5cGUSCQoFU0hBUEUQABIKCgZDSVJD",
-            "TEUQARINCglSRUNUQU5HTEUQAhILCgdQT0xZR09OEAMSCwoHQVJDUE9MWRAE",
-            "KlMKCEl0ZW1UeXBlEgoKBldFQVBPThAAEg0KCURFRkVOU0lWRRABEgcKA0JB",
-            "RxACEgwKCFJFQ09WRVJZEAMSCgoGQlVMTEVUEAQSCQoFU1BPSUwQBSqDAQoL",
-            "UEVfR2VhclBhcnQSCAoETk9ORRAAEg4KCk1haW5XZWFwb24QARINCglTdWJX",
-            "ZWFwb24QAhIJCgVBcm1vchADEgwKCEJhY2twYWNrEAQSDwoLUG9ja2V0Rmly",
-            "c3QQBRIQCgxQb2NrZXRTZWNvbmQQBhIPCgtQb2NrZXRUaGlyZBAHQhuqAhhH",
-            "b29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
+            "U19TRUFSQ0hfSVRFTRAYEhMKD0NfUkFZQ0FTVF9TSE9PVBAZEhMKD1NfUkFZ",
+            "Q0FTVF9TSE9PVBAaEg8KC1NfRVhJVF9HQU1FEBsSDwoLQ19FWElUX0dBTUUQ",
+            "HBIRCg1DX0pPSU5fU0VSVkVSEB0SEQoNU19KT0lOX1NFUlZFUhAeEhAKDFNf",
+            "R0FNRV9TVEFSVBAfEhQKEFNfV0FJVElOR19TVEFUVVMQIBIXChNDX0NIQU5H",
+            "RV9BUFBFQVJBTkNFECESFwoTU19DSEFOR0VfQVBQRUFSQU5DRRAiEg8KC0Nf",
+            "SU5QVVREQVRBECMqiAEKDkdhbWVPYmplY3RUeXBlEg4KCk5PTkVPQkpFQ1QQ",
+            "ABIKCgZQTEFZRVIQARILCgdNT05TVEVSEAISDgoKUFJPSkVDVElMRRADEg0K",
+            "CUlOVkVOREFUQRAEEgcKA0JPWBAFEggKBElURU0QBhIMCghFWElUWk9ORRAH",
+            "Eg0KCVNQQVdOWk9ORRAIKksKCVNoYXBlVHlwZRIJCgVTSEFQRRAAEgoKBkNJ",
+            "UkNMRRABEg0KCVJFQ1RBTkdMRRACEgsKB1BPTFlHT04QAxILCgdBUkNQT0xZ",
+            "EAQqUwoISXRlbVR5cGUSCgoGV0VBUE9OEAASDQoJREVGRU5TSVZFEAESBwoD",
+            "QkFHEAISDAoIUkVDT1ZFUlkQAxIKCgZCVUxMRVQQBBIJCgVTUE9JTBAFKoMB",
+            "CgtQRV9HZWFyUGFydBIICgROT05FEAASDgoKTWFpbldlYXBvbhABEg0KCVN1",
+            "YldlYXBvbhACEgkKBUFybW9yEAMSDAoIQmFja3BhY2sQBBIPCgtQb2NrZXRG",
+            "aXJzdBAFEhAKDFBvY2tldFNlY29uZBAGEg8KC1BvY2tldFRoaXJkEAdCG6oC",
+            "GEdvb2dsZS5Qcm90b2J1Zi5Qcm90b2NvbGIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), typeof(global::Google.Protobuf.Protocol.ItemType), typeof(global::Google.Protobuf.Protocol.PE_GearPart), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -226,7 +226,7 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("C_SEARCH_ITEM")] CSearchItem = 23,
     [pbr::OriginalName("S_SEARCH_ITEM")] SSearchItem = 24,
     [pbr::OriginalName("C_RAYCAST_SHOOT")] CRaycastShoot = 25,
-    [pbr::OriginalName("S_RAYCAST_HIT")] SRaycastHit = 26,
+    [pbr::OriginalName("S_RAYCAST_SHOOT")] SRaycastShoot = 26,
     [pbr::OriginalName("S_EXIT_GAME")] SExitGame = 27,
     [pbr::OriginalName("C_EXIT_GAME")] CExitGame = 28,
     /// <summary>
@@ -6765,7 +6765,7 @@ namespace Google.Protobuf.Protocol {
   }
 
   /// <summary>
-  ///16
+  ///25
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class C_RaycastShoot : pb::IMessage<C_RaycastShoot>
