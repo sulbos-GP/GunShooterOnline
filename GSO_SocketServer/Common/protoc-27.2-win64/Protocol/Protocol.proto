@@ -34,7 +34,7 @@ enum MsgId{
   S_SEARCH_ITEM = 24;
 
   C_RAYCAST_SHOOT = 25;
-  S_RAYCAST_HIT = 26;
+  S_RAYCAST_SHOOT = 26;
   S_EXIT_GAME = 27;
   C_EXIT_GAME = 28;
 
@@ -291,7 +291,7 @@ message S_DeleteItem                        //I14
 //                                        //
 ////////////////////////////////////////////
 
-message C_RaycastShoot{ //16
+message C_RaycastShoot{ //25
     float startPosX = 1;
     float startPosY = 2;
     float dirX = 3;
@@ -299,7 +299,7 @@ message C_RaycastShoot{ //16
 }
 
 
-message S_RaycastShoot // 17
+message S_RaycastShoot // 26
 {
     int32 shootPlayerId = 1;
     int32 hitObjectId = 2;
