@@ -787,11 +787,11 @@ namespace Server
             BroadCast(packet);
         }
 
-        internal void HandleInputData(Player player, bool isReload)
+        internal async void HandleInputData(Player player, bool isReload)
         {
             if (isReload)
             {
-                player.gun.Reload();
+                await player.gun.Reload();
             }
         }
 
@@ -803,6 +803,10 @@ namespace Server
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir)
         {
+            if (attacker.gun.UsingGunState != GunState.Shootable) 
+            {
+                return;
+            }
             attacker.gun.Fire(attacker,pos, dir);   
         }
 
