@@ -46,6 +46,8 @@
         TicketAlreadyMax = 2018,
         TicketRemainingTime = 2019,
 
+        DailyTaskIsAllocate = 2020,
+
         // Authentication 2500 ~
         ServerCodeNotFound = 2501,
 

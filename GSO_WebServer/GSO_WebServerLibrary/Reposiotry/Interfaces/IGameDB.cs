@@ -77,6 +77,21 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         public Task<FUserSkill?> GetUserSkillByUid(int uid, IDbTransaction? transaction = null);
 
         /// <summary>
+        /// 유저의 유니크 아이디로 user 일일 퀘스트 불러오기
+        /// </summary>
+        public Task<List<FUserRegisterQuest>?> GetUserDailyQuestByUid(int uid, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 유니크 아이디로 user 일일 퀘스트 삭제
+        /// </summary>
+        public Task<int> DeleteUserDailyQuestByUid(int uid, IDbTransaction? transaction = null);
+
+        /// <summary>
+        /// 유저의 유니크 아이디로 user 일일 퀘스트 삭제
+        /// </summary>
+        public Task<int> InsertUserDailyQuestByUid(int uid, int quest_id, IDbTransaction? transaction = null);
+
+        /// <summary>
         /// 유저의 유니크 아이디로 user 스킬 업데이트
         /// </summary>
         public Task<int> UpdateUserSkill(int uid, FUserSkill skill, IDbTransaction? transaction = null);

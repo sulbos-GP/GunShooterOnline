@@ -32,6 +32,11 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<(WebErrorCode, FUserSkill?)> GetSkillInfo(int uid);
 
         /// <summary>
+        /// 유저 등록된 일일 퀘스트 정보 가져오기
+        /// </summary>
+        public Task<(WebErrorCode, List<FUserRegisterQuest>?)> GetDailyQuest(int uid);
+
+        /// <summary>
         /// 유저 레벨 보상 정보 가져오기
         /// </summary>
         public Task<(WebErrorCode, List<FUserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id);
@@ -72,5 +77,9 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<WebErrorCode> UpdateTicketCount(Int32 uid);
 
         public Task<WebErrorCode> UpdateLastTicketTime(int uid);
+
+        public Task<WebErrorCode> UpdateDailyTask(int uid);
+
+        public Task<WebErrorCode> UpdateDailyQuset(int uid);
     }
 }
