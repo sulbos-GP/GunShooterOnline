@@ -49,5 +49,18 @@ namespace GsoWebServer.Servicies.DataLoad
             return (WebErrorCode.None, loadData);
         }
 
+        public async Task<(WebErrorCode, DailyLoadInfo?)> DailyLoadData(int uid)
+        {
+            DailyLoadInfo loadData = new DailyLoadInfo();
+
+            (var errorCode, loadData.DailyQuset) = await mGameService.GetDailyQuest(uid);
+            if (errorCode != WebErrorCode.None)
+            {
+                return (errorCode, null);
+            }
+
+            return (WebErrorCode.None, loadData);
+        }
+
     }
 }

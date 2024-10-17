@@ -13,3 +13,5 @@ CREATE TABLE IF NOT EXISTS storage_unit (
     CONSTRAINT FK_storage_unit_storage_id_storage_storage_id FOREIGN KEY (`storage_id`) REFERENCES storage (`storage_id`) ON DELETE CASCADE ON UPDATE RESTRICT,
 	CONSTRAINT FK_storage_unit_id_att_id_uatt_att_id FOREIGN KEY (`unit_attributes_id`) REFERENCES unit_attributes(`unit_attributes_id`) ON DELETE CASCADE ON UPDATE RESTRICT
 );
+
+DELETE FROM storage_unit;

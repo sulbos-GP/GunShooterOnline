@@ -11,6 +11,7 @@ namespace WebCommonLibrary.Reposiotry.Interfaces
             public DbTable<FMasterItemBase> MasterItemBase { get; }
             public DbTable<FMasterItemUse> MasterItemUse { get; }
             public DbTable<FMasterItemWeapon> MasterItemWeapon { get; }
+            public DbTable<FMasterQuestBase> MasterQuestBase { get; }
             public DbTable<FMasterRewardBase> MasterRewardBase { get; }
             public DbTable<FMasterRewardBox> MasterRewardBox { get; }
             public DbTable<FMasterRewardBoxItem> MasterRewardBoxItem { get; }

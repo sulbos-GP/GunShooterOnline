@@ -1,4 +1,6 @@
 ﻿using GsoWebServer.Servicies.Interfaces;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Transactions;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models;
@@ -125,6 +127,18 @@ namespace GsoWebServer.Servicies.Game
             try
             {
                 return (WebErrorCode.None, await mGameDB.GetUserSkillByUid(uid));
+            }
+            catch /*(Exception e)*/
+            {
+                return (WebErrorCode.TEMP_Exception, null);
+            }
+        }
+
+        public async Task<(WebErrorCode, List<FUserRegisterQuest>?)> GetDailyQuest(int uid)
+        {
+            try
+            {
+                return (WebErrorCode.None, await mGameDB.GetUserDailyQuestByUid(uid));
             }
             catch /*(Exception e)*/
             {
@@ -340,6 +354,98 @@ namespace GsoWebServer.Servicies.Game
             }
 
             return WebErrorCode.None;
+        }
+
+        public async Task<WebErrorCode> UpdateDailyTask(int uid)
+        {
+            FUser? user = await mGameDB.GetUserByUid(uid);
+            if (user == null)
+            {
+                return (WebErrorCode.TEMP_ERROR);
+            }
+
+            DateTime currentTime = DateTime.UtcNow;
+            DateTime recentLoginTime = user.recent_login_dt.AddDays(1).Date.AddHours(9);
+
+            if(currentTime < recentLoginTime)
+            {
+                return WebErrorCode.DailyTaskIsAllocate;
+            }
+
+            var error = await UpdateDailyQuset(uid);
+            if(error != WebErrorCode.None)
+            {
+                return error;
+            }
+
+            return WebErrorCode.None;
+        }
+
+        public async Task<WebErrorCode> UpdateDailyQuset(int uid)
+        {
+            var transaction = mGameDB.GetConnection().BeginTransaction();
+            try
+            {
+                var oldDailyQuestList = await mGameDB.GetUserDailyQuestByUid(uid, transaction);
+                if(oldDailyQuestList == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                var deleteCount = await mGameDB.DeleteUserDailyQuestByUid(uid, transaction);
+                if(oldDailyQuestList.Count != deleteCount)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                var masterDailyQusetList = mMasterDB.Context.MasterQuestBase
+                    .Select(quest => quest.Value)
+                    .Where(quest => quest.type == "day")
+                    .ToList();
+
+                List<string> categorys = new List<string>
+                {
+                    "전투",
+                    "보급",
+                    "플레이"
+                };
+
+                foreach(var category in categorys)
+                {
+                    int quset_id = GetRandomDailyQuestWithCategory(masterDailyQusetList, category);
+                    if (quset_id == -1)
+                    {
+                        return (WebErrorCode.TEMP_ERROR);
+                    }
+
+                    int result = await mGameDB.InsertUserDailyQuestByUid(uid, quset_id, transaction);
+                    if(result == 0)
+                    {
+                        return (WebErrorCode.TEMP_ERROR);
+                    }
+                }
+
+                transaction.Commit();
+                return (WebErrorCode.None);
+            }
+            catch /*(Exception e)*/
+            {
+                transaction.Rollback();
+                return (WebErrorCode.TEMP_Exception);
+            }
+        }
+
+        public int GetRandomDailyQuestWithCategory(List<FMasterQuestBase> dailyQuestList, string category)
+        {
+            var catecoryList = dailyQuestList.Where(quest => quest.category == category).ToList();
+            if (catecoryList.Count == 0)
+            {
+                return -1;
+            }
+
+            Random random = new Random();
+            int index = random.Next(catecoryList.Count);
+            return catecoryList[index].quest_id;
         }
 
     }
