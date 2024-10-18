@@ -16,7 +16,9 @@ public enum eTABLE_TYPE
     master_reward_base,
     master_reward_box,
     master_reward_level,
-    master_reward_box_item
+    master_reward_box_item,
+
+    master_quest_base,
 }
 
 public enum eSTAT

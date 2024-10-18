@@ -15,4 +15,15 @@ namespace WebCommonLibrary.DTO.User
     {
         public DailyLoadInfo? DailyLoads { get; set; } = null;
     }
+
+    public class DailyQuestReq
+    {
+        public int QuestId { get; set; } = 0;
+    }
+
+    public class DailyQuestRes : ErrorCodeDTO
+    {
+        public FUser? User { get; set; } = null;
+        public List<FUserRegisterQuest>? DailyQuset { get; set; } = null;
+    }
 }

@@ -81,5 +81,7 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<WebErrorCode> UpdateDailyTask(int uid);
 
         public Task<WebErrorCode> UpdateDailyQuset(int uid);
+
+        public Task<WebErrorCode> CompleteDailyQuset(int uid, int quest_id);
     }
 }
