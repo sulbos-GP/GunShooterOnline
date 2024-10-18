@@ -64,5 +64,25 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
                 }, transaction);
         }
 
+        public async Task<int> UpdateUserDailyQuestByUid(int uid, FUserRegisterQuest quest, IDbTransaction? transaction = null)
+        {
+
+            var where = new Dictionary<string, object>()
+                {
+                    { "uid"  , uid },
+                    { "quest_id"  , quest.quest_id },
+                };
+
+            return await mQueryFactory.Query("user_register_quest")
+                .Where(where)
+                .UpdateAsync(new
+                {
+                    uid = uid,
+                    quest_id = quest.quest_id,
+                    completed = quest.completed,
+                    register_dt = quest.register_dt,
+                }, transaction);
+        }
+
     }
 }

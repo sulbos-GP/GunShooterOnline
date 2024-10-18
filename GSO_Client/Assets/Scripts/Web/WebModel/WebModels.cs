@@ -158,5 +158,9 @@ public class WebModels
             }
             return dailyData.DailyQuset;
         }
+        set
+        {
+            dailyData.DailyQuset = value;
+        }
     }
 }

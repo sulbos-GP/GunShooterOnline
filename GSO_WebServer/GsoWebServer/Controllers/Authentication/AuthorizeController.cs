@@ -63,7 +63,7 @@ namespace AuthenticationServer.Controllers
             }
 
             //마지막 로그인한 날짜로부터 6개월 이상이 지났다면 다시 갱신토큰 받을 수 있도록 하기
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             int monthsDifference = (now.Year - user.recent_login_dt.Year) * 12 + now.Month - user.recent_login_dt.Month;
             if(monthsDifference > 6)
             {

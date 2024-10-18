@@ -12,13 +12,13 @@ namespace GsoWebServer.Controllers.User
 {
     [Route("api/User/[controller]")]
     [ApiController]
-    public class DailyTaskController : ControllerBase
+    public class DailyQuestController : ControllerBase
     {
         private readonly IAuthenticationService mAuthenticationService;
         private readonly IGameService mGameService;
         private readonly IDataLoadService mDataLoadService;
 
-        public DailyTaskController(IAuthenticationService auth, IGameService game, IDataLoadService dataload)
+        public DailyQuestController(IAuthenticationService auth, IGameService game, IDataLoadService dataload)
         {
             mAuthenticationService = auth;
             mGameService = game;
@@ -26,12 +26,12 @@ namespace GsoWebServer.Controllers.User
         }
 
         [HttpPost]
-        [Route("Update")]
-        public async Task<DailyTaskRes> Update([FromHeader] HeaderDTO header, [FromBody] DailyTaskReq request)
+        [Route("Complete")]
+        public async Task<DailyQuestRes> Complete([FromHeader] HeaderDTO header, [FromBody] DailyQuestReq request)
         {
-            Console.WriteLine($"[User.DailyTask.Update] uid:{header.uid}");
+            Console.WriteLine($"[User.DailyQuest.Complete] uid:{header.uid} quest:{request.QuestId}");
 
-            var response = new DailyTaskRes();
+            var response = new DailyQuestRes();
 
             if (!WebUtils.IsValidModelState(request))
             {
@@ -40,33 +40,35 @@ namespace GsoWebServer.Controllers.User
                 return response;
             }
             int uid = header.uid;
+            int qeust_id = request.QuestId;
 
-            var errorCode = await mGameService.UpdateDailyTask(uid);
-            if (errorCode != WebErrorCode.None)
+            var error = await mGameService.CompleteDailyQuset(uid, qeust_id);
+            if (error != WebErrorCode.None)
             {
-                response.error_code = errorCode;
+                response.error_code = error;
                 response.error_description = "";
                 return response;
             }
 
-            //최근 로그인 시간 변경
-            errorCode = await mAuthenticationService.UpdateLastSignInTime(uid);
-            if (errorCode != WebErrorCode.None)
+            (error, var user) = await mGameService.GetUserInfo(uid);
+            if (error != WebErrorCode.None)
             {
-                response.error_code = errorCode;
+                response.error_code = error;
                 response.error_description = "";
                 return response;
             }
 
-            (errorCode, response.DailyLoads) = await mDataLoadService.DailyLoadData(uid);
-            if (errorCode != WebErrorCode.None)
+            (error, var dailyQuest) = await mGameService.GetDailyQuest(uid);
+            if (error != WebErrorCode.None)
             {
-                response.error_code = errorCode;
+                response.error_code = error;
                 response.error_description = "";
                 return response;
             }
 
             response.error_code = WebErrorCode.None;
+            response.User = user;
+            response.DailyQuset = dailyQuest;
             return response;
         }
     }

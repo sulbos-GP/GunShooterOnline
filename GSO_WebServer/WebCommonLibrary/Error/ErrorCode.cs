@@ -47,6 +47,12 @@
         TicketRemainingTime = 2019,
 
         DailyTaskIsAllocate = 2020,
+        
+        DailyQuestInvalidList = 2300,
+        DailyQuestNotMatch = 2301,
+        DailyQuestNotEnough = 2302,
+        DailyQuestAlreadyComplelte = 2303,
+
 
         // Authentication 2500 ~
         ServerCodeNotFound = 2501,
