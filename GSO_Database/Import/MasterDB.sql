@@ -167,7 +167,7 @@ CREATE TABLE `master_quest_base` (
 
 LOCK TABLES `master_quest_base` WRITE;
 /*!40000 ALTER TABLE `master_quest_base` DISABLE KEYS */;
-INSERT INTO `master_quest_base` VALUES (20001,'day','전투','플레이어 적 처치',1,'PLAYER',20001,NULL,NULL),(20002,'day','전투','특수지역 적 처치',2,'NPC202',20002,NULL,NULL),(20003,'day','전투','좀비 처치',3,'NPC201',20003,NULL,NULL),(20004,'day','전투','NPC 적 처치',4,'NPC203',20004,NULL,NULL),(20005,'day','보급','건전지 회수',2,'S002',20005,NULL,NULL),(20006,'day','보급','의약품 가방 회수',1,'B001',20006,NULL,NULL),(20007,'day','보급','통나무 회수',8,'S006',20007,NULL,NULL),(20008,'day','보급','밧줄 한묶음 회수',10,'S003',20008,NULL,NULL),(20009,'day','플레이','전장 플레이',3,'PLAY_IN',20009,NULL,NULL),(20010,'day','플레이','전장 탈출',2,'PLAY_OUT',20010,NULL,NULL);
+INSERT INTO `master_quest_base` VALUES (20001,'day','전투','플레이어 적 처치',1,'PLAYER',20001,NULL,NULL),(20002,'day','전투','특수지역 적 처치',2,'NPC202',20002,NULL,NULL),(20003,'day','전투','좀비 처치',3,'NPC201',20003,NULL,NULL),(20004,'day','전투','NPC 적 처치',4,'NPC203',20004,NULL,NULL),(30001,'day','보급','건전지 회수',2,'S002',30001,NULL,NULL),(30002,'day','보급','의약품 가방 회수',1,'B001',30002,NULL,NULL),(30003,'day','보급','통나무 회수',8,'S006',30003,NULL,NULL),(30004,'day','보급','밧줄 한묶음 회수',10,'S003',30004,NULL,NULL),(40001,'day','플레이','전장 플레이',3,'PLAY_IN',40001,NULL,NULL),(40002,'day','플레이','전장 탈출',2,'PLAY_OUT',40002,NULL,NULL);
 /*!40000 ALTER TABLE `master_quest_base` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,7 +197,7 @@ CREATE TABLE `master_reward_base` (
 
 LOCK TABLES `master_reward_base` WRITE;
 /*!40000 ALTER TABLE `master_reward_base` DISABLE KEYS */;
-INSERT INTO `master_reward_base` VALUES (10001,1000,0,0,0,NULL),(10002,0,2,0,0,NULL),(10003,0,0,5,0,NULL),(10004,2000,0,0,0,NULL),(10005,0,4,0,0,NULL),(10006,0,0,10,0,NULL),(10007,3000,0,0,0,NULL),(10008,0,6,0,0,NULL),(10009,0,0,15,0,NULL),(20001,1000,1,0,500,NULL),(20002,0,0,0,1200,1),(20003,500,0,0,500,NULL),(20004,0,0,0,2000,2),(20005,500,0,0,500,NULL),(20006,0,0,0,500,3),(20007,2000,0,0,0,NULL),(20008,0,0,0,2000,NULL),(20009,0,1,1,1000,4),(20010,0,1,1,1000,5);
+INSERT INTO `master_reward_base` VALUES (10001,300,0,0,0,NULL),(10002,0,2,0,0,NULL),(10003,0,0,4,0,NULL),(10004,600,0,0,0,NULL),(10005,0,4,0,0,NULL),(10006,0,0,8,0,NULL),(10007,900,0,0,0,NULL),(10008,0,6,0,0,NULL),(10009,0,0,12,0,NULL),(20001,120,0,0,0,NULL),(20002,80,0,0,0,1),(20003,70,0,0,0,NULL),(20004,130,0,0,0,2),(30001,0,0,1,0,NULL),(30002,0,0,2,0,3),(30003,0,0,1,0,NULL),(30004,0,0,2,0,NULL),(40001,0,1,0,0,4),(40002,0,2,0,0,5);
 /*!40000 ALTER TABLE `master_reward_base` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,4 +345,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-17 15:08:37
+-- Dump completed on 2024-10-18 15:42:03
