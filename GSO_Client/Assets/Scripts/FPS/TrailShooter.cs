@@ -5,13 +5,17 @@ using UnityEngine;
 
 public class TrailShooter : MonoBehaviour
 {
+    public const int MaxProj = 300;
+    public const int MaxDistance = 100;
+    public const int MaxSpawnTime = 5;
+
     public GameObject projPref;
     public bool Fire = false;
-    [Range(0,300)]
+    [Range(0, MaxProj)]
     public int projNum = 10;
-    [Range(0, 100)]
+    [Range(0, MaxDistance)]
     public float distance = 20;
-    [Range(0, 5)]
+    [Range(0, MaxSpawnTime)]
     public float spawnTime = 1;
 
     private void Start()
