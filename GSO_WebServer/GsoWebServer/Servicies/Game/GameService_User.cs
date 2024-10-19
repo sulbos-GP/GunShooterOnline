@@ -203,7 +203,7 @@ namespace GsoWebServer.Servicies.Game
                     throw new Exception("레벨이 업데이트 되지 못했습니다.");
                 }
 
-                for(int level = oldLevel; level < curLevel; ++level)
+                for(int level = oldLevel + 1; level <= curLevel; ++level)
                 {
                     if(0 == await mGameDB.InsertLevelReward(uid, level, transaction))
                     {
@@ -317,13 +317,13 @@ namespace GsoWebServer.Servicies.Game
                     DateTime recent = user.recent_ticket_dt;
 
                     TimeSpan timeDiff = now - recent;
-                    int diffMinutes = (int)timeDiff.TotalMinutes;
-                    if (diffMinutes == 0)
+                    int timeTicket = (int)timeDiff.TotalMinutes / GameDefine.WAIT_TICKET_MINUTE;
+                    if (timeTicket == 0)
                     {
                         return WebErrorCode.TicketRemainingTime;
                     }
 
-                    int possibleTicketCount = (diffMinutes / GameDefine.WAIT_TICKET_MINUTE) + user.ticket;
+                    int possibleTicketCount = timeTicket + user.ticket;
                     possibleTicketCount = Math.Clamp(possibleTicketCount, 0, GameDefine.MAX_TICKET);
 
                     int updateRes = await mGameDB.UpdateTicket(uid, possibleTicketCount);
