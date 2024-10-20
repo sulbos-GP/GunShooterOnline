@@ -4,10 +4,13 @@ using System.IO.Pipes;
 using System.Net.Http;
 using System.Numerics;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
+using Server.Database.Handler;
 using Server.Game.Object.Gear;
 using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.MasterDatabase;
 
 namespace Server.Game;
 
@@ -21,6 +24,7 @@ public class Player : CreatureObj
 
     private float SpawnTime = 0;
 
+    private Dictionary<int, DateTime> itemCooldowns = new Dictionary<int, DateTime>();
 
     public Player()
     {
@@ -102,9 +106,155 @@ public class Player : CreatureObj
 
 
     #region InGames
+    /// <summary>
+    /// 등록된 아이템을 사용. 이건 아이템의 기능이 나와야할듯
+    /// </summary>
+    public void UseQuickSlot(Player player, int sourceObjectId, int deleteItemId)
+    {
+        PS_ItemInfo deleteInfo;
+        ItemObject deleteItem = gameRoom.FindAndDeleteItem(player, sourceObjectId, deleteItemId, out deleteInfo);
+
+        if (deleteItem == null)
+        {
+            // 삭제 실패 시 패킷 전송
+            S_DeleteItem packet = new S_DeleteItem
+            {
+                IsSuccess = false,
+                DeleteItem = deleteInfo,
+                SourceObjectId = sourceObjectId
+            };
+            player.Session.Send(packet);
+
+            return;
+        }
+
+        // 삭제 성공 시 데이터베이스 처리 및 결과 전송
+        gameRoom.HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
+
+        //아이템이 있고 사용할 수 있는 상태
+        FMasterItemUse use = DatabaseHandler.Context.MasterItemUse.Find(deleteItem.ItemId);
 
 
+        if (deleteItem == null)
+        {
+            Console.WriteLine("아이템이 등록되어있지 않음");
+            return;
+        }
 
+        if (!UseConsume(use)) // 아이템 사용
+        {
+            Console.WriteLine("아이템 사용 실패");
+            return;
+        }
+
+        Item.amount -= 1; // 아이템의 개수 감소
+        if (Item.amount == 0) // 개수가 0이 되면 아이템 삭제 및 슬롯 리셋
+        {
+            ResetSlot();
+        }
+        else
+        {
+            Console.WriteLine($"Remaining item amount: {Item.amount}");
+        }
+    }
+
+   
+
+    // 아이템을 사용할 수 있는지 확인
+    public bool CanUseItem(FMasterItemUse item)
+    {
+        if (!itemCooldowns.ContainsKey(itemId))
+        {
+            itemCooldowns.Add(itemId, DateTime.Now);
+            return true;
+        }
+
+        DateTime lastUsedTime = itemCooldowns[itemId];
+
+        TimeSpan timeSinceLastUse = DateTime.Now - lastUsedTime;
+
+        if (timeSinceLastUse.TotalSeconds >= defaultCooldownDuration)
+        {
+            return true; // 쿨타임이 끝남
+        }
+        else
+        {
+            Console.WriteLine($"아이템 {itemId} 사용 불가. 남은 쿨타임: {defaultCooldownDuration - timeSinceLastUse.TotalSeconds:F2}초");
+            return false; // 쿨타임이 아직 남아 있음
+        }
+    }
+
+
+    public bool UseConsume(FMasterItemUse consume)
+    {
+        if (!isReady)
+        {
+            Console.WriteLine("현재 비활성화 상태임");
+            return false;
+        }
+
+        if (cooltimer != null)
+        {
+            Console.WriteLine("쿨타임이 돌아가는 중");
+            return false;
+        }
+
+        if (consume.effect == EEffect.immediate)
+        {
+            isReady = false;
+            OnHealed(this,consume.energy);
+            cooltimer = StartCooltime(consume.cool_time);
+        }
+        else if (consume.effect == EEffect.buff)
+        {
+            isReady = false;
+            myPlayer.OnHealed(consume.energy);
+            StartBuff(myPlayer, consume);
+        }
+
+        return true;
+    }
+
+    private void StartBuff(MyPlayerController target, DataMasterItemUse consume)
+    {
+        Task.Run(async () =>
+        {
+            float elapsedTime = 0f;
+
+            while (elapsedTime < consume.duration)
+            {
+                if (target.Hp < target.MaxHp)
+                {
+                    target.OnHealed(consume.energy);
+                }
+
+                await Task.Delay(TimeSpan.FromSeconds(consume.active_time));
+
+                elapsedTime += consume.active_time;
+            }
+
+            cooltimer = StartCooltime(consume.cool_time);
+        });
+    }
+
+    private Task StartCooltime(double cooltime)
+    {
+        return Task.Run(async () =>
+        {
+            float elapseTime = (float)cooltime;
+
+            while (elapseTime > 0)
+            {
+                Console.WriteLine($"쿨타임 남은 시간: {elapseTime}s");
+                await Task.Delay(1000); // 1초 지연
+                elapseTime -= 1f;
+            }
+
+            Console.WriteLine("쿨타임 종료");
+            isReady = true;
+            cooltimer = null;
+        });
+    }
     #endregion
 
 

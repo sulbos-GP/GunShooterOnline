@@ -158,6 +158,12 @@ public class GameObject
     {
         Console.WriteLine(info.Name + "은" + attacker.info.Name + "에게 데미지 받음");
     }
+
+    public virtual void OnHealed(GameObject healer, int heal)
+    {
+        Console.WriteLine(info.Name + "은" + healer.info.Name + "에게 힐 받음");
+    }
+
     public virtual void OnCollision(GameObject other)
     {
         //상속받아 알아서 행동 ex) 스킬이면 데미지 사람이라면 충동처리

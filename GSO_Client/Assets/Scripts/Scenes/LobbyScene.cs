@@ -34,6 +34,10 @@ public class LobbyScene : BaseScene
         string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
 #endif
 
+        if(DebugMode)
+            Ip = "113.60.249.123";
+
+
         ExcelReader.CopyExcel(files);
         SceneType = Define.Scene.Lobby;
         Screen.SetResolution(1920, 1080, false);
