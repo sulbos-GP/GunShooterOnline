@@ -20,29 +20,29 @@ public class MySQLToExcel : MonoBehaviour
 
     private string mysqlPath = "/StreamingAssets/";
 
-    //void Start()
-    //{
-    //    try
-    //    {
-    //        string connString = $"Server={server};Database={database};User ID={userId};Password={password};Pooling=false;";
-    //        connection = new MySqlConnection(connString);
-    //        connection.Open();
-    //        Debug.Log("MySQL 데이터베이스에 성공적으로 연결되었습니다.");
+    void Start()
+    {
+        try
+        {
+            string connString = $"Server={server};Database={database};User ID={userId};Password={password};Pooling=false;";
+            connection = new MySqlConnection(connString);
+            connection.Open();
+            Debug.Log("MySQL 데이터베이스에 성공적으로 연결되었습니다.");
 
-    //        List<string> tables = GetTableName();
-    //        // MySQL에서 데이터를 가져와 엑셀에 저장
-    //        foreach (var table in tables)
-    //            ExportDataToExcel(table);
+            List<string> tables = GetTableName();
+            // MySQL에서 데이터를 가져와 엑셀에 저장
+            foreach (var table in tables)
+                ExportDataToExcel(table);
 
-    //        Debug.Log(GetDataVersion());
+            Debug.Log(GetDataVersion());
 
 
-    //    }
-    //    catch (Exception ex)
-    //    {
-    //        Debug.LogError("MySQL 데이터베이스 연결에 실패했습니다: " + ex.Message);
-    //    }
-    //}
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("MySQL 데이터베이스 연결에 실패했습니다: " + ex.Message);
+        }
+    }
 
     public void loadData()
     {

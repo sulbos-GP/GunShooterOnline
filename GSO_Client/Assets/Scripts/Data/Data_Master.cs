@@ -62,11 +62,6 @@ public class Data_master_reward_level : BaseData<Data_master_reward_level>
     public string icon;
 }
 
-public class Data_master_reward_box : BaseData<Data_master_reward_box>
-{
-    public int box_scale_x;
-    public int box_scale_y;
-}
 
 public class Data_master_reward_box_item : BaseData<Data_master_reward_box_item>
 {
@@ -76,4 +71,10 @@ public class Data_master_reward_box_item : BaseData<Data_master_reward_box_item>
     public int y;
     public int rotation;
     public int amount;
+}
+
+public class Data_master_reward_box : BaseData<Data_master_reward_box>
+{
+    public int box_scale_x { get; set; }
+    public int box_scale_y { get; set; }
 }
