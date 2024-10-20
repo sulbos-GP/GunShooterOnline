@@ -46,6 +46,7 @@ public class DBSetEditor : EditorWindow
         if (GUILayout.Button("LoadDB"))
         {
             LoadDB();
+            Debug.Log("DB->Excel 이 완료되었습니다.");
         }
 
         GUILayout.Label("Data 구조 생성", EditorStyles.boldLabel);
@@ -53,6 +54,7 @@ public class DBSetEditor : EditorWindow
         if(GUILayout.Button("Create Data"))
         {
             CreateData();
+            Debug.Log("DB->Data 스크립트 자동 생성이 완료되었습니다.");
         }
     }
 
@@ -328,7 +330,7 @@ public class DBSetEditor : EditorWindow
         foreach (var column in columns)
         {
             var csharpType = GetCSharpType(column.DataType);
-            sb.AppendLine($"    public {csharpType} {column.Name} {{ get; set; }}"); // 동적 컬럼에 맞춘 속성 생성
+            sb.AppendLine($"    public {csharpType} {column.Name};"); // 동적 컬럼에 맞춘 속성 생성
         }
 
         sb.AppendLine("}");

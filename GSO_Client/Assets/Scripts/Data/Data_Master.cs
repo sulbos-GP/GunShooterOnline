@@ -72,9 +72,8 @@ public class Data_master_reward_box_item : BaseData<Data_master_reward_box_item>
     public int rotation;
     public int amount;
 }
-
 public class Data_master_reward_box : BaseData<Data_master_reward_box>
 {
-    public int box_scale_x { get; set; }
-    public int box_scale_y { get; set; }
+    public int box_scale_x;
+    public int box_scale_y;
 }
