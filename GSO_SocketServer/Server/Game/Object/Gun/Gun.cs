@@ -91,7 +91,7 @@ namespace Server.Game
             float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
             float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
             float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
-            Vector2 direction = randomAngle * dir; //발사할 각도
+            Vector2 direction = dir; //발사할 각도 randomAngle
             Vector2 endPos = Vector2.Zero;
             float length = MathF.Sqrt(direction.X * direction.X + direction.Y * direction.Y);
             if (length != 0)
