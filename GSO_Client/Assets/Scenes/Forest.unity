@@ -5400,11 +5400,15 @@ PrefabInstance:
       objectReference: {fileID: 1397189871}
     - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvenBtn
+      value: invenUIControl
       objectReference: {fileID: 0}
     - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: InventoryController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3328538068500540800, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_Name
