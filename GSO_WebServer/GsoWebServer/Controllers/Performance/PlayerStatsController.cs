@@ -5,6 +5,8 @@ using WebCommonLibrary.DTO.Performance;
 using GSO_WebServerLibrary.Utils;
 using WebCommonLibrary.DTO.Game;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDatabase;
+using WebCommonLibrary.Models.GameDB;
 
 namespace GsoWebServer.Controllers.Performance
 {
@@ -24,7 +26,22 @@ namespace GsoWebServer.Controllers.Performance
         [HttpPost]
         public async Task<PlayerStatsRes> PlayerStats([FromBody] PlayerStatsReq request)
         {
-            Console.WriteLine($"[PlayerStats] uid:{request.uid} room:{request.room_token}");
+
+            if(request.outcome == null)
+            {
+                request.outcome = new MatchOutcome();
+            }
+
+            Console.WriteLine($"[PlayerStats] uid:{request.uid} room:{request.room_token} : " +
+                $"Outcome" +
+                $"(" +
+                $"kills:{request.outcome.kills}" +
+                $"death:{request.outcome.death}" +
+                $"damage:{request.outcome.damage}" +
+                $"farming:{request.outcome.farming}" +
+                $"escape:{request.outcome.escape}" +
+                $"survival_time:{request.outcome.survival_time}" +
+                $")");
 
             var response = new PlayerStatsRes();
 
@@ -46,6 +63,13 @@ namespace GsoWebServer.Controllers.Performance
 
             error = await mGameService.UpdateLevel(request.uid, experience);
             if (error != WebErrorCode.None)
+            {
+                response.error_code = error;
+                return response;
+            }
+
+            (error, response.User) = await mGameService.GetUserInfo(request.uid);
+            if (error != WebErrorCode.None || response.User == null)
             {
                 response.error_code = error;
                 return response;
