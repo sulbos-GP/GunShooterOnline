@@ -61,7 +61,9 @@ namespace GsoWebServer.Servicies.RatingSystem
             try
             {
                 Glicko2 glicko2 = new Glicko2();
-                return glicko2.CalculateExperience(outcome);
+                int exp = glicko2.CalculateExperience(outcome);
+                Console.WriteLine($"[CalculateExperience] exp:{exp}");
+                return exp;
             }
             catch (Exception ex)
             {
