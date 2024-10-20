@@ -766,7 +766,7 @@ namespace Server
             }
         }
 
-        internal async Task<ItemObject> DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
+        internal async void DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
         {
             PS_ItemInfo deleteInfo;
             ItemObject deleteItem = FindAndDeleteItem(player, sourceObjectId, deleteItemId, out deleteInfo);
@@ -781,13 +781,11 @@ namespace Server
                     SourceObjectId = sourceObjectId
                 };
                 player.Session.Send(packet);
-                return null;
             }
 
             // 삭제 성공 시 데이터베이스 처리 및 결과 전송
             await HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
 
-            return deleteItem;
         }
 
 
@@ -978,7 +976,7 @@ namespace Server
                 }
             }
 #else
-            if (tempPlayer.Count == 5) //접속할 인원에 따라 변경
+            if (tempPlayer.Count == 2) //접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
