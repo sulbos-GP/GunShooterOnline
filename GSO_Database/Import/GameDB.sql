@@ -32,7 +32,7 @@ CREATE TABLE `gear` (
   KEY `FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id` (`unit_attributes_id`),
   CONSTRAINT `FK_gear_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`),
   CONSTRAINT `FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id` FOREIGN KEY (`unit_attributes_id`) REFERENCES `unit_attributes` (`unit_attributes_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `gear` (
 
 LOCK TABLES `gear` WRITE;
 /*!40000 ALTER TABLE `gear` DISABLE KEYS */;
-INSERT INTO `gear` VALUES (1,1,'backpack',1),(2,2,'backpack',2),(3,3,'backpack',3),(4,4,'backpack',4),(5,5,'backpack',5),(6,6,'backpack',6),(7,7,'backpack',7),(8,8,'backpack',8),(9,9,'backpack',9),(10,10,'backpack',10),(13,1,'pocket_third',17),(16,1,'pocket_second',28),(17,1,'sub_weapon',29),(25,11,'main_weapon',53),(26,11,'sub_weapon',54),(27,11,'armor',55),(28,11,'backpack',56),(29,11,'pocket_first',57),(30,11,'pocket_second',58),(31,11,'pocket_third',59);
+INSERT INTO `gear` VALUES (116,1,'main_weapon',189),(117,1,'sub_weapon',190),(118,1,'armor',191),(119,1,'backpack',192),(120,1,'pocket_first',193),(121,1,'pocket_third',194),(122,2,'main_weapon',198),(123,2,'sub_weapon',199),(124,2,'armor',200),(125,2,'backpack',201),(126,2,'pocket_first',202),(127,2,'pocket_third',203),(128,3,'main_weapon',207),(129,3,'sub_weapon',208),(130,3,'armor',209),(131,3,'backpack',210),(132,3,'pocket_first',211),(133,3,'pocket_third',212),(134,4,'main_weapon',216),(135,4,'sub_weapon',217),(136,4,'armor',218),(137,4,'backpack',219),(138,4,'pocket_first',220),(139,4,'pocket_third',221),(140,5,'main_weapon',225),(141,5,'sub_weapon',226),(142,5,'armor',227),(143,5,'backpack',228),(144,5,'pocket_first',229),(145,5,'pocket_third',230);
 /*!40000 ALTER TABLE `gear` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +59,7 @@ CREATE TABLE `storage` (
   PRIMARY KEY (`storage_id`),
   KEY `FK_storage_uid_user_uid` (`uid`),
   CONSTRAINT `FK_storage_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `storage` (
 
 LOCK TABLES `storage` WRITE;
 /*!40000 ALTER TABLE `storage` DISABLE KEYS */;
-INSERT INTO `storage` VALUES (1,NULL,'backpack'),(2,NULL,'backpack'),(3,NULL,'backpack'),(4,NULL,'backpack'),(5,NULL,'backpack'),(6,NULL,'backpack'),(7,NULL,'backpack'),(8,NULL,'backpack'),(9,NULL,'backpack'),(10,NULL,'backpack'),(11,NULL,'backpack');
+INSERT INTO `storage` VALUES (34,NULL,'backpack'),(35,NULL,'backpack'),(36,NULL,'backpack'),(37,NULL,'backpack'),(38,NULL,'backpack');
 /*!40000 ALTER TABLE `storage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ CREATE TABLE `storage_unit` (
   KEY `FK_storage_unit_id_att_id_uatt_att_id` (`unit_attributes_id`),
   CONSTRAINT `FK_storage_unit_id_att_id_uatt_att_id` FOREIGN KEY (`unit_attributes_id`) REFERENCES `unit_attributes` (`unit_attributes_id`) ON DELETE CASCADE,
   CONSTRAINT `FK_storage_unit_storage_id_storage_storage_id` FOREIGN KEY (`storage_id`) REFERENCES `storage` (`storage_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,7 @@ CREATE TABLE `storage_unit` (
 
 LOCK TABLES `storage_unit` WRITE;
 /*!40000 ALTER TABLE `storage_unit` DISABLE KEYS */;
-INSERT INTO `storage_unit` VALUES (28,1,0,0,0,52),(29,11,0,0,0,60),(30,11,0,2,0,61),(31,11,2,2,0,62);
+INSERT INTO `storage_unit` VALUES (70,34,0,0,0,195),(71,34,0,2,0,196),(72,34,2,0,0,197),(73,35,0,0,0,204),(74,35,0,2,0,205),(75,35,2,0,0,206),(76,36,0,0,0,213),(77,36,0,2,0,214),(78,36,2,0,0,215),(79,37,0,0,0,222),(80,37,0,2,0,223),(81,37,2,0,0,224),(82,38,0,0,0,231),(83,38,0,2,0,232),(84,38,2,0,0,233);
 /*!40000 ALTER TABLE `storage_unit` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +123,7 @@ CREATE TABLE `unit_attributes` (
   KEY `FK_unit_attributes_unit_storage_id_storage_storage_id` (`unit_storage_id`),
   CONSTRAINT `FK_unit_attributes_item_id_master_item_base_item_id` FOREIGN KEY (`item_id`) REFERENCES `master_database`.`master_item_base` (`item_id`),
   CONSTRAINT `FK_unit_attributes_unit_storage_id_storage_storage_id` FOREIGN KEY (`unit_storage_id`) REFERENCES `storage` (`storage_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=63 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=234 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +132,7 @@ CREATE TABLE `unit_attributes` (
 
 LOCK TABLES `unit_attributes` WRITE;
 /*!40000 ALTER TABLE `unit_attributes` DISABLE KEYS */;
-INSERT INTO `unit_attributes` VALUES (1,302,0,0,1,1),(2,302,0,0,2,1),(3,302,0,0,3,1),(4,302,0,0,4,1),(5,302,0,0,5,1),(6,302,0,0,6,1),(7,302,0,0,7,1),(8,302,0,0,8,1),(9,302,0,0,9,1),(10,302,0,0,10,1),(17,402,0,0,NULL,15),(28,402,0,0,NULL,21),(29,101,0,0,NULL,1),(52,102,0,0,NULL,1),(53,102,0,0,NULL,1),(54,101,0,0,NULL,1),(55,201,100,0,NULL,1),(56,302,0,0,11,1),(57,402,0,0,NULL,5),(58,502,0,0,NULL,10),(59,602,0,0,NULL,15),(60,402,0,0,NULL,5),(61,502,0,0,NULL,10),(62,602,0,0,NULL,15);
+INSERT INTO `unit_attributes` VALUES (189,102,0,0,NULL,1),(190,101,0,0,NULL,1),(191,201,100,0,NULL,1),(192,302,0,0,34,1),(193,402,0,0,NULL,5),(194,404,0,0,NULL,15),(195,402,0,0,NULL,5),(196,502,0,0,NULL,10),(197,404,0,0,NULL,15),(198,102,0,0,NULL,1),(199,101,0,0,NULL,1),(200,201,100,0,NULL,1),(201,302,0,0,35,1),(202,402,0,0,NULL,5),(203,404,0,0,NULL,15),(204,402,0,0,NULL,5),(205,502,0,0,NULL,10),(206,404,0,0,NULL,15),(207,102,0,0,NULL,1),(208,101,0,0,NULL,1),(209,201,100,0,NULL,1),(210,302,0,0,36,1),(211,402,0,0,NULL,5),(212,404,0,0,NULL,15),(213,402,0,0,NULL,5),(214,502,0,0,NULL,10),(215,404,0,0,NULL,15),(216,102,0,0,NULL,1),(217,101,0,0,NULL,1),(218,201,100,0,NULL,1),(219,302,0,0,37,1),(220,402,0,0,NULL,5),(221,404,0,0,NULL,15),(222,402,0,0,NULL,5),(223,502,0,0,NULL,10),(224,404,0,0,NULL,15),(225,102,0,0,NULL,1),(226,101,0,0,NULL,1),(227,201,100,0,NULL,1),(228,302,0,0,38,1),(229,402,0,0,NULL,5),(230,404,0,0,NULL,15),(231,402,0,0,NULL,5),(232,502,0,0,NULL,10),(233,404,0,0,NULL,15);
 /*!40000 ALTER TABLE `unit_attributes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -167,7 +167,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'a_1','a_1',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(2,'a_2','a_2',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(3,'a_3','a_3',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(4,'a_4','a_4',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(5,'a_5','a_5',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(6,'a_6','a_6',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(7,'a_7','a_7',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(8,'a_8','a_8',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(9,'a_9','a_9',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(10,'a_10','a_10',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(11,'111273423436160748486',NULL,1,0,5,0,'Google','1//0eB5OREZb-rkmCgYIARAAGA4SNwF-L9Irx1Dzyy1HfroA0GW3-1vNWj420SUp11-UMDRBClbmN9yzFtRvtWlMhSSyVAg8cYOdNHM','2024-09-03 15:54:25','2024-09-04 17:48:34','2024-09-29 17:29:47'),(12,'a_4003771818344972651','장송',100,1000,5,0,'Google','1//0eHJmnKKtHgK8CgYIARAAGA4SNwF-L9IrCbicAPbqk9-Xwurgu2ifLckSxIkoTrs4_UiSMq00mPum_eIKFNXo8CXRZ6qMxvvi9hA','2024-09-04 17:54:48','2024-09-29 12:16:18','2024-09-29 17:29:47');
+INSERT INTO `user` VALUES (1,'a_1','a_1',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(2,'a_2','a_2',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(3,'a_3','a_3',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(4,'a_4','a_4',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(5,'a_5','a_5',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(6,'a_6','a_6',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(7,'a_7','a_7',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(8,'a_8','a_8',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(9,'a_9','a_9',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(10,'a_10','a_10',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(11,'111273423436160748486',NULL,1,0,5,0,'Google','1//0eB5OREZb-rkmCgYIARAAGA4SNwF-L9Irx1Dzyy1HfroA0GW3-1vNWj420SUp11-UMDRBClbmN9yzFtRvtWlMhSSyVAg8cYOdNHM','2024-09-03 15:54:25','2024-09-04 17:48:34','2024-09-29 17:29:47'),(12,'a_4003771818344972651','장송',100,1080,12,2,'Google','1//0eHJmnKKtHgK8CgYIARAAGA4SNwF-L9IrCbicAPbqk9-Xwurgu2ifLckSxIkoTrs4_UiSMq00mPum_eIKFNXo8CXRZ6qMxvvi9hA','2024-09-04 17:54:48','2024-10-18 05:08:18','2024-10-15 06:52:07');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,7 +189,7 @@ CREATE TABLE `user_level_reward` (
   KEY `FK_user_level_reward_master_reward_level_id` (`reward_id`),
   CONSTRAINT `FK_user_level_reward_master_reward_level_id` FOREIGN KEY (`reward_id`) REFERENCES `master_database`.`master_reward_level` (`reward_id`) ON DELETE CASCADE,
   CONSTRAINT `FK_user_reward_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -228,8 +228,40 @@ CREATE TABLE `user_metadata` (
 
 LOCK TABLES `user_metadata` WRITE;
 /*!40000 ALTER TABLE `user_metadata` DISABLE KEYS */;
-INSERT INTO `user_metadata` VALUES (1,0,0,0,0,0,0,0),(2,0,0,0,0,0,0,0),(3,0,0,0,0,0,0,0),(4,0,0,0,0,0,0,0),(5,0,0,0,0,0,0,0),(6,0,0,0,0,0,0,0),(7,0,0,0,0,0,0,0),(8,0,0,0,0,0,0,0),(9,0,0,0,0,0,0,0),(10,0,0,0,0,0,0,0),(11,0,0,0,0,0,0,0),(12,0,0,0,0,0,0,0);
+INSERT INTO `user_metadata` VALUES (1,0,0,0,0,0,0,0),(2,0,0,0,0,0,0,0),(3,0,0,0,0,0,0,0),(4,0,0,0,0,0,0,0),(5,0,0,0,0,0,0,0),(6,0,0,0,0,0,0,0),(7,0,0,0,0,0,0,0),(8,0,0,0,0,0,0,0),(9,0,0,0,0,0,0,0),(10,0,0,0,0,0,0,0),(11,0,0,0,0,0,0,0),(12,1,0,0,0,3,1,2);
 /*!40000 ALTER TABLE `user_metadata` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `user_register_quest`
+--
+
+DROP TABLE IF EXISTS `user_register_quest`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `user_register_quest` (
+  `register_quest_id` int(11) NOT NULL AUTO_INCREMENT COMMENT '등록된 퀘스트 아이디',
+  `uid` int(11) NOT NULL COMMENT '유저 아이디',
+  `quest_id` int(11) NOT NULL COMMENT '퀘스트 아이디',
+  `progress` int(11) NOT NULL DEFAULT 0 COMMENT '퀘스트 진행도',
+  `completed` tinyint(1) NOT NULL DEFAULT 0 COMMENT '퀘스트 완료 여부',
+  `register_dt` datetime NOT NULL DEFAULT current_timestamp() COMMENT '퀘스트 수령 날짜',
+  PRIMARY KEY (`register_quest_id`),
+  UNIQUE KEY `uid` (`uid`,`quest_id`),
+  KEY `FK_user_register_quest_master_quest_base_id` (`quest_id`),
+  CONSTRAINT `FK_user_register_quest_master_quest_base_id` FOREIGN KEY (`quest_id`) REFERENCES `master_database`.`master_quest_base` (`quest_id`) ON DELETE CASCADE,
+  CONSTRAINT `FK_user_register_quest_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `user_register_quest`
+--
+
+LOCK TABLES `user_register_quest` WRITE;
+/*!40000 ALTER TABLE `user_register_quest` DISABLE KEYS */;
+INSERT INTO `user_register_quest` VALUES (55,12,20002,0,1,'2024-10-18 03:38:47'),(56,12,30002,0,1,'2024-10-18 03:39:02'),(57,12,40002,0,1,'2024-10-18 03:39:02');
+/*!40000 ALTER TABLE `user_register_quest` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -255,7 +287,7 @@ CREATE TABLE `user_skill` (
 
 LOCK TABLES `user_skill` WRITE;
 /*!40000 ALTER TABLE `user_skill` DISABLE KEYS */;
-INSERT INTO `user_skill` VALUES (1,1431.093800841918,280.67481394920014,0.054455069661564263),(2,1500.0542334281413,324.96431258038086,0.06329327230648443),(3,1564.8063711494267,218.92526952449722,0.05317493561950972),(4,1483.045709024226,289.98536201192564,0.06507652924868887),(5,1593.8850205334695,287.84692351505805,0.05039911013133741),(6,1468.5678186533673,298.14934660508237,0.05486255275538429),(7,1450.530257495614,280.0810332224528,0.06822827884762388),(8,1591.0898156381118,206.45053918142852,0.05697341537752507),(9,1522.8686182972683,203.85547723048876,0.055709733279151595),(10,1470.0647611823535,334.27386026296193,0.05849647910194144),(11,1500,350,0.06),(12,1500,350,0.06);
+INSERT INTO `user_skill` VALUES (1,1500,350,0.06),(2,1500,350,0.06),(3,1500,350,0.06),(4,1500,350,0.06),(5,1500,350,0.06),(6,1500,350,0.06),(7,1500,350,0.06),(8,1500,350,0.06),(9,1500,350,0.06),(10,1500,350,0.06),(11,1500,350,0.06),(12,1500,350,0.06);
 /*!40000 ALTER TABLE `user_skill` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -268,4 +300,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-01 16:29:49
+-- Dump completed on 2024-10-18 15:42:33

@@ -513,14 +513,15 @@ namespace Matchmaker.Service
                     {
                         throw new Exception("플레이어가 존재하지 않음");
                     }
+                    int lessTicket = user.ticket - 1;
 
-                    int result = await mGameDB.UpdateTicket(uid, user.ticket - 1);
+                    int result = await mGameDB.UpdateTicket(uid, lessTicket);
                     if (result == 0)
                     {
                         throw new Exception("티켓이 올바르게 소모되지 않음");
                     }
 
-                    if (user.ticket - 1 < GameDefine.MAX_TICKET)
+                    if (lessTicket < GameDefine.MAX_TICKET)
                     {
                         result = await mGameDB.UpdateLastTicketTime(uid);
                         if (result == 0)

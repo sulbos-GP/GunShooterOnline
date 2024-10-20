@@ -211,6 +211,7 @@ public class SignInUI : MonoBehaviour
         {
             Managers.Web.Models.Credential = response.credential;
             Managers.Web.Models.Data = response.userData;
+            Managers.Web.Models.DailyData = response.DailyLoads;
         }
 
         //로비로 이동

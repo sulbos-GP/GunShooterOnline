@@ -187,6 +187,44 @@ public class UserResource
             this.mMethod = ERequestMethod.POST;
         }
     }
+
+    /// <summary>
+    /// 单老府 诀单捞飘
+    /// </summary>
+    public UpdateDailyTaskRequest GetUpdateDailyTaskRequest(HeaderVerfiyPlayer header, DailyTaskReq body)
+    {
+        return new UpdateDailyTaskRequest(this.mService, header, body);
+    }
+
+    public class UpdateDailyTaskRequest : WebClientServiceRequest<DailyTaskRes>
+    {
+        public UpdateDailyTaskRequest(GsoWebService service, HeaderVerfiyPlayer header, DailyTaskReq request)
+        {
+            this.mFromHeader = header.ToDictionary();
+            this.mFromBody = request;
+            this.mEndPoint = service.mBaseUrl + "/api/User/DailyTask/Update";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
+
+    /// <summary>
+    /// 单老府 诀单捞飘
+    /// </summary>
+    public CompleteDailyQuestRequest GetCompleteDailyQuestRequest(HeaderVerfiyPlayer header, DailyQuestReq body)
+    {
+        return new CompleteDailyQuestRequest(this.mService, header, body);
+    }
+
+    public class CompleteDailyQuestRequest : WebClientServiceRequest<DailyQuestRes>
+    {
+        public CompleteDailyQuestRequest(GsoWebService service, HeaderVerfiyPlayer header, DailyQuestReq request)
+        {
+            this.mFromHeader = header.ToDictionary();
+            this.mFromBody = request;
+            this.mEndPoint = service.mBaseUrl + "/api/User/DailyQuest/Complete";
+            this.mMethod = ERequestMethod.POST;
+        }
+    }
 }
 
 /// <summary>

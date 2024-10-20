@@ -139,6 +139,39 @@ INSERT INTO `master_item_weapon` VALUES (101,8,10,6,8,1,2,'7.29mm'),(102,20,18,1
 UNLOCK TABLES;
 
 --
+-- Table structure for table `master_quest_base`
+--
+
+DROP TABLE IF EXISTS `master_quest_base`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `master_quest_base` (
+  `quest_id` int(11) NOT NULL DEFAULT 0 COMMENT '퀘스트 아이디',
+  `type` varchar(5) NOT NULL DEFAULT '' COMMENT '퀘스트 타입',
+  `category` varchar(5) NOT NULL DEFAULT '' COMMENT '퀘스트 카테고리',
+  `title` varchar(20) NOT NULL DEFAULT '' COMMENT '퀘스트 제목',
+  `target` int(11) NOT NULL DEFAULT 0 COMMENT '퀘스트 목표',
+  `tag` varchar(10) NOT NULL DEFAULT '' COMMENT '퀘스트 태그',
+  `reward_id` int(11) NOT NULL DEFAULT 0 COMMENT '보상 아이디',
+  `next_quest_id` int(11) DEFAULT 0 COMMENT '연계 퀘스트',
+  `start_condition_id` int(11) DEFAULT 0 COMMENT '선행 조건',
+  PRIMARY KEY (`quest_id`),
+  KEY `FK_master_quest_base_master_reward_base_id` (`reward_id`),
+  CONSTRAINT `FK_master_quest_base_master_reward_base_id` FOREIGN KEY (`reward_id`) REFERENCES `master_reward_base` (`reward_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `master_quest_base`
+--
+
+LOCK TABLES `master_quest_base` WRITE;
+/*!40000 ALTER TABLE `master_quest_base` DISABLE KEYS */;
+INSERT INTO `master_quest_base` VALUES (20001,'day','전투','플레이어 적 처치',1,'PLAYER',20001,NULL,NULL),(20002,'day','전투','특수지역 적 처치',2,'NPC202',20002,NULL,NULL),(20003,'day','전투','좀비 처치',3,'NPC201',20003,NULL,NULL),(20004,'day','전투','NPC 적 처치',4,'NPC203',20004,NULL,NULL),(30001,'day','보급','건전지 회수',2,'S002',30001,NULL,NULL),(30002,'day','보급','의약품 가방 회수',1,'B001',30002,NULL,NULL),(30003,'day','보급','통나무 회수',8,'S006',30003,NULL,NULL),(30004,'day','보급','밧줄 한묶음 회수',10,'S003',30004,NULL,NULL),(40001,'day','플레이','전장 플레이',3,'PLAY_IN',40001,NULL,NULL),(40002,'day','플레이','전장 탈출',2,'PLAY_OUT',40002,NULL,NULL);
+/*!40000 ALTER TABLE `master_quest_base` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `master_reward_base`
 --
 
@@ -164,7 +197,7 @@ CREATE TABLE `master_reward_base` (
 
 LOCK TABLES `master_reward_base` WRITE;
 /*!40000 ALTER TABLE `master_reward_base` DISABLE KEYS */;
-INSERT INTO `master_reward_base` VALUES (10001,1000,0,0,0,NULL),(10002,0,2,0,0,NULL),(10003,0,0,5,0,NULL),(10004,2000,0,0,0,NULL),(10005,0,4,0,0,NULL),(10006,0,0,10,0,NULL),(10007,3000,0,0,0,NULL),(10008,0,6,0,0,NULL),(10009,0,0,15,0,NULL),(20001,1000,1,0,500,NULL),(20002,0,0,0,1200,1),(20003,500,0,0,500,NULL),(20004,0,0,0,2000,2),(20005,500,0,0,500,NULL),(20006,0,0,0,500,3),(20007,2000,0,0,0,NULL),(20008,0,0,0,2000,NULL),(20009,0,1,1,1000,4),(20010,0,1,1,1000,5);
+INSERT INTO `master_reward_base` VALUES (10001,300,0,0,0,NULL),(10002,0,2,0,0,NULL),(10003,0,0,4,0,NULL),(10004,600,0,0,0,NULL),(10005,0,4,0,0,NULL),(10006,0,0,8,0,NULL),(10007,900,0,0,0,NULL),(10008,0,6,0,0,NULL),(10009,0,0,12,0,NULL),(20001,120,0,0,0,NULL),(20002,80,0,0,0,1),(20003,70,0,0,0,NULL),(20004,130,0,0,0,2),(30001,0,0,1,0,NULL),(30002,0,0,2,0,3),(30003,0,0,1,0,NULL),(30004,0,0,2,0,NULL),(40001,0,1,0,0,4),(40002,0,2,0,0,5);
 /*!40000 ALTER TABLE `master_reward_base` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,4 +345,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-13 14:20:53
+-- Dump completed on 2024-10-18 15:42:03

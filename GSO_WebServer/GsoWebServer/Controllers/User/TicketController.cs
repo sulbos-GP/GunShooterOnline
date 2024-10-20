@@ -7,6 +7,7 @@ using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDatabase;
 using GsoWebServer.DTO;
 using WebCommonLibrary.Models;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace GsoWebServer.Controllers.User
 {
@@ -54,17 +55,22 @@ namespace GsoWebServer.Controllers.User
             error = await mGameService.UpdateTicketCount(header.uid);
             if (error == WebErrorCode.TicketRemainingTime)
             {
-                DateTime now = DateTime.UtcNow;
-                DateTime recent = user.recent_login_dt;
+                DateTime now = user.recent_ticket_dt;
+                DateTime next = now.AddMinutes(GameDefine.WAIT_TICKET_MINUTE);
+                TimeSpan timeRemaining = next - now;
 
-                TimeSpan timeDiff = now - recent;
-                int diffSeconds = GameDefine.WAIT_TICKET_SECOND - (int)timeDiff.TotalSeconds;
-
-                response.RemainingTime = diffSeconds;
+                response.RemainingTime = (int)timeRemaining.TotalSeconds;
                 response.error_code = WebErrorCode.TicketRemainingTime;
                 return response;
             }
             else if (error != WebErrorCode.None)
+            {
+                response.error_code = error;
+                return response;
+            }
+
+            (error, user) = await mGameService.GetUserInfo(header.uid);
+            if (error != WebErrorCode.None || user == null)
             {
                 response.error_code = error;
                 return response;

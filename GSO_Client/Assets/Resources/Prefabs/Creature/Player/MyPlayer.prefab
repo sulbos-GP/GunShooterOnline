@@ -38,6 +38,7 @@ Transform:
   m_Children:
   - {fileID: 7835294872513528505}
   - {fileID: 8393533796584692842}
+  - {fileID: 3160397531331417121}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4951753452970910547
@@ -657,8 +658,8 @@ LineRenderer:
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 1, g: 0.6517284, b: 0, a: 0.8627451}
-      key1: {r: 1, g: 0.42263094, b: 0, a: 1}
+      key0: {r: 1, g: 0.6517284, b: 0, a: 0.5176471}
+      key1: {r: 1, g: 0.42263094, b: 0, a: 0.34509805}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -674,7 +675,7 @@ LineRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65150
+      atime1: 65535
       atime2: 0
       atime3: 0
       atime4: 0
@@ -708,10 +709,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72fe8d205699f454696b3f840e3e5568, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gunLine: {fileID: 0}
   curGunEquipSlot: 0
-  isBulletPrefShoot: 1
-  bulletLine: {fileID: 0}
-  lineColor: {r: 1, g: 0, b: 0, a: 0.5}
 --- !u!114 &882539470372627104
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -724,6 +723,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ffb9116fac51274394d856398c986e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bulletLine: {fileID: 0}
+  lineColor: {r: 1, g: 0, b: 0, a: 0.5}
+--- !u!1 &3099717725469295379
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3160397531331417121}
+  m_Layer: 0
+  m_Name: Ground
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3160397531331417121
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3099717725469295379}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 18236110065076002}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4630412115343097071
 GameObject:
   m_ObjectHideFlags: 0
@@ -798,7 +830,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -2413806693520163455, guid: 95ba1083b2ce9fd4dbd60179395de272, type: 3}
+  m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -806,7 +838,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &5435796917907081314

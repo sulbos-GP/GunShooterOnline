@@ -1,4 +1,8 @@
-﻿using GsoWebServer.Servicies.Interfaces;
+﻿using Google.Apis.Games.v1.Data;
+using GsoWebServer.Servicies.Interfaces;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Transactions;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models;
@@ -132,6 +136,18 @@ namespace GsoWebServer.Servicies.Game
             }
         }
 
+        public async Task<(WebErrorCode, List<FUserRegisterQuest>?)> GetDailyQuest(int uid)
+        {
+            try
+            {
+                return (WebErrorCode.None, await mGameDB.GetUserDailyQuestByUid(uid));
+            }
+            catch /*(Exception e)*/
+            {
+                return (WebErrorCode.TEMP_Exception, null);
+            }
+        }
+
         public async Task<(WebErrorCode, List<FUserLevelReward>?)> GetUserLevelReward(int uid, bool? received, int? reward_level_id)
         {
             try
@@ -187,7 +203,7 @@ namespace GsoWebServer.Servicies.Game
                     throw new Exception("레벨이 업데이트 되지 못했습니다.");
                 }
 
-                for(int level = oldLevel; level < curLevel; ++level)
+                for(int level = oldLevel + 1; level <= curLevel; ++level)
                 {
                     if(0 == await mGameDB.InsertLevelReward(uid, level, transaction))
                     {
@@ -301,13 +317,13 @@ namespace GsoWebServer.Servicies.Game
                     DateTime recent = user.recent_ticket_dt;
 
                     TimeSpan timeDiff = now - recent;
-                    int diffMinutes = (int)timeDiff.TotalMinutes;
-                    if (diffMinutes == 0)
+                    int timeTicket = (int)timeDiff.TotalMinutes / GameDefine.WAIT_TICKET_MINUTE;
+                    if (timeTicket == 0)
                     {
                         return WebErrorCode.TicketRemainingTime;
                     }
 
-                    int possibleTicketCount = (diffMinutes / GameDefine.WAIT_TICKET_MINUTE) + user.ticket;
+                    int possibleTicketCount = timeTicket + user.ticket;
                     possibleTicketCount = Math.Clamp(possibleTicketCount, 0, GameDefine.MAX_TICKET);
 
                     int updateRes = await mGameDB.UpdateTicket(uid, possibleTicketCount);
@@ -337,6 +353,200 @@ namespace GsoWebServer.Servicies.Game
             if (rowCount != 1)
             {
                 return WebErrorCode.AccountIdMismatch;
+            }
+
+            return WebErrorCode.None;
+        }
+
+        public async Task<WebErrorCode> UpdateDailyTask(int uid)
+        {
+            FUser? user = await mGameDB.GetUserByUid(uid);
+            if (user == null)
+            {
+                return (WebErrorCode.TEMP_ERROR);
+            }
+
+            DateTime currentTime = DateTime.UtcNow;
+            DateTime recentLoginTime = user.recent_login_dt.AddDays(1);
+
+            if (currentTime < recentLoginTime)
+            {
+                return WebErrorCode.DailyTaskIsAllocate;
+            }
+
+            var error = await UpdateDailyQuset(uid);
+            if(error != WebErrorCode.None)
+            {
+                return error;
+            }
+
+            return WebErrorCode.None;
+        }
+
+        public async Task<WebErrorCode> UpdateDailyQuset(int uid)
+        {
+            var transaction = mGameDB.GetConnection().BeginTransaction();
+            try
+            {
+                var oldDailyQuestList = await mGameDB.GetUserDailyQuestByUid(uid, transaction);
+                if(oldDailyQuestList == null)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                var deleteCount = await mGameDB.DeleteUserDailyQuestByUid(uid, transaction);
+                if(oldDailyQuestList.Count != deleteCount)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                var masterDailyQusetList = mMasterDB.Context.MasterQuestBase
+                    .Select(quest => quest.Value)
+                    .Where(quest => quest.type == "day")
+                    .ToList();
+
+                List<string> categorys = new List<string>
+                {
+                    "전투",
+                    "보급",
+                    "플레이"
+                };
+
+                foreach(var category in categorys)
+                {
+                    int quset_id = GetRandomDailyQuestWithCategory(masterDailyQusetList, category);
+                    if (quset_id == -1)
+                    {
+                        return (WebErrorCode.TEMP_ERROR);
+                    }
+
+                    int result = await mGameDB.InsertUserDailyQuestByUid(uid, quset_id, transaction);
+                    if(result == 0)
+                    {
+                        return (WebErrorCode.TEMP_ERROR);
+                    }
+                }
+
+                transaction.Commit();
+                return (WebErrorCode.None);
+            }
+            catch /*(Exception e)*/
+            {
+                transaction.Rollback();
+                return (WebErrorCode.TEMP_Exception);
+            }
+        }
+
+        public int GetRandomDailyQuestWithCategory(List<FMasterQuestBase> dailyQuestList, string category)
+        {
+            var catecoryList = dailyQuestList.Where(quest => quest.category == category).ToList();
+            if (catecoryList.Count == 0)
+            {
+                return -1;
+            }
+
+            Random random = new Random();
+            int index = random.Next(catecoryList.Count);
+            return catecoryList[index].quest_id;
+        }
+
+        public async Task<WebErrorCode> CompleteDailyQuset(int uid, int quest_id)
+        {
+            var transaction = mGameDB.GetConnection().BeginTransaction();
+            try
+            {
+                var oldDailyQuestList = await mGameDB.GetUserDailyQuestByUid(uid, transaction);
+                if (oldDailyQuestList == null)
+                {
+                    return (WebErrorCode.DailyQuestInvalidList);
+                }
+
+                var completeQuest = oldDailyQuestList.FirstOrDefault(quest => quest.quest_id == quest_id);
+                if(completeQuest == null)
+                {
+                    return (WebErrorCode.DailyQuestNotMatch);
+                }
+
+                var completeQuestData = mMasterDB.Context.MasterQuestBase.FirstOrDefault(quest => quest.Value.quest_id == quest_id).Value;
+                if (completeQuestData == null)
+                {
+                    return (WebErrorCode.DailyQuestNotMatch);
+                }
+
+                if (completeQuest.progress != completeQuestData.target)
+                {
+                    return (WebErrorCode.DailyQuestNotEnough);
+                }
+
+                if (completeQuest.completed == true)
+                {
+                    return (WebErrorCode.DailyQuestAlreadyComplelte);
+                }
+                completeQuest.completed = true;
+
+                int result = await mGameDB.UpdateUserDailyQuestByUid(uid, completeQuest, transaction);
+                if (result == 0)
+                {
+                    return (WebErrorCode.TEMP_ERROR);
+                }
+
+                var error = await ReceiveReward(uid, completeQuestData.reward_id, transaction);
+                if (error != WebErrorCode.None)
+                {
+                    return error;
+                }
+
+                transaction.Commit();
+                return (WebErrorCode.None);
+            }
+            catch /*(Exception e)*/
+            {
+                transaction.Rollback();
+                return (WebErrorCode.TEMP_Exception);
+            }
+        }
+
+        public async Task<WebErrorCode> ReceiveReward(int uid, int reward_id, IDbTransaction transaction)
+        {
+            var user = await mGameDB.GetUserByUid(uid, transaction);
+            if (user == null)
+            {
+                return WebErrorCode.TEMP_ERROR;
+            }
+
+            FMasterRewardBase reward = mMasterDB.Context.MasterRewardBase.Where(reward => reward.Key == reward_id).FirstOrDefault().Value;
+            if (reward == null)
+            {
+                return WebErrorCode.TEMP_ERROR;
+            }
+
+            //경험치 보상이 포함되어 있을 경우
+            if (reward.experience != 0)
+            {
+                user.experience += reward.experience;
+                if (0 == await mGameDB.UpdateLevel(uid, user.experience, transaction))
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+            }
+
+            //통화에 대한 보상이 있을 경우
+            if (reward.money != 0 || user.ticket != 0 || user.gacha != 0)
+            {
+                user.money += reward.money;
+                user.ticket += reward.ticket;
+                user.gacha += reward.gacha;
+
+                if (0 == await mGameDB.UpdateCurrency(uid, user.money, user.ticket, user.gacha, transaction))
+                {
+                    return WebErrorCode.TEMP_ERROR;
+                }
+            }
+
+            //박스로된 보상이 포함되어 있을 경우
+            if (reward.reward_box_id != null)
+            {
+
             }
 
             return WebErrorCode.None;
