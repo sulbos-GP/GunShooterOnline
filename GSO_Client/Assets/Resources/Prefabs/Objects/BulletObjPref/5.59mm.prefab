@@ -10,7 +10,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 2437293690784308553, guid: 7c332d4e22839914a8d2b9af041938e7, type: 3}
       propertyPath: m_Name
-      value: 5.59mm Variant
+      value: 5.59mm
       objectReference: {fileID: 0}
     - target: {fileID: 5154598967893751351, guid: 7c332d4e22839914a8d2b9af041938e7, type: 3}
       propertyPath: m_LocalPosition.x
@@ -50,6 +50,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5154598967893751351, guid: 7c332d4e22839914a8d2b9af041938e7, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7785919234208048522, guid: 7c332d4e22839914a8d2b9af041938e7, type: 3}
+      propertyPath: endPos.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8871005756974746174, guid: 7c332d4e22839914a8d2b9af041938e7, type: 3}

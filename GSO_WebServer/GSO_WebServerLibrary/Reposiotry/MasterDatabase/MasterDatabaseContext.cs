@@ -18,6 +18,7 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
         public DbTable<FMasterItemBase> MasterItemBase { get; }
         public DbTable<FMasterItemUse> MasterItemUse { get; }
         public DbTable<FMasterItemWeapon> MasterItemWeapon { get; }
+        public DbTable<FMasterQuestBase> MasterQuestBase { get; }
         public DbTable<FMasterRewardBase> MasterRewardBase { get; }
         public DbTable<FMasterRewardBox> MasterRewardBox { get; }
         public DbTable<FMasterRewardBoxItem> MasterRewardBoxItem { get; }
@@ -34,6 +35,7 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
             MasterItemBase = LoadMasterItemBase().Result;
             MasterItemUse = LoadMasterItemUse().Result;
             MasterItemWeapon = LoadMasterItemWeapon().Result;
+            MasterQuestBase = LoadMasterQuestBase().Result;
             MasterRewardBase = LoadMasterRewardBase().Result;
             MasterRewardBox = LoadMasterRewardBox().Result;
             MasterRewardBoxItem = LoadMasterRewardBoxItem().Result;
@@ -70,6 +72,12 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
         {
             string query = "SELECT item_id, attack_range, damage, distance, reload_round, attack_speed, reload_time, bullet FROM master_item_weapon;";
             return await LoadDatabaseTable<FMasterItemWeapon>(_connectionString, query);
+        }
+            
+        private async Task<DbTable<FMasterQuestBase>> LoadMasterQuestBase()
+        {
+            string query = "SELECT quest_id, type, category, title, target, tag, reward_id, next_quest_id, start_condition_id FROM master_quest_base;";
+            return await LoadDatabaseTable<FMasterQuestBase>(_connectionString, query);
         }
             
         private async Task<DbTable<FMasterRewardBase>> LoadMasterRewardBase()
@@ -117,6 +125,7 @@ namespace WebCommonLibrary.Reposiotry.MasterDatabase
                 MasterItemBase.IsValid() == false || 
                 MasterItemUse.IsValid() == false || 
                 MasterItemWeapon.IsValid() == false || 
+                MasterQuestBase.IsValid() == false || 
                 MasterRewardBase.IsValid() == false || 
                 MasterRewardBox.IsValid() == false || 
                 MasterRewardBoxItem.IsValid() == false || 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using Google.Protobuf.Protocol;
 using UnityEngine;
 
@@ -125,6 +126,23 @@ public class CreatureController : BaseController
     {
         Debug.Log($"{gameObject.name}가 {healAmount}만큼 회복");
         Hp = Mathf.Min(Hp+healAmount , MaxHp);
+    }
+
+    public IEnumerator OnBuffed(Data_master_item_use consume)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < consume.duration)
+        {
+            if (Hp >= MaxHp)
+            {
+                OnHealed(consume.energy);
+            }
+
+            yield return new WaitForSeconds(consume.active_time);
+
+            elapsedTime += consume.active_time;
+        }
     }
 
     public virtual void OnDamaged(Transform attacker)

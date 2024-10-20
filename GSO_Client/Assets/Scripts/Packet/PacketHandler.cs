@@ -637,8 +637,8 @@ internal class PacketHandler
         
         bullet.startPos = startPoint;
         bullet.endPos = hitPoint;
-        
-        
+
+        Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
 
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)

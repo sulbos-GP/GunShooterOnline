@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using WebCommonLibrary.Models.MasterDatabase;
 
 public class Data_master_item_base : BaseData<Data_master_item_base>
 {
@@ -76,4 +77,17 @@ public class Data_master_reward_box_item : BaseData<Data_master_reward_box_item>
     public int y;
     public int rotation;
     public int amount;
+}
+
+public class Data_master_quest_base : BaseData<Data_master_quest_base>
+{
+    public int quest_id;
+    public string type;
+    public string category;
+    public string title;
+    public int target;
+    public string tag;
+    public int reward_id;
+    public int next_quest_id;
+    public int start_condition_id;
 }

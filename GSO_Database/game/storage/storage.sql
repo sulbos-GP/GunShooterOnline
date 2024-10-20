@@ -9,3 +9,5 @@ CREATE TABLE IF NOT EXISTS storage (
     PRIMARY KEY (`storage_id`),
     CONSTRAINT FK_storage_uid_user_uid FOREIGN KEY (`uid`) REFERENCES user (`uid`) ON DELETE RESTRICT ON UPDATE RESTRICT
 );
+
+DELETE FROM storage;

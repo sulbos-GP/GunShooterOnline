@@ -73,7 +73,7 @@ namespace Matchmaker.Controllers
                     }
                     else
                     {
-                        await mMatchmakerService.NotifyMatchSuccess(ticket, request.match_profile);
+                        await mMatchmakerService.NotifyMatchSuccess(uid, ticket, request.match_profile);
                     }
 
                     var error = await mMatchmakerService.RemoveMatchQueue(key);

@@ -13,6 +13,7 @@ namespace WebCommonLibrary.Models.GameDatabase
             user,
             user_level_reward,
             user_metadata,
+            user_register_quest,
             user_skill,
         }
 

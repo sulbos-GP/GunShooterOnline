@@ -1,3 +1,4 @@
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ public class UI_TicketTimer : LobbyUI
 
     public override void InitUI()
     {
-        CheackTicket();
+        
     }
 
     public override void UpdateUI()
@@ -51,17 +52,25 @@ public class UI_TicketTimer : LobbyUI
             {
                 StopCoroutine(countdownTicketTimer);
             }
+            this.gameObject.SetActive(false);
         }
+        else
+        {
+            this.gameObject.SetActive(true);
 
-        TimeSpan timeDifference = profile.recent_ticket_dt - DateTime.UtcNow;
-        int totalWaitSeconds = GameDefine.WAIT_TICKET_SECOND - (int)timeDifference.TotalSeconds;
+            DateTime next = profile.recent_ticket_dt.AddMinutes(GameDefine.WAIT_TICKET_MINUTE);
 
-        countdownTicketTimer = StartCoroutine(DoTicketTimer(totalWaitSeconds));
+            if (countdownTicketTimer != null)
+            {
+                StopCoroutine(countdownTicketTimer);
+            }
+            countdownTicketTimer = StartCoroutine(DoTicketTimer(next));
+        }
     }
 
     public override void OnRegister()
     {
-        this.gameObject.SetActive(false);
+        
     }
 
     public override void OnUnRegister()
@@ -72,18 +81,22 @@ public class UI_TicketTimer : LobbyUI
         }
     }
 
-    private IEnumerator DoTicketTimer(int seconds)
+    private IEnumerator DoTicketTimer(DateTime next)
     {
-        while (seconds > 0)
+
+        TimeSpan timeRemaining = TimeSpan.Zero;
+        do
         {
-            int minutes = seconds / 60;
-            int remainingSeconds = seconds % 60;
+            DateTime now = DateTime.UtcNow;
+            timeRemaining = next - now;
+            string formatTime = timeRemaining.ToString(@"mm\:ss");
+            timerText.text = formatTime;
 
-            timerText.text = string.Format("{0:00}:{1:00}", minutes, remainingSeconds);
+            yield return new WaitForSeconds(1f); //1초
 
-            yield return new WaitForSeconds(1f);
-            seconds--;
-        }
+        } while (timeRemaining > TimeSpan.Zero);
+        //while (timeRemaining > TimeSpan.Zero); 실제
+        //while (timeRemaining <= TimeSpan.Zero); 테스트
 
         PostUpdateTicket();
     }
@@ -125,17 +138,27 @@ public class UI_TicketTimer : LobbyUI
         {
             Managers.Web.Models.User = response.User;
             LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.Currency);
-            Managers.SystemLog.Message($"[TicketTimer] 티켓을 얻었습니다.");
-            this.gameObject.SetActive(false);
+            Managers.SystemLog.Message($"[TicketTimer] got ticket.");
+
+            if(response.User.ticket < GameDefine.MAX_TICKET)
+            {
+                LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.TicketTimer);
+            }
+            else
+            {
+                this.gameObject.SetActive(false);
+            }
         }
         else if(response.error_code == WebErrorCode.TicketRemainingTime)
         {
-            countdownTicketTimer = StartCoroutine(DoTicketTimer(response.RemainingTime));
-            Managers.SystemLog.Message($"[TicketTimer] 티켓을 얻기 까지 [{response.RemainingTime}]sec 오차가 있습니다.");
+            DateTime next = DateTime.UtcNow.AddSeconds(response.RemainingTime);
+            countdownTicketTimer = StartCoroutine(DoTicketTimer(next));
+
+            Managers.SystemLog.Message($"[TicketTimer] [{response.RemainingTime}]seconds before you get a ticket");
         }
         else if(response.error_code == WebErrorCode.TicketAlreadyMax)
         {
-            Managers.SystemLog.Message($"[TicketTimer] 티켓이 이미 한계입니다.");
+            Managers.SystemLog.Message($"[TicketTimer] Tickets hit the limit");
         }
         else
         {
