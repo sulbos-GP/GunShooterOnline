@@ -210,6 +210,7 @@ namespace Server.Game.Object.Gear
                                 amount = gear.attributes.amount,
                             }
                         };
+                       
 
                         ItemObject item = new ItemObject(owner.Id, unit);
                         Storage part = parts[gear.gear.part];

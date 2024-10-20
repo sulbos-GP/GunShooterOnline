@@ -10,6 +10,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
 
@@ -25,7 +26,7 @@ namespace Server
 
             //검사--------------------
 
-            Console.WriteLine(player.info.Name + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
+            //Console.WriteLine(player.info.Name + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
 
             var movePosInfo = packet.PositionInfo; //C요청
 
@@ -643,7 +644,7 @@ namespace Server
 
         }
 
-        internal async void DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
+      /*  internal async Task<ItemObject> DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
         {
             S_DeleteItem packet = new S_DeleteItem();
 
@@ -657,7 +658,7 @@ namespace Server
                 packet.DeleteItem = deleteInfo;
                 packet.SourceObjectId = sourceObjectId;
                 player.Session.Send(packet);
-                return;
+                return null;
             }
 
             bool isDelete = storage.DeleteItem(deleteItem);
@@ -667,8 +668,10 @@ namespace Server
                 packet.DeleteItem = deleteInfo;
                 packet.SourceObjectId = sourceObjectId;
                 player.Session.Send(packet);
-                return;
+                return null;
             }
+
+            return deleteItem;
 
             using (var database = DatabaseHandler.GameDB)
             {
@@ -701,7 +704,101 @@ namespace Server
                     player.Session.Send(packet);
                 }
             }
+
+        }*/
+
+        //메모리에서 아이템 지우기
+        internal ItemObject FindAndDeleteItem(Player player, int sourceObjectId, int deleteItemId, out PS_ItemInfo deleteInfo)
+        {
+            ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
+            deleteInfo = deleteItem.ConvertItemInfo(player.Id);
+
+            Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
+            if (storage == null)
+            {
+                return null;
+            }
+
+            bool isDeleted = storage.DeleteItem(deleteItem);
+            if (!isDeleted)
+            {
+                return null;
+            }
+
+            return deleteItem;
         }
+
+        //패킷 전송 및 데이터베이스 작업
+        internal async Task HandleDeleteItemResult(Player player, int sourceObjectId, ItemObject deleteItem, PS_ItemInfo deleteInfo)
+        {
+            S_DeleteItem packet = new S_DeleteItem();
+            using (var database = DatabaseHandler.GameDB)
+            {
+                try
+                {
+                    bool isDeleted = false;
+
+                    if (IsInventory(sourceObjectId))
+                    {
+                        Inventory inventory = player.inventory;
+                        isDeleted = await inventory.DeleteItem(deleteItem, database);
+                    }
+                    else if (IsGear(sourceObjectId))
+                    {
+                        Gear gear = player.gear;
+                        isDeleted = await gear.DeleteGear((EGearPart)sourceObjectId, deleteItem, database);
+                    }
+
+                    packet.IsSuccess = isDeleted;
+                    packet.SourceObjectId = sourceObjectId;
+                    packet.DeleteItem = deleteInfo;
+                    player.Session.Send(packet);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine($"[DeleteItem] : {e.Message}");
+
+                    packet.IsSuccess = false;
+                    packet.DeleteItem = deleteInfo;
+                    packet.SourceObjectId = sourceObjectId;
+                    player.Session.Send(packet);
+                }
+            }
+        }
+
+        internal async Task<ItemObject> DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
+        {
+            PS_ItemInfo deleteInfo;
+            ItemObject deleteItem = FindAndDeleteItem(player, sourceObjectId, deleteItemId, out deleteInfo);
+
+            if (deleteItem == null)
+            {
+                // 삭제 실패 시 패킷 전송
+                S_DeleteItem packet = new S_DeleteItem
+                {
+                    IsSuccess = false,
+                    DeleteItem = deleteInfo,
+                    SourceObjectId = sourceObjectId
+                };
+                player.Session.Send(packet);
+                return null;
+            }
+
+            // 삭제 성공 시 데이터베이스 처리 및 결과 전송
+            await HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
+
+            return deleteItem;
+        }
+
+
+
+
+
+
+
+
+
+
 
         public bool IsInventory(int storageObjectId)
         {
@@ -881,7 +978,7 @@ namespace Server
                 }
             }
 #else
-            if (tempPlayer.Count == 1) //접속할 인원에 따라 변경
+            if (tempPlayer.Count == 5) //접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
