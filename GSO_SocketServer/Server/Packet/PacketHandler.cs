@@ -174,6 +174,8 @@ class PacketHandler
 
         Player player = clientSession.MyPlayer;
         player.gameRoom.Push(player.gameRoom.DeleteItemHandler, player, packet.SourceObjectId, packet.DeleteItemId);
+
+        //player.gameRoom.DeleteItemHandler(player, packet.SourceObjectId, packet.DeleteItemId);
     }
 
     internal static void C_RaycastShootHandler(PacketSession session, IMessage message)

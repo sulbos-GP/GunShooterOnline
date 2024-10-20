@@ -46,6 +46,10 @@ public class CreatureObj : GameObject
         {
             outcome.death += 1;
         }
+        else
+        {
+            Console.WriteLine("outcome is null");
+        }
         gameRoom.PostPlayerStats(Id);
 
 

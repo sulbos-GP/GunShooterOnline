@@ -80,13 +80,16 @@ public class Player : CreatureObj
         if (gameRoom == null)
             return;
 
-        var diePacket = new S_Die();
+        /*var diePacket = new S_Die();
         diePacket.ObjectId = Id;
         diePacket.AttackerId = attacker.Id;
 
         gameRoom.BroadCast(diePacket);
 
-        var room = gameRoom;
+        var room = gameRoom;*/
+
+        base.OnDead(attacker);
+
         //room.Push(room.LeaveGame, Id);
     }
 
@@ -111,6 +114,7 @@ public class Player : CreatureObj
     /// </summary>
     public void UseQuickSlot(Player player, int sourceObjectId, int deleteItemId)
     {
+        /*
         PS_ItemInfo deleteInfo;
         ItemObject deleteItem = gameRoom.FindAndDeleteItem(player, sourceObjectId, deleteItemId, out deleteInfo);
 
@@ -127,7 +131,7 @@ public class Player : CreatureObj
 
             return;
         }
-
+        
         // 삭제 성공 시 데이터베이스 처리 및 결과 전송
         gameRoom.HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
 
@@ -155,13 +159,13 @@ public class Player : CreatureObj
         else
         {
             Console.WriteLine($"Remaining item amount: {Item.amount}");
-        }
+        }*/
     }
 
    
 
     // 아이템을 사용할 수 있는지 확인
-    public bool CanUseItem(FMasterItemUse item)
+    /*public bool CanUseItem(FMasterItemUse item)
     {
         if (!itemCooldowns.ContainsKey(itemId))
         {
@@ -235,9 +239,9 @@ public class Player : CreatureObj
 
             cooltimer = StartCooltime(consume.cool_time);
         });
-    }
+    }*/
 
-    private Task StartCooltime(double cooltime)
+   /* private Task StartCooltime(double cooltime)
     {
         return Task.Run(async () =>
         {
@@ -254,7 +258,7 @@ public class Player : CreatureObj
             isReady = true;
             cooltimer = null;
         });
-    }
+    }*/
     #endregion
 
 
