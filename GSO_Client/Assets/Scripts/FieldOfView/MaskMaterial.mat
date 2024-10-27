@@ -122,7 +122,7 @@ Material:
     m_Ints: []
     m_Floats:
     - PixelSnap: 0
-    - Vector1_D2837B7B: 0.01
+    - Vector1_D2837B7B: 0.003
     - _BASE_COLOR_WEIGHT: 1
     - _BUMP_MAP_STRENGTH: 0.3
     - _BumpScale: 1
