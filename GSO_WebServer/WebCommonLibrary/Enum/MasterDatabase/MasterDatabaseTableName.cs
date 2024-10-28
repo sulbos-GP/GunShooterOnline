@@ -10,6 +10,7 @@ namespace WebCommonLibrary.Models.MasterDatabase
             master_item_base,
             master_item_use,
             master_item_weapon,
+            master_quest_base,
             master_reward_base,
             master_reward_box,
             master_reward_box_item,

@@ -18,6 +18,8 @@ namespace WebCommonLibrary.DTO.Authentication
         public ClientCredential? credential { get; set; } = null;
 
         public DataLoadUserInfo? userData { get; set; } = null;
+
+        public DailyLoadInfo? DailyLoads { get; set; } = null;
     }
 
 }

@@ -5,10 +5,9 @@ DROP PROCEDURE IF EXISTS create_dummy_item $$
 CREATE PROCEDURE create_dummy_item()
 BEGIN
 
-	DECLARE count INT DEFAULT 12;
-    WHILE(count <= 16)
+	DECLARE count INT DEFAULT 1;
+    WHILE(count <= 5)
 		DO
-        
 			#아이템 생성 (Main, Sub, Armor, Backpack, Pocket)
 			#메인
 			INSERT INTO unit_attributes (item_id, durability, amount) VALUES (102, 0, 1);

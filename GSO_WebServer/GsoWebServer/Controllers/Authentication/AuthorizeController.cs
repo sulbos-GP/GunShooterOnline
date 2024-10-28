@@ -63,7 +63,7 @@ namespace AuthenticationServer.Controllers
             }
 
             //마지막 로그인한 날짜로부터 6개월 이상이 지났다면 다시 갱신토큰 받을 수 있도록 하기
-            var now = DateTime.Now;
+            var now = DateTime.UtcNow;
             int monthsDifference = (now.Year - user.recent_login_dt.Year) * 12 + now.Month - user.recent_login_dt.Month;
             if(monthsDifference > 6)
             {
@@ -176,6 +176,14 @@ namespace AuthenticationServer.Controllers
                     return response;
                 }
 
+                errorCode = await mGameService.UpdateDailyTask(uid);
+                if (errorCode != WebErrorCode.None && errorCode != WebErrorCode.DailyTaskIsAllocate)
+                {
+                    response.error_code = errorCode;
+                    response.error_description = "";
+                    return response;
+                }
+
                 //최근 로그인 시간 변경
                 errorCode = await mAuthenticationService.UpdateLastSignInTime(uid);
                 if (errorCode != WebErrorCode.None)
@@ -187,6 +195,15 @@ namespace AuthenticationServer.Controllers
 
                 //유저 데이터 로드
                 (errorCode, response.userData) = await mDataLoadService.LoadUserData(uid);
+                if (errorCode != WebErrorCode.None)
+                {
+                    response.error_code = errorCode;
+                    response.error_description = "";
+                    return response;
+                }
+
+                //유저 데일리 로드
+                (errorCode, response.DailyLoads) = await mDataLoadService.DailyLoadData(uid);
                 if (errorCode != WebErrorCode.None)
                 {
                     response.error_code = errorCode;

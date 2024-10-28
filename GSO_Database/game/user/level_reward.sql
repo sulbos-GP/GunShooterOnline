@@ -1,5 +1,7 @@
 USE game_database;
 
+DROP TABLE user_level_reward;
+
 CREATE TABLE IF NOT EXISTS user_level_reward (
     reward_level_id		INT 			NOT NULL	AUTO_INCREMENT				COMMENT '레벨 보상 아이디',
     uid					INT 			NOT NULL								COMMENT '유저 아이디',

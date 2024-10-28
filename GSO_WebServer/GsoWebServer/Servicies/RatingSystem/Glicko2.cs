@@ -128,8 +128,8 @@ namespace GsoWebServer.Servicies.Matching
         /// </summary>
         public int CalculateExperience(MatchOutcome outcome)
         {
-            double exp = GetPlayerPerformance(outcome) * 120;
-            return Math.Min(0, (int)exp);
+            int exp = (int)GetPlayerPerformance(outcome) * 120;
+            return Math.Clamp(exp, 0, 120);
         }
 
         /// <summary>

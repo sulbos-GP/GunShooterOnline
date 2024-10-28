@@ -2,6 +2,7 @@
 using Google.Protobuf.Protocol;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
+using Org.BouncyCastle.Bcpg;
 using ServerCore;
 using System;
 using System.Collections.Generic;
@@ -340,14 +341,14 @@ internal class PacketHandler
     /// </summary>
     private static void ChangeItemObjectId(ItemObject targetItem, int newId)
     {
-
+        int id = targetItem.itemData.objectId;
         InventoryController.instantItemDic.Remove(targetItem.itemData.objectId);
         targetItem.itemData.objectId = newId;
         if (!InventoryController.instantItemDic.ContainsKey(targetItem.itemData.objectId))
         {
             InventoryController.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
         }
-        
+        Managers.SystemLog.Message($"change ObjectId : OldId = {id} NewId = {newId}");
     }
 
     private static void AssignEquipOrGrid(int objectId, ref EquipSlot equipSlot, ref GridObject gridObject)
@@ -637,8 +638,8 @@ internal class PacketHandler
         
         bullet.startPos = startPoint;
         bullet.endPos = hitPoint;
-        
-        
+
+        Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
 
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)

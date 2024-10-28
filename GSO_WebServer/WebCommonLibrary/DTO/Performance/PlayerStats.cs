@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
 namespace WebCommonLibrary.DTO.Performance
@@ -12,7 +13,7 @@ namespace WebCommonLibrary.DTO.Performance
 
     public class PlayerStatsRes : ErrorCodeDTO
     {
-        
+        public FUser? User { get; set; } = null;
     }
 
 }
