@@ -20,7 +20,7 @@ MonoBehaviour:
       RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
-        m_Bits: 3072
+        m_Bits: 18944
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
@@ -41,7 +41,7 @@ MonoBehaviour:
       overrideCamera: 0
       restoreCamera: 1
       offset: {x: 0, y: 0, z: 0, w: 0}
-      cameraFieldOfView: 60
+      cameraFieldOfView: 49
 --- !u!114 &-3503104977218879613
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -62,7 +62,7 @@ MonoBehaviour:
       RenderQueueType: 1
       LayerMask:
         serializedVersion: 2
-        m_Bits: 512
+        m_Bits: 1024
       PassNames: []
     overrideMaterial: {fileID: 0}
     overrideMaterialPassIndex: 0
@@ -143,8 +143,8 @@ MonoBehaviour:
     hdrDebugViewPS: {fileID: 4800000, guid: 573620ae32aec764abd4d728906d2587, type: 3}
   m_RendererFeatures:
   - {fileID: -534657991572994616}
-  - {fileID: -3503104977218879613}
   - {fileID: -5912224076009702368}
+  - {fileID: -3503104977218879613}
   m_RendererFeatureMap: 
   m_UseNativeRenderPass: 0
   postProcessData: {fileID: 0}
