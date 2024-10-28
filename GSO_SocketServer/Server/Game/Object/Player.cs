@@ -114,7 +114,7 @@ public class Player : CreatureObj
     /// </summary>
     public void UseQuickSlot(Player player, int sourceObjectId, int deleteItemId)
     {
-        /*
+        
         PS_ItemInfo deleteInfo;
         ItemObject deleteItem = gameRoom.FindAndDeleteItem(player, sourceObjectId, deleteItemId, out deleteInfo);
 
@@ -144,14 +144,14 @@ public class Player : CreatureObj
             Console.WriteLine("아이템이 등록되어있지 않음");
             return;
         }
-
+        /*
         if (!UseConsume(use)) // 아이템 사용
         {
             Console.WriteLine("아이템 사용 실패");
             return;
         }
 
-        Item.amount -= 1; // 아이템의 개수 감소
+       Item.amount -= 1; // 아이템의 개수 감소
         if (Item.amount == 0) // 개수가 0이 되면 아이템 삭제 및 슬롯 리셋
         {
             ResetSlot();
@@ -164,8 +164,8 @@ public class Player : CreatureObj
 
    
 
-    // 아이템을 사용할 수 있는지 확인
-    /*public bool CanUseItem(FMasterItemUse item)
+    /*// 아이템을 사용할 수 있는지 확인
+    public bool CanUseItem(FMasterItemUse item)
     {
         if (!itemCooldowns.ContainsKey(itemId))
         {
@@ -239,26 +239,9 @@ public class Player : CreatureObj
 
             cooltimer = StartCooltime(consume.cool_time);
         });
-    }*/
-
-   /* private Task StartCooltime(double cooltime)
-    {
-        return Task.Run(async () =>
-        {
-            float elapseTime = (float)cooltime;
-
-            while (elapseTime > 0)
-            {
-                Console.WriteLine($"쿨타임 남은 시간: {elapseTime}s");
-                await Task.Delay(1000); // 1초 지연
-                elapseTime -= 1f;
-            }
-
-            Console.WriteLine("쿨타임 종료");
-            isReady = true;
-            cooltimer = null;
-        });
-    }*/
+    }
+*/
+  
     #endregion
 
 
