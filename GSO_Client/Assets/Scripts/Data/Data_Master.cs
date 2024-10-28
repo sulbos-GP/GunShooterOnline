@@ -85,6 +85,7 @@ public class Data_master_quest_base : BaseData<Data_master_quest_base>
     public int reward_id;
     public int next_quest_id;
     public int start_condition_id;
+}
 public class Data_master_reward_box : BaseData<Data_master_reward_box>
 {
     public int box_scale_x;
