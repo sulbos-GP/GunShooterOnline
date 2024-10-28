@@ -1043,6 +1043,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6344235287633309783, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6344235287633309783, guid: 05c111e2242db9e43ac0a2345734b49b, type: 3}
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
@@ -4210,7 +4214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1929648749}
   - component: {fileID: 1929648750}
-  m_Layer: 10
+  m_Layer: 9
   m_Name: blackFog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4272,7 +4276,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: 7482667652216324306, guid: d9487f49c55edf243aeeccfe24fa3244, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 0.30588236}
   m_FlipX: 0
@@ -4652,7 +4656,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b219b35a52d6c594f9f19406b157b1a1, type: 2}
+  - {fileID: -876546973899608171, guid: 99bfc49db73127e4f8939a90947ea2d3, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4694,7 +4698,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0624ae69902eb2744afe3ea695cb64f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
+  blockRayLayer:
     serializedVersion: 2
     m_Bits: 64
   viewDistance: 0
@@ -4972,7 +4976,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b219b35a52d6c594f9f19406b157b1a1, type: 2}
+  - {fileID: -876546973899608171, guid: 99bfc49db73127e4f8939a90947ea2d3, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5006,7 +5010,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5741077b30a25b45b9fc1db828873e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  layerMask:
+  blockRayLayer:
     serializedVersion: 2
     m_Bits: 64
   viewDistance: 0
@@ -5400,11 +5404,15 @@ PrefabInstance:
       objectReference: {fileID: 1397189871}
     - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: InvenBtn
+      value: invenUIControl
       objectReference: {fileID: 0}
     - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: InventoryController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 455507645150785668, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 3328538068500540800, guid: 5bdf4828f45fc8a4b82747641de89e1e, type: 3}
       propertyPath: m_Name

@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using Google.Protobuf.Protocol;
+using System.Threading.Tasks;
 public class Unit : MonoBehaviour
 {
     [SerializeField] private ItemData equipSlot1;
@@ -94,8 +95,9 @@ public class Unit : MonoBehaviour
     }
 
     //해당 슬롯의 총을 사용
-    private void UseGunInSlot(int slotNumber)
+    private async void UseGunInSlot(int slotNumber)
     {
+        await Task.Delay(100);
         ItemData equipptedItem = slotNumber == 1 ? equipSlot1 : equipSlot2;
         if (equipptedItem == null) return;
 
@@ -110,4 +112,6 @@ public class Unit : MonoBehaviour
         Managers.Network.Send(packet);
         Debug.Log($"C_ChangeAppearance 전송 {packet.ObjectId}, {packet.GunId}");
     }
+
+    
 }

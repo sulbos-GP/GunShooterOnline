@@ -8,12 +8,12 @@ using UnityEngine.UI;
 
 public class QuickSlot : MonoBehaviour
 {
-    //퀵슬롯 버튼 1, 2, 3에 넣을거임
+    //퀵슬롯 버튼 1, 2, 3의 컴포넌트에 부착
     public Sprite defaultSprite;
 
     public ItemData itemData;
     private Image itemImage;
-    private TextMeshProUGUI itemAmount;
+    private TextMeshProUGUI itemAmountText;
     private RectTransform cooltimeRect;
     private Data_master_item_use consumeData;
 
@@ -24,7 +24,7 @@ public class QuickSlot : MonoBehaviour
     {
         itemData = null;
         itemImage = transform.GetChild(0).GetComponent<Image>();
-        itemAmount = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        itemAmountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         cooltimeRect = transform.GetChild(2).GetComponent<RectTransform>();
 
         GetComponent<Button>().onClick.RemoveAllListeners();
@@ -48,7 +48,7 @@ public class QuickSlot : MonoBehaviour
 
         Sprite itemSprite = ItemObject.FindItemSprtie(item);
         itemImage.sprite = itemSprite;
-        itemAmount.text = item.amount.ToString();
+        itemAmountText.text = item.amount.ToString();
         consumeData = new Data_master_item_use();
 
         consumeData = Data_master_item_use.GetData(item.itemId);
@@ -63,7 +63,7 @@ public class QuickSlot : MonoBehaviour
 
     public void UpdateItemAmount(int newAmount)
     {
-        itemAmount.text = newAmount.ToString();
+        itemAmountText.text = newAmount.ToString();
         
         if (newAmount <= 0)
         {
@@ -81,7 +81,7 @@ public class QuickSlot : MonoBehaviour
         }
         itemData = null;
         itemImage.sprite = defaultSprite;
-        itemAmount.text = "x";
+        itemAmountText.text = "x";
         consumeData = null;
 
         cooltimeRect.sizeDelta = Vector2.zero;
@@ -127,7 +127,7 @@ public class QuickSlot : MonoBehaviour
         }
         else
         {
-            itemAmount.text = Item.amount.ToString();
+            itemAmountText.text = Item.amount.ToString();
         }
     }
 
@@ -157,46 +157,27 @@ public class QuickSlot : MonoBehaviour
         if (consume.effect == EEffect.immediate)
         {
             isReady = false;
-            myPlayer.OnHealed(consume.energy);
-            cooltimer = StartCoroutine(OnCooltime(consume.cool_time));
+            myPlayer.OnHealed(consume.energy); //체력 회복
+            cooltimer = StartCoroutine(OnCooltime(consume.cool_time)); //쿨타임 코루틴 시작
         }
         else if (consume.effect == EEffect.buff)
         {
             isReady = false;
-            myPlayer.OnHealed(consume.energy);
-            StartCoroutine(OnBuff(myPlayer, consume));
+            StartCoroutine(myPlayer.OnBuffed(consume));
+            cooltimer = StartCoroutine(OnCooltime(consume.cool_time)); //버프가 끝난뒤 쿨타임을 적용하고 싶다면 cooltime+효과 지속시간
         }
 
         return true;
     }
 
-    private IEnumerator OnBuff(CreatureController target, Data_master_item_use consume)
-    {
-        float elapsedTime = 0f;
-
-        while (elapsedTime < consume.duration)
-        {
-            if (target.Hp >= target.MaxHp)
-            {
-                target.OnHealed(consume.energy);
-            }
-
-            yield return new WaitForSeconds(consume.active_time);
-
-            elapsedTime += consume.active_time;
-        }
-
-        cooltimer = StartCoroutine(OnCooltime(consume.cool_time));
-    }
-
-
+    
 
     private IEnumerator OnCooltime(double cooltime)
     {
         Button thisBtn = GetComponent<Button>();
         thisBtn.interactable = false;
-        float elapseTime = (float)cooltime;
 
+        float elapseTime = (float)cooltime;
 
         Vector2 initialSize = thisBtn.GetComponent<RectTransform>().sizeDelta;
         cooltimeRect.sizeDelta = initialSize;

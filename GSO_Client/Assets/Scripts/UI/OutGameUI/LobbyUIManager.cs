@@ -17,6 +17,7 @@ public enum ELobbyUI
     LevelReward,
     MatchSetup,
     TicketTimer,
+    DailyQuest,
 }
 
 public class LobbyUIManager : MonoBehaviour

@@ -10,7 +10,7 @@ public class WebModels
 {
     private ClientCredential credential = new ClientCredential();
     private DataLoadUserInfo data = new DataLoadUserInfo();
-
+    private DailyLoadInfo dailyData = new DailyLoadInfo();
     private void InputLog(string message)
     {
         var log = Managers.SystemLog;
@@ -137,4 +137,30 @@ public class WebModels
     }
 
 
+    public DailyLoadInfo DailyData
+    {
+        set
+        {
+            dailyData = value;
+        }
+    }
+
+    public List<FUserRegisterQuest> DailyQuestData
+    {
+        get
+        {
+            foreach (var quest in dailyData.DailyQuset)
+            {
+                if (null == GetModelOrDefaultNull("DailyQuest", quest))
+                {
+                    return null;
+                }
+            }
+            return dailyData.DailyQuset;
+        }
+        set
+        {
+            dailyData.DailyQuset = value;
+        }
+    }
 }
