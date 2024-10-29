@@ -122,6 +122,8 @@ namespace AuthenticationServer.Controllers
                 if (errorCode == WebErrorCode.SignInFailUserNotExist)
                 {
                     (errorCode, uid) = await mGameService.SingUpWithNewUserGameData(request.user_id, request.service, token.RefreshToken);
+
+                    (errorCode) = await mGameService.UpdateDailyQuset(uid);
                 }
                 
                 if (errorCode != WebErrorCode.None || uid == 0)

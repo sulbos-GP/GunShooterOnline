@@ -167,7 +167,7 @@ CREATE TABLE `master_quest_base` (
 
 LOCK TABLES `master_quest_base` WRITE;
 /*!40000 ALTER TABLE `master_quest_base` DISABLE KEYS */;
-INSERT INTO `master_quest_base` VALUES (20001,'day','전투','플레이어 적 처치',1,'PLAYER',20001,NULL,NULL),(20002,'day','전투','특수지역 적 처치',2,'NPC202',20002,NULL,NULL),(20003,'day','전투','좀비 처치',3,'NPC201',20003,NULL,NULL),(20004,'day','전투','NPC 적 처치',4,'NPC203',20004,NULL,NULL),(30001,'day','보급','건전지 회수',2,'S002',30001,NULL,NULL),(30002,'day','보급','의약품 가방 회수',1,'B001',30002,NULL,NULL),(30003,'day','보급','통나무 회수',8,'S006',30003,NULL,NULL),(30004,'day','보급','밧줄 한묶음 회수',10,'S003',30004,NULL,NULL),(40001,'day','플레이','전장 플레이',3,'PLAY_IN',40001,NULL,NULL),(40002,'day','플레이','전장 탈출',2,'PLAY_OUT',40002,NULL,NULL);
+INSERT INTO `master_quest_base` VALUES (20001,'day','전투','플레이어 적 처치',1,'PLAYER',20001,NULL,NULL),(20002,'day','전투','특수지역 적 처치',2,'NPC202',20002,NULL,NULL),(20003,'day','전투','좀비 처치',3,'NPC201',20003,NULL,NULL),(20004,'day','전투','NPC 적 처치',4,'NPC203',20004,NULL,NULL),(30001,'day','보급','건전지 회수',2,'ITEM_S002',30001,NULL,NULL),(30002,'day','보급','의약품 가방 회수',1,'ITEM_B001',30002,NULL,NULL),(30003,'day','보급','통나무 회수',8,'ITEM_S006',30003,NULL,NULL),(30004,'day','보급','밧줄 한묶음 회수',10,'ITEM_S003',30004,NULL,NULL),(40001,'day','플레이','전장 플레이',3,'PLAY_IN',40001,NULL,NULL),(40002,'day','플레이','전장 탈출',2,'PLAY_OUT',40002,NULL,NULL);
 /*!40000 ALTER TABLE `master_quest_base` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,4 +345,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-18 15:42:03
+-- Dump completed on 2024-10-29 20:58:34
