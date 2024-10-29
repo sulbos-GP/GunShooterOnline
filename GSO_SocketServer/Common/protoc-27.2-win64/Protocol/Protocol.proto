@@ -47,7 +47,6 @@ enum MsgId{
   S_CHANGE_APPEARANCE = 34;
 
   C_INPUT_DATA = 35;
-
   S_UPDATE_QUEST = 36;
 
 }
