@@ -893,6 +893,7 @@ namespace Server
             {
                 //성훈
                 player.UseQuickSlot(packet.Item, packet.Item);
+                Console.WriteLine(packet.Item);
             }
 
         }
