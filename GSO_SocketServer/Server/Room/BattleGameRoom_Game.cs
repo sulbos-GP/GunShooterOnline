@@ -1067,8 +1067,11 @@ namespace Server
 
             BroadCast(s_GameStart);
 
+            foreach (var p in _playerDic.Values)
+            {
+                EventBus.Publish(EEventBusType.Play, p, "PLAY_IN");
+            }
 
-          
             IsGameStarted = true;
 
 
