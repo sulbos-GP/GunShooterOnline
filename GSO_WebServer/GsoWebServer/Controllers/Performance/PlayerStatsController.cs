@@ -35,12 +35,12 @@ namespace GsoWebServer.Controllers.Performance
             Console.WriteLine($"[PlayerStats] uid:{request.uid} room:{request.room_token} : " +
                 $"Outcome" +
                 $"(" +
-                $"kills:{request.outcome.kills}" +
-                $"death:{request.outcome.death}" +
-                $"damage:{request.outcome.damage}" +
-                $"farming:{request.outcome.farming}" +
-                $"escape:{request.outcome.escape}" +
-                $"survival_time:{request.outcome.survival_time}" +
+                $"\tkills:{request.outcome.kills}" +
+                $"\tdeath:{request.outcome.death}" +
+                $"\tdamage:{request.outcome.damage}" +
+                $"\tfarming:{request.outcome.farming}" +
+                $"\tescape:{request.outcome.escape}" +
+                $"\tsurvival_time:{request.outcome.survival_time}" +
                 $")");
 
             var response = new PlayerStatsRes();

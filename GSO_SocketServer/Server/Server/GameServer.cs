@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using Server.Database.Handler;
+using Server.Game.Quest;
 using Server.Web;
 using Server.Web.Service;
 using ServerCore;
@@ -22,6 +23,8 @@ namespace Server.Server
         protected override async Task<bool> OnStart()
         {
             Program.database.initializeAndLoadData();
+            
+            QuestSystem.Instance.Initialize();
 
             BattleGameRoom room = new BattleGameRoom();
             this.SetChannel(true, room, 0);

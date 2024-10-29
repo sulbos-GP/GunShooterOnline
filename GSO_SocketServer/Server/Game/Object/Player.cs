@@ -9,6 +9,7 @@ using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Database.Handler;
 using Server.Game.Object.Gear;
+using Server.Game.Quest;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
 
@@ -20,6 +21,7 @@ public class Player : CreatureObj
     public Inventory inventory;
     public Gear gear;
     public Gun gun = new();
+    public Quests Quest;
     public CredentiaInfo credential;
 
     private float SpawnTime = 0;
