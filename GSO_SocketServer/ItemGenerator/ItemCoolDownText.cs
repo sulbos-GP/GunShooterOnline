@@ -14,11 +14,8 @@ namespace DatabaseGenerator
 
  public class ItemCoolDown
 {{
-    #region Singleton
-    static ItemCoolDown _instance = new ItemCoolDown();
-    public static ItemCoolDown Instance {{ get {{ return _instance; }} }}
-  #endregion
-Dictionary<int, short> _handler = new Dictionary<int, short>();
+    
+    Dictionary<int, short> _handler = new Dictionary<int, short>();
 
     public ItemCoolDown()
     {{
