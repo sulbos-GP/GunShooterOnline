@@ -72,6 +72,7 @@ namespace Server.Game.Quest
 
             if (tag != Data.tag)
             {
+                Console.WriteLine("[QuestBase.Update] 퀘스트와 tag가 다름");
                 return;
             }
 
@@ -84,6 +85,8 @@ namespace Server.Game.Quest
             {
                 Register.completed = false;
             }
+
+            Console.WriteLine($"[QuestBase.Update] id:{Register.quest_id} progress:{Register.progress} completed:{Register.completed}");
 
             int result = await DatabaseHandler.GameDB.UpdateRegisterQuest(owner.UID, Register);
             if (result == 0)
