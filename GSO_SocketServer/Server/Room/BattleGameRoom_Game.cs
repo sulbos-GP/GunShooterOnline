@@ -915,6 +915,10 @@ namespace Server
         public void HandleExitGame(Player player, int exitId)
         {
 
+            EventBus.Publish(EEventBusType.Play, player, "PLAY_OUT");
+
+            Task.Delay(1000);
+
             //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
             player.inventory.ClearInventory();
             ObjectManager.Instance.Remove(player.inventory.Id);
