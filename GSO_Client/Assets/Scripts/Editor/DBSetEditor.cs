@@ -9,8 +9,6 @@ using MySqlConnector;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using System.Text.RegularExpressions;
-using static Unity.VisualScripting.Dependencies.Sqlite.SQLiteConnection;
-using Unity.VisualScripting.Dependencies.Sqlite;
 using System.Text;
 using System.Linq;
 

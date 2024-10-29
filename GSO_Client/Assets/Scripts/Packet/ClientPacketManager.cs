@@ -64,8 +64,10 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SWaitingStatus, MakePacket<S_WaitingStatus>);
 		_handler.Add((ushort)MsgId.SWaitingStatus, PacketHandler.S_WaitingStatusHandler);		
 		_onRecv.Add((ushort)MsgId.SChangeAppearance, MakePacket<S_ChangeAppearance>);
-		_handler.Add((ushort)MsgId.SChangeAppearance, PacketHandler.S_ChangeAppearanceHandler);
-    }
+		_handler.Add((ushort)MsgId.SChangeAppearance, PacketHandler.S_ChangeAppearanceHandler);		
+		_onRecv.Add((ushort)MsgId.SUpdateQuest, MakePacket<S_UpdateQuest>);
+		_handler.Add((ushort)MsgId.SUpdateQuest, PacketHandler.S_UpdateQuestHandler);
+	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
 	{

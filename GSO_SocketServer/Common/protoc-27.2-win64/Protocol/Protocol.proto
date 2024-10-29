@@ -47,6 +47,9 @@ enum MsgId{
   S_CHANGE_APPEARANCE = 34;
 
   C_INPUT_DATA = 35;
+
+  S_UPDATE_QUEST = 36;
+
 }
 
 enum GameObjectType{
@@ -109,6 +112,7 @@ message S_EnterGame{                       //0  1명 게임 접속 패킷
     ObjectInfo player = 1;
     repeated PS_ItemInfo itemInfos = 2;
     repeated PS_GearInfo gearInfos = 3;
+    repeated PS_RegisterQuest quests = 4;
 }
 
 message S_LeaveGame{                       //1
@@ -346,7 +350,7 @@ message S_GameStart {     //32  모두 모임
     float startTime = 2;   // 게임 시작 시간
 
     repeated ObjectInfo objects = 3;
-    repeated PS_GearInfo gearInfos = 5;
+    repeated PS_GearInfo gearInfos = 4;
 }
 
 
@@ -368,9 +372,13 @@ message C_InputData {  //35
 
 ////////////////////////////////////////////
 //                                        //
-//                COMMAND                 //
+//                 QUEST                  //
 //                                        //
 ////////////////////////////////////////////
+
+message S_UpdateQuest {  //36
+    PS_RegisterQuest quest = 1;
+}
 
 //--------------- END message --------------------
 
@@ -454,6 +462,12 @@ message PS_ItemInfo{
 message PS_GearInfo{
     PE_GearPart part                        = 1;        // 장비 아이템 번호
     PS_ItemInfo item                        = 2;        // 아이템 정보
+}
+
+message PS_RegisterQuest {
+    int32       id                          = 1;
+    int32       progress                    = 2;
+    bool        completed                   = 3;
 }
 
 
