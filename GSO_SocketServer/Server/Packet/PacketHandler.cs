@@ -299,6 +299,7 @@ class PacketHandler
 
         Player player = clientSession.MyPlayer;
 
-        player.gameRoom.Push(player.gameRoom.HandleInputData, player, packet.Reload);
+
+        player.gameRoom.Push(player.gameRoom.HandleInputData, player, packet);
     }
 }

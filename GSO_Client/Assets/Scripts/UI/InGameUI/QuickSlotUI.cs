@@ -1,3 +1,4 @@
+using Google.Protobuf.Protocol;
 using Google.Protobuf.WellKnownTypes;
 using System;
 using System.Collections;
@@ -116,7 +117,13 @@ public class QuickSlot : MonoBehaviour
             Debug.Log("아이템 사용 실패");
             return;
         }
-        
+
+        C_InputData inputPacket = new C_InputData();
+        inputPacket.Item = Item.itemId;
+
+        Managers.Network.Send(inputPacket);
+
+
         //추후 아이템 사용 패킷 생성후 교체
         //패킷을 통해 서버에 해당 아이템이 사용되었다는것을 알려주며 서버에있는 해당 아이템의 개수를 -1 시켜야함
 
@@ -153,6 +160,8 @@ public class QuickSlot : MonoBehaviour
             return false;
         }
 
+    
+        return true;
 
         if (consume.effect == EEffect.immediate)
         {

@@ -882,12 +882,19 @@ namespace Server
             BroadCast(packet);
         }
 
-        internal async void HandleInputData(Player player, bool isReload)
+        internal async void HandleInputData(Player player, C_InputData packet)
         {
-            if (isReload)
+             if (packet.Reload)
+             {
+                 await player.gun.Reload();
+             }
+
+            if (packet.Item != 0)
             {
-                await player.gun.Reload();
+                //성훈
+                player.UseQuickSlot(packet.Item, packet.Item);
             }
+
         }
 
         ////////////////////////////////////////////

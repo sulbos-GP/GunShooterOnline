@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Threading.Tasks;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
+using Humanizer.DateTimeHumanizeStrategy;
 using Server.Database.Handler;
 using Server.Game.Object.Gear;
 using Server.Game.Quest;
@@ -18,6 +19,7 @@ namespace Server.Game;
 public class Player : CreatureObj
 {
     public SkillCoolDown SkillCoolDown = new();
+    public ItemCoolDown ItemCoolDown = new();
     public Inventory inventory;
     public Gear gear;
     public Gun gun = new();
@@ -26,7 +28,6 @@ public class Player : CreatureObj
 
     private float SpawnTime = 0;
 
-    private Dictionary<int, DateTime> itemCooldowns = new Dictionary<int, DateTime>();
 
     public Player()
     {
@@ -114,11 +115,11 @@ public class Player : CreatureObj
     /// <summary>
     /// 등록된 아이템을 사용. 이건 아이템의 기능이 나와야할듯
     /// </summary>
-    public void UseQuickSlot(Player player, int sourceObjectId, int deleteItemId)
+    public void UseQuickSlot(int sourceObjectId, int deleteItemId)
     {
         
         PS_ItemInfo deleteInfo;
-        ItemObject deleteItem = gameRoom.FindAndDeleteItem(player, sourceObjectId, deleteItemId, out deleteInfo);
+        ItemObject deleteItem = gameRoom.FindAndDeleteItem(this , sourceObjectId, deleteItemId, out deleteInfo);
 
         if (deleteItem == null)
         {
@@ -129,16 +130,15 @@ public class Player : CreatureObj
                 DeleteItem = deleteInfo,
                 SourceObjectId = sourceObjectId
             };
-            player.Session.Send(packet);
+            Session.Send(packet);
 
             return;
         }
         
         // 삭제 성공 시 데이터베이스 처리 및 결과 전송
-        gameRoom.HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
+        gameRoom.HandleDeleteItemResult(this, sourceObjectId, deleteItem, deleteInfo);
 
         //아이템이 있고 사용할 수 있는 상태
-        FMasterItemUse use = DatabaseHandler.Context.MasterItemUse.Find(deleteItem.ItemId);
 
 
         if (deleteItem == null)
@@ -146,25 +146,30 @@ public class Player : CreatureObj
             Console.WriteLine("아이템이 등록되어있지 않음");
             return;
         }
-        /*
-        if (!UseConsume(use)) // 아이템 사용
-        {
-            Console.WriteLine("아이템 사용 실패");
-            return;
-        }
 
-       Item.amount -= 1; // 아이템의 개수 감소
-        if (Item.amount == 0) // 개수가 0이 되면 아이템 삭제 및 슬롯 리셋
-        {
-            ResetSlot();
-        }
-        else
-        {
-            Console.WriteLine($"Remaining item amount: {Item.amount}");
-        }*/
+        ItemManager.Instance.UseIteme(this, deleteItem.ItemId);
+
+
+      
     }
 
-   
+
+    public bool ApplyItem(int id, double CoolDown)
+    {
+        short ItemCool = ItemCoolDown.GetCoolTime(id);
+        short current = (short)(DateTime.Now.Second + DateTime.Now.Minute * 60);
+        //최소 : 0 최대 : 3660
+        //Console.WriteLine(skillCool);
+        //Console.WriteLine(currnt);
+        var t = ItemCool + CoolDown;
+        if (current >= (t >= 3599 ? t - 3599 : t))
+        {
+            ItemCoolDown.SetCoolTime(id, current);
+            return true;
+        }
+
+        return false;
+    }
 
     /*// 아이템을 사용할 수 있는지 확인
     public bool CanUseItem(FMasterItemUse item)
@@ -243,7 +248,7 @@ public class Player : CreatureObj
         });
     }
 */
-  
+
     #endregion
 
 
