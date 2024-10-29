@@ -202,8 +202,6 @@ class PacketHandler
         }
         player.gameRoom.PostPlayerStats(player.Id);
 
-        EventBus.Publish(EEventBusType.Play, player, "PLAY_OUT");
-
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
 
     }
