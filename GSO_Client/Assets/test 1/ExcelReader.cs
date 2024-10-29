@@ -36,7 +36,7 @@ public class ExcelReader
         {
             foreach (var file in files)
             {
-                //TO-DO : ÃßÈÄ¿¡ ÅØ½ºÆ® ÆÄÀÏ·Î ¿¢¼¿ ÀÌ¸§ °ü¸®.
+                //TO-DO : ì¶”í›„ì— í…ìŠ¤íŠ¸ íŒŒì¼ë¡œ ì—‘ì…€ ì´ë¦„ ê´€ë¦¬.
                 string filePath = Path.Combine(Application.streamingAssetsPath, file);
                 string filePerPath = Path.Combine(Application.persistentDataPath, file);
 
@@ -64,11 +64,11 @@ public class ExcelReader
         string[] fileList;
 #if UNITY_EDITOR
         fileList = Directory.GetFiles(Application.dataPath + EXCEL_PATH, "*.xlsx", SearchOption.TopDirectoryOnly);
-        Debug.Log("À¯´ÏÆ¼ ¿¡µğÅÍ");
+        Debug.Log("ìœ ë‹ˆí‹° ì—ë””í„°");
 #elif UNITY_ANDROID
         //string filePerPath = Path.Combine(Application.persistentDataPath, "Item.xlsx");
         fileList =  Directory.GetFiles(Application.persistentDataPath,"*.xlsx", SearchOption.TopDirectoryOnly);
-        Debug.Log("À¯´ÏÆ¼ ¾Èµå·ÎÀÌµå");
+        Debug.Log("ìœ ë‹ˆí‹° ì•ˆë“œë¡œì´ë“œ");
 #endif
 
         List<ISheet> sheetList = GetSheet(fileList);
@@ -120,7 +120,7 @@ public class ExcelReader
                 }
                 else
                 {
-                    Debug.Log("ÆÄÀÏ ¾È¿­¸²");
+                    Debug.Log("íŒŒì¼ ì•ˆì—´ë¦¼");
                     continue;
                 }
                 for (int i = 0; i < workbook.NumberOfSheets; i++)
@@ -172,7 +172,7 @@ public class ExcelReader
                     targetStr = cell == null ? string.Empty : cell.CellType == CellType.Formula ? cell.NumericCellValue.ToString() : cell.ToString();
                 }
 
-                // ½°Ç¥, ½Öµû¿ÈÇ¥, °³ÇàÀÌ Á¸ÀçÇÏ¸é ¿¹¿ÜÃ³¸®.
+                // ì‰¼í‘œ, ìŒë”°ì˜´í‘œ, ê°œí–‰ì´ ì¡´ì¬í•˜ë©´ ì˜ˆì™¸ì²˜ë¦¬.
                 bool hasCRLF = targetStr.IndexOf('\n') >= 0 || targetStr.IndexOf('\r') >= 0;
                 bool hasDoubleQuotes = targetStr.IndexOf('"') >= 0;
                 bool hasComma = targetStr.IndexOf(',') >= 0;

@@ -14,6 +14,9 @@ using WebCommonLibrary.Models.Match;
 using System.Numerics;
 using System.Linq;
 using System.Diagnostics;
+using Server.Game.Quest;
+using WebCommonLibrary.Models.GameDatabase;
+using Server.Game.Quest.Interfaces;
 
 namespace Server
 {
@@ -152,6 +155,13 @@ namespace Server
                         enterPacket.ItemInfos.Add(item);
                     }
 
+                    player.Quest = new Quests(player);
+                    foreach (IQuest quest in player.Quest.QuestList)
+                    {
+                        enterPacket.Quests.Add(quest.Packet);
+                    }
+
+                    EventBus.Publish(EEventBusType.Play, player, "PLAY_IN");
 
                     player.inventory.storage.PrintInvenContents();
                     player.Session.Send(enterPacket);
@@ -334,8 +344,9 @@ namespace Server
                 outcome.survival_time = (int)playTime.Elapsed.TotalMinutes;
             }
 
-
+#if DOCKER
             Program.web.Lobby.PostPlayerStats(player.UID, outcome).Wait();
+#endif
         }
     }
 }

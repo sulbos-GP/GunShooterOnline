@@ -338,6 +338,20 @@ namespace GsoWebServer.Servicies.Game
                         return WebErrorCode.TEMP_ERROR;
                     }
                 }
+                else
+                {
+                    int updateRes = await mGameDB.UpdateTicket(uid, 8);
+                    if (updateRes == 0)
+                    {
+                        return WebErrorCode.TEMP_ERROR;
+                    }
+
+                    updateRes = await mGameDB.UpdateLastTicketTime(uid);
+                    if (updateRes == 0)
+                    {
+                        return WebErrorCode.TEMP_ERROR;
+                    }
+                }
 
                 return WebErrorCode.None;
             }

@@ -27,7 +27,10 @@ public partial class MyPlayerController : PlayerController
     //게임
 
     public PlayerInput playerInput;
-    
+
+    //UI
+    public UI_Quest _Quest;
+
     //public int Attack => Stat.Attack;
     public Gun gun { get; private set; }
 
@@ -83,6 +86,8 @@ public partial class MyPlayerController : PlayerController
         gun = transform.Find("Pivot/Gun").GetComponent<Gun>();
         //base 무시
         base.Init();
+
+
 
         return;
 

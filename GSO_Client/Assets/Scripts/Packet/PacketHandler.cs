@@ -6,7 +6,7 @@ using Org.BouncyCastle.Bcpg;
 using ServerCore;
 using System;
 using System.Collections.Generic;
-
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using UnityEditor;
@@ -39,6 +39,9 @@ internal class PacketHandler
 
             targetSlot.ApplyItemEffects(data);
         }
+
+        Managers.Object.MyPlayer._Quest = GameObject.Find("Canvas").transform.GetComponentInChildren<UI_Quest>();
+        Managers.Object.MyPlayer._Quest.InitQuest(enterGamePacket.Quests.ToList());
     }
 
     public static void S_LeaveGameHandler(PacketSession session, IMessage packet)
@@ -754,7 +757,19 @@ internal class PacketHandler
         
     }
 
-    
+    internal static void S_UpdateQuestHandler(PacketSession session, IMessage message)
+    {
+        S_UpdateQuest packet = message as S_UpdateQuest;
+        Managers.SystemLog.Message("S_UpdateQuestHandler");
+
+        MyPlayerController player = Managers.Object.MyPlayer;
+        if (player != null)
+        {
+            var quest = packet.Quest;
+            player._Quest.UpdateQuest(quest.Id, quest.Progress, quest.Completed);
+        }
+
+    }
 
 
 
