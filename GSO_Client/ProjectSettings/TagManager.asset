@@ -22,12 +22,12 @@ TagManager:
   - BlockView
   - Ground
   - View
-  - HideWithoutView
   - Black
+  - HideWithoutView
   - BulletPass
   - BackGround
   - TransparencyWall
-  - 
+  - Cover
   - 
   - 
   - 

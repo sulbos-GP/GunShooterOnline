@@ -6,7 +6,7 @@ public class FieldOfView : MonoBehaviour
 {
     [Header("component")]
     private Mesh mesh;
-    [SerializeField] private LayerMask layerMask; //선택한 레이어만 레이에 막히게 하는 역할
+    [SerializeField] private LayerMask blockRayLayer; //선택한 레이어만 레이에 막히게 하는 역할
 
     [Header("view property")]
     [SerializeField] protected float viewDistance; //기본시야 레이의 최대거리
@@ -45,7 +45,7 @@ public class FieldOfView : MonoBehaviour
         for (int i = 0; i <= setRayCount; i++)
         {
             Vector3 vertex;
-            RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, GetVectorFromAngle(angle), setViewDistance, layerMask);
+            RaycastHit2D raycastHit2D = Physics2D.Raycast(origin, GetVectorFromAngle(angle), setViewDistance, blockRayLayer);
 
             if (raycastHit2D.collider == null)
             {

@@ -27,7 +27,7 @@ using WebCommonLibrary.Models.GameDB;
 class PacketHandler
 {
     //GWANHO TEMP
-    private static int cnt = 1;
+    private static int cnt = 12;
 
 
   
@@ -201,6 +201,8 @@ class PacketHandler
             outcome.escape += 1;
         }
         player.gameRoom.PostPlayerStats(player.Id);
+
+        EventBus.Publish(EEventBusType.Play, player, "PLAY_OUT");
 
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
 
