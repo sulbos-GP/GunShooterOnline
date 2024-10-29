@@ -186,6 +186,8 @@ namespace Server
             }
             sourcelItem.AddViewer(player.Id, player.Session.mPeer.RoundTripTime);
 
+            EventBus.Publish(EEventBusType.Collect, player, sourcelItem);
+
             packet.IsSuccess = true;
             packet.SourceObjectId = sourceObjectId;
             packet.SourceItem = sourceItemInfo;
