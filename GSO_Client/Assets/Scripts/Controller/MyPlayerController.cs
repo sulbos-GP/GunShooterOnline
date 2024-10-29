@@ -87,7 +87,7 @@ public partial class MyPlayerController : PlayerController
         //base 무시
         base.Init();
 
-        _Quest = GameObject.Find("Canvas").transform.GetComponentInChildren<UI_Quest>();
+
 
         return;
 

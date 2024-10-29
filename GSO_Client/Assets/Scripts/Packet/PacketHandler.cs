@@ -763,8 +763,12 @@ internal class PacketHandler
         Managers.SystemLog.Message("S_UpdateQuestHandler");
 
         MyPlayerController player = Managers.Object.MyPlayer;
-        var quest = packet.Quest;
-        player._Quest.UpdateQuest(quest.Id, quest.Progress, quest.Completed);
+        if (player != null)
+        {
+            var quest = packet.Quest;
+            player._Quest.UpdateQuest(quest.Id, quest.Progress, quest.Completed);
+        }
+
     }
 
 
