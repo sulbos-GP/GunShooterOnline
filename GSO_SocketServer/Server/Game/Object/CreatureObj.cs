@@ -104,8 +104,22 @@ public class CreatureObj : GameObject
         }
         //할일 TODO : 만약 주인이 또 스킬이거나 하는 경우!!
         //TODO : 진짜 딜량 구하기 지승현 241019
+        Player p = this as Player;
+        if (p != null)
+        {
+            damage = Math.Max(damage - p.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.Armor).Data.amount, 0);
 
-        damage = Math.Max(damage, 0);
+        }
+        else
+        {
+            damage = Math.Max(damage, 0);
+
+        }
+
+
+
+
+
         stat.Hp = Math.Max(stat.Hp - damage, 0);
 
         Console.WriteLine($" attacker :{rootAttacker.Id} Damage : {damage}  stat.Hp : {stat.Hp}");
