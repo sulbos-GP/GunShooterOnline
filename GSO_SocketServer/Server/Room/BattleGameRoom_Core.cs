@@ -161,8 +161,6 @@ namespace Server
                         enterPacket.Quests.Add(quest.Packet);
                     }
 
-                    EventBus.Publish(EEventBusType.Play, player, "PLAY_IN");
-
                     player.inventory.storage.PrintInvenContents();
                     player.Session.Send(enterPacket);
 
