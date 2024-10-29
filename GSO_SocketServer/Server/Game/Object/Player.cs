@@ -132,6 +132,8 @@ public class Player : CreatureObj
             };
             Session.Send(packet);
 
+            Console.WriteLine("Fail to Use" + sourceObjectId);
+
             return;
         }
         
