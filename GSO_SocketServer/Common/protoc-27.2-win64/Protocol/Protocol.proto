@@ -362,6 +362,7 @@ message S_ChangeAppearance{ //34
 
 message C_InputData {  //35
     bool reload = 1;
+    int32 item = 2;
 }
 
 
