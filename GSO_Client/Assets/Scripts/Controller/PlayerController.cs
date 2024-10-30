@@ -13,9 +13,9 @@ public class PlayerController : CreatureController
 
     public LineRenderer lineRenderer;
 
-    private Material material;
-    private SpriteRenderer sprite;
-    private Animator animator;
+    [SerializeField] private Material material;
+    [SerializeField] private SpriteRenderer sprite;
+    [SerializeField] private Animator animator;
     private Transform prevTrn;
     public struct Rectangle
     {
@@ -39,9 +39,7 @@ public class PlayerController : CreatureController
     public void SetDrawLine(float width , float height)
     {
         //TO-DO : 임시
-        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        animator = transform.GetChild(1).GetComponent<Animator>();
-        lineRenderer = GetComponent<LineRenderer>();
+        
         _width = width;
         _height = height;
 
@@ -91,6 +89,10 @@ public class PlayerController : CreatureController
     {
         base.Init();
         Debug.Log("init");
+
+        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        lineRenderer = GetComponent<LineRenderer>();
     }
 
     //protected override void UpdateAnimation()

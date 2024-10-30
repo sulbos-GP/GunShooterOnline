@@ -72,7 +72,6 @@ namespace Server.Game.Quest
 
             if (tag != Data.tag)
             {
-                Console.WriteLine("[QuestBase.Update] 퀘스트와 tag가 다름");
                 return;
             }
 

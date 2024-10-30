@@ -56,7 +56,7 @@ namespace Server.Game
             ResetGun();
         }
 
-        public void SetGunData(int gunItemId) //총의 오브젝트 ID
+        public void SetGunData(int gunItemId) //여기의 id는 총의 오브젝트 ID
         {
             gunItemData = ObjectManager.Instance.Find<ItemObject>(gunItemId);
             UsingGunData = DatabaseHandler.Context.MasterItemWeapon.Find(gunItemData.ItemId); 
