@@ -27,7 +27,7 @@ using WebCommonLibrary.Models.GameDB;
 class PacketHandler
 {
     //GWANHO TEMP
-    private static int cnt = 12;
+    private static int cnt = 1;
 
 
   
