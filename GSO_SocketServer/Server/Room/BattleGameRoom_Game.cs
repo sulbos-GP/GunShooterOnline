@@ -873,13 +873,18 @@ namespace Server
 
         internal void ChangeAppearance(Player player,int targetId, int gunId)
         {
-            player.gun.SetGunData(gunId);
-            
-            S_ChangeAppearance packet = new S_ChangeAppearance()
+            S_ChangeAppearance packet = new S_ChangeAppearance();
+            packet.ObjectId = targetId;
+            if (gunId == 0) //총을 들고 있지 않음
             {
-                ObjectId = targetId,
-                GunId = player.gun.UsingGunData.item_id
-            };
+                player.gun.ResetGun(); 
+                packet.GunId = 0;
+            }
+            else
+            {
+                player.gun.SetGunData(gunId);
+                packet.GunId = player.gun.UsingGunData.item_id;
+            }
 
             BroadCast(packet);
         }

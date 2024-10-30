@@ -741,6 +741,16 @@ internal class PacketHandler
 
         if(packet.ObjectId == Managers.Object.MyPlayer.Id)
         {
+            //return;
+        }
+
+        GameObject targetPlayer = Managers.Object.FindById(packet.ObjectId);
+       
+
+        if (packet.GunId == 0)
+        {
+            Managers.SystemLog.Message("S_ChangeAppearanceHandler : no gun in hand");
+            targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
             return;
         }
 
@@ -751,7 +761,6 @@ internal class PacketHandler
         }
         Managers.SystemLog.Message($"S_ChangeAppearanceHandler : spriteName : {targetSprite.name}");
 
-        GameObject targetPlayer = Managers.Object.FindById(packet.ObjectId);
         targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = targetSprite;
         Managers.SystemLog.Message($"S_ChangeAppearanceHandler : targetPlayer : {targetPlayer.name}");
         

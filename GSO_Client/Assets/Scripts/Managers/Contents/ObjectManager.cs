@@ -62,6 +62,7 @@ public class ObjectManager
                 //MyPlayer.Stat.MergeFrom(info.StatInfo);
                 MyPlayer.SyncPos();
                 MyPlayer.playerInput = MyPlayer.GetComponent<InputController>().playerInput;
+                MyPlayer.GetComponent<Unit>().Init();
             }
             else
             {

@@ -56,7 +56,7 @@ namespace Server.Game
             ResetGun();
         }
 
-        public void SetGunData(int gunItemId) //총의 오브젝트 ID
+        public void SetGunData(int gunItemId) //여기의 id는 총의 오브젝트 ID
         {
             gunItemData = ObjectManager.Instance.Find<ItemObject>(gunItemId);
             UsingGunData = DatabaseHandler.Context.MasterItemWeapon.Find(gunItemData.ItemId); 
@@ -88,8 +88,11 @@ namespace Server.Game
             Console.WriteLine($"attacker : {attacker}\n" +
                 $"pos : {pos.X},{pos.Y}\n" +
                 $"dir : {dir.X},{dir.Y}");
+
             ItemObject mainWeapon = ownerPlayer.gear.GetPartItem(EGearPart.MainWeapon);
             FMasterItemWeapon mainWeaponInfo = DatabaseHandler.Context.MasterItemWeapon.Find(mainWeapon.ItemId);
+            //왜 여기서 총의 데이터를 또 찾고있는거임? 변경된 현재 들고있는 총의 정보는 SetGunData를 통해 UsingGunData에 저장되어있는데...
+
 
             //정규분포를 사용한 발사
             float halfAccuracyRange = UsingGunData.attack_range / 2f;

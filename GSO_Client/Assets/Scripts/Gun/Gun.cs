@@ -151,6 +151,11 @@ public class Gun : MonoBehaviour
         //조건1 현재 총알이 최대개수보다 작아야함.
         //조건2 재장전 중이 아니어야함
         //조건3 인벤에 맞는 총알이 있어야함 (todo)
+        if(UsingGunData == null)
+        {
+            Managers.SystemLog.Message("총을 들고 있지 않음");
+            return;
+        }
         if(CurAmmo < UsingGunData.reload_round || UsingGunState != GunState.Reloading)
         {
             //인벤에 해당 총알이 있는지 검색. -> 있다면 최대 장전량 만큼 있는지 확인. -> 그이상이 있다면 최대개수로 아니라면 해당 개수만큼 재장전
