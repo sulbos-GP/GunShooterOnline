@@ -1,9 +1,12 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
+using Humanizer;
 using Server.Database.Handler;
+using System;
 using System.Numerics;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
+using static Humanizer.On;
 
 namespace Server.Game.Object.Item
 {
@@ -58,35 +61,46 @@ namespace Server.Game.Object.Item
             //임의의 아이템
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
-            FMasterItemBase colt45Data = DatabaseHandler.Context.MasterItemBase.Find(101);
-            DB_ItemUnit colt45 = new DB_ItemUnit()
+            Random rand = new Random();
+            int number = rand.Next(1, 6);
+
+            bool result = true;
+
+                switch (number)
+                {
+                    case 1:
+                        result = RandomItem(101, 103);
+                        break;
+                    case 2:
+                        result = RandomItem(201, 203);
+                        break;
+                    case 3:
+                        result = RandomItem(300, 303);
+                        break;
+                    case 4:
+                        result = RandomItem(401, 404);
+                        break;
+                    case 5:
+                        result = RandomItem(501, 502);
+                        break;
+                    case 6:
+                        result = RandomItem(601, 606);
+                        break;
+                }
+            
+
+        }
+
+        public bool RandomItem(int min, int max)
+        {
+            Random rand = new Random();
+            int item_id = rand.Next(min, max);
+            FMasterItemBase data = DatabaseHandler.Context.MasterItemBase.Find(item_id);
+            DB_ItemUnit item = new DB_ItemUnit()
             {
                 storage = new DB_StorageUnit()
                 {
                     grid_x = 0,
-                    grid_y = 0,
-                    rotation = 0,
-                    unit_attributes_id = 0
-                },
-
-                attributes = new DB_UnitAttributes()
-                {
-                    item_id = colt45Data.item_id,
-                    durability = 0,
-                    unit_storage_id = null,
-                    amount = 1
-                }
-            };
-            ItemObject colt45Item = new ItemObject(colt45);
-            storage.InsertItem(colt45Item);
-
-            //
-            FMasterItemBase akData = DatabaseHandler.Context.MasterItemBase.Find(102);
-            DB_ItemUnit ak47 = new DB_ItemUnit()
-            {
-                storage = new DB_StorageUnit()
-                {
-                    grid_x = 3,
                     grid_y = 0,
                     rotation = 1,
                     unit_attributes_id = 0
@@ -94,42 +108,16 @@ namespace Server.Game.Object.Item
 
                 attributes = new DB_UnitAttributes()
                 {
-                    item_id = akData.item_id,
+                    item_id = data.item_id,
                     durability = 0,
                     unit_storage_id = null,
                     amount = 1
                 }
             };
-            ItemObject akItem = new ItemObject(ak47);
-            storage.InsertItem(akItem);
+            ItemObject newItem = new ItemObject(item);
+            EStorageError error = storage.InsertItem(newItem);
 
-            //
-            FMasterItemBase bandData = DatabaseHandler.Context.MasterItemBase.Find(402);
-
-            for (int i = 0; i < 5; ++i)
-            {
-                DB_ItemUnit band = new DB_ItemUnit()
-                {
-                    storage = new DB_StorageUnit()
-                    {
-                        grid_x = i,
-                        grid_y = 4,
-                        rotation = 0,
-                        unit_attributes_id = 0
-                    },
-
-                    attributes = new DB_UnitAttributes()
-                    {
-                        item_id = bandData.item_id,
-                        durability = 0,
-                        unit_storage_id = null,
-                        amount = 1 + (i * 5)
-                    }
-                };
-                ItemObject bandItem = new ItemObject(band);
-                storage.InsertItem(bandItem);
-            }
-
+            return error == EStorageError.None ? true : false;
         }
 
     }

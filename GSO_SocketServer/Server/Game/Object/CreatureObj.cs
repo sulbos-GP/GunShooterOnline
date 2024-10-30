@@ -28,6 +28,13 @@ public class CreatureObj : GameObject
         if (gameRoom == null)
             return;
 
+        Player player = attacker as Player;
+        if(player != null)
+        {
+            EventBus.Publish(EEventBusType.Combat, player, "PLAYER");
+        }
+
+
         var room = gameRoom;
 
 
