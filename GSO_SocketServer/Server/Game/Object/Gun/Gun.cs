@@ -88,8 +88,8 @@ namespace Server.Game
             Console.WriteLine($"attacker : {attacker}\n" +
                 $"pos : {pos.X},{pos.Y}\n" +
                 $"dir : {dir.X},{dir.Y}");
-            ItemObject mainWeapon = ownerPlayer.gear.GetPartItem(EGearPart.MainWeapon);
-            FMasterItemWeapon mainWeaponInfo = DatabaseHandler.Context.MasterItemWeapon.Find(mainWeapon.ItemId);
+            //ItemObject mainWeapon = ownerPlayer.gear.GetPartItem(EGearPart.MainWeapon);
+            //FMasterItemWeapon mainWeaponInfo = DatabaseHandler.Context.MasterItemWeapon.Find(mainWeapon.ItemId);
 
             //정규분포를 사용한 발사
             float halfAccuracyRange = UsingGunData.attack_range / 2f;
@@ -102,14 +102,14 @@ namespace Server.Game
             float length = MathF.Sqrt(direction.X * direction.X + direction.Y * direction.Y);
             if (length != 0)
             {
-                endPos = pos + (direction / length) * mainWeaponInfo.distance;
+                endPos = pos + (direction / length) * UsingGunData.distance;
             }
             else
             {
                 endPos = pos;
             }
 
-            RaycastHit2D hit2D = RaycastManager.Raycast(pos, direction, mainWeaponInfo.distance, new List<GameObject>() { ownerPlayer }); //충돌객체 체크
+            RaycastHit2D hit2D = RaycastManager.Raycast(pos, direction, UsingGunData.distance, new List<GameObject>() { ownerPlayer }); //충돌객체 체크
             if (hit2D.Collider == null)
             {
                 //충돌된 객체 없음
