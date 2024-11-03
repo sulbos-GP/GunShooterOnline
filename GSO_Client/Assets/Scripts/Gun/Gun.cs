@@ -113,7 +113,6 @@ public class Gun : MonoBehaviour
     //발사버튼 누를시
     public void Fire(Vector2 dir)
     {
-        Debug.Log("fire호출");
         if (UsingGunData  == null) 
         {
             Debug.Log("현재 총을 들고 있지 않음");

@@ -7,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class QuickSlot : MonoBehaviour
+public class IQuickSlot : MonoBehaviour
 {
     //퀵슬롯 버튼 1, 2, 3의 컴포넌트에 부착
     public Sprite defaultSprite;
@@ -122,10 +122,6 @@ public class QuickSlot : MonoBehaviour
         inputPacket.Item = Item.itemId;
 
         Managers.Network.Send(inputPacket);
-
-
-        //추후 아이템 사용 패킷 생성후 교체
-        //패킷을 통해 서버에 해당 아이템이 사용되었다는것을 알려주며 서버에있는 해당 아이템의 개수를 -1 시켜야함
 
         Item.amount -= 1; //아이템의 개수 감소
         if (Item.amount == 0) //개수가 0이되면 아이템 삭제 및 슬롯 리셋
