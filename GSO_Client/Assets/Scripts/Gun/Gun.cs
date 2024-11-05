@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using Org.BouncyCastle.Utilities;
 using System.Collections;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,10 @@ public class Gun : MonoBehaviour
     public int currentIndex=0;
     public float nextTime = 0.0f;
     public int curGunEquipSlot; //사용중인 총의 데이터가 없을 경우 0 , 1슬롯 사용시 1 , 2슬롯 사용시 2
+    public AnimationClip aniInfo;
+
+    private Transform _fireParticlePos;
+    private Animator _animator;
 
     [SerializeField]
     public int CurAmmo 
@@ -49,6 +54,8 @@ public class Gun : MonoBehaviour
 
         //게임 시작시 실행할 루틴
         _fireStartPos = transform.GetChild(0);
+        _fireParticlePos = _fireStartPos.GetChild(0);
+        _animator = _fireParticlePos.GetComponent<Animator>();
         ResetGun();
     }
 
@@ -132,7 +139,6 @@ public class Gun : MonoBehaviour
                 DirX = dir.x,
                 DirY = dir.y,
             };
-            StartGunSound();
 
             Managers.Network.Send(cRay);
         }
@@ -189,13 +195,10 @@ public class Gun : MonoBehaviour
         return UsingGunData.attack_speed; // GunStat 클래스에서 설정한 발사 속도를 반환
     }
 
-    public void StartGunSound()
+    public void StartEffect()
     {
-        if (nextTime <= Time.time)
-        {
-            nextTime = Time.time+0.1f;
-            audioSource.PlayOneShot(audioClips[currentIndex],0.7f);
-            currentIndex = (currentIndex + 1) % audioClips.Length;
-        }
+        audioSource.PlayOneShot(audioClips[currentIndex],0.7f);
+        currentIndex = (currentIndex + 1) % audioClips.Length;
+        _animator.SetTrigger("Fire");
     }
 }
