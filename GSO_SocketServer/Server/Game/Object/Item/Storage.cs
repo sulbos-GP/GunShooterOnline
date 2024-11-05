@@ -252,7 +252,7 @@ namespace Server.Game
             for (int index = 0; index < items.Count; ++index)
             {
                 ItemObject item = items[index];
-                if (item.ItemId == target.ItemId && item.Rotate == target.Rotate && item.X == target.X && item.Y == target.Y)
+                if (item.ItemId == target.ItemId ) // 지승현 : 일단 체크 안함 && item.Rotate == target.Rotate && item.X == target.X && item.Y == target.Y)
                 {
                     return index;
                 }

@@ -365,7 +365,8 @@ message S_ChangeAppearance{ //34
 
 message C_InputData {  //35
     bool reload = 1;
-    int32 item = 2;
+    int32 itemId = 2;
+    int32 itemSoltId = 3;
 }
 
 
