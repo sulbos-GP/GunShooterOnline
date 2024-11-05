@@ -273,6 +273,10 @@ namespace Server.Game.Object.Gear
             return true;
         }
 
+   
+
+
+
         public async Task<bool> UpdateGear(EGearPart part, ItemObject oldItem, ItemObject newItem, GameDB database, IDbTransaction transaction = null)
         {
             int ret = await database.UpdateItemAttributes(newItem, transaction);
