@@ -647,6 +647,7 @@ internal class PacketHandler
         float distance = Vector2.Distance(bullet.startPos, bullet.endPos);
         Debug.Log($"이동거리 = {distance}");
 
+        Managers.Object.MyPlayer.gun.StartEffect();
         Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
 

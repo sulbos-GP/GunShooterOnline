@@ -74,7 +74,6 @@ public class InputController : MonoBehaviour
         playerInput.Player.Move.performed += OnMove;
         playerInput.Player.Move.canceled += OnMove;
         playerInput.Player.Interaction.started += OnInteraction;
-        playerInput.Player.Test.started += OnTest;
     }
 
     private void OnDisable()
@@ -90,11 +89,6 @@ public class InputController : MonoBehaviour
         playerInput.Player.Interaction.started -= OnInteraction;
         playerInput.Player.Disable();
         playerInput = null;
-    }
-
-    private void OnTest(InputAction.CallbackContext callbackContext)
-    {
-        Managers.Object.MyPlayer.gun.StartGunSound();
     }
 
     private void SetComponent()
