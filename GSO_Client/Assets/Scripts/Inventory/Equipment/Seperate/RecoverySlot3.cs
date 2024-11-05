@@ -25,7 +25,7 @@ public class RecoverySlot3 : RecoverySlot
     public override bool ApplyItemEffects(ItemData item)
     {
         base.ApplyItemEffects(item);
-        Debug.Log($"¼Ò¸ðÇ°3 : {item.item_name} ÀåÂø");   
+        Debug.Log($"ï¿½Ò¸ï¿½Ç°3 : {item.item_name} ï¿½ï¿½ï¿½ï¿½");   
         if (targetSlot != null)
         {
             targetSlot.SetSlot(item);
@@ -36,7 +36,7 @@ public class RecoverySlot3 : RecoverySlot
     public override bool RemoveItemEffects(ItemData item)
     {
         base.RemoveItemEffects(item);
-        Debug.Log($"¼Ò¸ðÇ°3 ¾ÆÀÌÅÛ ÇØÁ¦");
+        Debug.Log($"ï¿½Ò¸ï¿½Ç°3 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         if (targetSlot != null)
         {
             targetSlot.ResetSlot();
