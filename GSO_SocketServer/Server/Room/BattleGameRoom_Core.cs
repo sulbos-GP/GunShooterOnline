@@ -76,9 +76,9 @@ namespace Server
         {
             // 나머지 사람들 전부 쫓아 내기
             IsGameEnd = true;
-            
+
             //프로그램 종료 하기
-            sdfsdf
+            CheakGameDone();
         }
 
         public override void Clear()
