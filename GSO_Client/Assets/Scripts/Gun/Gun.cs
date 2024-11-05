@@ -13,7 +13,10 @@ public class Gun : MonoBehaviour
     private ItemData usingGunItemData; //사용중인 총의 아이템 데이터(총의 오브젝트 아이디, 총알 참조)
     private Transform _fireStartPos;
     public AimLine gunLine;
-
+    public AudioClip[] audioClips;
+    public AudioSource audioSource;
+    public int currentIndex=0;
+    public float nextTime = 0.0f;
     public int curGunEquipSlot; //사용중인 총의 데이터가 없을 경우 0 , 1슬롯 사용시 1 , 2슬롯 사용시 2
 
     [SerializeField]
@@ -129,6 +132,7 @@ public class Gun : MonoBehaviour
                 DirX = dir.x,
                 DirY = dir.y,
             };
+            StartGunSound();
 
             Managers.Network.Send(cRay);
         }
@@ -183,5 +187,15 @@ public class Gun : MonoBehaviour
     public float GetFireRate()
     {
         return UsingGunData.attack_speed; // GunStat 클래스에서 설정한 발사 속도를 반환
+    }
+
+    public void StartGunSound()
+    {
+        if (nextTime <= Time.time)
+        {
+            nextTime = Time.time+0.1f;
+            audioSource.PlayOneShot(audioClips[currentIndex],0.7f);
+            currentIndex = (currentIndex + 1) % audioClips.Length;
+        }
     }
 }

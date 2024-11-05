@@ -3,7 +3,7 @@ guid: 519ddc02349023547836112d2432d519
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -74,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -86,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -98,6 +103,33 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -2256,111 +2288,110 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Gunshot 09_#[512,288]_64: 1151510156
-      Gunshot 09_#[512,288]_50: -980902328
-      Gunshot 09_#[512,288]_10: 1106380341
-      Gunshot 09_#[512,288]_16: 1887080887
-      Gunshot 09_#[512,288]_30: -1207210850
-      Gunshot 09_#[512,288]_41: -64968695
-      Gunshot 09_#[512,288]_57: 2093074737
-      Gunshot 09_#[512,288]_6: -54449327
-      Gunshot 09_#[512,288]_83: -474115168
-      Gunshot 09_#[512,288]_2: -125473875
-      Gunshot 09_#[512,288]_73: -339582493
-      Gunshot 09_#[512,288]_27: -1182723761
-      Gunshot 09_#[512,288]_26: 1475727709
-      Gunshot 09_#[512,288]_33: -282611591
-      Gunshot 09_#[512,288]_97: -478505554
-      Gunshot 09_#[512,288]_51: -1942446284
-      Gunshot 09_#[512,288]_43: -368685543
-      Gunshot 09_#[512,288]_47: -1654082499
-      Gunshot 09_#[512,288]_80: 267027514
-      Gunshot 09_#[512,288]_22: -232771338
-      Gunshot 09_#[512,288]_21: -1490971443
-      Gunshot 09_#[512,288]_84: 2080852833
-      Gunshot 09_#[512,288]_4: 985163801
-      Gunshot 09_#[512,288]_75: 1519536292
-      Gunshot 09_#[512,288]_92: -1900713820
-      Gunshot 09_#[512,288]_90: 1730515092
-      Gunshot 09_#[512,288]_20: 1725309982
       Gunshot 09_#[512,288]_0: -877643363
-      Gunshot 09_#[512,288]_14: -510109823
-      Gunshot 09_#[512,288]_24: -1092863389
-      Gunshot 09_#[512,288]_46: 2094432824
-      Gunshot 09_#[512,288]_78: 2081353154
-      Gunshot 09_#[512,288]_44: 456478110
-      Gunshot 09_#[512,288]_87: -640903250
-      Gunshot 09_#[512,288]_77: -400294807
-      Gunshot 09_#[512,288]_3: -1675033936
-      Gunshot 09_#[512,288]_9: -1689530127
-      Gunshot 09_#[512,288]_72: -1761020029
-      Gunshot 09_#[512,288]_52: 873498614
-      Gunshot 09_#[512,288]_45: -1117379387
-      Gunshot 09_#[512,288]_56: -1839949965
       Gunshot 09_#[512,288]_1: 653373655
-      Gunshot 09_#[512,288]_91: -1678705375
-      Gunshot 09_#[512,288]_35: 325492181
-      Gunshot 09_#[512,288]_59: 484118649
-      Gunshot 09_#[512,288]_53: 1548044185
-      Gunshot 09_#[512,288]_18: 393752138
-      Gunshot 09_#[512,288]_36: -1235137394
-      Gunshot 09_#[512,288]_79: -13318032
+      Gunshot 09_#[512,288]_10: 1106380341
       Gunshot 09_#[512,288]_100: -218884408
-      Gunshot 09_#[512,288]_40: 727826267
-      Gunshot 09_#[512,288]_42: -78964373
-      Gunshot 09_#[512,288]_17: -24552558
-      Gunshot 09_#[512,288]_63: -1175585537
-      Gunshot 09_#[512,288]_23: -2076513251
-      Gunshot 09_#[512,288]_29: -1335226460
-      Gunshot 09_#[512,288]_66: 1482570374
-      Gunshot 09_#[512,288]_82: 597365144
-      Gunshot 09_#[512,288]_88: 1786112547
-      Gunshot 09_#[512,288]_8: 1868511356
-      Gunshot 09_#[512,288]_67: -867711343
-      Gunshot 09_#[512,288]_94: 995438338
-      Gunshot 09_#[512,288]_69: 1886231205
-      Gunshot 09_#[512,288]_58: -1671391348
-      Gunshot 09_#[512,288]_93: -309665590
-      Gunshot 09_#[512,288]_13: -2055231194
-      Gunshot 09_#[512,288]_25: -451486794
-      Gunshot 09_#[512,288]_32: 1539411771
-      Gunshot 09_#[512,288]_34: 760897388
-      Gunshot 09_#[512,288]_60: -1528399021
-      Gunshot 09_#[512,288]_54: 1831716102
-      Gunshot 09_#[512,288]_81: -1584692956
-      Gunshot 09_#[512,288]_95: 938649517
-      Gunshot 09_#[512,288]_5: 2015459413
-      Gunshot 09_#[512,288]_74: -796828569
-      Gunshot 09_#[512,288]_85: -625814566
-      Gunshot 09_#[512,288]_7: -60888238
-      Gunshot 09_#[512,288]_61: -1904684355
-      Gunshot 09_#[512,288]_98: -452726705
-      Gunshot 09_#[512,288]_39: 1143068542
-      Gunshot 09_#[512,288]_68: 1944115176
-      Gunshot 09_#[512,288]_11: -1276762815
-      Gunshot 09_#[512,288]_96: -1430117109
-      Gunshot 09_#[512,288]_12: -1551286021
-      Gunshot 09_#[512,288]_38: 1889643941
-      Gunshot 09_#[512,288]_70: -943440232
-      Gunshot 09_#[512,288]_37: 124153473
-      Gunshot 09_#[512,288]_19: 903356736
-      Gunshot 09_#[512,288]_28: -1364920338
-      Gunshot 09_#[512,288]_48: 2032646986
-      Gunshot 09_#[512,288]_86: -188764412
-      Gunshot 09_#[512,288]_89: 1204607420
-      Gunshot 09_#[512,288]_31: 354094935
-      Gunshot 09_#[512,288]_76: -1645225308
       Gunshot 09_#[512,288]_101: -699455013
-      Gunshot 09_#[512,288]_65: 1850664593
-      Gunshot 09_#[512,288]_55: -906040443
-      Gunshot 09_#[512,288]_62: 650810849
-      Gunshot 09_#[512,288]_99: 393167144
-      Gunshot 09_#[512,288]_49: 859300983
-      Gunshot 09_#[512,288]_71: -177796201
+      Gunshot 09_#[512,288]_11: -1276762815
+      Gunshot 09_#[512,288]_12: -1551286021
+      Gunshot 09_#[512,288]_13: -2055231194
+      Gunshot 09_#[512,288]_14: -510109823
       Gunshot 09_#[512,288]_15: -512902894
-  spritePackingTag: 
+      Gunshot 09_#[512,288]_16: 1887080887
+      Gunshot 09_#[512,288]_17: -24552558
+      Gunshot 09_#[512,288]_18: 393752138
+      Gunshot 09_#[512,288]_19: 903356736
+      Gunshot 09_#[512,288]_2: -125473875
+      Gunshot 09_#[512,288]_20: 1725309982
+      Gunshot 09_#[512,288]_21: -1490971443
+      Gunshot 09_#[512,288]_22: -232771338
+      Gunshot 09_#[512,288]_23: -2076513251
+      Gunshot 09_#[512,288]_24: -1092863389
+      Gunshot 09_#[512,288]_25: -451486794
+      Gunshot 09_#[512,288]_26: 1475727709
+      Gunshot 09_#[512,288]_27: -1182723761
+      Gunshot 09_#[512,288]_28: -1364920338
+      Gunshot 09_#[512,288]_29: -1335226460
+      Gunshot 09_#[512,288]_3: -1675033936
+      Gunshot 09_#[512,288]_30: -1207210850
+      Gunshot 09_#[512,288]_31: 354094935
+      Gunshot 09_#[512,288]_32: 1539411771
+      Gunshot 09_#[512,288]_33: -282611591
+      Gunshot 09_#[512,288]_34: 760897388
+      Gunshot 09_#[512,288]_35: 325492181
+      Gunshot 09_#[512,288]_36: -1235137394
+      Gunshot 09_#[512,288]_37: 124153473
+      Gunshot 09_#[512,288]_38: 1889643941
+      Gunshot 09_#[512,288]_39: 1143068542
+      Gunshot 09_#[512,288]_4: 985163801
+      Gunshot 09_#[512,288]_40: 727826267
+      Gunshot 09_#[512,288]_41: -64968695
+      Gunshot 09_#[512,288]_42: -78964373
+      Gunshot 09_#[512,288]_43: -368685543
+      Gunshot 09_#[512,288]_44: 456478110
+      Gunshot 09_#[512,288]_45: -1117379387
+      Gunshot 09_#[512,288]_46: 2094432824
+      Gunshot 09_#[512,288]_47: -1654082499
+      Gunshot 09_#[512,288]_48: 2032646986
+      Gunshot 09_#[512,288]_49: 859300983
+      Gunshot 09_#[512,288]_5: 2015459413
+      Gunshot 09_#[512,288]_50: -980902328
+      Gunshot 09_#[512,288]_51: -1942446284
+      Gunshot 09_#[512,288]_52: 873498614
+      Gunshot 09_#[512,288]_53: 1548044185
+      Gunshot 09_#[512,288]_54: 1831716102
+      Gunshot 09_#[512,288]_55: -906040443
+      Gunshot 09_#[512,288]_56: -1839949965
+      Gunshot 09_#[512,288]_57: 2093074737
+      Gunshot 09_#[512,288]_58: -1671391348
+      Gunshot 09_#[512,288]_59: 484118649
+      Gunshot 09_#[512,288]_6: -54449327
+      Gunshot 09_#[512,288]_60: -1528399021
+      Gunshot 09_#[512,288]_61: -1904684355
+      Gunshot 09_#[512,288]_62: 650810849
+      Gunshot 09_#[512,288]_63: -1175585537
+      Gunshot 09_#[512,288]_64: 1151510156
+      Gunshot 09_#[512,288]_65: 1850664593
+      Gunshot 09_#[512,288]_66: 1482570374
+      Gunshot 09_#[512,288]_67: -867711343
+      Gunshot 09_#[512,288]_68: 1944115176
+      Gunshot 09_#[512,288]_69: 1886231205
+      Gunshot 09_#[512,288]_7: -60888238
+      Gunshot 09_#[512,288]_70: -943440232
+      Gunshot 09_#[512,288]_71: -177796201
+      Gunshot 09_#[512,288]_72: -1761020029
+      Gunshot 09_#[512,288]_73: -339582493
+      Gunshot 09_#[512,288]_74: -796828569
+      Gunshot 09_#[512,288]_75: 1519536292
+      Gunshot 09_#[512,288]_76: -1645225308
+      Gunshot 09_#[512,288]_77: -400294807
+      Gunshot 09_#[512,288]_78: 2081353154
+      Gunshot 09_#[512,288]_79: -13318032
+      Gunshot 09_#[512,288]_8: 1868511356
+      Gunshot 09_#[512,288]_80: 267027514
+      Gunshot 09_#[512,288]_81: -1584692956
+      Gunshot 09_#[512,288]_82: 597365144
+      Gunshot 09_#[512,288]_83: -474115168
+      Gunshot 09_#[512,288]_84: 2080852833
+      Gunshot 09_#[512,288]_85: -625814566
+      Gunshot 09_#[512,288]_86: -188764412
+      Gunshot 09_#[512,288]_87: -640903250
+      Gunshot 09_#[512,288]_88: 1786112547
+      Gunshot 09_#[512,288]_89: 1204607420
+      Gunshot 09_#[512,288]_9: -1689530127
+      Gunshot 09_#[512,288]_90: 1730515092
+      Gunshot 09_#[512,288]_91: -1678705375
+      Gunshot 09_#[512,288]_92: -1900713820
+      Gunshot 09_#[512,288]_93: -309665590
+      Gunshot 09_#[512,288]_94: 995438338
+      Gunshot 09_#[512,288]_95: 938649517
+      Gunshot 09_#[512,288]_96: -1430117109
+      Gunshot 09_#[512,288]_97: -478505554
+      Gunshot 09_#[512,288]_98: -452726705
+      Gunshot 09_#[512,288]_99: 393167144
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
