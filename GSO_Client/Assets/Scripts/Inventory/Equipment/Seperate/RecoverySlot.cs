@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class RecoverySlot : EquipSlot
 {
-    public QuickSlot targetSlot;
+    public IQuickSlot targetSlot;
     public Transform ItemQuickSlotsParent;
 
     protected override void OnDisable()

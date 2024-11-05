@@ -3,7 +3,7 @@ guid: df6f11f1c8d715447b364157c5b5d91f
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,6 +64,8 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -74,6 +77,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -86,6 +90,7 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 3
@@ -98,6 +103,33 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: iPhone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
@@ -1521,76 +1553,75 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
+      Gunshot 03_#[512,288]_0: 1827274673
+      Gunshot 03_#[512,288]_1: 51201162
+      Gunshot 03_#[512,288]_10: 1545108318
+      Gunshot 03_#[512,288]_11: -49392964
+      Gunshot 03_#[512,288]_12: -31113190
+      Gunshot 03_#[512,288]_13: 1836715139
+      Gunshot 03_#[512,288]_14: 1611538901
+      Gunshot 03_#[512,288]_15: 1024010309
+      Gunshot 03_#[512,288]_16: -1567396587
+      Gunshot 03_#[512,288]_17: 1703547942
+      Gunshot 03_#[512,288]_18: 243613690
+      Gunshot 03_#[512,288]_19: 561033093
+      Gunshot 03_#[512,288]_2: -108154770
+      Gunshot 03_#[512,288]_20: 1138124576
+      Gunshot 03_#[512,288]_21: -322859903
       Gunshot 03_#[512,288]_22: -1612530365
+      Gunshot 03_#[512,288]_23: -122216631
+      Gunshot 03_#[512,288]_24: -1678888185
+      Gunshot 03_#[512,288]_25: -815959711
+      Gunshot 03_#[512,288]_26: -5584079
+      Gunshot 03_#[512,288]_27: 1864252775
+      Gunshot 03_#[512,288]_28: -1903924675
+      Gunshot 03_#[512,288]_29: -692489067
+      Gunshot 03_#[512,288]_3: -858996329
+      Gunshot 03_#[512,288]_30: -1434471454
+      Gunshot 03_#[512,288]_31: 623997965
+      Gunshot 03_#[512,288]_32: 15063107
+      Gunshot 03_#[512,288]_33: 285313767
+      Gunshot 03_#[512,288]_34: 1579094231
+      Gunshot 03_#[512,288]_35: -1424691627
+      Gunshot 03_#[512,288]_36: 1392402673
+      Gunshot 03_#[512,288]_37: -1535637803
       Gunshot 03_#[512,288]_38: -838066187
       Gunshot 03_#[512,288]_39: 672940102
+      Gunshot 03_#[512,288]_4: 1353773768
+      Gunshot 03_#[512,288]_40: 1130722810
+      Gunshot 03_#[512,288]_41: 675204627
+      Gunshot 03_#[512,288]_42: 809338427
+      Gunshot 03_#[512,288]_43: 881783145
+      Gunshot 03_#[512,288]_44: -1329921014
+      Gunshot 03_#[512,288]_45: -1126698514
+      Gunshot 03_#[512,288]_46: 1741713331
+      Gunshot 03_#[512,288]_47: -1651593949
+      Gunshot 03_#[512,288]_48: 426236630
+      Gunshot 03_#[512,288]_49: -1838884206
+      Gunshot 03_#[512,288]_5: -1431548195
+      Gunshot 03_#[512,288]_50: 1032717756
+      Gunshot 03_#[512,288]_51: -1833199540
+      Gunshot 03_#[512,288]_52: 309358287
+      Gunshot 03_#[512,288]_53: 1328290259
+      Gunshot 03_#[512,288]_54: -537222941
+      Gunshot 03_#[512,288]_55: -1429017612
       Gunshot 03_#[512,288]_56: 1429925731
       Gunshot 03_#[512,288]_57: 285040967
-      Gunshot 03_#[512,288]_26: -5584079
-      Gunshot 03_#[512,288]_61: -1962564517
-      Gunshot 03_#[512,288]_48: 426236630
-      Gunshot 03_#[512,288]_47: -1651593949
-      Gunshot 03_#[512,288]_65: 275495565
-      Gunshot 03_#[512,288]_14: 1611538901
-      Gunshot 03_#[512,288]_2: -108154770
-      Gunshot 03_#[512,288]_36: 1392402673
-      Gunshot 03_#[512,288]_41: 675204627
-      Gunshot 03_#[512,288]_17: 1703547942
-      Gunshot 03_#[512,288]_19: 561033093
-      Gunshot 03_#[512,288]_1: 51201162
-      Gunshot 03_#[512,288]_32: 15063107
-      Gunshot 03_#[512,288]_62: 256162719
-      Gunshot 03_#[512,288]_49: -1838884206
-      Gunshot 03_#[512,288]_4: 1353773768
-      Gunshot 03_#[512,288]_59: 968100533
-      Gunshot 03_#[512,288]_37: -1535637803
-      Gunshot 03_#[512,288]_44: -1329921014
-      Gunshot 03_#[512,288]_18: 243613690
-      Gunshot 03_#[512,288]_54: -537222941
-      Gunshot 03_#[512,288]_53: 1328290259
-      Gunshot 03_#[512,288]_13: 1836715139
-      Gunshot 03_#[512,288]_7: -1809482270
       Gunshot 03_#[512,288]_58: -1326360113
-      Gunshot 03_#[512,288]_10: 1545108318
-      Gunshot 03_#[512,288]_24: -1678888185
-      Gunshot 03_#[512,288]_40: 1130722810
-      Gunshot 03_#[512,288]_51: -1833199540
-      Gunshot 03_#[512,288]_8: -1081775816
-      Gunshot 03_#[512,288]_42: 809338427
-      Gunshot 03_#[512,288]_20: 1138124576
-      Gunshot 03_#[512,288]_28: -1903924675
-      Gunshot 03_#[512,288]_15: 1024010309
-      Gunshot 03_#[512,288]_25: -815959711
+      Gunshot 03_#[512,288]_59: 968100533
       Gunshot 03_#[512,288]_6: 252545676
-      Gunshot 03_#[512,288]_16: -1567396587
-      Gunshot 03_#[512,288]_12: -31113190
-      Gunshot 03_#[512,288]_33: 285313767
-      Gunshot 03_#[512,288]_5: -1431548195
-      Gunshot 03_#[512,288]_0: 1827274673
-      Gunshot 03_#[512,288]_3: -858996329
-      Gunshot 03_#[512,288]_35: -1424691627
-      Gunshot 03_#[512,288]_50: 1032717756
-      Gunshot 03_#[512,288]_52: 309358287
-      Gunshot 03_#[512,288]_46: 1741713331
-      Gunshot 03_#[512,288]_64: 682593965
-      Gunshot 03_#[512,288]_27: 1864252775
       Gunshot 03_#[512,288]_60: -1951252586
-      Gunshot 03_#[512,288]_21: -322859903
-      Gunshot 03_#[512,288]_9: 1313849599
-      Gunshot 03_#[512,288]_43: 881783145
-      Gunshot 03_#[512,288]_66: 2065295981
-      Gunshot 03_#[512,288]_11: -49392964
-      Gunshot 03_#[512,288]_45: -1126698514
-      Gunshot 03_#[512,288]_23: -122216631
-      Gunshot 03_#[512,288]_34: 1579094231
-      Gunshot 03_#[512,288]_30: -1434471454
-      Gunshot 03_#[512,288]_29: -692489067
+      Gunshot 03_#[512,288]_61: -1962564517
+      Gunshot 03_#[512,288]_62: 256162719
       Gunshot 03_#[512,288]_63: -708995733
-      Gunshot 03_#[512,288]_31: 623997965
-      Gunshot 03_#[512,288]_55: -1429017612
-  spritePackingTag: 
+      Gunshot 03_#[512,288]_64: 682593965
+      Gunshot 03_#[512,288]_65: 275495565
+      Gunshot 03_#[512,288]_66: 2065295981
+      Gunshot 03_#[512,288]_7: -1809482270
+      Gunshot 03_#[512,288]_8: -1081775816
+      Gunshot 03_#[512,288]_9: 1313849599
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

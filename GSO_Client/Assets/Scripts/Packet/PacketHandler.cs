@@ -11,6 +11,7 @@ using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using UnityEditor;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 
 internal class PacketHandler
@@ -626,7 +627,7 @@ internal class PacketHandler
         playerGun.UseAmmo();
 
         //총알 발사
-        Bullet bullet = Managers.Resource.Instantiate($"Objects/BulletObjPref/{Managers.Object.MyPlayer.gun.UsingGunData.bullet}").GetComponent<Bullet>();
+        Bullet bullet = Managers.Resource.Instantiate($"Objects/BulletObjPref/BulletBase").GetComponent<Bullet>();
         if (bullet == null)
         {
             Debug.Log("리소스에서 총알 로드 실패");
@@ -641,6 +642,10 @@ internal class PacketHandler
         
         bullet.startPos = startPoint;
         bullet.endPos = hitPoint;
+
+
+        float distance = Vector2.Distance(bullet.startPos, bullet.endPos);
+        Debug.Log($"이동거리 = {distance}");
 
         Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
@@ -780,7 +785,7 @@ internal class PacketHandler
 
     }
 
-
+    
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
