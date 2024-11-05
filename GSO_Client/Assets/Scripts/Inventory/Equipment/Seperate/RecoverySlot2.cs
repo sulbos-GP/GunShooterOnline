@@ -18,7 +18,7 @@ public class RecoverySlot2 : RecoverySlot
         allowedItemType = ItemType.Recovery;
         if (targetSlot != null)
         {
-            targetSlot = ItemQuickSlotsParent.GetChild(1).GetComponent<QuickSlot>();
+            targetSlot = ItemQuickSlotsParent.GetChild(1).GetComponent<IQuickSlot>();
             targetSlot.SlotId = 2;
 
         }
