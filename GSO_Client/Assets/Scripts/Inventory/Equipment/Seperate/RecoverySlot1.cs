@@ -17,15 +17,15 @@ public class RecoverySlot1 : RecoverySlot
         allowedItemType = ItemType.Recovery;
         if (targetSlot != null) 
         {
-            targetSlot = ItemQuickSlotsParent.GetChild(0).GetComponent<IQuickSlot>();
+            targetSlot = ItemQuickSlotsParent.GetChild(0).GetComponent<QuickSlot>();
+            targetSlot.SlotId = 1;
         }
-        
     }
 
     public override bool ApplyItemEffects(ItemData item)
     {
         base.ApplyItemEffects(item);
-        Debug.Log($"¼Ò¸ðÇ°1 : {item.item_name} ÀåÂø");
+        Debug.Log($"ï¿½Ò¸ï¿½Ç°1 : {item.item_name} ï¿½ï¿½ï¿½ï¿½");
 
         if (targetSlot != null)
         {
@@ -39,7 +39,7 @@ public class RecoverySlot1 : RecoverySlot
     public override bool RemoveItemEffects(ItemData item)
     {
         base.RemoveItemEffects(item);
-        Debug.Log($"¼Ò¸ðÇ°1 ¾ÆÀÌÅÛ ÇØÁ¦");
+        Debug.Log($"ï¿½Ò¸ï¿½Ç°1 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
         if (targetSlot != null)
         {
             targetSlot.ResetSlot();

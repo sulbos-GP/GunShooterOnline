@@ -10,6 +10,8 @@ using UnityEngine.UI;
 public class IQuickSlot : MonoBehaviour
 {
     //Äü½½·Ô ¹öÆ° 1, 2, 3ÀÇ ÄÄÆ÷³ÍÆ®¿¡ ºÎÂø
+    public int SlotId { get;  set; }
+
     public Sprite defaultSprite;
 
     public ItemData itemData;
@@ -119,7 +121,8 @@ public class IQuickSlot : MonoBehaviour
         }
 
         C_InputData inputPacket = new C_InputData();
-        inputPacket.Item = Item.itemId;
+        inputPacket.ItemId = Item.objectId;
+        inputPacket.ItemSoltId = SlotId;
 
         Managers.Network.Send(inputPacket);
 
