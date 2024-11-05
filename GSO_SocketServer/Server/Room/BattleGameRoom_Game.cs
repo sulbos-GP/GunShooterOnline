@@ -896,11 +896,11 @@ namespace Server
                  await player.gun.Reload();
              }
 
-            if (packet.Item != 0)
+            if (packet.ItemId != 0)
             {
                 //성훈
-                player.UseQuickSlot(packet.Item, packet.Item);
-                Console.WriteLine(packet.Item);
+                player.UseQuickSlot(packet.ItemId, packet.ItemSoltId);
+
             }
 
         }
@@ -948,10 +948,13 @@ namespace Server
             //사람 전부 나가면 gameserver.Stop();
             //gameserver.Stop();
 
+            
+
             //stop 부분에 모든 남아있는 플레이어 처리!!!!
         }
 
 
+    
 
         List<Player> tempPlayer = new List<Player>();
 
@@ -995,7 +998,7 @@ namespace Server
                 }
             }
 #else
-            if (tempPlayer.Count == 2) //접속할 인원에 따라 변경
+            if (tempPlayer.Count == 1) //접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();

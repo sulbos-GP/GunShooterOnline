@@ -147,8 +147,13 @@ internal class ItemHandler
 
 
         //---------------- 후처리 --------------
-
         p.gameRoom.Push(() => p.OnHealed(p, use.energy));
+
+        for (int i = 1; i < use.duration; i++)
+        {
+            p.gameRoom.PushAfter((int)(i * use.active_time * 1000), () => p.OnHealed(p, use.energy));
+
+        }
 
         Console.WriteLine($"Item ID : {id} Active");
 
@@ -186,6 +191,11 @@ internal class ItemHandler
 
         p.gameRoom.Push(() => p.OnHealed(p, use.energy));
 
+        for (int i = 1; i < use.duration; i++)
+        {
+            p.gameRoom.PushAfter((int)(i * use.active_time * 1000), () => p.OnHealed(p, use.energy));
+
+        }
         Console.WriteLine($"Item ID : {id} Active");
 
 

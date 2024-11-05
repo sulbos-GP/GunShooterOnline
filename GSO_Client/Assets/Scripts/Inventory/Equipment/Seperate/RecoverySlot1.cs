@@ -18,8 +18,8 @@ public class RecoverySlot1 : RecoverySlot
         if (targetSlot != null) 
         {
             targetSlot = ItemQuickSlotsParent.GetChild(0).GetComponent<QuickSlot>();
+            targetSlot.SlotId = 1;
         }
-        
     }
 
     public override bool ApplyItemEffects(ItemData item)

@@ -18,13 +18,14 @@ public class RecoverySlot3 : RecoverySlot
         if (targetSlot != null)
         {
             targetSlot = ItemQuickSlotsParent.GetChild(2).GetComponent<QuickSlot>();
+            targetSlot.SlotId = 3;
         }
 
     }
     public override bool ApplyItemEffects(ItemData item)
     {
         base.ApplyItemEffects(item);
-        Debug.Log($"家葛前3 : {item.item_name} 厘馒");
+        Debug.Log($"家葛前3 : {item.item_name} 厘馒");   
         if (targetSlot != null)
         {
             targetSlot.SetSlot(item);

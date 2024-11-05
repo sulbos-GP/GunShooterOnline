@@ -34,6 +34,7 @@ namespace Server
 
         private Stopwatch playTime = new Stopwatch();
         public bool IsGameStarted { get; protected set; } = false;
+        public bool IsGameEnd { get; protected set; } = false;
 
 
         public Map map { get; private set; }
@@ -73,12 +74,30 @@ namespace Server
 
         public override void Stop()
         {
-
+            // 나머지 사람들 전부 쫓아 내기
+            IsGameEnd = true;
+            
+            //프로그램 종료 하기
+            sdfsdf
         }
 
         public override void Clear()
         {
         }
+
+
+        private bool CheakGameDone()
+        {
+            if (_playerDic.Values.Count == 0)
+            {
+                Stop();
+                return true;
+            }
+
+
+            return false;
+        }
+
 
         public override void BroadCast(IMessage message)
         {
@@ -308,6 +327,9 @@ namespace Server
             S_Despawn despawnPacket = new S_Despawn();
             despawnPacket.ObjcetIds.Add(id);
             BroadCast(despawnPacket);
+
+
+            CheakGameDone();
 
 
         }
