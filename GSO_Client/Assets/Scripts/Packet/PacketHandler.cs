@@ -618,13 +618,15 @@ internal class PacketHandler
 
         //hit으로 인한 데미지는 다른 패킷으로 줌 -> ChangeHpHandler
 
+        GameObject shootingPlayer = Managers.Object.FindById(packet.ShootPlayerId);
+        Gun shooterGun = shootingPlayer.GetComponentInChildren<Gun>();
+
+
         Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
 
-        Gun playerGun = Managers.Object.MyPlayer.gun;
-
-        playerGun.gunLine.SetBulletLine(startPoint, hitPoint);
-        playerGun.UseAmmo();
+        shooterGun.gunLine.SetBulletLine(startPoint, hitPoint);
+        shooterGun.UseAmmo();
 
         //총알 발사
         Bullet bullet = Managers.Resource.Instantiate($"Objects/BulletObjPref/BulletBase").GetComponent<Bullet>();
@@ -647,7 +649,9 @@ internal class PacketHandler
         float distance = Vector2.Distance(bullet.startPos, bullet.endPos);
         Debug.Log($"이동거리 = {distance}");
 
-        Managers.Object.MyPlayer.gun.StartEffect();
+        //총을 쏜 객체만 
+        shooterGun.StartEffect();
+
         Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Google.Protobuf.Protocol;
+using NPOI.XSSF.UserModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -11,26 +12,26 @@ public partial class MyPlayerController : PlayerController
 {
     [SerializeField] private List<BaseController> _attackableList = new();
 
-    //private ButtonSkill _butnSkill;
-    private GameInfoBar _gameInfoBar; // HP+ Exp + Info
-    
-    private Coroutine _coskillCoolTime;
-    private VirtualJoystick _joystick;
+    public Dictionary<int, ItemData> gearDict = new Dictionary<int, ItemData>(); //앞으로 사용할 기어 딕셔너리. 장착을 조작할때는 이 딕셔너리를 참조하여 변경
+
     private Vector3 _latestPos;
 
-    private MyPlayerAttack _myPlayerAttack;
-
-    //private Vector2 _skillDir = new();
-    private SkillRequst _skillPanel;
-
-    private Vector3 _target;
     //게임
-
     public PlayerInput playerInput;
+    private GameInfoBar _gameInfoBar; // HP+ Exp + Info
+    private VirtualJoystick _joystick;
 
+
+    //----------------------------------위: 사용 / 아래:사용안하는듯--------------------------
+    //private ButtonSkill _butnSkill;
     //UI
     public UI_Quest _Quest;
 
+    private Vector3 _target;
+    private MyPlayerAttack _myPlayerAttack;
+    //private Vector2 _skillDir = new();
+    private SkillRequst _skillPanel;
+    private Coroutine _coskillCoolTime;
     //public int Attack => Stat.Attack;
     public Gun gun { get; private set; }
 

@@ -39,7 +39,7 @@ public class ItemObject : MonoBehaviour
     }
 
 
-    //자식객체
+    //자식 컴포넌트
     public Image imageUI;
     public TextMeshProUGUI amountText; //아이템 갯수 텍스트
     public TextMeshProUGUI unhideTimer; //아이템 수색 타이머 텍스트
@@ -48,7 +48,6 @@ public class ItemObject : MonoBehaviour
     public RectTransform itemRect;
 
     //아이템의 스프라이트
-    public List<Sprite> spriteList;
     private Sprite itemSprite;
     public Sprite hideSprite; //조회 전에 보여질 스프라이트
 

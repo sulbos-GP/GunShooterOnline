@@ -10,7 +10,16 @@ public class EquipSlot : MonoBehaviour
 {
     public int slotId;
     public ItemType allowedItemType; // 이 슬롯에 허용되는 아이템 유형
+    public ItemData gearData
+    {
+        get => Managers.Object.MyPlayer.gearDict[slotId];
+        set
+        {
+            Managers.Object.MyPlayer.gearDict[slotId] = value;
+        }
+    }
     public ItemObject equippedItem; // 현재 장착된 아이템
+
     private Vector2 originalItemSize = Vector2.zero;
 
     protected virtual void OnDisable()
@@ -27,7 +36,7 @@ public class EquipSlot : MonoBehaviour
 
     }
 
-    //장착 슬롯에 아이템이 배치되었을 경우
+    //인벤토리를 통한 장착: 플레이어 기어에 추가 + 아이템 오브젝트 변형
     public bool EquipItem(ItemObject item)
     {
         //todo 로드를 통해 불려와 질수 있으니 원래 장착되어 있던 아이템과 비교하여 효과 적용
@@ -46,7 +55,7 @@ public class EquipSlot : MonoBehaviour
         //중앙에 배치 및 슬롯의 크기만큼 크기 세팅
         equippedItem.transform.SetParent(transform);
         SetEquipItemObj(item);
-
+        
         return true;
     }
 
@@ -97,38 +106,21 @@ public class EquipSlot : MonoBehaviour
         originalItemSize = Vector2.zero;
 
         equippedItem = null;
-
+        
         return true;
     }
 
+    //인벤토리를 통하지 않은 장착 : 플레이어의 gear에 의한 장착 + 장착 혹은 해제에 따른 파라미터 변화 적용
     public virtual bool ApplyItemEffects(ItemData item)
     {
-        //로드 될때마다 장착이 일어나므로 여기서 데이터의 변화가 없다면 컷해줘야함
-
-        //총일 경우 현재 장착 슬롯의 총 데이터 변경
-
-        //방어구 일경우 플레이어의 방어력 증가
-        //데미지감소 0 : 0%, 1 : 15%, 2: 25%, 3 : 35%  , 감소횟수 20회 고정
-
-        //가방일경우 그리드의 데이터 변경
-        // 레벨이 커질경우 -> 크기 증가
-        // 레벨이 낮아질경우 -> 크기를 줄일수 있는지(아이템칸에 겹치는지) 검사후 가능하면 감소
-        // 가방 크기 0 : 2*3 , 1 : 3*4 , 2 : 5*5 , 3 : 7*6
-
-        //회복용품일 경우 퀵슬롯에 퀵슬롯의 아이템 데이터 변경
+        gearData = item;
         Debug.Log("아이템 장착");
         return true;
     }
 
     public virtual bool RemoveItemEffects(ItemData item)
     {
-        //총일 경우 현재 장착 슬롯의 총 데이터 제거
-
-        //방어구 일경우 플레이어의 방어력 원위치
-
-        //가방일경우 가방의 기본크기보다 아이템이 많이 들어있으면 제거 불가
-
-        //회복용품일 경우 해당 퀵슬롯의 아이템 제거
+        gearData = null;
         Debug.Log("아이템 해제");
         return true;
     }
