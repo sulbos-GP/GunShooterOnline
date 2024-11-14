@@ -78,7 +78,7 @@ namespace Server
             IsGameEnd = true;
 
             //프로그램 종료 하기
-            CheakGameDone();
+            //CheakGameDone();
         }
 
         public override void Clear()
@@ -329,7 +329,7 @@ namespace Server
             BroadCast(despawnPacket);
 
 
-            CheakGameDone();
+            //CheakGameDone();
 
 
         }
