@@ -24,8 +24,6 @@ public class WeaponSlot2 : EquipSlot
     {
         base.ApplyItemEffects(item);
         Debug.Log($"무기2 : {item.item_name} 장착");
-
-        Managers.Object.MyPlayer.GetComponent<Unit>().Slot2Equip = item;
         return true;
     }
 
@@ -33,7 +31,6 @@ public class WeaponSlot2 : EquipSlot
     {
         base.RemoveItemEffects(item);
         Debug.Log($"무기2 아이템 해제");
-        Managers.Object.MyPlayer.GetComponent<Unit>().Slot2Equip = null;
         return true;
     }
 }
