@@ -188,11 +188,9 @@ public class UIManager : MonoBehaviour
         switch (slotId)
         {
             case 1:
-                targetBtn = MainWeaponBtn;
-                break;
+                targetBtn = MainWeaponBtn; break;
             case 2:
-                targetBtn = SubWeaponBtn;
-                break;
+                targetBtn = SubWeaponBtn; break;
             default:
                 Debug.Log($"무기 슬롯의 코드가 적절하지 않음 slotId : {slotId}");
                 return false;
