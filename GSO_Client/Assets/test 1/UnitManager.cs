@@ -15,7 +15,7 @@ public class UnitManager : MonoBehaviour
     {
         Unit player = Resources.Load<Unit>("Unit/UnitModel");
         GameObject playerObj = Instantiate(player).gameObject;
-        playerObj.GetComponent<Unit>().Init();
+        //playerObj.GetComponent<Unit>().Init();
         playerObj.name = "Player";
         CurrentPlayer = playerObj.GetComponent<Unit>();
     }

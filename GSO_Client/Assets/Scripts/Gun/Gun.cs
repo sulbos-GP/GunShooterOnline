@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 public class Gun : MonoBehaviour
 {
-    public GunState UsingGunState { get; private set; } //현재 총의 상태 : shootable, empty, reload
+    public GunState gunState { get; private set; } //현재 총의 상태 : shootable, empty, reload
 
     [SerializeField]
     public Data_master_item_weapon UsingGunData { get; private set; } //현재 사용중인 총의 스텟 데이터
@@ -63,7 +63,7 @@ public class Gun : MonoBehaviour
     {
         usingGunItemData = itemData;
         UsingGunData = Data_master_item_weapon.GetData(itemData.itemId);
-        UsingGunState = CurAmmo == 0 ? GunState.Empty: GunState.Shootable;
+        gunState = CurAmmo == 0 ? GunState.Empty: GunState.Shootable;
 
         gunLine.OnAimLine();
         SetGunSprite(itemData.iconName);
@@ -90,7 +90,7 @@ public class Gun : MonoBehaviour
         UsingGunData = null;
         usingGunItemData = null;
         CurAmmo = 0;
-        UsingGunState = GunState.Empty;
+        gunState = GunState.Empty;
         GetComponent<SpriteRenderer>().sprite = null;
         gunLine.OffAimLine();
         //총 제거 패킷 전송
@@ -130,7 +130,7 @@ public class Gun : MonoBehaviour
         }
         
 
-        if(UsingGunState == GunState.Shootable)
+        if(gunState == GunState.Shootable)
         {
             var cRay = new C_RaycastShoot
             {
@@ -150,7 +150,7 @@ public class Gun : MonoBehaviour
         CurAmmo = Mathf.Max(CurAmmo, 0);
         if (CurAmmo == 0)
         {
-            UsingGunState = GunState.Empty;
+            gunState = GunState.Empty;
         }
     }
 
@@ -165,9 +165,10 @@ public class Gun : MonoBehaviour
             Managers.SystemLog.Message("총을 들고 있지 않음");
             return;
         }
-        if(CurAmmo < UsingGunData.reload_round || UsingGunState != GunState.Reloading)
+        if(CurAmmo < UsingGunData.reload_round || gunState != GunState.Reloading)
         {
             //인벤에 해당 총알이 있는지 검색. -> 있다면 최대 장전량 만큼 있는지 확인. -> 그이상이 있다면 최대개수로 아니라면 해당 개수만큼 재장전
+            
             StartCoroutine(ReloadCoroutine(UsingGunData.reload_round));//현재는 임시로 최대 개수
         }
     }
@@ -180,11 +181,15 @@ public class Gun : MonoBehaviour
         packet.Reload = true;
         Managers.Network.Send(packet);
 
-        UsingGunState = GunState.Reloading;
+        gunState = GunState.Reloading;
+        UIManager.Instance.SetActiveReloadBtn(false);
+        UIManager.Instance.SetAmmoText();
         yield return new WaitForSeconds(UsingGunData.reload_time);
 
         CurAmmo = reloadAmount;
-        UsingGunState = GunState.Shootable;
+        gunState = GunState.Shootable;
+        UIManager.Instance.SetActiveReloadBtn(true);
+        UIManager.Instance.SetAmmoText();
 
         //(TODO) 인벤에 총알의 양을 감소시킴
     }

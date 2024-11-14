@@ -125,7 +125,6 @@ public class BaseController : MonoBehaviour
     private void Start()
     {
         Init();
-        
     }
 
     protected void Update()
