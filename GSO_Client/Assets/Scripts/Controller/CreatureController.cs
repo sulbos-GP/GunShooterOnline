@@ -134,6 +134,7 @@ public class CreatureController : BaseController
 
         while (elapsedTime < consume.duration)
         {
+            //힐 아이콘 활성화
             if (Hp >= MaxHp)
             {
                 OnHealed(consume.energy);
@@ -143,6 +144,8 @@ public class CreatureController : BaseController
 
             elapsedTime += consume.active_time;
         }
+
+        //힐 아이콘 비활성화
     }
 
     public virtual void OnDamaged(Transform attacker)

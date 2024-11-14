@@ -1,4 +1,5 @@
 using Google.Protobuf.Protocol;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,27 +10,16 @@ public class Unit : MonoBehaviour
 
     //ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ
 
-    [SerializeField] private ItemData equipSlot1; //장착칸에 저장된 아이템 데이터
-    [SerializeField] private ItemData equipSlot2;
+    [SerializeField] private ItemData equipSlot1 => Managers.Object.MyPlayer.gearDict[1]; //장착칸에 저장된 아이템 데이터
+    [SerializeField] private ItemData equipSlot2 => Managers.Object.MyPlayer.gearDict[2];
 
-    public Gun UsingGun; //손에 들고 있는 총 (사격을 할 총)
+    public Gun UsingGun; //손에 들고 있는 총 (사격을 할 총 **기어에 장착된 총 중 하나 즉 사용하는 총임)
     public int loadedAmount1; //아직 안씀
     public int loadedAmount2;
 
     public Button quickSlotBtn1; //퀵슬롯 버튼
     public Button quickSlotBtn2;
 
-    
-    public ItemData Slot1Equip
-    {
-        get => equipSlot1;
-        set => UpdateSlot(ref equipSlot1, value, quickSlotBtn1, 1);
-    }
-    public ItemData Slot2Equip
-    {
-        get => equipSlot2;
-        set => UpdateSlot(ref equipSlot2, value, quickSlotBtn2, 2);
-    }
 
     public void Init()
     {
@@ -40,11 +30,6 @@ public class Unit : MonoBehaviour
         unitStat.Init();
 
         UsingGun = transform.Find("Pivot/Gun").GetComponent<Gun>();
-
-        equipSlot1 = null;
-        equipSlot2 = null;
-
-        
     }
 
     private void InitQuickSlotBtn()
@@ -112,7 +97,7 @@ public class Unit : MonoBehaviour
             SendChangeGunPacket(0); //총을 들고있지 않을 경우 0(널값) 전송
             return;
         }
-
+        Dictionary<int, ItemData> item = Managers.Object.MyPlayer.gearDict;
         UsingGun.SetGunStat(equipptedItem);
         UsingGun.curGunEquipSlot = slotNumber;
         SendChangeGunPacket(equipptedItem.objectId);
