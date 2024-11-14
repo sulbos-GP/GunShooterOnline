@@ -14,9 +14,9 @@ public partial class InventoryController
         else if (IsPlayerSlot(item.parentObjId)) 
         { 
             playerInvenUI.instantGrid.UpdateBackUpSlot();
-            invenInstance.playerInvenUI.WeightTextSet(
-                invenInstance.playerInvenUI.instantGrid.GridWeight,
-                invenInstance.playerInvenUI.instantGrid.limitWeight);
+            Instance.playerInvenUI.WeightTextSet(
+                Instance.playerInvenUI.instantGrid.GridWeight,
+                Instance.playerInvenUI.instantGrid.limitWeight);
         }
         else
         {
@@ -39,8 +39,8 @@ public partial class InventoryController
     {
         if(IsEquipSlot(item.backUpParentId))
         {
-            EquipSlot UndoEquipSlot = equipSlotDic[item.backUpParentId];
-            UndoEquipSlot.EquipItem(item);
+            EquipSlotBase UndoEquipSlot = equipSlotDic[item.backUpParentId];
+            UndoEquipSlot.UnsetItemEquip();
             return;
         }
         else if (IsPlayerSlot(item.backUpParentId))
@@ -68,8 +68,8 @@ public partial class InventoryController
 
         if(IsEquipSlot(item.parentObjId))
         {
-            EquipSlot targetSlot = equipSlotDic[item.parentObjId];
-            targetSlot.EquipItem(item);
+            EquipSlotBase targetSlot = equipSlotDic[item.parentObjId];
+            targetSlot.UnsetItemEquip();
         }
         else if(IsPlayerSlot(item.parentObjId))
         {

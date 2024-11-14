@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 4282537680480379708}
   - component: {fileID: 1156559941162417088}
   - component: {fileID: 2151735185809450313}
-  - component: {fileID: 5589048240770995353}
   - component: {fileID: -5452985717935214419}
   m_Layer: 0
   m_Name: MyPlayer
@@ -264,23 +263,6 @@ MonoBehaviour:
   isFiring: 0
   interactList: []
   interactTarget: {fileID: 0}
---- !u!114 &5589048240770995353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 191436082380664689}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a47a8fb1aeecfb34497a3e4f858f68b2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  UsingGun: {fileID: 0}
-  loadedAmount1: 0
-  loadedAmount2: 0
-  quickSlotBtn1: {fileID: 0}
-  quickSlotBtn2: {fileID: 0}
 --- !u!114 &-5452985717935214419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -298,6 +280,10 @@ MonoBehaviour:
   sprite: {fileID: 0}
   animator: {fileID: 0}
   _attackableList: []
+  quickSlotBtn1: {fileID: 0}
+  quickSlotBtn2: {fileID: 0}
+  loadedAmount1: 0
+  loadedAmount2: 0
   _Quest: {fileID: 0}
 --- !u!1 &355922946167704334
 GameObject:

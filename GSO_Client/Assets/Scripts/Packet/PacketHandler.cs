@@ -28,20 +28,15 @@ internal class PacketHandler
         Managers.Object.MyPlayer.Hp = Stats.Hp;
         Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
 
-        //enterGamePacket.ItemInfos //총알을 반영하기 위함. 실제로 아이템을 생성해내지는 않음
-
-        //enterGamePacket.GearInfos //장착을 통해 장비 반영. 실제로 아이템을 생성하지 않고 장비변경만
+        //인벤토리를 열지 않은 장착
         foreach(PS_GearInfo gear in enterGamePacket.GearInfos)
         {
-            EquipSlot targetSlot = InventoryController.equipSlotDic[(int)gear.Part];
-
             ItemData data = new ItemData();
             data.SetItemData(gear.Item);
-
-            targetSlot.ApplyItemEffects(data);
+            InventoryController.Instance.SetEquipItem((int)gear.Part, data);
         }
 
-        Managers.Object.MyPlayer._Quest = GameObject.Find("Canvas").transform.GetComponentInChildren<UI_Quest>();
+        Managers.Object.MyPlayer._Quest = UIManager.Instance.QuestUI;
         Managers.Object.MyPlayer._Quest.InitQuest(enterGamePacket.Quests.ToList());
     }
 
@@ -142,6 +137,7 @@ internal class PacketHandler
         var changeHpPacket = message as S_ChangeHp;
 
         var go = Managers.Object.FindById(changeHpPacket.ObjectId);
+        
 
         if (go != null) 
         {
@@ -159,7 +155,12 @@ internal class PacketHandler
                 go.GetComponent<CreatureController>().Hp = Mathf.Min(changeHpPacket.Hp, go.GetComponent<CreatureController>().MaxHp); //과치료 방지
 
             }
-            
+
+            //go가 나 자신이라면 UI변화
+            if (go == Managers.Object.MyPlayer)
+            {
+                UIManager.Instance.SetHpText();
+            }
         }
         else
             Managers.SystemLog.Message("S_ChangeHpHandler : can't find ObjectId");
@@ -204,17 +205,17 @@ internal class PacketHandler
         if (!packet.IsSuccess)
         {
             Managers.SystemLog.Message("S_LoadInventory : fail to load");
-            if (InventoryController.invenInstance.isActive)
+            if (InventoryController.Instance.isActive)
             {
-                InventoryController.invenInstance.invenUIControl();
+                InventoryController.Instance.invenUIControl();
             }
             return;
         }
 
         //먼저 켜야함. 그래야 장비창의 awake로 장비칸의 id가 적용됨 -> 컨트롤러에서 Init으로 설정하도록 변경 옮겨도 됨
-        if (!InventoryController.invenInstance.isActive) //인벤토리가 꺼져있으면 킴
+        if (!InventoryController.Instance.isActive) //인벤토리가 꺼져있으면 킴
         {
-            InventoryController.invenInstance.invenUIControl();
+            InventoryController.Instance.invenUIControl();
         }
 
         //패킷으로 받은 아이템데이터 리스트를 클라이언트 형식으로 변경
@@ -235,25 +236,25 @@ internal class PacketHandler
                 ItemData convertItem = new ItemData();
                 convertItem.SetItemData(packetItem.Item);
 
-                EquipSlot targetSlot = InventoryController.equipSlotDic[(int)packetItem.Part];
+                EquipSlotBase targetSlot = InventoryController.equipSlotDic[(int)packetItem.Part];
 
                 ItemObject newItem = ItemObject.CreateNewItem(convertItem, targetSlot.transform);
 
-                if (targetSlot.equippedItem == null)
+                if (targetSlot.equipItemObj == null)
                 {
-                    targetSlot.EquipItem(newItem);
+                    targetSlot.SetItemEquip(newItem);
                 }
-                else if(targetSlot.equippedItem != newItem)
+                else if(targetSlot.equipItemObj != newItem)
                 {
                     //아이템 교체 -> todo 서버와 함께 구현해야함
-                    targetSlot.UnEquipItem();
-                    targetSlot.EquipItem(newItem);
+                    targetSlot.UnsetItemEquip();
+                    targetSlot.SetItemEquip(newItem);
                 }
                 
             }
 
             //플레이어의 인벤토리
-            PlayerInventoryUI playerInvenUI = InventoryController.invenInstance.playerInvenUI;
+            PlayerInventoryUI playerInvenUI = InventoryController.Instance.playerInvenUI;
             playerInvenUI.InventorySet(); //그리드 생성됨
 
             GridObject playerGrid = playerInvenUI.instantGrid;
@@ -261,8 +262,6 @@ internal class PacketHandler
             playerGrid.PlaceItemInGrid(packetItemList);
             InventoryController.UpdatePlayerWeight();
             playerGrid.PrintInvenContents();
-
-            
         }
         else
         {
@@ -270,7 +269,7 @@ internal class PacketHandler
             Box box = target.GetComponent<Box>();
             box.interactable = false;
 
-            OtherInventoryUI otherInvenUI = InventoryController.invenInstance.otherInvenUI;
+            OtherInventoryUI otherInvenUI = InventoryController.Instance.otherInvenUI;
             otherInvenUI.InventorySet();
             otherInvenUI.instantGrid.InitializeGrid(box.size, box.weight);
             GridObject boxGrid = otherInvenUI.instantGrid;
@@ -280,7 +279,7 @@ internal class PacketHandler
             boxGrid.PlaceItemInGrid(packetItemList);
             boxGrid.PrintInvenContents();
         }
-        InventoryController.invenInstance.DebugDic();
+        InventoryController.Instance.DebugDic();
     }
 
     internal static void S_CloseInventoryHandler(PacketSession session, IMessage message)
@@ -311,9 +310,9 @@ internal class PacketHandler
             target.GetComponent<Box>().interactable = true;
         }
 
-        if (InventoryController.invenInstance.isActive)//인벤토리가 켜져 있으면 끔
+        if (InventoryController.Instance.isActive)//인벤토리가 켜져 있으면 끔
         {
-            InventoryController.invenInstance.invenUIControl();
+            InventoryController.Instance.invenUIControl();
         }
     }
 
@@ -355,7 +354,7 @@ internal class PacketHandler
         Managers.SystemLog.Message($"change ObjectId : OldId = {id} NewId = {newId}");
     }
 
-    private static void AssignEquipOrGrid(int objectId, ref EquipSlot equipSlot, ref GridObject gridObject)
+    private static void AssignEquipOrGrid(int objectId, ref EquipSlotBase equipSlot, ref GridObject gridObject)
     {
 
         if (objectId > 0 && objectId <= 7)
@@ -371,7 +370,7 @@ internal class PacketHandler
     private static GridObject GetGridObject(int objectId)
     {
 
-        return objectId == 0 ? InventoryController.invenInstance.playerInvenUI.instantGrid : InventoryController.invenInstance.otherInvenUI.instantGrid;
+        return objectId == 0 ? InventoryController.Instance.playerInvenUI.instantGrid : InventoryController.Instance.otherInvenUI.instantGrid;
     }
 
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
@@ -383,7 +382,7 @@ internal class PacketHandler
         Managers.SystemLog.Message("S_MoveItem");
         S_MoveItem packet = message as S_MoveItem;
 
-        InventoryController invenInstance = InventoryController.invenInstance;
+        InventoryController invenInstance = InventoryController.Instance;
         
         ItemObject targetItem = null;
         InventoryController.instantItemDic.TryGetValue(packet.SourceMoveItem.ObjectId, out targetItem);
@@ -395,8 +394,8 @@ internal class PacketHandler
 
         GridObject sourceGrid = null;
         GridObject destinationGrid = null;
-        EquipSlot sourceEquip = null;
-        EquipSlot destinationEquip = null;
+        EquipSlotBase sourceEquip = null;
+        EquipSlotBase destinationEquip = null;
 
         AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
         AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
@@ -408,7 +407,7 @@ internal class PacketHandler
             if (packet.DestinationObjectId > 0 && packet.DestinationObjectId <= 7)
             {
                 //도착지점이 장착칸 -> 해당 아이템을 장착칸에 장착
-                if (!destinationEquip.EquipItem(targetItem)) //장착 실패시 원위치로
+                if (!destinationEquip.SetItemEquip(targetItem)) //장착 실패시 원위치로
                 {
                     invenInstance.UndoSlot(targetItem);
                     invenInstance.UndoItem(targetItem);
@@ -443,7 +442,7 @@ internal class PacketHandler
 
         Managers.SystemLog.Message($"S_DeleteItem : targetId = {packet.DeleteItem.ObjectId}");
 
-        InventoryController invenInstance = InventoryController.invenInstance;
+        InventoryController invenInstance = InventoryController.Instance;
 
         ItemObject targetItem = null;
         InventoryController.instantItemDic.TryGetValue(packet.DeleteItem.ObjectId, out targetItem);
@@ -454,7 +453,7 @@ internal class PacketHandler
         }
 
         GridObject sourceGrid = null;
-        EquipSlot sourceEquip = null;
+        EquipSlotBase sourceEquip = null;
         AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
 
 
@@ -478,7 +477,7 @@ internal class PacketHandler
         Managers.SystemLog.Message("S_MergeItem");
 
         Managers.SystemLog.Message($"S_MergeItem : 합쳐지는 아이템 아이디 = {packet.MergedItem.ObjectId}, 합치기 위한 아이디 = {packet.CombinedItem.ObjectId}");
-        InventoryController invenInstance = InventoryController.invenInstance;
+        InventoryController invenInstance = InventoryController.Instance;
 
         ItemObject mergedItem = null;
         InventoryController.instantItemDic.TryGetValue(packet.MergedItem.ObjectId, out mergedItem);
@@ -496,8 +495,8 @@ internal class PacketHandler
 
         GridObject sourceGrid = null;
         GridObject destinationGrid = null;
-        EquipSlot sourceEquip = null;
-        EquipSlot destinationEquip = null;
+        EquipSlotBase sourceEquip = null;
+        EquipSlotBase destinationEquip = null;
 
         AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
         AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
@@ -533,8 +532,8 @@ internal class PacketHandler
         else
         {
             Managers.SystemLog.Message("S_MergeItem failed");
-            InventoryController.invenInstance.UndoSlot(combinedItem);
-            InventoryController.invenInstance.UndoItem(combinedItem);
+            InventoryController.Instance.UndoSlot(combinedItem);
+            InventoryController.Instance.UndoItem(combinedItem);
         }
 
         InventoryController.UpdatePlayerWeight();
@@ -545,7 +544,7 @@ internal class PacketHandler
     {
         S_DevideItem packet = message as S_DevideItem;
         Managers.SystemLog.Message("S_Divide");
-        InventoryController invenInstance = InventoryController.invenInstance;
+        InventoryController invenInstance = InventoryController.Instance;
 
         ItemObject sourceItem = null; //원래 있던 아이템
         InventoryController.instantItemDic.TryGetValue(packet.SourceItem.ObjectId, out sourceItem);
@@ -558,8 +557,8 @@ internal class PacketHandler
         
         GridObject sourceGrid = null;
         GridObject destinationGrid = null;
-        EquipSlot sourceEquip = null;
-        EquipSlot destinationEquip = null;
+        EquipSlotBase sourceEquip = null;
+        EquipSlotBase destinationEquip = null;
 
         AssignEquipOrGrid(packet.SourceObjectId, ref sourceEquip, ref sourceGrid);
         AssignEquipOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
@@ -579,7 +578,7 @@ internal class PacketHandler
 
                 ItemObject newItem = ItemObject.CreateNewItem(itemData, destinationEquip.transform);
                     
-                if (!destinationEquip.EquipItem(newItem))
+                if (!destinationEquip.SetItemEquip(newItem))
                 {
                     invenInstance.UndoSlot(newItem);
                     invenInstance.UndoItem(newItem);
@@ -628,7 +627,7 @@ internal class PacketHandler
 
         shooterGun.gunLine.SetBulletLine(startPoint, hitPoint);
         shooterGun.UseAmmo();
-
+        UIManager.Instance.SetAmmoText();
         //총알 발사
         Bullet bullet = Managers.Resource.Instantiate($"Objects/BulletObjPref/BulletBase").GetComponent<Bullet>();
         if (bullet == null)
@@ -734,7 +733,7 @@ internal class PacketHandler
         ////enterGamePacket.GearInfos //장착을 통해 장비 반영. 실제로 아이템을 생성하지 않고 장비변경만
         //foreach (PS_GearInfo gear in enterGamePacket.GearInfos)
         //{
-        //    EquipSlot targetSlot = InventoryController.equipSlotDic[(int)gear.Part];
+        //    EquipSlotBase targetSlot = InventoryController.equipSlotDic[(int)gear.Part];
 
         //    ItemData data = new ItemData();
         //    data.SetItemData(gear.Item);
@@ -759,7 +758,7 @@ internal class PacketHandler
 
         if (packet.GunId == 0)
         {
-            Managers.SystemLog.Message("S_ChangeAppearanceHandler : no gun in hand");
+            Managers.SystemLog.Message("S_ChangeAppearanceHandler : no usingGun in hand");
             targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
             return;
         }

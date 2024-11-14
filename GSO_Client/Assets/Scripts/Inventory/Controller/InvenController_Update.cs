@@ -149,13 +149,13 @@ public partial class InventoryController
             return;
         }
 
-        if (selectedItem.itemData.item_type != selectedEquip.allowedItemType)
+        if (selectedItem.itemData.item_type != selectedEquip.equipType)
         {
             invenHighlight.SetColor(HighlightColor.Red);
         }
         else
         {
-            invenHighlight.SetColor(selectedEquip.equippedItem != null ? HighlightColor.Yellow : HighlightColor.Green);
+            invenHighlight.SetColor(selectedEquip.equipItemObj != null ? HighlightColor.Yellow : HighlightColor.Green);
         }
         InvenHighLight.highlightObj.transform.SetParent(selectedEquip.transform);
         InvenHighLight.highlightObj.transform.position = selectedEquip.transform.position;

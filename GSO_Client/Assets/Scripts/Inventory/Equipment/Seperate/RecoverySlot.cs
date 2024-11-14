@@ -3,24 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RecoverySlot : EquipSlot
+public class RecoverySlot : EquipSlotBase
 {
     public IQuickSlot targetSlot;
-    public Transform ItemQuickSlotsParent;
-
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-    }
-
-    public override void Init()
-    {
-        base.Init();
-        if(GameObject.Find("IQuickSlot") != null)
-        {
-            ItemQuickSlotsParent = GameObject.Find("IQuickSlot").transform;
-        }
-    }
+    public Transform ItemQuickSlotsParent => UIManager.Instance.IQuickSlot;
 
     public override bool ApplyItemEffects(ItemData item)
     {
@@ -28,9 +14,9 @@ public class RecoverySlot : EquipSlot
         return true;
     }
 
-    public override bool RemoveItemEffects(ItemData item)
+    public override bool RemoveItemEffects()
     {
-        base.RemoveItemEffects(item);
+        base.RemoveItemEffects();
         return true;
     }
 

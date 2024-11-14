@@ -62,7 +62,7 @@ public class ObjectManager
                 //MyPlayer.Stat.MergeFrom(info.StatInfo);
                 MyPlayer.SyncPos();
                 MyPlayer.playerInput = MyPlayer.GetComponent<InputController>().playerInput;
-                MyPlayer.GetComponent<Unit>().Init();
+                //MyPlayer.GetComponent<Unit>().Init(); 유닛 안씀
             }
             else
             {

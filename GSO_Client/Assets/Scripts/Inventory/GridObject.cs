@@ -146,7 +146,7 @@ public class GridObject : MonoBehaviour
     public Color32 PlaceCheckInGridHighLight(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
     {
         overlapItem = null;
-        InventoryController.invenInstance.itemPlaceableInGrid = false;
+        InventoryController.Instance.itemPlaceableInGrid = false;
         //아이템이 그리드 밖으로 나갈시 취소
         if (!BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height))
         {
@@ -179,13 +179,13 @@ public class GridObject : MonoBehaviour
         }
         
 
-        InventoryController.invenInstance.itemPlaceableInGrid = true;
+        InventoryController.Instance.itemPlaceableInGrid = true;
         return HighlightColor.Green;
     }
 
     private bool CheckGridWeight(ItemObject placeItem, ItemObject overlapItem)
     {
-        GridObject playerGrid = InventoryController.invenInstance.playerInvenUI.instantGrid;
+        GridObject playerGrid = InventoryController.Instance.playerInvenUI.instantGrid;
         double curWeight = playerGrid.GridWeight;
         double itemWeight = 0;
         if (overlapItem != null) 
@@ -205,7 +205,7 @@ public class GridObject : MonoBehaviour
 
             itemWeight = giveAmount > ableAmount ? placeItem.itemData.item_weight * ableAmount : itemWeight = placeItem.itemData.item_weight * giveAmount;
         }
-        else if ( InventoryController.invenInstance.isDivideMode)
+        else if ( InventoryController.Instance.isDivideMode)
         {
             //오버랩 아이템이 존재한다면 이것은 머지가 가능할 경우 + divide모드가 켜져있다면 나누기 모드(일단은 배치가 가능하게 하여 서버에 패킷을 전송해야함)
             itemWeight = placeItem.itemData.item_weight; //최소한의 개수인 1개의 무게가 들어갈수 있다면 성공판정
@@ -224,17 +224,17 @@ public class GridObject : MonoBehaviour
         
         double result = Math.Round(curWeight + itemWeight,2);
 
-        if(InventoryController.invenInstance.SelectedGrid.objectId == 0)
+        if(InventoryController.Instance.SelectedGrid.objectId == 0)
         {
-            InventoryController.invenInstance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
+            InventoryController.Instance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
 
             if (result > playerGrid.limitWeight)
             {
-                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.red;
+                InventoryController.Instance.playerInvenUI.weightText.color = Color.red;
             }
             else
             {
-                InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
+                InventoryController.Instance.playerInvenUI.weightText.color = Color.white;
             }
         }
         

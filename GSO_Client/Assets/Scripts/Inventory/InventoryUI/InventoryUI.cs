@@ -28,4 +28,6 @@ public class InventoryUI : MonoBehaviour
     {
         instantGrid = Managers.Resource.Instantiate("UI/InvenUI/GridUI", transform).GetComponent<GridObject>();
     }
+
+
 }
