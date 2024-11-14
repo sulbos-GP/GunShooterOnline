@@ -1,17 +1,97 @@
+using Google.Protobuf.Protocol;
 using System.Collections.Generic;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 using Vector2 = System.Numerics.Vector2;
 
 
 public partial class InventoryController : MonoBehaviour
 {
-    public static InventoryController invenInstance;
+    public static InventoryController Instance;
 
     private const int MaxEquipSlots = 7;
     private const int PlayerSlotId = 0;
 
-    public static Dictionary<int, EquipSlot> equipSlotDic { get; private set; } = new Dictionary<int, EquipSlot>();
+    private Dictionary<int, ItemData> EquipDict = new Dictionary<int, ItemData>();
+    /*앞으로 사용할 기어 딕셔너리. 장착을 조작할때는 이 딕셔너리를 참조하여 변경
+    * 1번 주무기
+    * 2번 보조무기
+    * 3번 방어구
+    * 4번 가방
+    * 5~7번 소모품
+    */
+    //딕셔너리의 아이템 검색
+    public bool SetEquipItem(int slotId, ItemData item)
+    {
+        if(item == null)
+        {
+            return false;
+        }
+
+        EquipDict[slotId] = item;
+
+        switch (item.item_type)
+        {
+            case ItemType.Weapon:
+                UIManager.Instance.SetWeaponBtn(slotId, item.itemId);
+                break;
+            case ItemType.Defensive:
+                //아직 없음
+                break;
+            case ItemType.Bag:
+                return playerInvenUI.SetInventoryGrid(item.itemId);
+            case ItemType.Recovery:
+                UIManager.Instance.SetIQuickSlot(slotId, item);
+                break;
+            default:
+                Debug.Log("장착불가능한 아이템입니다.");
+                break;
+        }
+        return true;
+    }
+
+    public bool UnsetEquipItem(int slotId)
+    {
+        if (EquipDict[slotId] == null)
+        {
+            return false;
+        }
+
+        EquipDict[slotId] = null;
+
+        switch (EquipDict[slotId].item_type)
+        {
+            case ItemType.Weapon:
+                return UIManager.Instance.SetWeaponBtn(slotId, 0);
+            case ItemType.Defensive:
+                //아직 없음
+                break;
+            case ItemType.Bag:
+                playerInvenUI.ResetInventoryGrid();
+                break;
+            case ItemType.Recovery:
+                return UIManager.Instance.SetIQuickSlot(slotId, null);
+            default:
+                Debug.Log("장착불가능한 아이템입니다.");
+                return false;
+        }
+
+        
+        return true;
+    }
+    public ItemData GetItemInDictionaryByCode(int GearCode)
+    {
+        if (EquipDict[GearCode] == null)
+        {
+            return null;
+        }
+
+        return EquipDict[GearCode];
+    }
+
+    public static Dictionary<int, EquipSlotBase> equipSlotDic { get; private set; } = new Dictionary<int, EquipSlotBase>();
     public static Dictionary<int, ItemObject> instantItemDic { get; private set; } = new Dictionary<int, ItemObject>();
 
 
@@ -43,7 +123,7 @@ public partial class InventoryController : MonoBehaviour
     public bool itemPlaceableInGrid; //아이템이 그리드에 들어갈수 있는가?
 
     //장착칸
-    [SerializeField] private EquipSlot selectedEquip;
+    [SerializeField] private EquipSlotBase selectedEquip;
     private bool isEquipSelected;
 
     //하이라이트
@@ -111,7 +191,7 @@ public partial class InventoryController : MonoBehaviour
             deleteUI.GetComponent<DeleteZone>().IsDeleteOn = value;
         }
     }
-    public EquipSlot SelectedEquip
+    public EquipSlotBase SelectedEquip
     {
         get => selectedEquip;
         set
@@ -137,10 +217,10 @@ public partial class InventoryController : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log("invenInstance");
-        if (invenInstance == null)
+        Debug.Log("Instance");
+        if (Instance == null)
         {
-            invenInstance = this;
+            Instance = this;
 
         }
         else
@@ -202,7 +282,8 @@ public partial class InventoryController : MonoBehaviour
 
     private void EquipSlotsSet()
     {
-        EquipSlot[] slots = inventoryUI.GetComponentsInChildren<EquipSlot>();
+
+        EquipSlotBase[] slots = inventoryUI.GetComponentsInChildren<EquipSlotBase>();
 
         for (int i = 0; i < slots.Length; i++)
         {
@@ -257,14 +338,14 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     public static void UpdatePlayerWeight()
     {
-        if (invenInstance.playerInvenUI.instantGrid == null)
+        if (Instance.playerInvenUI.instantGrid == null)
         {
             return;
         }
-        invenInstance.playerInvenUI.instantGrid.UpdateGridWeight();
-        invenInstance.playerInvenUI.WeightTextSet(
-            invenInstance.playerInvenUI.instantGrid.GridWeight,
-            invenInstance.playerInvenUI.instantGrid.limitWeight);
+        Instance.playerInvenUI.instantGrid.UpdateGridWeight();
+        Instance.playerInvenUI.WeightTextSet(
+            Instance.playerInvenUI.instantGrid.GridWeight,
+            Instance.playerInvenUI.instantGrid.limitWeight);
     }
 
 }

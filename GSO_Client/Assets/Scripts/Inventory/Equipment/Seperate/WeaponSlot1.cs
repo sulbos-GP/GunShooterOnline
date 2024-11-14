@@ -3,36 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponSlot1 : EquipSlot
+public class WeaponSlot1 : EquipSlotBase
 {
-    private void Awake()
-    {
-        Init();
-    }
-    protected override void OnDisable()
-    {
-        base.OnDisable();
-    }
-
     public override  void Init()
     {
+        base.Init();
         slotId = 1;
-        allowedItemType = ItemType.Weapon;
+        equipType = ItemType.Weapon;
     }
 
-
-    public override bool ApplyItemEffects(ItemData item)
-    {
-        base.ApplyItemEffects(item);
-        Debug.Log($"무기1 : {item.item_name} 장착");
-
-        return true;
-    }
-
-    public override bool RemoveItemEffects(ItemData item)
-    {
-        base.RemoveItemEffects(item);
-        Debug.Log($"무기1 아이템 해제");
-        return true;
-    }
 }

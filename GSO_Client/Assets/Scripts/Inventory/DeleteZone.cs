@@ -42,7 +42,7 @@ public class DeleteZone : MonoBehaviour
 
     private void ChangeImage()
     {
-        if (isOn&& InventoryController.invenInstance.isItemSelected)
+        if (isOn&& InventoryController.Instance.isItemSelected)
         {
             uiImage.sprite = onSprite;
             return;

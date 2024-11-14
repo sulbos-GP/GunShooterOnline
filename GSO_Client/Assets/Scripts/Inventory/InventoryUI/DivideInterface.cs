@@ -39,7 +39,7 @@ public class DivideInterface : MonoBehaviour
 
     public void SetAmountIndex(ItemObject item, Vector2Int pos, ItemObject overlap)
     {
-        InventoryController.invenInstance.isDivideInterfaceOn = true;
+        InventoryController.Instance.isDivideInterfaceOn = true;
         targetPos = pos;
         targetItem = item;
         objectId = item.parentObjId;
@@ -85,7 +85,7 @@ public class DivideInterface : MonoBehaviour
 
     private void OnScrollbarValueChanged(float value)
     {
-        InventoryController inven = InventoryController.invenInstance;
+        InventoryController inven = InventoryController.Instance;
         GridObject playerGridObj = inven.playerInvenUI.instantGrid;
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 1)) + 1;
         UpdateCountText();
@@ -112,7 +112,7 @@ public class DivideInterface : MonoBehaviour
 
     private void UpdateWeightText(double currentWeight)
     {
-        InventoryController inven = InventoryController.invenInstance;
+        InventoryController inven = InventoryController.Instance;
         GridObject playerGridObj = inven.playerInvenUI.instantGrid;
         double roundedWeight = Math.Round(currentWeight, 2);
         inven.playerInvenUI.weightText.text = $"WEIGHT \n{roundedWeight} / {playerGridObj.limitWeight}";
@@ -127,8 +127,8 @@ public class DivideInterface : MonoBehaviour
 
     private void OnCancelButtonClicked()
     {
-        InventoryController.invenInstance.UndoSlot(targetItem);
-        InventoryController.invenInstance.UndoItem(targetItem);
+        InventoryController.Instance.UndoSlot(targetItem);
+        InventoryController.Instance.UndoItem(targetItem);
         DestroyInterface();
     }
     
@@ -151,13 +151,13 @@ public class DivideInterface : MonoBehaviour
             InventoryPacket.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
         }
 
-        InventoryController.invenInstance.playerInvenUI.weightText.color = Color.white;
+        InventoryController.Instance.playerInvenUI.weightText.color = Color.white;
         DestroyInterface();
     }
 
     private void DestroyInterface()
     {
-        InventoryController.invenInstance.isDivideInterfaceOn = false;
+        InventoryController.Instance.isDivideInterfaceOn = false;
         Managers.Resource.Destroy(gameObject);
     }
 

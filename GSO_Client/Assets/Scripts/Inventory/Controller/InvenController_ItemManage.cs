@@ -39,11 +39,11 @@ public partial class InventoryController
         {
             if (isEquipSelected)
             {
-                if (selectedEquip.equippedItem != null)
+                if (selectedEquip.equipItemObj != null)
                 {
 
-                    SelectedItem = selectedEquip.equippedItem;
-                    if (!selectedEquip.UnEquipItem())
+                    SelectedItem = selectedEquip.equipItemObj;
+                    if (!selectedEquip.UnsetItemEquip())
                     {
                         selectedEquip.SetEquipItemObj(SelectedItem); //실패시 원위치로
                         ResetSelection();
@@ -101,7 +101,7 @@ public partial class InventoryController
 
         if (IsEquipSlot(item.parentObjId))
         {
-            EquipSlot target =equipSlotDic[item.parentObjId];
+            EquipSlotBase target =equipSlotDic[item.parentObjId];
             //옮긴 위치가 장착칸
             if (item.backUpParentId == selectedEquip.slotId)
             {
@@ -109,7 +109,7 @@ public partial class InventoryController
                 UndoItem(item);
                 return;
             }
-            divideInterface.SetAmountIndex(item, Vector2Int.zero, target.equippedItem);
+            divideInterface.SetAmountIndex(item, Vector2Int.zero, target.equipItemObj);
         }
         else
         {
@@ -127,9 +127,9 @@ public partial class InventoryController
         
     }
 
-    private void ItemReleaseInEquip(ItemObject item, EquipSlot slot)
+    private void ItemReleaseInEquip(ItemObject item, EquipSlotBase slot)
     {
-        if (slot.allowedItemType == item.itemData.item_type)
+        if (slot.equipType == item.itemData.item_type)
         {
 
             if (isDivideMode)
@@ -138,15 +138,15 @@ public partial class InventoryController
             }
             else
             {
-                if (slot.equippedItem != null)
+                if (slot.equipItemObj != null)
                 {
-                    if (CheckAbleToMerge(item, slot.equippedItem))
+                    if (CheckAbleToMerge(item, slot.equipItemObj))
                     {
 
-                        int needAmount = selectedItem.ItemAmount + slot.equippedItem.ItemAmount <= ItemObject.maxItemMergeAmount
-                            ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - slot.equippedItem.ItemAmount;
+                        int needAmount = selectedItem.ItemAmount + slot.equipItemObj.ItemAmount <= ItemObject.maxItemMergeAmount
+                            ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - slot.equipItemObj.ItemAmount;
 
-                        InventoryPacket.SendMergeItemPacket(item, slot.equippedItem, needAmount);
+                        InventoryPacket.SendMergeItemPacket(item, slot.equipItemObj, needAmount);
                     }
                     else
                     {

@@ -7,10 +7,10 @@ public class DeleteInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        InventoryController.invenInstance.IsOnDelete = true;
+        InventoryController.Instance.IsOnDelete = true;
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        InventoryController.invenInstance.IsOnDelete = false;
+        InventoryController.Instance.IsOnDelete = false;
     }
 }
