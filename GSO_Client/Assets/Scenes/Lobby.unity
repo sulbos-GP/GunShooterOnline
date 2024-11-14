@@ -1414,7 +1414,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c281d3335b7fb4fa1ce43ce7ad1f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DebugMode: 1
+  DebugMode: 0
   Store: {fileID: 1935026847}
   Profile: {fileID: 13247110}
   Coins: {fileID: 1408510275}
