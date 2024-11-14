@@ -2,8 +2,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Google.Protobuf.Protocol;
 using NPOI.XSSF.UserModel;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -12,15 +14,19 @@ public partial class MyPlayerController : PlayerController
 {
     [SerializeField] private List<BaseController> _attackableList = new();
 
-    public Dictionary<int, ItemData> gearDict = new Dictionary<int, ItemData>(); //앞으로 사용할 기어 딕셔너리. 장착을 조작할때는 이 딕셔너리를 참조하여 변경
-
+    
     private Vector3 _latestPos;
 
     //게임
     public PlayerInput playerInput;
     private GameInfoBar _gameInfoBar; // HP+ Exp + Info
     private VirtualJoystick _joystick;
+    public Gun usingGun { get; private set; } //플레이어가 들고있는 총(발사하는 총)
 
+    public int loadedAmount1; //아직 안씀
+    public int loadedAmount2;
+
+    
 
     //----------------------------------위: 사용 / 아래:사용안하는듯--------------------------
     //private ButtonSkill _butnSkill;
@@ -33,7 +39,7 @@ public partial class MyPlayerController : PlayerController
     private SkillRequst _skillPanel;
     private Coroutine _coskillCoolTime;
     //public int Attack => Stat.Attack;
-    public Gun gun { get; private set; }
+    
 
     private void LateUpdate()
     {
@@ -82,59 +88,16 @@ public partial class MyPlayerController : PlayerController
     }
     protected override void Init()
     {
-        //TODO : 삭제
+        usingGun = transform.Find("Pivot/Gun").GetComponent<Gun>();
+        InitWeaponQuickSlot();
+        UIManager.Instance.SetReloadBtnListener(usingGun);
+        
 
-        gun = transform.Find("Pivot/Gun").GetComponent<Gun>();
         //base 무시
         base.Init();
-
-
-
+        
         return;
 
-        _gameInfoBar = GameObject.Find("Canvas").transform.GetComponentInChildren<GameInfoBar>();
-        ChangeStat = CheakUpdateInfoBar; //초기화 했음
-        
-        
-        // Player 
-        var inputActions = new InputActions_Player();
-        inputActions.PlayerControls.Enable();
-        inputActions.PlayerControls.Movement.performed += Movement_performed;
-        inputActions.PlayerControls.Movement.canceled += Movement_Canceled;
-
-
-        //---------------------------------------------------------------------------
-        _myPlayerAttack = GetComponentInChildren<MyPlayerAttack>();
-        _myPlayerAttack.transform.GetComponent<CircleCollider2D>().radius = AttackRange;
-
-        //Managers.Object.MyPlayer.RefreshAddtionalStat();
-
-
-        //----------------------------------------------------------------------------------------
-        //_joystick = FindObjectOfType<VirtualJoystick>();
-        //if (_joystick == null) _joystick = Managers.Resource.Instantiate("UI/Joystick").GetComponent<VirtualJoystick>();
-        //_joystick.StartJoystick(true, this);
-        //----------------------------------------------------------------------------------------
-
-
-        //----------------------------------------------------------------------------------------
-
-        _skillPanel = FindObjectOfType<SkillRequst>();
-        if (_skillPanel == null)
-            _skillPanel = Managers.Resource.Instantiate("UI/SkillPanel").GetOrAddComponent<SkillRequst>();
-        _skillPanel.Init();
-        _skillPanel.Player = gameObject;
-        //----------------------------------------------------------------------------------------
-
-        //----------------------------------------------------------------------------------------
-
-        //_butnSkill = FindObjectOfType<ButtonSkill>();
-        //if (_butnSkill == null)
-        //    _butnSkill = Managers.Resource.Instantiate("UI/SkillBtns").GetOrAddComponent<ButtonSkill>();
-        //_butnSkill.Init(Stat);
-
-        //----------------------------------------------------------------------------------------
-        AutoUpdatedFlag();
     }
 
     private int leastLevel = 0;
@@ -149,13 +112,7 @@ public partial class MyPlayerController : PlayerController
 
         leastLevel = Stat.Level;*/
     }
-    
-    
-    
-    
-    
-    
-    
+
     private void Movement_performed(InputAction.CallbackContext context)
     {
         //Debug.Log("Movement_performed");
@@ -201,81 +158,6 @@ public partial class MyPlayerController : PlayerController
         UseSkill(number, dir: dir);
     }
 
-
-    /*protected override void UpdateController()
-    {
-        GetUIKeyInput();
-
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    Vector2 _dir = FindEnemyAndAttack();
-        //    if (_dir != Vector2.zero)
-        //    {
-        //        UseSkill(200, dir: _dir);
-        //    }
-        //}
-        //if (Input.GetKeyDown(KeyCode.J))
-        //{
-        //    UseSkill(301);
-        //}
-        //if (Input.GetKeyDown(KeyCode.P))
-        //{
-        //    UseSkill(102);
-        //} 
-        //if (Input.GetKeyDown(KeyCode.P))
-        //{
-        //    UseSkill(102);
-        //}
-
-
-        if (Dir.x == -1)
-            GetComponent<SpriteRenderer>().flipX = true;
-        else if (Dir.x == 1)
-            GetComponent<SpriteRenderer>().flipX = false;
-
-        base.UpdateController();
-    }*/
-
-
-    private void OnAttack(InputValue value)
-    {
-        Debug.Log("OnAttack");
-    }
-
-    private void GetUIKeyInput()
-    {
-        //if (Input.GetKeyDown(KeyCode.I))
-        //{
-        //	UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
-        //	UI_Inventory invenUI = gameSceneUI.InvenUI;
-
-        //	if (invenUI.gameObject.activeSelf)
-        //	{
-        //		invenUI.gameObject.SetActive(false);
-        //	}
-        //	else
-        //	{
-        //		invenUI.gameObject.SetActive(true);
-        //		invenUI.RefreshUI();
-        //	}
-        //}
-        //else if (Input.GetKeyDown(KeyCode.C))
-        //{
-        //	UI_GameScene gameSceneUI = Managers.UI.SceneUI as UI_GameScene;
-        //	UI_Stat statUI = gameSceneUI.StatUI;
-
-        //	if (statUI.gameObject.activeSelf)
-        //	{
-        //		statUI.gameObject.SetActive(false);
-        //	}
-        //	else
-        //	{
-        //		statUI.gameObject.SetActive(true);
-        //		statUI.RefreshUI();
-        //	}
-        //}
-    }
-
     protected override void UpdateIdle()
     {
         base.UpdateIdle();
@@ -312,21 +194,6 @@ public partial class MyPlayerController : PlayerController
 
         CheakUpdatedFlag();
     }
-
-
-    //IEnumerator CoJumpFlag()
-    //{
-    //    int t = 0;
-    //    while (t < 10)
-    //    {
-    //        CheakUpdatedFlag(isForce: true);
-    //        yield return new WaitForSeconds(.1f);
-    //        t += 1;
-    //    }
-
-    //    Debug.Log("CoUpdateFlagEnd");
-    //}
-
 
     private void AutoUpdatedFlag()
     {
@@ -439,5 +306,75 @@ public partial class MyPlayerController : PlayerController
     {
         yield return new WaitForSeconds(time);
         _coskillCoolTime = null;
+    }
+
+
+//ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ현재 들고 있는 총의 변화ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ//
+
+    
+
+    private Button quickSlotBtn1 => UIManager.Instance.MainWeaponBtn;
+    private Button quickSlotBtn2 => UIManager.Instance.SubWeaponBtn;
+    private void InitWeaponQuickSlot()
+    {
+        quickSlotBtn1.interactable = false;
+        quickSlotBtn2.interactable = false;
+
+        quickSlotBtn1.onClick.RemoveAllListeners();
+        quickSlotBtn2.onClick.RemoveAllListeners();
+
+        quickSlotBtn1.onClick.AddListener(() => ChangeUseGun(1));
+        quickSlotBtn2.onClick.AddListener(() => ChangeUseGun(2));
+    }
+
+    private async void ChangeUseGun(int slotNumber)
+    {
+        await Task.Delay(100);
+        InventoryController inven = InventoryController.Instance;
+        ItemData equipptedItem = inven.GetItemInDictionaryByCode(slotNumber);
+        if (equipptedItem == null)
+        {
+            SendChangeGunPacket(0); //총을 들고있지 않을 경우 0(널값) 전송
+            return;
+        }
+        else if(equipptedItem.item_type != ItemType.Weapon)
+        {
+            Debug.Log("잘못된 아이템 참조");
+        }
+
+        usingGun.SetGunStat(equipptedItem);
+        usingGun.curGunEquipSlot = slotNumber;
+        SendChangeGunPacket(equipptedItem.objectId);
+    }
+
+    private static void SendChangeGunPacket(int gunObjectId)
+    {
+        C_ChangeAppearance packet = new C_ChangeAppearance()
+        {
+            ObjectId = Managers.Object.MyPlayer.Id,
+            GunId = gunObjectId
+        };
+
+        Managers.Network.Send(packet);
+        Debug.Log($"C_ChangeAppearance 전송 {packet.ObjectId}, {packet.GunId}");
+    }
+
+    private Coroutine healCoroutine;
+    [ContextMenu("디버그 버프")]
+    public void DebugHeal()
+    {
+        if(healCoroutine == null ) 
+        {
+            healCoroutine = StartCoroutine(OnBuffed(Data_master_item_use.GetData(404)));
+        }
+    }
+
+    [ContextMenu("디버그 버프 중단")]
+    public void DebugStopHeal()
+    {
+        if (healCoroutine != null)
+        {
+            StopCoroutine(healCoroutine);
+        }
     }
 }

@@ -7,10 +7,10 @@ public class EquipInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 {
     public void OnPointerEnter(PointerEventData eventData)
     {
-        InventoryController.invenInstance.SelectedEquip = GetComponent<EquipSlot>();
+        InventoryController.Instance.SelectedEquip = GetComponent<EquipSlotBase>();
     }
     public void OnPointerExit(PointerEventData eventData)
     {
-        InventoryController.invenInstance.SelectedEquip = null;
+        InventoryController.Instance.SelectedEquip = null;
     }
 }

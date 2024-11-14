@@ -22,7 +22,7 @@ public class Box : InteractableObject
         base.Init();
         interactable = true; 
         interactRange = 2;
-        invenUI = InventoryController.invenInstance.otherInvenUI;
+        invenUI = InventoryController.Instance.otherInvenUI;
         SetTriggerSize();
     }
 
