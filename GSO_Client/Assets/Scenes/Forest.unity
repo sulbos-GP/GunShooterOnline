@@ -2980,6 +2980,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  itemImage: {fileID: 0}
+  itemAmountText: {fileID: 0}
+  cooltimeRect: {fileID: 0}
   itemData:
     objectId: 0
     itemId: 0
@@ -4094,17 +4097,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 7815713739285558164, guid: 44b826aa5a54ee64e935582d422ac1b2, type: 3}
   m_PrefabInstance: {fileID: 1251449009}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1251449011 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8725851685184444706, guid: 44b826aa5a54ee64e935582d422ac1b2, type: 3}
-  m_PrefabInstance: {fileID: 1251449009}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1001 &1341894781
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4287,6 +4279,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  itemImage: {fileID: 0}
+  itemAmountText: {fileID: 0}
+  cooltimeRect: {fileID: 0}
   itemData:
     objectId: 0
     itemId: 0
@@ -4560,6 +4555,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   defaultSprite: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  itemImage: {fileID: 0}
+  itemAmountText: {fileID: 0}
+  cooltimeRect: {fileID: 0}
   itemData:
     objectId: 0
     itemId: 0
@@ -4838,11 +4836,11 @@ RectTransform:
   - {fileID: 664250194}
   - {fileID: 870652769}
   - {fileID: 1156740449}
-  - {fileID: 490672682}
-  - {fileID: 6402864669946907678}
   - {fileID: 875843144}
   - {fileID: 7876822940558909841}
   - {fileID: 1516688827}
+  - {fileID: 490672682}
+  - {fileID: 6402864669946907678}
   - {fileID: 1750997233}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4863,9 +4861,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f47f60c593c019544ba112ef44dced77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Health: {fileID: 1251449011}
-  AmmoText: {fileID: 2025900962}
-  DieUI: {fileID: 1750997232}
   Duration: 2
 --- !u!1 &1843023168
 GameObject:
