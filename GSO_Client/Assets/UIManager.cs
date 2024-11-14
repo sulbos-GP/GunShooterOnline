@@ -48,12 +48,12 @@ public class UIManager : MonoBehaviour
         //GunAmmo
         Gun playerGun = myPlayer.transform.Find("Pivot/Gun").GetComponentInChildren<Gun>();
         if (playerGun.UsingGunState == GunState.Reloading)
-            AmmoText.text = "ReloadCoroutine Gun";
+            AmmoText.text = "Reload";
         else
         {
             if(playerGun.UsingGunData == null)
             {
-                AmmoText.text = "Gun is not Equipped";
+                AmmoText.text = "0 / 0";
             }
             else
             {
@@ -84,7 +84,7 @@ public class UIManager : MonoBehaviour
         
         foreach (Transform child in transform)
         {
-            if (child.name == "Reload")
+            if (child.name == "ReloadBtn")
             {
                 reloadBtn = child.GetComponent<Button>();
                 break;
