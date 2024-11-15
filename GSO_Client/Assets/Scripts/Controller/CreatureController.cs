@@ -181,7 +181,7 @@ public class CreatureController : BaseController
             return;
         //TO - DO : 2024.10.08 수정 예정
         if(Managers.Object.MyPlayer.Hp==0)
-            UIManager.Instance.DieMessage(Managers.Object.FindById(attackerId).name);
+            UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
         Debug.Log(transform.name + "Dead");
         //GameObject effect = Managers.Resource.Instantiate("Effect/DieEffect");
         //effect.transform.position = transform.position;

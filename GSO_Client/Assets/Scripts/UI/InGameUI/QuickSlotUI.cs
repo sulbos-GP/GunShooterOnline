@@ -11,14 +11,14 @@ using static UnityEditor.Progress;
 public class IQuickSlot : MonoBehaviour
 {
     //퀵슬롯 버튼 1, 2, 3의 컴포넌트에 부착
-    public int SlotId { get; set; }
+    public int SlotId;
 
     public Sprite defaultSprite;
 
     //컴포넌트
     public Image itemImage;
     public TextMeshProUGUI itemAmountText;
-    public RectTransform cooltimeRect;
+    public Image coolTimeImage;
 
     public ItemData itemData;
     
@@ -29,11 +29,14 @@ public class IQuickSlot : MonoBehaviour
     {
         itemImage = transform.GetChild(0).GetComponent<Image>();
         itemAmountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        cooltimeRect = transform.GetChild(2).GetComponent<RectTransform>();
+        coolTimeImage = transform.GetChild(2).GetComponent<Image>();
+        
+    }
 
+    public void Init()
+    {
         GetComponent<Button>().onClick.RemoveAllListeners();
         GetComponent<Button>().onClick.AddListener(() => UseQuickSlot(itemData));
-
         ResetSlot();
     }
 
@@ -48,21 +51,22 @@ public class IQuickSlot : MonoBehaviour
         }
         itemData = item;
         GetComponent<Button>().interactable = true;
-        
 
         Sprite itemSprite = ItemObject.FindItemSprtie(item);
         itemImage.sprite = itemSprite;
-        itemAmountText.text = item.amount.ToString();
-        itemData.OnAmountChanged += UpdateItemAmount;
+        UpdateItemAmount(item.amount);
+        StartCoroutine(OnCooltime(Data_master_item_use.GetData(item.itemId).cool_time));
     }
 
     public void UpdateItemAmount(int newAmount)
     {
-        itemAmountText.text = newAmount.ToString();
-        
         if (newAmount <= 0)
         {
             ResetSlot();
+        }
+        else
+        {
+            itemAmountText.text = newAmount.ToString();
         }
     }
 
@@ -71,14 +75,11 @@ public class IQuickSlot : MonoBehaviour
     /// </summary>
     public void ResetSlot()
     {
-        if (itemData != null) {
-            itemData.OnAmountChanged -= UpdateItemAmount;
-        }
-
         itemImage.sprite = defaultSprite;
         itemAmountText.text = "x";
 
-        cooltimeRect.sizeDelta = Vector2.zero;
+        coolTimeImage.fillAmount = 0;
+
         isReady = false;
         if(cooltimer != null)
         {
@@ -92,51 +93,32 @@ public class IQuickSlot : MonoBehaviour
     /// <summary>
     /// 등록된 아이템을 사용. 이건 아이템의 기능이 나와야할듯
     /// </summary>
-    public void UseQuickSlot(ItemData Item)
+    public void UseQuickSlot(ItemData item)
     {
-        if (!isReady)
-        {
-            return;
-        }
-
-        if(Item == null )
+        if (item == null)
         {
             Debug.Log("아이템이 등록되어있지 않음");
             return;
         }
 
-        Data_master_item_use consumeData = new Data_master_item_use();
-        consumeData = Data_master_item_use.GetData(Item.itemId);
-        if (consumeData == null)
-        {
-            Debug.Log($"ConsumeDB에서 해당 아이템을 찾지 못함 {Item.itemId}");
-            return;
-        }
-
-        if (!UseConsume(consumeData))//아이템 사용
+        if (!CheckAbleToUse())//아이템 사용
         {
             Debug.Log("아이템 사용 실패");
             return;
         }
 
         C_InputData inputPacket = new C_InputData();
-        inputPacket.ItemId = Item.objectId;
+        inputPacket.ItemId = item.objectId;
         inputPacket.ItemSoltId = SlotId;
 
         Managers.Network.Send(inputPacket);
 
-        Item.amount -= 1; //아이템의 개수 감소
-        if (Item.amount == 0) //개수가 0이되면 아이템 삭제 및 슬롯 리셋
-        {
-            ResetSlot();
-        }
-        else
-        {
-            itemAmountText.text = Item.amount.ToString();
-        }
+        item.amount -= 1; //아이템의 개수 감소
+        UpdateItemAmount(item.amount);
+        StartCoroutine(OnCooltime(Data_master_item_use.GetData(item.itemId).cool_time));
     }
 
-    public bool UseConsume(Data_master_item_use consume)
+    public bool CheckAbleToUse()
     {
         MyPlayerController myPlayer = Managers.Object.MyPlayer;
 
@@ -157,53 +139,35 @@ public class IQuickSlot : MonoBehaviour
             Debug.Log("쿨타임이 돌아가는 중");
             return false;
         }
-
-    
-        return true;
-        //패킷핸들러 이동
-        if (consume.effect == EEffect.immediate)
-        {
-            isReady = false;
-            myPlayer.OnHealed(consume.energy); //체력 회복
-            cooltimer = StartCoroutine(OnCooltime(consume.cool_time)); //쿨타임 코루틴 시작
-        }
-        else if (consume.effect == EEffect.buff)
-        {
-            isReady = false;
-            StartCoroutine(myPlayer.OnBuffed(consume));
-            cooltimer = StartCoroutine(OnCooltime(consume.cool_time)); //버프가 끝난뒤 쿨타임을 적용하고 싶다면 cooltime+효과 지속시간
-        }
-
         return true;
     }
 
-    
+
 
     private IEnumerator OnCooltime(double cooltime)
     {
         Button thisBtn = GetComponent<Button>();
         thisBtn.interactable = false;
 
-        float elapseTime = (float)cooltime;
+        coolTimeImage.fillAmount = 1;
+        float elapseTime = 0f;
 
-        Vector2 initialSize = thisBtn.GetComponent<RectTransform>().sizeDelta;
-        cooltimeRect.sizeDelta = initialSize;
-
-        // 쿨타임이 끝날 때까지 반복
-        while (elapseTime > 0)
+        while (elapseTime < cooltime)
         {
-            float remainingTimeRatio = elapseTime / (float)cooltime;
+            float remainingTimeRatio = 1 - (elapseTime / (float)cooltime);
+            coolTimeImage.fillAmount = remainingTimeRatio;
 
-            float newSize = initialSize.y * remainingTimeRatio;
-            cooltimeRect.sizeDelta = new Vector2(initialSize.x, newSize);
-            elapseTime -= Time.deltaTime;
+            // 경과 시간 업데이트
+            elapseTime += Time.deltaTime;
             yield return null;
         }
 
-        cooltimeRect.sizeDelta = Vector2.zero;
+        // 쿨타임 종료 후 초기화
+        coolTimeImage.fillAmount = 0;
         thisBtn.interactable = true;
         cooltimer = null;
         isReady = true;
     }
+
 }
 
