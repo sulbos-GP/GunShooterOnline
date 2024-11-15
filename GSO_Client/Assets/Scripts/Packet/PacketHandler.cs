@@ -27,6 +27,7 @@ internal class PacketHandler
         var Stats = enterGamePacket.Player.StatInfo;
         Managers.Object.MyPlayer.Hp = Stats.Hp;
         Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
+        UIManager.Instance.SetHpText();
 
         //인벤토리를 열지 않은 장착
         foreach(PS_GearInfo gear in enterGamePacket.GearInfos)
@@ -146,7 +147,7 @@ internal class PacketHandler
             {
                 //HP가 줄었을때 
                 //기존의 HP보다 패킷의 HP가 작을때만 Hit 판정
-                go.GetComponent<PlayerController>().Hit();  //todo -> 아무리 생각해도 처음에 흰색으로 변하는 현상은 이거다. 서버 고쳐지면 테스트 진행
+                go.GetComponent<PlayerController>().Hit();
             }
             else if(go.GetComponent<CreatureController>().Hp < changeHpPacket.Hp)
             {
@@ -237,7 +238,6 @@ internal class PacketHandler
                 convertItem.SetItemData(packetItem.Item);
 
                 EquipSlotBase targetSlot = InventoryController.equipSlotDic[(int)packetItem.Part];
-
                 ItemObject newItem = ItemObject.CreateNewItem(convertItem, targetSlot.transform);
 
                 if (targetSlot.equipItemObj == null)

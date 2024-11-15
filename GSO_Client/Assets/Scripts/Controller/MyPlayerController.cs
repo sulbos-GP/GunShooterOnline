@@ -89,6 +89,7 @@ public partial class MyPlayerController : PlayerController
     protected override void Init()
     {
         usingGun = transform.Find("Pivot/Gun").GetComponent<Gun>();
+        usingGun.Init();
         InitWeaponQuickSlot();
         UIManager.Instance.SetReloadBtnListener(usingGun);
         
@@ -317,9 +318,6 @@ public partial class MyPlayerController : PlayerController
     private Button quickSlotBtn2 => UIManager.Instance.SubWeaponBtn;
     private void InitWeaponQuickSlot()
     {
-        quickSlotBtn1.interactable = false;
-        quickSlotBtn2.interactable = false;
-
         quickSlotBtn1.onClick.RemoveAllListeners();
         quickSlotBtn2.onClick.RemoveAllListeners();
 
@@ -334,6 +332,7 @@ public partial class MyPlayerController : PlayerController
         ItemData equipptedItem = inven.GetItemInDictionaryByCode(slotNumber);
         if (equipptedItem == null)
         {
+            UIManager.Instance.ReloadBtn.interactable = false;
             SendChangeGunPacket(0); //총을 들고있지 않을 경우 0(널값) 전송
             return;
         }
@@ -341,7 +340,7 @@ public partial class MyPlayerController : PlayerController
         {
             Debug.Log("잘못된 아이템 참조");
         }
-
+        UIManager.Instance.ReloadBtn.interactable = true;
         usingGun.SetGunStat(equipptedItem);
         usingGun.curGunEquipSlot = slotNumber;
         SendChangeGunPacket(equipptedItem.objectId);
