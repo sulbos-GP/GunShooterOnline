@@ -38,13 +38,7 @@ public class Gun : MonoBehaviour
         }
     } 
 
-
-    private void Awake()
-    {
-        Init();
-    }
-
-    private void Init()
+    public void Init()
     {
         curGunEquipSlot = 0;
 
@@ -67,6 +61,7 @@ public class Gun : MonoBehaviour
 
         gunLine.OnAimLine();
         SetGunSprite(itemData.iconName);
+        UIManager.Instance.SetAmmoText();
     }
 
     private void SetGunSprite(string iconName)
@@ -93,6 +88,7 @@ public class Gun : MonoBehaviour
         gunState = GunState.Empty;
         GetComponent<SpriteRenderer>().sprite = null;
         gunLine.OffAimLine();
+        UIManager.Instance.SetAmmoText();
         //총 제거 패킷 전송
     }
 
@@ -184,7 +180,20 @@ public class Gun : MonoBehaviour
         gunState = GunState.Reloading;
         UIManager.Instance.SetActiveReloadBtn(false);
         UIManager.Instance.SetAmmoText();
-        yield return new WaitForSeconds(UsingGunData.reload_time);
+
+        Image delayImage = UIManager.Instance.ReloadBtn.transform.GetChild(1).GetComponent<Image>();
+
+        delayImage.fillAmount = 1;
+        float elapseTime = 0f;
+        while (elapseTime < UsingGunData.reload_time)
+        {
+            float remainingTimeRatio = 1 - (elapseTime / UsingGunData.reload_time);
+            delayImage.fillAmount = remainingTimeRatio;
+
+            // 경과 시간 업데이트
+            elapseTime += Time.deltaTime;
+            yield return null;
+        }
 
         CurAmmo = reloadAmount;
         gunState = GunState.Shootable;

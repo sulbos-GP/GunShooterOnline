@@ -102,7 +102,8 @@ public class EquipSlotBase : MonoBehaviour
             Debug.Log("제거실패");
             return false;
         }
-        
+
+        equipItemObj =null;
         return true;
     }
 

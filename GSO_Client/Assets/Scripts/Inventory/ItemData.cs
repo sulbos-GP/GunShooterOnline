@@ -73,22 +73,11 @@ public class ItemData
         return itemInfo;
     }
 
-    public event Action<int> OnAmountChanged;
-    private int _amount;
-
     public int objectId;    // 해당 데이터의 고유하며 유일한 아이디
     public int itemId;      // 아이템의 종류를 명시하는 코드
     public Vector2Int pos;  // 아이템의 그리드 안 좌표상의 위치
     public int rotate;      // 아이템의 회전코드(rotate * 90)
-    public int amount
-    {
-        get => _amount;
-        set
-        {
-            _amount = value;
-            OnAmountChanged?.Invoke(_amount); //양이 변경할 경우의 이벤트 -> 퀵슬롯의 개수 변화
-        }
-    } 
+    public int amount;
 
     public bool isSearched; //클라입장에서 이 아이템이 검색되었는지 확인
 

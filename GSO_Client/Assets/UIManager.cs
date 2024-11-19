@@ -36,7 +36,7 @@ public class UIManager : MonoBehaviour
 
     public float Duration = 2.0f;
     private bool isDie;
-    private bool _init;
+    private bool _init = false;
     private float _alphaTime = 3f;
 
     
@@ -53,7 +53,6 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         isDie = false;
-        _init = false;
     }
 
 
@@ -72,12 +71,7 @@ public class UIManager : MonoBehaviour
 
     }
 
-    public void DieMessage(string attackerName)
-    {
-        DieUI.SetActive(true);
-        DieUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text += attackerName;
-        StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));
-    }
+    
 
     private void Init()
     {
@@ -92,19 +86,26 @@ public class UIManager : MonoBehaviour
                     break;
                 case "GunAmmo":
                     AmmoText = child.GetComponentInChildren<TMP_Text>();
+                    AmmoText.text = "Not Setted";
                     break;
                 case "TimeUI":
                     TimeText = child.GetComponentInChildren<TMP_Text>();
+                    TimeText.text = "Not Setted";
                     break;
                 case "Health":
                     HealthText = child.GetComponentInChildren<TMP_Text>();
-                    CureImage = child.GetChild(2).GetComponent<Image>();
+                    CureImage = child.GetChild(1).GetComponent<Image>();
+                    HealthText.text = "Not Setted";
+                    CureImage.gameObject.SetActive(false);
                     break;
                 case "InteractBtn":
                     InteractBtn = child.GetComponent<Button>();
+                    InteractBtn.interactable = false;
                     break;
                 case "ReloadBtn":
                     ReloadBtn = child.GetComponent<Button>();
+                    ReloadBtn.interactable = false;
+                    ReloadBtn.transform.GetChild(1).GetComponent<Image>().fillAmount = 0;
                     break;
                 case "OptionBtn":
                     OptionBtn = child.GetComponent<Button>();
@@ -113,21 +114,30 @@ public class UIManager : MonoBehaviour
                     InventoryBtn = child.GetComponent<Button>();
                     break;
                 case "DieUI":
-                    child.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Killer : ";
+                    DieUI = child.gameObject;
+                    DieUI.SetActive(false);
+                    DieUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Killer : ";
                     break;
                 case "IQuickSlot":
                     IQuickSlot = child;
+                    IQuickSlot[] slots = IQuickSlot.GetComponentsInChildren<IQuickSlot>();
+                    foreach(IQuickSlot slot in slots)
+                    {
+                        slot.Init();
+                    }
                     break;
                 case "WQuickSlot":
                     WQuickSlot = child;
                     MainWeaponBtn = child.GetChild(0).GetComponent<Button>();
                     SubWeaponBtn = child.GetChild(1).GetComponent<Button>();
+                    SetWQuickSlot(1); //초기화
+                    SetWQuickSlot(2);
                     break;
             }
         }
     }
-
     
+
     private IEnumerator TextAlpha(CanvasGroup group,float duration)
     {
         float elapsedTime = 0f;
@@ -142,6 +152,13 @@ public class UIManager : MonoBehaviour
         group.alpha = 1f;
     }
 
+    public void SetDieMessage(string attackerName)
+    {
+        DieUI.SetActive(true);
+        DieUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text += attackerName;
+        StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));
+    }
+
     public void SetActiveHealImage(bool tf)
     {
         CureImage.gameObject.SetActive(tf);
@@ -151,18 +168,18 @@ public class UIManager : MonoBehaviour
     {
         float MaxHP = myPlayer.MaxHp;
         float HP = myPlayer.Hp;
-        HealthText.text = HP + " / " + MaxHP;
+        HealthText.text = $"HP : {(HP / MaxHP)*100}% ";
     }
 
     public void SetAmmoText()
     {
         if (myPlayer.usingGun.gunState == GunState.Reloading)
-            AmmoText.text = "ReloadCoroutine Gun";
+            AmmoText.text = "Reloading";
         else
         {
             if (myPlayer.usingGun.UsingGunData == null)
             {
-                AmmoText.text = "Gun is not Equipped";
+                AmmoText.text = "No Gun";
             }
             else
             {
@@ -182,7 +199,7 @@ public class UIManager : MonoBehaviour
         ReloadBtn.interactable = tf;
     }
 
-    public bool SetWeaponBtn(int slotId, int itemId)
+    public bool SetWQuickSlot(int slotId, int itemId = 0)
     {
         Button targetBtn;
         switch (slotId)
@@ -195,11 +212,13 @@ public class UIManager : MonoBehaviour
                 Debug.Log($"무기 슬롯의 코드가 적절하지 않음 slotId : {slotId}");
                 return false;
         }
-
+        Image targetImageUI = targetBtn.transform.GetChild(1).GetComponent<Image>();
         Sprite targetSprite;
         if (itemId == 0) {
-            targetSprite = null;
             targetBtn.interactable = false;
+            targetSprite = null;
+            targetImageUI.gameObject.SetActive(false);
+            return true;
         }
         else
         {
@@ -217,10 +236,12 @@ public class UIManager : MonoBehaviour
             }
         }
 
-        targetBtn.transform.GetChild(1).GetComponent<Image>().sprite = targetSprite;
+        targetImageUI.gameObject.SetActive(true);
+        targetImageUI.sprite = targetSprite;
         targetBtn.interactable = true;
         return true;
     }
+
 
     public bool SetIQuickSlot(int slotId, ItemData itemdata)
     {
@@ -235,7 +256,11 @@ public class UIManager : MonoBehaviour
         {
             targetSlot.ResetSlot();
         }
-        targetSlot.SetSlot(itemdata);
+        else
+        {
+            targetSlot.SetSlot(itemdata);
+        }
+        
         return true;
     }
 

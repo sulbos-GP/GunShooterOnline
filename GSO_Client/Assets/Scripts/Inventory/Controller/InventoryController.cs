@@ -35,7 +35,7 @@ public partial class InventoryController : MonoBehaviour
         switch (item.item_type)
         {
             case ItemType.Weapon:
-                UIManager.Instance.SetWeaponBtn(slotId, item.itemId);
+                UIManager.Instance.SetWQuickSlot(slotId, item.itemId);
                 break;
             case ItemType.Defensive:
                 //아직 없음
@@ -59,12 +59,10 @@ public partial class InventoryController : MonoBehaviour
             return false;
         }
 
-        EquipDict[slotId] = null;
-
         switch (EquipDict[slotId].item_type)
         {
             case ItemType.Weapon:
-                return UIManager.Instance.SetWeaponBtn(slotId, 0);
+                return UIManager.Instance.SetWQuickSlot(slotId, 0);
             case ItemType.Defensive:
                 //아직 없음
                 break;
@@ -78,7 +76,7 @@ public partial class InventoryController : MonoBehaviour
                 return false;
         }
 
-        
+        EquipDict[slotId] = null;
         return true;
     }
     public ItemData GetItemInDictionaryByCode(int GearCode)
@@ -282,7 +280,6 @@ public partial class InventoryController : MonoBehaviour
 
     private void EquipSlotsSet()
     {
-
         EquipSlotBase[] slots = inventoryUI.GetComponentsInChildren<EquipSlotBase>();
 
         for (int i = 0; i < slots.Length; i++)
