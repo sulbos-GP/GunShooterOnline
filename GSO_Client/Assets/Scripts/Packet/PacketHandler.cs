@@ -716,7 +716,7 @@ internal class PacketHandler
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
         
 
-        if (shootingPlayer == Managers.Object.MyPlayer)
+        if (shootingPlayer.GetComponent<PlayerController>().Id == Managers.Object.MyPlayer.Id)
         {
             //쏜사람이 플레이어라면 총알감소 및 총알 텍스트 변경
             Gun shooterGun = Managers.Object.MyPlayer.usingGun;
@@ -726,7 +726,7 @@ internal class PacketHandler
             }
             shooterGun.gunLine.SetBulletLine(startPoint, hitPoint);
 
-            Managers.Object.MyPlayer.usingGun.UseAmmo();
+            shooterGun.UseAmmo();
             UIManager.Instance.SetAmmoText();
 
             shooterGun.StartEffect();
