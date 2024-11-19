@@ -1,5 +1,6 @@
 using Google.Protobuf.Protocol;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UI;
@@ -51,7 +52,6 @@ public partial class InventoryController : MonoBehaviour
         }
         return true;
     }
-
     public bool UnsetEquipItem(int slotId)
     {
         if (EquipDict[slotId] == null)
@@ -79,7 +79,7 @@ public partial class InventoryController : MonoBehaviour
         EquipDict[slotId] = null;
         return true;
     }
-    public ItemData GetItemInDictionaryByCode(int GearCode)
+    public ItemData GetItemInDictByGearCode(int GearCode)
     {
         if (EquipDict[GearCode] == null)
         {
@@ -88,9 +88,19 @@ public partial class InventoryController : MonoBehaviour
 
         return EquipDict[GearCode];
     }
+    public ItemData GetItemInDictByItemObjId(int objId)
+    {
+        ItemData findData = EquipDict.Values.FirstOrDefault(data => data.objectId == objId);
+        if(findData == null)
+        {
+            return null;
+        }
+
+        return findData;
+    }
 
     public static Dictionary<int, EquipSlotBase> equipSlotDic { get; private set; } = new Dictionary<int, EquipSlotBase>();
-    public static Dictionary<int, ItemObject> instantItemDic { get; private set; } = new Dictionary<int, ItemObject>();
+    public static Dictionary<int, ItemObject> instantItemDic { get; private set; } = new Dictionary<int, ItemObject>(); //인벤토리를 닫으면 초기화됨
 
 
     //UI

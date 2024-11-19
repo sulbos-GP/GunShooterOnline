@@ -10,12 +10,15 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using UnityEditor;
+using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
+using UnityEngine.InputSystem.LowLevel;
 using static UnityEditor.PlayerSettings;
 
 
 internal class PacketHandler
 {
+    /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ GAMESYSTEM PACKET START ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
     public static void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
         Managers.SystemLog.Message("S_EnterGameHandler");
@@ -23,13 +26,12 @@ internal class PacketHandler
         Managers.SystemLog.Message($"{enterGamePacket.Player}");
         Managers.Object.Add(enterGamePacket.Player, true);
 
-        //Use Stat
         var Stats = enterGamePacket.Player.StatInfo;
         Managers.Object.MyPlayer.Hp = Stats.Hp;
         Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
         UIManager.Instance.SetHpText();
 
-        //인벤토리를 열지 않은 장착
+        //장착데이터 딕셔너리에 저장 -> UI에 반영되지 않음
         foreach(PS_GearInfo gear in enterGamePacket.GearInfos)
         {
             ItemData data = new ItemData();
@@ -199,28 +201,120 @@ internal class PacketHandler
 
     }
 
+    internal static void S_ExitGameHandler(PacketSession session, IMessage message)
+    {
+        S_ExitGame packet = message as S_ExitGame;
+        Managers.SystemLog.Message("S_ExitGame");
+        if (Managers.Object.MyPlayer == null)
+        {
+            return;
+        }
+        //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
+        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+        {
+            //플레이어는 자신의 장착칸과 인벤토리의 내용을 서버에 전송?
+            return;
+        }
+
+        var player = Managers.Object.FindById(packet.PlayerId);
+
+        Managers.Resource.Destroy(player);
+        Managers.Object.Remove(packet.PlayerId);
+        Managers.Object.DebugDics();
+    }
+
+    internal static void S_JoinServerHandler(PacketSession session, IMessage message)
+    {
+        S_JoinServer packet = message as S_JoinServer;
+        Managers.SystemLog.Message("S_JoinServer");
+        if (!packet.Connected)
+        {
+            Managers.SystemLog.Message("S_JoinServer : fail");
+            return;
+        }
+
+
+        //접속 완료
+        Managers.Scene.LoadScene(Define.Scene.Forest);
+
+
+        Managers.SystemLog.Message("S_JoinServer : success");
+
+    }
+
+    internal static void S_WaitingStatusHandler(PacketSession session, IMessage message)
+    {
+        S_WaitingStatus packet = message as S_WaitingStatus;
+        Managers.SystemLog.Message("S_WaitingStatus");
+        if (packet == null)
+            return;
+
+        //참가시 인원 증감시 호출
+
+        Managers.SystemLog.Message($"S_WaitingStatus : curPlayer : {packet.CurrentPlayers} / {packet.RequiredPlayers}");
+    }
+
+    internal static void S_GameStartHandler(PacketSession session, IMessage message)
+    {
+        Managers.SystemLog.Message("S_GameStartHandler");
+        S_GameStart packet = message as S_GameStart;
+
+        //자신의 플레이어 외에 다른 플레이어와 오브젝트의 객체 생성
+
+        foreach (ObjectInfo obj in packet.Objects)
+        {
+            Managers.Object.Add(obj, false);
+        }
+
+        //obj가 플레이어인 경우 장착칸 1번 확인해서 
+
+        //Managers.Object.Add(enterGamePacket.Player, true);
+
+        ////Use Stat
+        //var Stats = enterGamePacket.Player.StatInfo;
+        //Managers.Object.MyPlayer.Hp = Stats.Hp;
+        //Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
+
+        ////enterGamePacket.ItemInfos //총알을 반영하기 위함. 실제로 아이템을 생성해내지는 않음
+
+        ////enterGamePacket.GearInfos //장착을 통해 장비 반영. 실제로 아이템을 생성하지 않고 장비변경만
+        //foreach (PS_GearInfo gear in enterGamePacket.GearInfos)
+        //{
+        //    EquipSlotBase targetSlot = InventoryController.equipSlotDic[(int)gear.Part];
+
+        //    ItemData data = new ItemData();
+        //    data.SetItemData(gear.Item);
+
+        //    targetSlot.ApplyItemEffects(data);
+        //}
+    }
+    /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ GAMESYSTEM PACKET END ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+
+    /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ INVENTORY PACKET STARTㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
     internal static void S_LoadInventoryHandler(PacketSession session, IMessage message)
     {
         Managers.SystemLog.Message("S_LoadInventory");
         S_LoadInventory packet = message as S_LoadInventory;
+        InventoryController inventory = InventoryController.Instance;
 
+        //불러오기에 실패할경우 인벤토리가 off상태로 보장
         if (!packet.IsSuccess)
         {
             Managers.SystemLog.Message("S_LoadInventory : fail to load");
-            if (InventoryController.Instance.isActive)
+            if (inventory.isActive)
             {
-                InventoryController.Instance.invenUIControl();
+                inventory.invenUIControl(false);
             }
             return;
         }
 
-        //먼저 켜야함. 그래야 장비창의 awake로 장비칸의 id가 적용됨 -> 컨트롤러에서 Init으로 설정하도록 변경 옮겨도 됨
-        if (!InventoryController.Instance.isActive) //인벤토리가 꺼져있으면 킴
+        //인벤토리가 꺼져있으면 킴
+        if (!inventory.isActive) 
         {
-            InventoryController.Instance.invenUIControl();
+            inventory.invenUIControl(true);
         }
 
-        //패킷으로 받은 아이템데이터 리스트를 클라이언트 형식으로 변경
+        //인벤토리에 존재하는 아이템의 데이터 생성
         List<ItemData> packetItemList = new List<ItemData>();
         foreach (PS_ItemInfo packetItem in packet.ItemInfos)
         {
@@ -229,41 +323,43 @@ internal class PacketHandler
             packetItemList.Add(convertItem);
         }
 
-        //인벤토리 불러오기
+        //플레이어의 인벤토리의 경우
         if(packet.SourceObjectId == 0)
         {
-            //장착칸 불러오기 및 수정
+            //장착칸 설정
             foreach (PS_GearInfo packetItem in packet.GearInfos)
             {
-                ItemData convertItem = new ItemData();
-                convertItem.SetItemData(packetItem.Item);
-
                 EquipSlotBase targetSlot = InventoryController.equipSlotDic[(int)packetItem.Part];
-                ItemObject newItem = ItemObject.CreateNewItem(convertItem, targetSlot.transform);
-
-                if (targetSlot.equipItemObj == null)
-                {
-                    targetSlot.SetItemEquip(newItem);
-                }
-                else if(targetSlot.equipItemObj != newItem)
-                {
-                    //아이템 교체 -> todo 서버와 함께 구현해야함
-                    targetSlot.UnsetItemEquip();
-                    targetSlot.SetItemEquip(newItem);
-                }
+                ItemData targetItem;
                 
+                ItemData gearedItem = inventory.GetItemInDictByGearCode((int)packetItem.Part);
+
+                if(gearedItem != null)
+                {
+                    gearedItem.SetItemData(packetItem.Item);
+                    targetItem = gearedItem;
+                }
+                else
+                {
+                    targetItem = new ItemData();
+                    targetItem.SetItemData(packetItem.Item);
+                }
+
+                ItemObject newItem = ItemObject.CreateNewItemObj(targetItem, targetSlot.transform);
+                targetSlot.SetItemEquip(newItem);
             }
 
             //플레이어의 인벤토리
-            PlayerInventoryUI playerInvenUI = InventoryController.Instance.playerInvenUI;
-            playerInvenUI.InventorySet(); //그리드 생성됨
+            inventory.playerInvenUI.InventorySet(); //그리드 생성됨
 
-            GridObject playerGrid = playerInvenUI.instantGrid;
+            GridObject playerGrid = inventory.playerInvenUI.instantGrid;
             playerGrid.objectId = packet.SourceObjectId;
             playerGrid.PlaceItemInGrid(packetItemList);
             InventoryController.UpdatePlayerWeight();
+
             playerGrid.PrintInvenContents();
         }
+        //타인의 인벤토리의 경우
         else
         {
             GameObject target = Managers.Object.FindById(packet.SourceObjectId);
@@ -280,6 +376,7 @@ internal class PacketHandler
             boxGrid.PlaceItemInGrid(packetItemList);
             boxGrid.PrintInvenContents();
         }
+
         InventoryController.Instance.DebugDic();
     }
 
@@ -313,18 +410,12 @@ internal class PacketHandler
 
         if (InventoryController.Instance.isActive)//인벤토리가 켜져 있으면 끔
         {
-            InventoryController.Instance.invenUIControl();
+            InventoryController.Instance.invenUIControl(false);
         }
     }
 
     internal static void S_SearchItemHandler(PacketSession session, IMessage message)
     {
-        /*
-         * 아이템을 검색 시작할때 보낸패킷의 답장
-         * isSuccess로 성공유무 판단
-         * 실패하면 검색 코루틴을 중지하거나 isHide가 풀려있으면 다시 잠금
-         */
-
         S_SearchItem packet = message as S_SearchItem;
         
         Managers.SystemLog.Message($"S_SearchItem : target = {packet.SourceItem.ObjectId}");
@@ -340,9 +431,7 @@ internal class PacketHandler
         }
     }
 
-    /// <summary>
-    /// moveItem에선 이동전 아이템과 이동후 아이템을 따로 주는데 이동전 아이템의 아이디와 이동후 아이템의 아이디가 다룰수 있어 이동후 아이디로 교체
-    /// </summary>
+    //나중에 서버의 인벤토리 방식을 바꿔 변경 시 아이템 오브젝트의 아이디가 바뀌는 현상이 제거되면 없앨 예정
     private static void ChangeItemObjectId(ItemObject targetItem, int newId)
     {
         int id = targetItem.itemData.objectId;
@@ -577,7 +666,7 @@ internal class PacketHandler
                 ItemData itemData = new ItemData();
                 itemData.SetItemData(packet.DestinationItem);
 
-                ItemObject newItem = ItemObject.CreateNewItem(itemData, destinationEquip.transform);
+                ItemObject newItem = ItemObject.CreateNewItemObj(itemData, destinationEquip.transform);
                     
                 if (!destinationEquip.SetItemEquip(newItem))
                 {
@@ -609,7 +698,9 @@ internal class PacketHandler
         InventoryController.UpdatePlayerWeight();
     }
 
+    /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ INVENTORY PACKET ENDㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
+    /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ GUN PACKET START ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
     //총알의 시작지점과 끝지점을 받아 총알을 발사해 궤적을 그림
     internal static void S_RaycastShootHandler(PacketSession session, IMessage message)
     {
@@ -655,93 +746,7 @@ internal class PacketHandler
         Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
 
-    internal static void S_ExitGameHandler(PacketSession session, IMessage message)
-    {
-        S_ExitGame packet = message as S_ExitGame;
-        Managers.SystemLog.Message("S_ExitGame");
-        if (Managers.Object.MyPlayer == null)
-        {
-            return;
-        }
-        //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
-        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
-        {
-            //플레이어는 자신의 장착칸과 인벤토리의 내용을 서버에 전송?
-            return;
-        }
-
-        var player = Managers.Object.FindById(packet.PlayerId);
-
-        Managers.Resource.Destroy(player);
-        Managers.Object.Remove(packet.PlayerId);
-        Managers.Object.DebugDics();
-    }
-
-    internal static void S_JoinServerHandler(PacketSession session, IMessage message)
-    {
-        S_JoinServer packet = message as S_JoinServer;
-        Managers.SystemLog.Message("S_JoinServer");
-        if (!packet.Connected)
-        {
-            Managers.SystemLog.Message("S_JoinServer : fail");
-            return;
-        }
-
-
-        //접속 완료
-        Managers.Scene.LoadScene(Define.Scene.Forest);
-
-
-        Managers.SystemLog.Message("S_JoinServer : success");
-
-    }
-
-    internal static void S_WaitingStatusHandler(PacketSession session, IMessage message)
-    {
-        S_WaitingStatus packet = message as S_WaitingStatus;
-        Managers.SystemLog.Message("S_WaitingStatus");
-        if (packet == null)
-            return;
-
-        //참가시 인원 증감시 호출
-
-        Managers.SystemLog.Message($"S_WaitingStatus : curPlayer : {packet.CurrentPlayers} / {packet.RequiredPlayers}");
-    }
-
-    internal static void S_GameStartHandler(PacketSession session, IMessage message)
-    {
-        Managers.SystemLog.Message("S_GameStartHandler");
-        S_GameStart packet = message as S_GameStart;
-
-        //자신의 플레이어 외에 다른 플레이어와 오브젝트의 객체 생성
-
-        foreach(ObjectInfo obj in packet.Objects)
-        {
-            Managers.Object.Add(obj, false);
-        }
-
-        //obj가 플레이어인 경우 장착칸 1번 확인해서 
-
-        //Managers.Object.Add(enterGamePacket.Player, true);
-
-        ////Use Stat
-        //var Stats = enterGamePacket.Player.StatInfo;
-        //Managers.Object.MyPlayer.Hp = Stats.Hp;
-        //Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
-
-        ////enterGamePacket.ItemInfos //총알을 반영하기 위함. 실제로 아이템을 생성해내지는 않음
-
-        ////enterGamePacket.GearInfos //장착을 통해 장비 반영. 실제로 아이템을 생성하지 않고 장비변경만
-        //foreach (PS_GearInfo gear in enterGamePacket.GearInfos)
-        //{
-        //    EquipSlotBase targetSlot = InventoryController.equipSlotDic[(int)gear.Part];
-
-        //    ItemData data = new ItemData();
-        //    data.SetItemData(gear.Item);
-
-        //    targetSlot.ApplyItemEffects(data);
-        //}
-    }
+    
 
     internal static void S_ChangeAppearanceHandler(PacketSession session, IMessage message)
     {
@@ -775,6 +780,8 @@ internal class PacketHandler
         Managers.SystemLog.Message($"S_ChangeAppearanceHandler : targetPlayer : {targetPlayer.name}");
         
     }
+    /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ GUN PACKET END ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
+
 
     internal static void S_UpdateQuestHandler(PacketSession session, IMessage message)
     {
@@ -790,7 +797,15 @@ internal class PacketHandler
 
     }
 
-    
+    internal static void S_GundataUpdateHandler(PacketSession session, IMessage message)
+    {
+        S_GundataUpdate packet = message as S_GundataUpdate;
+        Managers.SystemLog.Message("S_GundataUpdateHandler");
+
+        //서버 완성시 해제
+        //Managers.Object.MyPlayer.usingGun.ReloadDone(packet.GunData.Item.Attributes.LoadedAmmo);
+
+    }
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
@@ -829,10 +844,6 @@ internal class PacketHandler
             mc.CheakUpdateLevel();
         }
         #endregion
-
-
-
-
         Managers.SystemLog.Message($"Next : S_Stat {statpacket.StatInfo}");
     }*/
 
