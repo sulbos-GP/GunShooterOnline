@@ -264,8 +264,10 @@ namespace Server.Game
 
             s_GundataUpdate.GunData = new PS_GearInfo();
             s_GundataUpdate.GunData.Part = PE_GearPart.MainWeapon;
+            s_GundataUpdate.GunData.Item = new PS_ItemInfo();
             s_GundataUpdate.GunData.Item.ObjectId = gunItemData.Id;
             s_GundataUpdate.GunData.Item.ItemId = GunData.item_id;
+            s_GundataUpdate.GunData.Item.Attributes = new PS_ItemAttributes();
             s_GundataUpdate.GunData.Item.Attributes.LoadedAmmo = GunData.reload_round;
             //s_GundataUpdate.GunData.Item.Attributes.LoadedAmmo = CurAmmo;
 
