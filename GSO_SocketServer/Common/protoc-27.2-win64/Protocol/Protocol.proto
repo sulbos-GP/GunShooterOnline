@@ -373,7 +373,6 @@ message C_InputData {  //35
 
 message S_GundataUpdate{  //37 (지승현)추후 많은 데이터 업데이트 예정
     PS_GearInfo gunData =1;  
-    int32 loaded_ammo = 2;
 }
 
 ////////////////////////////////////////////

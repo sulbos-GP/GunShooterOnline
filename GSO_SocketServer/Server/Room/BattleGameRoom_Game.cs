@@ -768,6 +768,12 @@ namespace Server
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="player"></param>
+        /// <param name="sourceObjectId">Player is 0</param>
+        /// <param name="deleteItemId"></param>
         internal async void DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
         {
             PS_ItemInfo deleteInfo;
