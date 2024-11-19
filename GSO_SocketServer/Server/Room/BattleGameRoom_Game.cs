@@ -883,17 +883,17 @@ namespace Server
             else
             {
                 player.gun.SetGunData(gunId);
-                packet.GunId = player.gun.UsingGunData.item_id;
+                packet.GunId = player.gun.GunData.item_id;
             }
 
             BroadCast(packet);
         }
 
-        internal async void HandleInputData(Player player, C_InputData packet)
+        internal void HandleInputData(Player player, C_InputData packet)
         {
              if (packet.Reload)
              {
-                 await player.gun.Reload();
+                 player.gun.Reload();
              }
 
             if (packet.ItemId != 0)
@@ -998,7 +998,7 @@ namespace Server
                 }
             }
 #else
-            if (tempPlayer.Count == 4) //접속할 인원에 따라 변경
+            if (tempPlayer.Count == 1) //접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();

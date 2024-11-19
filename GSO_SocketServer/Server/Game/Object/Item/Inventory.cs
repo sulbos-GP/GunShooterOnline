@@ -67,6 +67,15 @@ namespace Server.Game
             }
         }
 
+      
+
+
+
+
+
+
+
+
         /// <summary>
         /// 저장소 아이디에 있는 모든 아이템 불러오기
         /// </summary>
@@ -107,6 +116,10 @@ namespace Server.Game
                 Console.WriteLine($"[LoadInventory] : {e.Message.ToString()}");
             }
         }
+
+
+
+
 
         public async Task<bool> InsertItem(ItemObject item, GameDB database, IDbTransaction transaction = null)
         {

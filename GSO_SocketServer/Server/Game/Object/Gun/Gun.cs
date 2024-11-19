@@ -20,17 +20,21 @@ namespace Server.Game
     {
         public Player ownerPlayer;
 
+       
+        public GunState UsingGunState { get; private set; } //현재 총의 상태 : shootable, empty, reload
+        public FMasterItemWeapon GunData { get; private set; } //현재 사용중인 총의 스텟 데이터
+        public ItemObject gunItemData; //해당 총에 장전된 총알이 있을경우 불러오기 위함
+
+
+        #region Props
+
         public int Damage
         {
             get
             {
-                return UsingGunData.damage;
+                return GunData.damage;
             }
         }
-
-        public GunState UsingGunState { get; private set; } //현재 총의 상태 : shootable, empty, reload
-        public FMasterItemWeapon UsingGunData { get; private set; } //현재 사용중인 총의 스텟 데이터
-        public ItemObject gunItemData; //해당 총에 장전된 총알이 있을경우 불러오기 위함
         public int CurAmmo
         {
             get => gunItemData.Loaded_ammo;
@@ -43,11 +47,15 @@ namespace Server.Game
                 gunItemData.Loaded_ammo = value;
             }
         }
+
+        #endregion
+
+
         //public bool isBulletPrefShoot = false;
 
         public FMasterItemWeapon GetCurrentGunData()
         {
-            return UsingGunData;
+            return GunData;
         }
 
         public void Init(Player p)
@@ -60,13 +68,13 @@ namespace Server.Game
         public void SetGunData(int gunItemId) //여기의 id는 총의 오브젝트 ID
         {
             gunItemData = ObjectManager.Instance.Find<ItemObject>(gunItemId);
-            UsingGunData = DatabaseHandler.Context.MasterItemWeapon.Find(gunItemData.ItemId); 
+            GunData = DatabaseHandler.Context.MasterItemWeapon.Find(gunItemData.ItemId); 
             UsingGunState = CurAmmo == 0 ? GunState.Empty : GunState.Shootable; 
         }
         //=> 총의 번호가 0일 경우 (들고 있는 총이 없음)
         public void ResetGun()
         {
-            UsingGunData = null;
+            GunData = null;
             gunItemData = null;
             CurAmmo = 0;
             UsingGunState = GunState.Empty;
@@ -93,7 +101,7 @@ namespace Server.Game
             Vector2 direction = CalculateNormal(dir);
             Vector2 endPos = GetEndPos(pos, direction);
 
-            RaycastHit2D hit2D = RaycastManager.Raycast(pos, direction, UsingGunData.distance, new List<GameObject>() { ownerPlayer }); //충돌객체 체크
+            RaycastHit2D hit2D = RaycastManager.Raycast(pos, direction, GunData.distance, new List<GameObject>() { ownerPlayer }); //충돌객체 체크
             //충돌된 객체 없음
             if (hit2D.Collider == null)
             {
@@ -146,7 +154,7 @@ namespace Server.Game
         private Vector2 GetEndPos(Vector2 pos, Vector2 direction)
         {
             Vector2 normalizedDir = Vector2.Normalize(direction);
-            Vector2 endPos = pos + normalizedDir * UsingGunData.distance;
+            Vector2 endPos = pos + normalizedDir * GunData.distance;
 
             float distance = Vector2.Distance(pos, endPos);
             Console.WriteLine($"이동거리 = {distance}");
@@ -166,7 +174,7 @@ namespace Server.Game
         #region 정규분포
         private Vector2 CalculateNormal(Vector2 dir)
         {
-            float halfAccuracyRange = UsingGunData.attack_range / 2f;
+            float halfAccuracyRange = GunData.attack_range / 2f;
             float meanAngle = 0f;  // 발사 각도의 평균 (중앙)
             float standardDeviation = halfAccuracyRange / 3f;  // 발사 각도의 표준편차 (정확도 기반)
             float randomAngle = GetRandomNormalDistribution(meanAngle, standardDeviation);
@@ -201,29 +209,34 @@ namespace Server.Game
         #endregion
 
         //재장전 버튼 누를시
-        public async Task Reload()
+        public void Reload()
         {
-            if (CurAmmo < UsingGunData.reload_round || UsingGunState != GunState.Reloading)
+            /*if(ownerPlayer.inventory.storage.)*/
+
+
+
+            if (CurAmmo < GunData.reload_round && UsingGunState != GunState.Reloading )
             {
-                await Reloading();
+                UsingGunState = GunState.Reloading;
+                ownerPlayer.gameRoom.PushAfter(GunData.reload_time * 1000 ,HandleReload);
             }
         }
 
         //실질적인 재장전
-        private async Task Reloading()
+        private void HandleReload()
         {
-            UsingGunState = GunState.Reloading;
-            await Task.Delay(((int)UsingGunData.reload_time) * 1000);
-            Console.WriteLine("Reload done");
-            CurAmmo = UsingGunData.reload_round;
+            CurAmmo = GunData.reload_round;
             UsingGunState = GunState.Shootable;
+
+
+
         }
 
         //다음 발사까지 대기
         public async Task<bool> WaitForReadyToFire()
         {
             UsingGunState = GunState.Reloading;
-            await Task.Delay((int)(UsingGunData.attack_speed * 1000));
+            await Task.Delay((int)(GunData.attack_speed * 1000));
             Console.WriteLine("ReadyToFire done");
             UsingGunState = GunState.Shootable;
             return true;
