@@ -177,7 +177,7 @@ public class UIManager : MonoBehaviour
             AmmoText.text = "Reloading";
         else
         {
-            if (myPlayer.usingGun.UsingGunData == null)
+            if (myPlayer.usingGun.WeaponData == null)
             {
                 AmmoText.text = "No Gun";
             }

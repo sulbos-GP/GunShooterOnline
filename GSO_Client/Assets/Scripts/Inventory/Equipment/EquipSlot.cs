@@ -51,6 +51,7 @@ public class EquipSlotBase : MonoBehaviour
         equipItemObj.parentObjId = slotId;
         equipItemObj.backUpParentId = slotId;
         equipItemObj.transform.SetParent(transform);
+
         SetEquipItemObj(item);
         
         return true;
