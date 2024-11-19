@@ -148,6 +148,7 @@ internal class PacketHandler
                 //HP가 줄었을때 
                 //기존의 HP보다 패킷의 HP가 작을때만 Hit 판정
                 go.GetComponent<PlayerController>().Hit();
+                go.GetComponent<CreatureController>().Hp = changeHpPacket.Hp;
             }
             else if(go.GetComponent<CreatureController>().Hp < changeHpPacket.Hp)
             {
