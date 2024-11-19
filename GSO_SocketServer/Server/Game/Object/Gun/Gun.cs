@@ -260,6 +260,9 @@ namespace Server.Game
 
 
             S_GundataUpdate s_GundataUpdate = new S_GundataUpdate();
+
+
+            s_GundataUpdate.GunData = new PS_GearInfo();
             s_GundataUpdate.GunData.Part = PE_GearPart.MainWeapon;
             s_GundataUpdate.GunData.Item.ObjectId = gunItemData.Id;
             s_GundataUpdate.GunData.Item.ItemId = GunData.item_id;
