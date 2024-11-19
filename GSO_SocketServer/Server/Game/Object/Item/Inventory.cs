@@ -10,6 +10,7 @@ using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Server.Game
 {
@@ -24,11 +25,36 @@ namespace Server.Game
 
 
 
+        /*
+         
+            100번대 : 무기 설명 키
+            200번대 : 방어구 설명 키
+            300번대 : 가방 설명 키
+            400번대 : 회복, 버프 설명 키
+            500번대 : 탄알 설명 키
+            600번대 : 전리품 설명 키
+         
+         */
 
-
-        public ItemObject FindItem(int id)
+        public ItemObject FindItem() //나중에 추가
         {
-            storage.GetItemObjectIds
+            List<int> t = storage.GetItemObjectIds();
+
+
+            foreach (int itemId in t)
+            {
+                if(itemId / 100 == 5)
+                {
+
+                    var items = storage.FindItemsByItemID(itemId);
+                    if (items != null && items.Count > 0)
+                    {
+                        return items[0];
+                    }
+                }
+            }
+
+            return null;
         }
 
 

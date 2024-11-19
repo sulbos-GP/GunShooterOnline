@@ -247,6 +247,13 @@ namespace Server.Game
             }
         }
 
+
+        public List<ItemObject> FindItemsByItemID(int itemID)
+        {
+            return items.FindAll(t => t.ItemId == itemID);
+        }
+
+
         public int ScanItem(ItemObject target)
         {
             for (int index = 0; index < items.Count; ++index)

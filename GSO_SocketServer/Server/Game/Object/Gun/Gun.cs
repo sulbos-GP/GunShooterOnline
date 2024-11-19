@@ -211,8 +211,44 @@ namespace Server.Game
         //재장전 버튼 누를시
         public void Reload()
         {
-           //if(ownerPlayer.inventory.storage.)
+            //part추가
 
+            //나중에 수정
+            var ammo = ownerPlayer.inventory.FindItem();
+            
+            if(ammo != null)
+            {
+                int target = GunData.reload_round - CurAmmo;
+
+          
+                if(ammo.Amount >= target)       //넉넉함
+                {
+                    int next = ammo.Amount - target;
+                    //ownerPlayer.inventory.UpdateItem(ammo);
+                    ownerPlayer.gameRoom.DeleteItemHandler(ownerPlayer, 0, ammo.Id);
+
+                    ammo.Amount = next;
+                }
+                else                            //인벤에 있는 총알이 부족함
+                {
+                    int next = ammo.Amount;
+
+                    //ownerPlayer.gameRoom.DeleteItemHandler(ownerPlayer, 0, ammo.Id);
+
+                }
+
+
+
+
+
+
+
+            }
+            else                        //총알이 없음
+            {
+
+            }
+            
 
 
             if (CurAmmo < GunData.reload_round && UsingGunState != GunState.Reloading )
@@ -225,9 +261,14 @@ namespace Server.Game
 
             S_GundataUpdate s_GundataUpdate = new S_GundataUpdate();
             s_GundataUpdate.GunData.Part = PE_GearPart.MainWeapon;
-            s_GundataUpdate.LoadedAmmo = CurAmmo;
+            s_GundataUpdate.GunData.Item.ObjectId = gunItemData.Id;
+            s_GundataUpdate.GunData.Item.ItemId = GunData.item_id;
+            s_GundataUpdate.GunData.Item.Attributes.LoadedAmmo = GunData.reload_round;
+            //s_GundataUpdate.GunData.Item.Attributes.LoadedAmmo = CurAmmo;
 
-            ownerPlayer.gameRoom.BroadCast(s_GundataUpdate);
+
+
+            ownerPlayer.Session.Send(s_GundataUpdate);
         }
 
         //실질적인 재장전
