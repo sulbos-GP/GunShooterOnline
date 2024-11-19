@@ -711,15 +711,23 @@ internal class PacketHandler
 
         //총을 쏜 객체만 
         GameObject shootingPlayer = Managers.Object.FindById(packet.ShootPlayerId);
-        Gun shooterGun = shootingPlayer.GetComponentInChildren<Gun>();
-
+        Gun shooterGun = shootingPlayer.transform.GetChild(0).GetComponentInChildren<Gun>();
+        if(shooterGun == null)
+        {
+            Debug.LogError("S_RaycastShootHandler error : 총 스크립트를 찾을수 없음");
+        }
 
         Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
-
         shooterGun.gunLine.SetBulletLine(startPoint, hitPoint);
-        shooterGun.UseAmmo();
-        UIManager.Instance.SetAmmoText();
+
+        if (shootingPlayer == Managers.Object.MyPlayer)
+        {
+            //쏜사람이 플레이어라면 총알감소 및 총알 텍스트 변경
+            Managers.Object.MyPlayer.usingGun.UseAmmo();
+            UIManager.Instance.SetAmmoText();
+        }
+
         //총알 발사
         Bullet bullet = Managers.Resource.Instantiate($"Objects/BulletObjPref/BulletBase").GetComponent<Bullet>();
         if (bullet == null)
