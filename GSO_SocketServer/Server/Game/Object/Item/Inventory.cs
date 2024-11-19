@@ -22,6 +22,24 @@ namespace Server.Game
         public Storage storage = new Storage();
         private List<int> initItemIds = new List<int>();
 
+
+
+
+
+        public ItemObject FindItem(int id)
+        {
+            storage.GetItemObjectIds
+        }
+
+
+
+
+
+
+
+
+
+
         /// <summary>
         /// 처음 접속한 이후 데이터베이스의 인벤토리 데이터 가져오기
         /// </summary>
