@@ -711,21 +711,25 @@ internal class PacketHandler
 
         //총을 쏜 객체만 
         GameObject shootingPlayer = Managers.Object.FindById(packet.ShootPlayerId);
-        Gun shooterGun = shootingPlayer.transform.GetChild(0).GetComponentInChildren<Gun>();
-        if(shooterGun == null)
-        {
-            Debug.LogError("S_RaycastShootHandler error : 총 스크립트를 찾을수 없음");
-        }
-
+        
         Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
-        shooterGun.gunLine.SetBulletLine(startPoint, hitPoint);
+        
 
         if (shootingPlayer == Managers.Object.MyPlayer)
         {
             //쏜사람이 플레이어라면 총알감소 및 총알 텍스트 변경
+            Gun shooterGun = Managers.Object.MyPlayer.usingGun;
+            if (shooterGun == null)
+            {
+                Debug.LogError("S_RaycastShootHandler error : 총 스크립트를 찾을수 없음");
+            }
+            shooterGun.gunLine.SetBulletLine(startPoint, hitPoint);
+
             Managers.Object.MyPlayer.usingGun.UseAmmo();
             UIManager.Instance.SetAmmoText();
+
+            shooterGun.StartEffect();
         }
 
         //총알 발사
@@ -749,7 +753,7 @@ internal class PacketHandler
         float distance = Vector2.Distance(bullet.startPos, bullet.endPos);
         Debug.Log($"이동거리 = {distance}");
 
-        shooterGun.StartEffect();
+        
 
         Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
