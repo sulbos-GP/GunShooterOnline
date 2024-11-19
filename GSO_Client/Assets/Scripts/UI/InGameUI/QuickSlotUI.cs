@@ -114,8 +114,12 @@ public class IQuickSlot : MonoBehaviour
         Managers.Network.Send(inputPacket);
 
         item.amount -= 1; //아이템의 개수 감소
+
         UpdateItemAmount(item.amount);
-        StartCoroutine(OnCooltime(Data_master_item_use.GetData(item.itemId).cool_time));
+        Data_master_item_use consumeData = Data_master_item_use.GetData(item.itemId);
+
+        StartCoroutine(OnBuffMark(consumeData.duration)); //지속시간 동안 힐 마크 띄우기
+        StartCoroutine(OnCooltime(consumeData.cool_time));
     }
 
     public bool CheckAbleToUse()
@@ -167,6 +171,15 @@ public class IQuickSlot : MonoBehaviour
         thisBtn.interactable = true;
         cooltimer = null;
         isReady = true;
+    }
+
+    private IEnumerator OnBuffMark(float time)
+    {
+        UIManager.Instance.SetActiveHealImage(true);
+
+        yield return new WaitForSeconds(time);
+
+        UIManager.Instance.SetActiveHealImage(false);
     }
 
 }

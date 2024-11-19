@@ -22,12 +22,7 @@ public partial class MyPlayerController : PlayerController
     private GameInfoBar _gameInfoBar; // HP+ Exp + Info
     private VirtualJoystick _joystick;
     public Gun usingGun { get; private set; } //플레이어가 들고있는 총(발사하는 총)
-
-    public int loadedAmount1; //아직 안씀
-    public int loadedAmount2;
-
     
-
     //----------------------------------위: 사용 / 아래:사용안하는듯--------------------------
     //private ButtonSkill _butnSkill;
     //UI
@@ -329,7 +324,7 @@ public partial class MyPlayerController : PlayerController
     {
         await Task.Delay(100);
         InventoryController inven = InventoryController.Instance;
-        ItemData equipptedItem = inven.GetItemInDictionaryByCode(slotNumber);
+        ItemData equipptedItem = inven.GetItemInDictByGearCode(slotNumber);
         if (equipptedItem == null)
         {
             UIManager.Instance.ReloadBtn.interactable = false;
