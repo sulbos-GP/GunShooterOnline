@@ -115,7 +115,7 @@ public class GridObject : MonoBehaviour
     /// <param name="itemData"></param>
     public ItemObject CreateItemObjAndPlace(ItemData itemData)
     {
-        ItemObject itemObj = ItemObject.CreateNewItem(itemData, transform);
+        ItemObject itemObj = ItemObject.CreateNewItemObj(itemData, transform);
 
         //아이템을 해당 그리드에 배치하고 아이템 객체의 위치또한 맞게 변경
         PlaceItem(itemObj, itemData.pos.x, itemData.pos.y);

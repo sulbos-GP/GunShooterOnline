@@ -16,7 +16,7 @@ public class ItemObject : MonoBehaviour
     /// <summary>
     /// 아이템 데이터로 새로운 아이템 UI를 생성함
     /// </summary>
-    public static ItemObject CreateNewItem(ItemData data, Transform parent = null)
+    public static ItemObject CreateNewItemObj(ItemData data, Transform parent = null)
     {
         ItemObject newItem = Managers.Resource.Instantiate("UI/InvenUI/ItemUI", parent).GetComponent<ItemObject>();
         newItem.SetItem(data);

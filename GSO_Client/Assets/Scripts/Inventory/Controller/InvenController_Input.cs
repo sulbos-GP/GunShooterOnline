@@ -69,9 +69,9 @@ public partial class InventoryController
         selectedItem.RotateRight();
     }
 
-    public void invenUIControl()
+    public void invenUIControl(bool tf)
     {
-        isActive = !isActive;
+        isActive = tf;
 
         if (isActive)
         {

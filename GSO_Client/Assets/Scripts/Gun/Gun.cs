@@ -10,8 +10,8 @@ public class Gun : MonoBehaviour
     public GunState gunState { get; private set; } //현재 총의 상태 : shootable, empty, reload
 
     [SerializeField]
-    public Data_master_item_weapon UsingGunData { get; private set; } //현재 사용중인 총의 스텟 데이터
-    private ItemData usingGunItemData; //사용중인 총의 아이템 데이터(총의 오브젝트 아이디, 총알 참조)
+    public Data_master_item_weapon WeaponData { get; private set; } //현재 사용중인 총의 스텟 데이터
+    private ItemData itemData; //사용중인 총의 아이템 데이터(총의 오브젝트 아이디, 총알 참조)
     private Transform _fireStartPos;
     public AimLine gunLine;
     public AudioClip[] audioClips;
@@ -27,14 +27,14 @@ public class Gun : MonoBehaviour
     [SerializeField]
     public int CurAmmo 
     {
-        get => usingGunItemData.loadedAmmo; 
+        get => itemData.loadedAmmo; 
         set 
         {
-            if (usingGunItemData == null)
+            if (itemData == null)
             {
                 return;
             }
-            usingGunItemData.loadedAmmo = value;
+            itemData.loadedAmmo = value;
         }
     } 
 
@@ -53,10 +53,10 @@ public class Gun : MonoBehaviour
         ResetGun();
     }
 
-    public void SetGunStat(ItemData itemData)
+    public void SetGunStat(ItemData _itemData)
     {
-        usingGunItemData = itemData;
-        UsingGunData = Data_master_item_weapon.GetData(itemData.itemId);
+        itemData = _itemData;
+        WeaponData = Data_master_item_weapon.GetData(itemData.itemId);
         gunState = CurAmmo == 0 ? GunState.Empty: GunState.Shootable;
 
         gunLine.OnAimLine();
@@ -82,24 +82,23 @@ public class Gun : MonoBehaviour
 
     public void ResetGun()
     {
-        UsingGunData = null;
-        usingGunItemData = null;
+        WeaponData = null;
+        itemData = null;
         CurAmmo = 0;
         gunState = GunState.Empty;
         GetComponent<SpriteRenderer>().sprite = null;
         gunLine.OffAimLine();
         UIManager.Instance.SetAmmoText();
-        //총 제거 패킷 전송
     }
 
     public Data_master_item_weapon GetGunStat()
     {
-        return UsingGunData;
+        return WeaponData;
     }
 
     private void Update()
     {
-        if(UsingGunData == null) return;
+        if(WeaponData == null) return;
         SetAimLine();
     }
 
@@ -108,18 +107,18 @@ public class Gun : MonoBehaviour
         //발사범위 선 2개 긋기
         if (_fireStartPos == null) return;
 
-        float halfAngle = UsingGunData.attack_range * 0.5f;
+        float halfAngle = WeaponData.attack_range * 0.5f;
         Vector3 direction1 = Quaternion.Euler(0, 0, halfAngle) * _fireStartPos.up;
-        Vector3 endPoint1 = _fireStartPos.position + direction1 * UsingGunData.distance;
+        Vector3 endPoint1 = _fireStartPos.position + direction1 * WeaponData.distance;
         Vector3 direction2 = Quaternion.Euler(0, 0, -halfAngle) * _fireStartPos.up;
-        Vector3 endPoint2 = _fireStartPos.position + direction2 * UsingGunData.distance;
+        Vector3 endPoint2 = _fireStartPos.position + direction2 * WeaponData.distance;
         gunLine.SetAimLine(_fireStartPos.position, endPoint1, endPoint2);
     }
 
     //발사버튼 누를시
     public void Fire(Vector2 dir)
     {
-        if (UsingGunData  == null) 
+        if (WeaponData  == null) 
         {
             Debug.Log("현재 총을 들고 있지 않음");
             return;
@@ -128,7 +127,7 @@ public class Gun : MonoBehaviour
 
         if(gunState == GunState.Shootable)
         {
-            var cRay = new C_RaycastShoot
+            var cRay = new C_RaycastShoot //서버에서 이패킷을 받는다면 해당 아이템데이터의 총알을 감소
             {
                 StartPosX = _fireStartPos.position.x,
                 StartPosY = _fireStartPos.position.y,
@@ -153,19 +152,15 @@ public class Gun : MonoBehaviour
     //재장전 버튼 누를시
     public void Reload()
     {
-        //조건1 현재 총알이 최대개수보다 작아야함.
-        //조건2 재장전 중이 아니어야함
-        //조건3 인벤에 맞는 총알이 있어야함 (todo)
-        if(UsingGunData == null)
+        if(WeaponData == null)
         {
             Managers.SystemLog.Message("총을 들고 있지 않음");
             return;
         }
-        if(CurAmmo < UsingGunData.reload_round || gunState != GunState.Reloading)
+
+        if (CurAmmo < WeaponData.reload_round || gunState != GunState.Reloading)
         {
-            //인벤에 해당 총알이 있는지 검색. -> 있다면 최대 장전량 만큼 있는지 확인. -> 그이상이 있다면 최대개수로 아니라면 해당 개수만큼 재장전
-            
-            StartCoroutine(ReloadCoroutine(UsingGunData.reload_round));//현재는 임시로 최대 개수
+            StartCoroutine(ReloadCoroutine(WeaponData.reload_round));//현재는 임시로 최대 개수
         }
     }
 
@@ -185,9 +180,9 @@ public class Gun : MonoBehaviour
 
         delayImage.fillAmount = 1;
         float elapseTime = 0f;
-        while (elapseTime < UsingGunData.reload_time)
+        while (elapseTime < WeaponData.reload_time)
         {
-            float remainingTimeRatio = 1 - (elapseTime / UsingGunData.reload_time);
+            float remainingTimeRatio = 1 - (elapseTime / WeaponData.reload_time);
             delayImage.fillAmount = remainingTimeRatio;
 
             // 경과 시간 업데이트
@@ -195,6 +190,8 @@ public class Gun : MonoBehaviour
             yield return null;
         }
 
+
+        //나중에 패킷매니저에서 리로드 결과 받아오기
         CurAmmo = reloadAmount;
         gunState = GunState.Shootable;
         UIManager.Instance.SetActiveReloadBtn(true);
@@ -203,10 +200,18 @@ public class Gun : MonoBehaviour
         //(TODO) 인벤에 총알의 양을 감소시킴
     }
 
+    public void ReloadDone(int reloadAmount)
+    {
+        CurAmmo = reloadAmount;
+        gunState = GunState.Shootable;
+        UIManager.Instance.SetActiveReloadBtn(true);
+        UIManager.Instance.SetAmmoText();
+    }
+
     //FovPlayer의 코루틴에서 사용
     public float GetFireRate()
     {
-        return UsingGunData.attack_speed; // GunStat 클래스에서 설정한 발사 속도를 반환
+        return WeaponData.attack_speed; // GunStat 클래스에서 설정한 발사 속도를 반환
     }
 
     public void StartEffect()
