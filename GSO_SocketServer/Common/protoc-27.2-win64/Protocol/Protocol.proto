@@ -49,6 +49,8 @@ enum MsgId{
   C_INPUT_DATA = 35;
   S_UPDATE_QUEST = 36;
 
+  S_GUNDATA_UPDATE = 37;
+
 }
 
 enum GameObjectType{
@@ -369,7 +371,10 @@ message C_InputData {  //35
     int32 itemSoltId = 3;
 }
 
-
+message S_GundataUpdate{  //37 (지승현)추후 많은 데이터 업데이트 예정
+    PS_GearInfo gunData =1;  
+    int32 loaded_ammo = 2;
+}
 
 ////////////////////////////////////////////
 //                                        //

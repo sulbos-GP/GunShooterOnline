@@ -211,7 +211,7 @@ namespace Server.Game
         //재장전 버튼 누를시
         public void Reload()
         {
-            /*if(ownerPlayer.inventory.storage.)*/
+           //if(ownerPlayer.inventory.storage.)
 
 
 
@@ -219,7 +219,15 @@ namespace Server.Game
             {
                 UsingGunState = GunState.Reloading;
                 ownerPlayer.gameRoom.PushAfter(GunData.reload_time * 1000 ,HandleReload);
+
             }
+
+
+            S_GundataUpdate s_GundataUpdate = new S_GundataUpdate();
+            s_GundataUpdate.GunData.Part = PE_GearPart.MainWeapon;
+            s_GundataUpdate.LoadedAmmo = CurAmmo;
+
+            ownerPlayer.gameRoom.BroadCast(s_GundataUpdate);
         }
 
         //실질적인 재장전
@@ -227,7 +235,6 @@ namespace Server.Game
         {
             CurAmmo = GunData.reload_round;
             UsingGunState = GunState.Shootable;
-
 
 
         }
