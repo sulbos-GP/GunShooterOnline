@@ -41,7 +41,7 @@ public class PlayerInventoryUI : InventoryUI
 
 
         //생성된 그리드를 초기세팅하고 들어있는 아이템
-        instantGrid.InitializeGrid(newSize, equipBag.total_weight); // 가방의 크기로 바꿀것
+        instantGrid.InstantGrid(newSize, equipBag.total_weight); // 가방의 크기로 바꿀것
     }
 
     public bool SetInventoryGrid(int itemId)

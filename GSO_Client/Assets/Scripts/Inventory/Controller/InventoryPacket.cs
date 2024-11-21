@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class InventoryPacket
 {
-    public static void SendLoadInvenPacket(int objectId)
+    public static void SendLoadInvenPacket(int objectId = 0)
     {
         C_LoadInventory packet = new C_LoadInventory();
         packet.SourceObjectId = objectId;

@@ -75,7 +75,7 @@ public partial class InventoryController
             Debug.Log("부모 객체가 정해지지 않음");
             return;
         }
-        itemPreviewInstance = Managers.Resource.Instantiate("UI/DivideImageInstance", parentInstance.transform);
+        itemPreviewInstance = Managers.Resource.Instantiate("UI/InvenUI/DivideImageInstance", parentInstance.transform);
 
         Vector2 imagePos;
         if (IsEquipSlot(selectedItem.parentObjId))

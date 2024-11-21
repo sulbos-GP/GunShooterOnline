@@ -68,7 +68,7 @@ public partial class InventoryController
                     if (!clickedItem.isOnSearching)
                     {
                         InventoryPacket.SendSearchItemPacket(clickedItem.backUpParentId, clickedItem);
-                        clickedItem.UnhideItem();
+                        clickedItem.SearchItemHandler();
                     }
                 }
                 else

@@ -128,7 +128,7 @@ public partial class InventoryController
         //자신의 인벤토리 요청
         if (!isActive) {
             //인벤토리를 킬 경우
-            InventoryPacket.SendLoadInvenPacket(0);
+            InventoryPacket.SendLoadInvenPacket();
         }
         else
         {
