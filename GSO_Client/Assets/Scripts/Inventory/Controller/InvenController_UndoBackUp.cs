@@ -74,7 +74,6 @@ public partial class InventoryController
         else if(IsPlayerSlot(item.parentObjId))
         {
             playerInvenUI.instantGrid.UpdateItemPosition(item, item.itemData.pos.x, item.itemData.pos.y);
-
         }
         else
         {

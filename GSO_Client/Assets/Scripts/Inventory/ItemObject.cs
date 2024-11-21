@@ -42,7 +42,7 @@ public class ItemObject : MonoBehaviour
     //자식 컴포넌트
     public Image imageUI;
     public TextMeshProUGUI amountText; //아이템 갯수 텍스트
-    public TextMeshProUGUI unhideTimer; //아이템 수색 타이머 텍스트
+    public TextMeshProUGUI searchTimerUI; //아이템 수색 타이머 텍스트
 
     //컴포넌트
     public RectTransform itemRect;
@@ -111,9 +111,9 @@ public class ItemObject : MonoBehaviour
         imageUI = transform.GetChild(0).GetComponent<Image>(); 
         imageUI.raycastTarget = false;
 
-        unhideTimer = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
-        unhideTimer.raycastTarget = false;
-        unhideTimer.gameObject.SetActive(false);
+        searchTimerUI = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        searchTimerUI.raycastTarget = false;
+        searchTimerUI.gameObject.SetActive(false);
         
         amountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
         amountText.raycastTarget = false;
@@ -125,7 +125,7 @@ public class ItemObject : MonoBehaviour
         if(searchingCoroutine != null)
         {
             StopCoroutine(searchingCoroutine);
-            unhideTimer.gameObject.SetActive(false);
+            searchTimerUI.gameObject.SetActive(false);
             searchingCoroutine = null;
             isOnSearching = false;
         }
@@ -187,7 +187,7 @@ public class ItemObject : MonoBehaviour
     /// <summary>
     /// 가려진 아이템을 클릭한 경우 아이템 조회
     /// </summary>
-    public void UnhideItem()
+    public void SearchItemHandler()
     {
         if(isOnSearching == true) { return; }
         isOnSearching = true;
@@ -200,7 +200,7 @@ public class ItemObject : MonoBehaviour
     {
         float timeRemaining = duration;
 
-        unhideTimer.gameObject.SetActive(true);
+        searchTimerUI.gameObject.SetActive(true);
 
         while (timeRemaining > 0)
         {
@@ -208,20 +208,22 @@ public class ItemObject : MonoBehaviour
             int seconds = Mathf.FloorToInt(timeRemaining);
             int milliseconds = Mathf.FloorToInt((timeRemaining - seconds) * 10); // One decimal place
 
-            unhideTimer.text = string.Format("{0}:{1}", seconds, milliseconds);
+            searchTimerUI.text = string.Format("{0}:{1}", seconds, milliseconds);
             yield return null;
         }
 
-        // Hide the timer text after the countdown is complete
-        unhideTimer.gameObject.SetActive(false);
+        searchTimerUI.gameObject.SetActive(false);
+        searchingCoroutine = null;
+    }
 
+    public void RevealItem()
+    {
         isHide = false;
         itemData.isSearched = true;
-        
+
         imageUI.sprite = itemSprite;
         TextControl();
     }
-    
 
     public void HideItem()
     {
@@ -235,8 +237,6 @@ public class ItemObject : MonoBehaviour
         }
 
         imageUI.sprite = hideSprite;
-
-        
     }
 
     /// <summary>
