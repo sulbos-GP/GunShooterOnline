@@ -47,7 +47,10 @@ public class CreatureObj : GameObject
         diePacket.ObjectId = Id;
         diePacket.AttackerId = attacker.Id;
 
-        gameRoom.Push(room.BroadCast, diePacket);
+        room.BroadCast(diePacket);
+        //room.Push(room.BroadCast , diePacket);
+
+        Console.WriteLine("Die Pakcet Send");
 
         if (gameRoom.MatchInfo.TryGetValue(UID, out MatchOutcome outcome) == true)
         {

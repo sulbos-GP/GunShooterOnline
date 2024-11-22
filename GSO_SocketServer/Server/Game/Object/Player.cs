@@ -93,7 +93,7 @@ public class Player : CreatureObj
         gameRoom.BroadCast(diePacket);
 
         var room = gameRoom;*/
-
+        //Console.WriteLine("On Dead");
         base.OnDead(attacker);
 
         //room.Push(room.LeaveGame, Id);

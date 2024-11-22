@@ -101,6 +101,11 @@ namespace Server
 
         public override void BroadCast(IMessage message)
         {
+            if((message  as S_Die )!= null)
+            {
+                Console.WriteLine("S_DIE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            }
+
             foreach (Player player in _playerDic.Values)
                 player.Session.Send(message, DeliveryMethod.ReliableSequenced);
 
