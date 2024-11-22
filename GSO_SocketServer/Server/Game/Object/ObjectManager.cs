@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.Object;
@@ -17,13 +18,15 @@ internal class ObjectManager
     private readonly Dictionary<int, BoxObject> _rootable = new();
     private readonly Dictionary<int, ExitZone> _exit = new();
     private readonly Dictionary<int, ItemObject> _items = new();
-    private readonly Dictionary<int, SpawnZone> _spawn = new();
+    private readonly Dictionary<int, SpawnZone> _playerSpawn = new();
+    private readonly Dictionary<int, Mine> _mines = new();
+    private readonly Dictionary<int, EnemyAI> _enemys = new();
     public static ObjectManager Instance { get; } = new();
 
     public T Add<T>() where T : GameObject, new()
     {
         var gameObjcet = new T();
-
+        gameObjcet.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
         lock (_lock)
         {
             gameObjcet.Id = GenerateId(gameObjcet.ObjectType);
@@ -39,8 +42,15 @@ internal class ObjectManager
             else if (gameObjcet.ObjectType == GameObjectType.Exitzone)
                 _exit.Add(gameObjcet.Id, gameObjcet as ExitZone);
             
-            else if (gameObjcet.ObjectType == GameObjectType.Spawnzone)
-                _spawn.Add(gameObjcet.Id, gameObjcet as SpawnZone);
+            else if (gameObjcet.ObjectType == GameObjectType.Playerspawnzone)
+                _playerSpawn.Add(gameObjcet.Id, gameObjcet as SpawnZone);
+
+            else if (gameObjcet.ObjectType == GameObjectType.Mine)
+                _mines.Add(gameObjcet.Id, gameObjcet as Mine);
+
+            else if (gameObjcet.ObjectType == GameObjectType.Enemyai)
+                _enemys.Add(gameObjcet.Id, gameObjcet as EnemyAI);
+
         }
         return gameObjcet;
     }
@@ -60,8 +70,13 @@ internal class ObjectManager
                 _rootable.Add(obj.Id, obj as BoxObject);
             else if (obj.ObjectType == GameObjectType.Exitzone)
                 _exit.Add(obj.Id, obj as ExitZone); 
-            else if (obj.ObjectType == GameObjectType.Spawnzone)
-                _spawn.Add(obj.Id, obj as SpawnZone);
+            else if (obj.ObjectType == GameObjectType.Playerspawnzone)
+                _playerSpawn.Add(obj.Id, obj as SpawnZone);
+            else if (obj.ObjectType == GameObjectType.Mine)
+                _mines.Add(obj.Id, obj as Mine);
+            else if (obj.ObjectType == GameObjectType.Enemyai)
+                _enemys.Add(obj.Id, obj as EnemyAI);
+
         }
 
         return obj;
@@ -96,9 +111,24 @@ internal class ObjectManager
 
         Console.WriteLine();
         Console.WriteLine($"spawnZone : ");
-        foreach (SpawnZone pawn in _spawn.Values)
+        foreach (SpawnZone pawn in _playerSpawn.Values)
         {
             Console.Write($"{pawn.Id} ,");
+        }
+        Console.WriteLine();
+
+        Console.WriteLine($"mine : ");
+        foreach (Mine mine in _mines.Values)
+        {
+            Console.Write($"{mine.Id} ,");
+        
+        }
+        Console.WriteLine();
+
+        Console.WriteLine($"Enemy : ");
+        foreach (EnemyAI enemy in _enemys.Values)
+        {
+            Console.Write($"{enemy.Id} ,");
         }
         Console.WriteLine();
 
@@ -132,6 +162,10 @@ internal class ObjectManager
                 return _rootable.Remove(objectId);
             else if (objectType == GameObjectType.Exitzone)
                 return _exit.Remove(objectId);
+            else if (objectType == GameObjectType.Mine)
+                return _mines.Remove(objectId);
+            else if (objectType == GameObjectType.Enemyai)
+                return _enemys.Remove(objectId);
 
         }
 
@@ -190,6 +224,20 @@ internal class ObjectManager
                     return obj as T;
 
             }
+            else if (objectType == GameObjectType.Mine)
+            {
+                Mine obj = null;
+                if (_mines.TryGetValue(objectId, out obj))
+                    return obj as T;
+
+            }
+            else if (objectType == GameObjectType.Enemyai)
+            {
+                EnemyAI obj = null;
+                if (_enemys.TryGetValue(objectId, out obj))
+                    return obj as T;
+
+            }
 
         }
 
@@ -197,6 +245,14 @@ internal class ObjectManager
             return null;
     }
 
+    public EnemyAI[] GetEnemyAIs()
+    {
+        return _enemys.Values.ToArray();
+    }
+    public GameObject[] GetAllCreature()
+    {
+        return _enemys.Values.ToArray<GameObject>().Concat(_players.Values).Concat(_mines.Values).ToArray();
+    }
 
 
 
@@ -218,7 +274,10 @@ internal class ObjectManager
             {
                 shape.Add(p.currentShape);
             }
-
+            foreach (EnemyAI p in _enemys.Values)
+            {
+                shape.Add(p.currentShape);
+            }
         }
 
         return shape.ToArray();

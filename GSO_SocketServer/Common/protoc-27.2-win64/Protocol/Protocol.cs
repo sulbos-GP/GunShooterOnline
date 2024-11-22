@@ -138,18 +138,18 @@ namespace Google.Protobuf.Protocol {
             "DVNfSk9JTl9TRVJWRVIQHhIQCgxTX0dBTUVfU1RBUlQQHxIUChBTX1dBSVRJ",
             "TkdfU1RBVFVTECASFwoTQ19DSEFOR0VfQVBQRUFSQU5DRRAhEhcKE1NfQ0hB",
             "TkdFX0FQUEVBUkFOQ0UQIhIQCgxDX0lOUFVUX0RBVEEQIxISCg5TX1VQREFU",
-            "RV9RVUVTVBAkEhQKEFNfR1VOREFUQV9VUERBVEUQJSqIAQoOR2FtZU9iamVj",
+            "RV9RVUVTVBAkEhQKEFNfR1VOREFUQV9VUERBVEUQJSqlAQoOR2FtZU9iamVj",
             "dFR5cGUSDgoKTk9ORU9CSkVDVBAAEgoKBlBMQVlFUhABEgsKB01PTlNURVIQ",
             "AhIOCgpQUk9KRUNUSUxFEAMSDQoJSU5WRU5EQVRBEAQSBwoDQk9YEAUSCAoE",
-            "SVRFTRAGEgwKCEVYSVRaT05FEAcSDQoJU1BBV05aT05FEAgqSwoJU2hhcGVU",
-            "eXBlEgkKBVNIQVBFEAASCgoGQ0lSQ0xFEAESDQoJUkVDVEFOR0xFEAISCwoH",
-            "UE9MWUdPThADEgsKB0FSQ1BPTFkQBCpTCghJdGVtVHlwZRIKCgZXRUFQT04Q",
-            "ABINCglERUZFTlNJVkUQARIHCgNCQUcQAhIMCghSRUNPVkVSWRADEgoKBkJV",
-            "TExFVBAEEgkKBVNQT0lMEAUqgwEKC1BFX0dlYXJQYXJ0EggKBE5PTkUQABIO",
-            "CgpNYWluV2VhcG9uEAESDQoJU3ViV2VhcG9uEAISCQoFQXJtb3IQAxIMCghC",
-            "YWNrcGFjaxAEEg8KC1BvY2tldEZpcnN0EAUSEAoMUG9ja2V0U2Vjb25kEAYS",
-            "DwoLUG9ja2V0VGhpcmQQB0IbqgIYR29vZ2xlLlByb3RvYnVmLlByb3RvY29s",
-            "YgZwcm90bzM="));
+            "SVRFTRAGEgwKCEVYSVRaT05FEAcSEwoPUExBWUVSU1BBV05aT05FEAgSCAoE",
+            "TUlORRAJEgsKB0VORU1ZQUkQCipLCglTaGFwZVR5cGUSCQoFU0hBUEUQABIK",
+            "CgZDSVJDTEUQARINCglSRUNUQU5HTEUQAhILCgdQT0xZR09OEAMSCwoHQVJD",
+            "UE9MWRAEKlMKCEl0ZW1UeXBlEgoKBldFQVBPThAAEg0KCURFRkVOU0lWRRAB",
+            "EgcKA0JBRxACEgwKCFJFQ09WRVJZEAMSCgoGQlVMTEVUEAQSCQoFU1BPSUwQ",
+            "BSqDAQoLUEVfR2VhclBhcnQSCAoETk9ORRAAEg4KCk1haW5XZWFwb24QARIN",
+            "CglTdWJXZWFwb24QAhIJCgVBcm1vchADEgwKCEJhY2twYWNrEAQSDwoLUG9j",
+            "a2V0Rmlyc3QQBRIQCgxQb2NrZXRTZWNvbmQQBhIPCgtQb2NrZXRUaGlyZBAH",
+            "QhuqAhhHb29nbGUuUHJvdG9idWYuUHJvdG9jb2xiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Google.Protobuf.Protocol.MsgId), typeof(global::Google.Protobuf.Protocol.GameObjectType), typeof(global::Google.Protobuf.Protocol.ShapeType), typeof(global::Google.Protobuf.Protocol.ItemType), typeof(global::Google.Protobuf.Protocol.PE_GearPart), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -273,7 +273,9 @@ namespace Google.Protobuf.Protocol {
     [pbr::OriginalName("BOX")] Box = 5,
     [pbr::OriginalName("ITEM")] Item = 6,
     [pbr::OriginalName("EXITZONE")] Exitzone = 7,
-    [pbr::OriginalName("SPAWNZONE")] Spawnzone = 8,
+    [pbr::OriginalName("PLAYERSPAWNZONE")] Playerspawnzone = 8,
+    [pbr::OriginalName("MINE")] Mine = 9,
+    [pbr::OriginalName("ENEMYAI")] Enemyai = 10,
   }
 
   public enum ShapeType {

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1305691763}
   - component: {fileID: 4517425183532554915}
   m_Layer: 0
-  m_Name: lowgoblin
+  m_Name: Dog
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -75,9 +75,9 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: a3699ed8412d4ec4ba126b2d981cb4ce, type: 3}
-  m_Color: {r: 0.14017446, g: 0.6603774, b: 0.19563569, a: 1}
+  m_Color: {r: 0.8679245, g: 0.16785331, b: 0.16785331, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -100,7 +100,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 1
+  m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}

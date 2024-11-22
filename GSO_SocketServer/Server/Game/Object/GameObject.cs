@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Numerics;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
@@ -131,6 +132,11 @@ public class GameObject
                 currentShape.x = value.X;
                 currentShape.y = value.Y;
             }
+            else
+            {
+                Console.WriteLine("currentShape is null");
+
+            }
         }
     }
 
@@ -167,11 +173,11 @@ public class GameObject
     public virtual void OnCollision(GameObject other)
     {
         //상속받아 알아서 행동 ex) 스킬이면 데미지 사람이라면 충동처리
-        Console.WriteLine(info.Name + "은" + other.info.Name + " 과 충동함");
+        Console.WriteLine(info.Name + "은" + other.info.Name + " 과 충돌함");
     }
 
     /// <summary>
-    /// 충돌한 객체에서 정보를 받음
+    /// (일단 사용 중지)충돌한 객체에서 정보를 받음
     /// </summary>
     /// <param name="other"></param>
     public virtual void OnCollisionFeedback(GameObject other)

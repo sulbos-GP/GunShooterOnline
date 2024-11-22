@@ -15,12 +15,12 @@ public class CreatureObj : GameObject
         info.StatInfo = stat;
     }
 
-    public Action<GameObject> DamageReflexAction;
+    //public Action<GameObject> DamageReflexAction;
 
 
     public StatInfo stat { get; private set; } = new();
 
-
+    
    
 
     public virtual void OnDead(GameObject attacker)
@@ -41,8 +41,6 @@ public class CreatureObj : GameObject
         room.Push(room.LeaveGame, Id);
 
     
-
-
         var diePacket = new S_Die();
         diePacket.ObjectId = Id;
         diePacket.AttackerId = attacker.Id;
@@ -60,9 +58,12 @@ public class CreatureObj : GameObject
         {
             Console.WriteLine("outcome is null");
         }
-        gameRoom.PostPlayerStats(Id);
 
+        if (player != null)
+        {
+            gameRoom.PostPlayerStats(Id);
 
+        }
         /*room.Push(new Job(() =>
         {
             stat.Hp = stat.MaxHp;

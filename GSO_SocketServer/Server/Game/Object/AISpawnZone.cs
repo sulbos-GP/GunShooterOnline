@@ -1,6 +1,5 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
-using Humanizer;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,33 +9,30 @@ using System.Threading.Tasks;
 
 namespace Server.Game.Object
 {
-    public class SpawnZone : GameObject
+    public class AISpawnZone : GameObject
     {
 
-        public SpawnZone()
+        public AISpawnZone()
         {
-            ObjectType = GameObjectType.Playerspawnzone;
+            ObjectType = GameObjectType.Noneobject;
 
         }
+
 
         public void Init(Vector2 pos)
         {
-            //ObjectType = GameObjectType.S;
-            float width = 2;
-            float left = 2;
-            float top = 2;
+            CellPos = pos;
+            /*//ObjectType = GameObjectType.S;
+            float width = 1;
+            float left = 1;
+            float top = 1;
 
             Polygon rectangle = ShapeManager.CreateCenterSquare(left, top, width);
             rectangle.Parent = this;
-            currentShape = rectangle;
+            currentShape = rectangle;*/
 
-            info.Name = "SpawnZone" + Id;
-
-            CellPos = pos;
-
+            info.Name = "AISpawnZone" + Id;
         }
-
-
 
 
 

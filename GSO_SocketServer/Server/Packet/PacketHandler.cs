@@ -229,7 +229,7 @@ class PacketHandler
             p.info.Name = packet.Name + clientSession.SessionId;
             p.info.PositionInfo.PosX = 0;
             p.info.PositionInfo.PosY = 0;
-            p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+            //p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
 
           
 

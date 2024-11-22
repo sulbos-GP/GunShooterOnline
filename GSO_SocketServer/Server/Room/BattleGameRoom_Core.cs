@@ -17,6 +17,7 @@ using System.Diagnostics;
 using Server.Game.Quest;
 using WebCommonLibrary.Models.GameDatabase;
 using Server.Game.Quest.Interfaces;
+using Server.Game.Object;
 
 namespace Server
 {
@@ -26,7 +27,7 @@ namespace Server
         public List<int> connectPlayer = new List<int>();
 
         Dictionary<int, Player> _playerDic = new Dictionary<int, Player>();
-        Dictionary<int, CreatureObj> _monsterDic = new Dictionary<int, CreatureObj>();
+        Dictionary<int, CreatureObj> _enemyDic = new Dictionary<int, CreatureObj>();
         Dictionary<int, SkillObj> _skillObjDic = new Dictionary<int, SkillObj>();
 
         //public List<object> Escapes = new List<object>();
@@ -36,6 +37,7 @@ namespace Server
         public bool IsGameStarted { get; protected set; } = false;
         public bool IsGameEnd { get; protected set; } = false;
 
+        QuadTreeManager quadTreeManager = new QuadTreeManager();
 
         public Map map { get; private set; }
         public BattleGameRoom()
@@ -59,7 +61,6 @@ namespace Server
             Flush();
 
 
-            QuadTreeManager quadTreeManager = new QuadTreeManager();
             quadTreeManager.Update();
 
 
@@ -227,15 +228,17 @@ namespace Server
                     //중간 난입
                     Console.WriteLine($"Reconnected Game Id{gameObject.Id}");
                 }
+
+
             }
-            else if (type == GameObjectType.Monster)
+            else if (type == GameObjectType.Enemyai)
             {
-                var monster = gameObject as Monster;
-                _monsterDic.Add(gameObject.Id, monster);
-                monster.gameRoom = this;
+                var enemy = gameObject as EnemyAI;
+                _enemyDic.Add(gameObject.Id, enemy);
+                enemy.gameRoom = this;
 
                 //mMap.AddObject(monster);
-                monster.Update();
+                enemy.Update();
             }
             else if (type == GameObjectType.Projectile) //&& type == GameObjectType.Scopeskill)
             {
@@ -292,6 +295,18 @@ namespace Server
                 //Console.WriteLine($"exit id : {exit.Id}");
 
                 spawnPacket.Objects.Add(exit.info);
+            }
+
+
+            foreach(Mine mine in map.mines)
+            {
+                spawnPacket.Objects.Add(mine.info);
+            }
+
+
+            foreach (EnemyAI mine in ObjectManager.Instance.GetEnemyAIs())
+            {
+                spawnPacket.Objects.Add(mine.info);
             }
 
 
