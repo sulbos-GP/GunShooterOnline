@@ -46,7 +46,7 @@ public class Box : InteractableObject
     {
         if (interactable)
         {
-            InventoryPacket.SendLoadInvenPacket(0);
+            InventoryPacket.SendLoadInvenPacket();
             InventoryPacket.SendLoadInvenPacket(objectId);
         }
         else

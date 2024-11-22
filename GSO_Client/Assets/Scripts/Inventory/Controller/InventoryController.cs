@@ -102,7 +102,6 @@ public partial class InventoryController : MonoBehaviour
     public static Dictionary<int, EquipSlotBase> equipSlotDic { get; private set; } = new Dictionary<int, EquipSlotBase>();
     public static Dictionary<int, ItemObject> instantItemDic { get; private set; } = new Dictionary<int, ItemObject>(); //인벤토리를 닫으면 초기화됨
 
-
     //UI
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
