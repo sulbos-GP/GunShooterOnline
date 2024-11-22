@@ -160,12 +160,12 @@ public class Gun : MonoBehaviour
 
         if (CurAmmo < WeaponData.reload_round || gunState != GunState.Reloading)
         {
-            StartCoroutine(ReloadCoroutine(WeaponData.reload_round));//현재는 임시로 최대 개수
+            StartCoroutine(ReloadCoroutine());//현재는 임시로 최대 개수
         }
     }
 
     //실질적인 재장전
-    private IEnumerator ReloadCoroutine(int reloadAmount)
+    private IEnumerator ReloadCoroutine()
     {
         //재장전 패킷 전송
         C_InputData packet = new C_InputData();
@@ -192,7 +192,7 @@ public class Gun : MonoBehaviour
 
 
         //나중에 패킷매니저에서 리로드 결과 받아오기
-        CurAmmo = reloadAmount;
+        //CurAmmo = reloadAmount;
         gunState = GunState.Shootable;
         UIManager.Instance.SetActiveReloadBtn(true);
         UIManager.Instance.SetAmmoText();

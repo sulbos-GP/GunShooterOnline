@@ -328,7 +328,7 @@ public partial class MyPlayerController : PlayerController
         if (equipptedItem == null)
         {
             UIManager.Instance.ReloadBtn.interactable = false;
-            SendChangeGunPacket(0); //총을 들고있지 않을 경우 0(널값) 전송
+            SendChangeGunPacket(0, slotNumber); //총을 들고있지 않을 경우 0(널값) 전송
             return;
         }
         else if(equipptedItem.item_type != ItemType.Weapon)
@@ -338,19 +338,39 @@ public partial class MyPlayerController : PlayerController
         UIManager.Instance.ReloadBtn.interactable = true;
         usingGun.SetGunStat(equipptedItem);
         usingGun.curGunEquipSlot = slotNumber;
-        SendChangeGunPacket(equipptedItem.objectId);
+        SendChangeGunPacket(equipptedItem.objectId, slotNumber);
     }
 
-    private static void SendChangeGunPacket(int gunObjectId)
+    private static void SendChangeGunPacket(int gunObjectId, int slotNumber)
     {
         C_ChangeAppearance packet = new C_ChangeAppearance()
         {
             ObjectId = Managers.Object.MyPlayer.Id,
-            GunId = gunObjectId
+            GunType = new PS_GearInfo()
+            {
+                Item = new PS_ItemInfo()
+                {
+                    ObjectId = gunObjectId,
+                },
+            }
         };
 
+        // 승현 : protocol에서 enum으로 switch해서 참조하기
+        if (slotNumber == 1)
+        {
+            packet.GunType.Part = PE_GearPart.MainWeapon;
+        }
+        else if (slotNumber == 2) 
+        {
+            packet.GunType.Part = PE_GearPart.SubWeapon;
+
+        }
+
+
+
+
         Managers.Network.Send(packet);
-        Debug.Log($"C_ChangeAppearance 전송 {packet.ObjectId}, {packet.GunId}");
+        Debug.Log($"C_ChangeAppearance 전송 {packet.ObjectId}, {packet.GunType.Part}");
     }
 
     private Coroutine healCoroutine;

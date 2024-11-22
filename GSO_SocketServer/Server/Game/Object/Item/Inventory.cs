@@ -25,27 +25,28 @@ namespace Server.Game
 
 
 
-        /*
-         
-            100번대 : 무기 설명 키
-            200번대 : 방어구 설명 키
-            300번대 : 가방 설명 키
-            400번대 : 회복, 버프 설명 키
-            500번대 : 탄알 설명 키
-            600번대 : 전리품 설명 키
-         
-         */
-
-        public ItemObject FindItem() //나중에 추가
+        
+        public enum ItemType
         {
-            List<int> t = storage.GetItemObjectIds();
+            Weapon = 100,        // 100번대 : 무기
+            Armor = 200,         // 200번대 : 방어구
+            Bag = 300,           // 300번대 : 가방
+            RecoveryBuff = 400,  // 400번대 : 회복, 버프
+            Ammo = 500,          // 500번대 : 탄알
+            Loot = 600           // 600번대 : 전리품
+        }
 
 
-            foreach (int itemId in t)
+
+        public ItemObject FindItemByType(ItemType itemType)
+        {
+            List<int> itemIds = storage.GetAllItemObjectIds();
+
+
+            foreach (int itemId in itemIds)
             {
-                if(itemId / 100 == 5)
+                if (itemId / 100 == (int)itemType / 100)
                 {
-
                     var items = storage.FindItemsByItemID(itemId);
                     if (items != null && items.Count > 0)
                     {
@@ -59,8 +60,25 @@ namespace Server.Game
 
 
 
+        public List<ItemObject> FindItemAllByType(ItemType itemType)
+        {
+            List<int> itemIds = storage.GetAllItemItemIds();
 
+            List<ItemObject> list = new List<ItemObject>();
+            foreach (int itemId in itemIds)
+            {
+                if (itemId / 100 == (int)itemType / 100)
+                {
+                    var item = storage.FindItemsByItemID(itemId);
+                    if (item != null && item.Count > 0)
+                    {
+                        list.AddRange(item);
+                    }
+                }
+            }
 
+            return list;
+        }
 
 
 
@@ -218,7 +236,7 @@ namespace Server.Game
 
         public List<int> GetInventoryObjectIds()
         {
-            return storage.GetItemObjectIds().ToList();
+            return storage.GetAllItemObjectIds().ToList();
         }
 
         public List<int> GetInitInventoryObjectIds()

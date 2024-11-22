@@ -747,7 +747,7 @@ internal class PacketHandler
     {
         S_ChangeAppearance packet = message as S_ChangeAppearance;
         Managers.SystemLog.Message("S_ChangeAppearanceHandler");
-        Managers.SystemLog.Message($"S_ChangeAppearanceHandler {packet.ObjectId}, {packet.GunId}");
+        Managers.SystemLog.Message($"S_ChangeAppearanceHandler {packet.ObjectId}, {packet.GunType.Part}");
 
         if(packet.ObjectId == Managers.Object.MyPlayer.Id)
         {
@@ -756,15 +756,16 @@ internal class PacketHandler
 
         GameObject targetPlayer = Managers.Object.FindById(packet.ObjectId);
        
-
-        if (packet.GunId == 0)
+            
+        if (packet.GunType.Part == 0)
         {
             Managers.SystemLog.Message("S_ChangeAppearanceHandler : no usingGun in hand");
             targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
             return;
         }
 
-        Sprite targetSprite = Resources.Load<Sprite>($"Sprite/Item/{Data_master_item_base.GetData(packet.GunId).icon}");
+        //Sprite targetSprite = Resources.Load<Sprite>($"Sprite/Item/{Data_master_item_base.GetData(packet.GunId).icon}");
+        Sprite targetSprite = Resources.Load<Sprite>($"Sprite/Item/{Data_master_item_base.GetData(packet.GunType.Item.ItemId).icon}");
         if(targetSprite == null)
         {
             Managers.SystemLog.Message("S_ChangeAppearanceHandler : Can't find item with packet.GunId");
@@ -795,10 +796,12 @@ internal class PacketHandler
     internal static void S_GundataUpdateHandler(PacketSession session, IMessage message)
     {
         S_GundataUpdate packet = message as S_GundataUpdate;
+
+       // Managers.SystemLog.Message($"{packet.GunData}");
         Managers.SystemLog.Message("S_GundataUpdateHandler");
 
         //서버 완성시 해제
-        //Managers.Object.MyPlayer.usingGun.ReloadDone(packet.GunData.Item.Attributes.LoadedAmmo);
+        Managers.Object.MyPlayer.usingGun.ReloadDone(packet.GunData.Item.Attributes.LoadedAmmo);
 
     }
 

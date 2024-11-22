@@ -283,10 +283,10 @@ class PacketHandler
         C_ChangeAppearance packet = (C_ChangeAppearance)message;
         Console.WriteLine($"[C_ChangeAppearance]");
         Console.WriteLine($"playerid : {packet.ObjectId}");
-        Console.WriteLine($"gunId : {packet.GunId}"); //총의 마스터 아이디 -> 아이템 오브젝트 아이디
+        //Console.WriteLine($"gunId : {packet.GunId}"); //총의 마스터 아이디 -> 아이템 오브젝트 아이디
         Player player = clientSession.MyPlayer;
         
-        player.gameRoom.Push(player.gameRoom.ChangeAppearance, player, packet.ObjectId, packet.GunId);
+        player.gameRoom.Push(player.gameRoom.ChangeAppearance, player, packet.ObjectId, packet.GunType);
     }
 
     internal static void C_InputDataHandler(PacketSession session, IMessage message)

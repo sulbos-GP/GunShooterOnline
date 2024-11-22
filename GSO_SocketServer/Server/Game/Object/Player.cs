@@ -25,7 +25,7 @@ public class Player : CreatureObj
     public ItemCoolDown ItemCoolDown = new();
     public Inventory inventory;
     public Gear gear;
-    public Gun gun = new();
+    public WeaponInventory weapon = new WeaponInventory();
     public Quests Quest;
     public CredentiaInfo credential;
 
@@ -41,6 +41,12 @@ public class Player : CreatureObj
         //바꾼 부분(패킷핸들러의 C_EnterGameHandler에서 플레이어 설정)
         //inventory = new Inventory(Id,6, 7);
         Vision = new VisionRegion(this);
+
+  
+       /* gear = new Gear(this);
+        inventory = new Inventory(this);
+        Quest = new Quests(this);*/
+
 
         stat.MergeFrom(new StatInfo()
         {
@@ -59,10 +65,19 @@ public class Player : CreatureObj
         currentShape = rectangle;
 
 
-        gun.Init(this);
+
+
+
 
         SpawnTime = System.Environment.TickCount;
 
+    }
+
+
+    public void Init()
+    {
+
+        weapon.Init(this);
     }
 
     public ClientSession Session { get; set; }
@@ -148,12 +163,12 @@ public class Player : CreatureObj
 
 
         //SourcelItem의 수량을 전부 소진한 경우
-        if (lessAmount == 0)
+       if (lessAmount == 0)
         {
             bool isDelete = sourceStorage.DeleteItem(sourceItem);
             if (false == isDelete)
             {
-                /*//나눠진 아이템을 삭제한다
+                /* //나눠진 아이템을 삭제한다
                 destinationStorage.DeleteItem(devideItem);
 
                 //CombinedItem의 수량 감소에 성공했을 테니까 기존에 정보로 되돌려준다

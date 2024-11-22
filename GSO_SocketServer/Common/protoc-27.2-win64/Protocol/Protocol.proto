@@ -357,12 +357,16 @@ message S_GameStart {     //32  모두 모임
 
 message C_ChangeAppearance{ // 33
     int32 objectId = 1;  // 패킷을 보낸 플레이어의 아이디
-    int32 gunId = 2; //해당 총의 오브젝트 ID
+    PS_GearInfo GunType = 2; //지금은 타입만
+    //int32 GunId = 3; // GunType으로 옮기기
+
 }
 
 message S_ChangeAppearance{ //34
     int32 objectId = 1;  // 패킷을 보낸 플레이어의 아이디
-    int32 gunId = 2; //해당 총의 마스터ID
+    PS_GearInfo GunType = 2; //지금은 타입만
+    //int32 GunId = 3; //GunType으로 옮기기
+
 }
 
 message C_InputData {  //35
@@ -372,7 +376,8 @@ message C_InputData {  //35
 }
 
 message S_GundataUpdate{  //37 (지승현)추후 많은 데이터 업데이트 예정
-    PS_GearInfo gunData =1;  
+    bool isSuccess = 1;
+    PS_GearInfo gunData = 2;  
 }
 
 ////////////////////////////////////////////

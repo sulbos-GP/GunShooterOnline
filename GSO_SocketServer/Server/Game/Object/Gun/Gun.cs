@@ -11,16 +11,19 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
 using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.MasterDatabase;
 
 namespace Server.Game
 {
     public class Gun
     {
-        public Player ownerPlayer;
+        WeaponInventory weaponInven;
+        public Player ownerPlayer { get => weaponInven.ownerPlayer; } 
 
-       
+
         public GunState UsingGunState { get; private set; } //현재 총의 상태 : shootable, empty, reload
         public FMasterItemWeapon GunData { get; private set; } //현재 사용중인 총의 스텟 데이터
         public ItemObject gunItemData; //해당 총에 장전된 총알이 있을경우 불러오기 위함
@@ -58,25 +61,26 @@ namespace Server.Game
             return GunData;
         }
 
-        public void Init(Player p)
+        public void Init(WeaponInventory weapon)
         {
-            ownerPlayer = p;
-            ResetGun();
+            weaponInven = weapon;
+            //ResetGun();
         }
 
         //클라로부터 사용할 총을 지정하여 ChangeAppearence 패킷을 받은 경우 => 총의 번호가 유효할 경우
         public void SetGunData(int gunItemId) //여기의 id는 총의 오브젝트 ID
         {
             gunItemData = ObjectManager.Instance.Find<ItemObject>(gunItemId);
-            GunData = DatabaseHandler.Context.MasterItemWeapon.Find(gunItemData.ItemId); 
-            UsingGunState = CurAmmo == 0 ? GunState.Empty : GunState.Shootable; 
+            GunData = DatabaseHandler.Context.MasterItemWeapon.Find(gunItemData.ItemId);
+            UsingGunState = CurAmmo == 0 ? GunState.Empty : GunState.Shootable;
         }
         //=> 총의 번호가 0일 경우 (들고 있는 총이 없음)
         public void ResetGun()
         {
             GunData = null;
             gunItemData = null;
-            CurAmmo = 0;
+           
+             CurAmmo = 0;
             UsingGunState = GunState.Empty;
         }
 
@@ -84,7 +88,7 @@ namespace Server.Game
         public async void Fire(Player attacker, Vector2 pos, Vector2 dir)
         {   // TODO : 20240903 주석제거 
             //플레이어가 착용한 총의 정보
-            if (UsingGunState != GunState.Shootable)
+            if (UsingGunState != GunState.Shootable && gunItemData.Loaded_ammo == 0)
             {
                 //발사 실패
                 Console.WriteLine("Gun is not Shootable State");
@@ -105,7 +109,7 @@ namespace Server.Game
             //충돌된 객체 없음
             if (hit2D.Collider == null)
             {
-                
+
                 BroadcastHitPacket(-1, attacker, pos, endPos);
                 Console.WriteLine("hit is null");
                 await WaitForReadyToFire();
@@ -128,7 +132,7 @@ namespace Server.Game
                 CreatureObj creatureObj = hitObject as CreatureObj;
 
                 //TODO : 피격자의 hp 변화  attacker 밑에 넣기 240814지승현
-                creatureObj.OnDamaged(attacker, attacker.gun.Damage);
+                creatureObj.OnDamaged(attacker, attacker.weapon.GetCurrentWeapon().Damage);
 
                 BroadcastChangeHpPacket(attacker, creatureObj);
 
@@ -142,14 +146,14 @@ namespace Server.Game
             await WaitForReadyToFire();
         }
 
-        
+
 
         //히트 판정을 내릴 객체 타입을 정의
         private static bool CheckHitObjectType(GameObject hitObject)
         {
             return hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster;
         }
-        
+
 
         private Vector2 GetEndPos(Vector2 pos, Vector2 direction)
         {
@@ -211,76 +215,112 @@ namespace Server.Game
         //재장전 버튼 누를시
         public void Reload()
         {
-            //part추가
-
-            //나중에 수정
-            var ammo = ownerPlayer.inventory.FindItem();
-            
-            if(ammo != null)
-            {
-                int target = GunData.reload_round - CurAmmo;
-
-          
-                if(ammo.Amount >= target)       //넉넉함
-                {
-                    int next = ammo.Amount - target;
-                    //ownerPlayer.inventory.UpdateItem(ammo);
-                    ownerPlayer.gameRoom.DeleteItemHandler(ownerPlayer, 0, ammo.Id);
-
-                    ammo.Amount = next;
-                }
-                else                            //인벤에 있는 총알이 부족함
-                {
-                    int next = ammo.Amount;
-
-                    //ownerPlayer.gameRoom.DeleteItemHandler(ownerPlayer, 0, ammo.Id);
-
-                }
-
-
-
-
-
-
-
-            }
-            else                        //총알이 없음
-            {
-
-            }
-            
-
-
-            if (CurAmmo < GunData.reload_round && UsingGunState != GunState.Reloading )
+            if (CurAmmo < GunData.reload_round && UsingGunState != GunState.Reloading)
             {
                 UsingGunState = GunState.Reloading;
-                ownerPlayer.gameRoom.PushAfter(GunData.reload_time * 1000 ,HandleReload);
+                ownerPlayer.gameRoom.PushAfter(GunData.reload_time * 1000, HandleReload);
 
             }
 
 
-            S_GundataUpdate s_GundataUpdate = new S_GundataUpdate();
-
-
-            s_GundataUpdate.GunData = new PS_GearInfo();
-            s_GundataUpdate.GunData.Part = PE_GearPart.MainWeapon;
-            s_GundataUpdate.GunData.Item = new PS_ItemInfo();
-            s_GundataUpdate.GunData.Item.ObjectId = gunItemData.Id;
-            s_GundataUpdate.GunData.Item.ItemId = GunData.item_id;
-            s_GundataUpdate.GunData.Item.Attributes = new PS_ItemAttributes();
-            s_GundataUpdate.GunData.Item.Attributes.LoadedAmmo = GunData.reload_round;
-            //s_GundataUpdate.GunData.Item.Attributes.LoadedAmmo = CurAmmo;
-
-
-
-            ownerPlayer.Session.Send(s_GundataUpdate);
         }
 
         //실질적인 재장전
-        private void HandleReload()
+        private async void HandleReload()
         {
-            CurAmmo = GunData.reload_round;
+            //CurAmmo = GunData.reload_round;
             UsingGunState = GunState.Shootable;
+
+            //part추가 gunItemData.Loaded_ammo = 0; gunItemData.LimitAmount = 1; GunData.reload_round = 40; 
+
+            //나중에 수정
+            List<ItemObject> ammos = ownerPlayer.inventory.FindItemAllByType(itemType: Inventory.ItemType.Ammo);
+            
+            if (ammos == null || ammos.Count == 0)
+            {
+                await Console.Out.WriteLineAsync("Ammo is null");
+                return;         //DOTO : 실패 페킷 보내기
+
+            }
+
+
+            foreach (ItemObject ammo in ammos)
+            {
+
+                //DB
+                using (var database = DatabaseHandler.GameDB)
+                {
+                    using (var transaction = database.GetConnection().BeginTransaction())
+                    {
+                        try
+                        {
+                            int target = GunData.reload_round - CurAmmo; //최대 장전 할 수 있는 총알
+                            int next; //내가 장전 가능한 총알 개수 
+
+                            if (ammo.Amount >= target)       //넉넉함
+                            {
+                                next = target;
+                                ammo.Amount = ammo.Amount - next;
+
+                                await ownerPlayer.inventory.UpdateItem(ammo, ammo, database, transaction);
+                            }
+                            else                            //인벤에 있는 총알이 부족함
+                            {
+                                next = ammo.Amount;
+
+                                await  ownerPlayer.inventory.DeleteItem(ammo,database,transaction);
+                                //ownerPlayer.gameRoom.DeleteItemHandler(ownerPlayer, 0, ammo.Id);
+                            }
+
+                            ownerPlayer.weapon.GetCurrentWeapon().CurAmmo = next;
+
+                            int LeftAmount = ownerPlayer.inventory.storage.DecreaseAmount(ammo, next);
+
+                            if (LeftAmount == 0)
+                            {
+                                bool isDelete = ownerPlayer.inventory.storage.DeleteItem(ammo);
+                                if (false == isDelete)
+                                {
+                                    //실패면 ?
+                                }
+                            }
+                            
+                            
+                            S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
+                            gunDataUpdate.IsSuccess = true;
+                            gunDataUpdate.GunData = new PS_GearInfo
+                            {
+                                Part = weaponInven.GetCurrentWeaponGearPart(),
+                                Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
+                            };
+
+
+                            ownerPlayer.Session.Send(gunDataUpdate);
+
+                            CurAmmo = next;
+                            transaction.Commit();
+
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine($"[Ammo Error] : {e.Message.ToString()}");
+                            transaction.Rollback();
+
+                        }
+
+                      
+                    }
+                }
+               
+
+            }
+
+
+
+
+            //s_GundataUpdate.GunData.Item.Attributes.LoadedAmmo = CurAmmo;
+
+            Console.WriteLine($"Current Ammo : {gunItemData.Loaded_ammo}, Max Ammo :  {GunData.reload_round}");
 
 
         }

@@ -64,32 +64,64 @@ namespace Server.Game.Object.Item
             Random rand = new Random();
             int number = rand.Next(1, 6);
 
+
+            SetItem(501);
+            return;
             bool result = true;
 
-                switch (number)
-                {
-                    case 1:
-                        result = RandomItem(101, 103);
-                        break;
-                    case 2:
-                        result = RandomItem(201, 203);
-                        break;
-                    case 3:
-                        result = RandomItem(300, 303);
-                        break;
-                    case 4:
-                        result = RandomItem(401, 404);
-                        break;
-                    case 5:
-                        result = RandomItem(501, 502);
-                        break;
-                    case 6:
-                        result = RandomItem(601, 606);
-                        break;
-                }
-            
+            switch (number)
+            {
+                case 1:
+                    result = RandomItem(101, 103);
+                    break;
+                case 2:
+                    result = RandomItem(201, 203);
+                    break;
+                case 3:
+                    result = RandomItem(300, 303);
+                    break;
+                case 4:
+                    result = RandomItem(401, 404);
+                    break;
+                case 5:
+                    result = RandomItem(501, 502);
+                    break;
+                case 6:
+                    result = RandomItem(601, 606);
+                    break;
+            }
+
 
         }
+
+
+        public bool SetItem(int id)
+        {
+            FMasterItemBase data = DatabaseHandler.Context.MasterItemBase.Find(id);
+            DB_ItemUnit item = new DB_ItemUnit()
+            {
+                storage = new DB_StorageUnit()
+                {
+                    grid_x = 0,
+                    grid_y = 0,
+                    rotation = 1,
+                    unit_attributes_id = 0
+                },
+
+                attributes = new DB_UnitAttributes()
+                {
+                    item_id = data.item_id,
+                    durability = 0,
+                    unit_storage_id = null,
+                    amount = 10,
+                }
+            };
+            ItemObject newItem = new ItemObject(item);
+            EStorageError error = storage.InsertItem(newItem);
+
+            return error == EStorageError.None ? true : false;
+        }
+
 
         public bool RandomItem(int min, int max)
         {

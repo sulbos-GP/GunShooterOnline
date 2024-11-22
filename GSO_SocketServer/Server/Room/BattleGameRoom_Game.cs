@@ -267,7 +267,7 @@ namespace Server
                     return;
                 }
                 //Combined의 수량을 전부 소진한 경우
-                if (lessAmount == 0)
+                if (lessAmount == -1)
                 {
                     bool isDelete = destinationStorage.DeleteItem(combinedItem);
                     if (false == isDelete)
@@ -877,19 +877,25 @@ namespace Server
             return storage;
         }
 
-        internal void ChangeAppearance(Player player,int targetId, int gunId)
+        internal void ChangeAppearance(Player player,int targetId, PS_GearInfo info)
         {
             S_ChangeAppearance packet = new S_ChangeAppearance();
             packet.ObjectId = targetId;
-            if (gunId == 0) //총을 들고 있지 않음
+            if (info.Item.ObjectId == 0) //총을 들고 있지 않음
             {
-                player.gun.ResetGun(); 
-                packet.GunId = 0;
+                player.weapon.ResetGun();
+                //packet.GunId = 0;
+                packet.GunType = null;
             }
             else
             {
-                player.gun.SetGunData(gunId);
-                packet.GunId = player.gun.GunData.item_id;
+                player.weapon.SetGunData(info); //TODO : 0 or 1
+                //packet.GunId = player.weapon.GetCurrentWeapon().GunData.item_id;
+                packet.GunType = new PS_GearInfo()
+                {
+                    Item = player.weapon.GetCurrentWeapon().gunItemData.ConvertItemInfo(player.Id),
+                    Part = player.weapon.GetCurrentWeaponGearPart()
+                };
             }
 
             BroadCast(packet);
@@ -899,7 +905,7 @@ namespace Server
         {
              if (packet.Reload)
              {
-                 player.gun.Reload();
+                 player.weapon.Reload();
              }
 
             if (packet.ItemId != 0)
@@ -919,11 +925,8 @@ namespace Server
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir)
         {
-            if (attacker.gun.UsingGunState != GunState.Shootable) 
-            {
-                return;
-            }
-            attacker.gun.Fire(attacker,pos, dir);   
+           
+            attacker.weapon.Fire(attacker,pos, dir);   
         }
 
         public void HandleExitGame(Player player, int exitId)
@@ -1004,7 +1007,7 @@ namespace Server
                 }
             }
 #else
-            if (tempPlayer.Count == 2) //접속할 인원에 따라 변경
+            if (tempPlayer.Count == 1) // 접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();

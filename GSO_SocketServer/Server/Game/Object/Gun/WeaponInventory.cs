@@ -1,0 +1,134 @@
+﻿using Google.Protobuf.Protocol;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Numerics;
+using System.Text;
+using System.Threading.Tasks;
+using WebCommonLibrary.Enum;
+
+namespace Server.Game
+{
+
+    public class WeaponInventory
+    {
+
+
+        private enum currentWeapon
+        {
+            None = 0,
+            MAIN = 1,
+            SUB = 2,
+        }
+
+
+        public Player ownerPlayer;
+
+
+
+        currentWeapon current = currentWeapon.None;
+
+
+        public Gun MainGun;
+        public Gun SubGun;
+
+
+
+        internal void Init(Player player)
+        {
+            current = currentWeapon.None;
+
+            ownerPlayer = player;
+
+
+            MainGun = new Gun();
+            MainGun.SetGunData(ownerPlayer.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.MainWeapon).Id);
+            MainGun.Init(this);
+
+
+            SubGun = new Gun();
+            SubGun.SetGunData(ownerPlayer.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.SubWeapon).Id);
+            SubGun.Init(this);
+        }
+
+     
+
+
+        public PE_GearPart GetCurrentWeaponGearPart()
+        {
+            switch (current)
+            {
+                case currentWeapon.MAIN:
+                    return PE_GearPart.MainWeapon;
+                case currentWeapon.SUB:
+                    return PE_GearPart.SubWeapon;
+                default:
+                    Console.WriteLine("Error : currentType is Zero");
+                    return PE_GearPart.None;
+            }
+        }
+    
+        public Gun GetCurrentWeapon()
+        {
+            switch (current)
+            {
+                case currentWeapon.MAIN:
+                    return MainGun;
+                case currentWeapon.SUB:
+                    return SubGun;
+                default:
+                    Console.WriteLine("Error : currentType is Zero");
+                    return null;
+            }
+        }
+        internal void Fire(Player attacker, Vector2 pos, Vector2 dir)
+        {
+            if (GetCurrentWeapon().UsingGunState != GunState.Shootable)
+            {
+                return;
+            }
+            GetCurrentWeapon().Fire(attacker, pos, dir);
+        }
+
+        internal void ResetGun()
+        {
+            current = currentWeapon.None;
+            GetCurrentWeapon().ResetGun();
+        }
+
+        internal void SetGunData(PS_GearInfo info)
+        {
+            int gunId = 0;
+
+            switch (info.Part)
+            {
+                case PE_GearPart.None:
+                    Console.WriteLine("WeaponInventory info.Part is None");
+                    break;
+                case PE_GearPart.MainWeapon:
+                    current = currentWeapon.MAIN;
+                    gunId = ownerPlayer.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.MainWeapon).Id;
+                    break;
+                case PE_GearPart.SubWeapon:
+                    current = currentWeapon.SUB;
+                    gunId = ownerPlayer.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.SubWeapon).Id;
+
+                    break;
+              
+            }
+
+
+            
+
+            GetCurrentWeapon().SetGunData(gunId);
+
+        }
+
+        internal void Reload()
+        {
+            GetCurrentWeapon().Reload();
+
+        }
+    }
+
+}
