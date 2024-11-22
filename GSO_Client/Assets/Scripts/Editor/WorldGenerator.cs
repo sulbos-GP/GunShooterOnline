@@ -206,6 +206,9 @@ public class WorldGenerator
         Tilemap _box = null;
         Tilemap _exit = null;
         Tilemap _spawn = null;
+        Tilemap _mine = null;
+        Tilemap _aiSpawn = null;
+
         foreach (Transform _tr in tr)
         {
             if (_tr.name.Contains("base") == true)
@@ -224,10 +227,20 @@ public class WorldGenerator
             {
                 _exit = _tr.GetComponent<Tilemap>();
             }
+            else if (_tr.name.Contains("AiSpawnZone") == true)
+            {
+                _aiSpawn = _tr.GetComponent<Tilemap>();
+            }
             else if (_tr.name.Contains("SpawnZone") == true)
             {
                 _spawn = _tr.GetComponent<Tilemap>();
             }
+            else if (_tr.name.Contains("MineZone") == true)
+            {
+                _mine = _tr.GetComponent<Tilemap>();
+            }
+           
+            
         }
 
         //------------------------ _base Ã£±â ------------------------
@@ -265,6 +278,9 @@ public class WorldGenerator
                 TileBase boxTile = _box.GetTile(new Vector3Int(x, y, 0));
                 TileBase exitTile = _exit.GetTile(new Vector3Int(x, y, 0));
                 TileBase spawnTile = _spawn.GetTile(new Vector3Int(x, y, 0));
+                TileBase mineTile = _mine.GetTile(new Vector3Int(x, y, 0));
+                TileBase aiSpawnTile = _aiSpawn.GetTile(new Vector3Int(x, y, 0));
+
 
                 if (wallTile != null)
                 {
@@ -291,6 +307,16 @@ public class WorldGenerator
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 4;
+                }  
+                else if(mineTile != null)
+                {
+                    if (map[currnet.x, currnet.y] == 0)
+                        map[currnet.x, currnet.y] = 5;
+                }  
+                else if(aiSpawnTile != null)
+                {
+                    if (map[currnet.x, currnet.y] == 0)
+                        map[currnet.x, currnet.y] = 6;
                 }
                 else
                 {
