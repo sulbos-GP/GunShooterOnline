@@ -129,7 +129,7 @@ namespace Server
 
             if (type == GameObjectType.Player)
             {
-                var player = gameObject as Player;
+                Player player = gameObject as Player;
                 player.gameRoom = this;
 
 
@@ -165,15 +165,13 @@ namespace Server
                         Console.WriteLine("player.UID add same");
                     }
 
-
-
                     player.gear = new Gear(player);
                     foreach (PS_GearInfo item in player.gear.GetPartItems(player.Id))
                     {
                         enterPacket.GearInfos.Add(item);
                     }
 
-                    player.inventory = new Inventory(player);
+                   player.inventory = new Inventory(player);
                     foreach (PS_ItemInfo item in player.inventory.storage.GetItems(player.Id))
                     {
                         enterPacket.ItemInfos.Add(item);
@@ -184,6 +182,8 @@ namespace Server
                     {
                         enterPacket.Quests.Add(quest.Packet);
                     }
+
+                    player.Init();
 
                     player.inventory.storage.PrintInvenContents();
                     player.Session.Send(enterPacket);

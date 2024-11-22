@@ -211,7 +211,7 @@ namespace Server.Game
 
 
         /// <summary>
-        /// 아이템 수량 감소 (0일 경우 삭제)
+        /// 아이템 수량 감소 (return이  -1 일 경우 실패, 0이면 삭제 해야함)
         /// </summary>
         public int DecreaseAmount(ItemObject item, int amount)
         {
@@ -311,9 +311,13 @@ namespace Server.Game
             return items[index];
         }
 
-        public List<int> GetItemObjectIds()
+        public List<int> GetAllItemObjectIds()
         {
             return items.Select(item => item.Id).ToList();
+        }
+        public List<int> GetAllItemItemIds()
+        {
+            return items.Select(item => item.ItemId).ToList();
         }
 
         public void ClearStorage()

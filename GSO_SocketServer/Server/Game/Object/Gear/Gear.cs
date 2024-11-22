@@ -308,7 +308,7 @@ namespace Server.Game.Object.Gear
             List<int> itemIds = new List<int>();
             foreach (var (part, item) in parts)
             {
-                var items = item.GetItemObjectIds();
+                var items = item.GetAllItemObjectIds();
                 if(items.Count == 1)
                 {
                     itemIds.Add(items[0]);
