@@ -90,10 +90,10 @@ public class Player : CreatureObj
 
     public override void OnDamaged(GameObject attacker, int damage)
     {
-        if (DamageReflexAction != null)
+       /* if (DamageReflexAction != null)
             DamageReflexAction(attacker);
-        else
-            base.OnDamaged(attacker, damage);
+        else*/
+        base.OnDamaged(attacker, damage);
     }
 
     public override void OnDead(GameObject attacker)

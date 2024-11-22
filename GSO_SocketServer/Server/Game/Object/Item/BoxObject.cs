@@ -54,7 +54,6 @@ namespace Server.Game.Object.Item
         public void Init(Vector2 pos)
         {
 
-            CellPos = pos;
 
             info.Name = "Box" + Id;
 
@@ -91,6 +90,7 @@ namespace Server.Game.Object.Item
                     break;
             }
 
+            CellPos = pos;
 
         }
 

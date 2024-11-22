@@ -1,6 +1,7 @@
 ﻿using Google.Protobuf.Protocol;
 using Server.Database.Handler;
 using Server.Game;
+using Server.Game.Object;
 using Server.Game.Object.Gear;
 using Server.Game.Object.Item;
 using Server.Server;
@@ -10,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Threading;
 using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
@@ -18,7 +20,7 @@ namespace Server
 {
     public partial class BattleGameRoom
     {
-        
+
         public void HandleMove(Player player, C_Move packet)
         {
             if (player == null)
@@ -63,14 +65,14 @@ namespace Server
             S_LoadInventory packet = new S_LoadInventory();
 
             Inventory inventory = player.inventory;
-            if(inventory == null)
+            if (inventory == null)
             {
                 packet.IsSuccess = false;
                 player.Session.Send(packet);
                 return;
             }
 
-            foreach(PS_ItemInfo item in inventory.storage.GetItems(player.Id))
+            foreach (PS_ItemInfo item in inventory.storage.GetItems(player.Id))
             {
                 packet.ItemInfos.Add(item);
             }
@@ -105,7 +107,7 @@ namespace Server
                 return;
             }
 
-            if(true == box.IsOpen())
+            if (true == box.IsOpen())
             {
                 packet.IsSuccess = false;
                 player.Session.Send(packet);
@@ -176,7 +178,7 @@ namespace Server
                 return;
             }
 
-            if(true == sourcelItem.IsViewer(player.Id))
+            if (true == sourcelItem.IsViewer(player.Id))
             {
                 packet.IsSuccess = false;
                 packet.SourceObjectId = sourceObjectId;
@@ -493,7 +495,7 @@ namespace Server
                                     await gear.DeleteGear((EGearPart)sourceObjectId, sourceItem, database, transaction);
                                 }
                             }
-                            
+
                             if (IsInventory(destinationObjectId))
                             {
                                 Inventory inventory = player.inventory;
@@ -529,20 +531,20 @@ namespace Server
                             player.Session.Send(packet);
                         }
                     }
-                }           
+                }
             }
         }
 
         internal async void MoveItemHandler(Player player, int sourceObjectId, int destinationObjectId, int sourceMoveItemId, int destinationGridX, int destinationGridY, int destinationRotation)
         {
-            
+
             S_MoveItem packet = new S_MoveItem();
             packet.SourceObjectId = sourceObjectId;
             packet.DestinationObjectId = destinationObjectId;
 
             ItemObject sourceMovelItem = ObjectManager.Instance.Find<ItemObject>(sourceMoveItemId);
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourceMovelItem);
-            if(sourceStorage == null)
+            if (sourceStorage == null)
             {
                 packet.IsSuccess = false;
                 player.Session.Send(packet);
@@ -551,7 +553,7 @@ namespace Server
             PS_ItemInfo oldSourceMoveItemInfo = sourceMovelItem.ConvertItemInfo(player.Id);
 
             Storage destinationStorage = GetStorage(player, destinationObjectId);
-            if(sourceStorage == null)
+            if (sourceStorage == null)
             {
                 packet.IsSuccess = false;
                 packet.SourceMoveItem = oldSourceMoveItemInfo;
@@ -561,7 +563,7 @@ namespace Server
             }
 
             bool isDelete = sourceStorage.DeleteItem(sourceMovelItem);
-            if(false == isDelete)
+            if (false == isDelete)
             {
                 packet.IsSuccess = false;
                 packet.SourceMoveItem = oldSourceMoveItemInfo;
@@ -572,7 +574,7 @@ namespace Server
             DB_ItemUnit moveUnit = new DB_ItemUnit()
             {
                 storage = new DB_StorageUnit()
-                { 
+                {
                     grid_x = destinationGridX,
                     grid_y = destinationGridY,
                     rotation = destinationRotation,
@@ -607,7 +609,7 @@ namespace Server
                         else if (IsGear(sourceObjectId))
                         {
                             Gear gear = player.gear;
-                            isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, sourceMovelItem,database, transaction);
+                            isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, sourceMovelItem, database, transaction);
                         }
 
                         if (IsInventory(destinationObjectId))
@@ -646,68 +648,68 @@ namespace Server
 
         }
 
-      /*  internal async Task<ItemObject> DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
-        {
-            S_DeleteItem packet = new S_DeleteItem();
+        /*  internal async Task<ItemObject> DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
+          {
+              S_DeleteItem packet = new S_DeleteItem();
 
-            ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
-            PS_ItemInfo deleteInfo = deleteItem.ConvertItemInfo(player.Id);
+              ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
+              PS_ItemInfo deleteInfo = deleteItem.ConvertItemInfo(player.Id);
 
-            Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
-            if (storage == null)
-            {
-                packet.IsSuccess = false;
-                packet.DeleteItem = deleteInfo;
-                packet.SourceObjectId = sourceObjectId;
-                player.Session.Send(packet);
-                return null;
-            }
+              Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
+              if (storage == null)
+              {
+                  packet.IsSuccess = false;
+                  packet.DeleteItem = deleteInfo;
+                  packet.SourceObjectId = sourceObjectId;
+                  player.Session.Send(packet);
+                  return null;
+              }
 
-            bool isDelete = storage.DeleteItem(deleteItem);
-            if(false == isDelete)
-            {
-                packet.IsSuccess = false;
-                packet.DeleteItem = deleteInfo;
-                packet.SourceObjectId = sourceObjectId;
-                player.Session.Send(packet);
-                return null;
-            }
+              bool isDelete = storage.DeleteItem(deleteItem);
+              if(false == isDelete)
+              {
+                  packet.IsSuccess = false;
+                  packet.DeleteItem = deleteInfo;
+                  packet.SourceObjectId = sourceObjectId;
+                  player.Session.Send(packet);
+                  return null;
+              }
 
-            return deleteItem;
+              return deleteItem;
 
-            using (var database = DatabaseHandler.GameDB)
-            {
-                try
-                {
+              using (var database = DatabaseHandler.GameDB)
+              {
+                  try
+                  {
 
-                    if (IsInventory(sourceObjectId))
-                    {
-                        Inventory inventory = player.inventory;
-                        isDelete = await inventory.DeleteItem(deleteItem, database);
-                    }
-                    else if (IsGear(sourceObjectId))
-                    {
-                        Gear gear = player.gear;
-                        isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, deleteItem, database);
-                    }
+                      if (IsInventory(sourceObjectId))
+                      {
+                          Inventory inventory = player.inventory;
+                          isDelete = await inventory.DeleteItem(deleteItem, database);
+                      }
+                      else if (IsGear(sourceObjectId))
+                      {
+                          Gear gear = player.gear;
+                          isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, deleteItem, database);
+                      }
 
-                    packet.IsSuccess = true;
-                    packet.SourceObjectId = sourceObjectId;
-                    packet.DeleteItem = deleteInfo;
-                    player.Session.Send(packet);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"[DeleteItem] : {e.Message.ToString()}");
+                      packet.IsSuccess = true;
+                      packet.SourceObjectId = sourceObjectId;
+                      packet.DeleteItem = deleteInfo;
+                      player.Session.Send(packet);
+                  }
+                  catch (Exception e)
+                  {
+                      Console.WriteLine($"[DeleteItem] : {e.Message.ToString()}");
 
-                    packet.IsSuccess = false;
-                    packet.DeleteItem = deleteInfo;
-                    packet.SourceObjectId = sourceObjectId;
-                    player.Session.Send(packet);
-                }
-            }
+                      packet.IsSuccess = false;
+                      packet.DeleteItem = deleteInfo;
+                      packet.SourceObjectId = sourceObjectId;
+                      player.Session.Send(packet);
+                  }
+              }
 
-        }*/
+          }*/
 
         //메모리에서 아이템 지우기
         internal ItemObject FindAndDeleteItem(Player player, int sourceObjectId, int deleteItemId, out PS_ItemInfo deleteInfo)
@@ -829,7 +831,7 @@ namespace Server
 
                 return inventory.storage;
             }
-            else if(0 < storageObjectId && storageObjectId <= 7)
+            else if (0 < storageObjectId && storageObjectId <= 7)
             {
                 Gear gear = player.gear;
                 if (gear == null)
@@ -854,12 +856,12 @@ namespace Server
         public Storage GetStorageWithScanItem(Player player, int storageObjectId, ItemObject scanItem)
         {
             Storage storage = GetStorage(player, storageObjectId);
-            if(storage == null)
+            if (storage == null)
             {
                 return null;
             }
 
-            if(scanItem == null)
+            if (scanItem == null)
             {
                 return null;
             }
@@ -869,7 +871,7 @@ namespace Server
                 return null;
             }
 
-            if(false == scanItem.IsViewer(player.Id))
+            if (false == scanItem.IsViewer(player.Id))
             {
                 return null;
             }
@@ -877,7 +879,7 @@ namespace Server
             return storage;
         }
 
-        internal void ChangeAppearance(Player player,int targetId, PS_GearInfo info)
+        internal void ChangeAppearance(Player player, int targetId, PS_GearInfo info)
         {
             S_ChangeAppearance packet = new S_ChangeAppearance();
             packet.ObjectId = targetId;
@@ -903,10 +905,10 @@ namespace Server
 
         internal void HandleInputData(Player player, C_InputData packet)
         {
-             if (packet.Reload)
-             {
-                 player.weapon.Reload();
-             }
+            if (packet.Reload)
+            {
+                player.weapon.Reload();
+            }
 
             if (packet.ItemId != 0)
             {
@@ -925,8 +927,8 @@ namespace Server
 
         internal void HandleRayCast(Player attacker, Vector2 pos, Vector2 dir)
         {
-           
-            attacker.weapon.Fire(attacker,pos, dir);   
+
+            attacker.weapon.Fire(attacker, pos, dir);
         }
 
         public void HandleExitGame(Player player, int exitId)
@@ -957,13 +959,13 @@ namespace Server
             //사람 전부 나가면 gameserver.Stop();
             //gameserver.Stop();
 
-            
+
 
             //stop 부분에 모든 남아있는 플레이어 처리!!!!
         }
 
 
-    
+
 
         List<Player> tempPlayer = new List<Player>();
 
@@ -1029,7 +1031,7 @@ namespace Server
 
             foreach (Player p in tempPlayer)
             {
-                if(_playerDic.TryAdd(p.Id, p) == true)
+                if (_playerDic.TryAdd(p.Id, p) == true)
                 {
 
                 }
@@ -1039,6 +1041,19 @@ namespace Server
                 }
             }
 
+            foreach (AISpawnZone zone in map.aispawnZones)
+            {
+
+                EnemyAI enemy = ObjectManager.Instance.Add<EnemyAI>();
+                {
+                    //enemy.info.Name = "AI";
+                    enemy.CellPos = zone.CellPos;
+                    enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+
+                }
+                EnterGame(enemy);
+
+            }
 
             foreach (Player p in tempPlayer)
             {
@@ -1047,6 +1062,7 @@ namespace Server
             }
 
 
+           
             S_GameStart s_GameStart = new S_GameStart()
             {
                 RoomId = this.RoomId,
@@ -1069,7 +1085,7 @@ namespace Server
 
             }
 
-            foreach (var m in _monsterDic.Values)
+            foreach (var m in _enemyDic.Values)
             {
                 s_GameStart.Objects.Add(m.info);
 
@@ -1099,10 +1115,10 @@ namespace Server
             IsGameStarted = true;
 
 
+
+
+
         }
-
-
-
 
         public void HandleJoin(CredentiaInfo credentiaInfo, Player player)
         {
@@ -1119,6 +1135,6 @@ namespace Server
 
         }
 
-        
+
     }
 }

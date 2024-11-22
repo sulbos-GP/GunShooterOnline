@@ -89,7 +89,7 @@ public class ObjectManager
 
 
         }
-        else if (type == GameObjectType.Monster)
+        else if (type == GameObjectType.Enemyai)
         {
             var go = Managers.Resource.Instantiate($"Creature/Enemy/{info.Name}");
             //GameObject go = Managers.Resource.Instantiate("Creature/{}");
@@ -100,6 +100,13 @@ public class ObjectManager
                 Managers.SystemLog.Message($"{info.ObjectId} _objects add fail");
             }
 
+
+            //성훈아 지워라
+            go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
+            //end
+
+
+            Debug.Log("================성훈이 요기야====================== ");  //Enemyai  CLASS추가
             var mc = go.GetComponent<MonsterController>();
 
 
@@ -123,7 +130,7 @@ public class ObjectManager
 
             //mc.transform.gameObject.SetActive(false);
         }
-        else if (type == GameObjectType.Projectile)
+        /*else if (type == GameObjectType.Projectile)
         {
             var go = Managers.Resource.Instantiate($"Objects/{info.Name}");
 
@@ -143,7 +150,7 @@ public class ObjectManager
                 ac.SkillId = info.SkillId;
 
             //Debug.Log($"pos {ac.PosInfo.PosX}, {ac.PosInfo.PosY}");
-        }
+        }*/
         else if (type == GameObjectType.Box)
         {
             var go = Managers.Resource.Instantiate($"Objects/Box"); //생성할 오브젝트 경로(박스)
@@ -174,6 +181,21 @@ public class ObjectManager
                 Managers.SystemLog.Message("_objects add fail");
             }
 
+            ExitZone exitZone = go.GetComponent<ExitZone>();
+            exitZone.objectId = info.ObjectId;
+            exitZone.interactType = InteractType.Exit;
+            exitZone.exitTime = 5; //임시추가
+        }
+        else if (type == GameObjectType.Mine)
+        {
+            var go = Managers.Resource.Instantiate($"Objects/Mine"); //생성할 오브젝트 경로(박스)
+            go.name = $"{info.Name}"; //이름설정
+            go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
+            if (_objects.TryAdd(info.ObjectId, go) == false)
+            {
+                Managers.SystemLog.Message("_objects add fail");
+            }
+             Debug.Log("================성훈이 요기야====================== "); //Mine clASS
             ExitZone exitZone = go.GetComponent<ExitZone>();
             exitZone.objectId = info.ObjectId;
             exitZone.interactType = InteractType.Exit;

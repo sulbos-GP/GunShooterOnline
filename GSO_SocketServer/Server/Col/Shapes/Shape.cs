@@ -148,7 +148,7 @@ namespace Collision.Shapes
         {
             if (Type == ShapeType.CIRCLE)
                 return ((Circle)this).radius;
-            else if (Type == ShapeType.POLYGON) //할일 : 대각으로 바꿔야함
+            else if (Type == ShapeType.POLYGON || Type == ShapeType.RECTANGLE) //할일 : 대각으로 바꿔야함
             {
                 float max = 0;
                 float value = 0;
@@ -167,7 +167,7 @@ namespace Collision.Shapes
                         max = value;
                 }
 
-                return max;
+                return max * 5;
             }
             else
             {

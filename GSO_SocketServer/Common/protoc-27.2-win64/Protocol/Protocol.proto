@@ -62,7 +62,9 @@ enum GameObjectType{
     BOX = 5;
     ITEM = 6;
     EXITZONE = 7;
-    SPAWNZONE = 8;
+    PLAYERSPAWNZONE = 8;
+    MINE = 9;
+    ENEMYAI = 10;
 }
 
 enum ShapeType

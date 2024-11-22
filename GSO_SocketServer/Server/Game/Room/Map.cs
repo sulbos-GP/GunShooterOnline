@@ -93,6 +93,8 @@ public class Map
     public readonly List<ExitZone> exitZones = new List<ExitZone>();
 
     public readonly List<SpawnZone> spawnZones = new List<SpawnZone>();
+    public readonly List<Mine> mines = new List<Mine>();
+    public readonly List<AISpawnZone> aispawnZones = new List<AISpawnZone>();
 
     #endregion
 
@@ -226,6 +228,20 @@ public class Map
                     spawnZones.Add(spawn);
 
                 }
+                else if (_collisions[i, j] == 5) // 마인 존
+                {
+                    Mine mine = ObjectManager.Instance.Add<Mine>();
+                    mine.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset));
+                    mines.Add(mine);
+
+                }
+                else if (_collisions[i, j] == 6) //AI 스폰존
+                {
+                    AISpawnZone AIspawn = ObjectManager.Instance.Add<AISpawnZone>();
+                    AIspawn.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset));
+                    aispawnZones.Add(AIspawn);
+
+                }
             }
 #if DEBUG
 
@@ -281,7 +297,37 @@ public class Map
 
         return true;
     }
+    /*  public bool SpawnObj<T>(T[] players) where T : Creature
+      {
+          int sCount = spawnZones.Count;
+          int pCount = players.Length;
 
+          if (sCount < pCount)
+          {
+              // 스폰 구역이 사람 수보다 작음 == 겹쳐서 소환 가능함
+              return false;
+          }
+
+          List<List<SpawnZone>> combinations = new List<List<SpawnZone>>();
+
+          GetCombinations(spawnZones, new List<SpawnZone>(), 0, pCount, combinations);
+
+          Random random = new Random();
+          int randomIndex = random.Next(combinations.Count);
+
+          List<SpawnZone> selectedCombination = combinations[randomIndex];
+
+          int t = -1;
+          foreach (SpawnZone spawn in selectedCombination)
+          {
+              players[++t].CellPos = spawn.CellPos;
+              Console.WriteLine(players[t].Id + "는 " + spawn.CellPos + "에 소환 됨");
+          }
+
+          return true;
+      }*/
+
+    //TODO :  나중에 제너릭으로
     public bool SpawnPlayers(Player[] players)
     {
 
