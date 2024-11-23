@@ -7,7 +7,7 @@ using WebCommonLibrary.Models.MasterDatabase;
 
 namespace Server.Game
 {
-    public class ItemObject : GameObject
+    public class ItemObject : GameObject, ICloneable
     {
         private DB_ItemUnit unit = new DB_ItemUnit();
         private Dictionary<int, DateTime> viewers = new Dictionary<int, DateTime>();
@@ -33,7 +33,6 @@ namespace Server.Game
         {
             viewers.TryAdd(viewerId, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
         }
-
 
         public void CreateItem()
         {
@@ -279,6 +278,14 @@ namespace Server.Game
             return info;
         }
 
+        public object Clone()
+        {
+            ItemObject itemObject = new ItemObject();
+            itemObject.Id = Id;
+            itemObject.unit = Unit;
+            itemObject.viewers = this.viewers;
+            return itemObject;
+        }
     }
 
 }
