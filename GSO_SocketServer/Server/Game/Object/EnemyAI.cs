@@ -214,9 +214,10 @@ namespace Server.Game.Object
         public void MoveToTarget(Vector2 target, float speed)
         {
             Vector2 currentPosition = new Vector2(CellPos.X, CellPos.Y);
-            Vector2 directionToTarget = Vector2.Normalize(target - currentPosition);
-            Vector2 newPosition = currentPosition + directionToTarget * speed * Program.ServerIntervalTick;
+            Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition);
+            Vector2 newPosition = currentPosition + directdionToTarget * speed * Program.ServerIntervalTick; //fxxx
             CellPos = newPosition;
+            Console.WriteLine($"{Program.ServerIntervalTick}");
             //transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
         }
 

@@ -78,6 +78,10 @@ namespace Server.Game.Object.Shape
                 EnemyAI enemyAI = _owner as EnemyAI;
                 if (enemyAI != null)
                 {
+                    if (enemyAI.target != null)
+                    {
+                        return;
+                    }
                     enemyAI.target = closestTarget;
                     enemyAI._state.ChangeState(enemyAI.CheckState); // 상태를 체크로 전환
                 }

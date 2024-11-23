@@ -60,16 +60,16 @@ namespace Server.Game.FSM
         public override void Update()
         {
             //스폰 주변을 배회함.
-            base.Update();
-            float dist = Vector2.Distance(targetPos, Owner.CellPos);
-            Owner.MoveToTarget(targetPos, Owner.lowSpeed);
+            //if (isStop) return;
+            //float dist = Vector2.Distance(targetPos, Owner.CellPos);
+            //Owner.MoveToTarget(targetPos, Owner.lowSpeed);
 
-            if (dist < 0.1f)
-            {
-                //도착하면 5초 대기후 새로운 위치를 정하여 이동
-                Owner.gameRoom.PushAfter(5000, SetNewTargetPos);
-                isStop = true;
-            }
+            //if (dist < 0.1f)
+            //{
+            //    //도착하면 5초 대기후 새로운 위치를 정하여 이동
+            //    Owner.gameRoom.PushAfter(5000, SetNewTargetPos);
+            //    isStop = true;
+            //}
         }
 
         public void SetNewTargetPos()
@@ -98,19 +98,19 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
-            base.Enter();
-            Console.WriteLine("CheckState");
-
             Owner.curState = MobState.Check;
             targetPos = Owner.target.CellPos;
+            Console.WriteLine($"targetPos : {targetPos}");
         }
 
         public override void Update()
         {
-            base.Update();
+            if (isStop) return;
 
             Owner.MoveToTarget(targetPos, Owner.midSpeed);
             float distanceFromTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
+            
+            Console.WriteLine($"이동.현위치 : {Owner.CellPos}\n목표위치 : {targetPos}\n남은거리 : {distanceFromTargetPos}");
 
             //이동중 추격거리 안에 들어오면 추격상태로
             if (Owner.target != null)
@@ -123,9 +123,16 @@ namespace Server.Game.FSM
                 }
             }
 
+            if (distanceFromTargetPos > 0.1)
+            {
+                return;
+            }
+
+            //거리에 도착후 체크
             if (Owner.target == null)
             {
                 //타겟이 사라지면 3초동안 멈춘뒤 귀환
+                Console.WriteLine($"타겟이 범위 밖으로 나감 3초뒤 귀환");
                 Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner.ReturnState);
                 isStop = true;
                 return;
@@ -134,6 +141,7 @@ namespace Server.Game.FSM
             if (Vector2.Distance(Owner.target.CellPos, Owner.CellPos) <= Owner.detectionRange && distanceFromTargetPos <= 0.1f)
             {
                 //타겟 위치로 도착 + 타겟이 아직 감지 범위 안에 있다면 3초후 새로운 대기위치 할당 후 이동
+                Console.WriteLine($"3초뒤 새로운 타겟 위치 할당");
                 Owner.gameRoom.PushAfter(3000, SetNewTargetPos); 
                 isStop= true;
                 return;
@@ -164,14 +172,12 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             base.Enter();
-            Console.WriteLine("ChaseState");
-
             Owner.curState = MobState.Chase;
         }
 
         public override void Update()
         {
-            base.Update();
+            if (isStop) return;
 
             if (Owner.target == null)
             {
@@ -229,13 +235,12 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             base.Enter();
-            Console.WriteLine("AttackState");
             Owner.curState = MobState.Attack;
         }
 
         public override void Update()
         {
-            base.Update();
+            if (isStop) return;
 
             //공격함수 추가
 
@@ -301,7 +306,7 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
-            base.Update();
+            if (isStop) return;
 
             Owner.MoveToTarget(Owner.spawnPoint, Owner.midSpeed);
 
@@ -342,7 +347,7 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
-            base.Update();
+            if (isStop) return;
 
             //스턴시간만큼 대기 후 조건 체크 후 만족하는 다음 상태로 즉시 전환
             Owner.gameRoom.PushAfter((int)(stunTime*1000), CheckNextState);
@@ -409,7 +414,6 @@ namespace Server.Game.FSM
         public override void Update()
         {
             base.Update();
-
         }
 
         //종료
