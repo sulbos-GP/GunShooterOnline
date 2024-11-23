@@ -9,17 +9,17 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Transactions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Server.Game.FSM
 {
-
     public class StateBase : IState
     {
         public EnemyAI Owner;
 
-        protected float waitTimer = 0f; // 대기 타이머
-        protected bool isWaiting = false; // 대기 상태 여부
-        protected bool isMoveDone = false;
+        protected bool isStop; 
+
         public StateBase(EnemyAI owner)
         {
             Owner = owner;
@@ -27,23 +27,17 @@ namespace Server.Game.FSM
 
         public virtual void Enter()
         {
-
+            isStop = false;
         }
 
         public virtual void Update()
         {
-
+            if(isStop) return;
         }
 
         public virtual void Exit()
         {
 
-        }
-
-        protected virtual void StartWait(float duration)
-        {
-            waitTimer = duration;
-            isWaiting = true;
         }
     }
 
@@ -71,19 +65,16 @@ namespace Server.Game.FSM
             if (dist < 0.1f)
             {
                 //도착하면 5초 대기후 새로운 위치를 정하여 이동
-                Owner.gameRoom.PushAfter(5000, Test,5 , 6);
-                targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
-                
+                Owner.gameRoom.PushAfter(5000, SetNewTargetPos);
+                isStop = true;
             }
-
-            
         }
 
-        public void Test(int x , int y)
+        public void SetNewTargetPos()
         {
-
+            targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
         }
-
+        
 
         //종료
         public override void Exit()
@@ -113,75 +104,42 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
+            Owner.MoveToTarget(targetPos, Owner.midSpeed);
+
+            float distanceFromTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
+
+            //이동중 너무 추격범위 안이면 추격상태로
+            if (Owner.target != null)
+            {
+                float distanceToPlayer = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
+                if (distanceToPlayer <= Owner.chaseRange)
+                {
+                    Owner._state.ChangeState(Owner._chase);
+                    return;
+                }
+            }
+
             if (Owner.target == null)
             {
-                Owner.FSMController.ChangeState(Owner._return);
+                //상대가 사라지면 3초뒤 귀환
+                Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner._return);
+                isStop = true;
                 return;
             }
 
-            Owner.MoveToTarget(Owner.target.CellPos, Owner.midSpeed);
-
-            float distanceFromSpawn = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
-            if (distanceFromSpawn > Owner.maxDistance)
+            if (Vector2.Distance(Owner.target.CellPos, Owner.CellPos) <= Owner.detectionRange)
             {
-                Owner.FSMController.ChangeState(Owner._return);
+                Owner.gameRoom.PushAfter(3000, SetNewTargetPos); // 새로운 타겟 위치로 업데이트
+                isStop= true;
                 return;
             }
-
-            float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
-            if (distanceToTarget <= Owner.chaseRange)
-            {
-                Owner.FSMController.ChangeState(Owner._chase);
-                return;
-            }
-
-
-            //// 1. 이동 중이거나 대기 중이라면, 이동을 계속하거나 대기를 진행
-            //if (isWaiting)
-            //{
-            //    waitTimer -= Time.deltaTime;
-            //    if (waitTimer <= 0)
-            //    {
-            //        isWaiting = false; // 대기 종료
-
-            //        Debug.Log("대기가 끝났습니다. 이동 또는 귀환 처리 시작.");
-            //        if (Owner.target == null)
-            //        {
-            //            Debug.Log("타겟을 놓침. 이동 완료 후 귀환 상태로 전환.");
-            //            Owner._state.ChangeState(Owner._return);
-            //            return;
-            //        }
-            //        if (Vector3.Distance(Owner.target.transform.position, Owner.transform.position) <= Owner.detectionRange)
-            //        {
-            //            Debug.Log("타겟이 감지 범위에 있음. 새로운 타겟 위치 설정.");
-            //            targetPos = Owner.target.transform.position; // 새로운 타겟 위치로 업데이트
-            //            return;
-            //        }
-            //    }
-            //    return;
-            //}
-
-            //Owner.MoveToTarget(targetPos, Owner.midSpeed);
-            //float distanceFromTargetPos = Vector3.Distance(targetPos, Owner.transform.position);
-            //if (Owner.target != null)
-            //{
-            //    float distanceToPlayer = Vector3.Distance(Owner.target.transform.position, Owner.transform.position);
-            //    if (distanceToPlayer <= Owner.chaseRange)
-            //    {
-            //        Debug.Log("타겟이 추격 범위에 있음. 추격 상태로 전환.");
-            //        Owner._state.ChangeState(Owner._chase);
-            //        return;
-            //    }
-            //}
-
-
-            //if (distanceFromTargetPos <= 0.1f)
-            //{
-            //    Debug.Log("타겟 위치에 도달. 대기 시작.");
-            //    StartWait(3f); // 3초 대기
-            //    return;
-            //}
         }
+
+        public void SetNewTargetPos()
+        {
+            targetPos = Owner.target.CellPos; // 새로운 타겟 위치로 업데이트
+        }
+       
 
         //종료
         public override void Exit()
@@ -214,7 +172,9 @@ namespace Server.Game.FSM
              */
             if (Owner.target == null)
             {
-                Owner.FSMController.ChangeState(Owner._return);
+                //타겟이 사라지면 3초동안 멈춰있다 전환
+                Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner._return);
+                isStop = true;
                 return;
             }
 
@@ -222,6 +182,7 @@ namespace Server.Game.FSM
 
             #region PathFinding
             List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.target.CellPos, checkObjects: false);
+
 
             S_AiMove MovePacket = new S_AiMove();
             for (int i = 0; i < path.Count; i++)
@@ -232,73 +193,19 @@ namespace Server.Game.FSM
 
             #endregion
 
-            float distanceFromSpawn = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
-            if (distanceFromSpawn > Owner.maxDistance)
-            {
-                Owner.FSMController.ChangeState(Owner._return);
-                return;
-            }
-
             float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             if (distanceToTarget <= Owner.attackRange)
             {
-                Owner.FSMController.ChangeState(Owner._attack);
+                //즉시 공격상태로 전환
+                Owner._state.ChangeState(Owner._attack);
                 return;
             }
-            else if (distanceToTarget > Owner.chaseRange)
+            else if (distanceToTarget > Owner.chaseRange && distanceToTarget <=Owner.detectionRange)
             {
-                Owner.FSMController.ChangeState(Owner._check);
+                //1초간 더 이동하다가 경계로 전환
+                Owner.gameRoom.PushAfter(1000, Owner._state.ChangeState, Owner._check);
+                return;
             }
-
-            //if (isWaiting)
-            //{
-            //    waitTimer -= Time.deltaTime;
-            //    if (waitTimer <= 0)
-            //    {
-            //        isWaiting = false; // 대기 종료
-
-            //        if (Owner.target == null)
-            //        {
-            //            Owner._state.ChangeState(Owner._return);
-            //            return;
-            //        }
-            //        else
-            //        {
-            //            float dis = Vector3.Distance(Owner.target.transform.position, Owner.transform.position);
-            //            if (dis > Owner.chaseRange && dis <= Owner.detectionRange)
-            //            {
-            //                Owner._state.ChangeState(Owner._check); // 경계 상태로 전환
-            //            }
-            //        }
-
-            //    }
-            //    return;
-            //}
-
-            //if (Owner.target == null) //타겟이 경계범위 밖으로 나가면 3초 대기후 귀환
-            //{
-            //    Debug.Log("타겟을 놓침. 정지 후 3초 대기 후 귀환 상태로 전환.");
-            //    StartWait(3f);
-            //    return;
-            //}
-
-            //Owner.MoveToTarget(Owner.target.transform.position, Owner.highSpeed);
-
-            //float distanceToAttack = Vector3.Distance(Owner.target.transform.position, Owner.transform.position);
-            //if (distanceToAttack <= Owner.attackRange)
-            //{
-            //    Debug.Log("타겟이 공격 범위에 들어왔습니다. 공격 상태로 전환.");
-            //    Owner._state.ChangeState(Owner._attack); // 공격 상태로 전환
-            //    return;
-            //}
-
-            ////*** 다른 대기(정지하고 몇초뒤 전환) 와는 다름. 더 이동하다가 전환
-            //float distanceToChase = Vector3.Distance(Owner.target.transform.position, Owner.transform.position);
-            //if (distanceToChase > Owner.chaseRange)
-            //{
-            //    StartWait(1f); //추격범위 밖 감지범위 안 일경우 1초간 더 쫒다가 경계상태로 전환함
-            //    return;
-            //}
         }
 
         //종료
@@ -314,93 +221,48 @@ namespace Server.Game.FSM
         {
             Owner = owner;
         }
-
-        float timer;
-
         //초기화
         public override void Enter()
         {
             Console.WriteLine("AttackState");
             Owner.curState = MobState.Attack;
-            timer = 0;
         }
 
         public override void Update()
         {
-            /*
-             * 공격을 완료했을때 플레이어가 포착거리 밖으로 나갈경우 => 의심
-             *                 플레이어가 포착거리 안에 있음 => 추격 반복
-             */
-            timer += Program.ServerIntervalTick;
-            if (timer > Owner.attackDelay)
+
+            //공격함수 추가
+
+            //공격후 1초간의 딜레이 후 다음 행동 체크
+            Owner.gameRoom.PushAfter(1000, CheckNextState);
+            isStop = true;
+        }
+
+        public void CheckNextState()
+        {
+            if (Owner.target == null)  //공격후 타겟이 없어지면 귀환
             {
-                if (Owner.target == null)
-                {
-                    Owner.FSMController.ChangeState(Owner._return);
-                    return;
-                }
-
-                float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
-                if (distanceToTarget <= Owner.attackRange)
-                {
-                    //초기화 후 재공격
-                    timer = 0;
-                    return;
-                }
-                else if (distanceToTarget <= Owner.chaseRange)
-                {
-                    Owner.FSMController.ChangeState(Owner._chase);
-                    return;
-                }
-                else if (distanceToTarget <= Owner.detectionRange)
-                {
-                    Owner.FSMController.ChangeState(Owner._check);
-                    return;
-                }
-
+                Owner._state.ChangeState(Owner._return);
+                return;
             }
 
-
-
-
-            //if (isWaiting)
-            //{
-            //    waitTimer -= Time.deltaTime;
-            //    if (waitTimer <= 0)
-            //    {
-            //        isWaiting = false; // 대기 종료
-
-            //        if (Owner.target == null)  //공격후 타겟이 없어지면 귀환
-            //        {
-            //            Owner._state.ChangeState(Owner._return);
-            //            return;
-            //        }
-
-            //        float distanceToTarget = Vector3.Distance(Owner.target.transform.position, Owner.transform.position);
-            //        //타겟이 있다면 타겟과의 거리에 따라 패턴 변경
-            //        if (distanceToTarget <= Owner.attackRange)
-            //        {
-            //            //초기화 후 재공격
-            //            Debug.Log("재공격");
-            //            StartWait(1f);
-            //            return;
-            //        }
-            //        else if (distanceToTarget <= Owner.chaseRange)
-            //        {
-            //            Owner._state.ChangeState(Owner._chase);
-            //            return;
-            //        }
-            //        else if (distanceToTarget <= Owner.detectionRange)
-            //        {
-            //            Owner._state.ChangeState(Owner._check);
-            //            return;
-            //        }
-            //    }
-            //    return;
-            //}
-
-            ////공격 후 딜레이
-            //StartWait(1f);
+            float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
+            //타겟이 있다면 타겟과의 거리에 따라 패턴 변경
+            if (distanceToTarget <= Owner.attackRange)
+            {
+                isStop = false;
+                return;
+            }
+            else if (distanceToTarget <= Owner.chaseRange)
+            {
+                Owner._state.ChangeState(Owner._chase);
+                return;
+            }
+            else if (distanceToTarget <= Owner.detectionRange)
+            {
+                Owner._state.ChangeState(Owner._check);
+                return;
+            }
         }
 
         //종료
@@ -418,39 +280,26 @@ namespace Server.Game.FSM
             Owner = owner;
         }
 
+        private Vector2 targetPos;
+       
         //초기화
         public override void Enter()
         {
             Owner.curState = MobState.Return;
-            //targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
+            targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
         }
 
         public override void Update()
         {
-            /*
-             *  귀환범위 내에 도착함 => 대기
-             */
+
             Owner.MoveToTarget(Owner.spawnPoint, Owner.midSpeed);
 
             float distanceToSpawner = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
-            if (distanceToSpawner <= Owner.spawnerDistance)
+            if (distanceToSpawner <= 0.1f)
             {
-                Owner.FSMController.ChangeState(Owner._idle);
+                Owner._state.ChangeState(Owner._idle);
                 return;
             }
-
-
-
-
-            //Owner.MoveToTarget(targetPos, Owner.midSpeed);
-
-            //float distanceToTargetPos = Vector3.Distance(targetPos, Owner.transform.position);
-            //Debug.Log(distanceToTargetPos);
-            //if (distanceToTargetPos <= 0.1f)
-            //{
-            //    Owner._state.ChangeState(Owner._idle);
-            //    return;
-            //}
         }
 
         //종료
@@ -461,8 +310,7 @@ namespace Server.Game.FSM
     }
     public class StunState : StateBase
     {
-        public float stunTime;
-
+        public float stunTime = 5;
         public StunState(EnemyAI owner) : base(owner)
         {
             Owner = owner;
@@ -474,12 +322,42 @@ namespace Server.Game.FSM
             Owner.curState = MobState.Stun;
         }
 
+        public void SetStunTime(float _stunTime)
+        {
+            stunTime = _stunTime;
+        }
 
         public override void Update()
         {
-            /*
-             * 스턴이 끝나면 타겟이 존재하는지 확인후 있으면 추격 없으면 귀환
-             */
+            Owner.gameRoom.PushAfter((int)(stunTime*1000), CheckNextState);
+        }
+
+        public void CheckNextState()
+        {
+            //거리에 따른 상태 변화
+            if (Owner.target == null)  //타겟이 없다면 귀환
+            {
+                Owner._state.ChangeState(Owner._return);
+                return;
+            }
+
+            float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
+            //타겟이 있다면 타겟과의 거리에 따라 패턴 변경
+            if (distanceToTarget <= Owner.attackRange)
+            {
+                Owner._state.ChangeState(Owner._attack);
+                return;
+            }
+            else if (distanceToTarget <= Owner.chaseRange)
+            {
+                Owner._state.ChangeState(Owner._chase);
+                return;
+            }
+            else if (distanceToTarget <= Owner.detectionRange)
+            {
+                Owner._state.ChangeState(Owner._check);
+                return;
+            }
         }
 
         //종료
@@ -500,22 +378,18 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             Owner.curState = MobState.Dead;
-            //StartWait(Owner.disappearTime); //3초뒤 사라짐
+            Owner.gameRoom.PushAfter((int)(Owner.disappearTime*1000), DestroyOwner);
         }
 
+        public void DestroyOwner()
+        {
+            //오브젝트 삭제? 사망후 후처리
+        }
+        
         //업데이트
         public override void Update()
         {
-            //if (isWaiting)
-            //{
-            //    waitTimer -= Time.deltaTime;
-            //    if (waitTimer <= 0)
-            //    {
-            //        isWaiting = false; // 대기 종료
-            //                           //여기에 오브젝트 삭제 코드 삽입
-            //    }
-            //    return;
-            //}
+            
         }
 
         //종료
