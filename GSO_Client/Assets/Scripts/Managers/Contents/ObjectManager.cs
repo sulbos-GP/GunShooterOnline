@@ -196,10 +196,10 @@ public class ObjectManager
                 Managers.SystemLog.Message("_objects add fail");
             }
              Debug.Log("================성훈이 요기야====================== "); //Mine clASS
-            ExitZone exitZone = go.GetComponent<ExitZone>();
+            /*ExitZone exitZone = go.GetComponent<ExitZone>();
             exitZone.objectId = info.ObjectId;
             exitZone.interactType = InteractType.Exit;
-            exitZone.exitTime = 5; //임시추가
+            exitZone.exitTime = 5; //임시추가*/
         }
     }
 

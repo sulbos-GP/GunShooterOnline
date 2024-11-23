@@ -1,4 +1,5 @@
-﻿using Server.Game.Object;
+﻿using Google.Protobuf.Protocol;
+using Server.Game.Object;
 using Server.Game.Utils;
 using ServerCore;
 using System;
@@ -135,8 +136,17 @@ namespace Server.Game.FSM
 
             Owner.MoveToTarget(Owner.target.CellPos, Owner.highSpeed);
 
+            #region PathFinding
             List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.target.CellPos, checkObjects: false);
 
+            S_AiMove MovePacket = new S_AiMove();
+            for (int i = 0; i < path.Count; i++)
+            {
+                MovePacket.PosList.Add(new Vector2IntInfo() { X= path[i].x, Y = path[i].y });
+            }
+            Owner.gameRoom.BroadCast(MovePacket);
+
+            #endregion
 
             float distanceFromSpawn = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
             if (distanceFromSpawn > Owner.maxDistance)

@@ -70,7 +70,9 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SGundataUpdate, MakePacket<S_GundataUpdate>);
 		_handler.Add((ushort)MsgId.SGundataUpdate, PacketHandler.S_GundataUpdateHandler);		
 		_onRecv.Add((ushort)MsgId.STrapAction, MakePacket<S_TrapAction>);
-		_handler.Add((ushort)MsgId.STrapAction, PacketHandler.S_TrapActionHandler);
+		_handler.Add((ushort)MsgId.STrapAction, PacketHandler.S_TrapActionHandler);		
+		_onRecv.Add((ushort)MsgId.SAiMove, MakePacket<S_AiMove>);
+		_handler.Add((ushort)MsgId.SAiMove, PacketHandler.S_AiMoveHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
