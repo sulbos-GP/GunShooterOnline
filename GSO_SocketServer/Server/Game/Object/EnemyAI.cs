@@ -1,14 +1,10 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.FSM;
-using Server.Game.Utils;
 using ServerCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Server.Game.Object
 {
@@ -16,7 +12,7 @@ namespace Server.Game.Object
     {
 
         #region FSM
-        public FSMController FSMController;
+        public FSMController _state;
         public MobState curState;
 
         public IdleState _idle;
@@ -90,7 +86,7 @@ namespace Server.Game.Object
             _return = new ReturnState(this);
             _stun = new StunState(this);
 
-            FSMController = new FSMController();
+            _state = new FSMController();
 
             maxDistance = 10;
             spawnerDistance = 5;
@@ -111,7 +107,7 @@ namespace Server.Game.Object
                 MaxHp = 20,
             });
 
-            FSMController.ChangeState(_idle);
+            _state.ChangeState(_idle);
             #endregion
 
 
@@ -158,11 +154,11 @@ namespace Server.Game.Object
                 return;
             }
 
-            FSMController.Update();
+            _state.Update();
 
             if (Hp <= 0)
             {
-                FSMController.ChangeState(new DeadState(this));
+                _state.ChangeState(new DeadState(this));
             }
 
 
@@ -217,11 +213,5 @@ namespace Server.Game.Object
 
             return new Vector2(center.X + x, center.Y);
         }
-
-
-
-
-
-
     }
 }
