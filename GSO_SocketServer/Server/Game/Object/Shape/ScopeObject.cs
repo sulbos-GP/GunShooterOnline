@@ -19,7 +19,7 @@ namespace Server.Game.Object.Shape
 
         public ScopeObject()
         {
-            ObjectType = GameObjectType.Box;
+            ObjectType = GameObjectType.Noneobject;
 
             float width = 1;
             float left = -0.5f;
@@ -44,10 +44,10 @@ namespace Server.Game.Object.Shape
         {
             _owner = owenr;
 
-           info.Name = owenr.info.Name + "Detect";
-           OwnerId = owenr.Id;
-           currentShape.Parent = owenr;
-           CellPos = owenr.CellPos;
+            info.Name = owenr.info.Name + "Detect";
+            OwnerId = owenr.Id;
+            currentShape.Parent = owenr;
+            CellPos = owenr.CellPos;
         }
 
         public override void Update()
@@ -70,17 +70,18 @@ namespace Server.Game.Object.Shape
                     closestDistance = distance;
                     closestTarget = gameObject;
                 }
+                Console.Write($"HiT {gameObject.info.Name}");
             }
 
             if (closestTarget != null)
             {
                 EnemyAI enemyAI = _owner as EnemyAI;
-                if(enemyAI != null)
+                if (enemyAI != null)
                 {
                     enemyAI.target = closestTarget;
                     enemyAI._state.ChangeState(enemyAI.CheckState); // 상태를 체크로 전환
                 }
-               
+
             }
 
 
@@ -91,16 +92,23 @@ namespace Server.Game.Object.Shape
         {
             //base.OnCollision(other);
 
-            if (other.ObjectType != GameObjectType.Player || other.GetOwner().Id == OwnerId)
+            if (other.ObjectType != GameObjectType.Player)
+            {
+                return;
+            }
+
+            //Console.WriteLine("Player");
+
+            if (other.GetOwner().Id == OwnerId)
             {
                 return;
             }
             hits.Add(other);
 
-           
+
         }
 
-      
+
         public override GameObject GetOwner()
         {
             return _owner;

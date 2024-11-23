@@ -63,8 +63,8 @@ namespace Server
             quadTreeManager.Update();
             //방 처리
             Flush();
-
-
+            //Update 처리
+            ObjectManager.Instance.Update();
 
 
 

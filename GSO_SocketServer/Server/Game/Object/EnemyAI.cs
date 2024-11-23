@@ -42,32 +42,9 @@ namespace Server.Game.Object
         public float disappearTime; //죽은 적이 3초뒤에 삭제됨
 
         public List<GameObject> targets;
-        public GameObject? target
+        public GameObject target
         {
-            get
-            {
-                if (targets != null && targets.Count > 0)
-                {
-                    GameObject closestTarget = null;
-                    float closestDistance = float.MaxValue;
-
-                    foreach (GameObject t in targets)
-                    {
-                        Vector2 targetPos = t.CellPos;
-                        float distance = (CellPos - targetPos).Length();
-                        if (distance < closestDistance)
-                        {
-                            closestDistance = distance;
-                            closestTarget = t;
-                        }
-                    }
-
-                    return closestTarget;
-                }
-
-                return null; // 타겟이 없을 경우 null 반환
-            }
-            set => target = value;
+            get; set;
         }
         public float targetDistance;
 
@@ -136,7 +113,7 @@ namespace Server.Game.Object
             info.Name = "Dog";
 
             DetectObject.Init(this);
-        
+
             CellPos = pos;
 
 
@@ -144,19 +121,23 @@ namespace Server.Game.Object
 
         public override void Update()
         {
-            if (gameRoom != null) 
-                _job = gameRoom.PushAfter(Program.ServerIntervalTick, Update);
+
+            /*  gameRoom.Push(Update);
+              if (gameRoom != null) 
+                  _job = gameRoom.PushAfter(Program.ServerIntervalTick, Update);*/
 
             if (gameRoom.IsGameStarted == false)
                 return;
 
+            //Console.WriteLine("test");
+            //return;
             DetectObject.Update();
 
 
             if (target != null)
             {
                 float targetDis = Vector2.Distance(target.CellPos, CellPos);
-                if(targetDis > detectionRange)
+                if (targetDis > detectionRange)
                 {
                     target = null;
                 }
@@ -167,7 +148,7 @@ namespace Server.Game.Object
             }
 
 
-            
+
             _state.Update();
 
             if (Hp <= 0)
@@ -184,6 +165,11 @@ namespace Server.Game.Object
         public override void OnCollision(GameObject other)
         {
             base.OnCollision(other);
+            if (other.ObjectType == GameObjectType.Noneobject)
+            {
+                return;
+            }
+
         }
 
         public override void OnCollisionList(GameObject[] others)
@@ -213,7 +199,7 @@ namespace Server.Game.Object
 
         public void MoveToTarget(Vector2 target, float speed)
         {
-            Vector2 currentPosition = new Vector2(CellPos.X,CellPos.Y);
+            Vector2 currentPosition = new Vector2(CellPos.X, CellPos.Y);
             Vector2 directionToTarget = Vector2.Normalize(target - currentPosition);
             Vector2 newPosition = currentPosition + directionToTarget * speed * Program.ServerIntervalTick;
             CellPos = newPosition;
