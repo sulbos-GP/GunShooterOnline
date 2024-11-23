@@ -171,7 +171,7 @@ public class CreatureObj : GameObject
 
         //TODO : 진짜 힐량 구하기  지승현 241019
         heal = Math.Max(heal, 0);
-        stat.Hp = Math.Max(stat.Hp + heal, stat.MaxHp);
+        stat.Hp = Math.Clamp(stat.Hp + heal, 0, stat.MaxHp);
 
         Console.WriteLine($" healer :{healer.Id} heal : {heal}  stat.Hp : {stat.Hp}");
 
