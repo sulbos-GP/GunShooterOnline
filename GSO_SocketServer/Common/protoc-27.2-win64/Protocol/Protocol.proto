@@ -327,8 +327,10 @@ message S_RaycastShoot // 26
 
 
 message S_ExitGame {  //18
-  int32 playerId = 1;
-  int32 exitId = 2;
+  bool isSuccess = 1;
+  int32 retryTime = 2;
+  int32 playerId = 3;
+  int32 exitId = 4;
 }
 
 message C_ExitGame{   //19
