@@ -19,12 +19,12 @@ namespace Server.Game.Object
         public FSMController _state;
         public MobState curState;
 
-        public IdleState _idle;
-        public CheckState _check;
-        public ChaseState _chase;
-        public AttackState _attack;
-        public ReturnState _return;
-        public StunState _stun;
+        public IdleState IdleState;
+        public CheckState CheckState;
+        public ChaseState ChaseState;
+        public AttackState AttackState;
+        public ReturnState ReturnState;
+        public StunState StunState;
 
 
 
@@ -85,12 +85,12 @@ namespace Server.Game.Object
             spawnPoint = CellPos; //임시. 스폰위치를 일시적으로 자신이 생성된 위치로 함
 
             #region FSM
-            _idle = new IdleState(this);
-            _check = new CheckState(this);
-            _chase = new ChaseState(this);
-            _attack = new AttackState(this);
-            _return = new ReturnState(this);
-            _stun = new StunState(this);
+            IdleState = new IdleState(this);
+            CheckState = new CheckState(this);
+            ChaseState = new ChaseState(this);
+            AttackState = new AttackState(this);
+            ReturnState = new ReturnState(this);
+            StunState = new StunState(this);
 
             _state = new FSMController();
 
@@ -113,7 +113,7 @@ namespace Server.Game.Object
                 MaxHp = 20,
             });
 
-            _state.ChangeState(_idle);
+            _state.ChangeState(IdleState);
             #endregion
 
             #region DetectObject
@@ -146,12 +146,13 @@ namespace Server.Game.Object
 
 
 
-
-
         public override void Update()
         {
             if (gameRoom != null) 
                 _job = gameRoom.PushAfter(Program.ServerIntervalTick, Update);
+
+            DetectObject.Update();
+
 
             if (target != null)
             {
