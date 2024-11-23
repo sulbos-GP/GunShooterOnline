@@ -22,7 +22,8 @@ public class UIManager : MonoBehaviour
 
     public TMP_Text AmmoText { get; private set; }
     public TMP_Text TimeText { get; private set; }
-     
+    public float leftTime;
+
     public Button ReloadBtn { get; private set; }
     public Button InteractBtn { get; private set; }
     public Button OptionBtn { get; private set; }
@@ -69,6 +70,8 @@ public class UIManager : MonoBehaviour
         {
             isDie = true;
         }
+
+        UpdateTime();
 
     }
 
@@ -171,6 +174,13 @@ public class UIManager : MonoBehaviour
         int seconds = (int)(time % 60);
         TimeText.text = $"{minutes:D2}:{seconds:D2}";
     }
+
+    private void UpdateTime()
+    {
+        leftTime -= Time.deltaTime;
+        SetTimeUI(leftTime);
+    }
+
 
     public void SetHpText()
     {
