@@ -58,7 +58,7 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
-            //스폰 존 내를 배회
+            //스폰 주변을 배회함.
             float dist = Vector2.Distance(targetPos, Owner.CellPos);
             Owner.MoveToTarget(targetPos, Owner.lowSpeed);
 
@@ -105,10 +105,9 @@ namespace Server.Game.FSM
         public override void Update()
         {
             Owner.MoveToTarget(targetPos, Owner.midSpeed);
-
             float distanceFromTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
 
-            //이동중 너무 추격범위 안이면 추격상태로
+            //이동중 추격거리 안에 들어오면 추격상태로
             if (Owner.target != null)
             {
                 float distanceToPlayer = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
@@ -121,15 +120,16 @@ namespace Server.Game.FSM
 
             if (Owner.target == null)
             {
-                //상대가 사라지면 3초뒤 귀환
+                //타겟이 사라지면 3초동안 멈춘뒤 귀환
                 Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner._return);
                 isStop = true;
                 return;
             }
 
-            if (Vector2.Distance(Owner.target.CellPos, Owner.CellPos) <= Owner.detectionRange)
+            if (Vector2.Distance(Owner.target.CellPos, Owner.CellPos) <= Owner.detectionRange && distanceFromTargetPos <= 0.1f)
             {
-                Owner.gameRoom.PushAfter(3000, SetNewTargetPos); // 새로운 타겟 위치로 업데이트
+                //타겟 위치로 도착 + 타겟이 아직 감지 범위 안에 있다면 3초후 새로운 대기위치 할당 후 이동
+                Owner.gameRoom.PushAfter(3000, SetNewTargetPos); 
                 isStop= true;
                 return;
             }
@@ -138,8 +138,8 @@ namespace Server.Game.FSM
         public void SetNewTargetPos()
         {
             targetPos = Owner.target.CellPos; // 새로운 타겟 위치로 업데이트
+            isStop = false;                   // 정지상태 해제
         }
-       
 
         //종료
         public override void Exit()
@@ -165,11 +165,7 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
-            /*
-             * 플레이어가 의심거리보다 멀어짐 or 스폰장소에서 너무 멀어짐 => 귀환
-             * 플레이어가 공격거리 안으로 들어옴 => 공격
-             * 
-             */
+            
             if (Owner.target == null)
             {
                 //타겟이 사라지면 3초동안 멈춰있다 전환
@@ -196,13 +192,13 @@ namespace Server.Game.FSM
             float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             if (distanceToTarget <= Owner.attackRange)
             {
-                //즉시 공격상태로 전환
+                //공격 범위에 들어온다면 즉시 공격상태로 전환
                 Owner._state.ChangeState(Owner._attack);
                 return;
             }
             else if (distanceToTarget > Owner.chaseRange && distanceToTarget <=Owner.detectionRange)
             {
-                //1초간 더 이동하다가 경계로 전환
+                //추격범위 밖, 감지범위 안이라면 1초간 더 이동하다가 경계로 전환
                 Owner.gameRoom.PushAfter(1000, Owner._state.ChangeState, Owner._check);
                 return;
             }
@@ -250,16 +246,19 @@ namespace Server.Game.FSM
             //타겟이 있다면 타겟과의 거리에 따라 패턴 변경
             if (distanceToTarget <= Owner.attackRange)
             {
+                //아직 공격범위 안이라면 다시 공격
                 isStop = false;
                 return;
             }
             else if (distanceToTarget <= Owner.chaseRange)
             {
+                //추격범위 안이라면 추격상태 전환
                 Owner._state.ChangeState(Owner._chase);
                 return;
             }
             else if (distanceToTarget <= Owner.detectionRange)
             {
+                //감지범위 안이라면 경계상태 전환
                 Owner._state.ChangeState(Owner._check);
                 return;
             }
@@ -291,11 +290,11 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
-
             Owner.MoveToTarget(Owner.spawnPoint, Owner.midSpeed);
 
-            float distanceToSpawner = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
-            if (distanceToSpawner <= 0.1f)
+            //스폰존 내의 랜덤한 타겟위치로 이동후 대기상태로 전환
+            float distanceToTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
+            if (distanceToTargetPos <= 0.1f)
             {
                 Owner._state.ChangeState(Owner._idle);
                 return;
@@ -329,6 +328,7 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
+            //스턴시간만큼 대기 후 조건 체크 후 만족하는 다음 상태로 즉시 전환
             Owner.gameRoom.PushAfter((int)(stunTime*1000), CheckNextState);
         }
 
@@ -378,6 +378,8 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             Owner.curState = MobState.Dead;
+
+            //사라지는 시간동안 대기 후 사망 후처리 진행
             Owner.gameRoom.PushAfter((int)(Owner.disappearTime*1000), DestroyOwner);
         }
 

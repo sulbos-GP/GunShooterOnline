@@ -89,6 +89,8 @@ public class FSM_Enemy : MonoBehaviour
         {
             _state.ChangeState(new DeadState(this));
         }
+
+       
     }
     
     public void MoveToTarget(Vector2 target, float speed)
