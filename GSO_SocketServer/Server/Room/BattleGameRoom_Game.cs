@@ -1051,6 +1051,7 @@ namespace Server
                     enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
 
                 }
+                enemy.Init(zone.CellPos);
                 EnterGame(enemy);
 
             }

@@ -188,9 +188,14 @@ namespace Server
                     player.Init();
 
                     player.inventory.storage.PrintInvenContents();
+
+                    enterPacket.GameData = new GameDataInfo()
+                    {
+                        LeftTime = Program.minutes
+                    };
+
                     player.Session.Send(enterPacket);
 
-                    enterPacket.GameData.LeftTime = Program.minutes;
                     //player.Vision.Update();
                 }
 
