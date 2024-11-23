@@ -40,15 +40,21 @@ namespace Server.Game
 
             ownerPlayer = player;
 
-
             MainGun = new Gun();
-            MainGun.SetGunData(ownerPlayer.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.MainWeapon).Id);
-            MainGun.Init(this);
-
+            ItemObject mainGunItem = ownerPlayer.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.MainWeapon);
+            if (mainGunItem != null)
+            {
+                MainGun.SetGunData(mainGunItem.Id);
+                MainGun.Init(this);
+            }
 
             SubGun = new Gun();
-            SubGun.SetGunData(ownerPlayer.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.SubWeapon).Id);
-            SubGun.Init(this);
+            ItemObject subGunItem = ownerPlayer.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.SubWeapon);
+            if (subGunItem != null)
+            {
+                SubGun.SetGunData(subGunItem.Id);
+                SubGun.Init(this);
+            }
         }
 
      
