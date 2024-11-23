@@ -90,10 +90,10 @@ namespace Server.Game.Object.Item
             {
                 X = itemObject.Width,
                 Y = itemObject.Height,
-                Weight = (float)itemObject.Weight,
+                Weight = (float)itemObject.Weight + 1.0f,
             };
 
-            this.storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight + 1.0);
+            this.storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight * itemObject.Amount);
             this.storage.InsertItem(itemObject);
         }
 
