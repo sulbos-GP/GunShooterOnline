@@ -805,6 +805,18 @@ internal class PacketHandler
 
     }
 
+    internal static void S_TrapActionHandler(PacketSession session, IMessage message)
+    {
+        S_TrapAction packet = message as S_TrapAction;
+        Managers.SystemLog.Message("S_TrapActionHandler");
+
+        if(packet != null && packet.IsActive)
+        {
+            Mine mine = Managers.Object.FindById(packet.ObjectId).GetComponent<Mine>();
+            mine.Explosion(packet.ObjectId);
+        }
+    }
+
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
          var skillPacket = message as S_Skill;
