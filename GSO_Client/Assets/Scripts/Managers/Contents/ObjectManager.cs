@@ -107,7 +107,7 @@ public class ObjectManager
 
 
             Debug.Log("================성훈이 요기야====================== ");  //Enemyai  CLASS추가
-            var mc = go.GetComponent<MonsterController>();
+            var mc = go.GetComponent<EnemyAI>();
 
 
             //mc.PlanetSide = info.PositionInfo.Side;

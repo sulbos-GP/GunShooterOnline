@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1325195973964352163}
   - component: {fileID: 4464424891194087144}
   - component: {fileID: 1305691763}
-  - component: {fileID: 4517425183532554915}
+  - component: {fileID: 6782568182328615960}
   m_Layer: 0
   m_Name: Dog
   m_TagString: Monster
@@ -159,7 +159,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &4517425183532554915
+--- !u!114 &6782568182328615960
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -168,7 +168,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1325195973964352188}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cea721ca384d88443865a17002d4f37e, type: 3}
+  m_Script: {fileID: 11500000, guid: d28a5f25970295b45b77dcc3d49fe97f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CanAttackDirect: 0
