@@ -6,10 +6,8 @@ using Server.Game.Utils;
 using ServerCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace Server.Game.Object
 {
@@ -17,7 +15,7 @@ namespace Server.Game.Object
     {
 
         #region FSM
-        public FSMController FSMController;
+        public FSMController _state;
         public MobState curState;
 
         public IdleState _idle;
@@ -31,7 +29,7 @@ namespace Server.Game.Object
 
         public Vector2 spawnPoint;
         public float maxDistance; //스폰지점과 10만큼 떨어지면 귀환
-        public float spawnerDistance;
+        public float spawnerDistance; //스폰존 범위
 
         public float lowSpeed;
         public float midSpeed;
@@ -82,6 +80,7 @@ namespace Server.Game.Object
         {
             ObjectType = GameObjectType.Enemyai;
 
+            spawnPoint = CellPos; //임시. 스폰위치를 일시적으로 자신이 생성된 위치로 함
 
             #region FSM
             _idle = new IdleState(this);
@@ -91,7 +90,7 @@ namespace Server.Game.Object
             _return = new ReturnState(this);
             _stun = new StunState(this);
 
-            FSMController = new FSMController();
+            _state = new FSMController();
 
             maxDistance = 10;
             spawnerDistance = 5;
@@ -112,7 +111,7 @@ namespace Server.Game.Object
                 MaxHp = 20,
             });
 
-            FSMController.ChangeState(_idle);
+            _state.ChangeState(_idle);
             #endregion
 
             #region DetectObject
@@ -164,11 +163,11 @@ namespace Server.Game.Object
                 return;
             }
 
-            FSMController.Update();
+            _state.Update();
 
             if (Hp <= 0)
             {
-                FSMController.ChangeState(new DeadState(this));
+                _state.ChangeState(new DeadState(this));
             }
 
 
@@ -230,11 +229,5 @@ namespace Server.Game.Object
 
             return new Vector2(center.X + x, center.Y);
         }
-
-
-
-
-
-
     }
 }
