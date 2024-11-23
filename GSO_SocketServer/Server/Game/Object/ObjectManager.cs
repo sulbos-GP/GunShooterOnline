@@ -6,6 +6,7 @@ using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.Object;
 using Server.Game.Object.Item;
+using Server.Game.Object.Shape;
 
 namespace Server.Game;
 
@@ -21,6 +22,10 @@ internal class ObjectManager
     private readonly Dictionary<int, SpawnZone> _playerSpawn = new();
     private readonly Dictionary<int, Mine> _mines = new();
     private readonly Dictionary<int, EnemyAI> _enemys = new();
+
+
+
+    private readonly Dictionary<int, ScopeObject> _scopes = new();  //DetectObject.OwnerId
     public static ObjectManager Instance { get; } = new();
 
     public T Add<T>() where T : GameObject, new()
@@ -49,7 +54,12 @@ internal class ObjectManager
                 _mines.Add(gameObjcet.Id, gameObjcet as Mine);
 
             else if (gameObjcet.ObjectType == GameObjectType.Enemyai)
-                _enemys.Add(gameObjcet.Id, gameObjcet as EnemyAI);
+            {
+                EnemyAI enemyAI = gameObjcet as EnemyAI;
+                _enemys.Add(gameObjcet.Id, enemyAI);
+                _scopes.Add(enemyAI.Id, enemyAI.DetectObject);
+            }
+
 
         }
         return gameObjcet;
@@ -75,7 +85,11 @@ internal class ObjectManager
             else if (obj.ObjectType == GameObjectType.Mine)
                 _mines.Add(obj.Id, obj as Mine);
             else if (obj.ObjectType == GameObjectType.Enemyai)
-                _enemys.Add(obj.Id, obj as EnemyAI);
+            {
+                EnemyAI enemyAI = obj as EnemyAI;
+                _enemys.Add(enemyAI.Id, enemyAI);
+                _scopes.Add(enemyAI.Id, enemyAI.DetectObject);
+            }
 
         }
 
@@ -165,7 +179,11 @@ internal class ObjectManager
             else if (objectType == GameObjectType.Mine)
                 return _mines.Remove(objectId);
             else if (objectType == GameObjectType.Enemyai)
-                return _enemys.Remove(objectId);
+            {
+                bool t = _enemys.Remove(objectId);
+                t &= _scopes.Remove(objectId);
+                return t;
+            }
 
         }
 
@@ -238,6 +256,10 @@ internal class ObjectManager
                     return obj as T;
 
             }
+            else
+            {
+                Console.WriteLine("Type is None");
+            }
 
         }
 
@@ -249,9 +271,9 @@ internal class ObjectManager
     {
         return _enemys.Values.ToArray();
     }
-    public GameObject[] GetAllCreature()
+    public GameObject[] GetAllShapes()
     {
-        return _enemys.Values.ToArray<GameObject>().Concat(_players.Values).Concat(_mines.Values).ToArray();
+        return _enemys.Values.ToArray<GameObject>().Concat(_players.Values).Concat(_mines.Values).Concat(_scopes.Values).ToArray();
     }
 
 

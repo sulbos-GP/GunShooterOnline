@@ -1,6 +1,7 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.FSM;
+using Server.Game.Object.Shape;
 using Server.Game.Utils;
 using ServerCore;
 using System;
@@ -70,7 +71,7 @@ namespace Server.Game.Object
         }
         public float targetDistance;
 
-        Circle DetectShape;
+        public ScopeObject DetectObject = new ScopeObject();
         #endregion
 
 
@@ -114,10 +115,12 @@ namespace Server.Game.Object
             FSMController.ChangeState(_idle);
             #endregion
 
+            #region DetectObject
+            DetectObject.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+            DetectObject.currentShape = ShapeManager.CreateCircle(CellPos.X, CellPos.Y, detectionRange);
 
 
-
-          
+            #endregion
         }
 
         public void Init(Vector2 pos)
@@ -134,12 +137,15 @@ namespace Server.Game.Object
             Console.WriteLine("생성자 테스트");
             info.Name = "Dog";
 
-            Circle DetectShape = ShapeManager.CreateCircle(pos.X, pos.Y, detectionRange);
-            DetectShape.Parent = this;
 
+            #region DetectObject
+            DetectObject.info.Name = info.Name + "DetectObject";
+            DetectObject.OwnerId = Id;
+            DetectObject.currentShape.Parent = this;
+            DetectObject.CellPos = CellPos;
             CellPos = pos;
 
-
+            #endregion
 
         }
 
@@ -176,7 +182,14 @@ namespace Server.Game.Object
             base.OnCollision(other);
         }
 
-    
+        public override void OnCollisionList(GameObject[] others)
+        {
+            base.OnCollisionList(others);
+
+
+
+        }
+
 
         public override void OnDead(GameObject attacker)
         {

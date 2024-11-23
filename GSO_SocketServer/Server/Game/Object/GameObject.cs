@@ -180,6 +180,11 @@ public class GameObject
         Console.WriteLine(info.Name + "은" + other.info.Name + " 과 충돌함");
     }
 
+    public virtual void OnCollisionList(GameObject[] others)
+    {
+
+    }
+
     /// <summary>
     /// (일단 사용 중지)충돌한 객체에서 정보를 받음
     /// </summary>

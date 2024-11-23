@@ -28,7 +28,7 @@ namespace QuadTree
                 return total;*/
 
 
-                return ObjectManager.Instance.GetAllCreature();
+                return ObjectManager.Instance.GetAllShapes();
             }
         }
 
@@ -176,10 +176,15 @@ namespace QuadTree
             }
 
 
+
+            gameObject.OnCollisionList(hitList.ToArray());
+
             foreach (var go in hitList)
             {
                 gameObject.OnCollision(go);
             }
+
+
         }
         
         

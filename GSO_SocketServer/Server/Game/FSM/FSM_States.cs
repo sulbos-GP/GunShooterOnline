@@ -71,13 +71,19 @@ namespace Server.Game.FSM
             if (dist < 0.1f)
             {
                 //도착하면 5초 대기후 새로운 위치를 정하여 이동
-
+                Owner.gameRoom.PushAfter(5000, Test,5 , 6);
                 targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
                 
             }
 
             
         }
+
+        public void Test(int x , int y)
+        {
+
+        }
+
 
         //종료
         public override void Exit()
