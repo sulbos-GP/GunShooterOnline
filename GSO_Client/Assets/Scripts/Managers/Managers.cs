@@ -39,7 +39,7 @@ internal class Managers : MonoBehaviour
     private void Update()
     {
         _network.Update(); //네트워크
-
+        UpdateTime();
         if (_actions.Count > 0)
             lock (_lock)
             {
@@ -47,6 +47,12 @@ internal class Managers : MonoBehaviour
                     StartCoroutine(CoStart(t.Item1, t.Item2));
                 _actions.Clear();
             }
+    }
+
+    private void UpdateTime()
+    {
+        leftTime -= Time.deltaTime;
+        UIManager.Instance.SetTimeUI(leftTime);
     }
 
     public void Add(Tuple<Action, short> tuple)

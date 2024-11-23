@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.Protocol;
 using MathNet.Numerics.Providers.SparseSolver;
+using Mono.Cecil;
 using Org.BouncyCastle.Bcpg;
 using System.Collections;
 using System.Collections.Generic;
@@ -162,6 +163,13 @@ public class UIManager : MonoBehaviour
     public void SetActiveHealImage(bool tf)
     {
         CureImage.gameObject.SetActive(tf);
+    }
+
+    public void SetTimeUI(float time)
+    {
+        int minutes = (int)(time / 60);
+        int seconds = (int)(time % 60);
+        TimeText.text = $"{minutes:D2}:{seconds:D2}";
     }
 
     public void SetHpText()
