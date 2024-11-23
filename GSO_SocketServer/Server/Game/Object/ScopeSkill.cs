@@ -4,6 +4,7 @@ using System.Threading;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Data;
+using Server.Game.Object;
 using Server.Game.Utils;
 using ServerCore;
 
@@ -111,4 +112,11 @@ public class ScopeSkill : SkillObj
         destroyed = true;
         Console.WriteLine("Destory");
     }
+
+    public GameObject Owner;
+    public override GameObject GetOwner()
+    {
+        return Owner;
+    }
+
 }

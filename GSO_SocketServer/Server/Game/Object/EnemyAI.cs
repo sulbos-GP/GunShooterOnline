@@ -6,6 +6,7 @@ using Server.Game.Utils;
 using ServerCore;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Numerics;
 using System.Threading.Tasks.Dataflow;
 
@@ -131,22 +132,19 @@ namespace Server.Game.Object
             rectangle.Parent = this;
             currentShape = rectangle;
 
-
-
-            Console.WriteLine("생성자 테스트");
             info.Name = "Dog";
 
-
-            #region DetectObject
-            DetectObject.info.Name = info.Name + "DetectObject";
-            DetectObject.OwnerId = Id;
-            DetectObject.currentShape.Parent = this;
-            DetectObject.CellPos = CellPos;
+            DetectObject.Init(this);
+        
             CellPos = pos;
 
-            #endregion
 
         }
+
+     
+
+
+
 
 
         public override void Update()

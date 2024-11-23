@@ -177,7 +177,7 @@ namespace QuadTree
 
 
 
-            gameObject.OnCollisionList(hitList.ToArray());
+            //gameObject.OnCollisionList(hitList.ToArray());
 
             foreach (var go in hitList)
             {
