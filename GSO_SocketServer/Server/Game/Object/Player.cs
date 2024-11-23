@@ -31,6 +31,7 @@ public class Player : CreatureObj
 
     private float SpawnTime = 0;
 
+    public bool isInteractive = false;
 
     public Player()
     {
@@ -93,6 +94,13 @@ public class Player : CreatureObj
        /* if (DamageReflexAction != null)
             DamageReflexAction(attacker);
         else*/
+
+        if(isInteractive == true)
+        {
+
+            isInteractive = false;
+        }
+
         base.OnDamaged(attacker, damage);
     }
 
