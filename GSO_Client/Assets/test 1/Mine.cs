@@ -6,39 +6,41 @@ using UnityEngine;
 public class Mine : MonoBehaviour
 {
     private Animator animator;
+    private SpriteRenderer sprite;
+
     public void Explosion(int id)
     {
-        StartCoroutine(Explo("explosion"));
-        Managers.Object.Remove(id);
-        Destroy(gameObject);
+        StartCoroutine(Explo("explosion", id));
     }
 
-    IEnumerator Explo(string name)
+    IEnumerator Explo(string name, int id)
     {
         // 트리거 설정 및 애니메이션 시작
+        sprite.color = new Color(1,1,1,1) ; //투명도 제거
         animator.ResetTrigger(name);
         animator.SetTrigger(name);
 
         // 상태 정보 가져오기
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        // 상태가 업데이트되도록 한 프레임 대기
-        yield return null;
-        // 애니메이션 상태 검사
-        while (stateInfo.normalizedTime < 1.0f)
+        while (!stateInfo.IsName(name))
         {
-            stateInfo = animator.GetCurrentAnimatorStateInfo(0); // 상태 업데이트
-            yield return null; // 다음 프레임까지 대기
+            stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            yield return null; // 대기
         }
 
-        Destroy(gameObject);
-
-        // Destroy 확인
-        yield return null;
+        // 애니메이션이 끝날 때까지 대기
+        while (stateInfo.normalizedTime < 1.0f)
+        {
+            stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+            yield return null; // 대기
+        }
+        Managers.Object.Remove(id);
     }
 
     private void Start()
     {
         animator = gameObject.GetComponent<Animator>();
+        sprite=  GetComponent<SpriteRenderer>();    
     }
 }

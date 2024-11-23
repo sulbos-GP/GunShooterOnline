@@ -193,7 +193,7 @@ public class ObjectManager
             {
                 Managers.SystemLog.Message("_objects add fail");
             }
-             Debug.Log("================성훈이 요기야====================== "); //Mine clASS
+
             //Mine mine = go.GetComponent<Mine>();
             //mine.objectId = info.ObjectId;
             //mine.interactType = InteractType.Mine;
