@@ -1,5 +1,7 @@
 ﻿using Google.Protobuf;
 using Google.Protobuf.Protocol;
+using Google.Protobuf.WellKnownTypes;
+using MathNet.Numerics.LinearAlgebra.Factorization;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Bcpg;
@@ -852,6 +854,12 @@ internal class PacketHandler
         S_AiMove packet = message as S_AiMove;
         Managers.SystemLog.Message("S_AiMove");
 
+        GameObject enemy = Managers.Object.FindById(packet.ObjectId);
+
+        foreach (Vector2IntInfo info in packet.PosList)
+        {
+            Debug.DrawLine(enemy.transform.position, new Vector2(info.X,info.Y), Color.red);
+        }
     }
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
