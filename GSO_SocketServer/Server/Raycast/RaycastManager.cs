@@ -56,7 +56,7 @@ namespace Server
                 }
                 else
                 {
-                    Console.WriteLine($"{temp.Collider.name} is hit with {temp.distance} distance");
+                    Console.WriteLine($"{shape.Parent.info.Name} is hit with {temp.distance} distance");
                 }
 
 
@@ -100,6 +100,7 @@ namespace Server
             else
             {
                 //검출시 벽 위치 보내기
+                Console.WriteLine("벽이야");
                 return _ddaRes;
             }
             #endregion

@@ -201,6 +201,7 @@ namespace Server.Game.Object
 
         public override void OnDamaged(GameObject attacker, int damage)
         {
+            Console.WriteLine("Enemy Hit");
             base.OnDamaged(attacker, damage);
         }
 
