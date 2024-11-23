@@ -61,6 +61,14 @@ namespace Server.Game
             }
         }
 
+        public List<ItemObject> Items
+        {
+            get
+            {
+                return items;
+            }
+        }
+
         public int ItemCount
         {
             get

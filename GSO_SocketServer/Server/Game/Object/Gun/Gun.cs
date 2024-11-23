@@ -237,7 +237,7 @@ namespace Server.Game
 
             //나중에 수정
             List<ItemObject> ammos = ownerPlayer.inventory.FindItemAllByType(itemType: Inventory.ItemType.Ammo);
-            
+
             if (ammos == null || ammos.Count == 0)
             {
                 await Console.Out.WriteLineAsync("Ammo is null");
@@ -245,9 +245,26 @@ namespace Server.Game
 
             }
 
-
-            foreach (ItemObject ammo in ammos)
+            var deepCopiedAmmos = new List<ItemObject>();
+            foreach (var ammo in ammos)
             {
+                deepCopiedAmmos.Add((ItemObject)ammo.Clone());
+            }
+
+            foreach (ItemObject deepAmmo in deepCopiedAmmos)
+            {
+
+                if (ownerPlayer.weapon.GetCurrentWeapon().CurAmmo == GunData.reload_round)
+                {
+                    break;
+                }
+
+                ItemObject originalAmmo = ammos.FirstOrDefault(ammo => ammo.Id == deepAmmo.Id);
+                if (originalAmmo == null)
+                {
+                    Console.WriteLine($"[Ammo Error] : 오리지날 총알과 같은 아이디가 존재하지 않습니다");
+                    continue;
+                }
 
                 //DB
                 using (var database = DatabaseHandler.GameDB)
@@ -256,38 +273,39 @@ namespace Server.Game
                     {
                         try
                         {
+
                             int target = GunData.reload_round - CurAmmo; //최대 장전 할 수 있는 총알
                             int next; //내가 장전 가능한 총알 개수 
 
-                            if (ammo.Amount >= target)       //넉넉함
+                            if (deepAmmo.Amount >= target)       //넉넉함
                             {
                                 next = target;
-                                ammo.Amount = ammo.Amount - next;
+                                deepAmmo.Amount = deepAmmo.Amount - next;
 
-                                await ownerPlayer.inventory.UpdateItem(ammo, ammo, database, transaction);
+                                await ownerPlayer.inventory.UpdateItem(originalAmmo, deepAmmo, database, transaction);
                             }
                             else                            //인벤에 있는 총알이 부족함
                             {
-                                next = ammo.Amount;
+                                next = deepAmmo.Amount;
 
-                                await  ownerPlayer.inventory.DeleteItem(ammo,database,transaction);
+                                await ownerPlayer.inventory.DeleteItem(originalAmmo, database, transaction);
                                 //ownerPlayer.gameRoom.DeleteItemHandler(ownerPlayer, 0, ammo.Id);
                             }
 
-                            ownerPlayer.weapon.GetCurrentWeapon().CurAmmo = next;
+                            ownerPlayer.weapon.GetCurrentWeapon().CurAmmo += next;
 
-                            int LeftAmount = ownerPlayer.inventory.storage.DecreaseAmount(ammo, next);
+                            int LeftAmount = ownerPlayer.inventory.storage.DecreaseAmount(originalAmmo, next);
 
                             if (LeftAmount == 0)
                             {
-                                bool isDelete = ownerPlayer.inventory.storage.DeleteItem(ammo);
+                                bool isDelete = ownerPlayer.inventory.storage.DeleteItem(originalAmmo);
                                 if (false == isDelete)
                                 {
                                     //실패면 ?
                                 }
                             }
-                            
-                            
+
+
                             S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
                             gunDataUpdate.IsSuccess = true;
                             gunDataUpdate.GunData = new PS_GearInfo
@@ -295,11 +313,8 @@ namespace Server.Game
                                 Part = weaponInven.GetCurrentWeaponGearPart(),
                                 Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
                             };
-
-
                             ownerPlayer.Session.Send(gunDataUpdate);
 
-                            CurAmmo = next;
                             transaction.Commit();
 
                         }
@@ -310,10 +325,10 @@ namespace Server.Game
 
                         }
 
-                      
+
                     }
                 }
-               
+
 
             }
 
