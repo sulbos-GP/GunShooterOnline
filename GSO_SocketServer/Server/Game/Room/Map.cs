@@ -524,6 +524,16 @@ public class Map
     private readonly int[] _deltaX = { 0, 0, -1, 1 };
     private int[] _cost = { 10, 10, 10, 10 };
 
+    public List<Vector2Int> FindPath(Vector2 startCellPos, Vector2 destCellPos, bool checkObjects = true)
+    {
+        // Vector2를 Vector2Int로 변환
+        Vector2Int startCellPosInt = Vector2Int.RoundToInt(startCellPos);
+        Vector2Int destCellPosInt = Vector2Int.RoundToInt(destCellPos);
+
+        // 기존 FindPath 호출
+        return FindPath(startCellPosInt, destCellPosInt, checkObjects);
+    }
+
     public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool checkObjects = true)
     {
         var path = new List<Pos>();

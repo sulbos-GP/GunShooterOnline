@@ -1,4 +1,6 @@
-﻿using Server.Game.Utils;
+﻿using Server.Game.Object;
+using Server.Game.Utils;
+using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,9 +13,9 @@ namespace Server.Game.FSM
 {
     public class IdleState : IState
     {
-        public Monster Owner;
+        public EnemyAI Owner;
         private Vector2 targetPos;
-        public IdleState(Monster owner)
+        public IdleState(EnemyAI owner)
         {
             Owner = owner;
         }
@@ -28,7 +30,7 @@ namespace Server.Game.FSM
         public void Update()
         {
             //스폰 존 내를 배회
-            float dist = Vector3.Distance(targetPos, Owner.transform.position);
+            float dist = Vector2.Distance(targetPos, Owner.CellPos);
             Owner.MoveToTarget(targetPos, Owner.lowSpeed);
 
             if (dist < 0.1f)
@@ -47,9 +49,9 @@ namespace Server.Game.FSM
 
     public class CheckState : IState
     {
-        public Monster Owner;
+        public EnemyAI Owner;
 
-        public CheckState(Monster owner)
+        public CheckState(EnemyAI owner)
         {
             Owner = owner;
         }
@@ -57,6 +59,8 @@ namespace Server.Game.FSM
         //초기화
         public void Enter()
         {
+            Console.WriteLine("CheckState");
+
             Owner.curState = MobState.Check;
         }
 
@@ -71,23 +75,23 @@ namespace Server.Game.FSM
              */
             if (Owner.target == null)
             {
-                Owner._state.ChangeState(Owner._return);
+                Owner.FSMController.ChangeState(Owner._return);
                 return;
             }
 
-            Owner.MoveToTarget(Owner.target.transform.position, Owner.midSpeed);
+            Owner.MoveToTarget(Owner.target.CellPos, Owner.midSpeed);
 
-            float distanceFromSpawn = Vector3.Distance(Owner.spawnPoint.position, Owner.transform.position);
+            float distanceFromSpawn = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
             if (distanceFromSpawn > Owner.maxDistance)
             {
-                Owner._state.ChangeState(Owner._return);
+                Owner.FSMController.ChangeState(Owner._return);
                 return;
             }
 
-            float distanceToTarget = Vector3.Distance(Owner.target.transform.position, Owner.transform.position);
+            float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             if (distanceToTarget <= Owner.chaseRange)
             {
-                Owner._state.ChangeState(Owner._chase);
+                Owner.FSMController.ChangeState(Owner._chase);
                 return;
             }
         }
@@ -101,9 +105,9 @@ namespace Server.Game.FSM
 
     public class ChaseState : IState
     {
-        public Monster Owner;
+        public EnemyAI Owner;
 
-        public ChaseState(Monster owner)
+        public ChaseState(EnemyAI owner)
         {
             Owner = owner;
         }
@@ -111,6 +115,8 @@ namespace Server.Game.FSM
         //초기화
         public void Enter()
         {
+            Console.WriteLine("ChaseState");
+
             Owner.curState = MobState.Chase;
         }
 
@@ -123,28 +129,31 @@ namespace Server.Game.FSM
              */
             if (Owner.target == null)
             {
-                Owner._state.ChangeState(Owner._return);
+                Owner.FSMController.ChangeState(Owner._return);
                 return;
             }
 
-            Owner.MoveToTarget(Owner.target.transform.position, Owner.highSpeed);
+            Owner.MoveToTarget(Owner.target.CellPos, Owner.highSpeed);
 
-            float distanceFromSpawn = Vector3.Distance(Owner.spawnPoint.position, Owner.transform.position);
+            List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.target.CellPos, checkObjects: false);
+
+
+            float distanceFromSpawn = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
             if (distanceFromSpawn > Owner.maxDistance)
             {
-                Owner._state.ChangeState(Owner._return);
+                Owner.FSMController.ChangeState(Owner._return);
                 return;
             }
 
-            float distanceToTarget = Vector3.Distance(Owner.target.transform.position, Owner.transform.position);
+            float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             if (distanceToTarget <= Owner.attackRange)
             {
-                Owner._state.ChangeState(Owner._attack);
+                Owner.FSMController.ChangeState(Owner._attack);
                 return;
             }
             else if (distanceToTarget > Owner.chaseRange)
             {
-                Owner._state.ChangeState(Owner._check);
+                Owner.FSMController.ChangeState(Owner._check);
             }
         }
 
@@ -157,9 +166,9 @@ namespace Server.Game.FSM
 
     public class AttackState : IState
     {
-        public Monster Owner;
+        public EnemyAI Owner;
 
-        public AttackState(Monster owner)
+        public AttackState(EnemyAI owner)
         {
             Owner = owner;
         }
@@ -169,6 +178,7 @@ namespace Server.Game.FSM
         //초기화
         public void Enter()
         {
+            Console.WriteLine("AttackState");
             Owner.curState = MobState.Attack;
             timer = 0;
         }
@@ -179,16 +189,16 @@ namespace Server.Game.FSM
              * 공격을 완료했을때 플레이어가 포착거리 밖으로 나갈경우 => 의심
              *                 플레이어가 포착거리 안에 있음 => 추격 반복
              */
-            timer += Time.deltaTime;
+            timer += Program.ServerIntervalTick;
             if (timer > Owner.attackDelay)
             {
                 if (Owner.target == null)
                 {
-                    Owner._state.ChangeState(Owner._return);
+                    Owner.FSMController.ChangeState(Owner._return);
                     return;
                 }
 
-                float distanceToTarget = Vector3.Distance(Owner.target.transform.position, Owner.transform.position);
+                float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
                 if (distanceToTarget <= Owner.attackRange)
                 {
                     //초기화 후 재공격
@@ -197,12 +207,12 @@ namespace Server.Game.FSM
                 }
                 else if (distanceToTarget <= Owner.chaseRange)
                 {
-                    Owner._state.ChangeState(Owner._chase);
+                    Owner.FSMController.ChangeState(Owner._chase);
                     return;
                 }
                 else if (distanceToTarget <= Owner.detectionRange)
                 {
-                    Owner._state.ChangeState(Owner._check);
+                    Owner.FSMController.ChangeState(Owner._check);
                     return;
                 }
 
@@ -219,9 +229,9 @@ namespace Server.Game.FSM
 
     public class ReturnState : IState
     {
-        public Monster Owner;
+        public EnemyAI Owner;
 
-        public ReturnState(Monster owner)
+        public ReturnState(EnemyAI owner)
         {
             Owner = owner;
         }
@@ -236,12 +246,12 @@ namespace Server.Game.FSM
             /*
              *  귀환범위 내에 도착함 => 대기
              */
-            Owner.MoveToTarget(Owner.spawnPoint.transform.position, Owner.midSpeed);
+            Owner.MoveToTarget(Owner.spawnPoint, Owner.midSpeed);
 
-            float distanceToSpawner = Vector3.Distance(Owner.spawnPoint.position, Owner.transform.position);
+            float distanceToSpawner = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
             if (distanceToSpawner <= Owner.spawnerDistance)
             {
-                Owner._state.ChangeState(Owner._idle);
+                Owner.FSMController.ChangeState(Owner._idle);
                 return;
             }
         }
@@ -254,10 +264,10 @@ namespace Server.Game.FSM
     }
     public class StunState : IState
     {
-        public Monster Owner;
+        public EnemyAI Owner;
         public float stunTime;
 
-        public StunState(Monster owner)
+        public StunState(EnemyAI owner)
         {
             Owner = owner;
         }
@@ -285,8 +295,8 @@ namespace Server.Game.FSM
 
     public class DeadState : IState
     {
-        public Monster Owner;
-        public DeadState(Monster owner)
+        public EnemyAI Owner;
+        public DeadState(EnemyAI owner)
         {
             Owner = owner;
         }

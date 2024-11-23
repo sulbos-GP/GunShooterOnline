@@ -24,7 +24,7 @@ namespace Server.Game.FSM
         public void Exit(); // 상태 종료 시 실행
     }
 
-    internal class FSMController
+    public class FSMController
     {
         private IState curState;
 
