@@ -7,8 +7,8 @@ namespace ServerCore
 {
     public class LogicTimer
     {
-        public const float mFramesPerSecond = 60.0f;
-        public const float mFixedDelta = 1.0f / mFramesPerSecond;
+        public static int mFramesPerSecond { get; internal set; } = 60;
+        public static float mFixedDelta = 1.0f / (float)mFramesPerSecond;
 
         private double mAccumulator;
         private long mLastTime;
@@ -18,10 +18,18 @@ namespace ServerCore
 
         public float LerpAlpha => (float)mAccumulator / mFixedDelta;
 
+
+
+
+        public static ulong Tick = 0;
+
+
+
+
         public LogicTimer(Action action)
         {
             mStopwatch = new Stopwatch();
-            mAction = action;
+            mAction += action;
         }
 
         public void Start()
@@ -40,13 +48,16 @@ namespace ServerCore
         {
             long elapsedTicks = mStopwatch.ElapsedTicks;
             mAccumulator += (double)(elapsedTicks - mLastTime) / Stopwatch.Frequency;
+
             mLastTime = elapsedTicks;
 
             while (mAccumulator >= mFixedDelta)
             {
+                Tick++;
                 mAction();
                 mAccumulator -= mFixedDelta;
             }
+
         }
     }
 }

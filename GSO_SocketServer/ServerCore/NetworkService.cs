@@ -100,6 +100,7 @@ namespace ServerCore
     {
         public Listener        mListener;
         public SessionManager  mSessionManager;
+        
 
         public int  mRegister = 100;
         public int  mBackLog = 100;
@@ -107,6 +108,8 @@ namespace ServerCore
         public bool mUseChannel = false;
         public GameRoom gameRoom;
         public int mMaxChannelNumber =  1;
+
+
 
         public ServerNetworkService()
         {
@@ -126,7 +129,9 @@ namespace ServerCore
             mAcceptKey      = acceptKey;
             mRegister       = register;
             mBackLog        = backLog;
-        } public void Init(IPEndPoint endPoint,  string acceptKey, int register, int backLog)
+        } 
+        
+        public void Init(IPEndPoint endPoint,  string acceptKey, int register, int backLog)
         {
             mEndPoint       = endPoint;
             mAcceptKey      = acceptKey;

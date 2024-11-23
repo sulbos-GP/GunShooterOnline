@@ -18,8 +18,24 @@ namespace Server
         public static DatabaseHandler database = new DatabaseHandler();
         public static WebServer web = new WebServer();
 
-        public static ushort ServerTickCount { get; internal set; } = 0;
-        public static int ServerIntervalTick { get; internal set; } = 250;
+
+        public static ulong ServerTickCount
+        {
+            get
+            {
+                return LogicTimer.Tick;/// 10000.0; //50 => 1초
+            }
+          /*  set
+            {
+                LogicTimer._time = (ulong)(value * 10000.0);
+                Console.WriteLine(LogicTimer._time);
+
+            }*/
+        }
+
+
+        public static int mFramesPerSecond { get; internal set; } = LogicTimer.mFramesPerSecond; //50
+        public static int ServerIntervalTick { get; internal set; } = 1000 / mFramesPerSecond;
 
         public static int minutes = 30;
 
