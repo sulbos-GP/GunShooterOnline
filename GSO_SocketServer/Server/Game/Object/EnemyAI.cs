@@ -5,6 +5,7 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Threading.Tasks.Dataflow;
 
 namespace Server.Game.Object
 {
@@ -26,7 +27,7 @@ namespace Server.Game.Object
 
         public Vector2 spawnPoint;
         public float maxDistance; //스폰지점과 10만큼 떨어지면 귀환
-        public float spawnerDistance;
+        public float spawnerDistance; //스폰존 범위
 
         public float lowSpeed;
         public float midSpeed;
@@ -77,6 +78,7 @@ namespace Server.Game.Object
         {
             ObjectType = GameObjectType.Enemyai;
 
+            spawnPoint = CellPos; //임시. 스폰위치를 일시적으로 자신이 생성된 위치로 함
 
             #region FSM
             _idle = new IdleState(this);
