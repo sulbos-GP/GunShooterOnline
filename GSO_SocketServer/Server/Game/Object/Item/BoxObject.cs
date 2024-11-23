@@ -93,7 +93,7 @@ namespace Server.Game.Object.Item
                 Weight = (float)itemObject.Weight,
             };
 
-            this.storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
+            this.storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight + 1.0);
             this.storage.InsertItem(itemObject);
         }
 
