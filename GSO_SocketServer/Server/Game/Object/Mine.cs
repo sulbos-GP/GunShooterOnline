@@ -53,6 +53,13 @@ namespace Server.Game.Object
                     p.OnDamaged(this, 5);
                     active = false;
 
+                    S_TrapAction s_TrapAction = new S_TrapAction()
+                    {
+                        IsActive = true,
+                        ObjectId = info.ObjectId,
+                    };
+
+                    p.gameRoom.BroadCast(s_TrapAction);
                 }
 
 

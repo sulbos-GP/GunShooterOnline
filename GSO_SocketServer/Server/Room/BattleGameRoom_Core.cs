@@ -159,6 +159,7 @@ namespace Server
 
                 {   //본인에게 본인 데이터 정보 전송
                     var enterPacket = new S_EnterGame();
+
                     enterPacket.Player = player.info;
 
                     if (MatchInfo.TryAdd(player.UID, new MatchOutcome()) == false)
@@ -189,6 +190,7 @@ namespace Server
                     player.inventory.storage.PrintInvenContents();
                     player.Session.Send(enterPacket);
 
+                    enterPacket.GameData.LeftTime = Program.minutes;
                     //player.Vision.Update();
                 }
 

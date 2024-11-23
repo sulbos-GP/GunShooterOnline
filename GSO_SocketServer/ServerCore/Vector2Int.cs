@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using System.Runtime.Intrinsics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -46,6 +47,14 @@ namespace ServerCore
         public static explicit operator Vector2(Vector2Int v)
         {
             return new Vector2(v.x, v.y);
+        }
+
+        public static Vector2Int RoundToInt(Vector2 vector)
+        {
+            return new Vector2Int(
+             (int)Math.Round(vector.X, MidpointRounding.AwayFromZero),
+             (int)Math.Round(vector.Y, MidpointRounding.AwayFromZero)
+         );
         }
     }
 

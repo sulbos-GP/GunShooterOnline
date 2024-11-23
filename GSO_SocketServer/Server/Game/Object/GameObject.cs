@@ -119,6 +119,10 @@ public class GameObject
         set => stat.Speed = value;
     }*/
 
+
+    /// <summary>
+    /// Set는 Init에 가장 마지막으로
+    /// </summary>
     public Vector2 CellPos
     {
         get => new(PosInfo.PosX, PosInfo.PosY);

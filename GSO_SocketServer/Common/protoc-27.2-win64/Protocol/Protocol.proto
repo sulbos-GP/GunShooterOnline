@@ -116,6 +116,8 @@ message S_EnterGame{                       //0  1명 게임 접속 패킷
     repeated PS_ItemInfo itemInfos = 2;
     repeated PS_GearInfo gearInfos = 3;
     repeated PS_RegisterQuest quests = 4;
+    GameDataInfo GameData = 5;
+
 }
 
 message S_LeaveGame{                       //1
@@ -459,6 +461,10 @@ message ShapeInfo{
     float PosX          = 1;
     float PosY          = 2;
 }*/
+
+message GameDataInfo{
+    float LeftTime = 1;  //게임 남은 시간
+}
 
 message PS_ItemAttributes
 {
