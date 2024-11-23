@@ -127,8 +127,10 @@ namespace Server.Game.Object
             float bottom = -0.5f;
             Polygon rectangle = ShapeManager.CreateCenterSquare(left, bottom, width);
             rectangle.Parent = this;
-
             currentShape = rectangle;
+
+
+
             Console.WriteLine("생성자 테스트");
             info.Name = "Dog";
 
