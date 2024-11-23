@@ -105,7 +105,7 @@ public class CreatureObj : GameObject
 
         GameObject rootAttacker = attacker;
 
-        if (attacker.ObjectType == GameObjectType.Monster || attacker.ObjectType == GameObjectType.Player)
+        if (attacker.ObjectType == GameObjectType.Enemyai || attacker.ObjectType == GameObjectType.Player)
         {
 
         }
