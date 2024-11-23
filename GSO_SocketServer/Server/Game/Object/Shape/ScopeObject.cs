@@ -70,7 +70,7 @@ namespace Server.Game.Object.Shape
                     closestDistance = distance;
                     closestTarget = gameObject;
                 }
-                Console.Write($"HiT {gameObject.info.Name}");
+                //Console.Write($"HiT {gameObject.info.Name}");
             }
 
             if (closestTarget != null)
