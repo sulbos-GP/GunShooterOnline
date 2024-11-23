@@ -10,6 +10,7 @@ using Server.Game;
 using ServerCore;
 using Server.Game.Object.Item;
 using Server.Game.Object;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Server.Game;
 
@@ -220,6 +221,7 @@ public class Map
                     ExitZone exit = ObjectManager.Instance.Add<ExitZone>();
                     exit.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset));
                     exitZones.Add(exit);
+                    exit.Update();
                 }
                 else if (_collisions[i, j] == 4) //스폰존
                 {

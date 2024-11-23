@@ -933,35 +933,8 @@ namespace Server
 
         public void HandleExitGame(Player player, int exitId)
         {
-
-            EventBus.Publish(EEventBusType.Play, player, "PLAY_OUT");
-
-            Task.Delay(1000);
-
-            //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
-            player.inventory.ClearInventory();
-            ObjectManager.Instance.Remove(player.inventory.Id);
-
-            ObjectManager.Instance.Remove(player.Id);
-
-            S_ExitGame exitPacket = new S_ExitGame()
-            {
-                PlayerId = player.Id,
-                ExitId = exitId
-            };
-            BroadCast(exitPacket);
-
-            S_Despawn despawnPacket = new S_Despawn();
-            despawnPacket.ObjcetIds.Add(player.Id);
-            BroadCast(despawnPacket);
-
-
-            //사람 전부 나가면 gameserver.Stop();
-            //gameserver.Stop();
-
-
-
-            //stop 부분에 모든 남아있는 플레이어 처리!!!!
+            ExitZone exitZone = ObjectManager.Instance.Find<ExitZone>(exitId);
+            exitZone.OnEnterExitZone(player);
         }
 
 

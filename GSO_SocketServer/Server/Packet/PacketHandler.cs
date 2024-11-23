@@ -8,6 +8,7 @@ using Server.Database.Game;
 using Server.Database.Handler;
 using Server.Game;
 using Server.Game.Object;
+using Server.Game.Object.Item;
 using Server.Game.Utils;
 using ServerCore;
 using System;
@@ -195,13 +196,6 @@ class PacketHandler
         Console.WriteLine($"C_ExitPacketHandler");
 
         Player player = clientSession.MyPlayer;
-
-        if (player.gameRoom.MatchInfo.TryGetValue(player.UID, out MatchOutcome outcome) == true)
-        {
-            outcome.escape += 1;
-        }
-        player.gameRoom.PostPlayerStats(player.Id);
-
         player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
 
     }
