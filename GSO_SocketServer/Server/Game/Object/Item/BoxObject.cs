@@ -6,7 +6,6 @@ using System;
 using System.Numerics;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
-using static Humanizer.On;
 
 namespace Server.Game.Object.Item
 {
