@@ -9,6 +9,7 @@ using ServerCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Threading;
@@ -51,7 +52,6 @@ namespace Server
             //TODO : 삭제
             map.ApplyMove(player,
                 new Vector2Int((int)Math.Round(packet.PositionInfo.PosX), (int)Math.Round(packet.PositionInfo.PosY)));
-
             BroadCast(resMovePacket);
         }
 
