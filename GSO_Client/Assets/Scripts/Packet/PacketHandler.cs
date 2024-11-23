@@ -855,10 +855,11 @@ internal class PacketHandler
         Managers.SystemLog.Message("S_AiMove");
 
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
-
+        Vector2 instance = enemy.transform.position;
         foreach (Vector2IntInfo info in packet.PosList)
         {
-            Debug.DrawLine(enemy.transform.position, new Vector2(info.X,info.Y), Color.red);
+            Debug.DrawLine(instance, new Vector2(info.X,info.Y), Color.red);
+            instance = new Vector2(info.X, info.Y);
         }
     }
 
