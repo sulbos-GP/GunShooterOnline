@@ -852,8 +852,8 @@ internal class PacketHandler
     internal static void S_AiMoveHandler(PacketSession session, IMessage message)
     {
         S_AiMove packet = message as S_AiMove;
-        Managers.SystemLog.Message("S_AiMove");
-
+        Managers.SystemLog.Message($"S_AiMove {packet.ObjectId}");
+        
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
         Vector2 instance = enemy.transform.position;
         foreach (Vector2IntInfo info in packet.PosList)

@@ -70,7 +70,7 @@ namespace Server.Game.Object
             ReturnState = new ReturnState(this);
             StunState = new StunState(this);
 
-            _state = new FSMController();
+            _state = new FSMController(this);
 
             maxDistance = 10;
             spawnerDistance = 5;

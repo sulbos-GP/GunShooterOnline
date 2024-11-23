@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Server.Game.Object;
+using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -26,13 +28,21 @@ namespace Server.Game.FSM
 
     public class FSMController
     {
+        private EnemyAI owner;
         private IState curState;
+
+        public FSMController(EnemyAI _owner)
+        {
+            owner = _owner; 
+        }
 
         public void ChangeState(IState newState)
         {
             curState?.Exit();
             curState = newState;
             curState.Enter();
+
+            Console.WriteLine($"{owner.Id}를 {newState}상태로 전환");
         }
 
         public void Update()
