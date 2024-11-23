@@ -14,7 +14,6 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace Server.Game.FSM
 {
-
     public class StateBase : IState
     {
         public EnemyAI Owner;
@@ -39,12 +38,6 @@ namespace Server.Game.FSM
         public virtual void Exit()
         {
 
-        }
-
-
-        protected virtual void ChangeStates(IState changeState)
-        {
-            Owner._state.ChangeState(changeState);
         }
     }
 
@@ -179,6 +172,7 @@ namespace Server.Game.FSM
              */
             if (Owner.target == null)
             {
+                //타겟이 사라지면 3초동안 멈춰있다 전환
                 Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner._return);
                 isStop = true;
                 return;
@@ -202,13 +196,14 @@ namespace Server.Game.FSM
             float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             if (distanceToTarget <= Owner.attackRange)
             {
+                //즉시 공격상태로 전환
                 Owner._state.ChangeState(Owner._attack);
                 return;
             }
             else if (distanceToTarget > Owner.chaseRange && distanceToTarget <=Owner.detectionRange)
             {
+                //1초간 더 이동하다가 경계로 전환
                 Owner.gameRoom.PushAfter(1000, Owner._state.ChangeState, Owner._check);
-                isStop = true;
                 return;
             }
         }
