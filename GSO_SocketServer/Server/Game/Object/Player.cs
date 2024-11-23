@@ -122,6 +122,13 @@ public class Player : CreatureObj
         //room.Push(room.LeaveGame, Id);
     }
 
+    public override void OnCollision(GameObject other)
+    {
+        //base.OnCollision(other);
+
+
+    }
+
 
     public void OnEscaped()
     {

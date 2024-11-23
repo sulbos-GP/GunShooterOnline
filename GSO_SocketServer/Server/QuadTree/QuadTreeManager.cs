@@ -107,17 +107,22 @@ namespace QuadTree
                 Shape s1 = g1.currentShape;
                 ShapeCollision result;
 
+
                 foreach (GameObject g2 in GetNearestObjects(g1))
                 {
                     if (g1 == g2)
                         continue;
-
+               
 
                     Shape s2 = g2.currentShape;
 
                     result = s1.test(s2);
-                    if (result != null && (result.overlap > 0))
+                    if (result != null && (MathF.Abs(result.overlap) > 0))
                     {
+                        if (g1.ObjectType == Google.Protobuf.Protocol.GameObjectType.Noneobject && g2.ObjectType == Google.Protobuf.Protocol.GameObjectType.Player)
+                        {
+                            Console.WriteLine("Scope가 Player 충돌");
+                        }
                         //Debug.Log("충돌함");
                         g1.OnCollision(g2);
                     }

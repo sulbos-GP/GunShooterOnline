@@ -305,4 +305,21 @@ internal class ObjectManager
         return shape.ToArray();
 
     }
+
+    public void Update()
+    {
+        foreach (Player p in _players.Values)
+        {
+            p.Update();
+        }
+        foreach (EnemyAI e in _enemys.Values)
+        {
+            e.Update();
+        }
+        foreach (ScopeObject s in _scopes.Values)
+        {
+            s.Update();
+        }
+        
+    }
 }

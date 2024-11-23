@@ -176,6 +176,7 @@ public class GameObject
 
     public virtual void OnCollision(GameObject other)
     {
+       
         //상속받아 알아서 행동 ex) 스킬이면 데미지 사람이라면 충동처리
         //Console.Write(info.Name + "은" + other.info.Name + " 과 충돌함");
     }

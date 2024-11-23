@@ -7,7 +7,7 @@ namespace ServerCore
 {
     public class LogicTimer
     {
-        public static int mFramesPerSecond { get; internal set; } = 60;
+        public static int mFramesPerSecond { get; internal set; } = 5;
         public static float mFixedDelta = 1.0f / (float)mFramesPerSecond;
 
         private double mAccumulator;
