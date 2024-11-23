@@ -2,44 +2,69 @@ using System.Buffers;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Rendering;
-using static UnityEditor.Rendering.InspectorCurveEditor;
+
 
 public class IdleState : IState
 {
     public FSM_Enemy Owner;
-    private Vector2 targetPos;
+    private Vector2 targetPos;  // 현재 타겟 위치
+    private float waitTimer;   // 대기 타이머
+    private bool isWaiting;    // 대기 상태인지 여부
+
     public IdleState(FSM_Enemy owner)
     {
         Owner = owner;
     }
 
-    //초기화
+    // 초기화
     public void Enter()
     {
         Debug.Log("IdleState");
         Owner.curState = MobState.Idle;
-        targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
+        SetNewTarget();
+        waitTimer = 0f;
+        isWaiting = false;
     }
 
     public void Update()
     {
-        //스폰 존 내를 배회
-        float dist = Vector3.Distance(targetPos, Owner.transform.position);
-        Owner.MoveToTarget(targetPos, Owner.lowSpeed);
-
-        if (dist < 0.1f)
+        if (isWaiting)
         {
-            targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
+            // 대기 상태일 때 타이머 증가
+            waitTimer += Time.deltaTime;
+            if (waitTimer >= 5f) // 5초 대기 완료
+            {
+                isWaiting = false;
+                SetNewTarget(); // 새로운 위치 설정
+            }
+        }
+        else
+        {
+            // 이동 중
+            float dist = Vector3.Distance(targetPos, Owner.transform.position);
+            Owner.MoveToTarget(targetPos, Owner.lowSpeed);
+
+            if (dist < 0.1f) // 타겟에 도착했을 때
+            {
+                isWaiting = true; // 대기 상태로 전환
+                waitTimer = 0f;   // 타이머 초기화
+            }
         }
     }
 
-    //종료
+    // 종료
     public void Exit()
     {
-        
+        // 상태가 종료될 때 필요한 정리 작업
+    }
+
+    private void SetNewTarget()
+    {
+        targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
+        Debug.Log($"New Target Position: {targetPos}");
     }
 }
+
 
 
 public class CheckState : IState
@@ -165,7 +190,9 @@ public class AttackState : IState
         Owner = owner;
     }
 
-    float timer;
+    private float timer;
+
+    private bool isAttackComplete;
 
     //초기화
     public void Enter()
@@ -173,6 +200,7 @@ public class AttackState : IState
         Debug.Log("AttackState");
         Owner.curState = MobState.Attack;
         timer = 0;
+        isAttackComplete = false;
     }
 
     public void Update()
@@ -181,6 +209,8 @@ public class AttackState : IState
          * 공격을 완료했을때 플레이어가 포착거리 밖으로 나갈경우 => 의심
          *                 플레이어가 포착거리 안에 있음 => 추격 반복
          */
+
+
         timer += Time.deltaTime;
         if (timer > Owner.attackDelay)
         {
@@ -223,7 +253,7 @@ public class AttackState : IState
 public class ReturnState : IState
 {
     public FSM_Enemy Owner;
-
+    private Vector2 targetPos;  // 스폰 존 내의 랜덤한 위치
     public ReturnState(FSM_Enemy owner)
     {
         Owner = owner;
@@ -234,15 +264,17 @@ public class ReturnState : IState
     {
         Debug.Log("ReturnState");
         Owner.curState = MobState.Return;
+        targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
     }
     public void Update()
     {
         /*
          *  귀환범위 내에 도착함 => 대기
          */
-        Owner.MoveToTarget(Owner.spawnPoint.transform.position, Owner.midSpeed);
 
-        float distanceToSpawner = Vector3.Distance(Owner.spawnPoint.position, Owner.transform.position);
+        Owner.MoveToTarget(targetPos, Owner.midSpeed);
+
+        float distanceToSpawner = Vector3.Distance(targetPos, Owner.transform.position);
         if (distanceToSpawner <= Owner.spawnerDistance)
         {
             Owner._state.ChangeState(Owner._idle);

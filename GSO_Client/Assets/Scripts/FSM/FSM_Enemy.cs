@@ -107,8 +107,13 @@ public class FSM_Enemy : MonoBehaviour
         float distance = Mathf.Sqrt(UnityEngine.Random.Range(0f, 1f)) * radius;
 
         float x = Mathf.Cos(angle) * distance;
-        float z = Mathf.Sin(angle) * distance;
+        float y = Mathf.Sin(angle) * distance;
 
-        return new Vector2(center.position.x + x, center.position.y);
+        return new Vector2(center.position.x + x, center.position.y+y);
+    }
+
+    public void EnemyAttack()
+    {
+
     }
 }

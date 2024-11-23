@@ -9,8 +9,8 @@ public class AimFov : FieldOfView
     {
         base.Start();
         viewDistance = 10f;
-        fov = 45;
-        rayCount = 50;
+        fov = 90;
+        rayCount = 100;
     }
 
     // Update is called once per frame
