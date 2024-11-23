@@ -58,10 +58,12 @@ namespace Server
 
         public override void LogicUpdate()
         {
+            //물리 엔진 먼저
+            quadTreeManager.Update();
+            //방 처리
             Flush();
 
 
-            quadTreeManager.Update();
 
 
 

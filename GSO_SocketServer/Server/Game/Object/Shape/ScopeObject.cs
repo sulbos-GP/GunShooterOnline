@@ -1,10 +1,12 @@
 ﻿using Collision.Shapes;
 using Differ;
 using Google.Protobuf.Protocol;
+using Pipelines.Sockets.Unofficial.Buffers;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -13,6 +15,7 @@ namespace Server.Game.Object.Shape
     public class ScopeObject : GameObject
     {
         private GameObject _owner;
+        List<GameObject> hits = new List<GameObject>();
 
         public ScopeObject()
         {
@@ -47,29 +50,57 @@ namespace Server.Game.Object.Shape
            CellPos = owenr.CellPos;
         }
 
+        public override void Update()
+        {
+            base.Update();
 
-       /* public override void OnCollision(GameObject other)
+            CellPos = _owner.CellPos;
+
+            GameObject closestTarget = null;
+            float closestDistance = float.MaxValue;
+
+            foreach (GameObject gameObject in hits)
+            {
+                // 현재 오브젝트와 타겟 간의 거리 계산
+                float distance = Vector2.Distance(_owner.CellPos, gameObject.CellPos);
+
+                // 가장 가까운 거리 갱신
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    closestTarget = gameObject;
+                }
+            }
+
+            if (closestTarget != null)
+            {
+                EnemyAI enemyAI = _owner as EnemyAI;
+                if(enemyAI != null)
+                {
+                    enemyAI.target = closestTarget;
+                    enemyAI._state.ChangeState(enemyAI.CheckState); // 상태를 체크로 전환
+                }
+               
+            }
+
+
+            hits.Clear();
+        }
+
+        public override void OnCollision(GameObject other)
         {
             //base.OnCollision(other);
 
-            if (other.ObjectType == GameObjectType.Player && GetOwner)
+            if (other.ObjectType != GameObjectType.Player && other.GetOwner().Id != OwnerId)
             {
                 return;
             }
+            hits.Add(other);
 
-            if (collision.tag == "Player" && _owner.target == null)
-            {
-                Debug.Log("감지됨");
-                _owner.target = collision.gameObject;
-                _owner._state.ChangeState(_owner._check);     //idle과 return 상태에서 자동으로 check으로 전환됨
-            }
-
+           
         }
 
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-           
-        }*/
+      
         public override GameObject GetOwner()
         {
             return _owner;

@@ -113,7 +113,7 @@ namespace Server.Game.FSM
                 float distanceToPlayer = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
                 if (distanceToPlayer <= Owner.chaseRange)
                 {
-                    Owner._state.ChangeState(Owner._chase);
+                    Owner._state.ChangeState(Owner.ChaseState);
                     return;
                 }
             }
@@ -121,7 +121,7 @@ namespace Server.Game.FSM
             if (Owner.target == null)
             {
                 //타겟이 사라지면 3초동안 멈춘뒤 귀환
-                Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner._return);
+                Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner.ReturnState);
                 isStop = true;
                 return;
             }
@@ -169,7 +169,7 @@ namespace Server.Game.FSM
             if (Owner.target == null)
             {
                 //타겟이 사라지면 3초동안 멈춰있다 전환
-                Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner._return);
+                Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner.ReturnState);
                 isStop = true;
                 return;
             }
@@ -193,13 +193,13 @@ namespace Server.Game.FSM
             if (distanceToTarget <= Owner.attackRange)
             {
                 //공격 범위에 들어온다면 즉시 공격상태로 전환
-                Owner._state.ChangeState(Owner._attack);
+                Owner._state.ChangeState(Owner.AttackState);
                 return;
             }
             else if (distanceToTarget > Owner.chaseRange && distanceToTarget <=Owner.detectionRange)
             {
                 //추격범위 밖, 감지범위 안이라면 1초간 더 이동하다가 경계로 전환
-                Owner.gameRoom.PushAfter(1000, Owner._state.ChangeState, Owner._check);
+                Owner.gameRoom.PushAfter(1000, Owner._state.ChangeState, Owner.CheckState);
                 return;
             }
         }
@@ -238,7 +238,7 @@ namespace Server.Game.FSM
         {
             if (Owner.target == null)  //공격후 타겟이 없어지면 귀환
             {
-                Owner._state.ChangeState(Owner._return);
+                Owner._state.ChangeState(Owner.ReturnState);
                 return;
             }
 
@@ -253,13 +253,13 @@ namespace Server.Game.FSM
             else if (distanceToTarget <= Owner.chaseRange)
             {
                 //추격범위 안이라면 추격상태 전환
-                Owner._state.ChangeState(Owner._chase);
+                Owner._state.ChangeState(Owner.ChaseState);
                 return;
             }
             else if (distanceToTarget <= Owner.detectionRange)
             {
                 //감지범위 안이라면 경계상태 전환
-                Owner._state.ChangeState(Owner._check);
+                Owner._state.ChangeState(Owner.CheckState);
                 return;
             }
         }
@@ -296,7 +296,7 @@ namespace Server.Game.FSM
             float distanceToTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
             if (distanceToTargetPos <= 0.1f)
             {
-                Owner._state.ChangeState(Owner._idle);
+                Owner._state.ChangeState(Owner.IdleState);
                 return;
             }
         }
@@ -337,7 +337,7 @@ namespace Server.Game.FSM
             //거리에 따른 상태 변화
             if (Owner.target == null)  //타겟이 없다면 귀환
             {
-                Owner._state.ChangeState(Owner._return);
+                Owner._state.ChangeState(Owner.ReturnState);
                 return;
             }
 
@@ -345,17 +345,17 @@ namespace Server.Game.FSM
             //타겟이 있다면 타겟과의 거리에 따라 패턴 변경
             if (distanceToTarget <= Owner.attackRange)
             {
-                Owner._state.ChangeState(Owner._attack);
+                Owner._state.ChangeState(Owner.AttackState);
                 return;
             }
             else if (distanceToTarget <= Owner.chaseRange)
             {
-                Owner._state.ChangeState(Owner._chase);
+                Owner._state.ChangeState(Owner.ChaseState);
                 return;
             }
             else if (distanceToTarget <= Owner.detectionRange)
             {
-                Owner._state.ChangeState(Owner._check);
+                Owner._state.ChangeState(Owner.CheckState);
                 return;
             }
         }
