@@ -1,18 +1,25 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
+using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Models.GameDB;
 
 namespace Server.Game
 {
     public class ExitZone : GameObject
     {
+        private IJob _job;
 
-        
+        private const int EXIT_TIME = 5000;
+        private const double EXIT_DISTANCE = 1.5;
+
+        private Dictionary<int, int> playerTickCounts = new Dictionary<int, int>();
+
         public ExitZone()
         {
             ObjectType = GameObjectType.Exitzone;
@@ -36,31 +43,124 @@ namespace Server.Game
 
         }
 
-
-        public void Update(Player player)
+        public override void Update()
         {
-            if (IsPlayerInZone(player))
+
+            if (gameRoom != null)
+                _job = gameRoom.PushAfter(Program.ServerIntervalTick, Update);
+
+            Vector2 exitZonePos = CellPos;
+            foreach ((int playerId, int interactiveTick) in playerTickCounts)
             {
-                OnPlayerExit(player);
+                Player player = ObjectManager.Instance.Find<Player>(playerId);
+                if(player == null)
+                {
+                    OnLevaeExitZone(player, "player is null");
+                    break;
+                }
+
+                if(player.isInteractive == false)
+                {
+                    OnLevaeExitZone(player, "player interative is false");
+                    break;
+                }
+
+                Vector2 playerPos = player.CellPos;
+                double distance = Math.Sqrt(Math.Pow(playerPos.X - exitZonePos.X, 2) + Math.Pow(playerPos.Y - exitZonePos.Y, 2));
+                if (distance >= EXIT_DISTANCE)
+                {
+                    OnLevaeExitZone(player, $"player distance over {EXIT_DISTANCE}");
+                    break;
+                }
+                
+            }
+            
+        }
+
+        public void OnEnterExitZone(Player enterPlayer)
+        {
+            bool isFind = playerTickCounts.TryGetValue(enterPlayer.Id, out int tickCount);
+            if (isFind == true)
+            {
+                return;
+            }
+            playerTickCounts.Add(enterPlayer.Id, Environment.TickCount);
+
+            enterPlayer.isInteractive = true;
+            enterPlayer.gameRoom.PushAfter(EXIT_TIME, HandleExit, enterPlayer);
+        }
+
+        public void OnLevaeExitZone(Player leavePlayer, string cause)
+        {
+            Console.WriteLine($"OnLevaeExitZone : {cause}");
+            bool isFind = playerTickCounts.TryGetValue(leavePlayer.Id, out int tickCount);
+            if (isFind == true)
+            {
+                S_ExitGame exitPacket = new S_ExitGame()
+                {
+                    IsSuccess = false,
+                    RetryTime = (tickCount + EXIT_TIME) - Environment.TickCount,
+                    PlayerId = leavePlayer.Id,
+                    ExitId = this.Id
+                };
+                leavePlayer.gameRoom.BroadCast(exitPacket);
+
+                playerTickCounts.Remove(leavePlayer.Id);
             }
         }
 
-        private bool IsPlayerInZone(Player player)
+        private void HandleExit(Player exitPlayer)
         {
-            //return Bounds.IntersectsWith(player.Bounds);
-            return true;
+            bool isFind = playerTickCounts.TryGetValue(exitPlayer.Id, out int tickCount);
+            if (isFind == false)
+            {
+                return;
+            }
+            playerTickCounts.Remove(exitPlayer.Id);
+
+            if(tickCount + EXIT_TIME > Environment.TickCount)
+            {
+                //OnLevaeExitZone(exitPlayer, $"tick count over {Environment.TickCount - (tickCount + EXIT_TIME)}");
+                return;
+            }
+
+            if (exitPlayer.gameRoom.MatchInfo.TryGetValue(exitPlayer.UID, out MatchOutcome outcome) == true)
+            {
+                outcome.escape += 1;
+            }
+
+            //Play관련 이벤트 버스
+            EventBus.Publish(EEventBusType.Play, exitPlayer, "PLAY_OUT");
+
+            //웹에 플레이어 메타데이터 보내기
+            exitPlayer.gameRoom.PostPlayerStats(exitPlayer.Id);
+
+            //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
+            exitPlayer.inventory.ClearInventory();
+            ObjectManager.Instance.Remove(exitPlayer.inventory.Id);
+
+            ObjectManager.Instance.Remove(exitPlayer.Id);
+
+            S_ExitGame exitPacket = new S_ExitGame()
+            {
+                IsSuccess = true,
+                PlayerId = exitPlayer.Id,
+                ExitId = this.Id
+            };
+            exitPlayer.gameRoom.BroadCast(exitPacket);
+
+            S_Despawn despawnPacket = new S_Despawn();
+            despawnPacket.ObjcetIds.Add(exitPlayer.Id);
+            exitPlayer.gameRoom.BroadCast(despawnPacket);
+
+
+            //사람 전부 나가면 gameserver.Stop();
+            //gameserver.Stop();
+
+
+
+            //stop 부분에 모든 남아있는 플레이어 처리!!!!
         }
 
-        private void OnPlayerExit(Player player)
-        {
-            // 게임을 종료하거나 다음 단계로 넘어가는 로직을 여기에 작성
-            Console.WriteLine("Player has exited the zone!");
-
-            // 예를 들어, 게임 종료 시
-            // Game.End();
-
-            // 또는 다음 단계로 넘어가기
-            // Game.LoadNextLevel();
-        }
     }
 }

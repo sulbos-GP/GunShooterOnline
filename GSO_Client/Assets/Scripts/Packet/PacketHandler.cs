@@ -212,18 +212,45 @@ internal class PacketHandler
         {
             return;
         }
-        //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
-        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+
+        if(packet.IsSuccess == true)
         {
-            //플레이어는 자신의 장착칸과 인벤토리의 내용을 서버에 전송?
-            return;
+            var player = Managers.Object.FindById(packet.PlayerId);
+
+            //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
+            if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+            {
+                //플레이어는 자신의 장착칸과 인벤토리의 내용을 서버에 전송?
+                //return;
+            }
+
+            //클라이언트의 모든 오브젝트의 내용 클리어
+            Managers.Object.Clear();
+            Managers.Object.DebugDics();
+
+            // 게임 씬을 로비로
+            var evniorment = Managers.EnvConfig.GetEnvironmentConfig();
+            if (evniorment.LobbyName == "Shelter")
+            {
+                Managers.Scene.LoadScene(Define.Scene.Shelter);
+            }
+            else
+            {
+                Managers.Scene.LoadScene(Define.Scene.Lobby);
+            }
+
+            //Managers.Resource.Destroy(player);
+            //Managers.Object.Remove(packet.PlayerId);
+        }
+        else
+        {
+            ExitZone exitZone = Managers.Object.FindById(packet.ExitId).GetComponent<ExitZone>();
+            if (exitZone != null)
+            {
+                exitZone.CancelExit(packet.RetryTime / 1000.0f);
+            }
         }
 
-        var player = Managers.Object.FindById(packet.PlayerId);
-
-        Managers.Resource.Destroy(player);
-        Managers.Object.Remove(packet.PlayerId);
-        Managers.Object.DebugDics();
     }
 
     internal static void S_JoinServerHandler(PacketSession session, IMessage message)
@@ -818,6 +845,13 @@ internal class PacketHandler
             Mine mine = Managers.Object.FindById(packet.ObjectId).GetComponent<Mine>();
             mine.Explosion(packet.ObjectId);
         }
+    }
+
+    internal static void S_AiMoveHandler(PacketSession session, IMessage message)
+    {
+        S_AiMove packet = message as S_AiMove;
+        Managers.SystemLog.Message("S_AiMove");
+
     }
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)

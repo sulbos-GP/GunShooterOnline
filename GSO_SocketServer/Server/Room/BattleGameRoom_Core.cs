@@ -18,6 +18,7 @@ using Server.Game.Quest;
 using WebCommonLibrary.Models.GameDatabase;
 using Server.Game.Quest.Interfaces;
 using Server.Game.Object;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Server
 {
