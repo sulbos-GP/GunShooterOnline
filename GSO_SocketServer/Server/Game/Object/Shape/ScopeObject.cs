@@ -91,7 +91,7 @@ namespace Server.Game.Object.Shape
         {
             //base.OnCollision(other);
 
-            if (other.ObjectType != GameObjectType.Player && other.GetOwner().Id != OwnerId)
+            if (other.ObjectType != GameObjectType.Player || other.GetOwner().Id == OwnerId)
             {
                 return;
             }
