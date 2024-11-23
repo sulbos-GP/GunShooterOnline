@@ -66,6 +66,7 @@ namespace Server.Game.Object
 
                 return null; // 타겟이 없을 경우 null 반환
             }
+            set => target = value;
         }
         public float targetDistance;
 
@@ -157,12 +158,18 @@ namespace Server.Game.Object
             if (target != null)
             {
                 float targetDis = Vector2.Distance(target.CellPos, CellPos);
+                if(targetDis > detectionRange)
+                {
+                    target = null;
+                }
             }
             if (curState == MobState.Dead)
             {
                 return;
             }
 
+
+            
             _state.Update();
 
             if (Hp <= 0)
