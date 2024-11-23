@@ -13,7 +13,7 @@ internal class Managers : MonoBehaviour
 
     private readonly List<Tuple<Action, short>> _actions = new();
     private readonly object _lock = new();
-
+    public float leftTime;
     public static Managers Instance
     {
         get

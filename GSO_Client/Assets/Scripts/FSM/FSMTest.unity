@@ -541,9 +541,9 @@ MonoBehaviour:
   lowSpeed: 3
   midSpeed: 5
   highSpeed: 7
-  detectionRange: 7.5
-  chaseRange: 5
-  attackRange: 3
+  detectionRange: 10
+  chaseRange: 4
+  attackRange: 2
   attackDelay: 2
   disappearTime: 3
   maxHP: 100
@@ -611,7 +611,7 @@ Transform:
   m_GameObject: {fileID: 1287914121}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.91, y: -0.39, z: 0}
+  m_LocalPosition: {x: -3.25, y: -0.09, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -26,9 +26,9 @@ public class FSM_Enemy : MonoBehaviour
     public float spawnerDistance;
 
     [Header("스텟")]
-    public float lowSpeed;
-    public float midSpeed ;
-    public float highSpeed;
+    public float lowSpeed; //대기 이동속도
+    public float midSpeed ; //대기와 추격을 제외한 이동속도
+    public float highSpeed; //추격 이동속도
     public float detectionRange; //감지 거리 , 감지범위의 크기 = *2 . 트리거로 감지범위 안에 들어온 적이 있으면 해당 방향으로 중간속도 이동. 감지범위밖으로 나가고 3초뒤 귀환
     public float chaseRange;        //추격 거리 , 범위안에 타겟이 들어오면 타겟을 향해 빠르게 이동, 해당 범위 밖으로 나가고 3초뒤 의심으로 전환
     public float attackRange;      //공격 거리 , 범위안에 들어오면 타겟을 향해 공격 실행, 공격이 끝나면 타겟의 거리에 따라 반복 공격, 추격 혹은 의심 혹은 귀환
@@ -61,10 +61,10 @@ public class FSM_Enemy : MonoBehaviour
         midSpeed = 1f;
         highSpeed = 2f;
         detectionRange = 10f; //감지 거리 , 감지범위의 크기 = *2 . 트리거로 감지범위 안에 들어온 적이 있으면 해당 방향으로 중간속도 이동. 감지범위밖으로 나가고 3초뒤 귀환
-        chaseRange = 6;        //추격 거리 , 범위안에 타겟이 들어오면 타겟을 향해 빠르게 이동, 해당 범위 밖으로 나가고 3초뒤 의심으로 전환
+        chaseRange = 4;        //추격 거리 , 범위안에 타겟이 들어오면 타겟을 향해 빠르게 이동, 해당 범위 밖으로 나가고 3초뒤 의심으로 전환
         attackRange = 2f;      //공격 거리 , 범위안에 들어오면 타겟을 향해 공격 실행, 공격이 끝나면 타겟의 거리에 따라 반복 공격, 추격 혹은 의심 혹은 귀환
         attackDelay = 2f;      //공격후 잠시 대기하는 시간
-        disappearTime = 3f; //죽은 적이 3초뒤에 삭제됨
+        disappearTime = 3f;   //죽은 적이 3초뒤에 삭제됨
         maxHP = 100;
 
         currentHP = maxHP;
