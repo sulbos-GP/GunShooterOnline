@@ -16,6 +16,7 @@ namespace Server.Game.Object.Item
 
         public BoxObject()
         {
+
             ObjectType = GameObjectType.Box;
 
             float width = 1;
@@ -59,38 +60,39 @@ namespace Server.Game.Object.Item
             //임의의 아이템
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
-            Random rand = new Random();
-            int number = rand.Next(1, 6);
-
-
             SetItem(501);
-            return;
-            bool result = true;
-
-            switch (number)
-            {
-                case 1:
-                    result = RandomItem(101, 103);
-                    break;
-                case 2:
-                    result = RandomItem(201, 203);
-                    break;
-                case 3:
-                    result = RandomItem(300, 303);
-                    break;
-                case 4:
-                    result = RandomItem(401, 404);
-                    break;
-                case 5:
-                    result = RandomItem(501, 502);
-                    break;
-                case 6:
-                    result = RandomItem(601, 606);
-                    break;
-            }
-
             CellPos = pos;
 
+
+
+        }
+
+        public void SetStorage(Storage storage)
+        {
+            info.Box = new BoxInfo()
+            {
+                X = storage.Scale_X,
+                Y = storage.Scale_Y,
+                Weight = (float)storage.MaxWeight,
+            };
+
+            this.storage = storage;
+        }
+
+        public void SetItemObject(ItemObject itemObject)
+        {
+            info.Box = new BoxInfo()
+            {
+                X = itemObject.X,
+                Y = itemObject.Y,
+                Weight = (float)itemObject.Weight,
+            };
+
+            itemObject.X = 0;
+            itemObject.Y = 0;
+
+            storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
+            storage.InsertItem(itemObject);
         }
 
 
@@ -121,8 +123,36 @@ namespace Server.Game.Object.Item
             return error == EStorageError.None ? true : false;
         }
 
+        public void SetRandomItem()
+        {
 
-        public bool RandomItem(int min, int max)
+            Random rand = new Random();
+            int number = rand.Next(1, 6);
+
+            switch (number)
+            {
+                case 1:
+                    RandomItem(101, 103);
+                    break;
+                case 2:
+                    RandomItem(201, 203);
+                    break;
+                case 3:
+                    RandomItem(300, 303);
+                    break;
+                case 4:
+                    RandomItem(401, 404);
+                    break;
+                case 5:
+                    RandomItem(501, 502);
+                    break;
+                case 6:
+                    RandomItem(601, 606);
+                    break;
+            }
+        }
+
+        private void RandomItem(int min, int max)
         {
             Random rand = new Random();
             int item_id = rand.Next(min, max);
@@ -146,9 +176,7 @@ namespace Server.Game.Object.Item
                 }
             };
             ItemObject newItem = new ItemObject(item);
-            EStorageError error = storage.InsertItem(newItem);
-
-            return error == EStorageError.None ? true : false;
+            SetItemObject(newItem);
         }
 
     }

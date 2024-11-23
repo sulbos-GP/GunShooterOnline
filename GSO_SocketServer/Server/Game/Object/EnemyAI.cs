@@ -1,6 +1,7 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.FSM;
+using Server.Game.Object.Item;
 using Server.Game.Object.Shape;
 using Server.Game.Utils;
 using ServerCore;
@@ -183,6 +184,18 @@ namespace Server.Game.Object
 
         public override void OnDead(GameObject attacker)
         {
+            if (gameRoom == null)
+                return;
+
+            BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
+            boxObject.CellPos = this.CellPos;
+            boxObject.SetRandomItem();
+            gameRoom.map.rootableObjects.Add(boxObject);
+
+            S_Spawn spawnPacket = new S_Spawn();
+            spawnPacket.Objects.Add(boxObject.info);
+            gameRoom.BroadCast(spawnPacket);
+
             base.OnDead(attacker);
         }
 

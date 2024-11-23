@@ -11,11 +11,13 @@ using Google.Protobuf.Protocol;
 using Humanizer.DateTimeHumanizeStrategy;
 using Server.Database.Handler;
 using Server.Game.Object.Gear;
+using Server.Game.Object.Item;
 using Server.Game.Quest;
 using StackExchange.Redis;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
+using static Humanizer.On;
 
 namespace Server.Game;
 
@@ -109,17 +111,56 @@ public class Player : CreatureObj
         if (gameRoom == null)
             return;
 
-        /*var diePacket = new S_Die();
-        diePacket.ObjectId = Id;
-        diePacket.AttackerId = attacker.Id;
+        int[,] directions = new int[,]
+        {
+            { 0, -1 },
+            { 0, 1 }, 
+            { -1, 0 }, 
+            { 1, 0 },
+            { -1, -1 }, 
+            { -1, 1 }, 
+            { 1, -1 },
+            { 1, 1 }
+        };
 
-        gameRoom.BroadCast(diePacket);
+        int currenDirection = 0;
 
-        var room = gameRoom;*/
-        //Console.WriteLine("On Dead");
+        S_Spawn spawnPacket = new S_Spawn();
+        foreach (EGearPart type in Enum.GetValues(typeof(EGearPart)))
+        {
+            ItemObject gearItem = gear.GetPartItem(type);
+            if (gearItem == null)
+            {
+                continue;
+            }
+
+            Random rand = new Random();
+            double scale = rand.NextDouble() + 1.5;
+
+            BoxObject gearBoxObject = ObjectManager.Instance.Add<BoxObject>();
+            gearBoxObject.CellPos = new Vector2(
+                (int)(this.CellPos.X + directions[currenDirection, 0] * scale), 
+                (int)(this.CellPos.Y + directions[currenDirection, 1] * scale));
+
+            gearBoxObject.SetItemObject(gearItem);
+            gameRoom.map.rootableObjects.Add(gearBoxObject);
+
+            spawnPacket.Objects.Add(gearBoxObject.info);
+
+            currenDirection++;
+        }
+ 
+        BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
+        boxObject.CellPos = this.CellPos;
+        boxObject.SetStorage(this.inventory.storage);
+        gameRoom.map.rootableObjects.Add(boxObject);
+
+        spawnPacket.Objects.Add(boxObject.info);
+        gameRoom.BroadCast(spawnPacket);
+
+
         base.OnDead(attacker);
 
-        //room.Push(room.LeaveGame, Id);
     }
 
     public override void OnCollision(GameObject other)
