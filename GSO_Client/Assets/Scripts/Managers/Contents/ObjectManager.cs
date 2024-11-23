@@ -107,7 +107,7 @@ public class ObjectManager
 
 
             Debug.Log("================성훈이 요기야====================== ");  //Enemyai  CLASS추가
-            var mc = go.GetComponent<MonsterController>();
+            var mc = go.GetComponent<EnemyAI>();
 
 
             //mc.PlanetSide = info.PositionInfo.Side;
@@ -196,10 +196,10 @@ public class ObjectManager
                 Managers.SystemLog.Message("_objects add fail");
             }
              Debug.Log("================성훈이 요기야====================== "); //Mine clASS
-            /*ExitZone exitZone = go.GetComponent<ExitZone>();
-            exitZone.objectId = info.ObjectId;
-            exitZone.interactType = InteractType.Exit;
-            exitZone.exitTime = 5; //임시추가*/
+            //Mine mine = go.GetComponent<Mine>();
+            //mine.objectId = info.ObjectId;
+            //mine.interactType = InteractType.Mine;
+            //exitZone.exitTime = 5; //임시추가
         }
     }
 

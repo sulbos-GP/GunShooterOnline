@@ -24,25 +24,6 @@ public enum MonsterSpawnType //직접 소환 or 세력 느낌
 
 public class Monster : CreatureObj
 {
-    
-
-    private void Awake()
-    {
-    }
-
-    private void Start()
-    {
-       
-    }
-
-    private void Update()
-    {
-       
-    }
-
-
-
-    
     /*private readonly int FindRange = 12;
 
 
