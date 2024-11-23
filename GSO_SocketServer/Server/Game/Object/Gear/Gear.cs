@@ -52,6 +52,12 @@ namespace Server.Game.Object.Gear
 
         public ItemObject GetPartItem(EGearPart part)
         {
+
+            if(part == EGearPart.None)
+            {
+                return null;
+            }
+
             Storage storage = parts[ConvertPartToString(part)];
             if(storage.ItemCount == 0)
             {

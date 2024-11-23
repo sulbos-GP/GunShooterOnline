@@ -26,8 +26,28 @@ namespace Server.Game
     {
         private List<ItemObject> items = new List<ItemObject>();     //저장소에 들어있는 아이템 오브젝트
         private List<List<int>> grid = new List<List<int>>();        //저장소의 그리드
+
+        private int scale_x = 0;
+        private int scale_y = 0;
+
         private double maxWeight = 0.0;                             //저장소 최대 무게
         private double curWeight = 0.0;                             //저장소 현재 무게
+
+        public int Scale_X
+        {
+            get
+            {
+                return scale_x;
+            }
+        }
+
+        public int Scale_Y
+        {
+            get
+            {
+                return scale_y;
+            }
+        }
 
         public double MaxWeight
         {
@@ -85,6 +105,10 @@ namespace Server.Game
             grid.Clear();
  
             this.items.Clear();
+
+            scale_x = rows;
+            scale_y = cols;
+
             this.MaxWeight = weight;
             this.CurWeight = 0.0;
 
