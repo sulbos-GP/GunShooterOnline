@@ -52,6 +52,7 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
+            base.Enter();
             Owner.curState = MobState.Idle;
             targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
         }
@@ -59,6 +60,7 @@ namespace Server.Game.FSM
         public override void Update()
         {
             //스폰 주변을 배회함.
+            base.Update();
             float dist = Vector2.Distance(targetPos, Owner.CellPos);
             Owner.MoveToTarget(targetPos, Owner.lowSpeed);
 
@@ -96,6 +98,7 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
+            base.Enter();
             Console.WriteLine("CheckState");
 
             Owner.curState = MobState.Check;
@@ -104,6 +107,8 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
+            base.Update();
+
             Owner.MoveToTarget(targetPos, Owner.midSpeed);
             float distanceFromTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
 
@@ -158,6 +163,7 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
+            base.Enter();
             Console.WriteLine("ChaseState");
 
             Owner.curState = MobState.Chase;
@@ -165,7 +171,8 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
-            
+            base.Update();
+
             if (Owner.target == null)
             {
                 //타겟이 사라지면 3초동안 멈춰있다 전환
@@ -183,6 +190,7 @@ namespace Server.Game.FSM
             S_AiMove MovePacket = new S_AiMove();
             for (int i = 0; i < path.Count; i++)
             {
+                MovePacket.ObjectId = Owner.Id;
                 MovePacket.PosList.Add(new Vector2IntInfo() { X= path[i].x, Y = path[i].y });
             }
             Owner.gameRoom.BroadCast(MovePacket);
@@ -220,12 +228,14 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
+            base.Enter();
             Console.WriteLine("AttackState");
             Owner.curState = MobState.Attack;
         }
 
         public override void Update()
         {
+            base.Update();
 
             //공격함수 추가
 
@@ -284,12 +294,15 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
+            base.Enter();
             Owner.curState = MobState.Return;
             targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
         }
 
         public override void Update()
         {
+            base.Update();
+
             Owner.MoveToTarget(Owner.spawnPoint, Owner.midSpeed);
 
             //스폰존 내의 랜덤한 타겟위치로 이동후 대기상태로 전환
@@ -318,6 +331,7 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
+            base.Enter();
             Owner.curState = MobState.Stun;
         }
 
@@ -328,6 +342,8 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
+            base.Update();
+
             //스턴시간만큼 대기 후 조건 체크 후 만족하는 다음 상태로 즉시 전환
             Owner.gameRoom.PushAfter((int)(stunTime*1000), CheckNextState);
         }
@@ -377,6 +393,7 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
+            base.Enter();
             Owner.curState = MobState.Dead;
 
             //사라지는 시간동안 대기 후 사망 후처리 진행
@@ -391,7 +408,8 @@ namespace Server.Game.FSM
         //업데이트
         public override void Update()
         {
-            
+            base.Update();
+
         }
 
         //종료

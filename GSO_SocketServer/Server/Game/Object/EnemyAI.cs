@@ -223,6 +223,7 @@ namespace Server.Game.Object
 
         public Vector2 GetRandomPosInSpawnZone(Vector2 center, float radius)
         {
+            return center;
             Random random = new Random();
 
             float angle = (float)(random.NextDouble() * MathF.PI * 2);

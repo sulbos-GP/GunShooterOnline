@@ -406,7 +406,8 @@ message S_UpdateQuest {  //36
 
 
 message S_AiMove{  //S_AI_MOVE = 39;
-    repeated Vector2IntInfo PosList = 1;
+    int32 ObjectId = 1;
+    repeated Vector2IntInfo PosList = 2;
 }
 
 //--------------- END message --------------------
