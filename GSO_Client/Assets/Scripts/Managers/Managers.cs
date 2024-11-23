@@ -13,7 +13,7 @@ internal class Managers : MonoBehaviour
 
     private readonly List<Tuple<Action, short>> _actions = new();
     private readonly object _lock = new();
-    public float leftTime;
+    
     public static Managers Instance
     {
         get
@@ -39,7 +39,7 @@ internal class Managers : MonoBehaviour
     private void Update()
     {
         _network.Update(); //네트워크
-        UpdateTime();
+        
         if (_actions.Count > 0)
             lock (_lock)
             {
@@ -49,12 +49,7 @@ internal class Managers : MonoBehaviour
             }
     }
 
-    private void UpdateTime()
-    {
-        leftTime -= Time.deltaTime;
-        UIManager.Instance.SetTimeUI(leftTime);
-    }
-
+    
     public void Add(Tuple<Action, short> tuple)
     {
         lock (_lock)
