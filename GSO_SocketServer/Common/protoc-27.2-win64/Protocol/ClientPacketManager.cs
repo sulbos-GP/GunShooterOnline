@@ -68,7 +68,9 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SUpdateQuest, MakePacket<S_UpdateQuest>);
 		_handler.Add((ushort)MsgId.SUpdateQuest, PacketHandler.S_UpdateQuestHandler);		
 		_onRecv.Add((ushort)MsgId.SGundataUpdate, MakePacket<S_GundataUpdate>);
-		_handler.Add((ushort)MsgId.SGundataUpdate, PacketHandler.S_GundataUpdateHandler);
+		_handler.Add((ushort)MsgId.SGundataUpdate, PacketHandler.S_GundataUpdateHandler);		
+		_onRecv.Add((ushort)MsgId.STrapAction, MakePacket<S_TrapAction>);
+		_handler.Add((ushort)MsgId.STrapAction, PacketHandler.S_TrapActionHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)
