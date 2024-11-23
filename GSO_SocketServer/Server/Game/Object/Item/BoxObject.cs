@@ -69,6 +69,8 @@ namespace Server.Game.Object.Item
 
         public void SetStorage(Storage storage)
         {
+            info.Name = "Box" + Id;
+
             info.Box = new BoxInfo()
             {
                 X = storage.Scale_X,
@@ -76,25 +78,24 @@ namespace Server.Game.Object.Item
                 Weight = (float)storage.MaxWeight,
             };
 
+            this.storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
             this.storage = storage;
         }
 
         public void SetItemObject(ItemObject itemObject)
         {
+            info.Name = "Box" + Id;
+
             info.Box = new BoxInfo()
             {
-                X = itemObject.X,
-                Y = itemObject.Y,
+                X = itemObject.Width,
+                Y = itemObject.Height,
                 Weight = (float)itemObject.Weight,
             };
 
-            itemObject.X = 0;
-            itemObject.Y = 0;
-
-            storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
-            storage.InsertItem(itemObject);
+            this.storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
+            this.storage.InsertItem(itemObject);
         }
-
 
         public bool SetItem(int id)
         {
