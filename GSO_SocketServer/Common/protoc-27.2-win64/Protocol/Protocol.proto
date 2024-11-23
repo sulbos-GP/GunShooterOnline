@@ -51,6 +51,8 @@ enum MsgId{
 
   S_GUNDATA_UPDATE = 37;
   S_TRAP_ACTION = 38;
+
+  S_AI_MOVE = 39;
 }
 
 enum GameObjectType{
@@ -400,6 +402,11 @@ message S_UpdateQuest {  //36
     PS_RegisterQuest quest = 1;
 }
 
+
+message S_AiMove{  //S_AI_MOVE = 39;
+    repeated Vector2IntInfo PosList = 1;
+}
+
 //--------------- END message --------------------
 
 //--------------- INFO -------------------- 기생하는 친구들
@@ -441,6 +448,11 @@ message BoxInfo
     float weight = 3;
 }
 
+message Vector2IntInfo{
+    int32 x = 1;
+    int32 y = 2;
+}  
+
 
 // Caustion : must sync Collision.Shapes.Shape.ShapeType Enum
 message ShapeInfo{
@@ -455,6 +467,9 @@ message ShapeInfo{
     float Height        = 9;//
     
 }
+
+
+
 
 
 /*message  Vector2Info{
