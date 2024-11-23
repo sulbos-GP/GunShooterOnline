@@ -105,19 +105,17 @@ public class ObjectManager
             go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
             //end
 
-
-            Debug.Log("================성훈이 요기야====================== ");  //Enemyai  CLASS추가
-            var mc = go.GetComponent<EnemyAI>();
+            var enemyAI = go.GetComponent<EnemyAI>();
 
 
-            //mc.PlanetSide = info.PositionInfo.Side;
-            mc.Id = info.ObjectId;
-            mc.PosInfo = info.PositionInfo;
-            //mc.Stat = info.StatInfo;
-            mc.SyncPos();
+            //enemyAI.PlanetSide = info.PositionInfo.Side;
+            enemyAI.Id = info.ObjectId;
+            enemyAI.PosInfo = info.PositionInfo;
+            //enemyAI.Stat = info.StatInfo;
+            enemyAI.SyncPos();
 
             Debug.Log("다시소환");
-            mc.ChangeStat?.Invoke();
+            enemyAI.ChangeStat?.Invoke();
 
             //foreach (Transform t in Managers.Map.CurrentMap.transform)
             //{
@@ -128,7 +126,7 @@ public class ObjectManager
             //}
 
 
-            //mc.transform.gameObject.SetActive(false);
+            //enemyAI.transform.gameObject.SetActive(false);
         }
         /*else if (type == GameObjectType.Projectile)
         {

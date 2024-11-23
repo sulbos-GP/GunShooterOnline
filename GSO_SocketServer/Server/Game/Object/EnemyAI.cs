@@ -142,10 +142,6 @@ namespace Server.Game.Object
 
         }
 
-     
-
-
-
         public override void Update()
         {
             if (gameRoom != null) 
