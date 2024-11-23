@@ -983,7 +983,7 @@ namespace Server
                 }
             }
 #else
-            if (tempPlayer.Count == 1) // 접속할 인원에 따라 변경
+            if (tempPlayer.Count == 2) // 초코파이 접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();

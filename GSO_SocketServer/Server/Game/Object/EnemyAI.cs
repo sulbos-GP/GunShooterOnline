@@ -161,7 +161,7 @@ namespace Server.Game.Object
             //업데이트 코드
         }
 
-
+       
 
         public override void OnCollision(GameObject other)
         {
