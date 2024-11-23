@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -62,22 +63,20 @@ namespace Server.Game
 
         public List<ItemObject> FindItemAllByType(ItemType itemType)
         {
-            List<int> itemIds = storage.GetAllItemItemIds();
-
-            List<ItemObject> list = new List<ItemObject>();
-            foreach (int itemId in itemIds)
+            List<ItemObject> items = storage.Items;
+            List<ItemObject> findItems = new List<ItemObject>();
+            foreach (ItemObject item in items)
             {
-                if (itemId / 100 == (int)itemType / 100)
+                if (item.ItemId / 100 == (int)itemType / 100)
                 {
-                    var item = storage.FindItemsByItemID(itemId);
-                    if (item != null && item.Count > 0)
+                    if (item != null && item.Amount > 0)
                     {
-                        list.AddRange(item);
+                        findItems.Add(item);
                     }
                 }
             }
 
-            return list;
+            return findItems;
         }
 
 
