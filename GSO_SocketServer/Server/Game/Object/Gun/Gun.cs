@@ -151,7 +151,7 @@ namespace Server.Game
         //히트 판정을 내릴 객체 타입을 정의
         private static bool CheckHitObjectType(GameObject hitObject)
         {
-            return hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Monster;
+            return hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Enemyai;
         }
 
 
