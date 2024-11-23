@@ -151,6 +151,9 @@ namespace Server.Game.Object
             if (gameRoom != null) 
                 _job = gameRoom.PushAfter(Program.ServerIntervalTick, Update);
 
+            if (gameRoom.IsGameStarted == false)
+                return;
+
             DetectObject.Update();
 
 
