@@ -1,3 +1,4 @@
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -56,11 +57,11 @@ public class FSM_Enemy : MonoBehaviour
         maxDistance = 10;
         spawnerDistance = 5;
 
-        lowSpeed = 3f;
-        midSpeed = 5f;
-        highSpeed = 7f;
-        detectionRange = 4.5f; //감지 거리 , 감지범위의 크기 = *2 . 트리거로 감지범위 안에 들어온 적이 있으면 해당 방향으로 중간속도 이동. 감지범위밖으로 나가고 3초뒤 귀환
-        chaseRange = 3;        //추격 거리 , 범위안에 타겟이 들어오면 타겟을 향해 빠르게 이동, 해당 범위 밖으로 나가고 3초뒤 의심으로 전환
+        lowSpeed = 0.5f;
+        midSpeed = 1f;
+        highSpeed = 2f;
+        detectionRange = 10f; //감지 거리 , 감지범위의 크기 = *2 . 트리거로 감지범위 안에 들어온 적이 있으면 해당 방향으로 중간속도 이동. 감지범위밖으로 나가고 3초뒤 귀환
+        chaseRange = 6;        //추격 거리 , 범위안에 타겟이 들어오면 타겟을 향해 빠르게 이동, 해당 범위 밖으로 나가고 3초뒤 의심으로 전환
         attackRange = 2f;      //공격 거리 , 범위안에 들어오면 타겟을 향해 공격 실행, 공격이 끝나면 타겟의 거리에 따라 반복 공격, 추격 혹은 의심 혹은 귀환
         attackDelay = 2f;      //공격후 잠시 대기하는 시간
         disappearTime = 3f; //죽은 적이 3초뒤에 삭제됨
@@ -89,10 +90,25 @@ public class FSM_Enemy : MonoBehaviour
             _state.ChangeState(new DeadState(this));
         }
     }
-
     
-    public void OnMoveToPos(Vector2 pos, float _speed)
+    public void MoveToTarget(Vector2 target, float speed)
     {
-        transform.position = pos * _speed * Time.deltaTime;
+        if (target == null) return;
+
+        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
+        Vector2 directionToTarget = (target - currentPosition).normalized;
+        Vector2 newPosition = currentPosition + directionToTarget * speed * Time.deltaTime;
+        transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
+    }
+
+    public Vector2 GetRandomPosInSpawnZone(Transform center, float radius)
+    {
+        float angle = UnityEngine.Random.Range(0f, Mathf.PI * 2);
+        float distance = Mathf.Sqrt(UnityEngine.Random.Range(0f, 1f)) * radius;
+
+        float x = Mathf.Cos(angle) * distance;
+        float z = Mathf.Sin(angle) * distance;
+
+        return new Vector2(center.position.x + x, center.position.y);
     }
 }
