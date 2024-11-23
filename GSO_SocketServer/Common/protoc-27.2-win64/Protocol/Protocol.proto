@@ -50,7 +50,7 @@ enum MsgId{
   S_UPDATE_QUEST = 36;
 
   S_GUNDATA_UPDATE = 37;
-
+  S_TRAP_ACTION = 38;
 }
 
 enum GameObjectType{
@@ -380,6 +380,12 @@ message C_InputData {  //35
 message S_GundataUpdate{  //37 (지승현)추후 많은 데이터 업데이트 예정
     bool isSuccess = 1;
     PS_GearInfo gunData = 2;  
+}
+
+
+message S_TrapAction{ //  S_TRAP_ACTION = 38;
+    bool isActive = 1;
+    int32 ObjectId = 2;
 }
 
 ////////////////////////////////////////////
