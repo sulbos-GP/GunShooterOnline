@@ -69,6 +69,7 @@ enum GameObjectType{
     PLAYERSPAWNZONE = 8;
     MINE = 9;
     ENEMYAI = 10;
+    ATTACK = 11;
 }
 
 enum ShapeType
@@ -426,7 +427,8 @@ message S_AiSpawn{ //40
 message S_AiAttack //  S_AI_ATTACK = 40;
 { 
     int32 ObjectId = 1;
-    ShapeInfo shape = 2;
+    int32 damage = 2;
+    ShapeInfo shape = 3;
 
 }
 

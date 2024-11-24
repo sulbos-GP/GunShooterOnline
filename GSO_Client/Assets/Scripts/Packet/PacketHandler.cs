@@ -109,20 +109,21 @@ internal class PacketHandler
     {
         var movePacket = packet as S_Move;
         var go = Managers.Object.FindById(movePacket.ObjectId);
-        Managers.SystemLog.Message("S_MoveHandler : " +go.name);
+        
         if (go == null)
         {
-            Managers.SystemLog.Message("S_MoveHandler 해당 id로 대상을 찾지 못함 : " + go.name);
             return;
         }
-            
+
+        Managers.SystemLog.Message("S_MoveHandler : " + go.name);
         if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
         {
+            
             return;
         }
 
         //타 플레이어의 움직임을 조정
-
+       
 
         var cc = go.GetComponent<CreatureController>();
         if (cc == null)
@@ -866,6 +867,13 @@ internal class PacketHandler
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
 
         enemy.GetComponent<EnemyAI>().SetData(packet);
+    }
+    internal static void S_AiAttackHandler(PacketSession session, IMessage message)
+    {
+        S_AiSpawn packet = message as S_AiSpawn;
+
+        GameObject enemy = Managers.Object.FindById(packet.ObjectId);
+
     }
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)

@@ -74,7 +74,9 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.SAiMove, MakePacket<S_AiMove>);
 		_handler.Add((ushort)MsgId.SAiMove, PacketHandler.S_AiMoveHandler);		
 		_onRecv.Add((ushort)MsgId.SAiSpawn, MakePacket<S_AiSpawn>);
-		_handler.Add((ushort)MsgId.SAiSpawn, PacketHandler.S_AiSpawnHandler);
+		_handler.Add((ushort)MsgId.SAiSpawn, PacketHandler.S_AiSpawnHandler);		
+		_onRecv.Add((ushort)MsgId.SAiAttack, MakePacket<S_AiAttack>);
+		_handler.Add((ushort)MsgId.SAiAttack, PacketHandler.S_AiAttackHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

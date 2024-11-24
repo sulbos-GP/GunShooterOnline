@@ -415,7 +415,7 @@ namespace Server.Game.FSM
             {
 
                 //TODO : 공격
-
+                Owner.DoAttack();
 
                 float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
                 if (distanceToTarget <= Owner.chaseRange)
