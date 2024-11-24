@@ -528,6 +528,8 @@ public class Map
     private readonly int[] _deltaX = { 0, 0, -1, 1 };
     private int[] _cost = { 10, 10, 10, 10 };
 
+
+    
     public List<Vector2Int> FindPath(Vector2 startCellPos, Vector2 destCellPos, bool checkObjects = false)
     {
         // Vector2를 Vector2Int로 변환
