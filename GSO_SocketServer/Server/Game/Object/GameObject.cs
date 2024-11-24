@@ -138,7 +138,7 @@ public class GameObject
             }
             else
             {
-                Console.WriteLine("currentShape is null");
+                //Console.WriteLine("currentShape is null");
 
             }
         }
