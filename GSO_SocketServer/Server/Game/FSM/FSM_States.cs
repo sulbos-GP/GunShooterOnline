@@ -98,6 +98,7 @@ namespace Server.Game.FSM
         //초기화
         public override void Enter()
         {
+            base.Enter();
             Owner.curState = MobState.Check;
             targetPos = Owner.target.CellPos;
             Console.WriteLine($"targetPos : {targetPos}");
@@ -107,9 +108,29 @@ namespace Server.Game.FSM
         {
             if (isStop) return;
 
+            if (Vector2.Distance(targetPos, Owner.CellPos) <= 0.1)
+            {
+                Owner.gameRoom.PushAfter(3000, CheckToOtherStates);
+                isStop = true;
+                return;
+            }
+
+            #region PathFinding
+            List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, targetPos, checkObjects: false); //?이거 길찾기 디버그용인가?
+            if(path != null)
+            {
+                S_AiMove MovePacket = new S_AiMove();
+                for (int i = 0; i < path.Count; i++)
+                {
+                    MovePacket.ObjectId = Owner.Id;
+                    MovePacket.PosList.Add(new Vector2IntInfo() { X = path[i].x, Y = path[i].y });
+                }
+                Owner.gameRoom.BroadCast(MovePacket);
+            }
+            #endregion
+
             Owner.MoveToTarget(targetPos, Owner.midSpeed);
             float distanceFromTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
-            
             Console.WriteLine($"이동.현위치 : {Owner.CellPos}\n목표위치 : {targetPos}\n남은거리 : {distanceFromTargetPos}");
 
             //이동중 추격거리 안에 들어오면 추격상태로
@@ -122,28 +143,18 @@ namespace Server.Game.FSM
                     return;
                 }
             }
+        }
 
-            if (distanceFromTargetPos > 0.1)
-            {
-                return;
-            }
-
-            //거리에 도착후 체크
+        private void CheckToOtherStates()
+        {
+            //대기시간이 지난시점에서 타겟이 없으면 귀환 있다면 타겟위치 재할당
             if (Owner.target == null)
             {
-                //타겟이 사라지면 3초동안 멈춘뒤 귀환
-                Console.WriteLine($"타겟이 범위 밖으로 나감 3초뒤 귀환");
-                Owner.gameRoom.PushAfter(3000, Owner._state.ChangeState, Owner.ReturnState);
-                isStop = true;
-                return;
+                Owner._state.ChangeState(Owner.ReturnState);
             }
-
-            if (Vector2.Distance(Owner.target.CellPos, Owner.CellPos) <= Owner.detectionRange && distanceFromTargetPos <= 0.1f)
+            else
             {
-                //타겟 위치로 도착 + 타겟이 아직 감지 범위 안에 있다면 3초후 새로운 대기위치 할당 후 이동
-                Console.WriteLine($"3초뒤 새로운 타겟 위치 할당");
-                Owner.gameRoom.PushAfter(3000, SetNewTargetPos); 
-                isStop= true;
+                SetNewTargetPos();
                 return;
             }
         }
@@ -188,7 +199,6 @@ namespace Server.Game.FSM
             }
 
             Owner.MoveToTarget(Owner.target.CellPos, Owner.highSpeed);
-
             #region PathFinding
             List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.target.CellPos, checkObjects: false);
 
@@ -213,8 +223,27 @@ namespace Server.Game.FSM
             else if (distanceToTarget > Owner.chaseRange && distanceToTarget <=Owner.detectionRange)
             {
                 //추격범위 밖, 감지범위 안이라면 1초간 더 이동하다가 경계로 전환
-                Owner.gameRoom.PushAfter(1000, Owner._state.ChangeState, Owner.CheckState);
+                Owner.gameRoom.PushAfter(1000, DelayCheckForCheckStates);
                 return;
+            }
+        }
+
+        public void DelayCheckForCheckStates()
+        {
+            if(Owner.target == null)
+            {
+                Owner.
+            }
+            float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
+            if (distanceToTarget <= Owner.attackRange)
+            {
+                //공격 범위에 들어온다면 즉시 공격상태로 전환
+                Owner._state.ChangeState(Owner.AttackState);
+                return;
+            }
+            if (distanceToTarget > Owner.chaseRange && distanceToTarget <= Owner.detectionRange)
+            {
+                Owner._state.ChangeState(Owner.CheckState);
             }
         }
 
@@ -245,6 +274,7 @@ namespace Server.Game.FSM
             //공격함수 추가
 
             //공격후 1초간의 딜레이 후 다음 행동 체크
+            Console.WriteLine("1초뒤 다음행동 조건 체크");
             Owner.gameRoom.PushAfter(1000, CheckNextState);
             isStop = true;
         }
@@ -263,6 +293,7 @@ namespace Server.Game.FSM
             {
                 //아직 공격범위 안이라면 다시 공격
                 isStop = false;
+                Console.WriteLine("재공격");
                 return;
             }
             else if (distanceToTarget <= Owner.chaseRange)
