@@ -47,6 +47,7 @@ public class DebugShape : MonoBehaviour
 
     public void SetDrawLine(float width, float height)
     {
+        //TO-DO : юс╫ц
         isLineSet = true;
 
         _width = width;
