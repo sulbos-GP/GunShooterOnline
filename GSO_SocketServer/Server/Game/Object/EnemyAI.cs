@@ -222,7 +222,7 @@ namespace Server.Game.Object
         }
 
 
-        public void MoveToTarget(Vector2 target, float speed)
+        private void MoveToTarget(Vector2 target, float speed)
         {
             Vector2 currentPosition = new Vector2(CellPos.X, CellPos.Y);
             Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition);
@@ -230,6 +230,22 @@ namespace Server.Game.Object
             CellPos = newPosition;
             //transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
         }
+
+        public void MoveToTargetList(List<Vector2Int> targets , float speed)
+        {
+            if (targets == null || targets.Count == 0)
+            {
+                //Debug.LogWarning("Target list is empty or null!");
+                return;
+            }
+
+            // 첫 번째 위치 가져오기
+            Vector2Int firstTarget = targets[1];
+
+            MoveToTarget(new Vector2(firstTarget.x, firstTarget.y), speed);
+        }
+
+
 
 
         public Vector2 GetRandomPosInSpawnZone(Vector2 center, float radius)
