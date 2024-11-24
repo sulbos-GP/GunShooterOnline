@@ -80,7 +80,7 @@ namespace Server.Game
             GunData = null;
             gunItemData = null;
            
-             CurAmmo = 0;
+            CurAmmo = 0;
             UsingGunState = GunState.Empty;
         }
 
@@ -95,7 +95,7 @@ namespace Server.Game
                 return;
             }
 
-            DecreaseAmmo();
+            //DecreaseAmmo();
 
             Console.WriteLine($"attacker : {attacker}\n" +
                 $"pos : {pos.X},{pos.Y}\n" +

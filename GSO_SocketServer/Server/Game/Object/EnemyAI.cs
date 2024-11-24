@@ -173,6 +173,8 @@ namespace Server.Game.Object
             if (gameRoom == null)
                 return;
 
+            
+
             {
                 _state.ChangeState(new DeadState(this));
             }
@@ -186,13 +188,11 @@ namespace Server.Game.Object
             spawnPacket.Objects.Add(boxObject.info);
             gameRoom.BroadCast(spawnPacket);
 
-            S_Die Diepacket = new S_Die();
-            Diepacket.ObjectId = Id;
-            Diepacket.AttackerId = attacker.Id;
-            gameRoom.BroadCast(Diepacket);
-
 
             base.OnDead(attacker);
+
+
+            gameRoom.LeaveGame(Id);
         }
 
         public override void OnDamaged(GameObject attacker, int damage)

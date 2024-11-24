@@ -394,10 +394,19 @@ namespace Server
                
 
             }
-            else if (type == GameObjectType.Monster)
+            else if (type == GameObjectType.Enemyai)
             {
+                bool t = _enemyDic.Remove(id);
 
+                if (t == true)
+                {
+                    Console.WriteLine($"LeaveGame id : {id}");
+                }
 
+                if (MatchInfo.Remove(id) == false)
+                {
+                    Console.WriteLine("MatchInfo.Remove(id) == false");
+                }
             }
 
             S_Despawn despawnPacket = new S_Despawn();
