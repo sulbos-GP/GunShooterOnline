@@ -1,4 +1,5 @@
 using Google.Protobuf.Protocol;
+using NPOI.OpenXmlFormats.Wordprocessing;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
@@ -12,6 +13,7 @@ public class EnemyAI : CreatureController
     public float AttackRange2;
     public Vector2Int SpawnZone;
 
+    public LineRenderer AttackShape;
 
     public void SetData(S_AiSpawn s_AiSpawn)
     {
@@ -27,6 +29,32 @@ public class EnemyAI : CreatureController
     {
         base.Init();
         animator = GetComponent<Animator>();
+        AttackShape = transform.GetChild(0).GetComponent<LineRenderer>();
+
+        AttackShape.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
+        AttackShape.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.
+        AttackShape.startWidth = 0.1f;
+        AttackShape.endWidth = 0.1f;
+        AttackShape.startColor = Color.red;
+        AttackShape.endColor = Color.red;
+    }
+    Rectangle rect;
+    public void DrawAttackLine(Vector2 center,float width, float height)
+    {
+        rect = new Rectangle(width, height);
+
+        AttackShape.SetPosition(0, center + rect.topLeft * 2);
+        AttackShape.SetPosition(1, center + rect.topRight * 2);
+        AttackShape.SetPosition(2, center + rect.bottomRight * 2);
+        AttackShape.SetPosition(3, center + rect.bottomLeft * 2);
+        AttackShape.SetPosition(4, center + rect.topLeft * 2);
+    }
+
+    public void ClearLine()
+    {
+        rect = default;
+        AttackShape.positionCount = 0;
+        AttackShape.positionCount = 5;
     }
 
     public override void UpdatePosInfo(PositionInfo info)

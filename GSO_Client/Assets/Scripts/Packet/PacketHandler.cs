@@ -84,17 +84,21 @@ internal class PacketHandler
             }
 
             var type = (info.ObjectId >> 24) & 0x7f;
-            if ((GameObjectType)type != GameObjectType.Player)
+            var creature = Managers.Object.FindById(info.ObjectId).GetComponent<CreatureController>();
+            if(creature == null)
+            {
                 continue;
+            }
 
             //체력 STAT 주입
             var Stats = info.StatInfo;
-            var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
-            player.Hp = Stats.Hp;
-            player.MaxHp = Stats.MaxHp;
+            
+            creature.Hp = Stats.Hp;
+            creature.MaxHp = Stats.MaxHp;
 
             //Spawn Player
             Vector2 vec2 = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
+            var player = creature.GetComponent<PlayerController>();
             player.SpawnPlayer(vec2);
             Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + info.ObjectId);
         }
@@ -881,16 +885,17 @@ internal class PacketHandler
     {
         S_AiAttackReady packet = message as S_AiAttackReady;
 
-        GameObject enemy = Managers.Object.FindById(packet.ObjectId);
-
+        EnemyAI enemy = Managers.Object.FindById(packet.ObjectId).GetComponent<EnemyAI>();
+        enemy.DrawAttackLine(new Vector2(packet.Shape.CenterPosX, packet.Shape.CenterPosY), packet.Shape.Width, packet.Shape.Height);
     }
 
     internal static void S_AiAttackShotHandler(PacketSession session, IMessage message)
     {
         S_AiAttackShot packet = message as S_AiAttackShot;
 
-        GameObject enemy = Managers.Object.FindById(packet.ObjectId);
-
+        EnemyAI enemy = Managers.Object.FindById(packet.ObjectId).GetComponent<EnemyAI>();
+        enemy.ClearLine();
+        enemy.SetAniamtionAttack();
     }
 
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
