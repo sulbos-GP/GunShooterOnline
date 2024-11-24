@@ -5,6 +5,7 @@ using System.Linq;
 using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.Object;
+using Server.Game.Object.Attack;
 using Server.Game.Object.Item;
 using Server.Game.Object.Shape;
 
@@ -21,6 +22,7 @@ internal class ObjectManager
     private readonly Dictionary<int, ItemObject> _items = new();
     private readonly Dictionary<int, SpawnZone> _playerSpawn = new();
     private readonly Dictionary<int, Mine> _mines = new();
+    private readonly Dictionary<int, AttackObjectBase> _attacks = new();
     private readonly Dictionary<int, EnemyAI> _enemys = new();
 
 
@@ -53,6 +55,9 @@ internal class ObjectManager
             else if (gameObjcet.ObjectType == GameObjectType.Mine)
                 _mines.Add(gameObjcet.Id, gameObjcet as Mine);
 
+            else if (gameObjcet.ObjectType == GameObjectType.Attack)
+                _attacks.Add(gameObjcet.Id, gameObjcet as AttackObjectBase);
+
             else if (gameObjcet.ObjectType == GameObjectType.Enemyai)
             {
                 EnemyAI enemyAI = gameObjcet as EnemyAI;
@@ -84,6 +89,8 @@ internal class ObjectManager
                 _playerSpawn.Add(obj.Id, obj as SpawnZone);
             else if (obj.ObjectType == GameObjectType.Mine)
                 _mines.Add(obj.Id, obj as Mine);
+            else if (obj.ObjectType == GameObjectType.Attack)
+                _attacks.Add(obj.Id, obj as AttackObjectBase);
             else if (obj.ObjectType == GameObjectType.Enemyai)
             {
                 EnemyAI enemyAI = obj as EnemyAI;
@@ -178,6 +185,8 @@ internal class ObjectManager
                 return _exit.Remove(objectId);
             else if (objectType == GameObjectType.Mine)
                 return _mines.Remove(objectId);
+            else if (objectType == GameObjectType.Attack)
+                return _attacks.Remove(objectId);
             else if (objectType == GameObjectType.Enemyai)
             {
                 bool t = _enemys.Remove(objectId);
@@ -249,6 +258,13 @@ internal class ObjectManager
                     return obj as T;
 
             }
+            else if (objectType == GameObjectType.Attack)
+            {
+                AttackObjectBase obj = null;
+                if (_attacks.TryGetValue(objectId, out obj))
+                    return obj as T;
+
+            }
             else if (objectType == GameObjectType.Enemyai)
             {
                 EnemyAI obj = null;
@@ -273,7 +289,7 @@ internal class ObjectManager
     }
     public GameObject[] GetAllShapes()
     {
-        return _enemys.Values.ToArray<GameObject>().Concat(_players.Values).Concat(_mines.Values).Concat(_scopes.Values).ToArray();
+        return _enemys.Values.ToArray<GameObject>().Concat(_players.Values).Concat(_mines.Values).Concat(_scopes.Values).Concat(_attacks.Values).ToArray();
     }
 
 

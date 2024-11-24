@@ -50,7 +50,7 @@ namespace Server.Game.Object
                 if (p != null)
                 {
                     Console.WriteLine("p hit Mine");
-                    p.OnDamaged(this, 5);
+                    p.OnDamaged(this, 20);
                     active = false;
 
                     S_TrapAction s_TrapAction = new S_TrapAction()
