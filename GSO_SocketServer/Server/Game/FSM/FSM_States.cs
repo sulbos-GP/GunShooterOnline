@@ -86,7 +86,7 @@ namespace Server.Game.FSM
             }
 
             int currentTickCount = Environment.TickCount;
-            Console.WriteLine($"Wait idle to round:{(storeTickCount + idleToRoundTime) - currentTickCount}");
+            //`Console.WriteLine($"Wait idle to round:{(storeTickCount + idleToRoundTime) - currentTickCount}");
             if (storeTickCount + idleToRoundTime < currentTickCount)
             {
                 Owner._state.ChangeState(Owner.RoundState);
@@ -153,7 +153,7 @@ namespace Server.Game.FSM
             }
             #endregion
             float dist = Vector2.Distance(targetPos, Owner.CellPos);
-            Console.WriteLine($"close to target pos:{dist}");
+            //Console.WriteLine($"close to target pos:{dist}");
             if (dist < 0.2f)
             {
                 Owner._state.ChangeState(Owner.IdleState);
@@ -185,7 +185,7 @@ namespace Server.Game.FSM
             base.Enter();
             targetPos = Owner.target.CellPos;
             storeTickCount = Environment.TickCount;
-            Console.WriteLine($"check targetPos : [{targetPos.X}, {targetPos.Y}]");
+            //Console.WriteLine($"check targetPos : [{targetPos.X}, {targetPos.Y}]");
         }
 
         public override void Update()
@@ -234,7 +234,7 @@ namespace Server.Game.FSM
             #endregion
 
             float distanceFromTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
-            Console.WriteLine($"close to check target pos:{distanceFromTargetPos}");
+            //Console.WriteLine($"close to check target pos:{distanceFromTargetPos}");
             //Console.WriteLine($"이동.현위치 : {Owner.CellPos}\n목표위치 : {targetPos}\n남은거리 : {distanceFromTargetPos}");
 
             //이동중 추격거리 안에 들어오면 추격상태로
@@ -497,7 +497,7 @@ namespace Server.Game.FSM
             }
 
             int currentTickCount = Environment.TickCount;
-            Console.WriteLine($"Wait attack:{(storeTickCount + waitAttackTime) - currentTickCount}");
+            //Console.WriteLine($"Wait attack:{(storeTickCount + waitAttackTime) - currentTickCount}");
             if (storeTickCount + waitAttackTime < currentTickCount)
             {
 
@@ -577,6 +577,9 @@ namespace Server.Game.FSM
             //집으로 귀환
 
             #region PathFinding
+
+            
+
             List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.spawnPoint, checkObjects: false); //?이거 길찾기 디버그용인가?
             if (path != null)
             {
@@ -594,7 +597,7 @@ namespace Server.Game.FSM
             #endregion
             //스폰존 내의 랜덤한 타겟위치로 이동후 대기상태로 전환
             float distanceToTargetPos = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
-            Console.WriteLine($"close to spawn point:{distanceToTargetPos}");
+            //Console.WriteLine($"close to spawn point:{distanceToTargetPos}");
             if (distanceToTargetPos <= 0.2f)
             {
                 Owner._state.ChangeState(Owner.IdleState);

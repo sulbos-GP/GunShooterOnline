@@ -28,6 +28,8 @@ public class CreatureObj : GameObject
         if (gameRoom == null)
             return;
 
+        
+
         IsDead = true;
 
         Player player = attacker as Player;
@@ -66,6 +68,8 @@ public class CreatureObj : GameObject
             gameRoom.PostPlayerStats(Id);
 
         }
+
+        ObjectManager.Instance.Remove(Id);
         /*room.Push(new Job(() =>
         {
             stat.Hp = stat.MaxHp;
