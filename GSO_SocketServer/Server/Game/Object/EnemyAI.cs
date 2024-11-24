@@ -1,6 +1,7 @@
 ﻿using Collision.Shapes;
 using Google.Protobuf.Protocol;
 using Server.Game.FSM;
+using Server.Game.Object.Attack;
 using Server.Game.Object.Item;
 using Server.Game.Object.Shape;
 using Server.Game.Utils;
@@ -234,6 +235,23 @@ namespace Server.Game.Object
             float z = MathF.Sin(angle) * distance;
 
             return new Vector2(center.X + x, center.Y);
+        }
+
+        //원래는 상속해서 만들고 해당 몬스터에 따라서 만들어야 하는거 알쥐?
+        //어택 오브젝트도 마찬가지인거 알쥐?
+        public virtual void DoAttack()
+        {
+            AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
+            attack.Init(this, 10, CellPos);
+
+            //S_AiAttack attackPacket = new S_AiAttack()
+            //{
+            //    ObjectId = this.OwnerId,
+            //    Shape = attack.info.Shape,
+            //};
+            //this.gameRoom.BroadCast(attackPacket);
+
+            this.gameRoom.PushAfter(100, attack.Destroy);
         }
     }
 }
