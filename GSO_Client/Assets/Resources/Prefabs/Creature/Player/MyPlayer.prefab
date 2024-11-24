@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 2151735185809450313}
   - component: {fileID: -5452985717935214419}
   - component: {fileID: 8142050897654077236}
+  - component: {fileID: -2915596204070146364}
   m_Layer: 0
   m_Name: MyPlayer
   m_TagString: Player
@@ -92,7 +93,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6581e9a362c67f24f9c7256dec307b02, type: 2}
+  - {fileID: 10306, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -277,9 +278,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  lineRenderer: {fileID: 0}
   material: {fileID: 0}
   sprite: {fileID: 0}
+  AudioSource: {fileID: 0}
   _attackableList: []
   _Quest: {fileID: 0}
 --- !u!82 &8142050897654077236
@@ -378,6 +379,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &-2915596204070146364
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 191436082380664689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6d64d001fefd3af40ab53bf926499733, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lineRenderer: {fileID: 0}
 --- !u!1 &355922946167704334
 GameObject:
   m_ObjectHideFlags: 0
