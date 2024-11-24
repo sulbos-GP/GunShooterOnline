@@ -8,11 +8,7 @@ public class PlayerController : CreatureController
     protected Coroutine _coSkill;
     protected bool _rangedSkill = false;
 
-    protected float _width;
-    protected float _height;
-
-    public LineRenderer lineRenderer;
-
+    
     [SerializeField] private Material material;
     [SerializeField] private SpriteRenderer sprite;
 
@@ -20,44 +16,7 @@ public class PlayerController : CreatureController
     private float Timer = 0.0f;
     private float moveInterval = 0.5f;
     public AudioSource AudioSource;
-    public struct Rectangle
-    {
-        public Vector2 topLeft;
-        public Vector2 topRight;
-        public Vector2 bottomLeft;
-        public Vector2 bottomRight;
-
-        public Rectangle(float width, float height)
-        {
-            topLeft = new Vector2(-width / 2, -height / 2);
-            topRight = new Vector2(+width / 2, -height / 2);
-            bottomLeft = new Vector2(-width / 2, +height / 2);
-            bottomRight = new Vector2(+width / 2, +height / 2);
-        }
-    };
-
-    public Rectangle rect;
-   //private SkillType skillType = SkillType.None; //애니메이션용
-
-    public void SetDrawLine(float width , float height)
-    {
-        //TO-DO : 임시
-        
-        _width = width;
-        _height = height;
-
-        rect = new Rectangle(width, height);
-        // LineRenderer 설정
-        lineRenderer.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
-        lineRenderer.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.
-        lineRenderer.startWidth = 0.1f;
-        lineRenderer.endWidth = 0.1f;
-        lineRenderer.startColor = Color.red;
-        lineRenderer.endColor = Color.red;
-
-        // LineRenderer의 점 위치 설정
-        UpdateDrawLine();
-    }
+   
 
     private void FixedUpdate()
     {
@@ -73,15 +32,7 @@ public class PlayerController : CreatureController
         }
     }
 
-    public void UpdateDrawLine()
-    {
-        return;
-        lineRenderer.SetPosition(0, (Vector2)gameObject.transform.position + rect.topLeft * 2);
-        lineRenderer.SetPosition(1, (Vector2)gameObject.transform.position + rect.topRight * 2);
-        lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight * 2);
-        lineRenderer.SetPosition(3, (Vector2)gameObject.transform.position + rect.bottomLeft * 2);
-        lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft * 2);
-    }
+    
 
     public void SpawnPlayer(Vector2 vec2)
     {
@@ -108,8 +59,6 @@ public class PlayerController : CreatureController
         Debug.Log("init");
         animator = transform.GetChild(1).GetComponent<Animator>();
         sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
-        
-        lineRenderer = GetComponent<LineRenderer>();
     }
 
     //protected override void UpdateAnimation()
@@ -208,7 +157,7 @@ public class PlayerController : CreatureController
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
         moveSound();
-        UpdateDrawLine();
+        
         //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;

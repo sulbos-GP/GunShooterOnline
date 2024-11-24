@@ -293,7 +293,7 @@ public partial class InventoryController : MonoBehaviour
 
         for (int i = 0; i < slots.Length; i++)
         {
-            equipSlotDic.Add(i + 1, slots[i]);
+            equipSlotDic[i + 1] = slots[i];
             slots[i].Init();
         }
     }
