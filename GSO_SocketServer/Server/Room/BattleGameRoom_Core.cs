@@ -414,6 +414,11 @@ namespace Server
             return _playerDic.TryGetValue(id, out var player) ? player : null;
         }
 
+        public List<Player> GetPlayers()
+        {
+            return _playerDic.Values.ToList();
+        }
+
         public void PostPlayerStats(int playerId)
         {
             Player player = GetPlayer(playerId);
