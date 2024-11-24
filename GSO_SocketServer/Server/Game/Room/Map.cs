@@ -410,9 +410,11 @@ public class Map
         var x = cellPos.x - Bleft.x;
         var y = cellPos.y - Bleft.y;
 
-        Console.WriteLine($"{_collisions[x, y]}");
+        if(_collisions[x, y] != 0)
+            Console.WriteLine($"{x},{y} is  {_collisions[x, y]}");
 
-        return _collisions[x, y] == 0; // && (!cheakObjects || _objects[x, y] == null)
+        //나중에 수정return _collisions[x, y] == 0; // && (!cheakObjects || _objects[x, y] == null)
+        return _collisions[x, y] != 1; // && (!cheakObjects || _objects[x, y] == null)
     }
 
     public void SetMonster(GameRoom room, int monsterCount)
@@ -526,17 +528,20 @@ public class Map
     private readonly int[] _deltaX = { 0, 0, -1, 1 };
     private int[] _cost = { 10, 10, 10, 10 };
 
-    public List<Vector2Int> FindPath(Vector2 startCellPos, Vector2 destCellPos, bool checkObjects = true)
+    public List<Vector2Int> FindPath(Vector2 startCellPos, Vector2 destCellPos, bool checkObjects = false)
     {
         // Vector2를 Vector2Int로 변환
         Vector2Int startCellPosInt = Vector2Int.RoundToInt(startCellPos);
+        //Console.WriteLine("시작 위치 : " + startCellPos);
+
         Vector2Int destCellPosInt = Vector2Int.RoundToInt(destCellPos);
+        //Console.WriteLine("목표 위치 : " + destCellPos);
 
         // 기존 FindPath 호출
         return FindPath(startCellPosInt, destCellPosInt, checkObjects);
     }
 
-    public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool checkObjects = true)
+    public List<Vector2Int> FindPath(Vector2Int startCellPos, Vector2Int destCellPos, bool checkObjects = false)
     {
         var path = new List<Pos>();
         var closeList = new HashSet<Pos>(); // CloseList
