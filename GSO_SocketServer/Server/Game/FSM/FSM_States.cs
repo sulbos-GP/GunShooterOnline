@@ -136,7 +136,7 @@ namespace Server.Game.FSM
 
             float dist = Vector2.Distance(targetPos, Owner.CellPos);
             Console.WriteLine($"close to target pos:{dist}");
-            if (dist < 0.1f)
+            if (dist < 0.2f)
             {
                 Owner._state.ChangeState(Owner.IdleState);
                 return;
@@ -214,7 +214,7 @@ namespace Server.Game.FSM
                 }
             }
 
-            //if (Vector2.Distance(targetPos, Owner.CellPos) <= 0.1)
+            //if (Vector2.Distance(targetPos, Owner.CellPos) <= 0.2)
             //{
             //    Owner.gameRoom.PushAfter(3000, CheckToOtherStates);
             //    isStop = true;
@@ -374,7 +374,7 @@ namespace Server.Game.FSM
 
     public class AttackState : StateBase
     {
-        private const int waitAttackTime = 1000;
+        private const int waitAttackTime = 500;
         private int storeTickCount = 0;
         public AttackState(EnemyAI owner) : base(owner, MobState.Attack)
         {
@@ -492,7 +492,7 @@ namespace Server.Game.FSM
             //스폰존 내의 랜덤한 타겟위치로 이동후 대기상태로 전환
             float distanceToTargetPos = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
             Console.WriteLine($"close to spawn point:{distanceToTargetPos}");
-            if (distanceToTargetPos <= 0.1f)
+            if (distanceToTargetPos <= 0.2f)
             {
                 Owner._state.ChangeState(Owner.IdleState);
                 return;
