@@ -30,19 +30,20 @@ namespace Server.Game.Object.Attack
 
             OwnerId = owner.Id;
             info.Name = $"[{owner.info.Name}:{owner.Id}] ATTACK";
-            CellPos = pos;
+
 
             this.damage = damage;
 
             ObjectType = GameObjectType.Attack;
-            float width = 1;
-            float left = 1;
-            float top = 1;
+            float width = 3;
+            float left = 3;
+            float top = 3;
 
             Polygon rectangle = ShapeManager.CreateCenterSquare(left, top, width);
             rectangle.Parent = this;
-            currentShape = rectangle;
+            this.currentShape = rectangle;
 
+            CellPos = pos;
         }
 
         public void Destroy()
