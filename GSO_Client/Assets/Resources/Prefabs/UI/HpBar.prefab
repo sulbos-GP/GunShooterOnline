@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6149014562198626120}
   - component: {fileID: 1682141552502207482}
   - component: {fileID: 1908764736455762098}
-  m_Layer: 5
+  m_Layer: 19
   m_Name: Border
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 9100643267856810223}
   - component: {fileID: 1959878255554621789}
   - component: {fileID: 1757716609797075626}
-  m_Layer: 5
+  m_Layer: 19
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -161,7 +161,7 @@ GameObject:
   - component: {fileID: 8041408176632522588}
   - component: {fileID: 4075777965980421864}
   - component: {fileID: 2017713409794371580}
-  m_Layer: 5
+  m_Layer: 19
   m_Name: Health bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ GameObject:
   - component: {fileID: 213584860746001584}
   - component: {fileID: 4997522404849763461}
   - component: {fileID: 436963664622263165}
-  m_Layer: 5
+  m_Layer: 19
   m_Name: HpBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
