@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Google.Protobuf.Protocol;
+using Microsoft.AspNetCore.Connections;
 using UnityEngine;
 
 public class CreatureController : BaseController
@@ -123,15 +124,11 @@ public class CreatureController : BaseController
 
     }
 
-    public void UpdatePosInfo(PositionInfo info)
+    public virtual void UpdatePosInfo(PositionInfo info)
     {
         //적 위치 변경
         Dir = new Vector2(info.DirX, info.DirY);
         var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
-
-        gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
-        gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
-
 
         if (animator == null)
         {
@@ -143,6 +140,19 @@ public class CreatureController : BaseController
             animator.SetBool("IsMove", true);
         else
             animator.SetBool("IsMove", false);
+
+        if(nextPos.x - transform.position.x < 0)
+        {
+            transform.localScale = new Vector2(1, 1);
+        }
+        else if(nextPos.x - transform.position.x > 0)
+        {
+            transform.localScale = new Vector2(-1, 1);
+        }
+
+
+        gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
+        gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
     }
 
     public virtual void OnHealed(int healAmount)
@@ -212,7 +222,6 @@ public class CreatureController : BaseController
         //GameObject.Destroy(effect, 0.5f);
 
         Managers.Object.Remove(Id);
-        Managers.Resource.Destroy(gameObject);
     }
 
     [ContextMenu("GetInfo")]
