@@ -61,7 +61,7 @@ internal class ObjectManager
             else if (gameObjcet.ObjectType == GameObjectType.Enemyai)
             {
                 EnemyAI enemyAI = gameObjcet as EnemyAI;
-                _enemys.Add(gameObjcet.Id, enemyAI);
+                _enemys.Add(enemyAI.Id, enemyAI);
                 _scopes.Add(enemyAI.Id, enemyAI.DetectObject);
             }
 
