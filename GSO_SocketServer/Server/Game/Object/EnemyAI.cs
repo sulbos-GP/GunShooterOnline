@@ -136,10 +136,10 @@ namespace Server.Game.Object
             
             //만약에 FSM전용으로 만들거면 Update넣을 때 거리 있으면 좋을듯
             //이거는 
-            DetectObject.Update();
 
             _state.Update();
 
+            DetectObject.Update();
         }
 
 
