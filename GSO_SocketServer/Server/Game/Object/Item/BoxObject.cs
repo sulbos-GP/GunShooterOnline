@@ -127,30 +127,31 @@ namespace Server.Game.Object.Item
         public void SetRandomItem()
         {
 
-            Random rand = new Random();
-            int number = rand.Next(1, 6);
+            RandomItem(601, 606);
+            //Random rand = new Random();
+            //int number = rand.Next(1, 6);
 
-            switch (number)
-            {
-                case 1:
-                    RandomItem(101, 103);
-                    break;
-                case 2:
-                    RandomItem(201, 203);
-                    break;
-                case 3:
-                    RandomItem(300, 303);
-                    break;
-                case 4:
-                    RandomItem(401, 404);
-                    break;
-                case 5:
-                    RandomItem(501, 502);
-                    break;
-                case 6:
-                    RandomItem(601, 606);
-                    break;
-            }
+            //switch (number)
+            //{
+            //    case 1:
+            //        RandomItem(101, 103);
+            //        break;
+            //    case 2:
+            //        RandomItem(201, 203);
+            //        break;
+            //    case 3:
+            //        RandomItem(300, 303);
+            //        break;
+            //    case 4:
+            //        RandomItem(401, 404);
+            //        break;
+            //    case 5:
+            //        RandomItem(501, 502);
+            //        break;
+            //    case 6:
+                    
+            //        break;
+            //}
         }
 
         private void RandomItem(int min, int max)
