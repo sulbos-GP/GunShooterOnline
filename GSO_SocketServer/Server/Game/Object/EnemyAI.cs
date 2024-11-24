@@ -56,6 +56,8 @@ namespace Server.Game.Object
 
         private IJob _job;
 
+        public Polygon attackPolygon;
+
 
         public EnemyAI()
         {
@@ -93,6 +95,13 @@ namespace Server.Game.Object
 
             _state.ChangeState(IdleState);
             #endregion
+
+            {
+                float width = 3;
+                float left = 3;
+                float top = 3;
+                attackPolygon = ShapeManager.CreateCenterSquare(left, top, width);
+            }
 
             #region DetectObject
             DetectObject.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
@@ -244,14 +253,9 @@ namespace Server.Game.Object
             AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
             attack.Init(this, 10, CellPos);
 
-            //S_AiAttack attackPacket = new S_AiAttack()
-            //{
-            //    ObjectId = this.OwnerId,
-            //    Shape = attack.info.Shape,
-            //};
-            //this.gameRoom.BroadCast(attackPacket);
 
-            this.gameRoom.PushAfter(100, attack.Destroy);
+
+            this.gameRoom.PushAfter(300, attack.Destroy);
         }
     }
 }
