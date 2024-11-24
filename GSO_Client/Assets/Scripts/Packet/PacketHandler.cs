@@ -128,13 +128,9 @@ internal class PacketHandler
         if (cc == null)
             return;
 
-        var ec = cc.GetComponent<PlayerController>();
-        ec.UpdatePosInfo(movePacket.PositionInfo);
-        ec.UpdateMoving();
+        cc.UpdatePosInfo(movePacket.PositionInfo);
+        cc.UpdateMoving();
         cc.PosInfo = movePacket.PositionInfo;
-
-
-
 
         //cc.State = CreatureState.Moving;
     }
