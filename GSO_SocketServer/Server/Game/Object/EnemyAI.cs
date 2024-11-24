@@ -253,7 +253,11 @@ namespace Server.Game.Object
             AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
             attack.Init(this, attackPolygon, 10);
 
-
+            S_AiAttackShot attackShotPacket = new S_AiAttackShot()
+            {
+                ObjectId = this.Id
+            };
+            this.gameRoom.BroadCast(attackShotPacket);
 
             this.gameRoom.PushAfter(300, attack.Destroy);
         }

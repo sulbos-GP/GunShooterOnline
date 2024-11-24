@@ -403,7 +403,7 @@ namespace Server.Game.FSM
 
             storeTickCount = Environment.TickCount;
 
-            S_AiAttack attackPacket = new S_AiAttack()
+            S_AiAttackReady attackReadyPacket = new S_AiAttackReady()
             {
                 ObjectId = Owner.OwnerId,
                 Shape = new ShapeInfo()
@@ -416,18 +416,18 @@ namespace Server.Game.FSM
 
             };
             Shape s = Owner.attackPolygon;
-            switch (attackPacket.Shape.ShpapeType)
+            switch (attackReadyPacket.Shape.ShpapeType)
             {
                 case Google.Protobuf.Protocol.ShapeType.Shape:
                     break;
                 case Google.Protobuf.Protocol.ShapeType.Circle:
-                    attackPacket.Shape.Radius = ((Circle)s).radius;
+                    attackReadyPacket.Shape.Radius = ((Circle)s).radius;
                     break;
                 case Google.Protobuf.Protocol.ShapeType.Rectangle:
-                    attackPacket.Shape.Left = ((Rectangle)s).Left;
-                    attackPacket.Shape.Bottom = ((Rectangle)s).Bottom;
-                    attackPacket.Shape.Width = ((Rectangle)s).Width;
-                    attackPacket.Shape.Height = ((Rectangle)s).Height;
+                    attackReadyPacket.Shape.Left = ((Rectangle)s).Left;
+                    attackReadyPacket.Shape.Bottom = ((Rectangle)s).Bottom;
+                    attackReadyPacket.Shape.Width = ((Rectangle)s).Width;
+                    attackReadyPacket.Shape.Height = ((Rectangle)s).Height;
                 break;
                 case Google.Protobuf.Protocol.ShapeType.Polygon:
                     Console.WriteLine("Polygon Error");
@@ -442,7 +442,7 @@ namespace Server.Game.FSM
             }
 
                    
-            room.BroadCast(attackPacket);
+            room.BroadCast(attackReadyPacket);
         }
 
         public override void Update()
