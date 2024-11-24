@@ -133,6 +133,12 @@ public class CreatureController : BaseController
         gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
 
 
+        if (animator == null)
+        {
+            Console.WriteLine("Animator is null");
+            return;
+        }
+
         if ((nextPos - transform.position).sqrMagnitude != 0)
             animator.SetBool("IsMove", true);
         else
