@@ -230,10 +230,6 @@ namespace Server.Game.FSM
 
         public void DelayCheckForCheckStates()
         {
-            if(Owner.target == null)
-            {
-                Owner.
-            }
             float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             if (distanceToTarget <= Owner.attackRange)
             {
