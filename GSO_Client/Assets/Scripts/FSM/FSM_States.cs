@@ -210,7 +210,6 @@ public class ChaseState : StateBase
                         Owner._state.ChangeState(Owner._check); // 경계 상태로 전환
                     }
                 }
-                
             }
             return;
         }

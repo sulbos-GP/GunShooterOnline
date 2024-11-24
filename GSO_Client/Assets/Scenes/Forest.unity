@@ -4977,6 +4977,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f47f60c593c019544ba112ef44dced77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  leftTime: 0
   Duration: 2
 --- !u!1 &1847620471
 GameObject:
@@ -5099,7 +5100,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1929648749}
   - component: {fileID: 1929648750}
-  m_Layer: 9
+  m_Layer: 17
   m_Name: blackFog
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5650,7 +5651,7 @@ GameObject:
   - component: {fileID: 1996094876}
   - component: {fileID: 1996094875}
   - component: {fileID: 1996094877}
-  m_Layer: 8
+  m_Layer: 18
   m_Name: AimView
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5887,7 +5888,7 @@ GameObject:
   - component: {fileID: 2137543323}
   - component: {fileID: 2137543325}
   - component: {fileID: 2137543326}
-  m_Layer: 8
+  m_Layer: 18
   m_Name: BasicView
   m_TagString: Untagged
   m_Icon: {fileID: 0}

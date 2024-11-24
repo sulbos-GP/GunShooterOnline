@@ -140,11 +140,13 @@ namespace Server.Game.Object
                 float targetDis = Vector2.Distance(target.CellPos, CellPos);
                 if (targetDis > detectionRange)
                 {
+                    Console.WriteLine("타겟이 사라짐");
                     target = null;
                 }
             }
             if (curState == MobState.Dead)
             {
+
                 return;
             }
 
@@ -214,8 +216,8 @@ namespace Server.Game.Object
         public void MoveToTarget(Vector2 target, float speed)
         {
             Vector2 currentPosition = new Vector2(CellPos.X, CellPos.Y);
-            Vector2 directionToTarget = Vector2.Normalize(target - currentPosition);
-            Vector2 newPosition = currentPosition + directionToTarget * speed * Program.ServerIntervalTick;
+            Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition); 
+            Vector2 newPosition = currentPosition + directdionToTarget * speed * 1 / Program.mFramesPerSecond; //fxxx 
             CellPos = newPosition;
             //transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
         }
