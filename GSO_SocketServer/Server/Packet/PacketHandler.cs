@@ -71,6 +71,7 @@ class PacketHandler
         C_Move packet = (C_Move)message;
         BattleGameRoom room = clientSession.Room; //나중에 null로 바꿔도 참조가능
 
+
         room.Push(room.HandleMove , clientSession.MyPlayer, packet.PositionInfo);
 
     }
