@@ -1,16 +1,17 @@
 using Google.Protobuf.Protocol;
 using System.Collections;
 using System.Collections.Generic;
+using System.Configuration;
+using Unity.Collections;
 using UnityEngine;
 
 public class EnemyAI : CreatureController
 {
-
-
     public float DetectRange;
     public float ChaseRange ;
     public float AttackRange2;
     public Vector2Int SpawnZone;
+
 
     public void SetData(S_AiSpawn s_AiSpawn)
     {
@@ -22,20 +23,37 @@ public class EnemyAI : CreatureController
 
     }
 
-
-    private Coroutine moveCoroutine;
     protected override void Init()
     {
         base.Init();
+        animator = GetComponent<Animator>();
     }
 
+    public override void UpdatePosInfo(PositionInfo info)
+    {
+        base.UpdatePosInfo(info);
+        //이동방향 수정
+    }
 
+    public void SetAniamtionAttack()
+    {
+        animator.SetTrigger("IsAttack");
+    }
 
+    public void SetAniamtionDead()
+    {
+        animator.SetTrigger("IsDead");
+    }
 
+    public override void OnDead(int attackerId = -1)
+    {
+        if (attackerId == -1)
+            return;
 
+        SetAniamtionDead();
+    }
 
-
-
+    
 
     private void OnDrawGizmos()
     {
@@ -64,14 +82,6 @@ public class EnemyAI : CreatureController
                             new Vector3(zoneSize.x, zoneSize.y, 0));
     }
 
-
-    //public IEnumerator AIMove(List<Vector2IntInfo> moveList)  
-    //{ 
-    //    foreach(Vector2IntInfo move in moveList)
-    //    {
-            
-    //    }
-    //}
 
     public void MoveToTarget(Vector2 target, float speed)
     {

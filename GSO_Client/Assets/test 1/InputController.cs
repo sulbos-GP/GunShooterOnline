@@ -13,6 +13,7 @@ public class InputController : MonoBehaviour
 
     //Component
     private Animator animator;
+    private AudioSource audioSource;
     private SpriteRenderer playerSpriteRenderer;
     private SpriteRenderer gunSpriteRenderer;
     private Button interactBtn;
@@ -21,6 +22,8 @@ public class InputController : MonoBehaviour
     public PlayerInput playerInput;
     private Vector2 lookInput;
     private Vector2 direction;
+    private float moveInterval = 0.5f;
+    private float timer = 0.0f;
     //private Vector3 lastPos; //didn't use
 
     //FOV Objects
@@ -98,6 +101,7 @@ public class InputController : MonoBehaviour
         basicFov = GameObject.Find("BasicView").GetComponent<BasicFov>();
 
         animator = transform.GetChild(1).GetComponent<Animator>();
+        audioSource = GetComponent<AudioSource>();
         playerSpriteRenderer = transform.GetChild(1).GetComponent<SpriteRenderer>();
         gunSpriteRenderer = transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
         
@@ -108,6 +112,11 @@ public class InputController : MonoBehaviour
     {
         UpdateState();
         HandleFiring();
+        if (onMove)
+        {
+            timer += Time.deltaTime;
+            moveSound();
+        }
 
         //Mouse Move Logic
         //Vector3 mousePosition = lookInput;
@@ -211,6 +220,16 @@ public class InputController : MonoBehaviour
         }
 
         direction = new Vector2(input.x, input.y);
+    }
+
+    private void moveSound()
+    {
+        if(onMove && timer > moveInterval)
+        {
+            Debug.Log("걷는중");
+            timer = 0.0f;
+            audioSource.PlayOneShot(audioSource.clip);
+        }
     }
 
     
@@ -340,7 +359,6 @@ public class InputController : MonoBehaviour
 
         aimFov.SetOrigin(transform.position); //fov의 중심을 플레이어의 위치로 설정
         basicFov.SetOrigin(transform.position);
-
 
         gameObject.GetComponent<MyPlayerController>().UpdateDrawLine();
         UpdateServer();

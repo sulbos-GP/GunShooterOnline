@@ -60,8 +60,6 @@ namespace Server.Game.Object
         {
             ObjectType = GameObjectType.Enemyai;
 
-            spawnPoint = CellPos; //임시. 스폰위치를 일시적으로 자신이 생성된 위치로 함
-
             #region FSM
             IdleState = new IdleState(this);
             RoundState = new RoundState(this);
@@ -117,7 +115,7 @@ namespace Server.Game.Object
             DetectObject.Init(this);
 
             CellPos = pos;
-
+            spawnPoint = CellPos; //임시. 스폰위치를 일시적으로 자신이 생성된 위치로 함
 
         }
 
