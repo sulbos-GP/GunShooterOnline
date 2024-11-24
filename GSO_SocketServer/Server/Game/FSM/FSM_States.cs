@@ -1,4 +1,7 @@
-﻿using Google.Protobuf.Protocol;
+﻿using Collision.Shapes;
+using Google.Protobuf.Protocol;
+using Google.Protobuf.WellKnownTypes;
+using Newtonsoft.Json.Linq;
 using Server.Game.Object;
 using Server.Game.Utils;
 using ServerCore;
@@ -403,8 +406,42 @@ namespace Server.Game.FSM
             S_AiAttack attackPacket = new S_AiAttack()
             {
                 ObjectId = Owner.OwnerId,
-                Shape = Owner.attackPolygon,
+                Shape = new ShapeInfo()
+                {
+                    ShpapeType = (Google.Protobuf.Protocol.ShapeType)Owner.attackPolygon.Type,
+                    CenterPosX = Owner.attackPolygon.position.x,
+                    CenterPosY = Owner.attackPolygon.position.y,
+                    Roatation = Owner.attackPolygon.rotation
+                }
+
             };
+            Shape s = Owner.attackPolygon;
+            switch (attackPacket.Shape.ShpapeType)
+            {
+                case Google.Protobuf.Protocol.ShapeType.Shape:
+                    break;
+                case Google.Protobuf.Protocol.ShapeType.Circle:
+                    attackPacket.Shape.Radius = ((Circle)s).radius;
+                    break;
+                case Google.Protobuf.Protocol.ShapeType.Rectangle:
+                    attackPacket.Shape.Left = ((Rectangle)s).Left;
+                    attackPacket.Shape.Bottom = ((Rectangle)s).Bottom;
+                    attackPacket.Shape.Width = ((Rectangle)s).Width;
+                    attackPacket.Shape.Height = ((Rectangle)s).Height;
+                break;
+                case Google.Protobuf.Protocol.ShapeType.Polygon:
+                    Console.WriteLine("Polygon Error");
+
+                    break;
+                case Google.Protobuf.Protocol.ShapeType.Arcpoly:
+                    Console.WriteLine("Arcpoly Error");
+
+                    break;
+                default:
+                    break;
+            }
+
+                   
             room.BroadCast(attackPacket);
         }
 
