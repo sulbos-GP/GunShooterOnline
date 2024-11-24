@@ -42,7 +42,7 @@ namespace Server.Game.FSM
             curState = newState;
             curState.Enter();
 
-            Console.WriteLine($"{owner.Id}를 {newState}상태로 전환");
+            Console.WriteLine($"@@@@@@@@@{owner.Id}를 {newState}상태로 전환@@@@@@@@@");
         }
 
         public void Update()

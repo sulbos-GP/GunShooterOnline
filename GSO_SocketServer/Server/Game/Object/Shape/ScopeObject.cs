@@ -53,18 +53,24 @@ namespace Server.Game.Object.Shape
         public override void Update()
         {
             base.Update();
+            CellPos = _owner.CellPos; //콜라이더의 위치 업데이트
 
-            CellPos = _owner.CellPos;
+            EnemyAI enemyAI = _owner as EnemyAI;
+            if (enemyAI == null || enemyAI.target != null)
+            {
+                //적 스크립트가 없거나 해당 적의 타겟이 이미 있다면 안함
+                return;
+            }
 
+            //변수 초기화
             GameObject closestTarget = null;
             float closestDistance = float.MaxValue;
 
+            //hit안의 가장 가까운 게임 오브젝트 계산
             foreach (GameObject gameObject in hits)
             {
-                // 현재 오브젝트와 타겟 간의 거리 계산
                 float distance = Vector2.Distance(_owner.CellPos, gameObject.CellPos);
 
-                // 가장 가까운 거리 갱신
                 if (distance < closestDistance)
                 {
                     closestDistance = distance;
@@ -73,19 +79,22 @@ namespace Server.Game.Object.Shape
                 //Console.Write($"HiT {gameObject.info.Name}");
             }
 
+            //hit의 초기화
+            hits.Clear();
+
+            //가까운 타겟이 있다면 타겟 할당
             if (closestTarget != null)
             {
-                EnemyAI enemyAI = _owner as EnemyAI;
-                if (enemyAI != null)
+                enemyAI.target = closestTarget;
+                Console.WriteLine($"타겟세팅 {closestTarget.Id}\n타깃과의 거리 : {Vector2.Distance(enemyAI.CellPos, closestTarget.CellPos)}");
+                if (enemyAI.curState == FSM.MobState.Idle || enemyAI.curState == FSM.MobState.Return)
                 {
-                    enemyAI.target = closestTarget;
-                    enemyAI._state.ChangeState(enemyAI.CheckState); // 상태를 체크로 전환
+                    //대기와 귀환 상태일때만 콜라이더로 인한 check전환
+                    enemyAI._state.ChangeState(enemyAI.CheckState); 
                 }
-
-            }
-
-
-            hits.Clear();
+               
+               
+            }            
         }
 
         public override void OnCollision(GameObject other)
@@ -103,9 +112,10 @@ namespace Server.Game.Object.Shape
             {
                 return;
             }
+
+            if(hits.Contains(other)) { return; }
+
             hits.Add(other);
-
-
         }
 
 
@@ -113,7 +123,5 @@ namespace Server.Game.Object.Shape
         {
             return _owner;
         }
-
-
     }
 }
