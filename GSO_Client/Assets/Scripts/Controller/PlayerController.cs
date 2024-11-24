@@ -15,7 +15,7 @@ public class PlayerController : CreatureController
 
     [SerializeField] private Material material;
     [SerializeField] private SpriteRenderer sprite;
-    [SerializeField] private Animator animator;
+
     private Transform prevTrn;
     public struct Rectangle
     {
@@ -89,9 +89,9 @@ public class PlayerController : CreatureController
     {
         base.Init();
         Debug.Log("init");
-
-        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
         animator = transform.GetChild(1).GetComponent<Animator>();
+        sprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        
         lineRenderer = GetComponent<LineRenderer>();
     }
 
@@ -177,23 +177,7 @@ public class PlayerController : CreatureController
         base.UpdateController();
     }
 
-    public void UpdatePosInfo (PositionInfo info)
-    {
-        //적 위치 변경
-        Dir = new Vector2(info.DirX, info.DirY);
-        var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
-
-        gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
-        gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
-
-
-        if ((nextPos - transform.position).sqrMagnitude != 0)
-            animator.SetBool("IsMove", true);
-        else
-            animator.SetBool("IsMove", false);
-       
     
-    }
 
     public override void UpdateMoving()
     {

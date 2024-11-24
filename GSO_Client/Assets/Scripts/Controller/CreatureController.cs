@@ -8,7 +8,7 @@ public class CreatureController : BaseController
     private BaseInfoBar _baseInfoBar; //hp, exp UI manage
     public Action ChangeStat;
 
-
+    [SerializeField] protected Animator animator; //자식객체에서 할당을 해줘야함
     public override StatInfo Stat
     {
         get => base.Stat;
@@ -57,6 +57,7 @@ public class CreatureController : BaseController
     {
         base.Init();
         MyPlayerController mc = this as MyPlayerController;
+        
         ChangeStat += CheakUpdateBar;
         AddHpbar();
 
@@ -120,6 +121,22 @@ public class CreatureController : BaseController
 
         #endregion
 
+    }
+
+    public void UpdatePosInfo(PositionInfo info)
+    {
+        //적 위치 변경
+        Dir = new Vector2(info.DirX, info.DirY);
+        var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
+
+        gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
+        gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
+
+
+        if ((nextPos - transform.position).sqrMagnitude != 0)
+            animator.SetBool("IsMove", true);
+        else
+            animator.SetBool("IsMove", false);
     }
 
     public virtual void OnHealed(int healAmount)
