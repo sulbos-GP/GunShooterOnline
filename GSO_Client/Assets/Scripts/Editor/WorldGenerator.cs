@@ -203,6 +203,7 @@ public class WorldGenerator
 
         Tilemap _base = null;
         Tilemap _wall = null;
+        Tilemap _hiddenWall = null;
         Tilemap _box = null;
         Tilemap _exit = null;
         Tilemap _spawn = null;
@@ -218,6 +219,10 @@ public class WorldGenerator
             else if (_tr.name.Contains("Wall") == true)
             {
                 _wall = _tr.GetComponent<Tilemap>();
+            } 
+            else if (_tr.name.Contains("HiddenWall") == true)
+            {
+                _hiddenWall = _tr.GetComponent<Tilemap>();
             } 
             else if (_tr.name.Contains("Box") == true)
             {
@@ -275,6 +280,7 @@ public class WorldGenerator
                 //Debug.Log(currnet);
 
                 TileBase wallTile = _wall.GetTile(new Vector3Int(x, y, 0));
+                TileBase hiddenWallTile = _wall.GetTile(new Vector3Int(x, y, 0));
                 TileBase boxTile = _box.GetTile(new Vector3Int(x, y, 0));
                 TileBase exitTile = _exit.GetTile(new Vector3Int(x, y, 0));
                 TileBase spawnTile = _spawn.GetTile(new Vector3Int(x, y, 0));
@@ -291,32 +297,65 @@ public class WorldGenerator
 
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 1;
+                    else
+                    {
+                        Debug.Log("에러 : 충돌");
+                    }
 
                 }
+                else if (hiddenWallTile != null)
+                {
+                    if (map[currnet.x, currnet.y] == 0)
+                        map[currnet.x, currnet.y] = 1;
+                    else
+                    {
+                        Debug.Log("에러 : 충돌");
+                    }
+                } 
                 else if (boxTile != null)
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 2;
+                    else
+                    {
+                        Debug.Log("에러 : 충돌");
+                    }
                 } 
                 else if (exitTile != null)
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 3;
+                    else
+                    {
+                        Debug.Log("에러 : 충돌");
+                    }
                 }
                 else if(spawnTile != null)
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 4;
+                    else
+                    {
+                        Debug.Log("에러 : 충돌");
+                    }
                 }  
                 else if(mineTile != null)
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 5;
+                    else
+                    {
+                        Debug.Log("에러 : 충돌");
+                    }
                 }  
                 else if(aiSpawnTile != null)
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 6;
+                    else
+                    {
+                        Debug.Log("에러 : 충돌");
+                    }
                 }
                 else
                 {
