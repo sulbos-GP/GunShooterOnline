@@ -31,6 +31,8 @@ internal class PacketHandler
         Managers.SystemLog.Message($"{enterGamePacket.Player}");
         Managers.Object.Add(enterGamePacket.Player, true);
 
+        Managers.Object.MyPlayer.GetComponent<DebugShape>().SetDrawLine(enterGamePacket.Player.Shape.Width, enterGamePacket.Player.Shape.Height);
+
         var Stats = enterGamePacket.Player.StatInfo;
         Managers.Object.MyPlayer.Hp = Stats.Hp;
         Managers.Object.MyPlayer.MaxHp = Stats.MaxHp;
@@ -75,6 +77,11 @@ internal class PacketHandler
         foreach (var info in spawnPacket.Objects)
         {
             Managers.Object.Add(info, false);
+            DebugShape ds = Managers.Object.FindById(info.ObjectId).GetComponent<DebugShape>();
+            if (ds != null)
+            {
+                ds.SetDrawLine(info.Shape.Width, info.Shape.Height);
+            }
 
             var type = (info.ObjectId >> 24) & 0x7f;
             if ((GameObjectType)type != GameObjectType.Player)
@@ -85,9 +92,6 @@ internal class PacketHandler
             var player = Managers.Object.FindById(info.ObjectId).GetComponent<PlayerController>();
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
-
-            player.SetDrawLine(info.Shape.Width,info.Shape.Height);
-            
 
             //Spawn Player
             Vector2 vec2 = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
@@ -134,6 +138,11 @@ internal class PacketHandler
         cc.PosInfo = movePacket.PositionInfo;
 
         //cc.State = CreatureState.Moving;
+        var ds = go.GetComponent<DebugShape>();
+        if(ds != null)
+        {
+            ds.UpdateDrawLine();
+        }
     }
 
     public static void S_ChangeHpHandler(PacketSession session, IMessage message)
