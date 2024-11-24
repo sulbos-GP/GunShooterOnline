@@ -73,18 +73,12 @@ namespace Server.Game.FSM
                 return;
             }
 
-            foreach (Player player in room.GetPlayers())
+            GameObject target = Owner.DetectObject.GetNearestObject();
+            if (target != null)
             {
-                if (Owner.target == null)
-                {
-                    float checkTargetDistance = Vector2.Distance(Owner.CellPos, player.CellPos);
-                    if (checkTargetDistance < Owner.detectionRange)
-                    {
-                        Owner.target = player;
-                        Owner._state.ChangeState(Owner.CheckState);
-                        return;
-                    }
-                }
+                Owner.target = target;
+                Owner._state.ChangeState(Owner.CheckState);
+                return;
             }
 
             int currentTickCount = Environment.TickCount;
@@ -130,18 +124,12 @@ namespace Server.Game.FSM
                 return;
             }
 
-            foreach (Player player in room.GetPlayers())
+            GameObject target = Owner.DetectObject.GetNearestObject();
+            if (target != null)
             {
-                if (Owner.target == null)
-                {
-                    float checkTargetDistance = Vector2.Distance(Owner.CellPos, player.CellPos);
-                    if (checkTargetDistance < Owner.detectionRange)
-                    {
-                        Owner.target = player;
-                        Owner._state.ChangeState(Owner.CheckState);
-                        return;
-                    }
-                }
+                Owner.target = target;
+                Owner._state.ChangeState(Owner.CheckState);
+                return;
             }
 
             Owner.MoveToTarget(targetPos, Owner.lowSpeed);
@@ -590,7 +578,7 @@ namespace Server.Game.FSM
             base.Enter();
 
             //사라지는 시간동안 대기 후 사망 후처리 진행
-            Owner.gameRoom.PushAfter((int)(Owner.disappearTime*1000), DestroyOwner);
+            //Owner.gameRoom.PushAfter((int)(Owner.disappearTime*1000), DestroyOwner);
         }
 
         public void DestroyOwner()
