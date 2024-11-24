@@ -216,8 +216,8 @@ namespace Server.Game.Object
         public void MoveToTarget(Vector2 target, float speed)
         {
             Vector2 currentPosition = new Vector2(CellPos.X, CellPos.Y);
-            Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition);
-            Vector2 newPosition = currentPosition + directdionToTarget * speed * LogicTimer.mFixedDelta; //fxxx
+            Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition); 
+            Vector2 newPosition = currentPosition + directdionToTarget * speed * 1 / Program.mFramesPerSecond; //fxxx 
             CellPos = newPosition;
             //transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
         }
