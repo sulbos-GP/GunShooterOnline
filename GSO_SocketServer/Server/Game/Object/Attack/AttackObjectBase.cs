@@ -50,11 +50,17 @@ namespace Server.Game.Object.Attack
 
             if (other != null && other.gameRoom != null && other.gameRoom == this.gameRoom)
             {
+                GameObject owner = ObjectManager.Instance.Find<GameObject>(this.OwnerId);
+                if(owner == null)
+                {
+                    return;
+                }
+
                 Player p = other as Player;
                 if (p != null)
                 {
                     Console.WriteLine($"{info.Name} to {this.damage}");
-                    p.OnDamaged(this, this.damage);
+                    p.OnDamaged(owner, this.damage);
                 }
             }
         }
