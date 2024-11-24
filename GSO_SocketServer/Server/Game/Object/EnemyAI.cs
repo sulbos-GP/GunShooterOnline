@@ -18,9 +18,9 @@ namespace Server.Game.Object
 
         #region FSM
         public FSMController _state;
-        public MobState curState;
 
         public IdleState IdleState;
+        public RoundState RoundState;
         public CheckState CheckState;
         public ChaseState ChaseState;
         public AttackState AttackState;
@@ -64,6 +64,7 @@ namespace Server.Game.Object
 
             #region FSM
             IdleState = new IdleState(this);
+            RoundState = new RoundState(this);
             CheckState = new CheckState(this);
             ChaseState = new ChaseState(this);
             AttackState = new AttackState(this);
@@ -132,45 +133,16 @@ namespace Server.Game.Object
 
             //Console.WriteLine("test");
             //return;
+            
+            //만약에 FSM전용으로 만들거면 Update넣을 때 거리 있으면 좋을듯
+            //이거는 
             DetectObject.Update();
-
-
-
-
-            if (target != null)
-            {
-                float targetDis = Vector2.Distance(target.CellPos, CellPos);
-                if (targetDis > detectionRange)
-                {
-                    Console.WriteLine("타겟이 사라짐");
-                    target = null;
-                }
-                else
-                {
-                    gameRoom.HandleMove( this, new PositionInfo() 
-                    { PosX = CellPos.X, PosY = CellPos.Y, DirX = Dir.X, DirY = Dir.Y});
-                }
-            }
-            if (curState == MobState.Dead)
-            {
-
-                return;
-            }
-
-
 
             _state.Update();
 
-            if (Hp <= 0)
-            {
-                _state.ChangeState(new DeadState(this));
-            }
-
-
-            //업데이트 코드
         }
 
-       
+
 
         public override void OnCollision(GameObject other)
         {
@@ -196,6 +168,10 @@ namespace Server.Game.Object
             if (gameRoom == null)
                 return;
 
+            {
+                _state.ChangeState(new DeadState(this));
+            }
+
             BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
             boxObject.CellPos = this.CellPos;
             boxObject.SetRandomItem();
@@ -218,6 +194,13 @@ namespace Server.Game.Object
         {
             Console.WriteLine("Enemy Hit");
             base.OnDamaged(attacker, damage);
+
+            if (Hp > 0)
+            {
+                this.target = attacker;
+                _state.ChangeState(this.ChaseState);
+            }
+
         }
 
         public override void OnHealed(GameObject healer, int heal)
@@ -229,8 +212,8 @@ namespace Server.Game.Object
         public void MoveToTarget(Vector2 target, float speed)
         {
             Vector2 currentPosition = new Vector2(CellPos.X, CellPos.Y);
-            Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition); 
-            Vector2 newPosition = currentPosition + directdionToTarget * speed * 1 / Program.mFramesPerSecond; //fxxx 
+            Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition);
+            Vector2 newPosition = currentPosition + directdionToTarget * speed * LogicTimer.mFixedDelta; //fxxx
             CellPos = newPosition;
             //transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
         }
@@ -238,7 +221,6 @@ namespace Server.Game.Object
 
         public Vector2 GetRandomPosInSpawnZone(Vector2 center, float radius)
         {
-            return center;
             Random random = new Random();
 
             float angle = (float)(random.NextDouble() * MathF.PI * 2);

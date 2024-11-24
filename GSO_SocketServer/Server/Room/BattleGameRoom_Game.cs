@@ -1014,35 +1014,35 @@ namespace Server
                 }
             }
 
-             foreach (AISpawnZone zone in map.aispawnZones)
-             {
+            //foreach (AISpawnZone zone in map.aispawnZones)
+            //{
 
-                 EnemyAI enemy = ObjectManager.Instance.Add<EnemyAI>();
-                 {
-                     //enemy.info.Name = "AI";
-                     enemy.CellPos = zone.CellPos;
-                     enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+            //    EnemyAI enemy = ObjectManager.Instance.Add<EnemyAI>();
+            //    {
+            //        //enemy.info.Name = "AI";
+            //        enemy.CellPos = zone.CellPos;
+            //        enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
 
-                 }
-                 enemy.Init(zone.CellPos);
-
-
-
-                 EnterGame(enemy);
-
-             }
+            //    }
+            //    enemy.Init(zone.CellPos);
 
 
 
-            /*  EnemyAI enemy = ObjectManager.Instance.Add<EnemyAI>();
-              {
-                  //enemy.info.Name = "AI";
-                  enemy.CellPos = map.aispawnZones[0].CellPos;
-                  enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+            //    EnterGame(enemy);
 
-              }
-              enemy.Init(map.aispawnZones[0].CellPos);
-              EnterGame(enemy);*/
+            //}
+
+
+
+            EnemyAI enemy = ObjectManager.Instance.Add<EnemyAI>();
+            {
+                //enemy.info.Name = "AI";
+                enemy.CellPos = map.aispawnZones[0].CellPos;
+                enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+
+            }
+            enemy.Init(map.aispawnZones[0].CellPos);
+            EnterGame(enemy);
 
             foreach (Player p in tempPlayer)
             {
