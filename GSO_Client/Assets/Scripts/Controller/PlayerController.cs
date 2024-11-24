@@ -208,7 +208,7 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-
+        moveSound();
         UpdateDrawLine();
         //rig.MovePosition(rig.position + newVec2);
 
