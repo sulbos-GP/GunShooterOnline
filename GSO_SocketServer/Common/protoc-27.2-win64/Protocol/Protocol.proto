@@ -54,7 +54,8 @@ enum MsgId{
 
   S_AI_MOVE = 39;
   S_AI_SPAWN = 40;
-  S_AI_ATTACK = 41;
+  S_AI_ATTACK_READY = 41;
+  S_AI_ATTACK_SHOT = 42;
 }
 
 enum GameObjectType{
@@ -424,13 +425,13 @@ message S_AiSpawn{ //40
 }
 
 
-message S_AiAttackReady //  S_AI_ATTACK = 40;
+message S_AiAttackReady //  S_AI_ATTACK = 41;
 { 
     int32 ObjectId = 1;
     ShapeInfo shape = 3;
 }
 
-message S_AiAttackShot //  S_AI_ATTACK = 40;
+message S_AiAttackShot //  S_AI_ATTACK = 42;
 { 
     int32 ObjectId = 1;
 }
