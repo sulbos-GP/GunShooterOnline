@@ -222,6 +222,7 @@ public class CreatureController : BaseController
         //GameObject.Destroy(effect, 0.5f);
 
         Managers.Object.Remove(Id);
+        //Managers.Resource.Destroy(gameObject);
     }
 
     [ContextMenu("GetInfo")]
