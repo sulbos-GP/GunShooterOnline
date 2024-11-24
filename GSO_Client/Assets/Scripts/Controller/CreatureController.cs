@@ -141,13 +141,13 @@ public class CreatureController : BaseController
         else
             animator.SetBool("IsMove", false);
 
-        if(nextPos.x - transform.position.x < 0)
+        if (nextPos.x - transform.position.x < 0)
         {
-            transform.localScale = new Vector2(1, 1);
+            transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
         }
-        else if(nextPos.x - transform.position.x > 0)
+        else if (nextPos.x - transform.position.x > 0)
         {
-            transform.localScale = new Vector2(-1, 1);
+            transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
         }
 
 
