@@ -410,8 +410,8 @@ public class Map
         var x = cellPos.x - Bleft.x;
         var y = cellPos.y - Bleft.y;
 
-        if(_collisions[x, y] != 0)
-            Console.WriteLine($"{x},{y} is  {_collisions[x, y]}");
+      /*  if(_collisions[x, y] != 0)
+            Console.WriteLine($"{x},{y} is  {_collisions[x, y]}");*/
 
         //나중에 수정return _collisions[x, y] == 0; // && (!cheakObjects || _objects[x, y] == null)
         return _collisions[x, y] != 1; // && (!cheakObjects || _objects[x, y] == null)
@@ -630,6 +630,11 @@ public class Map
     private List<Vector2Int> CalcCellPathFromParent(Dictionary<Pos, Pos> parent, Pos dest)
     {
         var cells = new List<Vector2Int>();
+        Pos p;
+        if (parent.TryGetValue(dest, out p) == false)  //벡터 Int값이 float로 변환하는 과정에서 에러생김
+        {
+            return null;
+        }
 
         var pos = dest;
         while (parent[pos] != pos)

@@ -95,7 +95,7 @@ namespace Server.Game
                 return;
             }
 
-            //DecreaseAmmo();
+            DecreaseAmmo();
 
             Console.WriteLine($"attacker : {attacker}\n" +
                 $"pos : {pos.X},{pos.Y}\n" +
