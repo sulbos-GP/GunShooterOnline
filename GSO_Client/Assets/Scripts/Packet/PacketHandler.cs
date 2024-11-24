@@ -5,6 +5,7 @@ using MathNet.Numerics.LinearAlgebra.Factorization;
 using NPOI.HSSF.Record;
 using NPOI.SS.Formula.Functions;
 using Org.BouncyCastle.Bcpg;
+using Server.Data;
 using ServerCore;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ using UnityEditor;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
+using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 using static UnityEditor.PlayerSettings;
 
 
@@ -71,7 +73,7 @@ internal class PacketHandler
     public static void S_SpawnHandler(PacketSession session, IMessage packet)
     {
         Managers.SystemLog.Message("S_SpawnHandler");
-        // 1번째 : 적 Spawn 정보 2번째 : box 정보 3번째 : 로컬 플레이어 정보?
+        //플레이어 제외 오브젝트
         var spawnPacket = (S_Spawn)packet;
         
         foreach (var info in spawnPacket.Objects)
@@ -90,21 +92,9 @@ internal class PacketHandler
                 continue;
             }
 
-            //체력 STAT 주입
             var Stats = info.StatInfo;
-            
             creature.Hp = Stats.Hp;
             creature.MaxHp = Stats.MaxHp;
-
-            //Spawn Player
-            Vector2 vec2 = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
-            var player = creature.GetComponent<PlayerController>();
-            if(player == null)
-            {
-                continue;
-            }
-            player.SpawnPlayer(vec2);
-            Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + info.ObjectId);
         }
         //Managers.SystemLog.Message("S_SpawnHandler");*/
     }
@@ -305,11 +295,25 @@ internal class PacketHandler
         Managers.SystemLog.Message("S_GameStartHandler");
         S_GameStart packet = message as S_GameStart;
 
-        //자신의 플레이어 외에 다른 플레이어와 오브젝트의 객체 생성
-
+        //자신의 플레이어 외에 다른 플레이어 생성
         foreach (ObjectInfo obj in packet.Objects)
         {
             Managers.Object.Add(obj, false);
+            //Spawn Player
+
+            //Vector2 vec2 = new Vector2(obj.PositionInfo.PosX, obj.PositionInfo.PosY);
+
+            var player = Managers.Object.FindById(obj.ObjectId).GetComponent<CreatureController>();
+            var Stats = obj.StatInfo;
+            player.Hp = Stats.Hp;
+            player.MaxHp = Stats.MaxHp;
+
+            //if (player == null)
+            //{
+            //    continue;
+            //}
+            //player.SpawnPlayer(vec2);
+            Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + obj.ObjectId);
         }
 
         //obj가 플레이어인 경우 장착칸 1번 확인해서 
