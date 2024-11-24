@@ -3,6 +3,7 @@ using Server.Game.Object;
 using Server.Game.Utils;
 using ServerCore;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -375,7 +376,7 @@ namespace Server.Game.FSM
 
     public class AttackState : StateBase
     {
-        private const int waitAttackTime = 500;
+        private const int waitAttackTime = 1000;
         private int storeTickCount = 0;
         public AttackState(EnemyAI owner) : base(owner, MobState.Attack)
         {
@@ -385,8 +386,26 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             base.Enter();
+
+            if (Owner == null)
+            {
+                return;
+            }
+
+            BattleGameRoom room = Owner.gameRoom;
+            if (room == null)
+            {
+                return;
+            }
+
             storeTickCount = Environment.TickCount;
 
+            S_AiAttack attackPacket = new S_AiAttack()
+            {
+                ObjectId = Owner.OwnerId,
+                Shape = Owner.attackPolygon,
+            };
+            room.BroadCast(attackPacket);
         }
 
         public override void Update()
