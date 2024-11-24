@@ -251,7 +251,7 @@ namespace Server.Game.Object
         public virtual void DoAttack()
         {
             AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
-            attack.Init(this, 10, CellPos);
+            attack.Init(this, attackPolygon, 10);
 
 
 
