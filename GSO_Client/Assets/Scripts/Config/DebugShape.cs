@@ -65,10 +65,10 @@ public class DebugShape : MonoBehaviour
         {
             return;
         }
-        lineRenderer.SetPosition(0, (Vector2)gameObject.transform.position + rect.topLeft * 2);
-        lineRenderer.SetPosition(1, (Vector2)gameObject.transform.position + rect.topRight * 2);
-        lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight * 2);
-        lineRenderer.SetPosition(3, (Vector2)gameObject.transform.position + rect.bottomLeft * 2);
-        lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft * 2);
+        lineRenderer.SetPosition(0, (Vector2)gameObject.transform.position + rect.topLeft);
+        lineRenderer.SetPosition(1, (Vector2)gameObject.transform.position + rect.topRight);
+        lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight);
+        lineRenderer.SetPosition(3, (Vector2)gameObject.transform.position + rect.bottomLeft);
+        lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft);
     }
 }

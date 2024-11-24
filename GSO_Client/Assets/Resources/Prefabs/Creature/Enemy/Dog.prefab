@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 9146170769284473433}
   - component: {fileID: 6782568182328615960}
   - component: {fileID: -6169923716430347105}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Dog
   m_TagString: Monster
   m_Icon: {fileID: 0}
@@ -305,6 +305,7 @@ MonoBehaviour:
   ChaseRange: 0
   AttackRange2: 0
   SpawnZone: {x: 0, y: 0}
+  AttackShape: {fileID: 0}
 --- !u!114 &-6169923716430347105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -328,7 +329,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2046104097865509647}
   - component: {fileID: 6055317967842773987}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
