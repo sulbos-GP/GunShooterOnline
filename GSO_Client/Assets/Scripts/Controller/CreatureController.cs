@@ -104,7 +104,7 @@ public class CreatureController : BaseController
             if (Stat.MaxHp > 0)
             {
                 ratio = Mathf.Max(0, (float)Hp / Stat.MaxHp);
-                //Debug.Log($"updateHp {transform.name} : new hp = {Hp} ,ratio = {ratio}");
+                Debug.Log($"updateHp {transform.name} : new hp = {Hp} ,ratio = {ratio}");
             }
             _baseInfoBar.SetHpBar(ratio);
         }
