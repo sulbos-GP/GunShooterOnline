@@ -135,6 +135,8 @@ namespace Server.Game.Object
             DetectObject.Update();
 
 
+
+
             if (target != null)
             {
                 float targetDis = Vector2.Distance(target.CellPos, CellPos);
@@ -142,6 +144,11 @@ namespace Server.Game.Object
                 {
                     Console.WriteLine("타겟이 사라짐");
                     target = null;
+                }
+                else
+                {
+                    gameRoom.Push(gameRoom.HandleMove, this, new PositionInfo() 
+                    { PosX = CellPos.X, PosY = CellPos.Y, DirX = Dir.X, DirY = Dir.Y});
                 }
             }
             if (curState == MobState.Dead)
