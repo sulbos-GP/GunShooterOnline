@@ -28,6 +28,8 @@ public class CreatureObj : GameObject
         if (gameRoom == null)
             return;
 
+        IsDead = true;
+
         Player player = attacker as Player;
         if(player != null)
         {
@@ -88,7 +90,11 @@ public class CreatureObj : GameObject
         set => stat.Hp = Math.Clamp(value, 0, stat.MaxHp);
     }
 
-
+    public bool IsDead
+    {
+        get;
+        set;
+    } = false;
   
 
 

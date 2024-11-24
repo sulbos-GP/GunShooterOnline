@@ -410,7 +410,7 @@ public class Map
         var x = cellPos.x - Bleft.x;
         var y = cellPos.y - Bleft.y;
 
-        //Console.WriteLine($"{cellPos.x}, {cellPos.y}and {x}, {y}");
+        Console.WriteLine($"{_collisions[x, y]}");
 
         return _collisions[x, y] == 0; // && (!cheakObjects || _objects[x, y] == null)
     }
