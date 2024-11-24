@@ -877,9 +877,17 @@ internal class PacketHandler
 
         enemy.GetComponent<EnemyAI>().SetData(packet);
     }
-    internal static void S_AiAttackHandler(PacketSession session, IMessage message)
+    internal static void S_AiAttackReadyHandler(PacketSession session, IMessage message)
     {
-        S_AiSpawn packet = message as S_AiSpawn;
+        S_AiAttackReady packet = message as S_AiAttackReady;
+
+        GameObject enemy = Managers.Object.FindById(packet.ObjectId);
+
+    }
+
+    internal static void S_AiAttackShotHandler(PacketSession session, IMessage message)
+    {
+        S_AiAttackShot packet = message as S_AiAttackShot;
 
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
 
