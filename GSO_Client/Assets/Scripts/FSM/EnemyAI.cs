@@ -43,11 +43,11 @@ public class EnemyAI : CreatureController
     {
         rect = new Rectangle(width, height);
 
-        AttackShape.SetPosition(0, center + rect.topLeft * 2);
-        AttackShape.SetPosition(1, center + rect.topRight * 2);
-        AttackShape.SetPosition(2, center + rect.bottomRight * 2);
-        AttackShape.SetPosition(3, center + rect.bottomLeft * 2);
-        AttackShape.SetPosition(4, center + rect.topLeft * 2);
+        AttackShape.SetPosition(0, center + rect.topLeft);
+        AttackShape.SetPosition(1, center + rect.topRight);
+        AttackShape.SetPosition(2, center + rect.bottomRight);
+        AttackShape.SetPosition(3, center + rect.bottomLeft);
+        AttackShape.SetPosition(4, center + rect.topLeft);
     }
 
     public void ClearLine()
