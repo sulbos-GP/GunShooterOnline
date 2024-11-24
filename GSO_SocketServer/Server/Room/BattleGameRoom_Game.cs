@@ -1026,6 +1026,9 @@ namespace Server
 
                  }
                  enemy.Init(zone.CellPos);
+
+
+
                  EnterGame(enemy);
 
              }

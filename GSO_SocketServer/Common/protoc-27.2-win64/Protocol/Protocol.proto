@@ -53,6 +53,7 @@ enum MsgId{
   S_TRAP_ACTION = 38;
 
   S_AI_MOVE = 39;
+  S_AI_SPAWN = 40;
 }
 
 enum GameObjectType{
@@ -70,13 +71,13 @@ enum GameObjectType{
 }
 
 enum ShapeType
-    {
-        SHAPE = 0;
-        CIRCLE = 1;
-        RECTANGLE = 2;
-        POLYGON = 3;
-        ARCPOLY = 4;
-    }
+{
+    SHAPE = 0;
+    CIRCLE = 1;
+    RECTANGLE = 2;
+    POLYGON = 3;
+    ARCPOLY = 4;
+}
 
 
 enum ItemType{
@@ -409,6 +410,17 @@ message S_AiMove{  //S_AI_MOVE = 39;
     int32 ObjectId = 1;
     repeated Vector2IntInfo PosList = 2;
 }
+
+
+message S_AiSpawn{ //40
+    int32 objectId = 1;
+     float DetectRange = 2;
+     float ChaseRange = 3;
+     float AttackRange =4;
+     Vector2IntInfo SpawnZone = 5;
+
+}
+
 
 //--------------- END message --------------------
 

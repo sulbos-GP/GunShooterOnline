@@ -863,6 +863,15 @@ internal class PacketHandler
         }
     }
 
+    internal static void S_AiSpawnHandler(PacketSession session, IMessage message)
+    {
+        S_AiSpawn packet = message as S_AiSpawn;
+
+        GameObject enemy = Managers.Object.FindById(packet.ObjectId);
+
+        enemy.GetComponent<EnemyAI>().SetData(packet);
+    }
+
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
          var skillPacket = message as S_Skill;

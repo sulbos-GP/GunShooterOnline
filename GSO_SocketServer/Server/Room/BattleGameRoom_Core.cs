@@ -248,7 +248,29 @@ namespace Server
                 enemy.gameRoom = this;
 
                 //mMap.AddObject(monster);
-                enemy.Update();
+
+
+              /*  S_AiSpawn info = new S_AiSpawn();
+                info.DetectRange = enemy.detectionRange;
+                info.ChaseRange = enemy.chaseRange;
+                info.AttackRange = enemy.attackRange;
+                info.SpawnZone = new Vector2IntInfo()
+                {
+                    X = (int)enemy.spawnPoint.X,
+                    Y = (int)enemy.spawnPoint.Y
+                };
+
+
+                BroadCast(info);*/
+
+
+
+
+
+
+
+
+                //enemy.Update();
             }
             else if (type == GameObjectType.Projectile) //&& type == GameObjectType.Scopeskill)
             {
@@ -257,7 +279,7 @@ namespace Server
                 skillObj.gameRoom = this;
 
                 //mMap.AddObject(skillObj);
-                skillObj.Update();
+                //skillObj.Update();
             } //if끝
 
 
@@ -314,13 +336,37 @@ namespace Server
             }
 
 
-            foreach (EnemyAI mine in ObjectManager.Instance.GetEnemyAIs())
+            foreach (EnemyAI enemy in ObjectManager.Instance.GetEnemyAIs())
             {
-                spawnPacket.Objects.Add(mine.info);
+                spawnPacket.Objects.Add(enemy.info);
+
+               
             }
 
 
             enterPlayer.Session.Send(spawnPacket);
+
+
+            foreach (EnemyAI enemy in ObjectManager.Instance.GetEnemyAIs())
+            {
+
+                S_AiSpawn info = new S_AiSpawn();
+                info.ObjectId = enemy.Id;
+                info.DetectRange = enemy.detectionRange;
+                info.ChaseRange = enemy.chaseRange;
+                info.AttackRange = enemy.attackRange;
+                info.SpawnZone = new Vector2IntInfo()
+                {
+                    X = (int)enemy.spawnPoint.X,
+                    Y = (int)enemy.spawnPoint.Y
+                };
+
+
+                enterPlayer.Session.Send(info);
+            }
+
+         
+
         }
 
 
