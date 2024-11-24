@@ -21,29 +21,23 @@ namespace Server.Game.Object.Attack
             ObjectType = GameObjectType.Attack;
         }
 
-        public void Init(GameObject owner, int damage, Vector2 pos)
+        public void Init(GameObject owner, Polygon polygon, int damage)
         {
             if (owner == null)
             {
                 return;
             }
 
+            ObjectType = GameObjectType.Attack;
             OwnerId = owner.Id;
-            info.Name = $"[{owner.info.Name}:{owner.Id}] ATTACK";
-
+            info.Name = $"[{owner.info.Name}:{owner.Id}] Melee ATTACK";
 
             this.damage = damage;
 
-            ObjectType = GameObjectType.Attack;
-            float width = 3;
-            float left = 3;
-            float top = 3;
+            polygon.Parent = this;
+            this.currentShape = polygon;
 
-            Polygon rectangle = ShapeManager.CreateCenterSquare(left, top, width);
-            rectangle.Parent = this;
-            this.currentShape = rectangle;
-
-            CellPos = pos;
+            CellPos = owner.CellPos;
         }
 
         public void Destroy()
