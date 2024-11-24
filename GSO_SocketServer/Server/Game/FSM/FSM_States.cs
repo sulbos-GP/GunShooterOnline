@@ -436,7 +436,7 @@ namespace Server.Game.FSM
 
             S_AiAttackReady attackReadyPacket = new S_AiAttackReady()
             {
-                ObjectId = Owner.OwnerId,
+                ObjectId = Owner.Id,
                 Shape = new ShapeInfo()
                 {
                     ShpapeType = (Google.Protobuf.Protocol.ShapeType)Owner.attackPolygon.Type,

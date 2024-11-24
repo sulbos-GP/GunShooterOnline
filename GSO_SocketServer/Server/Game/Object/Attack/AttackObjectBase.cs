@@ -15,6 +15,7 @@ namespace Server.Game.Object.Attack
     {
 
         int damage;
+        List<Player> hitPlayers = new List<Player>();
 
         public AttackObjectBase()
         {
@@ -47,7 +48,7 @@ namespace Server.Game.Object.Attack
 
         public override void OnCollision(GameObject other)
         {
-
+            
             if (other != null && other.gameRoom != null && other.gameRoom == this.gameRoom)
             {
                 GameObject owner = ObjectManager.Instance.Find<GameObject>(this.OwnerId);
@@ -56,12 +57,20 @@ namespace Server.Game.Object.Attack
                     return;
                 }
 
-                Player p = other as Player;
-                if (p != null)
+                Player player = other as Player;
+                if (player == null)
                 {
-                    Console.WriteLine($"{info.Name} to {this.damage}");
-                    p.OnDamaged(owner, this.damage);
+                    return;
                 }
+
+                if(true == hitPlayers.Contains(player))
+                {
+                    return;
+                }
+                hitPlayers.Add(player);
+
+                Console.WriteLine($"{info.Name} to {this.damage}");
+                player.OnDamaged(owner, this.damage);
             }
         }
     }

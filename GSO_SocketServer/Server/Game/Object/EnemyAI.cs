@@ -275,7 +275,7 @@ namespace Server.Game.Object
             };
             this.gameRoom.BroadCast(attackShotPacket);
 
-            this.gameRoom.PushAfter(300, attack.Destroy);
+            this.gameRoom.PushAfter(100, attack.Destroy);
         }
     }
 }
