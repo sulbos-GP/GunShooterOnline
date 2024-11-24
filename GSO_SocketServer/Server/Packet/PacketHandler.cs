@@ -68,10 +68,10 @@ class PacketHandler
     {
         ClientSession clientSession = session as ClientSession;
 
-        C_Move move = (C_Move)message;
+        C_Move packet = (C_Move)message;
         BattleGameRoom room = clientSession.Room; //나중에 null로 바꿔도 참조가능
 
-        room.Push(room.HandleMove , clientSession.MyPlayer, move);
+        room.Push(room.HandleMove , clientSession.MyPlayer, packet.PositionInfo);
 
     }
 

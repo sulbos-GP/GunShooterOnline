@@ -87,7 +87,7 @@ namespace Server.Game.Object.Shape
             {
                 enemyAI.target = closestTarget;
                 Console.WriteLine($"타겟세팅 {closestTarget.Id}\n타깃과의 거리 : {Vector2.Distance(enemyAI.CellPos, closestTarget.CellPos)}");
-                if (enemyAI.curState == FSM.MobState.Idle || enemyAI.curState == FSM.MobState.Return)
+                if (enemyAI._state.CurState.state == FSM.MobState.Idle || enemyAI._state.CurState.state == FSM.MobState.Return)
                 {
                     //대기와 귀환 상태일때만 콜라이더로 인한 check전환
                     enemyAI._state.ChangeState(enemyAI.CheckState); 

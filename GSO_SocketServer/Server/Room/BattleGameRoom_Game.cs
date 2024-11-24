@@ -23,35 +23,34 @@ namespace Server
     public partial class BattleGameRoom
     {
 
-        public void HandleMove(Player player, C_Move packet)
+        public void HandleMove(CreatureObj creature, PositionInfo movePosInfo)
         {
-            if (player == null)
+            if (creature == null)
                 return;
 
             //검사--------------------
 
             //Console.WriteLine(player.info.Name + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
 
-            var movePosInfo = packet.PositionInfo; //C요청
 
             //player.info.PositionInfo.State = movePosInfo.State;
-            player.info.PositionInfo.DirY = movePosInfo.DirY;
-            player.info.PositionInfo.DirX = movePosInfo.DirX;
-            player.info.PositionInfo.PosX = movePosInfo.PosX;
-            player.info.PositionInfo.PosY = movePosInfo.PosY;
-            player.info.PositionInfo.RotZ = movePosInfo.RotZ;
+            creature.info.PositionInfo.DirY = movePosInfo.DirY;
+            creature.info.PositionInfo.DirX = movePosInfo.DirX;
+            creature.info.PositionInfo.PosX = movePosInfo.PosX;
+            creature.info.PositionInfo.PosY = movePosInfo.PosY;
+            creature.info.PositionInfo.RotZ = movePosInfo.RotZ;
 
 
             //다른플레이어에게 알려줌
             var resMovePacket = new S_Move();
-            resMovePacket.ObjectId = player.info.ObjectId;
-            resMovePacket.PositionInfo = packet.PositionInfo;
+            resMovePacket.ObjectId = creature.info.ObjectId;
+            resMovePacket.PositionInfo = movePosInfo;
 
-            player.CellPos = new Vector2(packet.PositionInfo.PosX, packet.PositionInfo.PosY);
+            creature.CellPos = new Vector2(movePosInfo.PosX, movePosInfo.PosY);
 
             //TODO : 삭제
-            map.ApplyMove(player,
-                new Vector2Int((int)Math.Round(packet.PositionInfo.PosX), (int)Math.Round(packet.PositionInfo.PosY)));
+            map.ApplyMove(creature,
+                new Vector2Int((int)Math.Round(movePosInfo.PosX), (int)Math.Round(movePosInfo.PosY)));
             BroadCast(resMovePacket);
         }
 
