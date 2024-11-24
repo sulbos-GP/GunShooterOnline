@@ -99,6 +99,10 @@ internal class PacketHandler
             //Spawn Player
             Vector2 vec2 = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
             var player = creature.GetComponent<PlayerController>();
+            if(player == null)
+            {
+                continue;
+            }
             player.SpawnPlayer(vec2);
             Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + info.ObjectId);
         }
