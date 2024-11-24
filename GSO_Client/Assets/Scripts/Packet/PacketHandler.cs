@@ -170,7 +170,7 @@ internal class PacketHandler
             }
 
             //go가 나 자신이라면 UI변화
-            if (go == Managers.Object.MyPlayer)
+            if (go.GetComponent<CreatureController>().Id == Managers.Object.MyPlayer.Id)
             {
                 UIManager.Instance.SetHpText();
             }
