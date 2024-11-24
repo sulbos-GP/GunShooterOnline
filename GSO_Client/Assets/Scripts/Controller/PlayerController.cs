@@ -17,6 +17,9 @@ public class PlayerController : CreatureController
     [SerializeField] private SpriteRenderer sprite;
 
     private Transform prevTrn;
+    private float Timer = 0.0f;
+    private float moveInterval = 0.5f;
+    public AudioSource AudioSource;
     public struct Rectangle
     {
         public Vector2 topLeft;
@@ -54,6 +57,20 @@ public class PlayerController : CreatureController
 
         // LineRenderer의 점 위치 설정
         UpdateDrawLine();
+    }
+
+    private void FixedUpdate()
+    {
+        Timer += Time.deltaTime;
+    }
+
+    private void moveSound()
+    {
+        if (Timer > moveInterval)
+        {
+            Timer = 0.0f;
+            AudioSource.PlayOneShot(AudioSource.clip);
+        }
     }
 
     public void UpdateDrawLine()
@@ -190,7 +207,7 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-
+        moveSound();
         UpdateDrawLine();
         //rig.MovePosition(rig.position + newVec2);
 
