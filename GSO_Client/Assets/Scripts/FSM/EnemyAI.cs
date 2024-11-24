@@ -61,6 +61,7 @@ public class EnemyAI : CreatureController
     {
         base.UpdatePosInfo(info);
         //이동방향 수정
+
     }
 
     public void SetAniamtionAttack()
