@@ -140,11 +140,13 @@ namespace Server.Game.Object
                 float targetDis = Vector2.Distance(target.CellPos, CellPos);
                 if (targetDis > detectionRange)
                 {
+                    Console.WriteLine("타겟이 사라짐");
                     target = null;
                 }
             }
             if (curState == MobState.Dead)
             {
+
                 return;
             }
 
@@ -215,9 +217,8 @@ namespace Server.Game.Object
         {
             Vector2 currentPosition = new Vector2(CellPos.X, CellPos.Y);
             Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition);
-            Vector2 newPosition = currentPosition + directdionToTarget * speed * Program.ServerIntervalTick; //fxxx
+            Vector2 newPosition = currentPosition + directdionToTarget * speed * LogicTimer.mFixedDelta; //fxxx
             CellPos = newPosition;
-            Console.WriteLine($"{Program.ServerIntervalTick}");
             //transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
         }
 
