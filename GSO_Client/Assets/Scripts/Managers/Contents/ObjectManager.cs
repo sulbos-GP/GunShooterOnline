@@ -204,8 +204,6 @@ public class ObjectManager
 
     public void Remove(int id)
     {
-        if (MyPlayer != null && MyPlayer.Id == id)
-            return;
         if (_objects.ContainsKey(id) == false)
             return;
 
