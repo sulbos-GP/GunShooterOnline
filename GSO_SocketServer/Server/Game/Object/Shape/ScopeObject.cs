@@ -21,21 +21,21 @@ namespace Server.Game.Object.Shape
         {
             ObjectType = GameObjectType.Noneobject;
 
-            float width = 1;
+            /*float width = 1;
             float left = -0.5f;
             float bottom = -0.5f;
-            Polygon rectangle = ShapeManager.CreateCenterSquare(left, bottom, width);
+            Polygon rectangle = ShapeManager.CreateCircle(left, bottom, width);
             rectangle.Parent = this;
 
-            currentShape = rectangle;
+            currentShape = rectangle;*/
 
-            info.Box = new BoxInfo()
+            /*info.Box = new BoxInfo()
             {
                 X = 6,
                 Y = 6,
                 Weight = 50,
             };
-
+*/
 
 
         }

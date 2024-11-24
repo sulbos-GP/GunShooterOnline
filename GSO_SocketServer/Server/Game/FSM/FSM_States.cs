@@ -230,7 +230,9 @@ namespace Server.Game.FSM
 
         public void DelayCheckForCheckStates()
         {
+
             float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
+
             if (distanceToTarget <= Owner.attackRange)
             {
                 //공격 범위에 들어온다면 즉시 공격상태로 전환

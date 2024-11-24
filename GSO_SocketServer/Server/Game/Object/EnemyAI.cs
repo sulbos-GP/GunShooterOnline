@@ -147,7 +147,7 @@ namespace Server.Game.Object
                 }
                 else
                 {
-                    gameRoom.Push(gameRoom.HandleMove, this, new PositionInfo() 
+                    gameRoom.HandleMove( this, new PositionInfo() 
                     { PosX = CellPos.X, PosY = CellPos.Y, DirX = Dir.X, DirY = Dir.Y});
                 }
             }
@@ -204,6 +204,12 @@ namespace Server.Game.Object
             S_Spawn spawnPacket = new S_Spawn();
             spawnPacket.Objects.Add(boxObject.info);
             gameRoom.BroadCast(spawnPacket);
+
+            S_Die Diepacket = new S_Die();
+            Diepacket.ObjectId = Id;
+            Diepacket.AttackerId = attacker.Id;
+            gameRoom.BroadCast(Diepacket);
+
 
             base.OnDead(attacker);
         }
