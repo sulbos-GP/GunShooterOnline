@@ -9,6 +9,9 @@ public class CreatureController : BaseController
     private BaseInfoBar _baseInfoBar; //hp, exp UI manage
     public Action ChangeStat;
 
+    private Vector2 basicScale;
+    private Vector2 reverseScale;
+
     [SerializeField] protected Animator animator; //자식객체에서 할당을 해줘야함
     public override StatInfo Stat
     {
@@ -58,7 +61,8 @@ public class CreatureController : BaseController
     {
         base.Init();
         MyPlayerController mc = this as MyPlayerController;
-        
+        basicScale = transform.localScale;
+        reverseScale = new Vector2(-basicScale.x, basicScale.y);
         ChangeStat += CheakUpdateBar;
         AddHpbar();
 
@@ -129,6 +133,7 @@ public class CreatureController : BaseController
         //적 위치 변경
         Dir = new Vector2(info.DirX, info.DirY);
         var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
+        var creaturePos = gameObject.transform.position;
 
         if (animator == null)
         {
@@ -137,22 +142,34 @@ public class CreatureController : BaseController
         }
 
         if ((nextPos - transform.position).sqrMagnitude != 0)
+        {
             animator.SetBool("IsMove", true);
+            if (creaturePos.x < nextPos.x)
+            {
+                Debug.Log($"오른쪽 : 현재위치 {creaturePos}, 다음위치 {nextPos}");
+                transform.localScale = reverseScale;
+            }
+            else
+            {
+                Debug.Log($"왼쪽 : 현재위치 {creaturePos}, 다음위치 {nextPos}");
+                transform.localScale = basicScale;
+            }
+        }
         else
+        {
+            if (nextPos == creaturePos && !animator.GetBool("IsMove"))
+            {
+                return;
+            }
             animator.SetBool("IsMove", false);
-
-        if (nextPos.x - transform.position.x < 0)
-        {
-            transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
         }
-        else if (nextPos.x - transform.position.x > 0)
-        {
-            transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
-        }
+            
 
+        //실질적인 이동
+        gameObject.transform.position = nextPos;
 
-        gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
-        gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
+        //이건 필요한가?
+        //gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
     }
 
     public virtual void OnHealed(int healAmount)

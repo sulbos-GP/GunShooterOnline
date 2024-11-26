@@ -577,9 +577,6 @@ namespace Server.Game.FSM
             //집으로 귀환
 
             #region PathFinding
-
-            
-
             List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.spawnPoint, checkObjects: false); //?이거 길찾기 디버그용인가?
             if (path != null)
             {
@@ -598,7 +595,7 @@ namespace Server.Game.FSM
             //스폰존 내의 랜덤한 타겟위치로 이동후 대기상태로 전환
             float distanceToTargetPos = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
             //Console.WriteLine($"close to spawn point:{distanceToTargetPos}");
-            if (distanceToTargetPos <= 0.2f)
+            if (distanceToTargetPos <= 0.5f)
             {
                 Owner._state.ChangeState(Owner.IdleState);
                 return;
