@@ -16,6 +16,7 @@ using UnityEditor;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.UIElements;
 using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 using static UnityEditor.PlayerSettings;
 
@@ -124,18 +125,16 @@ internal class PacketHandler
             return;
         }
 
-        //타 플레이어의 움직임을 조정
-       
-
+        //지정 오브젝트의 이동위치로 이동
         var cc = go.GetComponent<CreatureController>();
         if (cc == null)
             return;
 
         cc.UpdatePosInfo(movePacket.PositionInfo);
-        cc.UpdateMoving();
-        cc.PosInfo = movePacket.PositionInfo;
+        cc.UpdateMoving();   
+        cc.PosInfo = movePacket.PositionInfo;//??
 
-        //cc.State = CreatureState.Moving;
+        //디버그라인 업데이트
         var ds = go.GetComponent<DebugShape>();
         if(ds != null)
         {
