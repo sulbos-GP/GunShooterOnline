@@ -31,7 +31,7 @@ namespace Server
             //검사--------------------
 
             //Console.WriteLine(player.info.Name + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
-
+            //Console.WriteLine($"{creature.info.Name} + {movePosInfo.PosX} , {movePosInfo.PosY}");
 
             //player.info.PositionInfo.State = movePosInfo.State;
             creature.info.PositionInfo.DirY = movePosInfo.DirY;
@@ -1014,9 +1014,13 @@ namespace Server
                 }
             }
 
+            int count = 1;
             foreach (AISpawnZone zone in map.aispawnZones)
             {
-            
+                if(count-- <= 0)
+                    continue;
+
+
                 EnemyAI enemy = ObjectManager.Instance.Add<EnemyAI>();
                 {
                     //enemy.info.Name = "AI";

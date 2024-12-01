@@ -109,7 +109,7 @@ public class Map
 
     public void Init()
     {
-        loadMap("Forest");
+        loadMap("Forest", "./{mapName}.txt");
     }
 
     #region item
@@ -149,9 +149,21 @@ public class Map
 #if DOCKER
         var text = File.ReadAllText("/app/MapData/" + $"{mapName}.txt");
 #else
+        
         var text = File.ReadAllText(" ./../../../../../MapData/" + $"{mapName}.txt");
 #endif
 
+        /*pathPrefix = AppDomain.CurrentDomain.BaseDirectory + $"/{mapName}.txt";
+
+
+        string exeDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        Console.WriteLine("test");
+        // 읽을 파일의 경로 설정 (exe 폴더 내에 있는 파일 이름 지정)
+        string fileName = "Forest.txt"; // 파일 이름
+        string filePath = Path.Combine(exeDirectory, fileName);*/
+
+
+       // var text = File.ReadAllText(filePath); 
 
         var reader = new StringReader(text);
 
@@ -538,6 +550,10 @@ public class Map
 
         Vector2Int destCellPosInt = Vector2Int.RoundToInt(destCellPos);
         //Console.WriteLine("목표 위치 : " + destCellPos);
+
+        if(startCellPosInt == destCellPosInt)
+            return new List<Vector2Int>() { startCellPosInt };
+
 
         // 기존 FindPath 호출
         return FindPath(startCellPosInt, destCellPosInt, checkObjects);
