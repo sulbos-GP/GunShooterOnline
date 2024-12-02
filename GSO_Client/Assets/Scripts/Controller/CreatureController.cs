@@ -12,7 +12,10 @@ public class CreatureController : BaseController
     private Vector2 basicScale;
     private Vector2 reverseScale;
 
-    [SerializeField] protected Animator animator; //자식객체에서 할당을 해줘야함
+    //아래 변수들은 자식객체에서 할당을 해줘야함(크리쳐 별로 캐릭터 스프라이트나 애니메이터의 위치가 다르기때문)
+    [SerializeField] protected Animator animator; 
+    [SerializeField] protected SpriteRenderer characterSprite;
+
     public override StatInfo Stat
     {
         get => base.Stat;
@@ -146,12 +149,10 @@ public class CreatureController : BaseController
             animator.SetBool("IsMove", true);
             if (creaturePos.x < nextPos.x)
             {
-                Debug.Log($"오른쪽 : 현재위치 {creaturePos}, 다음위치 {nextPos}");
                 transform.localScale = reverseScale;
             }
             else
             {
-                Debug.Log($"왼쪽 : 현재위치 {creaturePos}, 다음위치 {nextPos}");
                 transform.localScale = basicScale;
             }
         }
@@ -218,6 +219,25 @@ public class CreatureController : BaseController
         }
     }
 
+    public void Hit() 
+    {
+        if (characterSprite == null)
+        {
+            Debug.LogError("캐릭터의 스프라이트가 없거나 지정되지 않음");
+            return;
+        }
+        StartCoroutine(HitEffect()); 
+    }
+
+    
+    public IEnumerator HitEffect()
+    {
+        var whiteMaterial = Resources.Load<Material>("Material/FlashWhite");
+        Material matInstance = characterSprite.material;
+        characterSprite.material = whiteMaterial;
+        yield return new WaitForSeconds(0.1f);
+        characterSprite.material = matInstance;
+    }
 
     /*public virtual void UseSkillTodo(SkillType skillType, float Time)
     {
