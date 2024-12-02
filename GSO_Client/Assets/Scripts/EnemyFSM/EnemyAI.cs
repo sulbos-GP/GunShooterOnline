@@ -28,7 +28,11 @@ public class EnemyAI : CreatureController
     protected override void Init()
     {
         base.Init();
+
         animator = GetComponent<Animator>();
+        characterSprite = GetComponent<SpriteRenderer>();
+
+
         AttackShape = transform.GetChild(0).GetComponent<LineRenderer>();
 
         AttackShape.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
@@ -38,23 +42,22 @@ public class EnemyAI : CreatureController
         AttackShape.startColor = Color.red;
         AttackShape.endColor = Color.red;
     }
-    Rectangle rect;
+
     public void DrawAttackLine(Vector2 center,float width, float height)
     {
-        rect = new Rectangle(width, height);
-
+        Rectangle rect = new Rectangle(width, height);
+        AttackShape.positionCount = 5;
         AttackShape.SetPosition(0, center + rect.topLeft);
         AttackShape.SetPosition(1, center + rect.topRight);
         AttackShape.SetPosition(2, center + rect.bottomRight);
         AttackShape.SetPosition(3, center + rect.bottomLeft);
         AttackShape.SetPosition(4, center + rect.topLeft);
+        Debug.Log($"공격범위 그리기 완료 center : {center} ");
     }
 
     public void ClearLine()
     {
-        rect = default;
         AttackShape.positionCount = 0;
-        AttackShape.positionCount = 5;
     }
 
     public override void UpdatePosInfo(PositionInfo info)
