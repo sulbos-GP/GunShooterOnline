@@ -226,7 +226,8 @@ public class CreatureController : BaseController
             Debug.LogError("캐릭터의 스프라이트가 없거나 지정되지 않음");
             return;
         }
-        StartCoroutine(HitEffect()); 
+        animator.SetTrigger("IsHit");
+        /*StartCoroutine(HitEffect()); */
     }
 
     
