@@ -39,6 +39,16 @@ namespace ServerCore
             return new Vector2Int((int)a.X - b.x, (int)a.Y - b.y);
         }
 
+        public static bool operator ==(Vector2Int a, Vector2Int b)
+        {
+            return (a.x == b.x) && (a.y == b.y);
+        }
+        public static bool operator !=(Vector2Int a, Vector2Int b)
+        {
+            return (a.x != b.x) || (a.y != b.y);
+        }
+
+
         public float sqrMagnitude => MathF.Sqrt(sqrMagnitude);
         public int Magnitude => x * x + y * y;
 

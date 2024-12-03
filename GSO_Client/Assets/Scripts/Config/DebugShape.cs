@@ -24,8 +24,12 @@ public class DebugShape : MonoBehaviour
     public LineRenderer lineRenderer;
     public Rectangle rect;
     //private SkillType skillType = SkillType.None; //애니메이션용
-    protected float _width;
-    protected float _height;
+
+    public bool activeLine;
+
+    private float _width;
+    private float _height;
+
 
     private bool isLineSet;
     public void Init()
@@ -47,8 +51,6 @@ public class DebugShape : MonoBehaviour
 
     public void SetDrawLine(float width, float height)
     {
-        return;
-        //TO-DO : 임시
         isLineSet = true;
 
         _width = width;
@@ -58,19 +60,26 @@ public class DebugShape : MonoBehaviour
 
         // LineRenderer의 점 위치 설정
         UpdateDrawLine();
-        
     }
+
+    [ContextMenu("히트박스 그리기")]
     public void UpdateDrawLine()
     {
-        return;
         if (!isLineSet)
         {
             return;
         }
+        lineRenderer.positionCount = 5;
         lineRenderer.SetPosition(0, (Vector2)gameObject.transform.position + rect.topLeft);
         lineRenderer.SetPosition(1, (Vector2)gameObject.transform.position + rect.topRight);
         lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight);
         lineRenderer.SetPosition(3, (Vector2)gameObject.transform.position + rect.bottomLeft);
         lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft);
+    }
+
+    [ContextMenu("히트박스 지우기")]
+    public void ClearDrawLine()
+    {
+        lineRenderer.positionCount = 0;
     }
 }

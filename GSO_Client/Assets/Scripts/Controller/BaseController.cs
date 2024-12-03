@@ -158,6 +158,7 @@ public class BaseController : MonoBehaviour
         //UpdateAnimation();
     }
 
+
     protected virtual void UpdateController()
     {
         /*switch (State)

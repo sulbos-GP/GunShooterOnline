@@ -53,7 +53,7 @@ public class _MapController : MonoBehaviour
     //            pc.Id = _count++;
     //            Plants.Add(item.gameObject);
 
-    //            pc.radius = (int)item.localScale.x;
+    //            pc.radius = (int)item.basicScale.x;
     //        }
 
     //    }

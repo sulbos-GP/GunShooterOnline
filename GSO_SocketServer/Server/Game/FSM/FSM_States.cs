@@ -9,6 +9,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -38,6 +39,7 @@ namespace Server.Game.FSM
 
         public virtual void Update()
         {
+
             if(isStop) return;
         }
 
@@ -45,6 +47,10 @@ namespace Server.Game.FSM
         {
 
         }
+
+      
+
+
     }
 
     public class IdleState : StateBase
@@ -113,6 +119,11 @@ namespace Server.Game.FSM
         {
             base.Enter();
             targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
+
+
+            Owner.PathFinding_Once(Owner.CellPos, targetPos, checkObjects: false);
+
+
         }
 
         public override void Update()
@@ -136,22 +147,8 @@ namespace Server.Game.FSM
                 return;
             }
 
-            #region PathFinding
-            List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, targetPos, checkObjects: false); //?이거 길찾기 디버그용인가?
-            if (path != null)
-            {
-                S_AiMove MovePacket = new S_AiMove();
-                for (int i = 0; i < path.Count; i++)
-                {
-                    MovePacket.ObjectId = Owner.Id;
-                    MovePacket.PosList.Add(new Vector2IntInfo() { X = path[i].x, Y = path[i].y });
-                }
-                Owner.gameRoom.BroadCast(MovePacket);
 
-                Owner.MoveToTargetList(path, Owner.midSpeed);
 
-            }
-            #endregion
             float dist = Vector2.Distance(targetPos, Owner.CellPos);
             //Console.WriteLine($"close to target pos:{dist}");
             if (dist < 0.2f)
@@ -186,6 +183,10 @@ namespace Server.Game.FSM
             targetPos = Owner.target.CellPos;
             storeTickCount = Environment.TickCount;
             //Console.WriteLine($"check targetPos : [{targetPos.X}, {targetPos.Y}]");
+
+    
+
+            Owner.PathFinding_Once(Owner.CellPos, targetPos, checkObjects: false);
         }
 
         public override void Update()
@@ -208,6 +209,9 @@ namespace Server.Game.FSM
                 return;
             }
 
+            Owner.MoveAI();
+
+
             //이상이 없다면 돌아감
             int currentTickCount = Environment.TickCount;
             if (storeTickCount + checkToReturnTime < currentTickCount)
@@ -216,22 +220,7 @@ namespace Server.Game.FSM
                 return;
             }
 
-            #region PathFinding
-            List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, targetPos, checkObjects: false); //?이거 길찾기 디버그용인가?
-            if (path != null)
-            {
-                S_AiMove MovePacket = new S_AiMove();
-                for (int i = 0; i < path.Count; i++)
-                {
-                    MovePacket.ObjectId = Owner.Id;
-                    MovePacket.PosList.Add(new Vector2IntInfo() { X = path[i].x, Y = path[i].y });
-                }
-                Owner.gameRoom.BroadCast(MovePacket);
-
-                Owner.MoveToTargetList(path, Owner.midSpeed);
-
-            }
-            #endregion
+         
 
             float distanceFromTargetPos = Vector2.Distance(targetPos, Owner.CellPos);
             //Console.WriteLine($"close to check target pos:{distanceFromTargetPos}");
@@ -321,6 +310,8 @@ namespace Server.Game.FSM
             {
                 return;
             }
+            
+
 
             //이상이 없다면 돌아감
             int currentTickCount = Environment.TickCount;
@@ -337,40 +328,17 @@ namespace Server.Game.FSM
             //    isStop = true;
             //    return;
             //}
-            #region PathFinding
-            List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.target.CellPos, checkObjects: false); //?이거 길찾기 디버그용인가?
-            if (path != null)
-            {
-                S_AiMove MovePacket = new S_AiMove();
-                for (int i = 0; i < path.Count; i++)
-                {
-                    MovePacket.ObjectId = Owner.Id;
-                    MovePacket.PosList.Add(new Vector2IntInfo() { X = path[i].x, Y = path[i].y });
-                }
-                Owner.gameRoom.BroadCast(MovePacket);
+        
 
-                Owner.MoveToTargetList(path, Owner.midSpeed);
-
-            }
-            #endregion
-            //#region PathFinding
-            //List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.target.CellPos, checkObjects: false);
+            Owner.PathFinding_Update(Owner.CellPos, Owner.target.CellPos, checkObjects: false);
+            //Owner.MoveToTargetList(path);
 
 
-            //S_AiMove MovePacket = new S_AiMove();
-            //for (int i = 0; i < path.Count; i++)
-            //{
-            //    MovePacket.ObjectId = Owner.Id;
-            //    MovePacket.PosList.Add(new Vector2IntInfo() { X= path[i].x, Y = path[i].y });
-            //}
-            //Owner.gameRoom.BroadCast(MovePacket);
-
-            //#endregion
 
             float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             //Console.WriteLine($"close to chase target pos:{distanceToTarget}");
             
-            if (distanceToTarget <= Owner.attackRange)
+            if (distanceToTarget < Owner.attackRange)
             {
                 //공격 범위에 들어온다면 즉시 공격상태로 전환
                 Owner._state.ChangeState(Owner.AttackState);
@@ -478,6 +446,8 @@ namespace Server.Game.FSM
 
         public override void Update()
         {
+            base.Update();
+
             if (Owner == null)
             {
                 return;
@@ -495,6 +465,8 @@ namespace Server.Game.FSM
                 Owner._state.ChangeState(Owner.ReturnState);
                 return;
             }
+
+
 
             int currentTickCount = Environment.TickCount;
             //Console.WriteLine($"Wait attack:{(storeTickCount + waitAttackTime) - currentTickCount}");
@@ -559,6 +531,10 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             base.Enter();
+
+       
+
+            Owner.PathFinding_Once(Owner.CellPos, Owner.spawnPoint, checkObjects: false);
         }
 
         public override void Update()
@@ -575,30 +551,13 @@ namespace Server.Game.FSM
             }
 
             //집으로 귀환
+            Owner.MoveAI();
 
-            #region PathFinding
 
-            
-
-            List<Vector2Int> path = Owner.gameRoom.map.FindPath(Owner.CellPos, Owner.spawnPoint, checkObjects: false); //?이거 길찾기 디버그용인가?
-            if (path != null)
-            {
-                S_AiMove MovePacket = new S_AiMove();
-                for (int i = 0; i < path.Count; i++)
-                {
-                    MovePacket.ObjectId = Owner.Id;
-                    MovePacket.PosList.Add(new Vector2IntInfo() { X = path[i].x, Y = path[i].y });
-                }
-                Owner.gameRoom.BroadCast(MovePacket);
-
-                Owner.MoveToTargetList(path, Owner.midSpeed);
-
-            }
-            #endregion
             //스폰존 내의 랜덤한 타겟위치로 이동후 대기상태로 전환
             float distanceToTargetPos = Vector2.Distance(Owner.spawnPoint, Owner.CellPos);
             //Console.WriteLine($"close to spawn point:{distanceToTargetPos}");
-            if (distanceToTargetPos <= 0.2f)
+            if (distanceToTargetPos <= 1f)
             {
                 Owner._state.ChangeState(Owner.IdleState);
                 return;
@@ -706,4 +665,6 @@ namespace Server.Game.FSM
             //사실상 필요없음
         }
     }
+
+
 }
