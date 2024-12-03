@@ -278,8 +278,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  material: {fileID: 0}
-  sprite: {fileID: 0}
+  characterSprite: {fileID: 0}
   AudioSource: {fileID: 0}
   _attackableList: []
   _Quest: {fileID: 0}
@@ -392,6 +391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 0}
+  activeLine: 0
 --- !u!1 &355922946167704334
 GameObject:
   m_ObjectHideFlags: 0
@@ -1019,6 +1019,7 @@ GameObject:
   - component: {fileID: 8393533796584692842}
   - component: {fileID: 5559101021482929944}
   - component: {fileID: 5379287948281337228}
+  - component: {fileID: 8397381202578125613}
   m_Layer: 0
   m_Name: ObjectSprite
   m_TagString: Untagged
@@ -1061,7 +1062,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 6cfa813529bf3b44da4af43f1975bba2, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1114,6 +1115,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8397381202578125613
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5435796917907081314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentShaderType: 0
+  normalStrength: 5
+  normalSmoothing: 1
+  computingNormal: 0
 --- !u!1 &6869094561862249626
 GameObject:
   m_ObjectHideFlags: 0
