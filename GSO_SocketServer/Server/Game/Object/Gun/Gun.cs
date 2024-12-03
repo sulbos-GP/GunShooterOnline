@@ -134,7 +134,12 @@ namespace Server.Game
                 //TODO : 피격자의 hp 변화  attacker 밑에 넣기 240814지승현
                 creatureObj.OnDamaged(attacker, attacker.weapon.GetCurrentWeapon().Damage);
 
-                BroadcastChangeHpPacket(attacker, creatureObj);
+
+                S_ChangeHp ChangeHpPacket = new S_ChangeHp();
+                ChangeHpPacket.ObjectId = creatureObj.Id;
+                ChangeHpPacket.Hp = creatureObj.Hp;
+                attacker.gameRoom.BroadCast(ChangeHpPacket);
+               
 
                 Console.WriteLine("attacker Id :" + attacker.Id + ", " + "HIT ID " + creatureObj.Id + "HIT Hp : " + creatureObj.Hp);
 
@@ -149,7 +154,7 @@ namespace Server.Game
 
 
         //히트 판정을 내릴 객체 타입을 정의
-        private static bool CheckHitObjectType(GameObject hitObject)
+        private bool CheckHitObjectType(GameObject hitObject)
         {
             return hitObject.ObjectType == GameObjectType.Player || hitObject.ObjectType == GameObjectType.Enemyai;
         }
@@ -352,13 +357,7 @@ namespace Server.Game
             return true;
         }
 
-        public static void BroadcastChangeHpPacket(Player attacker, CreatureObj creatureObj)
-        {
-            S_ChangeHp ChangeHpPacket = new S_ChangeHp();
-            ChangeHpPacket.ObjectId = creatureObj.Id;
-            ChangeHpPacket.Hp = creatureObj.Hp;
-            attacker.gameRoom.BroadCast(ChangeHpPacket);
-        }
+      
 
         public static void BroadcastHitPacket(int hitObjectId, Player attacker, Vector2 startPos, Vector2 hitPoint)
         {
