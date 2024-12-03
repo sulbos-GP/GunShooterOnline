@@ -16,6 +16,7 @@ using UnityEditor;
 using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.UIElements;
 using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
 using static UnityEditor.PlayerSettings;
 
@@ -124,18 +125,16 @@ internal class PacketHandler
             return;
         }
 
-        //타 플레이어의 움직임을 조정
-       
-
+        //지정 오브젝트의 이동위치로 이동
         var cc = go.GetComponent<CreatureController>();
         if (cc == null)
             return;
 
         cc.UpdatePosInfo(movePacket.PositionInfo);
-        cc.UpdateMoving();
-        cc.PosInfo = movePacket.PositionInfo;
+        cc.UpdateMoving();   
+        cc.PosInfo = movePacket.PositionInfo;//??
 
-        //cc.State = CreatureState.Moving;
+        //디버그라인 업데이트
         var ds = go.GetComponent<DebugShape>();
         if(ds != null)
         {
@@ -149,34 +148,37 @@ internal class PacketHandler
         var changeHpPacket = message as S_ChangeHp;
 
         var go = Managers.Object.FindById(changeHpPacket.ObjectId);
-        
-
-        if (go != null) 
+        if(go == null)
         {
-            go.GetComponent<CreatureController>().Hp = changeHpPacket.Hp;
-            if(go.GetComponent<CreatureController>().Hp > changeHpPacket.Hp)
-            {
-                //HP가 줄었을때 
-                //기존의 HP보다 패킷의 HP가 작을때만 Hit 판정
-                go.GetComponent<PlayerController>().Hit();
-                go.GetComponent<CreatureController>().Hp = changeHpPacket.Hp;
-            }
-            else if(go.GetComponent<CreatureController>().Hp < changeHpPacket.Hp)
-            {
-                //HP가 증가했을때 (회복 등)
-                //회복 이펙트?
-                go.GetComponent<CreatureController>().Hp = Mathf.Min(changeHpPacket.Hp, go.GetComponent<CreatureController>().MaxHp); //과치료 방지
-
-            }
-
-            //go가 나 자신이라면 UI변화
-            if (go.GetComponent<CreatureController>().Id == Managers.Object.MyPlayer.Id)
-            {
-                UIManager.Instance.SetHpText();
-            }
-        }
-        else
             Managers.SystemLog.Message("S_ChangeHpHandler : can't find ObjectId");
+            return;
+        }
+        
+        var creature = go.GetComponent<CreatureController>();
+        if(creature == null)
+        {
+            Managers.SystemLog.Message("S_ChangeHpHandler : obj is not creature");
+            return;
+        }
+
+        if (creature.Hp > changeHpPacket.Hp)
+        {
+            //피격
+            creature.Hit();
+            creature.Hp = changeHpPacket.Hp;
+        }
+        else if (creature.Hp < changeHpPacket.Hp)
+        {
+            //회복
+            creature.Hp = Mathf.Min(changeHpPacket.Hp, creature.MaxHp); //과치료 방지
+        }
+
+        creature.Hp = changeHpPacket.Hp;
+        //go가 나 자신이라면 UI변화
+        if (creature.Id == Managers.Object.MyPlayer.Id)
+        {
+            UIManager.Instance.SetHpText();
+        }
     }
 
     public static void S_DieHandler(PacketSession session, IMessage message)
@@ -874,9 +876,11 @@ internal class PacketHandler
         
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
         Vector2 instance = enemy.transform.position;
+
+        Debug.Log(packet.PosList.ToList().Count); 
         foreach (Vector2IntInfo info in packet.PosList)
         {
-            Debug.DrawLine(instance, new Vector2(info.X,info.Y), Color.red);
+            //Debug.DrawLine(instance, new Vector2(info.X,info.Y), Color.red);
             instance = new Vector2(info.X, info.Y);
         }
     }

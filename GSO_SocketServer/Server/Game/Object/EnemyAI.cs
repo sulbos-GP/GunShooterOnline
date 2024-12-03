@@ -9,6 +9,7 @@ using ServerCore;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Numerics;
 using System.Threading.Tasks.Dataflow;
 
@@ -43,7 +44,7 @@ namespace Server.Game.Object
         public float attackDelay;      //공격후 잠시 대기하는 시간
         public float disappearTime; //죽은 적이 3초뒤에 삭제됨
 
-        public List<GameObject> targets;
+        //public List<GameObject> targets;
         public GameObject target
         {
             get; set;
@@ -151,8 +152,7 @@ namespace Server.Game.Object
             DetectObject.Update();
 
 
-             gameRoom.HandleMove( this, new PositionInfo() 
-                    { PosX = CellPos.X, PosY = CellPos.Y, DirX = Dir.X, DirY = Dir.Y});
+             gameRoom.HandleMove( this, PosInfo );
         }
 
 
@@ -222,29 +222,54 @@ namespace Server.Game.Object
         }
 
 
-        private void MoveToTarget(Vector2 target, float speed)
+        private bool MoveToTarget(Vector2 target, float speed)
         {
+            if(Vector2.Distance(target, CellPos) <= 0.01)
+            {
+                return true;
+            }
             Vector2 currentPosition = new Vector2(CellPos.X, CellPos.Y);
             Vector2 directdionToTarget = Vector2.Normalize(target - currentPosition);
             Vector2 newPosition = currentPosition + directdionToTarget * speed * LogicTimer.mFixedDelta; //fxxx
             CellPos = newPosition;
+
+            return false;
             //transform.position = new Vector3(newPosition.x, newPosition.y, transform.position.z);
         }
 
-        public void MoveToTargetList(List<Vector2Int> targets , float speed)
+
+        /// <summary>
+        /// 리스트에 따라 AI 움직임
+        /// </summary>
+
+        int currentTargetIndex = 1; //Pathfinding시 초기화
+        public void MoveAI() // 체크, 추적, 귀환
         {
-            if (targets == null || targets.Count == 0)
+            if (path == null || path.Count == 0)
             {
-                //Debug.LogWarning("Target list is empty or null!");
+                //Console.WriteLine("Target list is empty or null!");
                 return;
             }
 
-            // 첫 번째 위치 가져오기
-            Vector2Int firstTarget = targets[1];
 
-            MoveToTarget(new Vector2(firstTarget.x, firstTarget.y), speed);
+            while (currentTargetIndex < path.Count)
+            {
+                Vector2Int currentTarget = path[currentTargetIndex];
+
+                bool isArrived = MoveToTarget(new Vector2(currentTarget.x, currentTarget.y), midSpeed);
+
+                if (isArrived)
+                {
+                    currentTargetIndex++;
+                }
+                else
+                {
+                    //이동 중
+                    break;
+                }
+
+            }
         }
-
 
 
 
@@ -277,5 +302,89 @@ namespace Server.Game.Object
 
             this.gameRoom.PushAfter(100, attack.Destroy);
         }
+
+        #region PathFidningCore
+        public List<Vector2Int> path;
+
+        public void PathFinding_Once(Vector2 start, Vector2 end, bool checkObjects = false)
+        {
+            Console.WriteLine(" PathFinding_Once");
+
+            path = gameRoom.map.FindPath(start, end, checkObjects: false);
+            if (path != null)
+            {
+                currentTargetIndex = 1;
+                S_AiMove MovePacket = new S_AiMove();
+                for (int i = 0; i < path.Count; i++)
+                {
+                    MovePacket.ObjectId = Id;
+                    MovePacket.PosList.Add(new Vector2IntInfo() { X = path[i].x, Y = path[i].y });
+                }
+                gameRoom.BroadCast(MovePacket);
+
+
+            }
+
+        }
+
+        public Vector2Int? lastTargetPos;
+       /* private Vector2 laststart;
+        private Vector2 lastend;*/
+
+
+        public void PathFinding_Update(Vector2 start, Vector2 end, bool checkObjects = false)
+        {
+
+            if(lastTargetPos.HasValue == false) //처음이거나 도착 햇으면
+            {
+                /* if(start ==  laststart && end == lastend) //길을 못 찾았는데 계속 찾으려고 한다면 
+                 {
+
+                 }*/
+                Console.WriteLine(" PathFinding_Update");
+
+                path = gameRoom.map.FindPath(start, end, checkObjects: false); 
+
+                if (path != null)
+                {
+                    S_AiMove MovePacket = new S_AiMove();
+                    for (int i = 0; i < path.Count; i++)
+                    {
+                        MovePacket.ObjectId = Id;
+                        MovePacket.PosList.Add(new Vector2IntInfo() { X = path[i].x, Y = path[i].y });
+                    }
+                    gameRoom.BroadCast(MovePacket);
+
+                    if (path.Count > 1)
+                    {
+                        lastTargetPos = path[1];
+                    }
+                    else
+                    {
+                        lastTargetPos = path[0];
+                    }
+
+                    /*laststart = start;
+                    lastend = end;*/
+
+                }
+            }
+            else //목표 있음
+            {
+            }
+
+            if (path != null)
+            {
+                bool t = MoveToTarget(new Vector2(lastTargetPos.Value.x, lastTargetPos.Value.y), midSpeed);
+                if (t)
+                {
+                    lastTargetPos = null;
+                }
+            }
+
+
+        }
+
+        #endregion
     }
 }

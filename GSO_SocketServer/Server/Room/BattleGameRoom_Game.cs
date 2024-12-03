@@ -31,7 +31,7 @@ namespace Server
             //검사--------------------
 
             //Console.WriteLine(player.info.Name + packet.PositionInfo.PosX + ", " + packet.PositionInfo.PosY);
-
+            //Console.WriteLine($"{creature.info.Name} + {movePosInfo.PosX} , {movePosInfo.PosY}");
 
             //player.info.PositionInfo.State = movePosInfo.State;
             creature.info.PositionInfo.DirY = movePosInfo.DirY;
@@ -982,7 +982,7 @@ namespace Server
                 }
             }
 #else
-            if (tempPlayer.Count == 3) // 초코파이 접속할 인원에 따라 변경
+            if (tempPlayer.Count == 1) // 초코파이 접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
@@ -1014,9 +1014,13 @@ namespace Server
                 }
             }
 
+            int count = 1;
             foreach (AISpawnZone zone in map.aispawnZones)
             {
-            
+                if(count-- <= 0)
+                    continue;
+
+
                 EnemyAI enemy = ObjectManager.Instance.Add<EnemyAI>();
                 {
                     //enemy.info.Name = "AI";

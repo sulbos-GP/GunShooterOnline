@@ -100,10 +100,7 @@ public class ObjectManager
                 Managers.SystemLog.Message($"{info.ObjectId} _objects add fail");
             }
 
-
-            //성훈아 지워라
             go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
-            //end
 
             var enemyAI = go.GetComponent<EnemyAI>();
 

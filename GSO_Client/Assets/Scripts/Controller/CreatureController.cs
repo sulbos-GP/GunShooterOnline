@@ -9,7 +9,13 @@ public class CreatureController : BaseController
     private BaseInfoBar _baseInfoBar; //hp, exp UI manage
     public Action ChangeStat;
 
-    [SerializeField] protected Animator animator; //자식객체에서 할당을 해줘야함
+    private Vector2 basicScale;
+    private Vector2 reverseScale;
+
+    //아래 변수들은 자식객체에서 할당을 해줘야함(크리쳐 별로 캐릭터 스프라이트나 애니메이터의 위치가 다르기때문)
+    [SerializeField] protected Animator animator; 
+    [SerializeField] protected SpriteRenderer characterSprite;
+
     public override StatInfo Stat
     {
         get => base.Stat;
@@ -58,7 +64,8 @@ public class CreatureController : BaseController
     {
         base.Init();
         MyPlayerController mc = this as MyPlayerController;
-        
+        basicScale = transform.localScale;
+        reverseScale = new Vector2(-basicScale.x, basicScale.y);
         ChangeStat += CheakUpdateBar;
         AddHpbar();
 
@@ -129,6 +136,7 @@ public class CreatureController : BaseController
         //적 위치 변경
         Dir = new Vector2(info.DirX, info.DirY);
         var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
+        var creaturePos = gameObject.transform.position;
 
         if (animator == null)
         {
@@ -137,22 +145,32 @@ public class CreatureController : BaseController
         }
 
         if ((nextPos - transform.position).sqrMagnitude != 0)
+        {
             animator.SetBool("IsMove", true);
+            if (creaturePos.x < nextPos.x)
+            {
+                transform.localScale = reverseScale;
+            }
+            else
+            {
+                transform.localScale = basicScale;
+            }
+        }
         else
+        {
+            if (nextPos == creaturePos && !animator.GetBool("IsMove"))
+            {
+                return;
+            }
             animator.SetBool("IsMove", false);
-
-        if (nextPos.x - transform.position.x < 0)
-        {
-            transform.localScale = new Vector2(transform.localScale.x, transform.localScale.y);
         }
-        else if (nextPos.x - transform.position.x > 0)
-        {
-            transform.localScale = new Vector2(-transform.localScale.x, transform.localScale.y);
-        }
+            
 
+        //실질적인 이동
+        gameObject.transform.position = nextPos;
 
-        gameObject.transform.position = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
-        gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
+        //이건 필요한가?
+        //gameObject.transform.rotation = new Quaternion(gameObject.transform.rotation.x, gameObject.transform.rotation.y, info.RotZ, gameObject.transform.rotation.w);
     }
 
     public virtual void OnHealed(int healAmount)
@@ -201,6 +219,25 @@ public class CreatureController : BaseController
         }
     }
 
+    public void Hit() 
+    {
+        if (characterSprite == null)
+        {
+            Debug.LogError("캐릭터의 스프라이트가 없거나 지정되지 않음");
+            return;
+        }
+        StartCoroutine(HitEffect()); 
+    }
+
+    
+    public IEnumerator HitEffect()
+    {
+        var whiteMaterial = Resources.Load<Material>("Material/FlashWhite");
+        Material matInstance = characterSprite.material;
+        characterSprite.material = whiteMaterial;
+        yield return new WaitForSeconds(0.1f);
+        characterSprite.material = matInstance;
+    }
 
     /*public virtual void UseSkillTodo(SkillType skillType, float Time)
     {
