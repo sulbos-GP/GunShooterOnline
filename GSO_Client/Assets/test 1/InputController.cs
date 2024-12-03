@@ -48,7 +48,7 @@ public class InputController : MonoBehaviour
         SetComponent();
 
         if (interactBtn == null) {
-            Debug.Log("¹öÆ°À» Ã£Áö¸øÇÔ"); 
+            Debug.Log("ï¿½ï¿½Æ°ï¿½ï¿½ Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"); 
             return; 
         }
 
@@ -112,11 +112,6 @@ public class InputController : MonoBehaviour
     {
         UpdateState();
         HandleFiring();
-        if (onMove)
-        {
-            timer += Time.deltaTime;
-            moveSound();
-        }
 
         //Mouse Move Logic
         //Vector3 mousePosition = lookInput;
@@ -138,7 +133,7 @@ public class InputController : MonoBehaviour
     }
 
     /// <summary>
-    /// ÀÎÅÍ·ºÆ® °¡´ÉÇÑ ¿ÀºêÁ§Æ®°¡ µé¾îÀÖ´Â ¸®½ºÆ®ÀÇ °³¼ö¸¦ °Ë»öÇÏ°í 1°³ ÀÌ»óÀÌ¸é ÀÎÅÍ·ºÆ® ½ÇÇà °¡´É
+    /// ï¿½ï¿½ï¿½Í·ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½Ï°ï¿½ 1ï¿½ï¿½ ï¿½Ì»ï¿½ï¿½Ì¸ï¿½ ï¿½ï¿½ï¿½Í·ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void HandleInteraction()
     {
@@ -155,7 +150,7 @@ public class InputController : MonoBehaviour
     }
 
     /// <summary>
-    /// °¡Àå °¡±î¿î ÀÎÅÍ·ºÆ® °¡´É ¿ÀºêÁ§Æ®¸¦ µµÃâ
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í·ï¿½Æ® ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     private void ChooseInteractObj()
     {
@@ -202,19 +197,21 @@ public class InputController : MonoBehaviour
         if (callbackContext.started)
         {
             animator.SetBool("IsMove", true);
+            audioSource.Play();
             onMove = true;
         }
         if (callbackContext.canceled)
         {
             animator.SetBool("IsMove", false);
+            audioSource.Stop();
             onMove = false;
-            return; //¿©±â¼­ ¸®ÅÏÇØÁà¾ß ¹æÇâÀÌ ÃÊ±âÈ­µÇÁö ¾ÊÀ½
+            return; //ï¿½ï¿½ï¿½â¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         }
 
         Vector2 input = callbackContext.ReadValue<Vector2>();
         FlipPlayerSprite(input.x);
 
-        if (!isFiring) //ÇÃ·¹ÀÌ¾î°¡ »ç°Ý Á¶ÀÌ½ºÆ½À» Á¶Á¤ÇÏÁö ¾Ê´Â »óÅÂ¶ó¸é ÀÌµ¿ ¹æÇâÀ» ¹Ù¶óº½
+        if (!isFiring) //ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½Æ½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½Â¶ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¶ï¿½
         {
             Aim(input);
         }
@@ -226,7 +223,7 @@ public class InputController : MonoBehaviour
     {
         if(onMove && timer > moveInterval)
         {
-            Debug.Log("°È´ÂÁß");
+            Debug.Log("ï¿½È´ï¿½ï¿½ï¿½");
             timer = 0.0f;
             audioSource.PlayOneShot(audioSource.clip);
         }
@@ -236,7 +233,7 @@ public class InputController : MonoBehaviour
 
     private void OnMove(InputValue inputValue)
     {
-        //TO-DO : Á¦°Å ½Ã Á¶ÀÌ½ºÆ½ ¿À·ù ¶ä.
+        //TO-DO : ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Ì½ï¿½Æ½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½.
     }
 
     private void OnLookInput(InputAction.CallbackContext context)
@@ -291,18 +288,18 @@ public class InputController : MonoBehaviour
 
     private void Aim(Vector2 dir)
     {
-        //pivot È¸Àü
+        //pivot È¸ï¿½ï¿½
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         var gunTrn = transform.GetChild(0);
         gunTrn.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
 
-        aimFov.SetAimDirection(dir); //fov È¸Àü
+        aimFov.SetAimDirection(dir); //fov È¸ï¿½ï¿½
         FlipGunSprite(dir.x);
     }
 
     private void FlipGunSprite(float inputX)
     {
-        //¹æÇâ¿¡ µû¶ó ÃÑÀÇ xÈ¸ÀüÀ» ÇÃ¸³
+        //ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ xÈ¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ã¸ï¿½
         if (inputX > 0)
         {
             gunSpriteRenderer.flipX = false;
@@ -327,7 +324,7 @@ public class InputController : MonoBehaviour
             {
                 break;
             }
-            playerGun.Fire(lookInput); // ¹ß»ç ¸Þ¼­µå È£Ãâ
+            playerGun.Fire(lookInput); // ï¿½ß»ï¿½ ï¿½Þ¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½
             yield return new WaitForSeconds(playerGun.GetFireRate());
         }
     }
@@ -357,7 +354,7 @@ public class InputController : MonoBehaviour
         Rigidbody2D rig = GetComponent<Rigidbody2D>();
         rig.MovePosition(rig.position + newVec2);
 
-        aimFov.SetOrigin(transform.position); //fovÀÇ Áß½ÉÀ» ÇÃ·¹ÀÌ¾îÀÇ À§Ä¡·Î ¼³Á¤
+        aimFov.SetOrigin(transform.position); //fovï¿½ï¿½ ï¿½ß½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         basicFov.SetOrigin(transform.position);
 
         gameObject.GetComponent<DebugShape>().UpdateDrawLine();
