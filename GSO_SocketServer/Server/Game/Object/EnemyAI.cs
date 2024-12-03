@@ -35,9 +35,10 @@ namespace Server.Game.Object
         public float maxDistance; //스폰지점과 10만큼 떨어지면 귀환
         public float spawnerDistance; //스폰존 범위
 
-        public float lowSpeed;
-        public float midSpeed;
-        public float highSpeed;
+
+        public float Speed;
+        public int AttackDamage;
+
         public float detectionRange;   //감지 거리 , 가장 길어야함 감지범위의 크기 = *2 . 트리거로 감지범위 안에 들어온 적이 있으면 해당 방향으로 중간속도 이동. 감지범위밖으로 나가고 3초뒤 귀환
         public float chaseRange;        //추격 거리 , 범위안에 타겟이 들어오면 타겟을 향해 빠르게 이동, 해당 범위 밖으로 나가고 3초뒤 의심으로 전환
         public float attackRange;      //공격 거리 , 범위안에 들어오면 타겟을 향해 공격 실행, 공격이 끝나면 타겟의 거리에 따라 반복 공격, 추격 혹은 의심 혹은 귀환
@@ -78,9 +79,7 @@ namespace Server.Game.Object
             maxDistance = 10;
             spawnerDistance = 5;
 
-            lowSpeed = 0.5f;
-            midSpeed = 1f;
-            highSpeed = 2f;
+            Speed = 5f;
             detectionRange = 10f;  //감지 거리 , 감지범위의 크기 = *2 . 트리거로 감지범위 안에 들어온 적이 있으면 해당 방향으로 중간속도 이동. 감지범위밖으로 나가고 3초뒤 귀환
             chaseRange = 6;        //추격 거리 , 범위안에 타겟이 들어오면 타겟을 향해 빠르게 이동, 해당 범위 밖으로 나가고 3초뒤 의심으로 전환
             attackRange = 2f;      //공격 거리 , 범위안에 들어오면 타겟을 향해 공격 실행, 공격이 끝나면 타겟의 거리에 따라 반복 공격, 추격 혹은 의심 혹은 귀환
@@ -112,7 +111,7 @@ namespace Server.Game.Object
             #endregion
         }
 
-        public void Init(Vector2 pos)
+        public virtual void Init(Vector2 pos)
         {
             float width = 0.5f;
             float left = -0.5f;
@@ -256,7 +255,7 @@ namespace Server.Game.Object
             {
                 Vector2Int currentTarget = path[currentTargetIndex];
 
-                bool isArrived = MoveToTarget(new Vector2(currentTarget.x, currentTarget.y), midSpeed);
+                bool isArrived = MoveToTarget(new Vector2(currentTarget.x, currentTarget.y), Speed);
 
                 if (isArrived)
                 {
@@ -375,7 +374,7 @@ namespace Server.Game.Object
 
             if (path != null)
             {
-                bool t = MoveToTarget(new Vector2(lastTargetPos.Value.x, lastTargetPos.Value.y), midSpeed);
+                bool t = MoveToTarget(new Vector2(lastTargetPos.Value.x, lastTargetPos.Value.y), Speed);
                 if (t)
                 {
                     lastTargetPos = null;
