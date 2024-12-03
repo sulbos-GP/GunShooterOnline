@@ -18,15 +18,7 @@ public class PlayerController : CreatureController
     {
         Timer += Time.deltaTime;
     }
-
-    private void moveSound()
-    {
-        if (Timer > moveInterval)
-        {
-            Timer = 0.0f;
-            AudioSource.PlayOneShot(AudioSource.clip);
-        }
-    }
+    
 
     protected override void Init()
     {
@@ -52,8 +44,8 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-        moveSound();
-        
+        AudioSource.Play();
+
         //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;
@@ -62,6 +54,7 @@ public class PlayerController : CreatureController
 
     protected override void UpdateIdle()
     {
+        AudioSource.Stop();
     }
 
 
