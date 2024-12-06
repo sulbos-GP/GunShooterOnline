@@ -938,6 +938,43 @@ namespace Server
         }
 
 
+        public void HandleForceExit(Player exitPlayer) //강제 종료
+        {
+        
+            
+            /*  if (exitPlayer.gameRoom.MatchInfo.TryGetValue(exitPlayer.UID, out MatchOutcome outcome) == true)
+            {
+                outcome.escape += 1;
+            }*/
+
+            //Play관련 이벤트 버스
+            EventBus.Publish(EEventBusType.Play, exitPlayer, "PLAY_OUT");
+
+            //웹에 플레이어 메타데이터 보내기
+            exitPlayer.gameRoom.PostPlayerStats(exitPlayer.Id);
+
+            //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
+            exitPlayer.inventory.ClearInventory();
+            ObjectManager.Instance.Remove(exitPlayer.inventory.Id);
+
+            LeaveGame(exitPlayer.Id);
+
+            //TODO 승현 : Death 처리?
+            S_ExitGame exitPacket = new S_ExitGame()
+            {
+                IsSuccess = true,
+                PlayerId = exitPlayer.Id,
+                //ExitId = this.Id
+            };
+            exitPlayer.gameRoom.BroadCast(exitPacket);
+
+            S_Despawn despawnPacket = new S_Despawn();
+            despawnPacket.ObjcetIds.Add(exitPlayer.Id);
+            exitPlayer.gameRoom.BroadCast(despawnPacket);
+        }
+
+
+
 
 
         List<Player> tempPlayer = new List<Player>();
@@ -1017,11 +1054,11 @@ namespace Server
             //int count = 1;
             foreach (AISpawnZone zone in map.aispawnZones)
             {
-              /*  if(count-- <= 0)
-                    continue;*/
+                /*  if(count-- <= 0)
+                      continue;*/
 
 
-                EnemyAI enemy = ObjectManager.Instance.Add<EnemyAI>();
+                RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
                 {
                     //enemy.info.Name = "AI";
                     enemy.CellPos = zone.CellPos;

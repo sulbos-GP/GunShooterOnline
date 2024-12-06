@@ -31,10 +31,10 @@ namespace Server.Game.FSM
 
     public class FSMController
     {
-        private EnemyAI owner;
+        private BaseAI owner;
         private IState curState;
 
-        public FSMController(EnemyAI _owner)
+        public FSMController(BaseAI _owner)
         {
             owner = _owner; 
         }

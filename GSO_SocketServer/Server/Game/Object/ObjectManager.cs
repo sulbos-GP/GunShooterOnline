@@ -23,7 +23,7 @@ internal class ObjectManager
     private readonly Dictionary<int, SpawnZone> _playerSpawn = new();
     private readonly Dictionary<int, Mine> _mines = new();
     private readonly Dictionary<int, AttackObjectBase> _attacks = new();
-    private readonly Dictionary<int, EnemyAI> _enemys = new();
+    private readonly Dictionary<int, BaseAI> _enemys = new();
 
 
 
@@ -60,7 +60,7 @@ internal class ObjectManager
 
             else if (gameObjcet.ObjectType == GameObjectType.Enemyai)
             {
-                EnemyAI enemyAI = gameObjcet as EnemyAI;
+                BaseAI enemyAI = gameObjcet as BaseAI;
                 _enemys.Add(enemyAI.Id, enemyAI);
                 _scopes.Add(enemyAI.Id, enemyAI.DetectObject);
             }
@@ -93,7 +93,7 @@ internal class ObjectManager
                 _attacks.Add(obj.Id, obj as AttackObjectBase);
             else if (obj.ObjectType == GameObjectType.Enemyai)
             {
-                EnemyAI enemyAI = obj as EnemyAI;
+                BaseAI enemyAI = obj as BaseAI;
                 _enemys.Add(enemyAI.Id, enemyAI);
                 _scopes.Add(enemyAI.Id, enemyAI.DetectObject);
             }
@@ -147,7 +147,7 @@ internal class ObjectManager
         Console.WriteLine();
 
         Console.WriteLine($"Enemy : ");
-        foreach (EnemyAI enemy in _enemys.Values)
+        foreach (BaseAI enemy in _enemys.Values)
         {
             Console.Write($"{enemy.Id} ,");
         }
@@ -170,6 +170,11 @@ internal class ObjectManager
         return (GameObjectType)type;
     }
 
+    /// <summary>
+    /// 최대한 LeaveGame 사용 할 것
+    /// </summary>
+    /// <param name="objectId"></param>
+    /// <returns></returns>
     public bool Remove(int objectId)
     {
         var objectType = GetObjectTypeById(objectId);
@@ -267,7 +272,7 @@ internal class ObjectManager
             }
             else if (objectType == GameObjectType.Enemyai)
             {
-                EnemyAI obj = null;
+                BaseAI obj = null;
                 if (_enemys.TryGetValue(objectId, out obj))
                     return obj as T;
 
@@ -283,7 +288,7 @@ internal class ObjectManager
             return null;
     }
 
-    public EnemyAI[] GetEnemyAIs()
+    public BaseAI[] GetEnemyAIs()
     {
         return _enemys.Values.ToArray();
     }
@@ -312,7 +317,7 @@ internal class ObjectManager
             {
                 shape.Add(p.currentShape);
             }
-            foreach (EnemyAI p in _enemys.Values)
+            foreach (BaseAI p in _enemys.Values)
             {
                 shape.Add(p.currentShape);
             }
@@ -328,7 +333,7 @@ internal class ObjectManager
         {
             p.Update();
         }
-        foreach (EnemyAI e in _enemys.Values)
+        foreach (BaseAI e in _enemys.Values)
         {
             e.Update();
         }
@@ -337,5 +342,11 @@ internal class ObjectManager
             s.Update();
         }
         
+    }
+
+
+    private void CheakPlayerEixt()
+    {
+
     }
 }

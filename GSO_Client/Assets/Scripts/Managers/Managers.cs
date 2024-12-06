@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Net;
+using Google.Protobuf.Protocol;
 using Server.Data;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -36,6 +37,7 @@ internal class Managers : MonoBehaviour
         Init();
     }
 
+   
     private void Update()
     {
         _network.Update(); //네트워크
@@ -133,6 +135,27 @@ internal class Managers : MonoBehaviour
     /// </summary>
     private void OnApplicationQuit()
     {
+
+        if(Managers.Object.MyPlayer != null)
+        {
+            
+            C_ExitGame packet = new C_ExitGame()
+            {
+                IsNormal = false,
+                PlayerId = Managers.Object.MyPlayer != null ? Managers.Object.MyPlayer.Id : 0,
+                //ExitId = objectId
+            };
+            Managers.Network.Send(packet);
+            Debug.Log("강제 종료");
+        }
+        else
+        {
+            Debug.Log("강제 종료 아님 : 시작안함");
+
+        }
+
+
+
 
         SceneManager.sceneLoaded -= OnSceneLoaded;
         SceneManager.sceneUnloaded -= OnSceneUnloaded;

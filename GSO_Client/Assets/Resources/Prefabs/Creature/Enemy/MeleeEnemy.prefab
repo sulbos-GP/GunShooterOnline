@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 6782568182328615960}
   - component: {fileID: -6169923716430347105}
   m_Layer: 19
-  m_Name: Dog
+  m_Name: MeleeEnemy
   m_TagString: Monster
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
