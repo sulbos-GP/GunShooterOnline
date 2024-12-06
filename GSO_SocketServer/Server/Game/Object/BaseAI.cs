@@ -15,7 +15,7 @@ using System.Threading.Tasks.Dataflow;
 
 namespace Server.Game.Object
 {
-    public class EnemyAI : CreatureObj
+    public class BaseAI : CreatureObj
     {
 
         #region FSM
@@ -61,7 +61,7 @@ namespace Server.Game.Object
         public Polygon attackPolygon;
 
 
-        public EnemyAI()
+        public BaseAI()
         {
             ObjectType = GameObjectType.Enemyai;
 
@@ -121,6 +121,8 @@ namespace Server.Game.Object
             currentShape = rectangle;
 
             info.Name = "Dog";
+            ObjectType = GameObjectType.Enemyai;
+
 
             DetectObject.Init(this);
 
@@ -290,16 +292,7 @@ namespace Server.Game.Object
         //어택 오브젝트도 마찬가지인거 알쥐?
         public virtual void DoAttack()
         {
-            AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
-            attack.Init(this, attackPolygon, 10);
-
-            S_AiAttackShot attackShotPacket = new S_AiAttackShot()
-            {
-                ObjectId = this.Id
-            };
-            this.gameRoom.BroadCast(attackShotPacket);
-
-            this.gameRoom.PushAfter(100, attack.Destroy);
+            
         }
 
         #region PathFidningCore

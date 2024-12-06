@@ -197,7 +197,10 @@ class PacketHandler
         Console.WriteLine($"C_ExitPacketHandler");
 
         Player player = clientSession.MyPlayer;
-        player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
+        if (packet.IsNormal == true)
+            player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
+        else
+            player.gameRoom.Push(player.gameRoom.LeaveGame, player.Id);
 
     }
 

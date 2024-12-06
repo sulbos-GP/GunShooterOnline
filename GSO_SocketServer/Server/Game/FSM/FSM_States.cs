@@ -21,12 +21,12 @@ namespace Server.Game.FSM
 {
     public class StateBase : IState
     {
-        public EnemyAI Owner;
+        public BaseAI Owner;
         public MobState state { get; }
 
         protected bool isStop;
 
-        public StateBase(EnemyAI owner, MobState type)
+        public StateBase(BaseAI owner, MobState type)
         {
             Owner = owner;
             state = type;
@@ -58,7 +58,7 @@ namespace Server.Game.FSM
         private const int idleToRoundTime = 5000;
         private int storeTickCount = 0;
         
-        public IdleState(EnemyAI owner) : base(owner, MobState.Idle)
+        public IdleState(BaseAI owner) : base(owner, MobState.Idle)
         {
             Owner = owner;
         }
@@ -109,7 +109,7 @@ namespace Server.Game.FSM
     public class RoundState : StateBase
     {
         private Vector2 targetPos;
-        public RoundState(EnemyAI owner) : base(owner, MobState.Round)
+        public RoundState(BaseAI owner) : base(owner, MobState.Round)
         {
             Owner = owner;
         }
@@ -171,7 +171,7 @@ namespace Server.Game.FSM
         private Vector2 targetPos;
         private int storeTickCount = 0;
 
-        public CheckState(EnemyAI owner) : base(owner, MobState.Check)
+        public CheckState(BaseAI owner) : base(owner, MobState.Check)
         {
             Owner = owner;
         }
@@ -280,7 +280,7 @@ namespace Server.Game.FSM
         private const int chaseToReturnTime = 10000;
         private int storeTickCount = 0;
 
-        public ChaseState(EnemyAI owner) : base(owner, MobState.Chase)
+        public ChaseState(BaseAI owner) : base(owner, MobState.Chase)
         {
             Owner = owner;
         }
@@ -380,7 +380,7 @@ namespace Server.Game.FSM
     {
         private const int waitAttackTime = 1000;
         private int storeTickCount = 0;
-        public AttackState(EnemyAI owner) : base(owner, MobState.Attack)
+        public AttackState(BaseAI owner) : base(owner, MobState.Attack)
         {
             Owner = owner;
         }
@@ -522,7 +522,7 @@ namespace Server.Game.FSM
 
     public class ReturnState : StateBase
     {
-        public ReturnState(EnemyAI owner) : base(owner, MobState.Return)
+        public ReturnState(BaseAI owner) : base(owner, MobState.Return)
         {
             Owner = owner;
         }
@@ -573,7 +573,7 @@ namespace Server.Game.FSM
     public class StunState : StateBase
     {
         public float stunTime = 5;
-        public StunState(EnemyAI owner) : base(owner, MobState.Stun)
+        public StunState(BaseAI owner) : base(owner, MobState.Stun)
         {
             Owner = owner;
         }
@@ -634,7 +634,7 @@ namespace Server.Game.FSM
 
     public class DeadState : StateBase
     {
-        public DeadState(EnemyAI owner) : base(owner, MobState.Dead)
+        public DeadState(BaseAI owner) : base(owner, MobState.Dead)
         {
             Owner = owner;
         }

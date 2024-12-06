@@ -139,7 +139,7 @@ namespace Server.Game
             exitPlayer.inventory.ClearInventory();
             ObjectManager.Instance.Remove(exitPlayer.inventory.Id);
 
-            ObjectManager.Instance.Remove(exitPlayer.Id);
+            exitPlayer.gameRoom.LeaveGame(exitPlayer.Id);
 
             S_ExitGame exitPacket = new S_ExitGame()
             {

@@ -90,7 +90,7 @@ namespace Server
         }
 
 
-        private bool CheakGameDone()
+        private bool CheakAllPlayerLeave()
         {
             if (_playerDic.Values.Count == 0)
             {
@@ -243,7 +243,7 @@ namespace Server
             }
             else if (type == GameObjectType.Enemyai)
             {
-                var enemy = gameObject as EnemyAI;
+                var enemy = gameObject as BaseAI;
                 _enemyDic.Add(gameObject.Id, enemy);
                 enemy.gameRoom = this;
 
@@ -336,7 +336,7 @@ namespace Server
             }
 
 
-            foreach (EnemyAI enemy in ObjectManager.Instance.GetEnemyAIs())
+            foreach (BaseAI enemy in ObjectManager.Instance.GetEnemyAIs())
             {
                 spawnPacket.Objects.Add(enemy.info);
 
@@ -347,7 +347,7 @@ namespace Server
             enterPlayer.Session.Send(spawnPacket);
 
 
-            foreach (EnemyAI enemy in ObjectManager.Instance.GetEnemyAIs())
+            foreach (BaseAI enemy in ObjectManager.Instance.GetEnemyAIs())
             {
 
                 S_AiSpawn info = new S_AiSpawn();
@@ -414,7 +414,7 @@ namespace Server
             BroadCast(despawnPacket);
 
 
-            //CheakGameDone();
+            CheakAllPlayerLeave();
 
 
         }
