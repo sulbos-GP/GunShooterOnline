@@ -33,6 +33,8 @@ public class UIManager : MonoBehaviour
 
     public Transform IQuickSlot { get; private set; }
 
+    public Image HitImage{get; private set;}
+
 
     public float Duration = 2.0f;
     private bool isDie;
@@ -135,6 +137,10 @@ public class UIManager : MonoBehaviour
                     SetWQuickSlot(1); //초기화
                     SetWQuickSlot(2);
                     break;
+                case "HitImage":
+                    HitImage = child.GetComponent<Image>();
+                    HitImage.color = Color.clear;
+                    break;
             }
         }
     }
@@ -159,6 +165,13 @@ public class UIManager : MonoBehaviour
         DieUI.SetActive(true);
         DieUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text += attackerName;
         StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));
+    }
+
+    public IEnumerator SetHitEffect()
+    {
+        HitImage.color = new Color(1f, 0f, 0f, Random.Range(0.2f, 0.3f));
+        yield return new WaitForSeconds(0.1f);
+        HitImage.color = Color.clear;
     }
 
     public void SetActiveHealImage(bool tf)
