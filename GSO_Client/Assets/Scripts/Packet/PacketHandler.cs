@@ -165,6 +165,8 @@ internal class PacketHandler
         {
             //피격
             creature.Hit();
+            if (go.GetComponent<MyPlayerController>() != null)
+                creature.GetComponent<MyPlayerController>().StartCoroutine(UIManager.Instance.SetHitEffect());
             creature.Hp = changeHpPacket.Hp;
         }
         else if (creature.Hp < changeHpPacket.Hp)
