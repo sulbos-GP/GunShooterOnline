@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Server.Game.Object
 {
-    public class RangeEnemy : EnemyAI
+    public class RangeEnemy : BaseAI
     {
 
         public override void Init(Vector2 pos)
@@ -51,7 +51,7 @@ namespace Server.Game.Object
                         AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
                         attack.Init(this, attackPolygon, 10);*/
 
-            Vector2 dir = Vector2.Normalize(CellPos - target.CellPos);
+            Vector2 dir = Vector2.Normalize(target.CellPos - CellPos);
             RaycastHit2D hit2D = RaycastManager.Raycast(CellPos, dir, 100, new List<GameObject>() { this }); //충돌객체 체크
 
             //충돌된 객체 없음
