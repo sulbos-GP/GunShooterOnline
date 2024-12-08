@@ -26,11 +26,11 @@ namespace GsoWebServer.Servicies.Matching
         /// 0.00 - 탈출 X 킬 X 파밍 X
         /// </summary>
         private long mKillPoint = +5;       //킬
-        private long mDeathPoint = -100;      //데스
-        private long mDamagePoint = +3;       //체력100 = 1대미지
-        private long mFarmingPoint = +4;       //레어급 파밍
-        private long mEscapePoint = +20;      //탈출
-        private long mSurvialPoint = +2;       //1분 = 1생존
+        private long mDeathPoint = -100;    //데스
+        private long mDamagePoint = +3;     //체력100 = 1대미지
+        private long mFarmingPoint = +4;    //레어급 파밍
+        private long mEscapePoint = +20;    //탈출
+        private long mSurvialPoint = +2;    //1분 = 1생존
 
         /// <summary>
         /// 플레이어의 매치 결과에 따른 퍼포먼스 값

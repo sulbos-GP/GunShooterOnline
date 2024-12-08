@@ -18,9 +18,6 @@ namespace WebCommonLibrary.Models.GameDatabase
         //아이템 내구도
         public int durability { get; set; } = 0;
             
-        //
-        public int loaded_ammo { get; set; } = 0;
-            
         //저장소 아이디 (가방 전용)
         public int? unit_storage_id { get; set; } = null;
             

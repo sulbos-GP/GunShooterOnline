@@ -1,4 +1,5 @@
-﻿using WebCommonLibrary.Error;
+﻿using System.Data;
+using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 
@@ -57,10 +58,27 @@ namespace GsoWebServer.Servicies.Interfaces
         public Task<(WebErrorCode, IEnumerable<DB_ItemUnit>?)> LoadInventory(int storage_id);
 
         /// <summary>
+        /// 저장소의 아이템 삭제
+        /// </summary>
+        public Task<bool> ClearInventory(int storage_id);
+
+        public Task<WebErrorCode> InsertInventory(int storage_id, DB_ItemUnit unit);
+
+        /// <summary>
         /// 장비의 아이템 로드
         /// </summary>
         public Task<(WebErrorCode, IEnumerable<DB_GearUnit>?)> LoadGear(int uid);
 
+        public Task<bool> ClearGear(int uid);
+
+        public Task<WebErrorCode> InsertGear(int uid, DB_GearUnit unit);
+
+        public Task<int> InsertGearBackpackItem(int uid, DB_GearUnit unit);
+
+        /// <summary>
+        /// 장비의 아이템 삭제
+        /// </summary>
+  
         /// <summary>
         /// 유저 레벨업
         /// </summary>

@@ -66,7 +66,7 @@ namespace Matchmaker.Controllers
                         continue;
                     }
 
-                    //이미 매치가 잡혔기 때문에 닷지 실패임
+                    //이미 매치가 잡혔기 때문에 닷지 실패
                     if (ticket.isExit == true)
                     {
                         await mMatchmakerService.NotifyMatchFailed(ticket, WebErrorCode.PopPlayersJoinForced);
@@ -79,7 +79,6 @@ namespace Matchmaker.Controllers
                     var error = await mMatchmakerService.RemoveMatchQueue(key);
                     if (error != WebErrorCode.None)
                     {
-                        Console.WriteLine("[StartMatch] 매치에 잡힌 플레이어를 큐에서 삭제하지 못하였습니다.");
                         response.error_code = error;
                         return response;
                     }

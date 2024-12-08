@@ -27,10 +27,20 @@ namespace GSO_WebServerLibrary.Reposiotry.Interfaces
         /// </summary>
         public Task<IEnumerable<DB_ItemUnit>> LoadInventory(int storage_id);
 
+        public Task<int> DeleteInventoryItem(int storage_id, DB_ItemUnit unit, IDbTransaction? transaction = null);
+
+        public Task<int> InsertInventoryItem(int storage_id, DB_ItemUnit unit, IDbTransaction? transaction = null);
+
         /// <summary>
         /// 유저의 장비 로드
         /// </summary>
         public Task<IEnumerable<DB_GearUnit>> LoadGear(int uid);
+
+        public Task<int> DeleteGearItem(int uid, DB_GearUnit unit, string part, IDbTransaction? transaction = null);
+
+        public Task<int> InsertGearItem(int uid, DB_GearUnit unit, string part, IDbTransaction? transaction = null);
+
+        public Task<int> InsertGearBackpackItem(int uid, DB_GearUnit unit, IDbTransaction? transaction = null);
 
         //GameDB_User
 

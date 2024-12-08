@@ -22,7 +22,7 @@ namespace WebCommonLibrary.Models.Match
         public string       region { get; set; } = string.Empty;        //리전
         public long         latency { get; set; } = 0;                  //레이턴시
         public long         match_start_time { get; set; } = 0;         //매칭 시작 시간
-        public bool         isExit { get; set; } = false;
+        public bool         isExit { get; set; } = false;               //나가고 싶은지
         public ETicketState state { get; set; } = ETicketState.None;    //매칭 상태
     }
 
