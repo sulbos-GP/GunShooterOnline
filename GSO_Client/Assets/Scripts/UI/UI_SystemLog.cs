@@ -36,7 +36,7 @@ public class UI_SystemLog : MonoBehaviour
     public void UpdateLog(string log)
     {
         logText.text = log;
-        logScrollView.verticalNormalizedPosition = 0.0f;
+        //logScrollView.verticalNormalizedPosition = 0.0f;
     }
 
     public void CloseWindow()

@@ -2,13 +2,26 @@
 using Google.Protobuf.Protocol;
 using Humanizer;
 using Server.Database.Handler;
+using Server.Database.Master;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Numerics;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
+using static Humanizer.In;
+using static Humanizer.On;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Server.Game.Object.Item
 {
+    public enum EBoxSize
+    {
+        Small,
+        Medium,
+        Large
+    }
+
     public class BoxObject : GameObject
     {
         public bool isOpen = false;
@@ -16,6 +29,7 @@ namespace Server.Game.Object.Item
 
         public BoxObject()
         {
+            info.Name = "Box" + Id;
 
             ObjectType = GameObjectType.Box;
 
@@ -53,24 +67,15 @@ namespace Server.Game.Object.Item
 
         public void Init(Vector2 pos)
         {
-
-
-            info.Name = "Box" + Id;
-
-            //임의의 아이템
             storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
-            SetItem(501);
+            SetRandomItem(3, EBoxSize.Medium);
+
             CellPos = pos;
-
-
-
         }
 
         public void SetStorage(Storage storage)
         {
-            info.Name = "Box" + Id;
-
             info.Box = new BoxInfo()
             {
                 X = storage.Scale_X,
@@ -84,8 +89,6 @@ namespace Server.Game.Object.Item
 
         public void SetItemObject(ItemObject itemObject)
         {
-            info.Name = "Box" + Id;
-
             info.Box = new BoxInfo()
             {
                 X = itemObject.Width,
@@ -97,88 +100,121 @@ namespace Server.Game.Object.Item
             this.storage.InsertItem(itemObject);
         }
 
-        public bool SetItem(int id)
+        public void SetRandomItem(int maxCount, EBoxSize boxSize)
         {
-            FMasterItemBase data = DatabaseHandler.Context.MasterItemBase.Find(id);
-            DB_ItemUnit item = new DB_ItemUnit()
+
+            var (boxX, boxY, boxWeight) = GetBoxSize(boxSize);
+            this.storage.Init(boxX, boxY, boxWeight);
+
+            const int MaxRetry = 10;
+            int retry = 0;
+
+            int count = 0;
+            while(count < maxCount)
             {
-                storage = new DB_StorageUnit()
-                {
-                    grid_x = 0,
-                    grid_y = 0,
-                    rotation = 1,
-                    unit_attributes_id = 0
-                },
+                FMasterItemBase data = GetRandomItemData(4, 6);
 
-                attributes = new DB_UnitAttributes()
+                DB_ItemUnit item = new DB_ItemUnit()
                 {
-                    item_id = data.item_id,
-                    durability = 0,
-                    unit_storage_id = null,
-                    amount = 10,
+                    storage = new DB_StorageUnit()
+                    {
+                        grid_x = 0,
+                        grid_y = 0,
+                        rotation = 1,
+                        unit_attributes_id = 0
+                    },
+
+                    attributes = new DB_UnitAttributes()
+                    {
+                        item_id = data.item_id,
+                        durability = 0,
+                        unit_storage_id = null,
+                        amount = 1
+                    }
+                };
+                ItemObject newItem = new ItemObject();
+                newItem.Init(null, item);
+
+                if(true == PlaceItem(newItem))
+                {
+                    ObjectManager.Instance.Add(newItem);
+                    count++;
                 }
-            };
-            ItemObject newItem = new ItemObject(item);
-            EStorageError error = storage.InsertItem(newItem);
+                else
+                {
+                    if(retry > MaxRetry)
+                    {
+                        break;
+                    }
+                    retry++;
+                }
 
-            return error == EStorageError.None ? true : false;
+            }
         }
 
-        public void SetRandomItem()
+        private bool PlaceItem(ItemObject item)
         {
+            for(int gridY = 0; gridY < this.storage.Scale_Y; ++gridY)
+            {
+                for(int gridX = 0; gridX < this.storage.Scale_X; ++gridX)
+                {
+                    for(int r = 0; r <= 1; ++r)
+                    {
+                        item.X = gridX;
+                        item.Y = gridY;
+                        item.Rotate = r;
 
-            RandomItem(601, 606);
-            //Random rand = new Random();
-            //int number = rand.Next(1, 6);
-
-            //switch (number)
-            //{
-            //    case 1:
-            //        RandomItem(101, 103);
-            //        break;
-            //    case 2:
-            //        RandomItem(201, 203);
-            //        break;
-            //    case 3:
-            //        RandomItem(300, 303);
-            //        break;
-            //    case 4:
-            //        RandomItem(401, 404);
-            //        break;
-            //    case 5:
-            //        RandomItem(501, 502);
-            //        break;
-            //    case 6:
-                    
-            //        break;
-            //}
+                        if(true == this.storage.InsertItem(item))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            return false;
         }
 
-        private void RandomItem(int min, int max)
+        private (int, int, double) GetBoxSize(EBoxSize size)
+        {
+            int x = 0;
+            int y = 0;
+            double weight = 0.0;
+
+            if(size == EBoxSize.Small)
+            {
+                x = 3;
+                y = 4;
+                weight = 10;
+            }
+            else if(size == EBoxSize.Medium)
+            {
+                x = 5;
+                y = 5;
+                weight = 15;
+            }
+            else if(size == EBoxSize.Large)
+            {
+                x = 5;
+                y = 7;
+                weight = 20;
+            }
+
+            return (x, y, weight);
+        }
+
+        private FMasterItemBase GetRandomItemData(int min, int max)
         {
             Random rand = new Random();
-            int item_id = rand.Next(min, max);
-            FMasterItemBase data = DatabaseHandler.Context.MasterItemBase.Find(item_id);
-            DB_ItemUnit item = new DB_ItemUnit()
-            {
-                storage = new DB_StorageUnit()
-                {
-                    grid_x = 0,
-                    grid_y = 0,
-                    rotation = 1,
-                    unit_attributes_id = 0
-                },
+            int randomRange = 100 * rand.Next(min, max);
 
-                attributes = new DB_UnitAttributes()
-                {
-                    item_id = data.item_id,
-                    durability = 0,
-                    unit_storage_id = null,
-                    amount = 1
-                }
-            };
-            ItemObject newItem = new ItemObject(item);
-            SetItemObject(newItem);
+            var rangeItems = DatabaseHandler.Context.MasterItemBase
+                .Where(item => item.Value.item_id >= randomRange && item.Value.item_id < randomRange + 100)
+                .ToDictionary();
+
+            int item_id = rand.Next(rangeItems.Keys.Min(), rangeItems.Keys.Max());
+            FMasterItemBase data = DatabaseHandler.Context.MasterItemBase.Find(item_id);
+
+            return data;
         }
 
     }

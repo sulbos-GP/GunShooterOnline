@@ -129,6 +129,10 @@ namespace Server.Game
                 outcome.escape += 1;
             }
 
+            //인벤토리 및 장비 세이브
+            exitPlayer.gear.Save().Wait();
+            exitPlayer.inventory.Save().Wait();
+
             //Play관련 이벤트 버스
             EventBus.Publish(EEventBusType.Play, exitPlayer, "PLAY_OUT");
 
@@ -136,7 +140,7 @@ namespace Server.Game
             exitPlayer.gameRoom.PostPlayerStats(exitPlayer.Id);
 
             //오브젝트 매니저의 딕셔너리에서 플레이어의 인벤토리(그리드, 아이템)와 플레이어를 제거
-            exitPlayer.inventory.ClearInventory();
+            //exitPlayer.inventory.ClearInventory();
             ObjectManager.Instance.Remove(exitPlayer.inventory.Id);
 
             ObjectManager.Instance.Remove(exitPlayer.Id);

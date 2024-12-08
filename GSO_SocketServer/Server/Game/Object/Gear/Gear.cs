@@ -13,20 +13,22 @@ using static Humanizer.In;
 using WebCommonLibrary.Models.MasterDatabase;
 using System.ComponentModel;
 using System.Reflection;
+using System.Transactions;
+using StackExchange.Redis;
+using System.Data.Common;
 
 namespace Server.Game.Object.Gear
 {
     public class Gear : GameObject
     {
         private Dictionary<string, Storage> parts = new Dictionary<string, Storage>();
-        private List<int> initPartItemIds = new List<int>();
         private Player owner;
 
         public Gear(Player owner) 
         {
             this.owner = owner;
             InitGear();
-            LoadGear().Wait();
+            Load().Wait();
         }
 
         public string ConvertPartToString(EGearPart part)
@@ -101,14 +103,14 @@ namespace Server.Game.Object.Gear
             }
         }
 
-        public async Task LoadGear()
+        public async Task Load()
         {
+
             try
             {
                 Console.WriteLine($"Player.UID[{owner.UID}] 장비 로드 시작");
 
                 IEnumerable<DB_GearUnit> gears = await DatabaseHandler.GameDB.LoadGear(owner.UID);
-
                 if (gears == null)
                 {
                     return;
@@ -124,7 +126,7 @@ namespace Server.Game.Object.Gear
                             grid_x = 0,
                             grid_y = 0,
                             rotation = 0,
-                            unit_attributes_id = gear.gear.unit_attributes_id
+                            unit_attributes_id = gear.gear.unit_attributes_id,
                         },
 
                         attributes = new DB_UnitAttributes()
@@ -136,9 +138,11 @@ namespace Server.Game.Object.Gear
                         }
                     };
 
-                    ItemObject item = new ItemObject(owner.Id, unit);
+                    ItemObject item = ObjectManager.Instance.Add<ItemObject>();
+                    item.Init(owner, unit);
+
                     Storage part = parts[gear.gear.part];
-                    if (EStorageError.None != part.InsertItem(item))
+                    if (false == part.InsertItem(item))
                     {
                         throw new Exception($"장비의 파트({gear.gear.part})가 중복되어 있음");
                     }
@@ -146,187 +150,225 @@ namespace Server.Game.Object.Gear
                     {
                         Console.WriteLine($"{gear.gear.part.ToString()}부위 {item.Data.name.ToString()}장착");
                     }
-                    initPartItemIds.Add(item.Id);
                 }
-
             }
             catch (Exception e)
             {
-                Console.WriteLine($"[LoadGear] : {e.Message.ToString()}");
+                Console.WriteLine($"[Gear.Load] Error : {e.Message.ToString()}");
             }
 
             ItemObject haveBackpack = GetPartItem(EGearPart.Backpack);
             if (haveBackpack == null)
             {
-                await CreateDefaultBackpack();
+                CreateDefaultBackpack();
             }
 
             Console.WriteLine($"Player.UID[{owner.UID}] 장비 로드 완료");
         }
-
-        public async Task CreateDefaultBackpack()
+        
+        public async Task Clear()
         {
-            
             using (var database = DatabaseHandler.GameDB)
             {
                 using (var transaction = database.GetConnection().BeginTransaction())
                 {
-                    FMasterItemBase defaultBackpackBaseData = DatabaseHandler.Context.MasterItemBase.FirstOrDefault(data => data.Value.code == "ITEM_B000").Value;
-                    if (defaultBackpackBaseData == null)
-                    {
-                        Console.WriteLine("기본 가방의 베이스 데이터를 얻을 수 없습니다.");
-                        return;
-                    }
-
-                    FMasterItemBackpack defaultBackpackData = DatabaseHandler.Context.MasterItemBackpack.Find(defaultBackpackBaseData.item_id);
-                    if (defaultBackpackData == null)
-                    {
-                        Console.WriteLine("기본 가방의 디테일 데이터를 얻을 수 없습니다.");
-                        return;
-                    }
-
-                    EGearPart type = EGearPart.Backpack;
-                    FieldInfo field = type.GetType().GetField(type.ToString());
-                    var attribute = field.GetCustomAttribute<DescriptionAttribute>();
-                    string description = attribute?.Description ?? type.ToString();
-
                     try
                     {
-                        await database.CreateDefaultBackpack(owner.UID, defaultBackpackBaseData, transaction);
 
-
-
-                        DB_GearUnit gear = await database.GetGearOfPart(owner.UID, description, transaction);
-
-                        DB_ItemUnit unit = new DB_ItemUnit()
+                        EGearPart[] parts = (EGearPart[])System.Enum.GetValues(typeof(EGearPart));
+                        for (int i = 1; i < parts.Length; i++)
                         {
-                            storage = new DB_StorageUnit()
+                            EGearPart part = parts[i];
+                            ItemObject item = GetPartItem(part);
+                            if (item == null || item.UnitAttributesId == 0)
                             {
-                                grid_x = 0,
-                                grid_y = 0,
-                                rotation = 0,
-                                unit_attributes_id = gear.gear.unit_attributes_id
-                            },
-
-                            attributes = new DB_UnitAttributes()
-                            {
-                                item_id = gear.attributes.item_id,
-                                durability = gear.attributes.durability,
-                                unit_storage_id = gear.attributes.unit_storage_id,
-                                amount = gear.attributes.amount,
+                                continue;
                             }
-                        };
-                       
 
-                        ItemObject item = new ItemObject(owner.Id, unit);
-                        Storage part = parts[gear.gear.part];
-                        if (EStorageError.None != part.InsertItem(item))
-                        {
-                            throw new Exception($"장비의 파트({gear.gear.part})가 중복되어 있음");
+                            int ret = await database.DeleteGear(owner.UID, item, ConvertPartToString(part), transaction);
+                            if (ret == 0)
+                            {
+                                throw new Exception($"장비[{part}]에서 아이템을 삭제하지 못함");
+                            }
+
+                            if (part == EGearPart.Backpack)
+                            {
+                                await database.DeleteStorage(item.UnitStorageId, transaction);
+                            }
                         }
-                        else
-                        {
-                            Console.WriteLine($"{gear.gear.part.ToString()}부위 {item.Data.name.ToString()}장착");
-                        }
-                        initPartItemIds.Add(item.Id);
 
                         transaction.Commit();
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine($"[CreateDefaultBackpack] : {e.Message.ToString()}");
+                        Console.WriteLine($"[Gear.Clear] Error: {e.Message.ToString()}");
                         transaction.Rollback();
                     }
-
-
-
                 }
             }
+        }
+
+        public async Task Save()
+        {
+            using (var database = DatabaseHandler.GameDB)
+            {
+                using (var transaction = database.GetConnection().BeginTransaction())
+                {
+                    try
+                    {
+                        EGearPart[] parts = (EGearPart[])System.Enum.GetValues(typeof(EGearPart));
+                        for (int i = 1; i < parts.Length; i++)
+                        {
+                            EGearPart part = parts[i];
+                            ItemObject item = GetPartItem(part);
+                            if (item == null)
+                            {
+                                continue;
+                            }
+
+                            if (part == EGearPart.Backpack)
+                            {
+                                int storage_id = await database.InsertGetStorageId(transaction);
+                                owner.inventory.storage_id = storage_id;
+                                item.UnitStorageId = storage_id;
+                            }
+
+                            int ret = await database.InsertGear(owner.UID, item, ConvertPartToString(part), transaction);
+                            if (ret == 0)
+                            {
+                                throw new Exception($"장비[{part}]에서 아이템을 삽입하지 못함");
+                            }
+
+                        }
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[Gear.Save] {e.Message.ToString()}");
+                        transaction.Rollback();
+                    }
+                }
+            }
+        }
+
+        public void CreateDefaultBackpack()
+        {
             
+
+            FMasterItemBase defaultBackpackBaseData = DatabaseHandler.Context.MasterItemBase.FirstOrDefault(data => data.Value.code == "ITEM_B000").Value;
+            if (defaultBackpackBaseData == null)
+            {
+                Console.WriteLine("기본 가방의 베이스 데이터를 얻을 수 없습니다.");
+                return;
+            }
+
+            FMasterItemBackpack defaultBackpackData = DatabaseHandler.Context.MasterItemBackpack.Find(defaultBackpackBaseData.item_id);
+            if (defaultBackpackData == null)
+            {
+                Console.WriteLine("기본 가방의 디테일 데이터를 얻을 수 없습니다.");
+                return;
+            }
+
+            EGearPart type = EGearPart.Backpack;
+            FieldInfo field = type.GetType().GetField(type.ToString());
+            var attribute = field.GetCustomAttribute<DescriptionAttribute>();
+            string description = attribute?.Description ?? type.ToString();
+
+            DB_ItemUnit unit = new DB_ItemUnit()
+            {
+                storage = new DB_StorageUnit()
+                {
+                    grid_x = 0,
+                    grid_y = 0,
+                    rotation = 0,
+                    unit_attributes_id = 0
+                },
+
+                attributes = new DB_UnitAttributes()
+                {
+                    item_id = defaultBackpackBaseData.item_id,
+                    durability = 0,
+                    unit_storage_id = 0,
+                    amount = 1,
+                }
+            };
+
+            ItemObject item = ObjectManager.Instance.Add<ItemObject>();
+            item.Init(owner, unit);
+
+            Storage part = parts[description];
+            if (false == part.InsertItem(item))
+            {
+                throw new Exception($"장비의 파트({description})가 중복되어 있음");
+            }
+            else
+            {
+                Console.WriteLine($"{description}부위 {item.Data.name.ToString()}장착");
+            }
         }
 
 
-        public async Task<bool> InsertGear(EGearPart part, ItemObject item, GameDB database, IDbTransaction transaction = null)
-        {
+        //public async Task<bool> InsertGear(EGearPart part, ItemObject item, GameDB database, IDbTransaction transaction = null)
+        //{
 
-            if (item.Type == "Backpack" && item.UnitStorageId == null)
-            {
-                int storage_id = await database.InsertGetStorageId(transaction);
-                item.UnitStorageId = storage_id;
-            }
+        //    if (item.Type == "Backpack" && item.UnitStorageId == null)
+        //    {
+        //        int storage_id = await database.InsertGetStorageId(transaction);
+        //        item.UnitStorageId = storage_id;
+        //    }
 
-            int ret = await database.InsertGear(owner.UID, item, ConvertPartToString(part), transaction);
-            if (ret == 0)
-            {
-                throw new Exception($"장비[{part}]에서 아이템을 삽입하지 못함");
-            }
-            return true;
-        }
+        //    int ret = await database.InsertGear(owner.UID, item, ConvertPartToString(part), transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception($"장비[{part}]에서 아이템을 삽입하지 못함");
+        //    }
+        //    return true;
+        //}
 
-        public async Task<bool> DeleteGear(EGearPart part, ItemObject item, GameDB database, IDbTransaction transaction = null)
-        {
+        //public async Task<bool> DeleteGear(EGearPart part, ItemObject item, GameDB database, IDbTransaction transaction = null)
+        //{
 
-            if (item.Type == "Backpack" && item.UnitStorageId != null)
-            {
-                await database.DeleteStorage(item.UnitStorageId, transaction);
-            }
+        //    if (item.Type == "Backpack" && item.UnitStorageId != null)
+        //    {
+        //        await database.DeleteStorage(item.UnitStorageId, transaction);
+        //    }
 
-            int ret = await database.DeleteGear(owner.UID, item, ConvertPartToString(part), transaction);
-            if (ret == 0)
-            {
-                throw new Exception($"장비[{part}]에서 아이템을 삭제하지 못함");
-            }
-            return true;
-        }
+        //    int ret = await database.DeleteGear(owner.UID, item, ConvertPartToString(part), transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception($"장비[{part}]에서 아이템을 삭제하지 못함");
+        //    }
+        //    return true;
+        //}
 
    
 
 
 
-        public async Task<bool> UpdateGear(EGearPart part, ItemObject oldItem, ItemObject newItem, GameDB database, IDbTransaction transaction = null)
-        {
-            int ret = await database.UpdateItemAttributes(newItem, transaction);
-            if (ret == 0)
-            {
-                throw new Exception("인벤토리에서 아이템 업데이트 안됨");
-            }
+        //public async Task<bool> UpdateGear(EGearPart part, ItemObject oldItem, ItemObject newItem, GameDB database, IDbTransaction transaction = null)
+        //{
+        //    int ret = await database.UpdateItemAttributes(newItem, transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+        //    }
 
-            ret = await database.UpdateGear(owner.UID, oldItem, newItem, ConvertPartToString(part), transaction);
-            if (ret == 0)
-            {
-                throw new Exception("장비에서 아이템 업데이트 안됨");
-            }
-            return true;
-        }
+        //    ret = await database.UpdateGear(owner.UID, oldItem, newItem, ConvertPartToString(part), transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception("장비에서 아이템 업데이트 안됨");
+        //    }
+        //    return true;
+        //}
 
-        public async Task<bool> UpdateItemAttributes(ItemObject item, GameDB database, IDbTransaction transaction = null)
-        {
-            int ret = await database.UpdateItemAttributes(item, transaction);
-            if (ret == 0)
-            {
-                throw new Exception("인벤토리에서 아이템 속성 업데이트 안됨");
-            }
-            return true;
-        }
-
-        public List<int> GetPartObjectIds()
-        {
-            List<int> itemIds = new List<int>();
-            foreach (var (part, item) in parts)
-            {
-                var items = item.GetAllItemObjectIds();
-                if(items.Count == 1)
-                {
-                    itemIds.Add(items[0]);
-                }
-            }
-            return itemIds;
-        }
-
-        public List<int> GetInitPartObjectIds()
-        {
-            return initPartItemIds;
-        }
-
+        //public async Task<bool> UpdateItemAttributes(ItemObject item, GameDB database, IDbTransaction transaction = null)
+        //{
+        //    int ret = await database.UpdateItemAttributes(item, transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception("인벤토리에서 아이템 속성 업데이트 안됨");
+        //    }
+        //    return true;
+        //}
     }
 }

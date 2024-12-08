@@ -275,18 +275,18 @@ public class GameResource
         }
     }
 
-    public LoadGearRequest GetLoadGearRequest(HeaderVerfiyPlayer header, LoadGearReq body)
+    public ResetStorageRequest GetResetStorageRequest(HeaderVerfiyPlayer header, ResetStorageReq body)
     {
-        return new LoadGearRequest(this.mService, header, body);
+        return new ResetStorageRequest(this.mService, header, body);
     }
 
-    public class LoadGearRequest : WebClientServiceRequest<LoadGearRes>
+    public class ResetStorageRequest : WebClientServiceRequest<ResetStorageRes>
     {
-        public LoadGearRequest(GsoWebService service, HeaderVerfiyPlayer header, LoadGearReq body)
+        public ResetStorageRequest(GsoWebService service, HeaderVerfiyPlayer header, ResetStorageReq body)
         {
             this.mFromHeader = header.ToDictionary();
             this.mFromBody = body;
-            this.mEndPoint = service.mBaseUrl + "/api/Game/Gear/Load";
+            this.mEndPoint = service.mBaseUrl + "/api/Game/Storage/Reset";
             this.mMethod = ERequestMethod.POST;
         }
     }

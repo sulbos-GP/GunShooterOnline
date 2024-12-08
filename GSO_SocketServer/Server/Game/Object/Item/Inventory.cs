@@ -26,7 +26,7 @@ namespace Server.Game
 
 
 
-        
+
         public enum ItemType
         {
             Weapon = 100,        // 100번대 : 무기
@@ -89,7 +89,7 @@ namespace Server.Game
         public Inventory(Player owner)
         {
             this.owner = owner;
-            LoadInventory().Wait();
+            Load().Wait();
         }
 
         /// <summary>
@@ -110,6 +110,11 @@ namespace Server.Game
                 //장비에 착용되어 있는 가방을 불러옴d
                 ItemObject backpackItem = owner.gear.GetPartItem(EGearPart.Backpack);
 
+                if (backpackItem == null)
+                {
+                    return;
+                }
+
                 //마스터 테이블의 아이템 데이터 불러와서 가방의 정보 얻기
                 FMasterItemBackpack backpackData = DatabaseHandler.Context.MasterItemBackpack.Find(backpackItem.ItemId);
                 int scaleX = backpackData.total_scale_x;
@@ -128,25 +133,20 @@ namespace Server.Game
             }
         }
 
-      
-
-
-
-
-
-
-
-
         /// <summary>
         /// 저장소 아이디에 있는 모든 아이템 불러오기
         /// </summary>
-        public async Task LoadInventory()
+        public async Task Load()
         {
             try
             {
                 Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 로드 시작");
 
                 InitInventory();
+                if(this.storage_id == 0)
+                {
+                    return;
+                }
 
                 IEnumerable<DB_ItemUnit> units = await DatabaseHandler.GameDB.LoadInventory(this.storage_id);
                 if (units == null)
@@ -157,16 +157,15 @@ namespace Server.Game
                 Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 아이템 개수 {units.Count()}");
                 foreach (DB_ItemUnit unit in units)
                 {
-                    ItemObject newItem = new ItemObject(owner.Id, unit);
-                    EStorageError error = storage.InsertItem(newItem);
-                    if (error == EStorageError.None)
+                    ItemObject newItem = ObjectManager.Instance.Add<ItemObject>();
+                    newItem.Init(owner, unit);
+
+                    bool error = storage.InsertItem(newItem);
+                    if (error == false)
                     {
-                        initItemIds.Add(newItem.Id);
+                        Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 {newItem.Data.name}아이템 삽입 실패");
                     }
-                    else
-                    {
-                        Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 {newItem.Data.name}아이템 {error.ToString()} 실패");
-                    }
+
                 }
 
                 Console.WriteLine($"Player.UID[{owner.UID}] 인벤토리 로드 완료");
@@ -174,78 +173,143 @@ namespace Server.Game
             }
             catch (Exception e)
             {
-                Console.WriteLine($"[LoadInventory] : {e.Message.ToString()}");
+                Console.WriteLine($"[Inventory.Load] : {e.Message.ToString()}");
             }
+
+            
         }
 
-
-
-
-
-        public async Task<bool> InsertItem(ItemObject item, GameDB database, IDbTransaction transaction = null)
+        public async Task Clear()
         {
-
-            int ret = await database.InsertItem(storage_id, item, transaction);
-            if (ret == 0)
+            using (var database = DatabaseHandler.GameDB)
             {
-                throw new Exception("데이터베이스에서 아이템을 삽입하지 못함");
+                using (var transaction = database.GetConnection().BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (ItemObject item in this.storage.Items)
+                        {
+                            if (item == null)
+                            {
+                                continue;
+                            }
+
+                            DB_ItemUnit unit = item.Unit;
+                            int ret = await database.DeleteItem(storage_id, unit, transaction);
+                            if (ret == 0)
+                            {
+                                throw new Exception("데이터베이스에서 아이템을 삭제하지 못함");
+                            }
+                        }
+
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[Inventory.Clear] Error :{e.Message.ToString()}");
+                        transaction.Rollback();
+                    }
+                }
             }
-            return true;
         }
+
+        public async Task Save()
+        {
+            using (var database = DatabaseHandler.GameDB)
+            {
+                using (var transaction = database.GetConnection().BeginTransaction())
+                {
+                    try
+                    {
+                        foreach (ItemObject item in this.storage.Items)
+                        {
+                            if (item == null)
+                            {
+                                continue;
+                            }
+
+                            int ret = await database.InsertItem(storage_id, item, transaction);
+                            if (ret == 0)
+                            {
+                                throw new Exception("데이터베이스에서 아이템을 삽입하지 못함");
+                            }
+                        }
+                        
+                        transaction.Commit();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine($"[Inventory.Save] Error : {e.Message.ToString()}");
+                        transaction.Rollback();
+                    }
+                }
+            }
+        }
+
+        //public async Task<bool> InsertItem(ItemObject item, GameDB database, IDbTransaction transaction = null)
+        //{
+
+        //    int ret = await database.InsertItem(storage_id, item, transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception("데이터베이스에서 아이템을 삽입하지 못함");
+        //    }
+        //    return true;
+        //}
 
         /// <summary>
         /// 자신의 인벤토리에 있는 아이템 삭제
         /// </summary>
-        public async Task<bool> DeleteItem(ItemObject item, GameDB database, IDbTransaction transaction = null)
-        {
-            DB_ItemUnit unit = item.Unit;
-            int ret = await database.DeleteItem(storage_id, unit, transaction);
-            if (ret == 0)
-            {
-                throw new Exception("데이터베이스에서 아이템을 삭제하지 못함");
-            }
-            return true;
-        }
+        //public async Task<bool> DeleteItem(ItemObject item, GameDB database, IDbTransaction transaction = null)
+        //{
+        //    DB_ItemUnit unit = item.Unit;
+        //    int ret = await database.DeleteItem(storage_id, unit, transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception("데이터베이스에서 아이템을 삭제하지 못함");
+        //    }
+        //    return true;
+        //}
 
-        public async Task<bool> UpdateItem(ItemObject oldItem, ItemObject newItem, GameDB database, IDbTransaction transaction = null)
-        {
-            int ret = await database.UpdateItemAttributes(newItem, transaction);
-            if (ret == 0)
-            {
-                throw new Exception("인벤토리에서 아이템 업데이트 안됨");
-            }
+        //public async Task<bool> UpdateItem(ItemObject oldItem, ItemObject newItem, GameDB database, IDbTransaction transaction = null)
+        //{
+        //    int ret = await database.UpdateItemAttributes(newItem, transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+        //    }
 
-            ret = await database.UpdateItem(storage_id, oldItem, newItem, transaction);
-            if (ret == 0)
-            {
-                throw new Exception("인벤토리에서 아이템 업데이트 안됨");
-            }
-            return true;
-        }
+        //    ret = await database.UpdateItem(storage_id, oldItem, newItem, transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception("인벤토리에서 아이템 업데이트 안됨");
+        //    }
+        //    return true;
+        //}
 
-        public async Task<bool> UpdateItemAttributes(ItemObject item, GameDB database, IDbTransaction transaction = null)
-        {
-            int ret = await database.UpdateItemAttributes(item, transaction);
-            if (ret == 0)
-            {
-                throw new Exception("인벤토리에서 아이템 속성 업데이트 안됨");
-            }
-            return true;
-        }
+        //public async Task<bool> UpdateItemAttributes(ItemObject item, GameDB database, IDbTransaction transaction = null)
+        //{
+        //    int ret = await database.UpdateItemAttributes(item, transaction);
+        //    if (ret == 0)
+        //    {
+        //        throw new Exception("인벤토리에서 아이템 속성 업데이트 안됨");
+        //    }
+        //    return true;
+        //}
 
-        public List<int> GetInventoryObjectIds()
-        {
-            return storage.GetAllItemObjectIds().ToList();
-        }
+        //public List<int> GetInventoryObjectIds()
+        //{
+        //    return storage.GetAllItemObjectIds().ToList();
+        //}
 
-        public List<int> GetInitInventoryObjectIds()
-        {
-            return initItemIds;
-        }
+        //public List<int> GetInitInventoryObjectIds()
+        //{
+        //    return initItemIds;
+        //}
 
-        public void ClearInventory()
-        {
-            storage.ClearStorage();
-        }
+        //public void ClearInventory()
+        //{
+        //    storage.ClearStorage();
+        //}
     }
 }

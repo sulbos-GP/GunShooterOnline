@@ -66,24 +66,27 @@ namespace Server.Database.Game
             return inventory;
         }
 
+        //public async Task<int> ClearInventory()
+        //{
+
+        //}
+
         public async Task<int> InsertItem(int storage_id, ItemObject item, IDbTransaction transaction = null)
         {
             var query = this.GetQueryFactory();
 
             DB_ItemUnit unit = item.Unit;
             int unit_attributes_id = unit.storage.unit_attributes_id;
-            if (unit_attributes_id == 0)
+
+            unit_attributes_id = await query.Query("unit_attributes").
+            InsertGetIdAsync<int>(new
             {
-                unit_attributes_id = await query.Query("unit_attributes").
-                InsertGetIdAsync<int>(new
-                {
-                    item_id = unit.attributes.item_id,
-                    durability = unit.attributes.durability,
-                    loaded_ammo = unit.attributes.loaded_ammo,
-                    unit_storage_id = unit.attributes.unit_storage_id,
-                    amount = unit.attributes.amount
-                }, transaction);
-            }
+                item_id = unit.attributes.item_id,
+                durability = unit.attributes.durability,
+                loaded_ammo = unit.attributes.loaded_ammo,
+                unit_storage_id = unit.attributes.unit_storage_id,
+                amount = unit.attributes.amount
+            }, transaction);
             item.UnitAttributesId = unit_attributes_id;
 
             return await query.Query("storage_unit").

@@ -190,12 +190,12 @@ public class Player : CreatureObj
     /// <summary>
     /// 등록된 아이템을 사용. 이건 아이템의 기능이 나와야할듯
     /// </summary>
-    public async void UseQuickSlot(int deleteItemId, int slotId)
+    public void UseQuickSlot(int deleteItemId, int slotId)
     {
 
         Console.WriteLine($"test {deleteItemId},  {slotId}");
 
-        PS_ItemInfo deleteInfo;
+        //PS_ItemInfo deleteInfo;
         //ItemObject deleteItem = gameRoom.FindAndDeleteItem(this, 0, deleteItemId, out deleteInfo); //스토리지에 있는 아이템
         ItemObject sourceItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
 
@@ -241,21 +241,21 @@ public class Player : CreatureObj
 
         ItemManager.Instance.UseIteme(this, sourceItem.ItemId);
 
-        using (var database = DatabaseHandler.GameDB)
-        {
-            using (var transaction = database.GetConnection().BeginTransaction())
-            {
-                try
-                {
+        //using (var database = DatabaseHandler.GameDB)
+        //{
+        //    using (var transaction = database.GetConnection().BeginTransaction())
+        //    {
+        //        try
+        //        {
 
 
-                }
-                catch (Exception ex)
-                {
+        //        }
+        //        catch (Exception ex)
+        //        {
 
-                }
-            }
-        }
+        //        }
+        //    }
+        //}
 
         /*
 

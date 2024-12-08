@@ -17,31 +17,15 @@ namespace Server.Game
             ObjectType = GameObjectType.Item;
         }
 
-        public ItemObject(ItemObject other) : this(other.unit)
+        public void Init(GameObject gameObject, DB_ItemUnit unit)
         {
-            this.Id = other.Id;
-            this.viewers = other.viewers;
-        }
 
-        public ItemObject(DB_ItemUnit unit)
-        {
-            ObjectType = GameObjectType.Item;
             this.unit = unit;
-        }
 
-        public ItemObject(int viewerId, DB_ItemUnit unit) : this(unit)
-        {
-            viewers.TryAdd(viewerId, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
-        }
-
-        public void CreateItem()
-        {
-            ObjectManager.Instance.Add(this);
-        }
-
-        public void DestroyItem()
-        {
-            ObjectManager.Instance.Remove(this.Id);
+            if (gameObject != null)
+            {
+                viewers.TryAdd(gameObject.Id, DateTime.UtcNow.AddSeconds(-Data.inquiry_time));
+            }
         }
 
         public FMasterItemBase Data

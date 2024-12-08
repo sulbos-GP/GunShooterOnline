@@ -56,7 +56,7 @@ namespace Server.Game.Object
         #endregion
 
 
-        private IJob _job;
+        //private IJob _job;
 
         public Polygon attackPolygon;
 
@@ -188,7 +188,7 @@ namespace Server.Game.Object
 
             BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
             boxObject.CellPos = this.CellPos;
-            boxObject.SetRandomItem();
+            boxObject.SetRandomItem(2, EBoxSize.Small);
             gameRoom.map.rootableObjects.Add(boxObject);
 
             S_Spawn spawnPacket = new S_Spawn();
@@ -291,7 +291,7 @@ namespace Server.Game.Object
         public virtual void DoAttack()
         {
             AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
-            attack.Init(this, attackPolygon, 10);
+            //attack.Init(this, attackPolygon, 10);
 
             S_AiAttackShot attackShotPacket = new S_AiAttackShot()
             {
