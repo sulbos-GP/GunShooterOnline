@@ -12,11 +12,14 @@ namespace WebCommonLibrary.Models.MasterDatabase
         //보상 박스 아이디
         public int reward_box_id { get; set; } = 0;
             
-        //박스 x크기
-        public int box_scale_x { get; set; } = 0;
+        //박스 이름
+        public string name { get; set; } = "Box";
             
-        //박스 y크기
-        public int box_scale_y { get; set; } = 0;
+        //박스 x크기
+        public int scale_x { get; set; } = 0;
+            
+        //박스 x크기
+        public int scale_y { get; set; } = 0;
             
     }
 

@@ -69,9 +69,9 @@ namespace Server.Game.Object.Item
         public void Init(Vector2 pos)
         {
 
-            SetAdvancedBox();
+            //SetAdvancedBox();
 
-            //SetRandomItem(3, EBoxSize.Medium);
+            SetRandomItem(1, 5, EBoxSize.Medium);
 
             CellPos = pos;
         }
@@ -132,7 +132,7 @@ namespace Server.Game.Object.Item
         }
 
         //랜덤 일반 상자
-        public void SetRandomItem(int maxCount, EBoxSize boxSize)
+        public void SetRandomItem(int min, int max, EBoxSize boxSize)
         {
 
             var (boxX, boxY, boxWeight) = GetBoxSize(boxSize);
@@ -141,6 +141,8 @@ namespace Server.Game.Object.Item
             const int MaxRetry = 10;
             int retry = 0;
 
+            Random rand = new Random();
+            int maxCount = rand.Next(min, max);
             int count = 0;
             while(count < maxCount)
             {

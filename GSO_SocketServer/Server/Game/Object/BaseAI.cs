@@ -190,7 +190,7 @@ namespace Server.Game.Object
 
             BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
             boxObject.CellPos = this.CellPos;
-            boxObject.SetRandomItem(2, EBoxSize.Small);
+            boxObject.SetRandomItem(1, 3, EBoxSize.Small);
             gameRoom.map.rootableObjects.Add(boxObject);
 
             S_Spawn spawnPacket = new S_Spawn();
