@@ -61,6 +61,7 @@ public class ExitZone : InteractableObject
 
             C_ExitGame packet = new C_ExitGame()
             {
+                IsNormal = true,
                 PlayerId = Managers.Object.MyPlayer.Id,
                 ExitId = objectId
             };

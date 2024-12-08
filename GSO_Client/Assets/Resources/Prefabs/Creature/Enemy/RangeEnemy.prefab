@@ -15,8 +15,9 @@ GameObject:
   - component: {fileID: 5611269195982421864}
   - component: {fileID: 8366404536324484918}
   - component: {fileID: -3203950932358963340}
+  - component: {fileID: -1729407263392030174}
   m_Layer: 19
-  m_Name: EnemyAI
+  m_Name: RangeEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -229,8 +230,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 0}
-  material: {fileID: 0}
-  sprite: {fileID: 0}
+  characterSprite: {fileID: 0}
   AudioSource: {fileID: 8366404536324484918}
 --- !u!82 &8366404536324484918
 AudioSource:
@@ -342,6 +342,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lineRenderer: {fileID: 0}
   activeLine: 0
+--- !u!114 &-1729407263392030174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 306105889506481765}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d28a5f25970295b45b77dcc3d49fe97f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 0}
+  characterSprite: {fileID: 0}
+  DetectRange: 0
+  ChaseRange: 0
+  AttackRange2: 0
+  SpawnZone: {x: 0, y: 0}
+  AttackShape: {fileID: 0}
 --- !u!1 &3618661517659610171
 GameObject:
   m_ObjectHideFlags: 0

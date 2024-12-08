@@ -340,8 +340,9 @@ message S_ExitGame {  //18
 }
 
 message C_ExitGame{   //19
-   int32 playerId = 1;
-   int32 exitId = 2;
+   bool isNormal = 1; // true 정상 탈출, false 이면 강제 종료
+   int32 playerId = 2;
+   int32 exitId = 3;
 }
 
 message C_JoinServer{   // 29  접속 요청  // 인벤토리
