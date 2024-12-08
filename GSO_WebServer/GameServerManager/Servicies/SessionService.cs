@@ -85,13 +85,13 @@ namespace GameServerManager.Servicies
                 var matchStatus = await mSessionMemory.GetAllMatchStatus();
                 if (matchStatus == null)
                 {
-                    return (WebErrorCode.TEMP_ERROR, null);
+                    return (WebErrorCode.EmptySession, null);
                 }
 
                 var match = matchStatus.FirstOrDefault(status => status.Value.state == EMatchState.Ready);
                 if(match.Key == null)
                 {
-                    return (WebErrorCode.TEMP_ERROR, null);
+                    return (WebErrorCode.NoPendingSession, null);
                 }
                 string key = match.Key;
                 MatchStatus status = match.Value;

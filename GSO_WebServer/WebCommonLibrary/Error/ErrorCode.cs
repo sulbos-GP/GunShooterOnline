@@ -47,11 +47,15 @@
         TicketRemainingTime = 2019,
 
         DailyTaskIsAllocate = 2020,
-        
+        TicketFailedUpdateCount = 2021,
+        TicketFailedUpdateLastTime = 2022,
+
         DailyQuestInvalidList = 2300,
         DailyQuestNotMatch = 2301,
         DailyQuestNotEnough = 2302,
         DailyQuestAlreadyComplelte = 2303,
+        DailyQuestFailedRandom = 2304,
+        DailyQuestFailedInsert = 2305,
 
 
         // Authentication 2500 ~
@@ -117,6 +121,9 @@
 
         UpdatePlayerToFailException,
 
+        // GameServerManager 5000 ~
+        EmptySession = 5001,
+        NoPendingSession = 5002,
 
         //GameDb 10000~ 
         GetGameDbConnectionFail = 10001,

@@ -195,19 +195,21 @@ namespace GsoWebServer.Servicies.Game
                     return (WebErrorCode.TEMP_ERROR);
                 }
 
-                int oldLevel = (user.experience < 100) ? 1 : (user.experience / 100);
-                int curLevel = (user.experience < 100) ? 1 : (user.experience + experience) / 100;
+
 
                 if(0 == await mGameDB.UpdateLevel(uid, user.experience + experience, transaction))
                 {
-                    throw new Exception("레벨이 업데이트 되지 못했습니다.");
+
                 }
 
-                for(int level = oldLevel + 1; level <= curLevel; ++level)
+                int oldLevel = (user.experience < 100) ? 1 : (user.experience / 100);
+                int curLevel = (user.experience < 100) ? 1 : (user.experience + experience) / 100;
+
+                for (int level = oldLevel + 1; level <= curLevel; ++level)
                 {
                     if(0 == await mGameDB.InsertLevelReward(uid, level, transaction))
                     {
-                        throw new Exception("레벨업은 하였지만 보상을 추가하지는 못했습니다.");
+
                     }
                 }
 
@@ -326,16 +328,16 @@ namespace GsoWebServer.Servicies.Game
                     int possibleTicketCount = timeTicket + user.ticket;
                     possibleTicketCount = Math.Clamp(possibleTicketCount, 0, GameDefine.MAX_TICKET);
 
-                    int updateRes = await mGameDB.UpdateTicket(uid, possibleTicketCount);
-                    if (updateRes == 0)
+                    int updateTicketRes = await mGameDB.UpdateTicket(uid, possibleTicketCount);
+                    if (updateTicketRes == 0)
                     {
-                        return WebErrorCode.TEMP_ERROR;
+                        return WebErrorCode.TicketFailedUpdateCount;
                     }
 
-                    updateRes = await mGameDB.UpdateLastTicketTime(uid);
-                    if (updateRes == 0)
+                    int updateLastTimeRes = await mGameDB.UpdateLastTicketTime(uid);
+                    if (updateLastTimeRes == 0)
                     {
-                        return WebErrorCode.TEMP_ERROR;
+                        return WebErrorCode.TicketFailedUpdateLastTime;
                     }
                 }
                 else
@@ -431,13 +433,13 @@ namespace GsoWebServer.Servicies.Game
                     int quset_id = GetRandomDailyQuestWithCategory(masterDailyQusetList, category);
                     if (quset_id == -1)
                     {
-                        return (WebErrorCode.TEMP_ERROR);
+                        return (WebErrorCode.DailyQuestFailedRandom);
                     }
 
                     int result = await mGameDB.InsertUserDailyQuestByUid(uid, quset_id, transaction);
                     if(result == 0)
                     {
-                        return (WebErrorCode.TEMP_ERROR);
+                        return (WebErrorCode.DailyQuestFailedInsert);
                     }
                 }
 

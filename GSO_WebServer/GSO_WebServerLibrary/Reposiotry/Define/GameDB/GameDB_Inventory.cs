@@ -1,6 +1,7 @@
 ﻿using WebCommonLibrary.Models.GameDB;
 using GSO_WebServerLibrary.Reposiotry.Interfaces;
 using SqlKata.Execution;
+using System.Data;
 
 namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
 {
@@ -45,6 +46,74 @@ namespace GSO_WebServerLibrary.Reposiotry.Define.GameDB
             }).ToList();
 
             return inventory;
+        }
+
+        public async Task<int> DeleteInventoryItem(int storage_id, DB_ItemUnit unit, IDbTransaction? transaction = null)
+        {
+            var query = this.mQueryFactory;
+
+            if(unit.storage == null)
+            {
+                return 0;
+            }
+
+            var values = new Dictionary<string, object>()
+            {
+                { "storage_id"  , storage_id },
+                { "grid_x"      , unit.storage.grid_x },
+                { "grid_y"      , unit.storage.grid_y },
+                { "rotation"    , unit.storage.rotation }
+            };
+
+            int result = await query.Query("storage_unit").
+                Where(values).
+                DeleteAsync(transaction);
+
+            if (result == 0)
+            {
+                return 0;
+            }
+
+            return await query.Query("unit_attributes").
+                Where("unit_attributes_id", unit.storage.unit_attributes_id).
+                DeleteAsync(transaction);
+
+
+        }
+
+        public async Task<int> InsertInventoryItem(int storage_id, DB_ItemUnit unit, IDbTransaction? transaction = null)
+        {
+            var query = this.mQueryFactory;
+
+            if (unit.storage == null || unit.attributes == null)
+            {
+                return 0;
+            }
+
+            int unit_attributes_id = unit.storage.unit_attributes_id;
+            if (unit_attributes_id == 0)
+            {
+                unit_attributes_id = await query.Query("unit_attributes").
+                InsertGetIdAsync<int>(new
+                {
+                    item_id = unit.attributes.item_id,
+                    durability = unit.attributes.durability,
+                    loaded_ammo = unit.attributes.loaded_ammo,
+                    unit_storage_id = unit.attributes.unit_storage_id,
+                    amount = unit.attributes.amount
+                }, transaction);
+            }
+            unit.attributes.unit_storage_id = unit_attributes_id;
+
+            return await query.Query("storage_unit").
+                InsertAsync(new
+                {
+                    storage_id = storage_id,
+                    grid_x = unit.storage.grid_x,
+                    grid_y = unit.storage.grid_y,
+                    rotation = unit.storage.rotation,
+                    unit_attributes_id = unit_attributes_id,
+                }, transaction);
         }
     }
 }

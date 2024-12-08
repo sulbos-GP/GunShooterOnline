@@ -105,10 +105,6 @@ namespace Matchmaker.Service.Background
                 error = await mMatchmakerService.MatchConfirmation(matchedPlayers);
                 if (error != WebErrorCode.None)
                 {
-                    foreach (var matchedPlayer in matchedPlayers)
-                    {
-                        await mMatchmakerService.RollbackTicket(KeyUtils.GetUID(matchedPlayer.Key));
-                    }
                     continue;
                 }
 

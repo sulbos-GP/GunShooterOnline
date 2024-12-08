@@ -12,12 +12,23 @@ namespace WebCommonLibrary.DTO.Game
     /// </summary>
     public class LoadStorageReq
     {
-        public int storage_id { get; set; } = 0;
+        
     }
 
     public class LoadStorageRes : ErrorCodeDTO
     {
+        public List<DB_GearUnit>? gears { get; set; } = null;
         public List<DB_ItemUnit>? items { get; set; } = null;
+    }
+
+    public class ResetStorageReq
+    {
+        
+    }
+
+    public class ResetStorageRes : ErrorCodeDTO
+    {
+        
     }
 
 }
