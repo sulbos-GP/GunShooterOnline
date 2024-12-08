@@ -56,7 +56,7 @@ namespace Server.Game.Object
         #endregion
 
 
-        private IJob _job;
+        //private IJob _job;
 
         public Polygon attackPolygon;
 
@@ -190,7 +190,7 @@ namespace Server.Game.Object
 
             BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
             boxObject.CellPos = this.CellPos;
-            boxObject.SetRandomItem();
+            boxObject.SetRandomItem(2, EBoxSize.Small);
             gameRoom.map.rootableObjects.Add(boxObject);
 
             S_Spawn spawnPacket = new S_Spawn();

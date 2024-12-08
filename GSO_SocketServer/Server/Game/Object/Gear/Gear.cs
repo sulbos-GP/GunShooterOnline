@@ -197,7 +197,7 @@ namespace Server.Game.Object.Gear
                             }
                         }
 
-                        transaction.Commit();
+                        //transaction.Commit();
                     }
                     catch (Exception e)
                     {
@@ -240,7 +240,7 @@ namespace Server.Game.Object.Gear
                             }
 
                         }
-                        transaction.Commit();
+                        //transaction.Commit();
                     }
                     catch (Exception e)
                     {

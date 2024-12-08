@@ -202,7 +202,7 @@ namespace Server.Game
                             }
                         }
 
-                        transaction.Commit();
+                        //transaction.Commit();
                     }
                     catch (Exception e)
                     {
@@ -235,7 +235,7 @@ namespace Server.Game
                             }
                         }
                         
-                        transaction.Commit();
+                        //transaction.Commit();
                     }
                     catch (Exception e)
                     {
