@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using WebCommonLibrary.Enum;
 using WebCommonLibrary.Models.GameDB;
 using WebCommonLibrary.Models.MasterDatabase;
 using static Humanizer.In;
@@ -67,9 +68,10 @@ namespace Server.Game.Object.Item
 
         public void Init(Vector2 pos)
         {
-            storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
 
-            SetRandomItem(3, EBoxSize.Medium);
+            SetAdvancedBox();
+
+            //SetRandomItem(3, EBoxSize.Medium);
 
             CellPos = pos;
         }
@@ -100,6 +102,36 @@ namespace Server.Game.Object.Item
             this.storage.InsertItem(itemObject);
         }
 
+        //기획상 고정 아이템
+        public void SetAdvancedBox()
+        {
+            var (boxX, boxY, boxWeight) = GetBoxSize(EBoxSize.Medium);
+            this.storage.Init(boxX, boxY, boxWeight);
+
+            ItemObject backpack = InstanceItemUnit(GetItemDataWithName("군용더블백"), 1);
+            ObjectManager.Instance.Add(backpack);
+            PlaceItem(backpack);
+
+            ItemObject armor = InstanceItemUnit(GetItemDataWithName("방탄조끼"), 1);
+            ObjectManager.Instance.Add(armor);
+            PlaceItem(armor);
+
+            ItemObject medicine = InstanceItemUnit(GetItemDataWithName("의약품상자"), 2);
+            ObjectManager.Instance.Add(medicine);
+            PlaceItem(medicine);
+
+            ItemObject adrenaline = InstanceItemUnit(GetItemDataWithName("아드레날린"), 2);
+            ObjectManager.Instance.Add(adrenaline);
+            PlaceItem(adrenaline);
+
+            ItemObject gold = InstanceItemUnit(GetItemDataWithName("금괴"), 1);
+            ObjectManager.Instance.Add(gold);
+            PlaceItem(gold);
+
+
+        }
+
+        //랜덤 일반 상자
         public void SetRandomItem(int maxCount, EBoxSize boxSize)
         {
 
@@ -112,28 +144,8 @@ namespace Server.Game.Object.Item
             int count = 0;
             while(count < maxCount)
             {
-                FMasterItemBase data = GetRandomItemData(4, 6);
-
-                DB_ItemUnit item = new DB_ItemUnit()
-                {
-                    storage = new DB_StorageUnit()
-                    {
-                        grid_x = 0,
-                        grid_y = 0,
-                        rotation = 1,
-                        unit_attributes_id = 0
-                    },
-
-                    attributes = new DB_UnitAttributes()
-                    {
-                        item_id = data.item_id,
-                        durability = 0,
-                        unit_storage_id = null,
-                        amount = 1
-                    }
-                };
-                ItemObject newItem = new ItemObject();
-                newItem.Init(null, item);
+                FMasterItemBase data = GetItemDataWithType(EItemType.Spoil);
+                ItemObject newItem = InstanceItemUnit(data, 1);
 
                 if(true == PlaceItem(newItem))
                 {
@@ -184,37 +196,77 @@ namespace Server.Game.Object.Item
             {
                 x = 3;
                 y = 4;
-                weight = 10;
+                weight = 15;
             }
             else if(size == EBoxSize.Medium)
             {
                 x = 5;
                 y = 5;
-                weight = 15;
+                weight = 20;
             }
             else if(size == EBoxSize.Large)
             {
                 x = 5;
                 y = 7;
-                weight = 20;
+                weight = 40;
             }
 
             return (x, y, weight);
         }
 
-        private FMasterItemBase GetRandomItemData(int min, int max)
+        private FMasterItemBase GetRandomItemDataWithTypes(EItemType min, EItemType max)
         {
             Random rand = new Random();
-            int randomRange = 100 * rand.Next(min, max);
+            int range = rand.Next((int)min, (int)max);
 
-            var rangeItems = DatabaseHandler.Context.MasterItemBase
-                .Where(item => item.Value.item_id >= randomRange && item.Value.item_id < randomRange + 100)
+            return GetItemDataWithType((EItemType)range);
+        }
+
+        private FMasterItemBase GetItemDataWithType(EItemType type)
+        {
+            Random rand = new Random();
+            int range = 100 * (int)type;
+
+            var items = DatabaseHandler.Context.MasterItemBase
+                .Where(item => item.Value.item_id >= range && item.Value.item_id < range + 100)
                 .ToDictionary();
 
-            int item_id = rand.Next(rangeItems.Keys.Min(), rangeItems.Keys.Max());
+            int item_id = rand.Next(items.Keys.Min(), items.Keys.Max());
             FMasterItemBase data = DatabaseHandler.Context.MasterItemBase.Find(item_id);
 
             return data;
+        }
+
+        private ItemObject InstanceItemUnit(FMasterItemBase data, int amount)
+        {
+            DB_ItemUnit item = new DB_ItemUnit()
+            {
+                storage = new DB_StorageUnit()
+                {
+                    grid_x = 0,
+                    grid_y = 0,
+                    rotation = 1,
+                    unit_attributes_id = 0
+                },
+
+                attributes = new DB_UnitAttributes()
+                {
+                    item_id = data.item_id,
+                    durability = 0,
+                    unit_storage_id = null,
+                    amount = amount
+                }
+            };
+
+            ItemObject newItem = new ItemObject();
+            newItem.Init(null, item);
+
+            return newItem;
+        }
+
+        private FMasterItemBase GetItemDataWithName(string name)
+        {
+            return DatabaseHandler.Context.MasterItemBase.FirstOrDefault(item => item.Value.name == name).Value;
         }
 
     }
