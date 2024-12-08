@@ -11,7 +11,7 @@ namespace Server.Game
 {
     public class Bullet
     {
-        private BulletStat _bulletStat;
+        //private BulletStat _bulletStat;
 
         //Gun에서 생성할때 업데이트
         public int _shooterId;
@@ -20,7 +20,7 @@ namespace Server.Game
         public Vector3 _dir;
 
         //발사된 위치
-        private Vector3 _startPos;
+        //private Vector3 _startPos;
 
        /* private void Awake()
         {

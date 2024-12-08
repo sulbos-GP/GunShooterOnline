@@ -496,14 +496,14 @@ internal class PacketHandler
     //나중에 서버의 인벤토리 방식을 바꿔 변경 시 아이템 오브젝트의 아이디가 바뀌는 현상이 제거되면 없앨 예정
     private static void ChangeItemObjectId(ItemObject targetItem, int newId)
     {
-        int id = targetItem.itemData.objectId;
-        InventoryController.instantItemDic.Remove(targetItem.itemData.objectId);
-        targetItem.itemData.objectId = newId;
-        if (!InventoryController.instantItemDic.ContainsKey(targetItem.itemData.objectId))
-        {
-            InventoryController.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
-        }
-        Managers.SystemLog.Message($"change ObjectId : OldId = {id} NewId = {newId}");
+        //int id = targetItem.itemData.objectId;
+        //InventoryController.instantItemDic.Remove(targetItem.itemData.objectId);
+        //targetItem.itemData.objectId = newId;
+        //if (!InventoryController.instantItemDic.ContainsKey(targetItem.itemData.objectId))
+        //{
+        //    InventoryController.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
+        //}
+        //Managers.SystemLog.Message($"change ObjectId : OldId = {id} NewId = {newId}");
     }
 
     private static void IsGearSlotOrGrid(int objectId, ref EquipSlotBase equipSlot, ref GridObject gridObject)

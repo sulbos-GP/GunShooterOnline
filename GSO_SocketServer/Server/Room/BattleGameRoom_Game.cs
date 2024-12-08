@@ -196,7 +196,7 @@ namespace Server
             player.Session.Send(packet);
         }
 
-        internal async void MergeItemHandler(Player player, int sourceObjectId, int destinationObjectId, int mergedObjectId, int combinedObjectId, int mergeNumber)
+        internal void MergeItemHandler(Player player, int sourceObjectId, int destinationObjectId, int mergedObjectId, int combinedObjectId, int mergeNumber)
         {
             S_MergeItem packet = new S_MergeItem();
             packet.SourceObjectId = sourceObjectId;
@@ -256,7 +256,6 @@ namespace Server
                     maxAmount = sourceStorage.CheackMaxAmount(mergedlItem, mergeNumber);
                 }
 
-                ItemObject tempItem = new ItemObject(combinedItem);
                 int lessAmount = destinationStorage.DecreaseAmount(combinedItem, maxAmount);
                 int moreAmount = sourceStorage.IncreaseAmount(mergedlItem, maxAmount);
 
@@ -285,85 +284,90 @@ namespace Server
                     }
                 }
 
+                packet.IsSuccess = true;
+                packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
+                player.Session.Send(packet);
+
                 //DB
-                using (var database = DatabaseHandler.GameDB)
-                {
-                    using (var transaction = database.GetConnection().BeginTransaction())
-                    {
-                        try
-                        {
-                            if (IsInventory(sourceObjectId))
-                            {
-                                Inventory inventory = player.inventory;
-                                await inventory.UpdateItemAttributes(mergedlItem, database, transaction);
-                            }
-                            else if (IsGear(sourceObjectId))
-                            {
-                                Gear gear = player.gear;
-                                await gear.UpdateItemAttributes(mergedlItem, database, transaction);
-                            }
+                //using (var database = DatabaseHandler.GameDB)
+                //{
+                //    using (var transaction = database.GetConnection().BeginTransaction())
+                //    {
+                //        try
+                //        {
+                //            if (IsInventory(sourceObjectId))
+                //            {
+                //                Inventory inventory = player.inventory;
+                //                await inventory.UpdateItemAttributes(mergedlItem, database, transaction);
+                //            }
+                //            else if (IsGear(sourceObjectId))
+                //            {
+                //                Gear gear = player.gear;
+                //                await gear.UpdateItemAttributes(mergedlItem, database, transaction);
+                //            }
 
-                            if (IsInventory(destinationObjectId))
-                            {
-                                Inventory inventory = player.inventory;
-                                if (combinedItem.Amount > 0)
-                                {
-                                    await inventory.UpdateItemAttributes(combinedItem, database, transaction);
-                                }
-                                else
-                                {
-                                    await inventory.DeleteItem(combinedItem, database, transaction);
-                                }
-                            }
-                            else if (IsGear(destinationObjectId))
-                            {
-                                Gear gear = player.gear;
-                                if (combinedItem.Amount > 0)
-                                {
-                                    await gear.UpdateItemAttributes(combinedItem, database, transaction);
-                                }
-                                else
-                                {
-                                    await gear.DeleteGear((EGearPart)destinationObjectId, combinedItem, database, transaction);
-                                }
-                            }
+                //            if (IsInventory(destinationObjectId))
+                //            {
+                //                Inventory inventory = player.inventory;
+                //                if (combinedItem.Amount > 0)
+                //                {
+                //                    await inventory.UpdateItemAttributes(combinedItem, database, transaction);
+                //                }
+                //                else
+                //                {
+                //                    await inventory.DeleteItem(combinedItem, database, transaction);
+                //                }
+                //            }
+                //            else if (IsGear(destinationObjectId))
+                //            {
+                //                Gear gear = player.gear;
+                //                if (combinedItem.Amount > 0)
+                //                {
+                //                    await gear.UpdateItemAttributes(combinedItem, database, transaction);
+                //                }
+                //                else
+                //                {
+                //                    await gear.DeleteGear((EGearPart)destinationObjectId, combinedItem, database, transaction);
+                //                }
+                //            }
 
-                            transaction.Commit();
+                //            transaction.Commit();
 
-                            packet.IsSuccess = true;
-                            packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
-                            packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
-                            player.Session.Send(packet);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"[MergeItem] : {e.Message.ToString()}");
-                            transaction.Rollback();
+                //            packet.IsSuccess = true;
+                //            packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                //            packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
+                //            player.Session.Send(packet);
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            Console.WriteLine($"[MergeItem] : {e.Message.ToString()}");
+                //            transaction.Rollback();
 
-                            if (lessAmount == 0)
-                            {
-                                sourceStorage.InsertItem(tempItem);
+                //            if (lessAmount == 0)
+                //            {
+                //                sourceStorage.InsertItem(tempItem);
 
-                                packet.CombinedItem = tempItem.ConvertItemInfo(player.Id);
-                            }
-                            else
-                            {
-                                destinationStorage.DecreaseAmount(mergedlItem, maxAmount);
-                                sourceStorage.IncreaseAmount(combinedItem, lessAmount);
+                //                packet.CombinedItem = tempItem.ConvertItemInfo(player.Id);
+                //            }
+                //            else
+                //            {
+                //                destinationStorage.DecreaseAmount(mergedlItem, maxAmount);
+                //                sourceStorage.IncreaseAmount(combinedItem, lessAmount);
 
-                                packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
-                            }
+                //                packet.CombinedItem = combinedItem.ConvertItemInfo(player.Id);
+                //            }
 
-                            packet.IsSuccess = false;
-                            packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
-                            player.Session.Send(packet);
-                        }
-                    }
-                }
+                //            packet.IsSuccess = false;
+                //            packet.MergedItem = mergedlItem.ConvertItemInfo(player.Id);
+                //            player.Session.Send(packet);
+                //        }
+                //    }
+                //}
             }
         }
 
-        internal async void DevideItemHandler(Player player, int sourceObjectId, int destinationObjectId, int sourceItemId, int destinationGridX, int destinationGridY, int destinationRotation, int devideNumber)
+        internal void DevideItemHandler(Player player, int sourceObjectId, int destinationObjectId, int sourceItemId, int destinationGridX, int destinationGridY, int destinationRotation, int devideNumber)
         {
 
             S_DevideItem packet = new S_DevideItem();
@@ -391,8 +395,6 @@ namespace Server
             }
 
             {
-                ItemObject tempItem = new ItemObject(sourceItem);
-
                 if (false == sourceStorage.IsHaveAmount(sourceItem, devideNumber))
                 {
                     packet.IsSuccess = false;
@@ -421,13 +423,14 @@ namespace Server
                 };
                 devideUnit.attributes.amount = devideNumber;
 
-                ItemObject devideItem = new ItemObject(player.Id, devideUnit);
+                ItemObject devideItem = ObjectManager.Instance.Add<ItemObject>();
+                devideItem.Init(player, devideUnit);
 
                 //SourcelItem의 수량을 DevideNumber만큼 감소
                 int lessAmount = sourceStorage.DecreaseAmount(sourceItem, devideNumber);
 
                 //미리 나눠진 아이템의 공간이 확보되어 있는지 확인한다
-                if (EStorageError.None != destinationStorage.InsertItem(devideItem))
+                if (false == destinationStorage.InsertItem(devideItem))
                 {
 
                     sourceStorage.IncreaseAmount(sourceItem, devideNumber);
@@ -454,6 +457,7 @@ namespace Server
                     {
                         //나눠진 아이템을 삭제한다
                         destinationStorage.DeleteItem(devideItem);
+                        ObjectManager.Instance.Remove(devideItem.Id);
 
                         //CombinedItem의 수량 감소에 성공했을 테니까 기존에 정보로 되돌려준다
                         sourceItem.Amount = oldSourceItemInfo.Amount;
@@ -463,79 +467,88 @@ namespace Server
                         player.Session.Send(packet);
                         return;
                     }
-                }
-
-                using (var database = DatabaseHandler.GameDB)
-                {
-                    using (var transaction = database.GetConnection().BeginTransaction())
+                    else
                     {
-                        try
-                        {
-                            if (IsInventory(sourceObjectId))
-                            {
-                                Inventory inventory = player.inventory;
-                                if (sourceItem.Amount > 0)
-                                {
-                                    await inventory.UpdateItemAttributes(sourceItem, database, transaction);
-                                }
-                                else
-                                {
-                                    await inventory.DeleteItem(sourceItem, database, transaction);
-                                }
-                            }
-                            else if (IsGear(sourceObjectId))
-                            {
-                                Gear gear = player.gear;
-                                if (sourceItem.Amount > 0)
-                                {
-                                    await gear.UpdateItemAttributes(sourceItem, database, transaction);
-                                }
-                                else
-                                {
-                                    await gear.DeleteGear((EGearPart)sourceObjectId, sourceItem, database, transaction);
-                                }
-                            }
-
-                            if (IsInventory(destinationObjectId))
-                            {
-                                Inventory inventory = player.inventory;
-                                await inventory.InsertItem(devideItem, database, transaction);
-                            }
-                            else if (IsGear(destinationObjectId))
-                            {
-                                Gear gear = player.gear;
-                                await gear.InsertGear((EGearPart)destinationObjectId, devideItem, database, transaction);
-                            }
-
-                            transaction.Commit();
-
-                            packet.IsSuccess = true;
-                            packet.SourceItem = sourceItem.ConvertItemInfo(player.Id);
-                            packet.DestinationItem = devideItem.ConvertItemInfo(player.Id);
-                            player.Session.Send(packet);
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"[DevideItem] : {e.Message.ToString()}");
-                            transaction.Rollback();
-
-                            if (lessAmount == 0)
-                            {
-                                destinationStorage.DeleteItem(devideItem);
-                                sourceStorage.InsertItem(tempItem);
-                            }
-
-                            packet.IsSuccess = false;
-                            packet.SourceItem = oldSourceItemInfo;                          //클라이언트에 남아있는 기존 아이템
-                            packet.DestinationItem = tempItem.ConvertItemInfo(player.Id);   //서버에서 다시 생성한 새로운 아이템
-                            player.Session.Send(packet);
-                        }
+                        ObjectManager.Instance.Remove(sourceItem.Id);
                     }
                 }
+
+                packet.IsSuccess = true;
+                packet.SourceItem = sourceItem.ConvertItemInfo(player.Id);
+                packet.DestinationItem = devideItem.ConvertItemInfo(player.Id);
+                player.Session.Send(packet);
+
+                //using (var database = DatabaseHandler.GameDB)
+                //{
+                //    using (var transaction = database.GetConnection().BeginTransaction())
+                //    {
+                //        try
+                //        {
+                //            if (IsInventory(sourceObjectId))
+                //            {
+                //                Inventory inventory = player.inventory;
+                //                if (sourceItem.Amount > 0)
+                //                {
+                //                    await inventory.UpdateItemAttributes(sourceItem, database, transaction);
+                //                }
+                //                else
+                //                {
+                //                    await inventory.DeleteItem(sourceItem, database, transaction);
+                //                }
+                //            }
+                //            else if (IsGear(sourceObjectId))
+                //            {
+                //                Gear gear = player.gear;
+                //                if (sourceItem.Amount > 0)
+                //                {
+                //                    await gear.UpdateItemAttributes(sourceItem, database, transaction);
+                //                }
+                //                else
+                //                {
+                //                    await gear.DeleteGear((EGearPart)sourceObjectId, sourceItem, database, transaction);
+                //                }
+                //            }
+
+                //            if (IsInventory(destinationObjectId))
+                //            {
+                //                Inventory inventory = player.inventory;
+                //                await inventory.InsertItem(devideItem, database, transaction);
+                //            }
+                //            else if (IsGear(destinationObjectId))
+                //            {
+                //                Gear gear = player.gear;
+                //                await gear.InsertGear((EGearPart)destinationObjectId, devideItem, database, transaction);
+                //            }
+
+                //            transaction.Commit();
+
+                //            packet.IsSuccess = true;
+                //            packet.SourceItem = sourceItem.ConvertItemInfo(player.Id);
+                //            packet.DestinationItem = devideItem.ConvertItemInfo(player.Id);
+                //            player.Session.Send(packet);
+                //        }
+                //        catch (Exception e)
+                //        {
+                //            Console.WriteLine($"[DevideItem] : {e.Message.ToString()}");
+                //            transaction.Rollback();
+
+                //            if (lessAmount == 0)
+                //            {
+                //                destinationStorage.DeleteItem(devideItem);
+                //                sourceStorage.InsertItem(tempItem);
+                //            }
+
+                //            packet.IsSuccess = false;
+                //            packet.SourceItem = oldSourceItemInfo;                          //클라이언트에 남아있는 기존 아이템
+                //            packet.DestinationItem = tempItem.ConvertItemInfo(player.Id);   //서버에서 다시 생성한 새로운 아이템
+                //            player.Session.Send(packet);
+                //        }
+                //    }
+                //}
             }
         }
 
-        internal async void MoveItemHandler(Player player, int sourceObjectId, int destinationObjectId, int sourceMoveItemId, int destinationGridX, int destinationGridY, int destinationRotation)
+        internal void MoveItemHandler(Player player, int sourceObjectId, int destinationObjectId, int sourceMoveItemId, int destinationGridX, int destinationGridY, int destinationRotation)
         {
 
             S_MoveItem packet = new S_MoveItem();
@@ -569,206 +582,180 @@ namespace Server
                 packet.SourceMoveItem = oldSourceMoveItemInfo;
                 packet.DestinationMoveItem = oldSourceMoveItemInfo;
                 player.Session.Send(packet);
+                return;
             }
 
-            DB_ItemUnit moveUnit = new DB_ItemUnit()
-            {
-                storage = new DB_StorageUnit()
-                {
-                    grid_x = destinationGridX,
-                    grid_y = destinationGridY,
-                    rotation = destinationRotation,
-                    unit_attributes_id = 0
-                },
-                attributes = sourceMovelItem.Attributes,
-            };
-            ItemObject moveItem = new ItemObject(player.Id, moveUnit);
+            sourceMovelItem.X = destinationGridX;
+            sourceMovelItem.Y = destinationGridY;
+            sourceMovelItem.Rotate = destinationRotation;
 
-            EStorageError isInsert = destinationStorage.InsertItem(moveItem);
-            if (EStorageError.None != isInsert)
+            bool isPlacement = destinationStorage.InsertItem(sourceMovelItem);
+            if(false == isPlacement)
             {
+
                 sourceStorage.InsertItem(sourceMovelItem);
 
                 packet.IsSuccess = false;
                 packet.SourceMoveItem = oldSourceMoveItemInfo;
-                packet.DestinationMoveItem = sourceMovelItem.ConvertItemInfo(player.Id);
+                packet.DestinationMoveItem = oldSourceMoveItemInfo;
                 player.Session.Send(packet);
+                return;
             }
 
-            using (var database = DatabaseHandler.GameDB)
+            if (destinationObjectId == (int)EGearPart.Backpack)
             {
-                using (var transaction = database.GetConnection().BeginTransaction())
-                {
-                    try
-                    {
-                        if (IsInventory(sourceObjectId))
-                        {
-                            Inventory inventory = player.inventory;
-                            isDelete = await inventory.DeleteItem(sourceMovelItem, database, transaction);
-                        }
-                        else if (IsGear(sourceObjectId))
-                        {
-                            Gear gear = player.gear;
-                            isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, sourceMovelItem, database, transaction);
-                        }
-
-                        if (IsInventory(destinationObjectId))
-                        {
-                            Inventory inventory = player.inventory;
-                            await inventory.InsertItem(moveItem, database, transaction);
-                        }
-                        else if (IsGear(destinationObjectId))
-                        {
-                            Gear gear = player.gear;
-                            await gear.InsertGear((EGearPart)destinationObjectId, moveItem, database, transaction);
-                        }
-
-                        transaction.Commit();
-
-                        packet.IsSuccess = true;
-                        packet.SourceMoveItem = oldSourceMoveItemInfo;
-                        packet.DestinationMoveItem = moveItem.ConvertItemInfo(player.Id);
-                        player.Session.Send(packet);
-                    }
-                    catch (Exception e)
-                    {
-                        Console.WriteLine($"[MoveItem] : {e.Message.ToString()}");
-                        transaction.Rollback();
-
-                        destinationStorage.DeleteItem(moveItem);
-                        sourceStorage.InsertItem(sourceMovelItem);
-
-                        packet.IsSuccess = false;
-                        packet.SourceMoveItem = oldSourceMoveItemInfo;
-                        packet.DestinationMoveItem = sourceMovelItem.ConvertItemInfo(player.Id);
-                        player.Session.Send(packet);
-                    }
-                }
+                player.inventory.InitInventory();
             }
+
+            packet.IsSuccess = true;
+            packet.SourceMoveItem = oldSourceMoveItemInfo;
+            packet.DestinationMoveItem = sourceMovelItem.ConvertItemInfo(player.Id);
+            player.Session.Send(packet);
+
+            //using (var database = DatabaseHandler.GameDB)
+            //{
+            //    using (var transaction = database.GetConnection().BeginTransaction())
+            //    {
+            //        try
+            //        {
+            //            if (IsInventory(sourceObjectId))
+            //            {
+            //                Inventory inventory = player.inventory;
+            //                isDelete = await inventory.DeleteItem(sourceMovelItem, database, transaction);
+            //            }
+            //            else if (IsGear(sourceObjectId))
+            //            {
+            //                Gear gear = player.gear;
+            //                isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, sourceMovelItem, database, transaction);
+            //            }
+
+            //            if (IsInventory(destinationObjectId))
+            //            {
+            //                Inventory inventory = player.inventory;
+            //                await inventory.InsertItem(moveItem, database, transaction);
+            //            }
+            //            else if (IsGear(destinationObjectId))
+            //            {
+            //                Gear gear = player.gear;
+            //                await gear.InsertGear((EGearPart)destinationObjectId, moveItem, database, transaction);
+            //            }
+
+            //            transaction.Commit();
+
+            //            packet.IsSuccess = true;
+            //            packet.SourceMoveItem = oldSourceMoveItemInfo;
+            //            packet.DestinationMoveItem = moveItem.ConvertItemInfo(player.Id);
+            //            player.Session.Send(packet);
+            //        }
+            //        catch (Exception e)
+            //        {
+            //            Console.WriteLine($"[MoveItem] : {e.Message.ToString()}");
+            //            transaction.Rollback();
+
+            //            destinationStorage.DeleteItem(moveItem);
+            //            sourceStorage.InsertItem(sourceMovelItem);
+
+            //            packet.IsSuccess = false;
+            //            packet.SourceMoveItem = oldSourceMoveItemInfo;
+            //            packet.DestinationMoveItem = sourceMovelItem.ConvertItemInfo(player.Id);
+            //            player.Session.Send(packet);
+            //        }
+            //    }
+            //}
 
         }
 
-        /*  internal async Task<ItemObject> DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
-          {
-              S_DeleteItem packet = new S_DeleteItem();
-
-              ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
-              PS_ItemInfo deleteInfo = deleteItem.ConvertItemInfo(player.Id);
-
-              Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
-              if (storage == null)
-              {
-                  packet.IsSuccess = false;
-                  packet.DeleteItem = deleteInfo;
-                  packet.SourceObjectId = sourceObjectId;
-                  player.Session.Send(packet);
-                  return null;
-              }
-
-              bool isDelete = storage.DeleteItem(deleteItem);
-              if(false == isDelete)
-              {
-                  packet.IsSuccess = false;
-                  packet.DeleteItem = deleteInfo;
-                  packet.SourceObjectId = sourceObjectId;
-                  player.Session.Send(packet);
-                  return null;
-              }
-
-              return deleteItem;
-
-              using (var database = DatabaseHandler.GameDB)
-              {
-                  try
-                  {
-
-                      if (IsInventory(sourceObjectId))
-                      {
-                          Inventory inventory = player.inventory;
-                          isDelete = await inventory.DeleteItem(deleteItem, database);
-                      }
-                      else if (IsGear(sourceObjectId))
-                      {
-                          Gear gear = player.gear;
-                          isDelete = await gear.DeleteGear((EGearPart)sourceObjectId, deleteItem, database);
-                      }
-
-                      packet.IsSuccess = true;
-                      packet.SourceObjectId = sourceObjectId;
-                      packet.DeleteItem = deleteInfo;
-                      player.Session.Send(packet);
-                  }
-                  catch (Exception e)
-                  {
-                      Console.WriteLine($"[DeleteItem] : {e.Message.ToString()}");
-
-                      packet.IsSuccess = false;
-                      packet.DeleteItem = deleteInfo;
-                      packet.SourceObjectId = sourceObjectId;
-                      player.Session.Send(packet);
-                  }
-              }
-
-          }*/
-
-        //메모리에서 아이템 지우기
-        internal ItemObject FindAndDeleteItem(Player player, int sourceObjectId, int deleteItemId, out PS_ItemInfo deleteInfo)
+        internal void DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
         {
+            S_DeleteItem packet = new S_DeleteItem();
+
             ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
-            deleteInfo = deleteItem.ConvertItemInfo(player.Id);
+            PS_ItemInfo deleteInfo = deleteItem.ConvertItemInfo(player.Id);
 
             Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
             if (storage == null)
             {
-                return null;
+                packet.IsSuccess = false;
+                packet.DeleteItem = deleteInfo;
+                packet.SourceObjectId = sourceObjectId;
+                player.Session.Send(packet);
+                return;
             }
 
-            bool isDeleted = storage.DeleteItem(deleteItem);
-            if (!isDeleted)
+            bool isDelete = storage.DeleteItem(deleteItem);
+            if (false == isDelete)
             {
-                return null;
+                packet.IsSuccess = false;
+                packet.DeleteItem = deleteInfo;
+                packet.SourceObjectId = sourceObjectId;
+                player.Session.Send(packet);
+                return;
             }
 
-            return deleteItem;
+            packet.IsSuccess = true;
+            packet.SourceObjectId = sourceObjectId;
+            packet.DeleteItem = deleteInfo;
+            player.Session.Send(packet);
         }
 
-        //패킷 전송 및 데이터베이스 작업
-        internal async Task HandleDeleteItemResult(Player player, int sourceObjectId, ItemObject deleteItem, PS_ItemInfo deleteInfo)
-        {
-            S_DeleteItem packet = new S_DeleteItem();
-            using (var database = DatabaseHandler.GameDB)
-            {
-                try
-                {
-                    bool isDeleted = false;
+        //메모리에서 아이템 지우기
+        //internal ItemObject FindAndDeleteItem(Player player, int sourceObjectId, int deleteItemId, out PS_ItemInfo deleteInfo)
+        //{
+        //    ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
+        //    deleteInfo = deleteItem.ConvertItemInfo(player.Id);
 
-                    if (IsInventory(sourceObjectId))
-                    {
-                        Inventory inventory = player.inventory;
-                        isDeleted = await inventory.DeleteItem(deleteItem, database);
-                    }
-                    else if (IsGear(sourceObjectId))
-                    {
-                        Gear gear = player.gear;
-                        isDeleted = await gear.DeleteGear((EGearPart)sourceObjectId, deleteItem, database);
-                    }
+        //    Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
+        //    if (storage == null)
+        //    {
+        //        return null;
+        //    }
 
-                    packet.IsSuccess = isDeleted;
-                    packet.SourceObjectId = sourceObjectId;
-                    packet.DeleteItem = deleteInfo;
-                    player.Session.Send(packet);
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine($"[DeleteItem] : {e.Message}");
+        //    bool isDeleted = storage.DeleteItem(deleteItem);
+        //    if (!isDeleted)
+        //    {
+        //        return null;
+        //    }
 
-                    packet.IsSuccess = false;
-                    packet.DeleteItem = deleteInfo;
-                    packet.SourceObjectId = sourceObjectId;
-                    player.Session.Send(packet);
-                }
-            }
-        }
+        //    return deleteItem;
+        //}
+
+        ////패킷 전송 및 데이터베이스 작업
+        //internal async Task HandleDeleteItemResult(Player player, int sourceObjectId, ItemObject deleteItem, PS_ItemInfo deleteInfo)
+        //{
+        //    S_DeleteItem packet = new S_DeleteItem();
+        //    using (var database = DatabaseHandler.GameDB)
+        //    {
+        //        try
+        //        {
+        //            bool isDeleted = false;
+
+        //            if (IsInventory(sourceObjectId))
+        //            {
+        //                Inventory inventory = player.inventory;
+        //                isDeleted = await inventory.DeleteItem(deleteItem, database);
+        //            }
+        //            else if (IsGear(sourceObjectId))
+        //            {
+        //                Gear gear = player.gear;
+        //                isDeleted = await gear.DeleteGear((EGearPart)sourceObjectId, deleteItem, database);
+        //            }
+
+        //            packet.IsSuccess = isDeleted;
+        //            packet.SourceObjectId = sourceObjectId;
+        //            packet.DeleteItem = deleteInfo;
+        //            player.Session.Send(packet);
+        //        }
+        //        catch (Exception e)
+        //        {
+        //            Console.WriteLine($"[DeleteItem] : {e.Message}");
+
+        //            packet.IsSuccess = false;
+        //            packet.DeleteItem = deleteInfo;
+        //            packet.SourceObjectId = sourceObjectId;
+        //            player.Session.Send(packet);
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 
@@ -776,27 +763,27 @@ namespace Server
         /// <param name="player"></param>
         /// <param name="sourceObjectId">Player is 0</param>
         /// <param name="deleteItemId"></param>
-        internal async void DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
-        {
-            PS_ItemInfo deleteInfo;
-            ItemObject deleteItem = FindAndDeleteItem(player, sourceObjectId, deleteItemId, out deleteInfo);
+        //internal async void DeleteItemHandler(Player player, int sourceObjectId, int deleteItemId)
+        //{
+        //    PS_ItemInfo deleteInfo;
+        //    ItemObject deleteItem = FindAndDeleteItem(player, sourceObjectId, deleteItemId, out deleteInfo);
 
-            if (deleteItem == null)
-            {
-                // 삭제 실패 시 패킷 전송
-                S_DeleteItem packet = new S_DeleteItem
-                {
-                    IsSuccess = false,
-                    DeleteItem = deleteInfo,
-                    SourceObjectId = sourceObjectId
-                };
-                player.Session.Send(packet);
-            }
+        //    if (deleteItem == null)
+        //    {
+        //        // 삭제 실패 시 패킷 전송
+        //        S_DeleteItem packet = new S_DeleteItem
+        //        {
+        //            IsSuccess = false,
+        //            DeleteItem = deleteInfo,
+        //            SourceObjectId = sourceObjectId
+        //        };
+        //        player.Session.Send(packet);
+        //    }
 
-            // 삭제 성공 시 데이터베이스 처리 및 결과 전송
-            await HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
+        //    // 삭제 성공 시 데이터베이스 처리 및 결과 전송
+        //    await HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
 
-        }
+        //}
 
 
 

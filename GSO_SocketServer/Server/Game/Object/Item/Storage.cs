@@ -131,30 +131,23 @@ namespace Server.Game
         /// <summary>
         /// 아이템 삽입
         /// </summary>
-        public EStorageError InsertItem(ItemObject item)
+        public bool InsertItem(ItemObject item)
         {
-            //자리가 겹치는지 확인
-            List<List<int>> rollback = InitRollBack();
-            if (false == StorageCheack(item, true))
+            double weight = item.Weight * item.Amount;
+            if (MaxWeight < CurWeight + weight)
             {
-                OverWriteToRollBackGrid(rollback);
-                return EStorageError.InsertFailed_DuplicateItem;
+                return false;
             }
 
-            double weight = item.Weight * item.Amount;
-            if(MaxWeight < CurWeight + weight)
+            if (false == this.StorageCheack(item, true))
             {
-                OverWriteToRollBackGrid(rollback);
-                return EStorageError.InsertFailed_WeightLimit;
+                return false;
             }
 
             CurWeight += weight;
             items.Add(item);
-            item.CreateItem();
 
-            //PrintInvenContents();
-
-            return EStorageError.None;
+            return true;
         }
 
         /// <summary>
@@ -162,31 +155,19 @@ namespace Server.Game
         /// </summary>
         public bool DeleteItem(ItemObject item)
         {
-            //자리가 겹치는지 확인
-            List<List<int>> rollback = InitRollBack();
-            if (false == StorageCheack(item, false))
-            {
-                OverWriteToRollBackGrid(rollback);
-                return false;
-            }
-
             double weight = item.Weight * item.Amount;
             if (0 > CurWeight - weight)
             {
-                OverWriteToRollBackGrid(rollback);
                 return false;
             }
 
-            if (false == items.Remove(item))
+            if (false == this.StorageCheack(item, false))
             {
-                OverWriteToRollBackGrid(rollback);
                 return false;
             }
-
             CurWeight -= weight;
-            item.DestroyItem();
+            items.Remove(item);
 
-            //PrintInvenContents();
             return true;
         }
 
@@ -260,16 +241,6 @@ namespace Server.Game
             }
         }
 
-        public List<List<int>> InitRollBack()
-        {
-            List<List<int>> rollback = new List<List<int>>();
-            foreach (var row in grid)
-            {
-                rollback.Add(new List<int>(row));
-            }
-            return rollback;
-        }
-
         public void OverWriteToRollBackGrid(List<List<int>> rollback)
         {
             grid.Clear();
@@ -291,7 +262,7 @@ namespace Server.Game
             for (int index = 0; index < items.Count; ++index)
             {
                 ItemObject item = items[index];
-                if (item.ItemId == target.ItemId ) // 지승현 : 일단 체크 안함 && item.Rotate == target.Rotate && item.X == target.X && item.Y == target.Y)
+                if (item.Id == target.Id)
                 {
                     return index;
                 }
@@ -311,20 +282,28 @@ namespace Server.Game
                 return false;
             }
 
+            List<List<int>> tempGrid = new List<List<int>>();
+            foreach (var row in grid)
+            {
+                tempGrid.Add(new List<int>(row));
+            }
+
             for (int i = y; i < y + height; ++i)
             {
                 for (int j = x; j < x + width; ++j)
                 {
                     int value = isPush ? 1 : -1;
-                    grid[i][j] += value;
+                    tempGrid[i][j] += value;
 
-                    if(grid[i][j] == -1 || grid[i][j] == 2)
+                    if(tempGrid[i][j] == -1 || tempGrid[i][j] == 2)
                     {
                         return false;
                     }
 
                 }
             }
+
+            grid = tempGrid;
             return true;
         }
 
@@ -356,7 +335,7 @@ namespace Server.Game
         {
             foreach (ItemObject item in items)
             {
-                item.DestroyItem();
+                ObjectManager.Instance.Remove(item.Id);
             }
             items.Clear();
         }

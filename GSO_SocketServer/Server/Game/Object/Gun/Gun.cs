@@ -272,69 +272,48 @@ namespace Server.Game
                 }
 
                 //DB
-                using (var database = DatabaseHandler.GameDB)
+
+
+                int target = GunData.reload_round - CurAmmo; //최대 장전 할 수 있는 총알
+                int next; //내가 장전 가능한 총알 개수 
+
+                if (deepAmmo.Amount >= target)       //넉넉함
                 {
-                    using (var transaction = database.GetConnection().BeginTransaction())
+                    next = target;
+                    deepAmmo.Amount = deepAmmo.Amount - next;
+
+                    //await ownerPlayer.inventory.UpdateItem(originalAmmo, deepAmmo, database, transaction);
+                }
+                else                            //인벤에 있는 총알이 부족함
+                {
+                    next = deepAmmo.Amount;
+
+                    //await ownerPlayer.inventory.DeleteItem(originalAmmo, database, transaction);
+                    //ownerPlayer.gameRoom.DeleteItemHandler(ownerPlayer, 0, ammo.Id);
+                }
+
+                ownerPlayer.weapon.GetCurrentWeapon().CurAmmo += next;
+
+                int LeftAmount = ownerPlayer.inventory.storage.DecreaseAmount(originalAmmo, next);
+
+                if (LeftAmount == 0)
+                {
+                    bool isDelete = ownerPlayer.inventory.storage.DeleteItem(originalAmmo);
+                    if (false == isDelete)
                     {
-                        try
-                        {
-
-                            int target = GunData.reload_round - CurAmmo; //최대 장전 할 수 있는 총알
-                            int next; //내가 장전 가능한 총알 개수 
-
-                            if (deepAmmo.Amount >= target)       //넉넉함
-                            {
-                                next = target;
-                                deepAmmo.Amount = deepAmmo.Amount - next;
-
-                                await ownerPlayer.inventory.UpdateItem(originalAmmo, deepAmmo, database, transaction);
-                            }
-                            else                            //인벤에 있는 총알이 부족함
-                            {
-                                next = deepAmmo.Amount;
-
-                                await ownerPlayer.inventory.DeleteItem(originalAmmo, database, transaction);
-                                //ownerPlayer.gameRoom.DeleteItemHandler(ownerPlayer, 0, ammo.Id);
-                            }
-
-                            ownerPlayer.weapon.GetCurrentWeapon().CurAmmo += next;
-
-                            int LeftAmount = ownerPlayer.inventory.storage.DecreaseAmount(originalAmmo, next);
-
-                            if (LeftAmount == 0)
-                            {
-                                bool isDelete = ownerPlayer.inventory.storage.DeleteItem(originalAmmo);
-                                if (false == isDelete)
-                                {
-                                    //실패면 ?
-                                }
-                            }
-
-
-                            S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
-                            gunDataUpdate.IsSuccess = true;
-                            gunDataUpdate.GunData = new PS_GearInfo
-                            {
-                                Part = weaponInven.GetCurrentWeaponGearPart(),
-                                Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
-                            };
-                            ownerPlayer.Session.Send(gunDataUpdate);
-
-                            transaction.Commit();
-
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine($"[Ammo Error] : {e.Message.ToString()}");
-                            transaction.Rollback();
-
-                        }
-
-
+                        //실패면 ?
                     }
                 }
 
 
+                S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
+                gunDataUpdate.IsSuccess = true;
+                gunDataUpdate.GunData = new PS_GearInfo
+                {
+                    Part = weaponInven.GetCurrentWeaponGearPart(),
+                    Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
+                };
+                ownerPlayer.Session.Send(gunDataUpdate);
             }
 
 

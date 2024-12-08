@@ -127,7 +127,7 @@ public class MatchmakerHub : ClientHub
     {
         EnqueueDispatch(() =>
         {
-            Managers.SystemLog.Message($"��ġ�� ��ҵǾ����ϴ� {error.ToString()}");
+            Managers.SystemLog.Message($"매칭 참여 실패 {error.ToString()}");
 
             if (matchStateUI == null)
             {
@@ -137,12 +137,12 @@ public class MatchmakerHub : ClientHub
 
             if(error == WebErrorCode.PopPlayersExitSuccess)
             {
-                state.SetStateText("��Ī ��� �Ϸ�");
+                state.SetStateText("매칭 참여 실패");
                 Destroy(matchStateUI);
             }
             else if(error == WebErrorCode.PopPlayersJoinForced)
             {
-                //��Ī�� ����Ϸ��� ������ �̹� ������ �������
+                //
             }
             else
             {
@@ -175,7 +175,7 @@ public class MatchmakerHub : ClientHub
 
         try
         {
-            state.SetStateText("��Ī ���� ��...");
+            state.SetStateText("매칭 요청중...");
             mIsProcessing = true;
 
             ClientCredential credential = Managers.Web.Models.Credential;
@@ -203,7 +203,7 @@ public class MatchmakerHub : ClientHub
         catch (HttpRequestException error)
         {
             mIsProcessing = false;
-            state.SetStateText($"��Ī ���� ���� : {error.Message}");
+            state.SetStateText($"매칭 요청 실패 : {error.Message}");
         }
     }
 
@@ -223,15 +223,15 @@ public class MatchmakerHub : ClientHub
         if (response.error_code == WebErrorCode.None)
         {
 
-            state.SetStateText("��Ī ��û ����");
+            state.SetStateText("매칭 참여 성공");
 
             state.StartTimer();
 
-            state.SetStateText("���� ��Ī ��...");
+            state.SetStateText("매칭 참여중...");
         }
         else
         {
-            state.SetStateText($"��Ī ���� ��û ���� : {response.error_code.ToString()}");
+            state.SetStateText($"매칭 참여 실패 : {response.error_code.ToString()}");
             Destroy(matchStateUI);
         }
     }
@@ -249,7 +249,7 @@ public class MatchmakerHub : ClientHub
 
         try
         {
-            state.SetStateText("��Ī ��� ��...");
+            state.SetStateText("매칭 취소 요청...");
             mIsProcessing = true;
 
             ClientCredential credential = Managers.Web.Models.Credential;
@@ -277,7 +277,7 @@ public class MatchmakerHub : ClientHub
         catch (HttpRequestException error)
         {
             mIsProcessing = false;
-            state.SetStateText($"��Ī ��� ���� : {error.Message}");
+            state.SetStateText($"매칭 취소 실패 : {error.Message}");
         }
     }
 
@@ -296,7 +296,7 @@ public class MatchmakerHub : ClientHub
 
         if (response.error_code == WebErrorCode.None)
         {
-            state.SetStateText("��Ī ��� ��û ����");
+            state.SetStateText("매칭 취소 성공");
             state.StopTiemr();
             Destroy(matchStateUI);
         }

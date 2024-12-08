@@ -78,6 +78,14 @@ namespace Server
 
         public override void Stop()
         {
+
+            //foreach (var player in _playerDic.Values)
+            //{
+            //    player.gear.Save().Wait();
+            //    player.inventory.Save().Wait();
+            //}
+
+
             // 나머지 사람들 전부 쫓아 내기
             IsGameEnd = true;
 
@@ -176,11 +184,14 @@ namespace Server
                         enterPacket.GearInfos.Add(item);
                     }
 
-                   player.inventory = new Inventory(player);
+                    player.inventory = new Inventory(player);
                     foreach (PS_ItemInfo item in player.inventory.storage.GetItems(player.Id))
                     {
                         enterPacket.ItemInfos.Add(item);
                     }
+
+                    player.inventory.Clear().Wait();
+                    player.gear.Clear().Wait();
 
                     player.Quest = new Quests(player);
                     foreach (IQuest quest in player.Quest.QuestList)
@@ -190,7 +201,7 @@ namespace Server
 
                     player.Init();
 
-                    player.inventory.storage.PrintInvenContents();
+                    //player.inventory.storage.PrintInvenContents();
 
                     enterPacket.GameData = new GameDataInfo()
                     {
@@ -444,9 +455,9 @@ namespace Server
 
             //파밍 계산
             {
-                var curInventoryAndGear = player.inventory.GetInventoryObjectIds().Union(player.gear.GetPartObjectIds()).ToList();
-                var oldInventoryAndGear = player.inventory.GetInitInventoryObjectIds().Union(player.gear.GetInitPartObjectIds()).ToList();
-                outcome.farming = curInventoryAndGear.Except(oldInventoryAndGear).Count();
+                //var curInventoryAndGear = player.inventory.GetInventoryObjectIds().Union(player.gear.GetPartObjectIds()).ToList();
+                //var oldInventoryAndGear = player.inventory.GetInitInventoryObjectIds().Union(player.gear.GetInitPartObjectIds()).ToList();
+                //outcome.farming = curInventoryAndGear.Except(oldInventoryAndGear).Count();
             }
 
             //생존 시간 계산
