@@ -74,7 +74,7 @@ CREATE TABLE `master_item_base` (
 
 LOCK TABLES `master_item_base` WRITE;
 /*!40000 ALTER TABLE `master_item_base` DISABLE KEYS */;
-INSERT INTO `master_item_base` VALUES (101,'ITEM_W001','Colt45',2,'Weapone',101,2,2,400,1.2,100,1,'IconW_colt'),(102,'ITEM_W002','Ak47',7,'Weapone',102,4,2,2200,1.8,500,1,'IconW_ak'),(103,'ITEM_W003','Aug',6,'Weapone',103,4,2,2300,1.8,440,1,'IconW_aug'),(201,'ITEM_D001','경찰조끼',3,'Defensive',201,2,3,1100,1.5,550,1,'IconD_police'),(202,'ITEM_D002','방탄조끼',4,'Defensive',202,2,3,1500,1.5,750,1,'IconD_proof'),(203,'ITEM_D003','군용조끼',5,'Defensive',203,2,3,1700,1.5,850,1,'IconD_military'),(300,'ITEM_B000','기본가방',0,'Bag',300,0,0,0,0,0,0,'null'),(301,'ITEM_B001','의약품가방',3,'Bag',301,2,2,500,1.4,250,1,'IconB_medical'),(302,'ITEM_B002','군대가방',3,'Bag',302,2,2,1500,1.4,750,1,'IconB_army'),(303,'ITEM_B003','군용더블백',4,'Bag',303,2,2,2500,1.4,1300,1,'IconB_double'),(401,'ITEM_R001','의약품상자',1,'Recovery',401,1,1,500,0.7,200,1,'IconR_medical'),(402,'ITEM_R002','밴드',0.2,'Recovery',402,1,1,100,0.7,50,64,'IconR_band'),(403,'ITEM_R003','아드레날린',0.2,'Recovery',403,1,1,1000,0.7,600,1,'IconR_adrenaline'),(404,'ITEM_R004','알약',0.2,'Recovery',404,1,1,500,0.7,300,64,'IconR_pill'),(501,'ITEM_E001','5.59mm',0.3,'Bullet',501,1,1,10,0.4,0,64,'IconE_5.59'),(502,'ITEM_E002','7.29mm',0.3,'Bullet',502,1,1,10,0.4,0,64,'IconE_7.29'),(601,'ITEM_S001','타이어휠',10,'Spoil',601,4,4,0,2.2,2000,1,'IconS_spoil'),(602,'ITEM_S002','1.5볼트건전지',2,'Spoil',602,1,2,0,1.2,600,1,'IconS_battery'),(603,'ITEM_S003','밧줄한묶음',6,'Spoil',603,1,3,0,1.3,500,1,'IconS_rope'),(604,'ITEM_S004','은도금톱니바퀴',8,'Spoil',604,3,3,0,1.8,200,1,'IconS_wheel'),(605,'ITEM_S005','금괴',5,'Spoil',605,2,1,0,1.2,2000,1,'IconS_goldbar'),(606,'ITEM_S006','통나무',3,'Spoil',606,2,2,0,1.2,250,1,'IconS_solidwood');
+INSERT INTO `master_item_base` VALUES (101,'ITEM_W001','Colt45',2,'Weapone',101,2,2,400,1.2,100,1,'IconW_colt'),(102,'ITEM_W002','Ak47',7,'Weapone',102,4,2,2200,1.8,500,1,'IconW_ak'),(103,'ITEM_W003','Aug',6,'Weapone',103,4,2,2300,1.8,440,1,'IconW_aug'),(104,'ITEM_W004','DP-79',10,'Weapone',104,4,3,3200,2,850,1,'IconW_dp'),(201,'ITEM_D001','경찰조끼',3,'Defensive',201,2,3,1100,1.5,550,1,'IconD_police'),(202,'ITEM_D002','방탄조끼',4,'Defensive',202,2,3,1500,1.5,750,1,'IconD_proof'),(203,'ITEM_D003','군용조끼',5,'Defensive',203,2,3,1700,1.5,850,1,'IconD_military'),(204,'ITEM_D004','방한조끼',4,'Defensive',204,2,3,1400,1.5,720,1,'IconD_cold'),(300,'ITEM_B000','기본가방',1.5,'Bag',300,1,1,0,0.2,0,0,'IconB_medical'),(301,'ITEM_B001','의약품가방',3,'Bag',301,2,2,500,1.4,250,1,'IconB_medical'),(302,'ITEM_B002','군대가방',3,'Bag',302,2,2,1500,1.4,750,1,'IconB_army'),(303,'ITEM_B003','군용더블백',4,'Bag',303,2,2,2500,1.4,1300,1,'IconB_double'),(304,'ITEM_B004','학원가방',3,'Bag',304,2,2,1800,1.4,900,1,'IconB_academy'),(401,'ITEM_R001','의약품상자',1,'Recovery',401,1,1,500,0.7,200,1,'IconR_medical'),(402,'ITEM_R002','밴드',0.2,'Recovery',402,1,1,100,0.7,50,64,'IconR_band'),(403,'ITEM_R003','아드레날린',0.2,'Recovery',403,1,1,1000,0.7,600,1,'IconR_adrenaline'),(404,'ITEM_R004','알약',0.2,'Recovery',404,1,1,500,0.7,300,64,'IconR_pill'),(501,'ITEM_E001','5.59mm',0.3,'Bullet',501,1,1,10,0.4,0,64,'IconE_5.59'),(502,'ITEM_E002','7.29mm',0.3,'Bullet',502,1,1,10,0.4,0,64,'IconE_7.29'),(601,'ITEM_S001','타이어휠',10,'Spoil',601,4,4,0,2.2,2000,1,'IconS_spoil'),(602,'ITEM_S002','1.5볼트건전지',2,'Spoil',602,1,2,0,1.2,600,1,'IconS_battery'),(603,'ITEM_S003','밧줄한묶음',6,'Spoil',603,1,3,0,1.3,500,1,'IconS_rope'),(604,'ITEM_S004','은도금톱니바퀴',8,'Spoil',604,3,3,0,1.8,200,1,'IconS_wheel'),(605,'ITEM_S005','금괴',5,'Spoil',605,2,1,0,1.2,2000,1,'IconS_goldbar'),(606,'ITEM_S006','통나무',3,'Spoil',606,2,2,0,1.2,250,1,'IconS_solidwood'),(607,'ITEM_S007','헤드셋',2,'Spoil',607,2,2,0,1.2,460,1,'IconS_headset'),(608,'ITEM_S008','핸드폰',1,'Spoil',608,1,2,0,1.2,1200,1,'IconS_phone'),(609,'ITEM_S009','방독면',2,'Spoil',609,2,2,0,1.2,880,1,'IconS_mask'),(610,'ITEM_S010','망원경',2,'Spoil',610,2,2,0,1.2,350,1,'IconS_telescope');
 /*!40000 ALTER TABLE `master_item_base` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,8 +210,9 @@ DROP TABLE IF EXISTS `master_reward_box`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `master_reward_box` (
   `reward_box_id` int(11) NOT NULL DEFAULT 0 COMMENT '보상 박스 아이디',
-  `box_scale_x` int(11) NOT NULL DEFAULT 0 COMMENT '박스 x크기',
-  `box_scale_y` int(11) NOT NULL DEFAULT 0 COMMENT '박스 y크기',
+  `name` varchar(50) CHARACTER SET utf8 NOT NULL DEFAULT 'Box' COMMENT '박스 이름',
+  `scale_x` int(11) NOT NULL DEFAULT 0 COMMENT '박스 x크기',
+  `scale_y` int(11) NOT NULL DEFAULT 0 COMMENT '박스 x크기',
   PRIMARY KEY (`reward_box_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -222,7 +223,7 @@ CREATE TABLE `master_reward_box` (
 
 LOCK TABLES `master_reward_box` WRITE;
 /*!40000 ALTER TABLE `master_reward_box` DISABLE KEYS */;
-INSERT INTO `master_reward_box` VALUES (1,2,2),(2,2,3),(3,1,0),(4,4,2),(5,4,3);
+INSERT INTO `master_reward_box` VALUES (1,'Box',2,2),(2,'Box',2,3),(3,'Box',1,0),(4,'Box',4,2),(5,'Box',4,3);
 /*!40000 ALTER TABLE `master_reward_box` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -345,4 +346,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-29 20:58:34
+-- Dump completed on 2024-12-09  0:08:33
