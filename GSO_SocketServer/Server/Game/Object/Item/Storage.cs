@@ -120,6 +120,58 @@ namespace Server.Game
 
         }
 
+        public void Fit()
+        {
+            int fitX = scale_x;
+            int fitY = scale_y;
+
+            for (int x = 0; x < scale_x; x++)
+            {
+                bool isEmpty = true;
+                for (int y = 0; y < scale_y; y++)
+                {
+                    if (grid[y][x] == 1)
+                    {
+                        isEmpty = false;
+                        break;
+                    }
+                }
+
+                if(isEmpty == true)
+                {
+                    fitX = Math.Min(x, fitX);
+                }
+            }
+
+            for (int y = 0; y < scale_y; y++)
+            {
+                bool isEmpty = true;
+                for (int x = 0; x < scale_x; x++)
+                {
+                    if (grid[y][x] == 1)
+                    {
+                        isEmpty = false;
+                        break;
+                    }
+                }
+
+                if (isEmpty == true)
+                {
+                    fitY = Math.Min(y, fitY);
+                }
+            }
+
+            double weight = 0.0f;
+            foreach(ItemObject item in items)
+            {
+                weight += item.Weight * item.Amount;
+            }
+
+            scale_x = fitX;
+            scale_y = fitY;
+            maxWeight = weight;
+        }
+
         /// <summary>
         /// Storage간 결합
         /// </summary>
@@ -344,14 +396,14 @@ namespace Server.Game
         {
             
             string content = $"[Storage : {items.Count}]\n";
-            content += $"[size ( {grid.Count} x {grid[0].Count} )]\n";
+            content += $"[size ( {scale_y} x {scale_x} )]\n";
             content += $"[weight ( {CurWeight} / {MaxWeight} )]\n";
             content += "{\n";
 
-            for (int i = 0; i < grid.Count; i++)
+            for (int i = 0; i < scale_y; i++)
             {
                 content += "\t";
-                for (int j = 0; j < grid[i].Count; j++)
+                for (int j = 0; j < scale_x; j++)
                 {
                     content += "[" + grid[i][j] + "]";
                 }
