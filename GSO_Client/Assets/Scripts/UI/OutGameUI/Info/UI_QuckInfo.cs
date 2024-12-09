@@ -1,17 +1,23 @@
+using MathNet.Numerics.Distributions;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Ubiety.Dns.Core;
 using UnityEngine;
 using UnityEngine.UI;
 using WebCommonLibrary.DTO.Game;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
+using WebCommonLibrary.Models.Match;
 using static AuthorizeResource;
 using static GameResource;
 using static UnityEngine.UI.CanvasScaler;
 
-public class UI_QuckInfo : MonoBehaviour
+public class UI_QuckInfo : LobbyUI
 {
+    protected override ELobbyUI type => ELobbyUI.QuickInfo;
+
     [SerializeField]
     private Button quickInfoBtn;
 
@@ -21,12 +27,64 @@ public class UI_QuckInfo : MonoBehaviour
     [SerializeField]
     private GameObject quickInfoUI;
 
+    private bool isProcess;
+
     private void Awake()
+    {
+        quickInfoBtn.onClick.AddListener(OnClickQuickInfo);
+        quickResetBtn.onClick.AddListener(OnClickQuickReset);
+    }
+
+    public override void InitUI()
+    {
+        isProcess = false;
+    }
+
+    public override void UpdateUI()
+    {
+        quickResetBtn.gameObject.SetActive(true);
+        quickInfoUI.SetActive(true);
+
+        List<DB_GearUnit> gears = Managers.Web.Models.Gear;
+        if (gears == null)
+        {
+            return;
+        }
+
+        foreach (var unit in gears)
+        {
+            Managers.SystemLog.Message($"Part : {unit.gear.part}");
+        }
+
+        List<DB_ItemUnit> items = Managers.Web.Models.Inventory;
+        if (items == null)
+        {
+            return;
+        }
+
+        foreach (var unit in items)
+        {
+            Managers.SystemLog.Message($"Item : {unit.attributes.item_id}");
+        }
+    }
+
+    public override void OnRegister()
     {
         quickInfoUI.SetActive(false);
         quickResetBtn.gameObject.SetActive(false);
-        quickInfoBtn.onClick.AddListener(OnClickQuickInfo);
-        quickResetBtn.onClick.AddListener(OnClickQuickReset);
+    }
+
+    public override void OnUnRegister()
+    {
+        if (quickInfoBtn != null)
+        {
+            quickInfoBtn.onClick.RemoveListener(OnClickQuickInfo);
+        }
+
+        if (quickResetBtn != null)
+        {
+            quickResetBtn.onClick.RemoveListener(OnClickQuickReset);
+        }
     }
 
     /// <summary>
@@ -37,7 +95,13 @@ public class UI_QuckInfo : MonoBehaviour
     private void OnClickQuickInfo()
     {
 
-        if(true == quickInfoUI.activeSelf)
+        if(true == isProcess)
+        {
+            return;
+        }
+        isProcess = true;
+
+        if (true == quickInfoUI.activeSelf)
         {
             quickInfoUI.SetActive(false);
             quickResetBtn.gameObject.SetActive(false);
@@ -73,27 +137,26 @@ public class UI_QuckInfo : MonoBehaviour
     private void OnProcessLoadStorage(LoadStorageRes response)
     {
 
-        if(response.error_code != WebErrorCode.None)
+        isProcess = true;
+
+        if (response.error_code != WebErrorCode.None)
         {
             return;
         }
+        Managers.Web.Models.Gear = response.gears;
+        Managers.Web.Models.Inventory = response.items;
 
-        foreach (var unit in response.gears)
-        {
-            Debug.Log($"Part : {unit.gear.part}");
-        }
-
-        foreach (var unit in response.items)
-        {
-            Debug.Log($"Item : {unit.attributes.item_id}");
-        }
-
-        quickResetBtn.gameObject.SetActive(true);
-        quickInfoUI.SetActive(true);    //모든 정보를 불러왔다면 정보창 켜주기
+        LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.QuickInfo);
     }
 
     private void OnClickQuickReset()
     {
+        if (true == isProcess)
+        {
+            return;
+        }
+        isProcess = true;
+
         ClientCredential crediential = Managers.Web.Models.Credential;
         if (crediential == null)
         {
@@ -122,12 +185,18 @@ public class UI_QuckInfo : MonoBehaviour
     /// </summary>
     private void OnProcessResetStorage(ResetStorageRes response)
     {
+
+        isProcess = true;
+
         if (response.error_code != WebErrorCode.None)
         {
             return;
         }
 
-        OnClickQuickInfo();
+        Managers.Web.Models.Gear = response.gears;
+        Managers.Web.Models.Inventory = response.items;
+
+        LobbyUIManager.Instance.UpdateLobbyUI(ELobbyUI.QuickInfo);
 
     }
 

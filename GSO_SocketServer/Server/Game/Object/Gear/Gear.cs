@@ -16,6 +16,7 @@ using System.Reflection;
 using System.Transactions;
 using StackExchange.Redis;
 using System.Data.Common;
+using Server.Game.Object.Item;
 
 namespace Server.Game.Object.Gear
 {
@@ -66,6 +67,24 @@ namespace Server.Game.Object.Gear
                 return null;
             }
             return storage.GetItem();
+        }
+
+        public List<ItemObject> GetPartItems()
+        {
+            List<ItemObject> items = new List<ItemObject>();
+            EGearPart[] statuses = (EGearPart[])System.Enum.GetValues(typeof(EGearPart));
+            for (int i = 1; i < statuses.Length; i++)
+            {
+                ItemObject item = GetPartItem(statuses[i]);
+                if (item == null)
+                {
+                    continue;
+                }
+
+                items.Add(item);
+
+            }
+            return items;
         }
 
         public IEnumerable<PS_GearInfo> GetPartItems(int viewerId)
@@ -162,6 +181,8 @@ namespace Server.Game.Object.Gear
             {
                 CreateDefaultBackpack();
             }
+
+
 
             Console.WriteLine($"Player.UID[{owner.UID}] 장비 로드 완료");
         }

@@ -18,6 +18,7 @@ public enum ELobbyUI
     MatchSetup,
     TicketTimer,
     DailyQuest,
+    QuickInfo,
 }
 
 public class LobbyUIManager : MonoBehaviour

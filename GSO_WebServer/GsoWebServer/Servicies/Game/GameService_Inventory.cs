@@ -10,11 +10,12 @@ namespace GsoWebServer.Servicies.Game
 {
     public partial class GameService : IGameService
     {
-        public async Task<(WebErrorCode, IEnumerable<DB_ItemUnit>?)> LoadInventory(int storage_id)
+        public async Task<(WebErrorCode, List<DB_ItemUnit>?)> LoadInventory(int storage_id)
         {
             try
             {
-                return (WebErrorCode.None, await mGameDB.LoadInventory(storage_id));
+                var items = await mGameDB.LoadInventory(storage_id);
+                return (WebErrorCode.None, items.ToList());
             }
             catch (Exception ex)
             {

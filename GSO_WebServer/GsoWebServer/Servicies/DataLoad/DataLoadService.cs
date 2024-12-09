@@ -1,6 +1,7 @@
 ﻿using GsoWebServer.Servicies.Interfaces;
 using WebCommonLibrary.DTO.DataLoad;
 using WebCommonLibrary.Error;
+using WebCommonLibrary.Models.GameDB;
 
 namespace GsoWebServer.Servicies.DataLoad
 {
@@ -44,6 +45,25 @@ namespace GsoWebServer.Servicies.DataLoad
             if (errorCode != WebErrorCode.None)
             {
                 return (errorCode, null);
+            }
+
+            (errorCode, loadData.gears) = await mGameService.LoadGear(uid);
+            if (errorCode != WebErrorCode.None)
+            {
+                return (errorCode, null);
+            }
+
+            if(loadData.gears != null)
+            {
+                var backpack = loadData.gears.FirstOrDefault(gear => gear.gear.part == "backpack");
+                if(backpack != null && backpack.attributes.unit_storage_id != null)
+                {
+                    (errorCode, loadData.items) = await mGameService.LoadInventory(backpack.attributes.unit_storage_id.Value);
+                    if (errorCode != WebErrorCode.None)
+                    {
+                        return (errorCode, null);
+                    }
+                }
             }
 
             return (WebErrorCode.None, loadData);

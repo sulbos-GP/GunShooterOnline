@@ -11,6 +11,8 @@ namespace WebCommonLibrary.DTO.DataLoad
         public FUserSkill? SkillInfo { get; set; } = null;
         public FUserMetadata? MetadataInfo { get; set; } = null;
         public List<FUserLevelReward>? LevelReward { get; set; } = null;
+        public List<DB_GearUnit>? gears { get; set; } = null;
+        public List<DB_ItemUnit>? items { get; set; } = null;
     }
 
     public class DailyLoadInfo

@@ -10,6 +10,7 @@ using WebCommonLibrary.DTO.User;
 using WebCommonLibrary.Enum;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
+using static Google.Apis.Requests.RequestError;
 
 namespace GsoWebServer.Controllers.Game
 {
@@ -184,7 +185,29 @@ namespace GsoWebServer.Controllers.Game
                 };
 
                 await mGameService.InsertInventory(storage_id, bullet);
+            }
 
+            (error, response.gears) = await mGameService.LoadGear(header.uid);
+            if (error != WebErrorCode.None)
+            {
+                response.error_code = error;
+                response.error_description = "장비 로드에 실패하였습니다.";
+                return response;
+            }
+
+            if (response.gears != null)
+            {
+                var newBackpack = response.gears.FirstOrDefault(gear => gear.gear.part == "backpack");
+                if (newBackpack != null && newBackpack.attributes.unit_storage_id != null)
+                {
+                    (error, response.items) = await mGameService.LoadInventory(newBackpack.attributes.unit_storage_id.Value);
+                    if (error != WebErrorCode.None)
+                    {
+                        response.error_code = error;
+                        response.error_description = "인벤토리 로드에 실패하였습니다.";
+                        return response;
+                    }
+                }
             }
 
             response.error_code = WebErrorCode.None;

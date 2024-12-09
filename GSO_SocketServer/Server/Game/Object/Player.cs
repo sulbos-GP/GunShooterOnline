@@ -79,7 +79,6 @@ public class Player : CreatureObj
 
     public void Init()
     {
-
         weapon.Init(this);
     }
 
@@ -111,52 +110,26 @@ public class Player : CreatureObj
         if (gameRoom == null)
             return;
 
-        int[,] directions = new int[,]
-        {
-            { 0, -1 },
-            { 0, 1 }, 
-            { -1, 0 }, 
-            { 1, 0 },
-            { -1, -1 }, 
-            { -1, 1 }, 
-            { 1, -1 },
-            { 1, 1 }
-        };
-
-        int currenDirection = 0;
-
         S_Spawn spawnPacket = new S_Spawn();
-        foreach (EGearPart type in Enum.GetValues(typeof(EGearPart)))
         {
-            ItemObject gearItem = gear.GetPartItem(type);
-            if (gearItem == null)
-            {
-                continue;
-            }
-
-            Random rand = new Random();
-            double scale = rand.NextDouble() + 1.5;
-
             BoxObject gearBoxObject = ObjectManager.Instance.Add<BoxObject>();
-            gearBoxObject.CellPos = new Vector2(
-                (int)(this.CellPos.X + directions[currenDirection, 0] * scale), 
-                (int)(this.CellPos.Y + directions[currenDirection, 1] * scale));
+            gearBoxObject.CellPos = new Vector2(this.CellPos.X + 0.5f, this.CellPos.Y + 0.5f);
 
-            gearBoxObject.SetItemObject(gearItem);
+            gearBoxObject.SetItemObjects(this.gear.GetPartItems());
             gameRoom.map.rootableObjects.Add(gearBoxObject);
-
             spawnPacket.Objects.Add(gearBoxObject.info);
-
-            currenDirection++;
         }
- 
-        BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
-        boxObject.CellPos = this.CellPos;
-        boxObject.SetStorage(this.inventory.storage);
-        gameRoom.map.rootableObjects.Add(boxObject);
 
-        spawnPacket.Objects.Add(boxObject.info);
+        {
+            BoxObject inventoryBoxObject = ObjectManager.Instance.Add<BoxObject>();
+            inventoryBoxObject.CellPos = new Vector2(this.CellPos.X - 0.5f, this.CellPos.Y - 0.5f);
+
+            inventoryBoxObject.SetStorage(this.inventory.storage);
+            gameRoom.map.rootableObjects.Add(inventoryBoxObject);
+            spawnPacket.Objects.Add(inventoryBoxObject.info);
+        }
         gameRoom.BroadCast(spawnPacket);
+
 
 
         base.OnDead(attacker);

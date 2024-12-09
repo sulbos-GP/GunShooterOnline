@@ -692,6 +692,19 @@ namespace Server
                 return;
             }
 
+            BattleGameRoom room = player.gameRoom;
+            if(room != null)
+            {
+                BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
+                boxObject.CellPos = player.CellPos;
+                boxObject.SetItemObject(deleteItem);
+                room.map.rootableObjects.Add(boxObject);
+
+                S_Spawn spawnPacket = new S_Spawn();
+                spawnPacket.Objects.Add(boxObject.info);
+                room.BroadCast(spawnPacket);
+            }
+
             packet.IsSuccess = true;
             packet.SourceObjectId = sourceObjectId;
             packet.DeleteItem = deleteInfo;

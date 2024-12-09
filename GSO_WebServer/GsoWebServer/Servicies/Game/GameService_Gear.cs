@@ -6,11 +6,12 @@ namespace GsoWebServer.Servicies.Game
 {
     public partial class GameService : IGameService
     {
-        public async Task<(WebErrorCode, IEnumerable<DB_GearUnit>?)> LoadGear(int uid)
+        public async Task<(WebErrorCode, List<DB_GearUnit>?)> LoadGear(int uid)
         {
             try
             {
-                return (WebErrorCode.None, await mGameDB.LoadGear(uid));
+                var gears = await mGameDB.LoadGear(uid);
+                return (WebErrorCode.None, gears.ToList());
             }
             catch (Exception ex)
             {

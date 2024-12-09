@@ -28,7 +28,8 @@ namespace WebCommonLibrary.DTO.Game
 
     public class ResetStorageRes : ErrorCodeDTO
     {
-        
+        public List<DB_GearUnit>? gears { get; set; } = null;
+        public List<DB_ItemUnit>? items { get; set; } = null;
     }
 
 }
