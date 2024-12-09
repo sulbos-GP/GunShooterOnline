@@ -71,42 +71,40 @@ namespace Server.Game.Object.Item
 
             //SetAdvancedBox();
 
-            SetRandomItem(1, 5, EBoxSize.Medium);
+            SetRandomItem(3, 5, EBoxSize.Medium);
 
             CellPos = pos;
         }
 
+        //저장소 그대로 가져올 경우
         public void SetStorage(Storage storage)
         {
-            info.Box = new BoxInfo()
-            {
-                X = storage.Scale_X,
-                Y = storage.Scale_Y,
-                Weight = (float)storage.MaxWeight,
-            };
-
-            this.storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight);
+            SetStorageAndBoxInfo(storage.Scale_X, storage.Scale_Y, (float)storage.MaxWeight + 1.0f);
             this.storage = storage;
         }
 
+        //아이템 한개 가져올 경우
         public void SetItemObject(ItemObject itemObject)
         {
-            info.Box = new BoxInfo()
-            {
-                X = itemObject.Width,
-                Y = itemObject.Height,
-                Weight = (float)itemObject.Weight + 1.0f,
-            };
-
-            this.storage.Init((int)info.Box.X, (int)info.Box.Y, info.Box.Weight * itemObject.Amount);
+            SetStorageAndBoxInfo(itemObject.Width, itemObject.Height, (float)itemObject.Weight + 1.0f);
             this.storage.InsertItem(itemObject);
+        }
+
+        //아이템 여러개 가져올 경우
+        public void SetItemObjects(List<ItemObject> items)
+        {
+            SetStorageAndBoxInfo(EBoxSize.Large);
+
+            foreach (var item in items)
+            {
+                PlaceItem(item);
+            }
         }
 
         //기획상 고정 아이템
         public void SetAdvancedBox()
         {
-            var (boxX, boxY, boxWeight) = GetBoxSize(EBoxSize.Medium);
-            this.storage.Init(boxX, boxY, boxWeight);
+            SetStorageAndBoxInfo(EBoxSize.Medium);
 
             ItemObject backpack = InstanceItemUnit(GetItemDataWithName("군용더블백"), 1);
             ObjectManager.Instance.Add(backpack);
@@ -134,9 +132,7 @@ namespace Server.Game.Object.Item
         //랜덤 일반 상자
         public void SetRandomItem(int min, int max, EBoxSize boxSize)
         {
-
-            var (boxX, boxY, boxWeight) = GetBoxSize(boxSize);
-            this.storage.Init(boxX, boxY, boxWeight);
+            SetStorageAndBoxInfo(boxSize);
 
             const int MaxRetry = 10;
             int retry = 0;
@@ -164,6 +160,24 @@ namespace Server.Game.Object.Item
                 }
 
             }
+        }
+        
+        private void SetStorageAndBoxInfo(int x, int y, float weight)
+        {
+            info.Box = new BoxInfo()
+            {
+                X = x,
+                Y = y,
+                Weight = weight,
+            };
+
+            this.storage.Init(x, y, weight);
+        }
+
+        private void SetStorageAndBoxInfo(EBoxSize boxSize)
+        {
+            var (boxX, boxY, boxWeight) = GetBoxSize(boxSize);
+            SetStorageAndBoxInfo(boxX, boxY, (float)boxWeight);
         }
 
         private bool PlaceItem(ItemObject item)
@@ -216,7 +230,7 @@ namespace Server.Game.Object.Item
             return (x, y, weight);
         }
 
-        private FMasterItemBase GetRandomItemDataWithTypes(EItemType min, EItemType max)
+        private FMasterItemBase GetRandomItemDataWithScopeType(EItemType min, EItemType max)
         {
             Random rand = new Random();
             int range = rand.Next((int)min, (int)max);

@@ -136,6 +136,30 @@ public class WebModels
         }
     }
 
+    public List<DB_GearUnit> Gear
+    {
+        get
+        {
+            return data.gears;
+        }
+        set
+        {
+            data.gears = value;
+        }
+    }
+
+    public List<DB_ItemUnit> Inventory
+    {
+        get
+        {
+            return data.items;
+        }
+        set
+        {
+            data.items = value;
+        }
+    }
+
 
     public DailyLoadInfo DailyData
     {

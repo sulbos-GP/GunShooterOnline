@@ -55,7 +55,7 @@ namespace GsoWebServer.Servicies.Interfaces
         /// <summary>
         /// 저장소의 아이템 로드
         /// </summary>
-        public Task<(WebErrorCode, IEnumerable<DB_ItemUnit>?)> LoadInventory(int storage_id);
+        public Task<(WebErrorCode, List<DB_ItemUnit>?)> LoadInventory(int storage_id);
 
         /// <summary>
         /// 저장소의 아이템 삭제
@@ -67,7 +67,7 @@ namespace GsoWebServer.Servicies.Interfaces
         /// <summary>
         /// 장비의 아이템 로드
         /// </summary>
-        public Task<(WebErrorCode, IEnumerable<DB_GearUnit>?)> LoadGear(int uid);
+        public Task<(WebErrorCode, List<DB_GearUnit>?)> LoadGear(int uid);
 
         public Task<bool> ClearGear(int uid);
 
