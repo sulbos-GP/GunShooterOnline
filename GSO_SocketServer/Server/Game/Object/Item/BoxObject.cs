@@ -20,7 +20,7 @@ namespace Server.Game.Object.Item
     {
         Small,
         Medium,
-        Large
+        Large,
     }
 
     public class BoxObject : GameObject
@@ -71,7 +71,7 @@ namespace Server.Game.Object.Item
 
             //SetAdvancedBox();
 
-            SetRandomItem(3, 5, EBoxSize.Medium);
+            SetRandomItem(3, 5, EBoxSize.Large);
 
             CellPos = pos;
         }
@@ -99,6 +99,8 @@ namespace Server.Game.Object.Item
             {
                 PlaceItem(item);
             }
+
+            SetFitStorage();
         }
 
         //기획상 고정 아이템
@@ -126,7 +128,7 @@ namespace Server.Game.Object.Item
             ObjectManager.Instance.Add(gold);
             PlaceItem(gold);
 
-
+            SetFitStorage();
         }
 
         //랜덤 일반 상자
@@ -160,6 +162,8 @@ namespace Server.Game.Object.Item
                 }
 
             }
+
+            SetFitStorage();
         }
         
         private void SetStorageAndBoxInfo(int x, int y, float weight)
@@ -172,6 +176,18 @@ namespace Server.Game.Object.Item
             };
 
             this.storage.Init(x, y, weight);
+        }
+
+        private void SetFitStorage()
+        {
+            this.storage.Fit();
+
+            info.Box = new BoxInfo()
+            {
+                X = this.storage.Scale_X,
+                Y = this.storage.Scale_Y,
+                Weight = (float)this.storage.MaxWeight,
+            };
         }
 
         private void SetStorageAndBoxInfo(EBoxSize boxSize)
