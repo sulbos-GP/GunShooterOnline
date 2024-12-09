@@ -13,12 +13,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Security.Cryptography.Xml;
 using UnityEditor;
-using UnityEditor.ShaderGraph.Serialization;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UIElements;
-using static Google.Protobuf.Compiler.CodeGeneratorResponse.Types;
-using static UnityEditor.PlayerSettings;
 
 
 internal class PacketHandler

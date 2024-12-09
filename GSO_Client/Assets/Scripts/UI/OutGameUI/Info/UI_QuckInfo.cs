@@ -137,7 +137,7 @@ public class UI_QuckInfo : LobbyUI
     private void OnProcessLoadStorage(LoadStorageRes response)
     {
 
-        isProcess = true;
+        isProcess = false;
 
         if (response.error_code != WebErrorCode.None)
         {
@@ -186,7 +186,7 @@ public class UI_QuckInfo : LobbyUI
     private void OnProcessResetStorage(ResetStorageRes response)
     {
 
-        isProcess = true;
+        isProcess = false;
 
         if (response.error_code != WebErrorCode.None)
         {
