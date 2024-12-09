@@ -14,7 +14,7 @@ using static AuthorizeResource;
 using static GameResource;
 using static UnityEngine.UI.CanvasScaler;
 
-public class UI_QuckInfo : LobbyUI
+public class UI_QuickInfo : LobbyUI
 {
     protected override ELobbyUI type => ELobbyUI.QuickInfo;
 
