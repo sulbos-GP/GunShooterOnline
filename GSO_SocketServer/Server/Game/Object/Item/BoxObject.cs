@@ -86,8 +86,8 @@ namespace Server.Game.Object.Item
         //아이템 한개 가져올 경우
         public void SetItemObject(ItemObject itemObject)
         {
-            SetStorageAndBoxInfo(itemObject.Width, itemObject.Height, (float)itemObject.Weight + 1.0f);
-            this.storage.InsertItem(itemObject);
+            SetStorageAndBoxInfo(itemObject.Width, itemObject.Height, (float)(itemObject.Weight * itemObject.Amount) + 1.0f);
+            PlaceItem(itemObject);
         }
 
         //아이템 여러개 가져올 경우
