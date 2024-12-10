@@ -144,17 +144,17 @@ namespace Server.Game.Object.Item
             int count = 0;
             while(count < maxCount)
             {
-                FMasterItemBase data = GetItemDataWithType(EItemType.Spoil);
+                FMasterItemBase data = GetRandomItemDataWithScopeType(EItemType.Weapone, EItemType.Spoil);
                 ItemObject newItem = InstanceItemUnit(data, 1);
 
                 if(true == PlaceItem(newItem))
                 {
-                    ObjectManager.Instance.Add(newItem);
                     count++;
                 }
                 else
                 {
-                    if(retry > MaxRetry)
+                    ObjectManager.Instance.Remove(newItem.Id);
+                    if (retry > MaxRetry)
                     {
                         break;
                     }
@@ -290,7 +290,7 @@ namespace Server.Game.Object.Item
                 }
             };
 
-            ItemObject newItem = new ItemObject();
+            ItemObject newItem = ObjectManager.Instance.Add<ItemObject>();
             newItem.Init(null, item);
 
             return newItem;

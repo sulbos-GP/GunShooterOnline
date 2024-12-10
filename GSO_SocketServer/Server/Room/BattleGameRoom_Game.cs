@@ -169,7 +169,7 @@ namespace Server
             PS_ItemInfo sourceItemInfo = sourcelItem.ConvertItemInfo(player.Id);
 
             Storage sourceStorage = GetStorage(player, sourceObjectId);
-            if (sourceStorage == null || sourcelItem == null || -1 == sourceStorage.ScanItem(sourcelItem))
+            if (sourceStorage == null || sourcelItem == null || false == sourceStorage.ScanItem(sourcelItem))
             {
                 packet.IsSuccess = false;
                 packet.SourceObjectId = sourceObjectId;
@@ -210,8 +210,8 @@ namespace Server
                 player.Session.Send(packet);
                 return;
             }
-            DB_ItemUnit oldMergedUnit = mergedlItem.Unit;
             PS_ItemInfo oldMergedItemInfo = mergedlItem.ConvertItemInfo(player.Id);
+            packet.MergedItem = oldMergedItemInfo;
 
             ItemObject combinedItem = ObjectManager.Instance.Find<ItemObject>(combinedObjectId);
             Storage destinationStorage = GetStorageWithScanItem(player, destinationObjectId, combinedItem);
@@ -221,66 +221,72 @@ namespace Server
                 player.Session.Send(packet);
                 return;
             }
-            DB_ItemUnit oldCombinedUnit = combinedItem.Unit;
             PS_ItemInfo oldCombinedInfo = combinedItem.ConvertItemInfo(player.Id);
-
-            //머지하는 아이템 이름이 다를경우
-            if (mergedlItem.ItemId != combinedItem.ItemId)
-            {
-                packet.IsSuccess = false;
-                packet.MergedItem = oldMergedItemInfo;
-                packet.CombinedItem = oldCombinedInfo;
-                player.Session.Send(packet);
-                return;
-            }
+            packet.CombinedItem = oldCombinedInfo;
 
             {
-
-                if (false == destinationStorage.IsHaveAmount(combinedItem, mergeNumber))
+                //머지하는 아이템 이름이 다를경우
+                if (mergedlItem.ItemId != combinedItem.ItemId)
                 {
                     packet.IsSuccess = false;
-                    packet.MergedItem = oldMergedItemInfo;
-                    packet.CombinedItem = oldCombinedInfo;
                     player.Session.Send(packet);
                     return;
                 }
 
-                //인벤토리에 넣을 수 있는 최대 수량
-                int maxAmount = 0;
-                if (sourceObjectId == destinationObjectId)
-                {
-                    maxAmount = mergeNumber;
-                }
-                else
-                {
-                    maxAmount = sourceStorage.CheackMaxAmount(mergedlItem, mergeNumber);
-                }
-
-                int lessAmount = destinationStorage.DecreaseAmount(combinedItem, maxAmount);
-                int moreAmount = sourceStorage.IncreaseAmount(mergedlItem, maxAmount);
-
-                if (lessAmount == -1 || moreAmount == -1)
+                //남은 아이템 양이 음수일 경우
+                int lessAmount = mergedlItem.Amount - mergeNumber;
+                if (lessAmount < 0)
                 {
                     packet.IsSuccess = false;
-                    packet.MergedItem = oldMergedItemInfo;
-                    packet.CombinedItem = oldCombinedInfo;
                     player.Session.Send(packet);
                     return;
                 }
+
+                //합친 아이템이 최대 수량을 넘길 경우
+                int combinedAmount = combinedItem.Amount + mergeNumber;
+                if(combinedItem.Data.amount < combinedAmount)
+                {
+                    packet.IsSuccess = false;
+                    player.Session.Send(packet);
+                    return;
+                }
+
+                //
+                if(false == sourceStorage.DecreaseAmount(mergedlItem, mergeNumber))
+                {
+                    packet.IsSuccess = false;
+                    player.Session.Send(packet);
+                    return;
+                }
+
+                //
+                if(false == destinationStorage.IncreaseAmount(combinedItem, mergeNumber))
+                {
+
+                    sourceStorage.IncreaseAmount(mergedlItem, mergeNumber);
+
+                    packet.IsSuccess = false;
+                    player.Session.Send(packet);
+                    return;
+                }
+
                 //Combined의 수량을 전부 소진한 경우
-                if (lessAmount == -1)
+                if (lessAmount == 0)
                 {
-                    bool isDelete = destinationStorage.DeleteItem(combinedItem);
+                    bool isDelete = sourceStorage.DeleteItem(mergedlItem);
                     if (false == isDelete)
                     {
-                        //CombinedItem의 수량 감소에 성공했을 테니까 기존에 정보로 되돌려준다
-                        combinedItem.Amount = oldCombinedInfo.Amount;
+
+                        sourceStorage.IncreaseAmount(mergedlItem, mergeNumber);
+                        destinationStorage.DecreaseAmount(combinedItem, mergeNumber);
 
                         packet.IsSuccess = false;
-                        packet.MergedItem = oldMergedItemInfo;
-                        packet.CombinedItem = oldCombinedInfo;
                         player.Session.Send(packet);
                         return;
+                    }
+                    else
+                    {
+                        ObjectManager.Instance.Remove(mergedlItem.Id);
                     }
                 }
 
@@ -375,8 +381,8 @@ namespace Server
             packet.DestinationObjectId = destinationObjectId;
 
             ItemObject sourceItem = ObjectManager.Instance.Find<ItemObject>(sourceItemId);
-            DB_ItemUnit oldSourceUnit = sourceItem.Unit;
             PS_ItemInfo oldSourceItemInfo = sourceItem.ConvertItemInfo(player.Id);
+            packet.SourceItem = oldSourceItemInfo;
 
             Storage sourceStorage = GetStorageWithScanItem(player, sourceObjectId, sourceItem);
             if (sourceStorage == null)
@@ -395,21 +401,31 @@ namespace Server
             }
 
             {
-                if (false == sourceStorage.IsHaveAmount(sourceItem, devideNumber))
+                //남은 양이 작거나 모두 옮길 경우
+                int lessAmount = sourceItem.Amount - devideNumber;
+                if(lessAmount <= 0)
                 {
                     packet.IsSuccess = false;
-                    packet.SourceItem = oldSourceItemInfo;
                     player.Session.Send(packet);
                     return;
                 }
 
+                //SourcelItem의 수량을 DevideNumber만큼 감소
+                if(false == sourceStorage.DecreaseAmount(sourceItem, devideNumber))
+                {
+                    packet.IsSuccess = false;
+                    player.Session.Send(packet);
+                    return;
+                }
+
+                //나눈 아이템 임시 생성
                 DB_ItemUnit devideUnit = new DB_ItemUnit()
                 {
                     attributes = new DB_UnitAttributes()
                     {
                         item_id = sourceItem.ItemId,
                         amount = devideNumber,
-                        durability = 0,
+                        durability = sourceItem.Durability,
                         unit_storage_id = null,
                     },
 
@@ -421,13 +437,8 @@ namespace Server
                         unit_attributes_id = 0,
                     }
                 };
-                devideUnit.attributes.amount = devideNumber;
-
                 ItemObject devideItem = ObjectManager.Instance.Add<ItemObject>();
                 devideItem.Init(player, devideUnit);
-
-                //SourcelItem의 수량을 DevideNumber만큼 감소
-                int lessAmount = sourceStorage.DecreaseAmount(sourceItem, devideNumber);
 
                 //미리 나눠진 아이템의 공간이 확보되어 있는지 확인한다
                 if (false == destinationStorage.InsertItem(devideItem))
@@ -435,42 +446,11 @@ namespace Server
 
                     sourceStorage.IncreaseAmount(sourceItem, devideNumber);
 
+                    ObjectManager.Instance.Remove(devideItem.Id);
+
                     packet.IsSuccess = false;
-                    packet.SourceItem = oldSourceItemInfo;
                     player.Session.Send(packet);
                     return;
-                }
-
-                //SourcelItem 수량을 DevideNumber만큼 감소하였을때 음수가 나올 경우
-                if (lessAmount == -1)
-                {
-                    packet.IsSuccess = false;
-                    packet.SourceItem = oldSourceItemInfo;
-                    player.Session.Send(packet);
-                    return;
-                }
-                //SourcelItem의 수량을 전부 소진한 경우
-                if (lessAmount == 0)
-                {
-                    bool isDelete = sourceStorage.DeleteItem(sourceItem);
-                    if (false == isDelete)
-                    {
-                        //나눠진 아이템을 삭제한다
-                        destinationStorage.DeleteItem(devideItem);
-                        ObjectManager.Instance.Remove(devideItem.Id);
-
-                        //CombinedItem의 수량 감소에 성공했을 테니까 기존에 정보로 되돌려준다
-                        sourceItem.Amount = oldSourceItemInfo.Amount;
-
-                        packet.IsSuccess = false;
-                        packet.SourceItem = oldSourceItemInfo;
-                        player.Session.Send(packet);
-                        return;
-                    }
-                    else
-                    {
-                        ObjectManager.Instance.Remove(sourceItem.Id);
-                    }
                 }
 
                 packet.IsSuccess = true;
@@ -866,7 +846,7 @@ namespace Server
                 return null;
             }
 
-            if (-1 == storage.ScanItem(scanItem))
+            if (false == storage.ScanItem(scanItem))
             {
                 return null;
             }

@@ -294,7 +294,12 @@ namespace Server.Game
 
                 ownerPlayer.weapon.GetCurrentWeapon().CurAmmo += next;
 
-                int LeftAmount = ownerPlayer.inventory.storage.DecreaseAmount(originalAmmo, next);
+                int LeftAmount = originalAmmo.Amount - next;
+                if(false == ownerPlayer.inventory.storage.DecreaseAmount(originalAmmo, next))
+                {
+                    //오류
+                    return;
+                }
 
                 if (LeftAmount == 0)
                 {

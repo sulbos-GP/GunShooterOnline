@@ -37,30 +37,6 @@ namespace Server.Game
             Loot = 600           // 600번대 : 전리품
         }
 
-
-
-        public ItemObject FindItemByType(ItemType itemType)
-        {
-            List<int> itemIds = storage.GetAllItemObjectIds();
-
-
-            foreach (int itemId in itemIds)
-            {
-                if (itemId / 100 == (int)itemType / 100)
-                {
-                    var items = storage.FindItemsByItemID(itemId);
-                    if (items != null && items.Count > 0)
-                    {
-                        return items[0];
-                    }
-                }
-            }
-
-            return null;
-        }
-
-
-
         public List<ItemObject> FindItemAllByType(ItemType itemType)
         {
             List<ItemObject> items = storage.Items;

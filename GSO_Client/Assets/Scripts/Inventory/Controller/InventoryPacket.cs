@@ -60,11 +60,11 @@ public class InventoryPacket
     public static void SendMergeItemPacket(ItemObject selectedItem, ItemObject overlapItem, int itemAmount)
     {
         C_MergeItem packet = new C_MergeItem();
-        packet.SourceObjectId = overlapItem.backUpParentId;
-        packet.DestinationObjectId = selectedItem.backUpParentId;
+        packet.SourceObjectId = selectedItem.backUpParentId;
+        packet.DestinationObjectId = overlapItem.backUpParentId;
 
-        packet.MergedObjectId = overlapItem.itemData.objectId;
-        packet.CombinedObjectId = selectedItem.itemData.objectId;
+        packet.MergedObjectId = selectedItem.itemData.objectId;
+        packet.CombinedObjectId = overlapItem.itemData.objectId;
         packet.MergeNumber = itemAmount;
 
         Managers.Network.Send(packet);
