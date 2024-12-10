@@ -13,7 +13,7 @@ using UnityEngine;
 public class ItemData
 {
     /// <summary>
-    /// ItemDataInfo¸¦ ÇØ´ç ½ºÅ©¸³Æ®ÀÇ º¯¼ö¿¡ Àû¿ë
+    /// ItemDataInfoï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void SetItemData(PS_ItemInfo itemInfo)
     {
@@ -26,7 +26,7 @@ public class ItemData
         isSearched = itemInfo.IsSearched;
         Data_master_item_base itemDB = Data_master_item_base.GetData(itemId);
         item_name = itemDB.name;
-        item_weight = Math.Round(itemDB.weight,2); //¾ÆÀÌÅÛÀÇ ¹«°Ô
+        item_weight = Math.Round(itemDB.weight,2); //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         switch (itemDB.type) {
             case eITEM_TYPE.Weapone: item_type = ItemType.Weapon; break;
@@ -53,7 +53,7 @@ public class ItemData
     }
 
     /// <summary>
-    /// ÇöÀç ½ºÅ©¸³Æ®ÀÇ º¯¼ö¸¦ ItemDataInfo·Î º¯È¯
+    /// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å©ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ItemDataInfoï¿½ï¿½ ï¿½ï¿½È¯
     /// </summary>
     public PS_ItemInfo GetItemData()
     {
@@ -74,13 +74,13 @@ public class ItemData
         return itemInfo;
     }
 
-    public int objectId;    // ÇØ´ç µ¥ÀÌÅÍÀÇ °íÀ¯ÇÏ¸ç À¯ÀÏÇÑ ¾ÆÀÌµð
-    public int itemId;      // ¾ÆÀÌÅÛÀÇ Á¾·ù¸¦ ¸í½ÃÇÏ´Â ÄÚµå
-    public Vector2Int pos;  // ¾ÆÀÌÅÛÀÇ ±×¸®µå ¾È ÁÂÇ¥»óÀÇ À§Ä¡
-    public int rotate;      // ¾ÆÀÌÅÛÀÇ È¸ÀüÄÚµå(rotate * 90)
+    public int objectId;    // ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½
+    public int itemId;      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Úµï¿½
+    public Vector2Int pos;  // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Ç¥ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    public int rotate;      // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½Úµï¿½(rotate * 90)
     public int amount;
 
-    public bool isSearched; //Å¬¶óÀÔÀå¿¡¼­ ÀÌ ¾ÆÀÌÅÛÀÌ °Ë»öµÇ¾ú´ÂÁö È®ÀÎ
+    public bool isSearched; //Å¬ï¿½ï¿½ï¿½ï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½Ç¾ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½
 
     public string item_name;
     public double item_weight;
@@ -95,6 +95,6 @@ public class ItemData
     public string iconName;
 
     //PS_ItemAttributes
-    public int durability; //ÇØ´ç ¾ÆÀÌÅÛÀÌ ¹æ¾î±¸ÀÎ °æ¿ì ³²Àº ³»±¸µµ
-    public int loadedAmmo; //ÇØ´ç ¾ÆÀÌÅÛÀÌ ÃÑÀÎ °æ¿ì ÇØ´ç ¾ÆÀÌÅÛ¿¡ ÀåÀüµÈ ÃÑ¾Ë ¼ö
+    public int durability; //ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½î±¸ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public int loadedAmmo; //ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ñ¾ï¿½ ï¿½ï¿½
 }
