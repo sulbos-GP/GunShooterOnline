@@ -67,7 +67,7 @@ public class LobbyPlayer : MonoBehaviour
 
     private void OnMove(InputValue inputValue)
     {
-        //TO-DO : Á¦°Å ½Ã Á¶ÀÌ½ºÆ½ ¿À·ù ¶ä.
+        //TO-DO : ì œê±° ì‹œ ì¡°ì´ìŠ¤í‹± ì˜¤ë¥˜ ëœ¸.
     }
 
     private void UpdateMove()

@@ -8,12 +8,12 @@ using UnityEngine;
 
 public class CSVParser : MonoBehaviour
 {
-    // ÆÄ½Ì½Ã ÇÊ¿ä°´Ã¼ Ä³½Ì.
+    // íŒŒì‹±ì‹œ í•„ìš”ê°ì²´ ìºì‹±.
     private static List<MemberInfo> _fileFieldInfoList = new List<MemberInfo>();
     private static List<string> _objFieldNameList = new List<string>();
     private static Type _strType = typeof(string);
 
-    // ÆÄ½Ì ¹®ÀÚ.
+    // íŒŒì‹± ë¬¸ì.
     private const char COMMA = ',';
     private const char LINE_FEED1 = '\n';
     private const char LINE_FEED2 = '\r';
@@ -22,16 +22,16 @@ public class CSVParser : MonoBehaviour
 
     public static List<T> LoadData<T>(string csvText) where T : new()
     {
-        // ÃÖÁ¾ ¸®ÅÏÇÒ List.
+        // ìµœì¢… ë¦¬í„´í•  List.
         List<T> resultList = new List<T>();
 
         if (string.IsNullOrEmpty(csvText))
             return resultList;
 
-        // ÇÊµå ÃßÃâ.
+        // í•„ë“œ ì¶”ì¶œ.
         int cursor = ParseHeaderByFile<T>(csvText);
 
-        // ³»¿ë ÃßÃâ º¯¼ö.
+        // ë‚´ìš© ì¶”ì¶œ ë³€ìˆ˜.
         Type fieldType;
         MemberInfo fInfo;
         int columnCount = 0;
@@ -40,7 +40,7 @@ public class CSVParser : MonoBehaviour
         char prevChar = LINE_FEED1;
         string targetValue;
 
-        // ³»¿ë ÃßÃâ.
+        // ë‚´ìš© ì¶”ì¶œ.
         for (int i = cursor; i < csvText.Length; i++)
         {
             char oneChar = csvText[i];
@@ -49,30 +49,30 @@ public class CSVParser : MonoBehaviour
             {
                 case LINE_FEED1:
                 case LINE_FEED2:
-                    // °³ÇàÁßÀÎ°æ¿ì´Â ¹«½Ã.
+                    // ê°œí–‰ì¤‘ì¸ê²½ìš°ëŠ” ë¬´ì‹œ.
                     if (prevChar == LINE_FEED1 || prevChar == LINE_FEED2)
                         break;
 
-                    // ³²ÀºÄÃ·³ÀÌ ÀÖÀ¸¸é ÇØ´çÄÃ·³¿¡ °ª Ãß°¡.
+                    // ë‚¨ì€ì»¬ëŸ¼ì´ ìˆìœ¼ë©´ í•´ë‹¹ì»¬ëŸ¼ì— ê°’ ì¶”ê°€.
                     if (columnCount < _fileFieldInfoList.Count)
                     {
-                        // ÄÃ·³ÀÌ 0ÀÌ°í µ¥ÀÌÅÍ°¡ ÀÖÀ¸¸é °´Ã¼ »ı¼º.
+                        // ì»¬ëŸ¼ì´ 0ì´ê³  ë°ì´í„°ê°€ ìˆìœ¼ë©´ ê°ì²´ ìƒì„±.
                         if (columnCount == 0)
                             datum = new T();
 
                         fInfo = _fileFieldInfoList[columnCount];
 
-                        // ³»¿ë¹°ÀÌ ¾øÀ¸¸é ºó°ªÀ¸·Î.
+                        // ë‚´ìš©ë¬¼ì´ ì—†ìœ¼ë©´ ë¹ˆê°’ìœ¼ë¡œ.
                         if (i - cursor <= 1)
                             targetValue = EMPTY_STR;
                         else
                             targetValue = csvText.Substring(cursor + 1, i - cursor - 1);
 
-                        // ½Öµû¿ÈÇ¥°¡ ÀÖ´Ù¸é Ãß°¡ÀÛ¾÷.
+                        // ìŒë”°ì˜´í‘œê°€ ìˆë‹¤ë©´ ì¶”ê°€ì‘ì—….
                         if (targetValue.IndexOf(DOUBLE_QUOTE) > -1)
                             targetValue = LoadParse(targetValue);
 
-                        // ¹®ÀÚ¿­ÀÌ ºó°ªÀÌ¸é ³ÖÀ» ÇÊ¿ä°¡ ¾øÀ½.
+                        // ë¬¸ìì—´ì´ ë¹ˆê°’ì´ë©´ ë„£ì„ í•„ìš”ê°€ ì—†ìŒ.
                         if (!string.IsNullOrEmpty(targetValue))
                         {
                             if (_fileFieldInfoList[columnCount] != null)
@@ -80,12 +80,12 @@ public class CSVParser : MonoBehaviour
                                 if (targetValue.IndexOf("\\n") >= 0)
                                     targetValue = targetValue.Replace("\\n", "\n");
 
-                                // ÇÁ·ÎÆÛÆ¼¿¡ °ª ÇÒ´ç.	
+                                // í”„ë¡œí¼í‹°ì— ê°’ í• ë‹¹.	
                                 fieldType = _fileFieldInfoList[columnCount].GetReturnType();
 
                                 if (fieldType.Equals(_strType))
                                 {
-                                    // stringÅ¸ÀÔÀº ¹Ú½ÌÀ» ÇØ¾ß µé¾î°¨.. classÅ¸ÀÔÀÌ ¾Æ´Ï¶ó struct¿¡ string ÀÖÀ¸¸é ±×³É ÇÏÁö¸¶¶ó.
+                                    // stringíƒ€ì…ì€ ë°•ì‹±ì„ í•´ì•¼ ë“¤ì–´ê°.. classíƒ€ì…ì´ ì•„ë‹ˆë¼ structì— string ìˆìœ¼ë©´ ê·¸ëƒ¥ í•˜ì§€ë§ˆë¼.
                                     object boxDatum = datum;
                                     fInfo.SetMemberValue(boxDatum, targetValue);
                                     datum = (T)boxDatum;
@@ -98,47 +98,47 @@ public class CSVParser : MonoBehaviour
                         }
                     }
 
-                    // ÃÖÁ¾ÀûÀ¸·Î Á¤Á¦µÈ °´Ã¼¸¦ ¸ñ·Ï¿¡ Ãß°¡.
+                    // ìµœì¢…ì ìœ¼ë¡œ ì •ì œëœ ê°ì²´ë¥¼ ëª©ë¡ì— ì¶”ê°€.
                     resultList.Add(datum);
 
-                    // ÀüºÎ ÃÊ±âÈ­.
+                    // ì „ë¶€ ì´ˆê¸°í™”.
                     cursor = i;
                     columnCount = 0;
                     isDoubleQuote = false;
 
                     break;
                 case DOUBLE_QUOTE:
-                    // ½Öµû¿ÈÇ¥ ½ÃÀÛ°ú ³¡ »çÀÌÀÇ ¸ğµç°ÍÀº ¹«Á¶°Ç ¹®ÀÚ·Î Ã³¸®µÈ´Ù.
+                    // ìŒë”°ì˜´í‘œ ì‹œì‘ê³¼ ë ì‚¬ì´ì˜ ëª¨ë“ ê²ƒì€ ë¬´ì¡°ê±´ ë¬¸ìë¡œ ì²˜ë¦¬ëœë‹¤.
                     isDoubleQuote = !isDoubleQuote;
 
                     break;
                 case COMMA:
-                    // ½Öµû¿ÈÇ¥ ³»ºÎ¿¡¼± ¹«½Ã.
+                    // ìŒë”°ì˜´í‘œ ë‚´ë¶€ì—ì„  ë¬´ì‹œ.
                     if (isDoubleQuote)
                         break;
 
-                    // ³²ÀºÄÃ·³ÀÌ ¾øÀ¸¸é ¹«½Ã.
+                    // ë‚¨ì€ì»¬ëŸ¼ì´ ì—†ìœ¼ë©´ ë¬´ì‹œ.
                     if (columnCount >= _fileFieldInfoList.Count)
                         break;
 
-                    // ÄÃ·³ÀÌ 0ÀÌ¸é °´Ã¼ »ı¼º.
+                    // ì»¬ëŸ¼ì´ 0ì´ë©´ ê°ì²´ ìƒì„±.
                     if (columnCount == 0)
                         datum = new T();
 
-                    // ÄÃ·³¿¡ Ãß°¡.
+                    // ì»¬ëŸ¼ì— ì¶”ê°€.
                     fInfo = _fileFieldInfoList[columnCount];
 
-                    // ³»¿ë¹°ÀÌ ¾øÀ¸¸é ºó°ªÀ¸·Î.
+                    // ë‚´ìš©ë¬¼ì´ ì—†ìœ¼ë©´ ë¹ˆê°’ìœ¼ë¡œ.
                     if (i - cursor <= 1)
                         targetValue = EMPTY_STR;
                     else
                         targetValue = csvText.Substring(cursor + 1, i - cursor - 1);
 
-                    // ½Öµû¿ÈÇ¥°¡ ÀÖ´Ù¸é Ãß°¡ÀÛ¾÷.
+                    // ìŒë”°ì˜´í‘œê°€ ìˆë‹¤ë©´ ì¶”ê°€ì‘ì—….
                     if (targetValue.IndexOf(DOUBLE_QUOTE) > -1)
                         targetValue = LoadParse(targetValue);
 
-                    // ¹®ÀÚ¿­ÀÌ ºó°ªÀÌ¸é ³ÖÀ» ÇÊ¿ä°¡ ¾øÀ½.
+                    // ë¬¸ìì—´ì´ ë¹ˆê°’ì´ë©´ ë„£ì„ í•„ìš”ê°€ ì—†ìŒ.
                     if (!string.IsNullOrEmpty(targetValue))
                     {
                         if (_fileFieldInfoList[columnCount] != null)
@@ -146,18 +146,18 @@ public class CSVParser : MonoBehaviour
                             if (targetValue.IndexOf("\\n") >= 0)
                                 targetValue = targetValue.Replace("\\n", "\n");
 
-                            // ÇÁ·ÎÆÛÆ¼¿¡ °ª ÇÒ´ç.    
+                            // í”„ë¡œí¼í‹°ì— ê°’ í• ë‹¹.    
                             fieldType = _fileFieldInfoList[columnCount].GetReturnType();
                             if (fieldType.Equals(_strType))
                             {
-                                // stringÅ¸ÀÔÀº ¹Ú½ÌÀ» ÇØ¾ß µé¾î°¨.. classÅ¸ÀÔÀÌ ¾Æ´Ï¶ó struct¿¡ string ÀÖÀ¸¸é ±×³É ÇÏÁö¸¶¶ó.
+                                // stringíƒ€ì…ì€ ë°•ì‹±ì„ í•´ì•¼ ë“¤ì–´ê°.. classíƒ€ì…ì´ ì•„ë‹ˆë¼ structì— string ìˆìœ¼ë©´ ê·¸ëƒ¥ í•˜ì§€ë§ˆë¼.
                                 object boxDatum = datum;
                                 fInfo.SetMemberValue(boxDatum, targetValue);
                                 datum = (T)boxDatum;
                             }
                             else
                             {
-                                // ´ë»ó T°´Ã¼¿¡ ÄÃ·³ ³Ö±â.
+                                // ëŒ€ìƒ Tê°ì²´ì— ì»¬ëŸ¼ ë„£ê¸°.
                                 fInfo.SetMemberValue(datum, GetTypeValue(fieldType, targetValue));
                             }
                         }
@@ -174,7 +174,7 @@ public class CSVParser : MonoBehaviour
         return resultList;
     }
 
-    // Å¸ÀÔº¯È¯.
+    // íƒ€ì…ë³€í™˜.
     private static object GetTypeValue(Type fieldType, string targetValue)
     {
         if (fieldType == typeof(long))
@@ -210,13 +210,13 @@ public class CSVParser : MonoBehaviour
         return 0;
     }
 
-    // ÆÄÀÏÀÇ Çì´õ ÃßÃâ.
+    // íŒŒì¼ì˜ í—¤ë” ì¶”ì¶œ.
     private static int ParseHeaderByFile<T>(string csvText)
     {
-        // ÆÄÀÏ³» Ä¿¼­À§Ä¡.
+        // íŒŒì¼ë‚´ ì»¤ì„œìœ„ì¹˜.
         int cursor = -1;
 
-        // ´ë»ó°´Ã¼ÀÇ Çì´õ ÃßÃâ.
+        // ëŒ€ìƒê°ì²´ì˜ í—¤ë” ì¶”ì¶œ.
         const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance;
         var type = typeof(T);
         MemberInfo[] objProperties = type.GetFields(bindingFlags).Cast<MemberInfo>()
@@ -224,7 +224,7 @@ public class CSVParser : MonoBehaviour
         ParseHeaderByObj(objProperties);
         string typeName = csvText.Split(',')[0];
 
-        // ÆÄÀÏÀÇ Çì´õ ÃßÃâ.
+        // íŒŒì¼ì˜ í—¤ë” ì¶”ì¶œ.
         _fileFieldInfoList.Clear();
         for (int i = 0; i < csvText.Length; i++)
         {
@@ -232,13 +232,13 @@ public class CSVParser : MonoBehaviour
 
             if (oneChar == COMMA || oneChar == LINE_FEED1 || oneChar == LINE_FEED2)
             {
-                // ³»¿ë¹°ÀÌ ÀÖÀ¸¸é Çì´õ¿¡ ÀúÀå.
+                // ë‚´ìš©ë¬¼ì´ ìˆìœ¼ë©´ í—¤ë”ì— ì €ì¥.
                 if (i > cursor + 1)
                 {
                     string targetFieldName = csvText.Substring(cursor + 1, i - cursor - 1);
                     if (targetFieldName.Contains(typeName))
                         targetFieldName = "Key";
-                    // ÇÊµå¸í¿¡ ÇØ´çÇÏ´Â ÄÃ·³À§Ä¡¸¦ Ã£´Â ´Ù¸¥ ¹æ¹ı.
+                    // í•„ë“œëª…ì— í•´ë‹¹í•˜ëŠ” ì»¬ëŸ¼ìœ„ì¹˜ë¥¼ ì°¾ëŠ” ë‹¤ë¥¸ ë°©ë²•.
                     //int targetIndex = mObjFieldNameList.FindIndex((string x) => { return x.Equals(targetFieldName, StringComparison.InvariantCultureIgnoreCase); });
                     int targetIndex = _objFieldNameList.IndexOf(targetFieldName);
                     _fileFieldInfoList.Add(targetIndex < 0 ? null : objProperties[targetIndex]);
@@ -252,7 +252,7 @@ public class CSVParser : MonoBehaviour
         return cursor;
     }
 
-    // °´Ã¼ÀÇ Çì´õ ÃßÃâ.
+    // ê°ì²´ì˜ í—¤ë” ì¶”ì¶œ.
     private static void ParseHeaderByObj(MemberInfo[] objProperties)
     {
         _objFieldNameList.Clear();
@@ -260,7 +260,7 @@ public class CSVParser : MonoBehaviour
             _objFieldNameList.Add(objProperties[i].Name);
     }
 
-    // °´Ã¼È­½Ã ¹®ÀÚ¿­ ÆÄ½Ì.
+    // ê°ì²´í™”ì‹œ ë¬¸ìì—´ íŒŒì‹±.
     private static string LoadParse(string target)
     {
         if (target.IndexOf("\"\"") > -1)
@@ -274,10 +274,10 @@ public class CSVParser : MonoBehaviour
         return target;
     }
 
-    // ÆÄÀÏÈ­½Ã ¹®ÀÚ¿­ ÆÄ½Ì.
+    // íŒŒì¼í™”ì‹œ ë¬¸ìì—´ íŒŒì‹±.
     private static string SaveParse(string target)
     {
-        // ½°Ç¥, ½Öµû¿ÈÇ¥, °³ÇàÀÌ Á¸ÀçÇÏ¸é ¿¹¿ÜÃ³¸®.
+        // ì‰¼í‘œ, ìŒë”°ì˜´í‘œ, ê°œí–‰ì´ ì¡´ì¬í•˜ë©´ ì˜ˆì™¸ì²˜ë¦¬.
         bool hasCRLF = target.IndexOf("\n") >= 0;
         bool hasDoubleQuotes = target.IndexOf(DOUBLE_QUOTE) >= 0;
         bool hasComma = target.IndexOf(',') >= 0;
@@ -294,18 +294,18 @@ public class CSVParser : MonoBehaviour
         return target;
     }
 
-    // csv·Î ÀúÀåÇÏ±â.
+    // csvë¡œ ì €ì¥í•˜ê¸°.
     public static string Parse<T>(List<T> data, int idCount = 1) where T : new()
     {
-        // ´ë»ó ÅØ½ºÆ®ÆÄÀÏ ¾ò±â.
+        // ëŒ€ìƒ í…ìŠ¤íŠ¸íŒŒì¼ ì–»ê¸°.
         StringBuilder sb = new StringBuilder();
 
-        // °´Ã¼ÀÇ ÇÊµå¸¦ ¸ğµÎ Çì´õ·Î ÀúÀåÇÑ´Ù.
+        // ê°ì²´ì˜ í•„ë“œë¥¼ ëª¨ë‘ í—¤ë”ë¡œ ì €ì¥í•œë‹¤.
         const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance;
         var type = typeof(T);
         MemberInfo[] objProperties = type.GetFields(bindingFlags).Cast<MemberInfo>().Concat(type.GetProperties(bindingFlags)).ToArray();
 
-        // ID ÄÃ·³ÀÌ Á¦ÀÏ ¾ÕÀ¸·Î ¿Àµµ·Ï Á¶Á¤.
+        // ID ì»¬ëŸ¼ì´ ì œì¼ ì•ìœ¼ë¡œ ì˜¤ë„ë¡ ì¡°ì •.
         for (int i = 0; i < idCount; i++)
         {
             MemberInfo lastField = objProperties[objProperties.Length - 1];
@@ -325,7 +325,7 @@ public class CSVParser : MonoBehaviour
         sb.Remove(sb.Length - 1, 1);
         sb.Append('\n');
 
-        // °´Ã¼ ÇÊµå¸¶´Ù ÆÄÀÏÇì´õ ¼ø¼­¿¡ ¸ÂÃç ¹®ÀÚ¿­È­.
+        // ê°ì²´ í•„ë“œë§ˆë‹¤ íŒŒì¼í—¤ë” ìˆœì„œì— ë§ì¶° ë¬¸ìì—´í™”.
         MemberInfo fInfo;
         for (int i = 0; i < data.Count; i++)
         {
