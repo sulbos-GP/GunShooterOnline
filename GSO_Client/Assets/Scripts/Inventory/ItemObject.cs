@@ -212,6 +212,8 @@ public class ItemObject : MonoBehaviour
             yield return null;
         }
 
+        RevealItem();
+
         searchTimerUI.gameObject.SetActive(false);
         searchingCoroutine = null;
     }

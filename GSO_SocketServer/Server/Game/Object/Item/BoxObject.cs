@@ -71,7 +71,7 @@ namespace Server.Game.Object.Item
 
             //SetAdvancedBox();
 
-            SetRandomItem(3, 5, EBoxSize.Large);
+            SetRandomItem(3, 5, EBoxSize.Large, EItemType.Spoil);
 
             CellPos = pos;
         }
@@ -132,7 +132,7 @@ namespace Server.Game.Object.Item
         }
 
         //랜덤 일반 상자
-        public void SetRandomItem(int min, int max, EBoxSize boxSize)
+        public void SetRandomItem(int min, int max, EBoxSize boxSize, EItemType type)
         {
             SetStorageAndBoxInfo(boxSize);
 
@@ -144,7 +144,7 @@ namespace Server.Game.Object.Item
             int count = 0;
             while(count < maxCount)
             {
-                FMasterItemBase data = GetRandomItemDataWithScopeType(EItemType.Weapone, EItemType.Spoil);
+                FMasterItemBase data = GetItemDataWithType(type);
                 ItemObject newItem = InstanceItemUnit(data, 1);
 
                 if(true == PlaceItem(newItem))
