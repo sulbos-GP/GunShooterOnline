@@ -12,6 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Numerics;
 using System.Threading.Tasks.Dataflow;
+using WebCommonLibrary.Enum;
 
 namespace Server.Game.Object
 {
@@ -190,7 +191,7 @@ namespace Server.Game.Object
 
             BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
             boxObject.CellPos = this.CellPos;
-            boxObject.SetRandomItem(1, 3, EBoxSize.Small);
+            boxObject.SetRandomItem(1, 3, EBoxSize.Small, EItemType.Spoil);
             gameRoom.map.rootableObjects.Add(boxObject);
 
             S_Spawn spawnPacket = new S_Spawn();

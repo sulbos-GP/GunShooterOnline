@@ -482,14 +482,11 @@ internal class PacketHandler
             return;
         }
 
-        if (packet.IsSuccess)
-        {
-            targetItem.RevealItem();
-        }
-        else
+        if (false == packet.IsSuccess)
         {
             targetItem.HideItem();
         }
+       
     }
 
     //나중에 서버의 인벤토리 방식을 바꿔 변경 시 아이템 오브젝트의 아이디가 바뀌는 현상이 제거되면 없앨 예정
