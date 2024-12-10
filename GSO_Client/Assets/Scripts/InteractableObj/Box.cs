@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Box : InteractableObject
 {
@@ -13,6 +14,8 @@ public class Box : InteractableObject
     public double weight;
 
     public bool interactable;
+
+    public Material mat { get;  set; }
     private void Awake()
     {
         Init();
@@ -20,11 +23,18 @@ public class Box : InteractableObject
     protected override void Init()
     {
         base.Init();
+        var originalMaterial = gameObject.transform.GetChild(0).GetComponent<SpriteRenderer>().material;
+        // Instantiate를 사용하여 기존 머티리얼의 복제본을 생성
+        mat = Instantiate(originalMaterial);
+        // 이 복제본을 자식 오브젝트의 SpriteRenderer에 적용
+        transform.GetChild(0).GetComponent<SpriteRenderer>().material = mat;
         interactable = true; 
         interactRange = 2;
         invenUI = InventoryController.Instance.otherInvenUI;
         SetTriggerSize();
     }
+    
+    
 
 
     public void SetBox(int x, int y, double weight)

@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
 using UnityEngine.UI;
 using Unity.Burst.Intrinsics;
+using Unity.VisualScripting;
 
 public class InputController : MonoBehaviour
 {
@@ -154,13 +155,36 @@ public class InputController : MonoBehaviour
     /// </summary>
     private void ChooseInteractObj()
     {
-        float nearestDistance = 0;
+        float nearestDistance = float.MaxValue; // 초기값 설정
+        GameObject nearestTarget = null;
 
         for (int i = 0; i < interactList.Count; i++)
         {
-            float distance = Vector2.Distance(gameObject.transform.position, interactList[i].transform.position);
-            interactTarget = interactList[i].gameObject;
-            nearestDistance = distance;
+            var currentObject = interactList[i];
+            float distance = Vector2.Distance(gameObject.transform.position, currentObject.transform.position);
+            if (currentObject.GetComponent<Box>() != null)
+            {
+                var mat = currentObject.transform.GetChild(0).GetComponent<SpriteRenderer>().material;
+                mat.DisableKeyword("OUTBASE_ON");
+                mat.DisableKeyword("INNEROUTLINE_ON");
+            }
+
+            if (distance < nearestDistance)
+            {
+                nearestDistance = distance;
+                nearestTarget = currentObject;
+            }
+        }
+
+        interactTarget = nearestTarget;
+        if (interactTarget != null)
+        {
+            if (interactTarget.GetComponent<Box>() != null)
+            {
+                var mat = interactTarget.transform.GetChild(0).GetComponent<SpriteRenderer>().material;
+                mat.EnableKeyword("OUTBASE_ON");
+                mat.EnableKeyword("INNEROUTLINE_ON");
+            }
         }
     }
 

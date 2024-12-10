@@ -27,16 +27,16 @@ public abstract class InteractableObject : MonoBehaviour
 
     protected virtual void OnTriggerEnter2D(Collider2D collision)
     {
-        //º®°ú ¸Â´ê¾Æ ÀÖÀ»°æ¿ì º®°ú Ãæµ¹ÇÑ »çÀÌÁî ¸¸Å­ »çÀÌÁî Á¶Àı(º®À» Åë°úÇØ¼­ ÀÎÅÍ·ºÆ®¸¦ ¹æÁöÇÏ±â À§ÇÔ)
+        //ë°”ë¡œ ì•ê¹Œì§€ ì ‘ê·¼í•˜ë©´ ì¶©ëŒì´ ë°œìƒí•  ë§Œí¼ í”Œë ˆì´ì–´ ì´ë™ì„ ë°©ì§€(í•„ìš” ë”°ë¼ì„œ ìƒí˜¸ì‘ìš©ì„ ì›í™œí•˜ê¸° ìœ„í•´)
 
-        //ÇÃ·¹ÀÌ¾î°¡ Æ®¸®°Å ¹üÀ§¾È¿¡ ¿Ã¶ó¿À¸é ÇÃ·¹ÀÌ¾îÀÇ »óÈ£ÀÛ¿ë ¸®½ºÆ®¿¡ µî·ÏÇÏ°í
-        //ÇÃ·¹ÀÌ¾î¿¡¼­ °¡Àå °¡±î¿î ¿ÀºêÁ§Æ®¸¦ °áÁ¤ÈÄ ÇØ´ç ¿ÀºêÁ§Æ®¿¡ ÇÏÀÌ¶óÀÌÆ® ¹× ÀÎÅÍ·ºÆ®
+        //í”Œë ˆì´ì–´ê°€ íŠ¸ë¦¬ê±° ë²”ìœ„ì— ë“¤ì–´ì˜¤ë©´ í”Œë ˆì´ì–´ì˜ ë³´í˜¸ë§‰ì— ìƒí˜¸ì‘ìš© ë²„íŠ¼ì´ í™œì„±í™”ë˜ê³ 
+        //í”Œë ˆì´ì–´ì—ê²Œ ë§ëŠ” ìƒí˜¸ì‘ìš©ì´ í•„ìš”í•˜ì—¬ í•´ë‹¹ ìƒí˜¸ì‘ìš© ë¦¬ìŠ¤íŠ¸ì— ì•„ì´ì½˜ìœ¼ë¡œ ì¶”ê°€
         if (collision.CompareTag("Player"))
         {
-            //ÇÃ·¹ÀÌ¾îÀÇ »óÈ£ÀÛ¿ë °¡´ÉÇÑ ¿ÀºêÁ§Æ® ¸®½ºÆ®¿¡ µî·Ï
+            //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½
             if (Managers.Object.MyPlayer == null)
             {
-                Debug.Log("myplayer°¡ ¾øÀ½");
+                Debug.Log("myplayerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
                 return;
             }
             InputController playerInput = Managers.Object.MyPlayer.GetComponent<InputController>();
@@ -49,13 +49,20 @@ public abstract class InteractableObject : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-            //ÇÃ·¹ÀÌ¾îÀÇ »óÈ£ÀÛ¿ë °¡´ÉÇÑ ¿ÀºêÁ§Æ® ¸®½ºÆ®¿¡¼­ Á¦°Å
+            //ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             if(Managers.Object.MyPlayer == null)
             {
-                Debug.Log("myplayer°¡ ¾øÀ½");
+                Debug.Log("myplayerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
                 return;
             }
             InputController playerInput = Managers.Object.MyPlayer.GetComponent<InputController>();
+            //íš¨ê³¼ê°€ ìˆë‹¤ë©´ íš¨ê³¼ë¥¼ ì œê±°
+            if (gameObject.GetComponent<Box>() != null)
+            {
+                var mat = transform.GetChild(0).GetComponent<SpriteRenderer>().material;
+                mat.DisableKeyword("OUTBASE_ON");
+                mat.DisableKeyword("INNEROUTLINE_ON");
+            }
             playerInput.interactList.Remove(gameObject);
             playerInput.HandleInteraction();
         }
