@@ -9,7 +9,7 @@ public class InventoryPacket
         C_LoadInventory packet = new C_LoadInventory();
         packet.SourceObjectId = objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_SendLoadInven : {objectId}ÀÇ ÀÎº¥Åä¸® ¿äÃ» Àü¼Û");
+        Debug.Log($"C_SendLoadInven : {objectId}ì˜ ì¸ë²¤í† ë¦¬ ìš”ì²­ ì „ì†¡");
     }
 
     public static void SendCloseInvenPacket(int objectId = 0)
@@ -17,7 +17,7 @@ public class InventoryPacket
         C_CloseInventory packet = new C_CloseInventory();
         packet.SourceObjectId = objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_SendCloseInven : {objectId}ÀÇ ÀÎº¥Åä¸® Á¾·á Çàµ¿ Àü¼Û");
+        Debug.Log($"C_SendCloseInven : {objectId}ì˜ ì¸ë²¤í† ë¦¬ ì¢…ë£Œ í–‰ë™ ì „ì†¡");
     }
 
     public static void SendSearchItemPacket(int objectId, ItemObject item)
@@ -26,7 +26,7 @@ public class InventoryPacket
         packet.SourceObjectId = objectId;
         packet.SourceItemId = item.itemData.objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_SearchInventory : {item.itemData.objectId}ÀÇ °Ë»ö Çàµ¿ Àü¼Û");
+        Debug.Log($"C_SearchInventory : {item.itemData.objectId}ì˜ ê²€ìƒ‰ í–‰ë™ ì „ì†¡");
     }
 
 
@@ -42,7 +42,7 @@ public class InventoryPacket
 
         packet.SourceMoveItemId = item.itemData.objectId;
 
-        Debug.Log($"C_MoveItem : {item.itemData.objectId}ÀÇ ¾ÆÀÌÅÛ ÀÌµ¿ ¿äÃ» Àü¼Û");
+        Debug.Log($"C_MoveItem : {item.itemData.objectId}ì˜ ì•„ì´í…œ ì´ë™ ìš”ì²­ ì „ì†¡");
         Managers.Network.Send(packet);
     }
 
@@ -53,7 +53,7 @@ public class InventoryPacket
         packet.SourceObjectId = item.backUpParentId;
         packet.DeleteItemId = item.itemData.objectId;
         Managers.Network.Send(packet);
-        Debug.Log($"C_DeleteItem : {item.itemData.objectId}¾ÆÀÌÅÛ »èÁ¦ ¿äÃ» Àü¼Û");
+        Debug.Log($"C_DeleteItem : {item.itemData.objectId}ì•„ì´í…œ ì‚­ì œ ìš”ì²­ ì „ì†¡");
     }
 
 
@@ -68,7 +68,7 @@ public class InventoryPacket
         packet.MergeNumber = itemAmount;
 
         Managers.Network.Send(packet);
-        Debug.Log($"C_MergeItem : {selectedItem.itemData.objectId}À» {overlapItem.itemData.objectId}¿¡ ÇÕÄ§ ¿äÃ» Àü¼Û");
+        Debug.Log($"C_MergeItem : {selectedItem.itemData.objectId}ì„ {overlapItem.itemData.objectId}ì— í•©ì¹¨ ìš”ì²­ ì „ì†¡");
     }
 
     public static void SendDivideItemPacket(ItemObject devideItem, Vector2Int pos, int amount)
@@ -84,11 +84,11 @@ public class InventoryPacket
         packet.DevideNumber = amount;
 
         Managers.Network.Send(packet);
-        Debug.Log($"C_DevideItem : {devideItem.itemData.objectId}ÀÇ ºĞ¸® ¿äÃ» Àü¼Û");
+        Debug.Log($"C_DevideItem : {devideItem.itemData.objectId}ì˜ ë¶„ë¦¬ ìš”ì²­ ì „ì†¡");
     }
 
     public static void SendUseItemPacket(ItemObject useItem)
     {
-        //¾ÆÀÌÅÛÀ» »ç¿ëÇÑ °æ¿ì ¼­¹ö¿¡ ¿äÃ» Àü¼Û
+        //ì•„ì´í…œì„ ì‚¬ìš©í•œ ê²½ìš° ì„œë²„ì— ìš”ì²­ ì „ì†¡
     }
 }

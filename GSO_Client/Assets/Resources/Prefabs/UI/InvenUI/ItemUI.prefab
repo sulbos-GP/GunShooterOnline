@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6962712291252202740}
   - component: {fileID: 5919268514935892896}
   - component: {fileID: 3351777670299059168}
+  - component: {fileID: 4206208023891188294}
   m_Layer: 5
   m_Name: Image
   m_TagString: Untagged
@@ -57,7 +58,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 2100000, guid: 923fe8adc3a2b024da4f7ddb7936262a, type: 2}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
@@ -75,6 +76,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &4206208023891188294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1108047616665074669}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee158225ee1e59f4791627785501d950, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentShaderType: 0
+  normalStrength: 5
+  normalSmoothing: 1
+  computingNormal: 0
 --- !u!1 &3426902481912085765
 GameObject:
   m_ObjectHideFlags: 0
@@ -405,20 +422,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   imageUI: {fileID: 0}
   amountText: {fileID: 0}
-  unhideTimer: {fileID: 0}
+  searchTimerUI: {fileID: 0}
   itemRect: {fileID: 0}
-  spriteList:
-  - {fileID: 21300000, guid: f223ac2f704b94f49b6182494b32a2c8, type: 3}
-  - {fileID: 21300000, guid: 6c18fae691b12c841aca31694b0d47f5, type: 3}
-  - {fileID: 21300000, guid: 19ef7a93844862b4f847a893d9310e35, type: 3}
-  - {fileID: 21300000, guid: 3027e086b176da54d829553903763a13, type: 3}
-  - {fileID: 21300000, guid: 6d0c4bfba1d6d72419d260435b7b5dd1, type: 3}
   hideSprite: {fileID: 21300000, guid: 15a2dd2bf5cb15747be8d9ee2ab098b8, type: 3}
   itemData:
     objectId: 0
     itemId: 0
     pos: {x: 0, y: 0}
     rotate: 0
+    amount: 0
     isSearched: 0
     item_name: 
     item_weight: 0
@@ -431,6 +443,8 @@ MonoBehaviour:
     height: 0
     isItemConsumeable: 0
     iconName: 
+    durability: 0
+    loadedAmmo: 0
   backUpItemPos: {x: 0, y: 0}
   backUpItemRotate: 0
   isHide: 0

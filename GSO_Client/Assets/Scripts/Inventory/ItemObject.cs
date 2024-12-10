@@ -14,7 +14,7 @@ public class ItemObject : MonoBehaviour
     public const int maxItemMergeAmount = 64;
 
     /// <summary>
-    /// ¾ÆÀÌÅÛ µ¥ÀÌÅÍ·Î »õ·Î¿î ¾ÆÀÌÅÛ UI¸¦ »ý¼ºÇÔ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í·ï¿½ ï¿½ï¿½ï¿½Î¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public static ItemObject CreateNewItemObj(ItemData data, Transform parent = null)
     {
@@ -24,39 +24,38 @@ public class ItemObject : MonoBehaviour
         {
             InventoryController.instantItemDic.Add(data.objectId, newItem);
         }
-
         return newItem;
     }
 
     /// <summary>
-    /// ÇØ´ç ¾ÆÀÌÅÛÀÇ ÇöÀç À§Ä¡, È¸Àü, ºÎ¸ðÀÇ ¾ÆÀÌµð¸¦ ¹é¾÷
+    /// ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡, È¸ï¿½ï¿½, ï¿½Î¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½
     /// </summary>
     public static void BackUpItem(ItemObject item)
     {
-        item.backUpItemPos = item.itemData.pos; //ÇöÀç À§Ä¡
-        item.backUpItemRotate = item.itemData.rotate; //ÇöÀç È¸Àü
-        item.backUpParentId = item.parentObjId; //ÇöÀç ºÎ¸ð ¿ÀºêÁ§Æ®
+        item.backUpItemPos = item.itemData.pos; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+        item.backUpItemRotate = item.itemData.rotate; //ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½
+        item.backUpParentId = item.parentObjId; //ï¿½ï¿½ï¿½ï¿½ ï¿½Î¸ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     }
 
 
-    //ÀÚ½Ä ÄÄÆ÷³ÍÆ®
+    //ï¿½Ú½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public Image imageUI;
-    public TextMeshProUGUI amountText; //¾ÆÀÌÅÛ °¹¼ö ÅØ½ºÆ®
-    public TextMeshProUGUI searchTimerUI; //¾ÆÀÌÅÛ ¼ö»ö Å¸ÀÌ¸Ó ÅØ½ºÆ®
+    public TextMeshProUGUI amountText; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®
+    public TextMeshProUGUI searchTimerUI; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½Ì¸ï¿½ ï¿½Ø½ï¿½Æ®
 
-    //ÄÄÆ÷³ÍÆ®
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public RectTransform itemRect;
 
-    //¾ÆÀÌÅÛÀÇ ½ºÇÁ¶óÀÌÆ®
-    private Sprite itemSprite;
-    public Sprite hideSprite; //Á¶È¸ Àü¿¡ º¸¿©Áú ½ºÇÁ¶óÀÌÆ®
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
+    public Sprite itemSprite;
+    public Sprite hideSprite; //ï¿½ï¿½È¸ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
 
     public Coroutine searchingCoroutine;
 
-    //¾ÆÀÌÅÛ µ¥ÀÌÅÍ ¿ä¼Ò
-    public ItemData itemData; //µ¥ÀÌÅÍ(¾ÆÀÌÅÛ ÄÚµå, ÀÌ¸§, Á¶È¸½Ã°£, Å©±â , ÀÌ¹ÌÁö)
-    public Vector2Int backUpItemPos; //¾ÆÀÌÅÛÀÇ ¿ø·¡ À§Ä¡
-    public int backUpItemRotate; //¾ÆÀÌÅÛÀÇ ¿ø·¡ È¸Àüµµ
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
+    public ItemData itemData; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½, ï¿½Ì¸ï¿½, ï¿½ï¿½È¸ï¿½Ã°ï¿½, Å©ï¿½ï¿½ , ï¿½Ì¹ï¿½ï¿½ï¿½)
+    public Vector2Int backUpItemPos; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡
+    public int backUpItemRotate; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½
 
     public int Width
     {
@@ -96,11 +95,11 @@ public class ItemObject : MonoBehaviour
         }
     }
 
-    //Çö »óÅÂ
-    public bool isHide; //¾ÆÀÌÅÛ Á¤º¸ ¼û°ÜÁü
-    public bool isOnSearching; //¾ÆÀÌÅÛ Á¶È¸Áß
+    //ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public bool isHide; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    public bool isOnSearching; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½
 
-    public double itemWeight; //Áö±Ý±îÁö ¾²ÀÎ itemData.itme_weight¸¦  ÀÌº¯¼ö·Î ¹Ù²Ü°Í
+    public double itemWeight; //ï¿½ï¿½ï¿½Ý±ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ itemData.itme_weightï¿½ï¿½  ï¿½Ìºï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù²Ü°ï¿½
 
     public int parentObjId;
     public int backUpParentId;
@@ -132,20 +131,20 @@ public class ItemObject : MonoBehaviour
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀÇ µ¥ÀÌÅÍ¸¦ Àû¿ë
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void SetItem(ItemData itemData)
     {
         Init();
 
-        //¾ÆÀÌÅÛ µ¥ÀÌÅÍ ¾÷µ¥ÀÌÆ®
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
         this.itemData = itemData;
         itemRect = GetComponent<RectTransform>();
         itemSprite = FindItemSprtie(itemData);
         isOnSearching = false;
         ItemAmount = itemData.amount;
 
-        //Å¬¶ó ÀÔÀå¿¡¼­ ÀÌ¹Ì Á¶È¸µÈ µ¥ÀÌÅÍ¶ó¸é ÇØ´ç ¾ÆÀÌÅÛÀÇ ÀÌ¹ÌÁö·Î ¾Æ´Ï¸é ¼û±è ÀÌ¹ÌÁö·Î
+        //Å¬ï¿½ï¿½ ï¿½ï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¶ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Æ´Ï¸ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½
         if (itemData.isSearched == false)
         {
             imageUI.sprite = hideSprite;
@@ -157,17 +156,17 @@ public class ItemObject : MonoBehaviour
             isHide = false;
         }
 
-        //¾ÆÀÌÅÛ ¿ÀºêÁ§Æ®ÀÇ ÃÊ±â Å©±â¸¦ ÁöÁ¤
-        //¾ÆÀÌÅÛÀÇ rotate°¡ 0ÀÏ¶§·Î ¸ÕÀú »ý¼ºÇÏ°í ±× ÈÄ¿¡ rotate·Î º¯°æ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ê±ï¿½ Å©ï¿½â¸¦ ï¿½ï¿½ï¿½ï¿½
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ rotateï¿½ï¿½ 0ï¿½Ï¶ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½ï¿½ ï¿½Ä¿ï¿½ rotateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         Vector2 size = new Vector2();
-        size.X = itemData.width * GridObject.WidthOfTile; //±×¸®µå 1Ä­ÀÇ Å©±â * ³ôÀÌ,³Êºñ
+        size.X = itemData.width * GridObject.WidthOfTile; //ï¿½×¸ï¿½ï¿½ï¿½ 1Ä­ï¿½ï¿½ Å©ï¿½ï¿½ * ï¿½ï¿½ï¿½ï¿½,ï¿½Êºï¿½
         size.Y = itemData.height * GridObject.HeightOfTile;
         itemRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
         imageUI.GetComponent<RectTransform>().sizeDelta = itemRect.sizeDelta;
 
         Rotate(itemData.rotate);
 
-        //¾ÆÀÌÅÛÀÇ À§Ä¡¸¦ ¼³Á¤. ÇöÀç ¾ÞÄ¿°¡ ÁÂ»ó´Ü ±âÁØÀÓ
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¿ï¿½ï¿½ ï¿½Â»ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile + 50, itemData.height * GridObject.HeightOfTile - 50);
     }
 
@@ -177,7 +176,7 @@ public class ItemObject : MonoBehaviour
 
         if (itemSprite == null)
         {
-            Debug.Log("½ºÇÁ¶óÀÌÆ® °Ë»ö ½ÇÆÐ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ë»ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return null;
         }
 
@@ -185,14 +184,14 @@ public class ItemObject : MonoBehaviour
     }
 
     /// <summary>
-    /// °¡·ÁÁø ¾ÆÀÌÅÛÀ» Å¬¸¯ÇÑ °æ¿ì ¾ÆÀÌÅÛ Á¶È¸
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¬ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸
     /// </summary>
     public void SearchItemHandler()
     {
         if(isOnSearching == true) { return; }
         isOnSearching = true;
 
-        //¾ÆÀÌÅÛÀÇ Á¶È¸ ½Ã°£µ¿¾È ´ë±âÈÄ ¾ÆÀÌÅÛ °ø°³
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ ï¿½Ã°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         searchingCoroutine = StartCoroutine(SearchingTimer(itemData.item_searchTime));
     }
 
@@ -242,7 +241,7 @@ public class ItemObject : MonoBehaviour
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ¿ìÈ¸Àü
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½
     /// </summary>
     public void RotateRight()
     {
@@ -251,7 +250,7 @@ public class ItemObject : MonoBehaviour
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ÁÂÈ¸Àü
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½
     /// </summary>
     public void RotateLeft()
     {
@@ -260,7 +259,7 @@ public class ItemObject : MonoBehaviour
     }
 
     /// <summary>
-    /// ½ÇÁúÀûÀÎ È¸Àü. rect°¡ È¸ÀüÇÏ¸é ÀÌ¹ÌÁö ¶ÇÇÑ È¸ÀüÇÔ.
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½. rectï¿½ï¿½ È¸ï¿½ï¿½ï¿½Ï¸ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È¸ï¿½ï¿½ï¿½ï¿½.
     /// </summary>
     public void Rotate(int rotateInt)
     {
@@ -272,7 +271,7 @@ public class ItemObject : MonoBehaviour
 
     public void MergeItem(ItemObject targetItem, int mergeAmount)
     {
-        //ÀÌ¹Ì À¯È¿¼º Ã¼Å©°¡ ¼º°øÇÔ.
+        //ï¿½Ì¹ï¿½ ï¿½ï¿½È¿ï¿½ï¿½ Ã¼Å©ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.
         targetItem.ItemAmount += mergeAmount;
         ItemAmount -= mergeAmount;
 
@@ -282,7 +281,7 @@ public class ItemObject : MonoBehaviour
     {
         amountText.text = ItemAmount.ToString();
 
-        //¾ÆÀÌÅÛ °¹¼ö ÅØ½ºÆ®°¡ ºñÈ°¼ºÈ­ »óÅÂÀÌ°í 2 ÀÌ»óÀÌ¸é È°¼ºÈ­
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½ 2 ï¿½Ì»ï¿½ï¿½Ì¸ï¿½ È°ï¿½ï¿½È­
         if (ItemAmount > 1  && !isHide) 
         {
             amountText.gameObject.SetActive(true);
@@ -317,7 +316,7 @@ public class ItemObject : MonoBehaviour
         imageUI.color = Color.red;
         while (elapsedTime < transitionTime)
         {
-            // °æ°ú ½Ã°£¿¡ µû¶ó »ö»ó º¯È­
+            // ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­
             imageUI.color = Color.Lerp(Color.red, Color.white, elapsedTime / transitionTime);
             elapsedTime += Time.deltaTime;
             yield return null;
