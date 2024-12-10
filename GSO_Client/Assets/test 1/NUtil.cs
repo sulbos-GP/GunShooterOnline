@@ -24,7 +24,7 @@ public static class NUtil
     public readonly static StringBuilder sb = new StringBuilder(1000);
     private const char QUOTE = ',';
 
-    // List¸¦ ±¸ºĞÀÚ¸¦ ÅëÇØ ¹®ÀÚ¿­·Î ÀüÈ¯.
+    // Listë¥¼ êµ¬ë¶„ìë¥¼ í†µí•´ ë¬¸ìì—´ë¡œ ì „í™˜.
     public static string ListToStr(List<int> list)
     {
         if (list.Count == 0)
@@ -45,7 +45,7 @@ public static class NUtil
         return str;
     }
 
-    // ¹®ÀÚ¿­À» List·Î ÀüÈ¯.
+    // ë¬¸ìì—´ì„ Listë¡œ ì „í™˜.
     public static void StrToList(string str, ref List<int> list)
     {
         if (string.IsNullOrEmpty(str))
@@ -58,7 +58,7 @@ public static class NUtil
             list.Add(int.Parse(strArr[i]));
     }
 
-    // List¸¦ ±¸ºĞÀÚ¸¦ ÅëÇØ ¹®ÀÚ¿­·Î ÀüÈ¯.
+    // Listë¥¼ êµ¬ë¶„ìë¥¼ í†µí•´ ë¬¸ìì—´ë¡œ ì „í™˜.
     public static string ListToStr(List<long> list)
     {
         if (list.Count == 0)
@@ -83,19 +83,19 @@ public static class NUtil
 
     #region Random
 
-    // ·£´ı bool
+    // ëœë¤ bool
     public static bool Random()
     {
         return UnityEngine.Random.Range(0, 2) == 0;
     }
 
-    // ·£´ı bool
+    // ëœë¤ bool
     public static bool Random(int count)
     {
         return UnityEngine.Random.Range(0, count) == 0;
     }
 
-    // ¹éºĞÀ² ·£´ı bool (ratio = 0~1)
+    // ë°±ë¶„ìœ¨ ëœë¤ bool (ratio = 0~1)
     public static bool Random(float ratio)
     {
         return UnityEngine.Random.Range(0f, 1f) <= ratio;
