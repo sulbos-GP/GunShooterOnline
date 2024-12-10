@@ -24,7 +24,7 @@ namespace Server.Game
 
     public class Storage
     {
-        private List<ItemObject> items = new List<ItemObject>();     //저장소에 들어있는 아이템 오브젝트
+        private Dictionary<int, ItemObject> items = new Dictionary<int, ItemObject>();     //저장소에 들어있는 아이템 오브젝트
         private List<List<int>> grid = new List<List<int>>();        //저장소의 그리드
 
         private int scale_x = 0;
@@ -85,7 +85,7 @@ namespace Server.Game
         {
             get
             {
-                return items;
+                return items.Values.ToList();
             }
         }
 
@@ -162,7 +162,7 @@ namespace Server.Game
             }
 
             double weight = 0.0f;
-            foreach(ItemObject item in items)
+            foreach(ItemObject item in Items)
             {
                 weight += item.Weight * item.Amount;
             }
@@ -197,7 +197,7 @@ namespace Server.Game
             }
 
             CurWeight += weight;
-            items.Add(item);
+            items.Add(item.Id, item);
 
             return true;
         }
@@ -207,7 +207,7 @@ namespace Server.Game
         /// </summary>
         public bool DeleteItem(ItemObject item)
         {
-            double weight = item.Weight * item.Amount;
+            double weight = Math.Round(item.Weight * item.Amount, 1);
             if (0 > CurWeight - weight)
             {
                 return false;
@@ -218,59 +218,26 @@ namespace Server.Game
                 return false;
             }
             CurWeight -= weight;
-            items.Remove(item);
+            items.Remove(item.Id);
 
             return true;
-        }
-
-        public bool IsHaveAmount(ItemObject target, int amount)
-        {
-            int index = ScanItem(target);
-            if(index == -1)
-            {
-                return false;
-            }
-
-            ItemObject item = items[index];
-            return item.Amount >= amount;
-        }
-
-        /// <summary>
-        ///아이템 무게에 따른 현재 아이템을 담을 수 있는 최대 수량
-        /// </summary>
-        public int CheackMaxAmount(ItemObject item, int amount)
-        {
-            
-            if(LessWeight >= Math.Round(item.Weight * amount, 1))
-            {
-                return amount;
-            }
-
-            double weight = 0.0;
-            int maxAmount = 0;
-            while(LessWeight > weight)
-            {
-                weight = Math.Round((++maxAmount) * item.Weight, 1);
-            }
-
-            return maxAmount;
         }
 
         /// <summary>
         /// 아이템 수량 증가
         /// </summary>
-        public int IncreaseAmount(ItemObject item, int amount)
+        public bool IncreaseAmount(ItemObject item, int amount)
         {
             int value = item.Amount + amount;
             if (value > item.LimitAmount)
             {
-                return -1;
+                return false;
             }
             else
             {
                 CurWeight += Math.Round(item.Weight * amount, 1);
                 item.Amount += amount;
-                return item.Amount;
+                return true;
             }
         }
 
@@ -278,18 +245,18 @@ namespace Server.Game
         /// <summary>
         /// 아이템 수량 감소 (return이  -1 일 경우 실패, 0이면 삭제 해야함)
         /// </summary>
-        public int DecreaseAmount(ItemObject item, int amount)
+        public bool DecreaseAmount(ItemObject item, int amount)
         {
             int value = item.Amount - amount;
             if(value < 0)
             {
-                return -1;
+                return false;
             }
             else
             {
                 CurWeight -= Math.Round(item.Weight * amount, 1);
                 item.Amount -= amount;
-                return item.Amount;
+                return true;
             }
         }
 
@@ -302,24 +269,9 @@ namespace Server.Game
             }
         }
 
-
-        public List<ItemObject> FindItemsByItemID(int itemID)
+        public bool ScanItem(ItemObject target)
         {
-            return items.FindAll(t => t.ItemId == itemID);
-        }
-
-
-        public int ScanItem(ItemObject target)
-        {
-            for (int index = 0; index < items.Count; ++index)
-            {
-                ItemObject item = items[index];
-                if (item.Id == target.Id)
-                {
-                    return index;
-                }
-            }
-            return -1;
+            return items.ContainsKey(target.Id);
         }
 
         public bool StorageCheack(ItemObject item, bool isPush)
@@ -362,7 +314,7 @@ namespace Server.Game
         public IEnumerable<PS_ItemInfo> GetItems(int viewerId)
         {
             List<PS_ItemInfo> infos = new List<PS_ItemInfo>();
-            foreach (ItemObject item in items)
+            foreach (ItemObject item in Items)
             {
                 infos.Add(item.ConvertItemInfo(viewerId));
             }
@@ -371,21 +323,12 @@ namespace Server.Game
 
         public ItemObject GetItem(int index = 0)
         {
-            return items[index];
-        }
-
-        public List<int> GetAllItemObjectIds()
-        {
-            return items.Select(item => item.Id).ToList();
-        }
-        public List<int> GetAllItemItemIds()
-        {
-            return items.Select(item => item.ItemId).ToList();
+            return items.First().Value;
         }
 
         public void ClearStorage()
         {
-            foreach (ItemObject item in items)
+            foreach (ItemObject item in Items)
             {
                 ObjectManager.Instance.Remove(item.Id);
             }

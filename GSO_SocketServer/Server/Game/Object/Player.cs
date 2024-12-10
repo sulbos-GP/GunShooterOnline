@@ -163,116 +163,35 @@ public class Player : CreatureObj
     /// <summary>
     /// 등록된 아이템을 사용. 이건 아이템의 기능이 나와야할듯
     /// </summary>
-    public void UseQuickSlot(int deleteItemId, int slotId)
+    public void UseQuickSlot(int useItemId, int slotId)
     {
 
-        Console.WriteLine($"test {deleteItemId},  {slotId}");
+        Console.WriteLine($"UseQuickSlot {useItemId},  {slotId}");
 
-        //PS_ItemInfo deleteInfo;
-        //ItemObject deleteItem = gameRoom.FindAndDeleteItem(this, 0, deleteItemId, out deleteInfo); //스토리지에 있는 아이템
-        ItemObject sourceItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
-
-
-        Storage sourceStorage = gameRoom.GetStorageWithScanItem(this, 0, sourceItem);
-
-
-        //SourcelItem의 수량을 DevideNumber만큼 감소
-        int lessAmount = sourceStorage.DecreaseAmount(sourceItem, 1);
-        if (lessAmount == -1)
+        ItemObject useItem = ObjectManager.Instance.Find<ItemObject>(useItemId);
+        if(useItem == null)
         {
-            /* packet.IsSuccess = false;
-             packet.SourceItem = oldSourceItemInfo;
-             player.Session.Send(packet);*/
             return;
-
-
         }
 
-
-
-
-        //SourcelItem의 수량을 전부 소진한 경우
-       if (lessAmount == 0)
+        Storage inventoryStorage = this.inventory.storage;
+        if(false == this.inventory.storage.ScanItem(useItem))
         {
-            bool isDelete = sourceStorage.DeleteItem(sourceItem);
-            if (false == isDelete)
-            {
-                /* //나눠진 아이템을 삭제한다
-                destinationStorage.DeleteItem(devideItem);
-
-                //CombinedItem의 수량 감소에 성공했을 테니까 기존에 정보로 되돌려준다
-                sourceItem.Amount = oldSourceItemInfo.Amount;
-
-                packet.IsSuccess = false;
-                packet.SourceItem = oldSourceItemInfo;
-                player.Session.Send(packet);
-                return;*/
-            }
+            return;
         }
 
+        if(false == inventoryStorage.DecreaseAmount(useItem, 1))
+        {
+            return;
+        }
 
+        if (false == inventoryStorage.DeleteItem(useItem))
+        {
+            inventoryStorage.IncreaseAmount(useItem, 1);
+            return;
+        }
 
-        ItemManager.Instance.UseIteme(this, sourceItem.ItemId);
-
-        //using (var database = DatabaseHandler.GameDB)
-        //{
-        //    using (var transaction = database.GetConnection().BeginTransaction())
-        //    {
-        //        try
-        //        {
-
-
-        //        }
-        //        catch (Exception ex)
-        //        {
-
-        //        }
-        //    }
-        //}
-
-        /*
-
-        세포를 이용해서 
-
-            이런식으로 맞춰진다
-
-
-            면역체계*/
-
-
-        /*
-
-                if (deleteItem == null)
-                {
-                    // 삭제 실패 시 패킷 전송
-                    S_DeleteItem packet = new S_DeleteItem
-                    {
-                        IsSuccess = false,
-                        DeleteItem = deleteInfo,
-                        SourceObjectId = 0
-                    };
-                    Session.Send(packet);
-
-                    Console.WriteLine("Fail to Use ID : " + deleteItemId);
-
-                    return;
-                }
-
-                // 삭제 성공 시 데이터베이스 처리 및 결과 전송
-                gameRoom.HandleDeleteItemResult(this, 0, deleteItem, deleteInfo);
-
-                //아이템이 있고 사용할 수 있는 상태
-
-
-                if (deleteItem == null)
-                {
-                    Console.WriteLine("아이템이 등록되어있지 않음");
-                    return;
-                }
-
-                ItemManager.Instance.UseIteme(this, deleteItem.ItemId);
-        */
-
+        ItemManager.Instance.UseIteme(this, useItem.ItemId);
 
     }
 
