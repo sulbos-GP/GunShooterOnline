@@ -69,4 +69,21 @@ public class PlayerController : CreatureController
         base.OnDamaged(attacker);
         //Debug.Log("Player HIT !");
     }
+
+    public override void OnDead(int attackerId = -1)
+    {
+        if (attackerId == -1)
+            return;
+        //TO - DO : 2024.10.08 수정 예정
+        if (Managers.Object.MyPlayer.Hp == 0)
+            UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
+        Debug.Log(transform.name + "Dead");
+
+        Managers.Object.RemoveWithoutDestroy(attackerId);
+
+        animator.SetTrigger("IsDie");
+
+        //사망 후 3초뒤 파괴?
+        Invoke("Destroy", 3);
+    }
 }

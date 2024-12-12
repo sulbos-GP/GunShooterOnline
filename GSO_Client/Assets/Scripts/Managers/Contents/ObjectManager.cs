@@ -217,6 +217,17 @@ public class ObjectManager
         Managers.Resource.Destroy(go);
     }
 
+    public void RemoveWithoutDestroy(int id)
+    {
+        if (_objects.ContainsKey(id) == false)
+            return;
+
+        var go = FindById(id);
+        if (go == null)
+            return;
+
+        _objects.Remove(id);
+    }
 
 
     public GameObject FindById(int id)

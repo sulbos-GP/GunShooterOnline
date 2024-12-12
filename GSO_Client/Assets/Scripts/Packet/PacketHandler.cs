@@ -889,6 +889,7 @@ internal class PacketHandler
 
         enemy.GetComponent<EnemyAI>().SetData(packet);
     }
+
     internal static void S_AiAttackReadyHandler(PacketSession session, IMessage message)
     {
         S_AiAttackReady packet = message as S_AiAttackReady;
