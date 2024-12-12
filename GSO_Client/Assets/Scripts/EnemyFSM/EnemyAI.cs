@@ -33,7 +33,7 @@ public class EnemyAI : CreatureController
         characterSprite = GetComponent<SpriteRenderer>();
 
 
-        AttackShape = transform.GetChild(0).GetComponent<LineRenderer>();
+        AttackShape = GetComponent<LineRenderer>(); //transform.GetChild(0).GetComponent<LineRenderer>(); //12/12 박성훈 : 이거 누가 왜 피봇으로 설정한건지?
 
         AttackShape.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
         AttackShape.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.
