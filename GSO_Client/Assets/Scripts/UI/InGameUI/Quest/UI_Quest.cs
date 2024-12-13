@@ -21,11 +21,50 @@ public class UI_Quest : MonoBehaviour
     private GameObject questContentPrefab;
 
     [SerializeField]
+    private GameObject questPanel;
+
+    [SerializeField]
+    private GameObject contentPanel;
+
+    [SerializeField]
     private Transform contentParent;
+
+    [SerializeField]
+    private Button toggleButton;
+
+    [SerializeField]
+    private Image toggleImage;
+
+    private bool isToggleUp;
 
     public void Awake()
     {
-        
+        isToggleUp = true;
+
+        toggleButton.onClick.AddListener(OnToggleButton);
+    }
+
+    public void OnToggleButton()
+    {
+        if (isToggleUp)
+        {
+            questPanel.transform.Translate(new Vector3(0.0f, 115.0f, 0.0f));
+
+            questPanel.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 70);
+
+            contentPanel.SetActive(false);
+        }
+        else
+        {
+            questPanel.transform.Translate(new Vector3(0.0f, -115.0f, 0.0f));
+
+            questPanel.gameObject.GetComponent<RectTransform>().sizeDelta = new Vector2(300, 300);
+
+            contentPanel.SetActive(true);
+        }
+
+        toggleImage.transform.Rotate(new Vector3(180.0f, 0.0f, 0.0f));
+        isToggleUp = !isToggleUp;
     }
 
     public void InitQuest(List<PS_RegisterQuest> quests)
