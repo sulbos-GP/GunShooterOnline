@@ -43,12 +43,13 @@ public class GridObject : MonoBehaviour
         gridRect = GetComponent<RectTransform>();
         
     }
-
+    
     /// <summary>
     /// 인벤토리에서 그리드를 생성할때 사용
     /// </summary>
-    public void InstantGrid(Vector2Int _gridSize, double gridWeigth = 100f)
+    public void InstantGrid(Vector2Int _gridSize, double gridWeigth = 100f, bool NotAlignPos = false)
     {
+        Managers.SystemLog.Message($"InstantGrid");
         if (gridRect == null) gridRect = GetComponent<RectTransform>();
 
         if (_gridSize.x <= 0 || _gridSize.y <= 0)
@@ -66,7 +67,11 @@ public class GridObject : MonoBehaviour
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
 
-        SetGridPosition();
+        if (!NotAlignPos)
+        {
+            SetGridPosition();
+        }
+        Managers.SystemLog.Message($"InstantGrid 완료");
     }
 
     /// <summary>
@@ -74,23 +79,25 @@ public class GridObject : MonoBehaviour
     /// </summary>
     private void SetGridPosition()
     {
+        Managers.SystemLog.Message($"SetGridPosition ");
         //그리드가 벽에 딱 붙지 않게 약간의 오프셋을 둠 -> 수정할것 : 중앙에 오도록
         Vector2 offsetGridPosition = new Vector2(InventoryUI.offsetX, InventoryUI.offsetY);
         transform.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector2(offsetGridPosition.X, offsetGridPosition.Y);
+        Managers.SystemLog.Message($"SetGridPosition 완료");
     }
 
-    /// <summary>
-    /// 그리드를 보여주기만 할경우에 부모객체에서 사용.
-    /// 주의. 그리드를 옮겨야하는 경우에 이걸로 그리드의 크기를 바꾸면 그리드간의 크기차이가 발생
-    /// </summary>
-    public void SetGridScale(RectTransform parentRect)
-    {
-        RectTransform childRect = GetComponent<RectTransform>();
+    ///// <summary>
+    ///// 그리드를 보여주기만 할경우에 부모객체에서 사용.
+    ///// 주의. 그리드를 옮겨야하는 경우에 이걸로 그리드의 크기를 바꾸면 그리드간의 크기차이가 발생
+    ///// </summary>
+    //public void SetGridScale(RectTransform parentRect)
+    //{
+    //    RectTransform childRect = GetComponent<RectTransform>();
 
-        float widthScale = parentRect.rect.width / childRect.rect.width;
-        float heightScale = parentRect.rect.height / childRect.rect.height;
-        childRect.localScale = new Vector3(widthScale, heightScale, 1);
-    }
+    //    float widthScale = parentRect.rect.width / childRect.rect.width;
+    //    float heightScale = parentRect.rect.height / childRect.rect.height;
+    //    childRect.localScale = new Vector3(widthScale, heightScale, 1);
+    //}
 
     /// <summary>
     /// 패킷에서 아템을 넣을것;
@@ -152,7 +159,6 @@ public class GridObject : MonoBehaviour
         {
             Debug.Log("boundary error");
             return HighlightColor.Red;
-
         }
 
         //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
@@ -171,7 +177,15 @@ public class GridObject : MonoBehaviour
         if(objectId == 0) //플레이어의 인벤토리에서만 무게 적용
         {
             //무게에 의해 배치가 불가능할 경우 취소
-            if (!CheckGridWeight(placeItem, overlapItem))
+            if (!CheckGridWeight(InventoryController.Instance.playerInvenUI,placeItem, overlapItem))
+            {
+                Debug.Log("weight error");
+                return HighlightColor.Red;
+            }
+        }
+        else //otherInventory의 경우
+        {
+            if (!CheckGridWeight(InventoryController.Instance.otherInvenUI, placeItem, overlapItem))
             {
                 Debug.Log("weight error");
                 return HighlightColor.Red;
@@ -183,62 +197,50 @@ public class GridObject : MonoBehaviour
         return HighlightColor.Green;
     }
 
-    private bool CheckGridWeight(ItemObject placeItem, ItemObject overlapItem)
+     
+    /// <summary>
+    /// 그리드에 placeItem을 추가할때의 무게
+    /// </summary>
+    private bool CheckGridWeight(InventoryUI targetUI,ItemObject placeItem, ItemObject overlapItem)
     {
-        GridObject playerGrid = InventoryController.Instance.playerInvenUI.instantGrid;
-        double curWeight = playerGrid.GridWeight;
+        GridObject targetGrid = targetUI.instantGrid; //타겟 그리드 = 타겟UI에서 생성된 그리드
+
+        double curWeight = targetGrid.GridWeight; 
+
+        //그리드에 존재하는 아이템들의 무게
         double itemWeight = 0;
-        if (overlapItem != null) 
+
+        //이동 전 그리드와 이동 후 그리드가 다를때만 아이템의 무게를 가산 => 이동전후 그리드가 같다면 그리드가 자신의 아이템을 다른 위치로 옮긴것 = 이미 무게가 가산됨
+        if (!(placeItem.backUpParentId == 0 && targetUI == InventoryController.Instance.playerInvenUI) 
+            && !(placeItem.backUpParentId != 0 && targetUI == InventoryController.Instance.otherInvenUI)) 
         {
-            int giveAmount = placeItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
-                    ? placeItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount; //머지가 가능한 개수
-
-            int ableAmount = (int)Math.Round((playerGrid.limitWeight - curWeight) / placeItem.itemData.item_weight); //남은 무게에서 채울수 있는 개수
-
-            if (giveAmount > ableAmount) { 
-                itemWeight = placeItem.itemData.item_weight * ableAmount;
-            }
-            else
+            itemWeight = placeItem.itemWeight;
+            if (overlapItem != null) //머지의 경우
             {
-                itemWeight = placeItem.itemData.item_weight * giveAmount;
-            }
+                int giveAmount = placeItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
+                        ? placeItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
 
-            itemWeight = giveAmount > ableAmount ? placeItem.itemData.item_weight * ableAmount : itemWeight = placeItem.itemData.item_weight * giveAmount;
+                int ableAmount = (int)Math.Round((targetGrid.limitWeight - curWeight) / placeItem.itemData.item_weight); //남은 무게에서 채울수 있는 개수
+                itemWeight = giveAmount > ableAmount ? placeItem.itemData.item_weight * ableAmount : itemWeight = placeItem.itemData.item_weight * giveAmount;
+            }
+            else if (InventoryController.Instance.isDivideMode) //나누기의 경우
+            {
+                itemWeight = placeItem.itemData.item_weight; //최소한의 개수인 1개의 무게가 들어갈수 있다면 성공판정
+            }
         }
-        else if ( InventoryController.Instance.isDivideMode)
+        
+        double resultWeight = Math.Round(curWeight + itemWeight,2);
+        if (resultWeight > targetGrid.limitWeight)
         {
-            //오버랩 아이템이 존재한다면 이것은 머지가 가능할 경우 + divide모드가 켜져있다면 나누기 모드(일단은 배치가 가능하게 하여 서버에 패킷을 전송해야함)
-            itemWeight = placeItem.itemData.item_weight; //최소한의 개수인 1개의 무게가 들어갈수 있다면 성공판정
+            targetUI.weightText.color = Color.red;
         }
         else
         {
-            //평상시
-            itemWeight = placeItem.itemWeight;
+            targetUI.weightText.color = Color.white;
         }
 
 
-        if (placeItem.backUpParentId == 0) //체크
-        {
-            itemWeight = 0;
-        }
-        
-        double result = Math.Round(curWeight + itemWeight,2);
-
-        if(InventoryController.Instance.SelectedGrid.objectId == 0)
-        {
-            InventoryController.Instance.playerInvenUI.weightText.text = $"WEIGHT \n{result} / {playerGrid.limitWeight}";
-
-            if (result > playerGrid.limitWeight)
-            {
-                InventoryController.Instance.playerInvenUI.weightText.color = Color.red;
-            }
-            else
-            {
-                InventoryController.Instance.playerInvenUI.weightText.color = Color.white;
-            }
-        }
-        
-        if (result > playerGrid.limitWeight)
+        if (resultWeight > targetGrid.limitWeight)
         {
             return false;
         }
@@ -372,13 +374,13 @@ public class GridObject : MonoBehaviour
 
         foreach(ItemObject item in InventoryController.instantItemDic.Values)
         {
-            if(item.backUpParentId == 0)
+            if (item.backUpParentId == objectId)
             {
                 double roundedWeight = Math.Round(item.itemWeight, 2);
                 weightIndex += roundedWeight;
             }
         }
-        
+
         GridWeight = Math.Round(weightIndex, 2);
         Debug.Log($"Grid weight updated: {GridWeight}");
     }
@@ -408,6 +410,7 @@ public class GridObject : MonoBehaviour
     /// <summary>
     /// InventoryItemSlot을 출력
     /// </summary>
+    [ContextMenu("debug grid")]
     public void PrintInvenContents()
     {
         string content = gameObject.name + " slot\n";
@@ -527,6 +530,7 @@ public class GridObject : MonoBehaviour
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
 
         InventoryController.UpdatePlayerWeight();
+        InventoryController.UpdateOtherWeight();
 
         foreach (ItemObject item in InventoryController.instantItemDic.Values)
         {

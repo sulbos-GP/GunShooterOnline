@@ -50,14 +50,13 @@ public class DivideInterface : MonoBehaviour
             return;
         }
 
-        splitAmountIndex = 0;
+        splitAmountIndex = 1;
         maxAmountIndex = targetItem.ItemAmount;
 
         InitializeScrollbar();
-        scrollBar.value = splitAmountIndex/maxAmountIndex;
+        scrollBar.value = (float)(splitAmountIndex - 1) / (maxAmountIndex - 2); // 초기값 설정
 
         AddButtonHandler();
-
     }
 
     public void SetInterfacePos()
@@ -75,11 +74,11 @@ public class DivideInterface : MonoBehaviour
 
     private void InitializeScrollbar()
     {
-        scrollBar.numberOfSteps = maxAmountIndex;      
-        scrollBar.value = 0;                    
-        splitAmountIndex = 1;                         
-        UpdateCountText();                         
+        scrollBar.numberOfSteps = maxAmountIndex - 1; 
+        scrollBar.value = (float)(splitAmountIndex - 1) / (maxAmountIndex - 2); 
+        UpdateCountText();
 
+        scrollBar.onValueChanged.RemoveAllListeners();
         scrollBar.onValueChanged.AddListener(OnScrollbarValueChanged);
     }
 
@@ -87,17 +86,19 @@ public class DivideInterface : MonoBehaviour
     {
         InventoryController inven = InventoryController.Instance;
         GridObject playerGridObj = inven.playerInvenUI.instantGrid;
-        splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 1)) + 1;
+
+        // 0~1 값을 1~(maxAmountIndex-1)로 변환
+        splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 2)) + 1;
         UpdateCountText();
 
-        UpdateWeightText(playerGridObj.GridWeight);
+        UpdatePlayerWeightText(playerGridObj.GridWeight);
 
         if (InventoryController.IsPlayerSlot(objectId))
         {
             if (!InventoryController.IsPlayerSlot(targetItem.backUpParentId))
             {
                 // 플레이어 그리드 -> 상대 그리드
-                UpdateWeightText(playerGridObj.GridWeight + targetItem.itemData.item_weight * splitAmountIndex);
+                UpdatePlayerWeightText(playerGridObj.GridWeight + targetItem.itemData.item_weight * splitAmountIndex);
             }
         }
         else
@@ -105,18 +106,16 @@ public class DivideInterface : MonoBehaviour
             if (InventoryController.IsPlayerSlot(targetItem.backUpParentId))
             {
                 // 상대 그리드 -> 플레이어 그리드
-                UpdateWeightText(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex);
+                UpdatePlayerWeightText(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex);
             }
         }
     }
-
-    private void UpdateWeightText(double currentWeight)
+    private void UpdatePlayerWeightText(double currentWeight)
     {
         InventoryController inven = InventoryController.Instance;
         GridObject playerGridObj = inven.playerInvenUI.instantGrid;
         double roundedWeight = Math.Round(currentWeight, 2);
         inven.playerInvenUI.weightText.text = $"WEIGHT \n{roundedWeight} / {playerGridObj.limitWeight}";
-
         inven.playerInvenUI.weightText.color = roundedWeight > playerGridObj.limitWeight ? Color.red : Color.white;
     }
 
@@ -144,12 +143,14 @@ public class DivideInterface : MonoBehaviour
         }
         else if (splitAmountIndex == targetItem.ItemAmount)
         {
+            //이제 안쓸지도(0이거나 전체를 보낼 경우를 제외시킴)
             InventoryPacket.SendMoveItemPacket(targetItem, targetPos);
         }
         else if(splitAmountIndex < targetItem.ItemAmount)
         {
             InventoryPacket.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
         }
+
 
         InventoryController.Instance.playerInvenUI.weightText.color = Color.white;
         DestroyInterface();

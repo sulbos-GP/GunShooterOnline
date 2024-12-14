@@ -409,7 +409,9 @@ internal class PacketHandler
             GridObject playerGrid = inventory.playerInvenUI.instantGrid;
             playerGrid.objectId = packet.SourceObjectId;
             playerGrid.PlaceItemInGrid(packetItemList);
+
             InventoryController.UpdatePlayerWeight();
+            InventoryController.UpdateOtherWeight();
 
             playerGrid.PrintInvenContents();
         }
@@ -426,6 +428,7 @@ internal class PacketHandler
 
             boxGrid.objectId = packet.SourceObjectId;
             boxGrid.PlaceItemInGrid(packetItemList);
+            InventoryController.UpdateOtherWeight();
 
             boxGrid.PrintInvenContents();
         }
@@ -487,19 +490,6 @@ internal class PacketHandler
             targetItem.HideItem();
         }
        
-    }
-
-    //나중에 서버의 인벤토리 방식을 바꿔 변경 시 아이템 오브젝트의 아이디가 바뀌는 현상이 제거되면 없앨 예정
-    private static void ChangeItemObjectId(ItemObject targetItem, int newId)
-    {
-        //int id = targetItem.itemData.objectId;
-        //InventoryController.instantItemDic.Remove(targetItem.itemData.objectId);
-        //targetItem.itemData.objectId = newId;
-        //if (!InventoryController.instantItemDic.ContainsKey(targetItem.itemData.objectId))
-        //{
-        //    InventoryController.instantItemDic.Add(targetItem.itemData.objectId, targetItem);
-        //}
-        //Managers.SystemLog.Message($"change ObjectId : OldId = {id} NewId = {newId}");
     }
 
     private static void IsGearSlotOrGrid(int objectId, ref EquipSlotBase equipSlot, ref GridObject gridObject)
@@ -567,8 +557,8 @@ internal class PacketHandler
             inventory.UndoItem(targetItem);
         }
 
-        ChangeItemObjectId(targetItem, packet.DestinationMoveItem.ObjectId);
         InventoryController.UpdatePlayerWeight();
+        InventoryController.UpdateOtherWeight();
     }
 
     internal static void S_DeleteItemHandler(PacketSession session, IMessage message)
@@ -599,12 +589,13 @@ internal class PacketHandler
 
         inventory.DestroyItem(targetItem);
         InventoryController.UpdatePlayerWeight();
+        InventoryController.UpdateOtherWeight();
     }
 
     internal static void S_MergeItemHandler(PacketSession session, IMessage message)
     {
         S_MergeItem packet = message as S_MergeItem;
-        Managers.SystemLog.Message($"S_MergeItem : 합쳐지는 아이템 아이디 = {packet.MergedItem.ObjectId}, 합치기 위한 아이디 = {packet.CombinedItem.ObjectId}");
+        Managers.SystemLog.Message($"S_MergeItem : 감소 아이템 아이디 = {packet.MergedItem.ObjectId}, 증가 아이템 아이디 = {packet.CombinedItem.ObjectId}");
 
 
         InventoryController inventory = InventoryController.Instance;
@@ -638,8 +629,8 @@ internal class PacketHandler
         IsGearSlotOrGrid(packet.DestinationObjectId, ref destinationEquip, ref destinationGrid);
 
         //각각 변화한 아이템 양 적용
-        mergedItem.ItemAmount = packet.MergedItem.Amount; //개수 증량
-        combinedItem.ItemAmount = packet.CombinedItem.Amount; //개수 감소 혹은 삭제
+        mergedItem.ItemAmount = packet.MergedItem.Amount; //개수 감소
+        combinedItem.ItemAmount = packet.CombinedItem.Amount; //개수 증가
 
         if (sourceEquip != null)
         {
@@ -652,9 +643,9 @@ internal class PacketHandler
         }
 
         //옮긴 아이템의 양이 0개가 되면 파괴 아니면 원래 위치로 이동
-        if (packet.CombinedItem.Amount == 0)
+        if (mergedItem.ItemAmount <= 0)
         {
-            inventory.DestroyItem(combinedItem);
+            inventory.DestroyItem(mergedItem);
         }
         else
         {
@@ -663,6 +654,7 @@ internal class PacketHandler
         }
 
         InventoryController.UpdatePlayerWeight();
+        InventoryController.UpdateOtherWeight();
     }
 
 
@@ -725,8 +717,8 @@ internal class PacketHandler
         inventory.BackUpSlot(sourceItem);
         inventory.BackUpItem(sourceItem);
 
-        ChangeItemObjectId(sourceItem, packet.SourceItem.ObjectId);
         InventoryController.UpdatePlayerWeight();
+        InventoryController.UpdateOtherWeight();
     }
 
     /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ INVENTORY PACKET ENDㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/

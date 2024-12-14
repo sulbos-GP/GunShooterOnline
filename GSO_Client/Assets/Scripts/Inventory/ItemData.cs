@@ -6,12 +6,94 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Net.Http.Headers;
 using UnityEngine;
+using WebCommonLibrary.Models.GameDB;
 
 
 
 [System.Serializable]
 public class ItemData
 {
+    #region DBGearUnit
+    public void SetItemData(DB_GearUnit gear)
+    {
+        //objectId = itemInfo.ObjectId;
+        itemId = gear.attributes.item_id;
+        amount = gear.attributes.amount;
+        isSearched = true;
+
+        Data_master_item_base itemDB = Data_master_item_base.GetData(itemId);
+        item_name = itemDB.name;
+        item_weight = Math.Round(itemDB.weight, 2); //�������� ����
+
+        switch (itemDB.type)
+        {
+            case eITEM_TYPE.Weapone: item_type = ItemType.Weapon; break;
+            case eITEM_TYPE.Defensive: item_type = ItemType.Defensive; break;
+            case eITEM_TYPE.Bag: item_type = ItemType.Bag; break;
+            case eITEM_TYPE.Recovery: item_type = ItemType.Recovery; break;
+            case eITEM_TYPE.Bullet: item_type = ItemType.Bullet; break;
+            case eITEM_TYPE.Spoil: item_type = ItemType.Spoil; break;
+        }
+
+        item_string_value = itemDB.description;
+        item_purchase_price = itemDB.purchase_price;
+        item_sell_price = itemDB.sell_price;
+        item_searchTime = itemDB.inquiry_time;
+        width = itemDB.scale_x;
+        height = itemDB.scale_y;
+
+        durability = gear.attributes.durability == 0 ? 0 : gear.attributes.durability;
+        loadedAmmo = gear.attributes.loaded_ammo == 0 ? 0 : gear.attributes.loaded_ammo;
+
+        isItemConsumeable = itemDB.type == eITEM_TYPE.Recovery || itemDB.type == eITEM_TYPE.Bullet;
+        iconName = itemDB.icon;
+
+    }
+    #endregion
+
+    #region DB_ItemUnit
+    public void SetItemData(DB_ItemUnit item)
+    {
+        //objectId = itemInfo.ObjectId;
+        itemId = item.attributes.item_id;
+        pos = new Vector2Int(item.storage.grid_x, item.storage.grid_y);
+        rotate = item.storage.rotation;
+        amount = item.attributes.amount;
+
+        Data_master_item_base itemDB = Data_master_item_base.GetData(itemId);
+        item_name = itemDB.name;
+        item_weight = Math.Round(itemDB.weight, 2);
+
+        switch (itemDB.type)
+        {
+            case eITEM_TYPE.Weapone: item_type = ItemType.Weapon; break;
+            case eITEM_TYPE.Defensive: item_type = ItemType.Defensive; break;
+            case eITEM_TYPE.Bag: item_type = ItemType.Bag; break;
+            case eITEM_TYPE.Recovery: item_type = ItemType.Recovery; break;
+            case eITEM_TYPE.Bullet: item_type = ItemType.Bullet; break;
+            case eITEM_TYPE.Spoil: item_type = ItemType.Spoil; break;
+        }
+
+        item_string_value = itemDB.description;
+        item_purchase_price = itemDB.purchase_price;
+        item_sell_price = itemDB.sell_price;
+        item_searchTime = itemDB.inquiry_time;
+        width = itemDB.scale_x;
+        height = itemDB.scale_y;
+
+        durability = item.attributes.durability == 0 ? 0 : item.attributes.durability;
+        loadedAmmo = item.attributes.loaded_ammo == 0 ? 0 : item.attributes.loaded_ammo;
+
+        isItemConsumeable = itemDB.type == eITEM_TYPE.Recovery || itemDB.type == eITEM_TYPE.Bullet;
+        iconName = itemDB.icon;
+
+    }
+
+    #endregion
+
+
+    
+    #region Ps_ItemInfo
     /// <summary>
     /// ItemDataInfo�� �ش� ��ũ��Ʈ�� ������ ����
     /// </summary>
@@ -73,6 +155,8 @@ public class ItemData
 
         return itemInfo;
     }
+    #endregion
+
 
     public int objectId;    // �ش� �������� �����ϸ� ������ ���̵�
     public int itemId;      // �������� ������ �����ϴ� �ڵ�

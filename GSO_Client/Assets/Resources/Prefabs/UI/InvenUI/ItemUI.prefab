@@ -424,6 +424,7 @@ MonoBehaviour:
   amountText: {fileID: 0}
   searchTimerUI: {fileID: 0}
   itemRect: {fileID: 0}
+  itemSprite: {fileID: 0}
   hideSprite: {fileID: 21300000, guid: 15a2dd2bf5cb15747be8d9ee2ab098b8, type: 3}
   itemData:
     objectId: 0
