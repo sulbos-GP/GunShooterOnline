@@ -399,6 +399,12 @@ internal class PacketHandler
                     targetItem.SetItemData(packetItem.Item);
                 }
 
+                if(targetItem.itemId == 300)
+                {
+                    Debug.Log("300번 기본가방은 생성안함 = 제외");
+                    continue;
+                }
+
                 ItemObject newItem = ItemObject.CreateNewItemObj(targetItem, targetSlot.transform);
                 targetSlot.SetItemEquip(newItem);
             }
