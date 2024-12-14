@@ -27,6 +27,9 @@ public class UI_QuickInfo : LobbyUI
     private Button quickResetBtn;
 
     [SerializeField]
+    private Button quickCloseBtn;
+
+    [SerializeField]
     private GameObject quickInfoUI;
 
     private bool isProcess;
@@ -41,6 +44,7 @@ public class UI_QuickInfo : LobbyUI
     {
         quickInfoBtn.onClick.AddListener(OnClickQuickInfo);
         quickResetBtn.onClick.AddListener(OnClickQuickReset);
+        quickCloseBtn.onClick.AddListener(OnClickQuickClose);
     }
 
     public override void InitUI()
@@ -50,6 +54,7 @@ public class UI_QuickInfo : LobbyUI
         foreach (EquipSlotBase equip in slots)
         {
             equipSlots[equip.slotId] = equip;
+            equip.Init();
         }
     }
     
@@ -92,6 +97,7 @@ public class UI_QuickInfo : LobbyUI
 
         quickResetBtn.gameObject.SetActive(true);
         quickInfoUI.SetActive(true);
+
         //장착 아이템 설정
         List<DB_GearUnit> gears = Managers.Web.Models.Gear;
 
@@ -194,13 +200,6 @@ public class UI_QuickInfo : LobbyUI
     /// </summary>
     private void OnClickQuickInfo()
     {
-        if (true == quickInfoUI.activeSelf)
-        {
-            quickInfoUI.SetActive(false);
-            quickResetBtn.gameObject.SetActive(false);
-            return;
-        }
-
         if (true == isProcess)
         {
             return;
@@ -277,6 +276,16 @@ public class UI_QuickInfo : LobbyUI
         GsoWebService service = new GsoWebService();
         ResetStorageRequest request = service.mGameResource.GetResetStorageRequest(header, body);
         request.ExecuteAsync(OnProcessResetStorage);
+    }
+
+    private void OnClickQuickClose()
+    {
+        if (true == quickInfoUI.activeSelf)
+        {
+            quickInfoUI.SetActive(false);
+            quickResetBtn.gameObject.SetActive(false);
+            return;
+        }
     }
 
     /// <summary>
