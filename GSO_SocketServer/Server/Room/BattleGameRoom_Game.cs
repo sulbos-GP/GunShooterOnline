@@ -160,6 +160,23 @@ namespace Server
             packet.IsSuccess = true;
             packet.SourceObjectId = sourceObjectId;
             player.Session.Send(packet);
+
+            if (box.storage.ItemCount == 0)
+            {
+                BattleGameRoom room = player.gameRoom;
+                if (room == null)
+                {
+                    return;
+                }
+
+                S_Despawn despawnPacket = new S_Despawn();
+                despawnPacket.ObjcetIds.Add(box.Id);
+                room.BroadCast(despawnPacket);
+
+                room.map.rootableObjects.Remove(box);
+
+                ObjectManager.Instance.Remove(box.Id);
+            }
         }
 
         internal void SearchItemHandler(Player player, int sourceObjectId, int sourceItemId)
@@ -306,7 +323,7 @@ namespace Server
                 //            if (IsInventory(sourceObjectId))
                 //            {
                 //                Inventory inventory = player.inventory;
-                //                await inventory.UpdateItemAttributes(mergedlItem, database, transaction);
+                //                await inventory..ItemAttributes(mergedlItem, database, transaction);
                 //            }
                 //            else if (IsGear(sourceObjectId))
                 //            {
@@ -855,26 +872,6 @@ namespace Server
         //    await HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
 
         //}
-
-
-
-
-
-
-
-
-
-
-
-        public bool IsInventory(int storageObjectId)
-        {
-            return storageObjectId == 0;
-        }
-
-        public bool IsGear(int storageObjectId)
-        {
-            return 0 < storageObjectId && storageObjectId <= 7;
-        }
 
         public Storage GetStorage(Player player, int storageObjectId)
         {
