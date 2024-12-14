@@ -155,7 +155,7 @@ namespace GsoWebServer.Controllers.Game
                     attributes = new DB_UnitAttributes()
                     {
                         item_id = mMasterDB.Context.MasterItemBase.First(item => item.Value.name == "밴드").Value.item_id,
-                        amount = 1,
+                        amount = 3,
                         loaded_ammo = 0,
                         durability = 0,
                         unit_storage_id = null,
