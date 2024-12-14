@@ -13,9 +13,6 @@ public class ItemObject : MonoBehaviour
 {
     public const int maxItemMergeAmount = 64;
 
-    /// <summary>
-    /// ������ �����ͷ� ���ο� ������ UI�� ������
-    /// </summary>
     public static ItemObject CreateNewItemObj(ItemData data, Transform parent = null)
     {
         ItemObject newItem = Managers.Resource.Instantiate("UI/InvenUI/ItemUI", parent).GetComponent<ItemObject>();
@@ -27,35 +24,28 @@ public class ItemObject : MonoBehaviour
         return newItem;
     }
 
-    /// <summary>
-    /// �ش� �������� ���� ��ġ, ȸ��, �θ��� ���̵� ���
-    /// </summary>
     public static void BackUpItem(ItemObject item)
     {
-        item.backUpItemPos = item.itemData.pos; //���� ��ġ
-        item.backUpItemRotate = item.itemData.rotate; //���� ȸ��
-        item.backUpParentId = item.parentObjId; //���� �θ� ������Ʈ
+        item.backUpItemPos = item.itemData.pos;
+        item.backUpItemRotate = item.itemData.rotate;
+        item.backUpParentId = item.parentObjId;
     }
 
 
-    //�ڽ� ������Ʈ
     public Image imageUI;
-    public TextMeshProUGUI amountText; //������ ���� �ؽ�Ʈ
-    public TextMeshProUGUI searchTimerUI; //������ ���� Ÿ�̸� �ؽ�Ʈ
+    public TextMeshProUGUI amountText; 
+    public TextMeshProUGUI searchTimerUI; 
 
-    //������Ʈ
     public RectTransform itemRect;
 
-    //�������� ��������Ʈ
     public Sprite itemSprite;
-    public Sprite hideSprite; //��ȸ ���� ������ ��������Ʈ
+    public Sprite hideSprite;
 
     public Coroutine searchingCoroutine;
 
-    //������ ������ ���
-    public ItemData itemData; //������(������ �ڵ�, �̸�, ��ȸ�ð�, ũ�� , �̹���)
-    public Vector2Int backUpItemPos; //�������� ���� ��ġ
-    public int backUpItemRotate; //�������� ���� ȸ����
+    public ItemData itemData; 
+    public Vector2Int backUpItemPos; 
+    public int backUpItemRotate; 
 
     public int Width
     {
@@ -95,11 +85,10 @@ public class ItemObject : MonoBehaviour
         }
     }
 
-    //�� ����
-    public bool isHide; //������ ���� ������
-    public bool isOnSearching; //������ ��ȸ��
+    public bool isHide;
+    public bool isOnSearching; 
 
-    public double itemWeight; //���ݱ��� ���� itemData.itme_weight��  �̺����� �ٲܰ�
+    public double itemWeight;
 
     public int parentObjId;
     public int backUpParentId;
@@ -130,21 +119,16 @@ public class ItemObject : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// �������� �����͸� ����
-    /// </summary>
     public void SetItem(ItemData itemData)
     {
         Init();
-
-        //������ ������ ������Ʈ
         this.itemData = itemData;
         itemRect = GetComponent<RectTransform>();
         itemSprite = FindItemSprtie(itemData);
         isOnSearching = false;
         ItemAmount = itemData.amount;
 
-        //Ŭ�� ���忡�� �̹� ��ȸ�� �����Ͷ�� �ش� �������� �̹����� �ƴϸ� ���� �̹�����
+
         if (itemData.isSearched == false)
         {
             imageUI.sprite = hideSprite;
@@ -156,17 +140,16 @@ public class ItemObject : MonoBehaviour
             isHide = false;
         }
 
-        //������ ������Ʈ�� �ʱ� ũ�⸦ ����
-        //�������� rotate�� 0�϶��� ���� �����ϰ� �� �Ŀ� rotate�� ����
+
+
         Vector2 size = new Vector2();
-        size.X = itemData.width * GridObject.WidthOfTile; //�׸��� 1ĭ�� ũ�� * ����,�ʺ�
+        size.X = itemData.width * GridObject.WidthOfTile; 
         size.Y = itemData.height * GridObject.HeightOfTile;
         itemRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
         imageUI.GetComponent<RectTransform>().sizeDelta = itemRect.sizeDelta;
 
         Rotate(itemData.rotate);
 
-        //�������� ��ġ�� ����. ���� ��Ŀ�� �»�� ������
         itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile + 50, itemData.height * GridObject.HeightOfTile - 50);
     }
 
@@ -176,22 +159,17 @@ public class ItemObject : MonoBehaviour
 
         if (itemSprite == null)
         {
-            Debug.Log("��������Ʈ �˻� ����");
             return null;
         }
 
         return itemSprite;
     }
 
-    /// <summary>
-    /// ������ �������� Ŭ���� ��� ������ ��ȸ
-    /// </summary>
     public void SearchItemHandler()
     {
         if(isOnSearching == true) { return; }
         isOnSearching = true;
 
-        //�������� ��ȸ �ð����� ����� ������ ����
         searchingCoroutine = StartCoroutine(SearchingTimer(itemData.item_searchTime));
     }
 
@@ -240,27 +218,19 @@ public class ItemObject : MonoBehaviour
         imageUI.sprite = hideSprite;
     }
 
-    /// <summary>
-    /// �������� ��ȸ��
-    /// </summary>
+
     public void RotateRight()
     {
         itemData.rotate = (itemData.rotate + 1) % 4;
         Rotate(itemData.rotate);
     }
 
-    /// <summary>
-    /// �������� ��ȸ��
-    /// </summary>
     public void RotateLeft()
     {
         itemData.rotate = (itemData.rotate - 1) % 4;
         Rotate(itemData.rotate);
     }
 
-    /// <summary>
-    /// �������� ȸ��. rect�� ȸ���ϸ� �̹��� ���� ȸ����.
-    /// </summary>
     public void Rotate(int rotateInt)
     {
         itemRect.sizeDelta = new UnityEngine.Vector2(Width* GridObject.WidthOfTile, Height*GridObject.HeightOfTile);
@@ -271,7 +241,6 @@ public class ItemObject : MonoBehaviour
 
     public void MergeItem(ItemObject targetItem, int mergeAmount)
     {
-        //�̹� ��ȿ�� üũ�� ������.
         targetItem.ItemAmount += mergeAmount;
         ItemAmount -= mergeAmount;
 
@@ -281,7 +250,6 @@ public class ItemObject : MonoBehaviour
     {
         amountText.text = ItemAmount.ToString();
 
-        //������ ���� �ؽ�Ʈ�� ��Ȱ��ȭ �����̰� 2 �̻��̸� Ȱ��ȭ
         if (ItemAmount > 1  && !isHide) 
         {
             amountText.gameObject.SetActive(true);
@@ -316,7 +284,6 @@ public class ItemObject : MonoBehaviour
         imageUI.color = Color.red;
         while (elapsedTime < transitionTime)
         {
-            // ��� �ð��� ���� ���� ��ȭ
             imageUI.color = Color.Lerp(Color.red, Color.white, elapsedTime / transitionTime);
             elapsedTime += Time.deltaTime;
             yield return null;
@@ -329,4 +296,5 @@ public class ItemObject : MonoBehaviour
     {
         Managers.Resource.Destroy(gameObject);
     }
+
 }

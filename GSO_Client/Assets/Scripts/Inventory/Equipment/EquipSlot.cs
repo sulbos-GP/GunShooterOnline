@@ -6,6 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EquipSlotBase : MonoBehaviour
 {
     public int slotId;
@@ -37,49 +38,69 @@ public class EquipSlotBase : MonoBehaviour
     }
 
     //인벤토리를 통한 장착: 플레이어 기어에 추가 + 아이템 오브젝트 변형
-    public bool SetItemEquip(ItemObject item)
+    public bool SetItemEquip(ItemObject item, bool isQuickInfo = false)
     {
-        if (!ApplyItemEffects(item.itemData)) //플레이어의 기어 딕셔너리에 추가
+        if (!isQuickInfo)
         {
-            Debug.Log("적용실패");
-            return false;
+            if (!ApplyItemEffects(item.itemData)) //플레이어의 기어 딕셔너리에 추가
+            {
+                Debug.Log("적용실패");
+                return false;
+            }
         }
 
-        //아이템 오브젝트 변화
         equipItemObj = item;
         equipItemObj.parentObjId = slotId;
         equipItemObj.backUpParentId = slotId;
-        equipItemObj.transform.SetParent(transform);
+        item.transform.SetParent(transform);
 
+        //아이템 오브젝트 변화
         SetEquipItemObj(item);
-        
         return true;
     }
 
     public void SetEquipItemObj(ItemObject item)
     {
+        Managers.SystemLog.Message($"SetEquipItemObj");
+        
         item.itemData.rotate = 0;
         item.Rotate(0);
-        originalItemSize = item.GetComponent<RectTransform>().rect.size;
+        RectTransform itemRect = item.GetComponent<RectTransform>();
+        originalItemSize = itemRect.localScale;
         SetItemObjSize(item);
-        item.GetComponent<RectTransform>().localPosition = Vector3.zero;
+        itemRect.localPosition = Vector3.zero;
+        Managers.SystemLog.Message($"SetEquipItemObj 완료");
     }
 
     private void SetItemObjSize(ItemObject item)
     {
-        Vector2 slotSize = GetComponent<RectTransform>().rect.size * 0.9f;
-        Vector2 itemSize = item.GetComponent<RectTransform>().rect.size;
+        Managers.SystemLog.Message($"SetItemObjSize");
 
-        float widthRatio = slotSize.x / itemSize.x;
-        float heightRatio = slotSize.y / itemSize.y;
+        RectTransform slotRect = GetComponent<RectTransform>();
+        RectTransform itemRect = item.GetComponent<RectTransform>();
 
-        float minRatio = Mathf.Min(widthRatio, heightRatio);
+        // 슬롯의 width와 height 가져오기
+        float slotWidth = slotRect.rect.width;
+        float slotHeight = slotRect.rect.height;
 
-        if (minRatio != 1f)
-        {
-            item.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, itemSize.x * minRatio);
-            item.GetComponent<RectTransform>().SetSizeWithCurrentAnchors(RectTransform.Axis.Vertical, itemSize.y * minRatio);
-        }
+        // 아이템의 width와 height 가져오기
+        float itemWidth = itemRect.rect.width;
+        float itemHeight = itemRect.rect.height;
+
+        // 너비와 높이 비율 계산
+        float widthRatio = slotWidth / itemWidth;
+        float heightRatio = slotHeight / itemHeight;
+
+        // 최소 비율 선택 (슬롯 크기에 맞게 비율 조정)
+        float scaleRatio = Mathf.Min(widthRatio, heightRatio);
+
+        // 아이템의 scale 조정 (자식 객체에 적용)
+        itemRect.localScale = new Vector3(scaleRatio, scaleRatio, 1f);
+
+        // 위치 정렬 보정 (중앙 정렬)
+        itemRect.anchoredPosition = Vector2.zero;
+
+        Managers.SystemLog.Message($"SetItemObjSize: 완료 (Slot: {slotWidth}x{slotHeight}, Item: {itemWidth}x{itemHeight}, Scale: {scaleRatio})");
     }
 
 
@@ -94,7 +115,7 @@ public class EquipSlotBase : MonoBehaviour
         }
 
         //장착 해제에 성공한 경우
-        equipItemObj.GetComponent<RectTransform>().sizeDelta = originalItemSize;
+        equipItemObj.GetComponent<RectTransform>().localScale = originalItemSize;
         originalItemSize = Vector2.zero;
 
         if (!RemoveItemEffects()) //플레이어의 기어 딕셔너리에서 제거
@@ -111,14 +132,20 @@ public class EquipSlotBase : MonoBehaviour
     public virtual bool ApplyItemEffects(ItemData item)
     {
         Debug.Log("아이템 장착");
-        InventoryController.Instance.SetEquipItem(slotId, item);
+        if(!InventoryController.Instance.SetEquipItem(slotId, item))
+        {
+            return false;
+        }
         return true;
     }
 
     public virtual bool RemoveItemEffects()
     {
         Debug.Log("아이템 해제");
-        InventoryController.Instance.UnsetEquipItem(slotId);
+        if (!InventoryController.Instance.UnsetEquipItem(slotId))
+        {
+            return false;
+        }
         return true;
     }
 }

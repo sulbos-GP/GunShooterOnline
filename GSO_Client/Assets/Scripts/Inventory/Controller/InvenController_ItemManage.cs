@@ -6,31 +6,26 @@ public partial class InventoryController
     {
         if (isItemSelected) 
         {
-
             if (SelectedEquip != null)
             {
                 ItemReleaseInEquip(selectedItem, selectedEquip);
                 ResetSelection();
                 return;
             }
-
-
             if (isOnDelete)
             {
                 ItemReleaseInDelete();
                 ResetSelection();
                 return;
             }
-
             if (isGridSelected)
             {
                 gridPosition = WorldToGridPos();
                 ItemReleaseInGrid(selectedItem, gridPosition);
+                
                 ResetSelection();
                 return;
             }
-
-
             UndoSlot(SelectedItem);
             UndoItem(SelectedItem);
             ResetSelection();
@@ -41,15 +36,22 @@ public partial class InventoryController
             {
                 if (selectedEquip.equipItemObj != null)
                 {
-
                     SelectedItem = selectedEquip.equipItemObj;
                     if (!selectedEquip.UnsetItemEquip())
                     {
+                        if(selectedItem == null)
+                        {
+                            return;
+                        }
                         selectedEquip.SetEquipItemObj(SelectedItem); //실패시 원위치로
                         ResetSelection();
                         return;
                     }
-                    SetSelectedObjectToLastSibling(selectedItem.transform);
+                    if (selectedItem != null)
+                    {
+                        SetSelectedObjectToLastSibling(selectedItem.transform);
+                    }
+                    
                 }
                 return;
             }
@@ -185,6 +187,7 @@ public partial class InventoryController
             UndoItem(item);
         }
 
+       
     }
 
     /// <summary>
