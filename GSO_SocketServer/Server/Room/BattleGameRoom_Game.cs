@@ -15,6 +15,7 @@ using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using WebCommonLibrary.Enum;
+using WebCommonLibrary.Models.GameDatabase;
 using WebCommonLibrary.Models.GameDB;
 using static Humanizer.In;
 
@@ -159,6 +160,23 @@ namespace Server
             packet.IsSuccess = true;
             packet.SourceObjectId = sourceObjectId;
             player.Session.Send(packet);
+
+            if (box.storage.ItemCount == 0)
+            {
+                BattleGameRoom room = player.gameRoom;
+                if (room == null)
+                {
+                    return;
+                }
+
+                S_Despawn despawnPacket = new S_Despawn();
+                despawnPacket.ObjcetIds.Add(box.Id);
+                room.BroadCast(despawnPacket);
+
+                room.map.rootableObjects.Remove(box);
+
+                ObjectManager.Instance.Remove(box.Id);
+            }
         }
 
         internal void SearchItemHandler(Player player, int sourceObjectId, int sourceItemId)
@@ -305,7 +323,7 @@ namespace Server
                 //            if (IsInventory(sourceObjectId))
                 //            {
                 //                Inventory inventory = player.inventory;
-                //                await inventory.UpdateItemAttributes(mergedlItem, database, transaction);
+                //                await inventory..ItemAttributes(mergedlItem, database, transaction);
                 //            }
                 //            else if (IsGear(sourceObjectId))
                 //            {
@@ -569,23 +587,77 @@ namespace Server
             sourceMovelItem.Y = destinationGridY;
             sourceMovelItem.Rotate = destinationRotation;
 
-            bool isPlacement = destinationStorage.InsertItem(sourceMovelItem);
-            if(false == isPlacement)
-            {
-
-                sourceStorage.InsertItem(sourceMovelItem);
-
-                packet.IsSuccess = false;
-                packet.SourceMoveItem = oldSourceMoveItemInfo;
-                packet.DestinationMoveItem = oldSourceMoveItemInfo;
-                player.Session.Send(packet);
-                return;
-            }
-
             if (destinationObjectId == (int)EGearPart.Backpack)
             {
-                player.inventory.InitInventory();
+                //가방을 장착 하였을 경우
+                List<ItemObject> items = player.inventory.storage.Items;
+
+                player.gear.GetPart(EGearPart.Backpack).ClearStorage();
+                destinationStorage.InsertItem(sourceMovelItem);
+
+                if (false == player.inventory.MakeInventory())
+                {
+                    sourceStorage.InsertItem(sourceMovelItem);
+
+                    player.gear.GetPart(EGearPart.Backpack).ClearStorage();
+                    player.gear.CreateDefaultBackpack();
+                    player.inventory.InitInventory();
+                    foreach (ItemObject item in items)
+                    {
+                        player.inventory.storage.InsertItem(item);
+                    }
+
+                    packet.IsSuccess = false;
+                    packet.SourceMoveItem = oldSourceMoveItemInfo;
+                    packet.DestinationMoveItem = oldSourceMoveItemInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
             }
+            else
+            {
+                bool isPlacement = destinationStorage.InsertItem(sourceMovelItem);
+                if (false == isPlacement)
+                {
+                    sourceStorage.InsertItem(sourceMovelItem);
+
+                    packet.IsSuccess = false;
+                    packet.SourceMoveItem = oldSourceMoveItemInfo;
+                    packet.DestinationMoveItem = oldSourceMoveItemInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+            }
+
+            if (sourceObjectId == (int)EGearPart.Backpack)
+            {
+                //가방을 이동한 경우
+                List<ItemObject> items = player.inventory.storage.Items;
+
+                player.gear.CreateDefaultBackpack();
+
+                if (false == player.inventory.MakeInventory())
+                {
+                    player.gear.GetPart(EGearPart.Backpack).ClearStorage();
+
+                    sourceStorage.InsertItem(sourceMovelItem);
+                    player.inventory.InitInventory();
+                    foreach (ItemObject item in items)
+                    {
+                        player.inventory.storage.InsertItem(item);
+                    }
+
+                    destinationStorage.DeleteItem(sourceMovelItem);
+
+                    packet.IsSuccess = false;
+                    packet.SourceMoveItem = oldSourceMoveItemInfo;
+                    packet.DestinationMoveItem = oldSourceMoveItemInfo;
+                    player.Session.Send(packet);
+                    return;
+                }
+            }
+            
+
 
             packet.IsSuccess = true;
             packet.SourceMoveItem = oldSourceMoveItemInfo;
@@ -652,12 +724,13 @@ namespace Server
             ItemObject deleteItem = ObjectManager.Instance.Find<ItemObject>(deleteItemId);
             PS_ItemInfo deleteInfo = deleteItem.ConvertItemInfo(player.Id);
 
+            packet.DeleteItem = deleteInfo;
+            packet.SourceObjectId = sourceObjectId;
+
             Storage storage = GetStorageWithScanItem(player, sourceObjectId, deleteItem);
             if (storage == null)
             {
                 packet.IsSuccess = false;
-                packet.DeleteItem = deleteInfo;
-                packet.SourceObjectId = sourceObjectId;
                 player.Session.Send(packet);
                 return;
             }
@@ -666,10 +739,32 @@ namespace Server
             if (false == isDelete)
             {
                 packet.IsSuccess = false;
-                packet.DeleteItem = deleteInfo;
-                packet.SourceObjectId = sourceObjectId;
                 player.Session.Send(packet);
                 return;
+            }
+
+            //가방을 삭제 했을 경우
+            if (sourceObjectId == (int)EGearPart.Backpack)
+            {
+                List<ItemObject> items = player.inventory.storage.Items;
+
+                player.gear.CreateDefaultBackpack();
+                
+                if(false == player.inventory.MakeInventory())
+                {
+                    player.gear.GetPart(EGearPart.Backpack).ClearStorage();
+
+                    storage.InsertItem(deleteItem);
+                    player.inventory.InitInventory();
+                    foreach (ItemObject item in items)
+                    {
+                        player.inventory.storage.InsertItem(item);
+                    }
+
+                    packet.IsSuccess = false;
+                    player.Session.Send(packet);
+                    return;
+                }
             }
 
             BattleGameRoom room = player.gameRoom;
@@ -777,26 +872,6 @@ namespace Server
         //    await HandleDeleteItemResult(player, sourceObjectId, deleteItem, deleteInfo);
 
         //}
-
-
-
-
-
-
-
-
-
-
-
-        public bool IsInventory(int storageObjectId)
-        {
-            return storageObjectId == 0;
-        }
-
-        public bool IsGear(int storageObjectId)
-        {
-            return 0 < storageObjectId && storageObjectId <= 7;
-        }
 
         public Storage GetStorage(Player player, int storageObjectId)
         {

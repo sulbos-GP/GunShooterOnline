@@ -62,10 +62,15 @@ public partial class InventoryController : MonoBehaviour
             case ItemType.Weapon:
                 return UIManager.Instance.SetWQuickSlot(slotId, 0);
             case ItemType.Defensive:
-                //아직 없음
                 break;
             case ItemType.Bag:
-                playerInvenUI.ResetInventoryGrid();
+                if(!playerInvenUI.ResetInventoryGrid())
+                {
+                    Debug.Log("실패");
+                    UndoItem(selectedItem);
+                    ResetSelection();
+                    return false;
+                }
                 break;
             case ItemType.Recovery:
                 return UIManager.Instance.SetIQuickSlot(slotId, null);
@@ -271,8 +276,6 @@ public partial class InventoryController : MonoBehaviour
         {
             Managers.Resource.Destroy(itemPreviewInstance);
         }
-
-        UpdatePlayerWeight();
     }
 
     [ContextMenu("아이템 보기")]
@@ -344,12 +347,26 @@ public partial class InventoryController : MonoBehaviour
     {
         if (Instance.playerInvenUI.instantGrid == null)
         {
+            Instance.playerInvenUI.SetWeightText(0, 0, false);
             return;
         }
         Instance.playerInvenUI.instantGrid.UpdateGridWeight();
-        Instance.playerInvenUI.WeightTextSet(
+        Instance.playerInvenUI.SetWeightText(
             Instance.playerInvenUI.instantGrid.GridWeight,
             Instance.playerInvenUI.instantGrid.limitWeight);
+    }
+
+    public static void UpdateOtherWeight()
+    {
+        if (Instance.otherInvenUI.instantGrid == null)
+        {
+            Instance.otherInvenUI.SetWeightText(0,0, false);
+            return;
+        }
+        Instance.otherInvenUI.instantGrid.UpdateGridWeight();
+        Instance.otherInvenUI.SetWeightText(
+            Instance.otherInvenUI.instantGrid.GridWeight,
+            Instance.otherInvenUI.instantGrid.limitWeight);
     }
 
 }

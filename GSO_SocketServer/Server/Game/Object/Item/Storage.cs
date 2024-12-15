@@ -321,7 +321,7 @@ namespace Server.Game
             return infos;
         }
 
-        public ItemObject GetItem(int index = 0)
+        public ItemObject GetItem()
         {
             return items.First().Value;
         }
@@ -330,7 +330,7 @@ namespace Server.Game
         {
             foreach (ItemObject item in Items)
             {
-                ObjectManager.Instance.Remove(item.Id);
+                this.DeleteItem(item);
             }
             items.Clear();
         }

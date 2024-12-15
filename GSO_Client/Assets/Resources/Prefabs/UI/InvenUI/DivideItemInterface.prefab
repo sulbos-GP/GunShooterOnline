@@ -340,9 +340,12 @@ MonoBehaviour:
   scrollBar: {fileID: 0}
   amountText: {fileID: 0}
   cancelBtn: {fileID: 0}
-  enterBTn: {fileID: 0}
+  enterBtn: {fileID: 0}
   splitAmountIndex: 0
   maxAmountIndex: 0
+  objectId: 0
+  targetPos: {x: 0, y: 0}
+  targetItem: {fileID: 0}
 --- !u!1 &2780202046634079918
 GameObject:
   m_ObjectHideFlags: 0
