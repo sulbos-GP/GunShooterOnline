@@ -42,17 +42,35 @@ namespace Server.Game.Object
             }*/
         }
 
-
+        private Vector2 _rangeAttackDir;
         public override void DoAttack()
         {
             //base.DoAttack();
-            Console.WriteLine();
+            Console.WriteLine("Range Attack - 1");
             /*
                         AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
                         attack.Init(this, attackPolygon, 10);*/
 
-            Vector2 dir = Vector2.Normalize(target.CellPos - CellPos);
-            RaycastHit2D hit2D = RaycastManager.Raycast(CellPos, dir, 100, new List<GameObject>() { this }); //충돌객체 체크
+            _rangeAttackDir = Vector2.Normalize(target.CellPos - CellPos);
+
+            S_AiAttackReady s_AiAttackReady = new S_AiAttackReady();
+
+            s_AiAttackReady.ObjectId = Id;
+            s_AiAttackReady.DirX = _rangeAttackDir.X; 
+            s_AiAttackReady.DirY = _rangeAttackDir.Y;
+
+            gameRoom.BroadCast(s_AiAttackReady);
+
+            gameRoom.PushAfter((int)(attackDelay * 1000), AttakHandle);
+
+        }
+
+        public void AttakHandle()
+        {
+            Console.WriteLine("Range Attack - 2");
+
+
+            RaycastHit2D hit2D = RaycastManager.Raycast(CellPos, _rangeAttackDir, 100, new List<GameObject>() { this }); //충돌객체 체크
 
             //충돌된 객체 없음
             if (hit2D.Collider == null)
@@ -86,7 +104,7 @@ namespace Server.Game.Object
                     ChangeHpPacket.Hp = creatureObj.Hp;
                     this.gameRoom.BroadCast(ChangeHpPacket);
                 }
-              
+
 
                 Console.WriteLine("attacker Id :" + this.Id + ", " + "HIT ID " + creatureObj.Id + "HIT Hp : " + creatureObj.Hp);
 
@@ -94,8 +112,8 @@ namespace Server.Game.Object
 
             BroadcastHitPacket(hitObject.Id, this, CellPos, hit2D.hitPoint.Value);
 
-        
         }
+
 
 
 
