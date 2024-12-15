@@ -70,10 +70,23 @@ namespace Server.Game
 
         /// <summary>
         /// 새로운 가방을 장착 시
+        /// 기존 아이템을 새로운 가방으로 이동
         /// </summary>
-        public void MakeInventory(int storage_id)
+        public bool MakeInventory()
         {
+            List<ItemObject> items = this.storage.Items;
 
+            InitInventory();
+
+            foreach (ItemObject item in items)
+            {
+                if(false == this.storage.InsertItem(item))
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         /// <summary>

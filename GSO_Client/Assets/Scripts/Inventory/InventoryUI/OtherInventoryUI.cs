@@ -14,6 +14,7 @@ public class OtherInventoryUI : InventoryUI
     public override void InventorySet()
     {
         base.InventorySet();
-        
     }
+
+    
 }

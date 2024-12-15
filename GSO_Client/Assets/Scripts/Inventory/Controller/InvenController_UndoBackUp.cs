@@ -11,16 +11,20 @@ public partial class InventoryController
         {
             return;
         }
-        else if (IsPlayerSlot(item.parentObjId)) 
-        { 
-            playerInvenUI.instantGrid.UpdateBackUpSlot();
-            Instance.playerInvenUI.WeightTextSet(
-                Instance.playerInvenUI.instantGrid.GridWeight,
-                Instance.playerInvenUI.instantGrid.limitWeight);
-        }
+        
         else
         {
-            otherInvenUI.instantGrid.UpdateBackUpSlot();
+            playerInvenUI.instantGrid.UpdateBackUpSlot();
+            Instance.playerInvenUI.SetWeightText(
+                Instance.playerInvenUI.instantGrid.GridWeight,
+                Instance.playerInvenUI.instantGrid.limitWeight);
+            if(otherInvenUI.instantGrid != null)
+            {
+                otherInvenUI.instantGrid.UpdateBackUpSlot();
+                Instance.otherInvenUI.SetWeightText(
+                    Instance.otherInvenUI.instantGrid.GridWeight,
+                    Instance.otherInvenUI.instantGrid.limitWeight);
+            }
         }
     }
 
@@ -40,7 +44,7 @@ public partial class InventoryController
         if(IsEquipSlot(item.backUpParentId))
         {
             EquipSlotBase UndoEquipSlot = equipSlotDic[item.backUpParentId];
-            UndoEquipSlot.UnsetItemEquip();
+            UndoEquipSlot.SetItemEquip(item);
             return;
         }
         else if (IsPlayerSlot(item.backUpParentId))
@@ -69,7 +73,7 @@ public partial class InventoryController
         if(IsEquipSlot(item.parentObjId))
         {
             EquipSlotBase targetSlot = equipSlotDic[item.parentObjId];
-            targetSlot.UnsetItemEquip();
+            targetSlot.SetItemEquip(item);
         }
         else if(IsPlayerSlot(item.parentObjId))
         {
