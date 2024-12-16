@@ -26,6 +26,7 @@ public class PlayerController : CreatureController
         Debug.Log("init");
         animator = transform.GetChild(1).GetComponent<Animator>();
         characterSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        AudioSource = transform.GetComponent<AudioSource>();
     }
 
     protected override void UpdateController()
@@ -74,16 +75,24 @@ public class PlayerController : CreatureController
     {
         if (attackerId == -1)
             return;
-        //TO - DO : 2024.10.08 수정 예정
+
+        IsDead = true;
+
         if (Managers.Object.MyPlayer.Hp == 0)
             UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
         Debug.Log(transform.name + "Dead");
 
-        Managers.Object.RemoveWithoutDestroy(attackerId);
+        Managers.Object.RemoveWithoutDestroy(Id);
 
         animator.SetTrigger("IsDie");
+        AudioSource.Stop();
 
         //사망 후 3초뒤 파괴?
-        Invoke("Destroy", 3);
+        Invoke("DestoryPlayer", 3);
+    }
+
+    private void DestoryPlayer()
+    {
+        Managers.Resource.Destroy(gameObject);
     }
 }
