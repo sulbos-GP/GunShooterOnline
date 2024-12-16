@@ -104,7 +104,6 @@ public class ObjectManager
 
             var enemyAI = go.GetComponent<EnemyAI>();
 
-
             //enemyAI.PlanetSide = info.PositionInfo.Side;
             enemyAI.Id = info.ObjectId;
             enemyAI.PosInfo = info.PositionInfo;
@@ -198,6 +197,10 @@ public class ObjectManager
         }
     }
 
+    public Dictionary<int, GameObject> GetDict()
+    {
+        return _objects;
+    }
 
     public void Remove(int id)
     {

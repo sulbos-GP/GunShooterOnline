@@ -118,7 +118,6 @@ internal class PacketHandler
         Managers.SystemLog.Message("S_MoveHandler : " + go.name);
         if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
         {
-            
             return;
         }
 
@@ -858,7 +857,14 @@ internal class PacketHandler
 
         if(packet != null && packet.IsActive)
         {
-            Mine mine = Managers.Object.FindById(packet.ObjectId).GetComponent<Mine>();
+            var go = Managers.Object.FindById(packet.ObjectId);
+            if(go == null)
+            {
+                Debug.Log("아이디를 찾지못함");
+                return;
+            }
+            Debug.Log($"{packet.ObjectId}폭발!");
+            Mine mine = go.GetComponent<Mine>();
             mine.Explosion(packet.ObjectId);
         }
     }
@@ -893,10 +899,20 @@ internal class PacketHandler
         S_AiAttackReady packet = message as S_AiAttackReady;
 
         EnemyAI enemy = Managers.Object.FindById(packet.ObjectId).GetComponent<EnemyAI>();
+        if(packet.Start != null)
+        {
+            //원거리
+            enemy.DrawAttackLine(new Vector2(packet.Start.X, packet.Start.Y), new Vector2(packet.Dir.X, packet.Dir.Y));
+            Debug.Log("원거리 공격 라인");
+        }
+        else
+        {
+            //근거리
+            enemy.DrawAttackLine(new Vector2(packet.Shape.CenterPosX, packet.Shape.CenterPosY), packet.Shape.Width, packet.Shape.Height);
+            Debug.Log("근거리 공격 라인");
+        }
 
 
-        enemy.DrawAttackLine(new Vector2(packet.Start.X, packet.Start.Y), new Vector2(packet.Dir.X,packet.Dir.Y) );
-        //enemy.DrawAttackLine(new Vector2(packet.Shape.CenterPosX, packet.Shape.CenterPosY), packet.Shape.Width, packet.Shape.Height);
     }
 
     internal static void S_AiAttackShotHandler(PacketSession session, IMessage message)

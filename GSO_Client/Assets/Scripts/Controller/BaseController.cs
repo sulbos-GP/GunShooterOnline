@@ -10,6 +10,7 @@ public class BaseController : MonoBehaviour
     protected Rigidbody2D _rig2d;
     protected SpriteRenderer _sprite;
     private readonly StatInfo _stat = new();
+    
     public int Id { get; set; }
     public int OwnerId { get; set; } = -1;
 
@@ -143,6 +144,7 @@ public class BaseController : MonoBehaviour
             transform.rotation = Quaternion.Euler(0, 0, RotationZ);
     }
 
+    protected bool isInitComplete = false;
     protected virtual void Init()
     {
         _animator = GetComponent<Animator>();
@@ -156,6 +158,7 @@ public class BaseController : MonoBehaviour
 
         AttackRange = 5;
         //UpdateAnimation();
+        isInitComplete = true;
     }
 
 

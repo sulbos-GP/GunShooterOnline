@@ -29,7 +29,6 @@ public class IQuickSlot : MonoBehaviour
         itemImage = transform.GetChild(1).GetComponent<Image>();
         itemAmountText = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         coolTimeImage = transform.GetChild(3).GetComponent<Image>();
-        
     }
 
     public void Init()

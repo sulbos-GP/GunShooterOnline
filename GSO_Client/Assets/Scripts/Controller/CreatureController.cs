@@ -12,6 +12,8 @@ public class CreatureController : BaseController
     private Vector2 basicScale;
     private Vector2 reverseScale;
 
+    public bool IsDead = false;
+
     //아래 변수들은 자식객체에서 할당을 해줘야함(크리쳐 별로 캐릭터 스프라이트나 애니메이터의 위치가 다르기때문)
     [SerializeField] protected Animator animator; 
     [SerializeField] protected SpriteRenderer characterSprite;
@@ -68,7 +70,7 @@ public class CreatureController : BaseController
         reverseScale = new Vector2(-basicScale.x, basicScale.y);
         ChangeStat += CheakUpdateBar;
         AddHpbar();
-
+        IsDead = false;
     }
 
     protected void AddHpbar()
@@ -134,14 +136,18 @@ public class CreatureController : BaseController
     public virtual void UpdatePosInfo(PositionInfo info)
     {
         //적 위치 변경
+        if(!isInitComplete)
+        {
+            return;
+        }
+
         Dir = new Vector2(info.DirX, info.DirY);
         var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
         var creaturePos = gameObject.transform.position;
 
         if (animator == null)
         {
-            Console.WriteLine("Animator is null");
-            return;
+            Debug.LogError($"{Id} : Animator is null");
         }
 
         if ((nextPos - transform.position).sqrMagnitude != 0)
@@ -150,10 +156,12 @@ public class CreatureController : BaseController
             if (creaturePos.x < nextPos.x)
             {
                 transform.localScale = reverseScale;
+                Debug.Log("우");
             }
             else
             {
                 transform.localScale = basicScale;
+                Debug.Log("좌");
             }
         }
         else
@@ -250,8 +258,9 @@ public class CreatureController : BaseController
         //State = CreatureState.Dead;
         if (attackerId == -1)
             return;
+        IsDead = true;
         //TO - DO : 2024.10.08 수정 예정
-        if(Managers.Object.MyPlayer.Hp==0)
+        if (Managers.Object.MyPlayer.Hp==0)
             UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
         Debug.Log(transform.name + "Dead");
         //GameObject effect = Managers.Resource.Instantiate("Effect/DieEffect");

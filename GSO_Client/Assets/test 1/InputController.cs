@@ -38,8 +38,6 @@ public class InputController : MonoBehaviour
     //Interact
     public List<GameObject> interactList;
     public GameObject interactTarget;
-    
-    
 
     private bool onMove = false;
     private void Awake()
@@ -111,6 +109,10 @@ public class InputController : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (Managers.Object.MyPlayer.IsDead)
+        {
+            return;
+        }
         UpdateState();
         HandleFiring();
 
@@ -192,6 +194,11 @@ public class InputController : MonoBehaviour
 
     private void OnInteraction(InputAction.CallbackContext callbackContext)
     {
+        if (Managers.Object.MyPlayer.IsDead)
+        {
+            return;
+        }
+
         InteractOn();
     }
 
@@ -199,6 +206,10 @@ public class InputController : MonoBehaviour
     {
         //if(!isRooting)
         //return;
+        if (Managers.Object.MyPlayer.IsDead)
+        {
+            return;
+        }
 
         if (interactTarget == null)
         {
@@ -210,6 +221,11 @@ public class InputController : MonoBehaviour
 
     private void OnMove(InputAction.CallbackContext callbackContext)
     {
+        if (Managers.Object.MyPlayer.IsDead)
+        {
+            return;
+        }
+
         //if(callbackContext.performed)
         //{
         //    State = CreatureState.Moving;
@@ -243,18 +259,6 @@ public class InputController : MonoBehaviour
         direction = new Vector2(input.x, input.y);
     }
 
-    private void moveSound()
-    {
-        if(onMove && timer > moveInterval)
-        {
-            Debug.Log("�ȴ���");
-            timer = 0.0f;
-            audioSource.PlayOneShot(audioSource.clip);
-        }
-    }
-
-    
-
     private void OnMove(InputValue inputValue)
     {
         //TO-DO : ���� �� ���̽�ƽ ���� ��.
@@ -262,6 +266,11 @@ public class InputController : MonoBehaviour
 
     private void OnLookInput(InputAction.CallbackContext context)
     {
+        if (Managers.Object.MyPlayer.IsDead)
+        {
+            return;
+        }
+
         if (context.performed)
         {
             lookInput = context.ReadValue<Vector2>();
@@ -276,7 +285,7 @@ public class InputController : MonoBehaviour
         {
             isFiring = false;
         }
-            
+
     }
 
     /*
@@ -293,10 +302,26 @@ public class InputController : MonoBehaviour
 
     private void OnReloadInput(InputAction.CallbackContext context)
     {
+        if (Managers.Object.MyPlayer.IsDead)
+        {
+            return;
+        }
+
         Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
         playerGun.Reload();
     }
 
+
+
+    private void moveSound()
+    {
+        if(onMove && timer > moveInterval)
+        {
+            Debug.Log("�ȴ���");
+            timer = 0.0f;
+            audioSource.PlayOneShot(audioSource.clip);
+        }
+    }
 
     private void FlipPlayerSprite(float inputX)
     {
