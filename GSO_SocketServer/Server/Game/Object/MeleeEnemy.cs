@@ -15,7 +15,7 @@ namespace Server.Game.Object
         {
             base.Init(pos);
 
-            info.Name = "MelleEnemy";
+            info.Name = "MeleeEnemy";
             chaseRange = 8;
             attackRange = 6;
 

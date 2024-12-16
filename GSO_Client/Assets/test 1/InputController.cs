@@ -310,7 +310,7 @@ public class InputController : MonoBehaviour
         }
     }
 
-    private void Aim(Vector2 dir)
+    private void Aim(Vector2 dir) //돌리기
     {
         //pivot ȸ��
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
@@ -339,7 +339,7 @@ public class InputController : MonoBehaviour
     }
 
     
-    private IEnumerator FireContinuously()
+    private IEnumerator FireContinuously() // 총 쏘기
     {
         while (isFiring)
         {
