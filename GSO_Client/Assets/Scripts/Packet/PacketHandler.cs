@@ -857,8 +857,14 @@ internal class PacketHandler
 
         if(packet != null && packet.IsActive)
         {
-            Debug.Log(packet.ObjectId);
-            Mine mine = Managers.Object.FindById(packet.ObjectId).GetComponent<Mine>();
+            var go = Managers.Object.FindById(packet.ObjectId);
+            if(go == null)
+            {
+                Debug.Log("아이디를 찾지못함");
+                return;
+            }
+            Debug.Log($"{packet.ObjectId}폭발!");
+            Mine mine = go.GetComponent<Mine>();
             mine.Explosion(packet.ObjectId);
         }
     }
