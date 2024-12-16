@@ -109,6 +109,7 @@ public partial class MyPlayerController : PlayerController
         leastLevel = Stat.Level;*/
     }
 
+
     private void Movement_performed(InputAction.CallbackContext context)
     {
         //Debug.Log("Movement_performed");

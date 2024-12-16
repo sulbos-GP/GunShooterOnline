@@ -29,11 +29,22 @@ public class EnemyAI : CreatureController
     {
         base.Init();
 
-        animator = GetComponent<Animator>();
-        characterSprite = GetComponent<SpriteRenderer>();
+        animator = transform.GetChild(1).GetComponent<Animator>();
+        characterSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        AttackShape = transform.GetChild(2).GetComponent<LineRenderer>(); //첫번째 자식에 존재하는 라인렌더러 지정 (본체 라인렌더러는 서버의 충돌범위를 그리는데 사용)
 
-        //12/15 : 공격 라인이랑 히트박스 라인같이 라인을 여러게 쓸거라고 생각해서 미리 햇음
-        AttackShape = GetComponent<LineRenderer>(); //transform.GetChild(0).GetComponent<LineRenderer>(); //12/12 박성훈 : 이거 누가 왜 피봇으로 설정한건지?
+        if(animator == null)
+        {
+            Debug.Log("Animator 찾지못함");
+        }
+        if (characterSprite == null)
+        {
+            Debug.Log("SpriteRenderer 찾지못함");
+        }
+        if (AttackShape == null)
+        {
+            Debug.Log("LineRenderer 찾지못함");
+        }
 
         AttackShape.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
         AttackShape.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.

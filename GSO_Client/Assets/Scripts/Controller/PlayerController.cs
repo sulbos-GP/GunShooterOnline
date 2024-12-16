@@ -74,7 +74,9 @@ public class PlayerController : CreatureController
     {
         if (attackerId == -1)
             return;
-        //TO - DO : 2024.10.08 수정 예정
+
+        IsDead = true;
+
         if (Managers.Object.MyPlayer.Hp == 0)
             UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
         Debug.Log(transform.name + "Dead");
@@ -82,8 +84,11 @@ public class PlayerController : CreatureController
         Managers.Object.RemoveWithoutDestroy(attackerId);
 
         animator.SetTrigger("IsDie");
+        AudioSource.Stop();
 
         //사망 후 3초뒤 파괴?
         Invoke("Destroy", 3);
+
+        
     }
 }
