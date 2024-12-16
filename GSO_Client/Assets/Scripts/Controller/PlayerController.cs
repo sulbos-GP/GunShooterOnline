@@ -82,7 +82,7 @@ public class PlayerController : CreatureController
             UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
         Debug.Log(transform.name + "Dead");
 
-        Managers.Object.RemoveWithoutDestroy(attackerId);
+        Managers.Object.RemoveWithoutDestroy(Id);
 
         animator.SetTrigger("IsDie");
         AudioSource.Stop();
