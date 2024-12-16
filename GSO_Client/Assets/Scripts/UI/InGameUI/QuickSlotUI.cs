@@ -9,12 +9,12 @@ using UnityEngine.UI;
 
 public class IQuickSlot : MonoBehaviour
 {
-    //Äü½½·Ô ¹öÆ° 1, 2, 3ÀÇ ÄÄÆ÷³ÍÆ®¿¡ ºÎÂø
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° 1, 2, 3ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public int SlotId;
 
     public Sprite defaultSprite;
 
-    //ÄÄÆ÷³ÍÆ®
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
     public Image itemImage;
     public TextMeshProUGUI itemAmountText;
     public Image coolTimeImage;
@@ -26,9 +26,9 @@ public class IQuickSlot : MonoBehaviour
 
     private void Awake()
     {
-        itemImage = transform.GetChild(0).GetComponent<Image>();
-        itemAmountText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
-        coolTimeImage = transform.GetChild(2).GetComponent<Image>();
+        itemImage = transform.GetChild(1).GetComponent<Image>();
+        itemAmountText = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
+        coolTimeImage = transform.GetChild(3).GetComponent<Image>();
         
     }
 
@@ -40,7 +40,7 @@ public class IQuickSlot : MonoBehaviour
     }
 
     /// <summary>
-    /// ½½·ÔÀÇ ÀÌ¹ÌÁö¿Í ¼ö·® ÅØ½ºÆ® ¼³Á¤
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ø½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void SetSlot(ItemData item)
     {
@@ -70,7 +70,7 @@ public class IQuickSlot : MonoBehaviour
     }
 
     /// <summary>
-    /// ½½·ÔÀÇ ¾ÆÀÌÅÛ Á¦°Å -> µðÆúÆ® ÀÌ¹ÌÁö ¹× ÅØ½ºÆ®·Î º¯°æ
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ -> ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ì¹ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ø½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void ResetSlot()
     {
@@ -90,19 +90,19 @@ public class IQuickSlot : MonoBehaviour
     }
 
     /// <summary>
-    /// µî·ÏµÈ ¾ÆÀÌÅÛÀ» »ç¿ë. ÀÌ°Ç ¾ÆÀÌÅÛÀÇ ±â´ÉÀÌ ³ª¿Í¾ßÇÒµí
+    /// ï¿½ï¿½Ïµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½. ï¿½Ì°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í¾ï¿½ï¿½Òµï¿½
     /// </summary>
     public void UseQuickSlot(ItemData item)
     {
         if (item == null)
         {
-            Debug.Log("¾ÆÀÌÅÛÀÌ µî·ÏµÇ¾îÀÖÁö ¾ÊÀ½");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ÏµÇ¾ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
-        if (!CheckAbleToUse())//¾ÆÀÌÅÛ »ç¿ë
+        if (!CheckAbleToUse())//ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         {
-            Debug.Log("¾ÆÀÌÅÛ »ç¿ë ½ÇÆÐ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
@@ -112,12 +112,12 @@ public class IQuickSlot : MonoBehaviour
 
         Managers.Network.Send(inputPacket);
 
-        item.amount -= 1; //¾ÆÀÌÅÛÀÇ °³¼ö °¨¼Ò
+        item.amount -= 1; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 
         UpdateItemAmount(item.amount);
         Data_master_item_use consumeData = Data_master_item_use.GetData(item.itemId);
 
-        StartCoroutine(OnBuffMark(consumeData.duration)); //Áö¼Ó½Ã°£ µ¿¾È Èú ¸¶Å© ¶ç¿ì±â
+        StartCoroutine(OnBuffMark(consumeData.duration)); //ï¿½ï¿½ï¿½Ó½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½Å© ï¿½ï¿½ï¿½ï¿½
         StartCoroutine(OnCooltime(consumeData.cool_time));
     }
 
@@ -127,19 +127,19 @@ public class IQuickSlot : MonoBehaviour
 
         if (myPlayer == null)
         {
-            Debug.Log("¾ÆÀÌÅÛÀ» Àû¿ëÇÒ ÇÃ·¹ÀÌ¾î¸¦ Ã£Áö ¸øÇÔ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾î¸¦ Ã£ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return false;
         }
 
         if (!isReady)
         {
-            Debug.Log("ÇöÀç ºñÈ°¼ºÈ­ »óÅÂÀÓ");
+            Debug.Log("ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½");
             return false;
         }
 
         if (cooltimer != null)
         {
-            Debug.Log("ÄðÅ¸ÀÓÀÌ µ¹¾Æ°¡´Â Áß");
+            Debug.Log("ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½ ï¿½ï¿½");
             return false;
         }
         return true;
@@ -160,12 +160,12 @@ public class IQuickSlot : MonoBehaviour
             float remainingTimeRatio = 1 - (elapseTime / (float)cooltime);
             coolTimeImage.fillAmount = remainingTimeRatio;
 
-            // °æ°ú ½Ã°£ ¾÷µ¥ÀÌÆ®
+            // ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®
             elapseTime += Time.deltaTime;
             yield return null;
         }
 
-        // ÄðÅ¸ÀÓ Á¾·á ÈÄ ÃÊ±âÈ­
+        // ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ê±ï¿½È­
         coolTimeImage.fillAmount = 0;
         thisBtn.interactable = true;
         cooltimer = null;
