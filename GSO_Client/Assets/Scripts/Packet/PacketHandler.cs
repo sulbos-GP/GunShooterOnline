@@ -745,7 +745,7 @@ internal class PacketHandler
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
         
 
-        if (shootingPlayer.GetComponent<PlayerController>().Id == Managers.Object.MyPlayer.Id)
+        if (shootingPlayer.GetComponent<CreatureController>().Id == Managers.Object.MyPlayer.Id)
         {
             //쏜사람이 플레이어라면 총알감소 및 총알 텍스트 변경
             Gun shooterGun = Managers.Object.MyPlayer.usingGun;
@@ -871,7 +871,7 @@ internal class PacketHandler
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
         Vector2 instance = enemy.transform.position;
 
-        Debug.Log(packet.PosList.ToList().Count); 
+        //Debug.Log(packet.PosList.ToList().Count); 
         foreach (Vector2IntInfo info in packet.PosList)
         {
             //Debug.DrawLine(instance, new Vector2(info.X,info.Y), Color.red);
@@ -893,7 +893,10 @@ internal class PacketHandler
         S_AiAttackReady packet = message as S_AiAttackReady;
 
         EnemyAI enemy = Managers.Object.FindById(packet.ObjectId).GetComponent<EnemyAI>();
-        enemy.DrawAttackLine(new Vector2(packet.Shape.CenterPosX, packet.Shape.CenterPosY), packet.Shape.Width, packet.Shape.Height);
+
+
+        enemy.DrawAttackLine(new Vector2(packet.Start.X, packet.Start.Y), new Vector2(packet.Dir.X,packet.Dir.Y) );
+        //enemy.DrawAttackLine(new Vector2(packet.Shape.CenterPosX, packet.Shape.CenterPosY), packet.Shape.Width, packet.Shape.Height);
     }
 
     internal static void S_AiAttackShotHandler(PacketSession session, IMessage message)

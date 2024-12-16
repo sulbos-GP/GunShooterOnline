@@ -293,7 +293,62 @@ namespace Server.Game.Object
         //어택 오브젝트도 마찬가지인거 알쥐?
         public virtual void DoAttack()
         {
-            
+            S_AiAttackReady attackReadyPacket = new S_AiAttackReady()
+            {
+                ObjectId = Id,
+                Shape = new ShapeInfo()
+                {
+                    ShpapeType = (Google.Protobuf.Protocol.ShapeType)attackPolygon.Type,
+                    CenterPosX = attackPolygon.position.x,
+                    CenterPosY = attackPolygon.position.y,
+                    Roatation = attackPolygon.rotation
+                }
+
+            };
+
+            RangeEnemy rangeEnemy = this as RangeEnemy;
+
+            if (rangeEnemy != null)
+            {
+
+                attackReadyPacket.Start = 
+                    new Vector2Info() { X = rangeEnemy.CellPos.X, Y = rangeEnemy.CellPos.Y };
+                attackReadyPacket.Dir = 
+                    new Vector2Info() { X = rangeEnemy.rangeAttackDir.X, Y = rangeEnemy.rangeAttackDir.Y };
+                    
+            }
+
+
+
+
+            Collision.Shapes.Shape s = attackPolygon;
+            switch (attackReadyPacket.Shape.ShpapeType)
+            {
+                case Google.Protobuf.Protocol.ShapeType.Shape:
+                    break;
+                case Google.Protobuf.Protocol.ShapeType.Circle:
+                    attackReadyPacket.Shape.Radius = ((Circle)s).radius;
+                    break;
+                case Google.Protobuf.Protocol.ShapeType.Rectangle:
+                    attackReadyPacket.Shape.Left = ((Rectangle)s).Left;
+                    attackReadyPacket.Shape.Bottom = ((Rectangle)s).Bottom;
+                    attackReadyPacket.Shape.Width = ((Rectangle)s).Width;
+                    attackReadyPacket.Shape.Height = ((Rectangle)s).Height;
+                    break;
+                case Google.Protobuf.Protocol.ShapeType.Polygon:
+                    Console.WriteLine("Polygon Error");
+
+                    break;
+                case Google.Protobuf.Protocol.ShapeType.Arcpoly:
+                    Console.WriteLine("Arcpoly Error");
+
+                    break;
+                default:
+                    break;
+            }
+
+
+            gameRoom.BroadCast(attackReadyPacket);
         }
 
         #region PathFidningCore

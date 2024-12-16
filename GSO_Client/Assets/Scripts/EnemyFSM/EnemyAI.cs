@@ -32,7 +32,7 @@ public class EnemyAI : CreatureController
         animator = GetComponent<Animator>();
         characterSprite = GetComponent<SpriteRenderer>();
 
-
+        //12/15 : 공격 라인이랑 히트박스 라인같이 라인을 여러게 쓸거라고 생각해서 미리 햇음
         AttackShape = GetComponent<LineRenderer>(); //transform.GetChild(0).GetComponent<LineRenderer>(); //12/12 박성훈 : 이거 누가 왜 피봇으로 설정한건지?
 
         AttackShape.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
@@ -54,6 +54,32 @@ public class EnemyAI : CreatureController
         AttackShape.SetPosition(4, center + rect.topLeft);
         Debug.Log($"공격범위 그리기 완료 center : {center} ");
     }
+
+
+    
+    public void DrawAttackLine(Vector2 start, Vector2 dir)
+    {
+        // 방향 벡터를 사용한 사각형 계산 (길이와 폭 가정)
+        float length = 20.0f; // 사각형의 길이
+        float width = 1.0f;  // 사각형의 폭
+        Vector2 perpDir = new Vector2(-dir.y, dir.x).normalized; // 방향 벡터의 수직 벡터
+
+        Vector2 topLeft = start + (perpDir * (width / 2));
+        Vector2 topRight = start + (dir.normalized * length) + (perpDir * (width / 2));
+        Vector2 bottomRight = start + (dir.normalized * length) - (perpDir * (width / 2));
+        Vector2 bottomLeft = start - (perpDir * (width / 2));
+
+        // LineRenderer에 위치 설정
+        AttackShape.positionCount = 5;
+        AttackShape.SetPosition(0, topLeft);
+        AttackShape.SetPosition(1, topRight);
+        AttackShape.SetPosition(2, bottomRight);
+        AttackShape.SetPosition(3, bottomLeft);
+        AttackShape.SetPosition(4, topLeft);
+
+        Debug.Log($"공격범위 그리기 완료 start : {start}, dir : {dir}");
+    }
+
 
     public void ClearLine()
     {

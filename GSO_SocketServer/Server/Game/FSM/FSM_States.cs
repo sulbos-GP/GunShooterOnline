@@ -402,46 +402,7 @@ namespace Server.Game.FSM
 
             storeTickCount = Environment.TickCount;
 
-            S_AiAttackReady attackReadyPacket = new S_AiAttackReady()
-            {
-                ObjectId = Owner.Id,
-                Shape = new ShapeInfo()
-                {
-                    ShpapeType = (Google.Protobuf.Protocol.ShapeType)Owner.attackPolygon.Type,
-                    CenterPosX = Owner.attackPolygon.position.x,
-                    CenterPosY = Owner.attackPolygon.position.y,
-                    Roatation = Owner.attackPolygon.rotation
-                }
-
-            };
-            Shape s = Owner.attackPolygon;
-            switch (attackReadyPacket.Shape.ShpapeType)
-            {
-                case Google.Protobuf.Protocol.ShapeType.Shape:
-                    break;
-                case Google.Protobuf.Protocol.ShapeType.Circle:
-                    attackReadyPacket.Shape.Radius = ((Circle)s).radius;
-                    break;
-                case Google.Protobuf.Protocol.ShapeType.Rectangle:
-                    attackReadyPacket.Shape.Left = ((Rectangle)s).Left;
-                    attackReadyPacket.Shape.Bottom = ((Rectangle)s).Bottom;
-                    attackReadyPacket.Shape.Width = ((Rectangle)s).Width;
-                    attackReadyPacket.Shape.Height = ((Rectangle)s).Height;
-                break;
-                case Google.Protobuf.Protocol.ShapeType.Polygon:
-                    Console.WriteLine("Polygon Error");
-
-                    break;
-                case Google.Protobuf.Protocol.ShapeType.Arcpoly:
-                    Console.WriteLine("Arcpoly Error");
-
-                    break;
-                default:
-                    break;
-            }
-
-                   
-            room.BroadCast(attackReadyPacket);
+           
         }
 
         public override void Update()

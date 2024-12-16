@@ -1105,11 +1105,11 @@ namespace Server
                 }
             }
 
-            //int count = 1;
+            int count = 1;
             foreach (AISpawnZone zone in map.aispawnZones)
             {
-                /*  if(count-- <= 0)
-                      continue;*/
+                if(count-- <= 0)
+                      continue;
 
 
                 RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
