@@ -1105,25 +1105,40 @@ namespace Server
                 }
             }
 
-            int count = 1;
+            int count = 2;
             foreach (AISpawnZone zone in map.aispawnZones)
             {
                 if(count-- <= 0)
                       continue;
 
 
-                RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
+                if(count == 1)
                 {
-                    //enemy.info.Name = "AI";
-                    enemy.CellPos = zone.CellPos;
-                    enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
-            
+                    RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
+                    {
+                        //enemy.info.Name = "AI";
+                        enemy.CellPos = zone.CellPos;
+                        enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+
+                    }
+                    enemy.Init(zone.CellPos);
+                    EnterGame(enemy);
+
                 }
-                enemy.Init(zone.CellPos);
+                else
+                {
+                    MeleeEnemy enemy = ObjectManager.Instance.Add<MeleeEnemy>();
+                    {
+                        //enemy.info.Name = "AI";
+                        enemy.CellPos = zone.CellPos;
+                        enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+
+                    }
+                    enemy.Init(zone.CellPos);
+                    EnterGame(enemy);
+                }
             
             
-            
-                EnterGame(enemy);
             
             }
 

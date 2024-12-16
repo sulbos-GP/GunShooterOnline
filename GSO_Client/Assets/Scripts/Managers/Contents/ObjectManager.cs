@@ -97,7 +97,7 @@ public class ObjectManager
             go.name = info.Name ?? "오류";
             if (_objects.TryAdd(info.ObjectId, go) == false)
             {
-                Managers.SystemLog.Message($"{info.ObjectId} _objects add fail");
+                Managers.SystemLog.Message($"{info.Name} _objects add fail");
             }
 
             go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
