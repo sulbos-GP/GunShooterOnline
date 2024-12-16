@@ -109,18 +109,18 @@ public class UIManager : MonoBehaviour
                 case "ReloadBtn":
                     ReloadBtn = child.GetComponent<Button>();
                     ReloadBtn.interactable = false;
-                    ReloadBtn.transform.GetChild(1).GetComponent<Image>().fillAmount = 0;
+                    ReloadBtn.transform.GetChild(2).GetComponent<Image>().fillAmount = 0;
                     break;
-                case "OptionBtn":
+                /*case "OptionBtn":
                     OptionBtn = child.GetComponent<Button>();
-                    break;
+                    break;*/
                 case "InventoryBtn":
                     InventoryBtn = child.GetComponent<Button>();
                     break;
                 case "DieUI":
                     DieUI = child.gameObject;
+                    DieUI.transform.Find("KillName").GetComponent<TextMeshProUGUI>().text = "Killer : ";
                     DieUI.SetActive(false);
-                    DieUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text = "Killer : ";
                     break;
                 case "IQuickSlot":
                     IQuickSlot = child;
