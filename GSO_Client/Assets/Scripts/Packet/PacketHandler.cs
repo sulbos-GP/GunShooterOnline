@@ -857,6 +857,7 @@ internal class PacketHandler
 
         if(packet != null && packet.IsActive)
         {
+            Debug.Log(packet.ObjectId);
             Mine mine = Managers.Object.FindById(packet.ObjectId).GetComponent<Mine>();
             mine.Explosion(packet.ObjectId);
         }

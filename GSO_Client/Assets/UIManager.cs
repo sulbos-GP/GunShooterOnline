@@ -97,7 +97,7 @@ public class UIManager : MonoBehaviour
                     TimeText.text = "Not Setted";
                     break;
                 case "Health":
-                    HealthText = child.GetComponentInChildren<TMP_Text>();
+                    HealthText = child.GetChild(0).GetComponent<TMP_Text>();
                     CureImage = child.GetChild(1).GetComponent<Image>();
                     HealthText.text = "Not Setted";
                     CureImage.gameObject.SetActive(false);
@@ -109,7 +109,7 @@ public class UIManager : MonoBehaviour
                 case "ReloadBtn":
                     ReloadBtn = child.GetComponent<Button>();
                     ReloadBtn.interactable = false;
-                    ReloadBtn.transform.GetChild(2).GetComponent<Image>().fillAmount = 0;
+                    ReloadBtn.transform.GetChild(1).GetComponent<Image>().fillAmount = 0;
                     break;
                 /*case "OptionBtn":
                     OptionBtn = child.GetComponent<Button>();
@@ -119,7 +119,6 @@ public class UIManager : MonoBehaviour
                     break;
                 case "DieUI":
                     DieUI = child.gameObject;
-                    DieUI.transform.Find("KillName").GetComponent<TextMeshProUGUI>().text = "Killer : ";
                     DieUI.SetActive(false);
                     break;
                 case "IQuickSlot":
@@ -143,6 +142,8 @@ public class UIManager : MonoBehaviour
                     break;
             }
         }
+
+        DieUI.gameObject.SetActive(false);
     }
     
 
@@ -163,8 +164,10 @@ public class UIManager : MonoBehaviour
     public void SetDieMessage(string attackerName)
     {
         DieUI.SetActive(true);
-        DieUI.transform.GetChild(1).GetComponent<TextMeshProUGUI>().text += attackerName;
-        StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));
+        Transform dieContent = DieUI.transform.GetChild(2).GetComponent<ScrollRect>().content;
+        dieContent.Find("KillName").GetComponent<TextMeshProUGUI>().text = "Killer : ";
+        dieContent.Find("KillName").GetComponent<TextMeshProUGUI>().text += attackerName;
+        //StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));   //12/16 박성훈 : UI개편후 없어짐?
     }
 
     public IEnumerator SetHitEffect()
