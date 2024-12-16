@@ -31,7 +31,7 @@ public class ExitZone : InteractableObject
         interactRange = 1;
         if (exitTime == 0)
         {
-            exitTime = 8;
+            exitTime = 6;
         }
         remainingTime = exitTime;
     }

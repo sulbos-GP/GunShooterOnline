@@ -136,6 +136,11 @@ public class CreatureController : BaseController
     public virtual void UpdatePosInfo(PositionInfo info)
     {
         //적 위치 변경
+        if(!isInitComplete)
+        {
+            return;
+        }
+
         Dir = new Vector2(info.DirX, info.DirY);
         var nextPos = new Vector3(info.PosX, info.PosY, gameObject.transform.position.z);
         var creaturePos = gameObject.transform.position;

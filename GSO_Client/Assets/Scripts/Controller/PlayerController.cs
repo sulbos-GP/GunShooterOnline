@@ -26,6 +26,7 @@ public class PlayerController : CreatureController
         Debug.Log("init");
         animator = transform.GetChild(1).GetComponent<Animator>();
         characterSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
+        AudioSource = transform.GetComponent<AudioSource>();
     }
 
     protected override void UpdateController()
@@ -87,8 +88,11 @@ public class PlayerController : CreatureController
         AudioSource.Stop();
 
         //사망 후 3초뒤 파괴?
-        Invoke("Destroy", 3);
+        Invoke("DestoryPlayer", 3);
+    }
 
-        
+    private void DestoryPlayer()
+    {
+        Managers.Resource.Destroy(gameObject);
     }
 }

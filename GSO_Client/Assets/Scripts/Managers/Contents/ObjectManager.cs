@@ -104,7 +104,6 @@ public class ObjectManager
 
             var enemyAI = go.GetComponent<EnemyAI>();
 
-
             //enemyAI.PlanetSide = info.PositionInfo.Side;
             enemyAI.Id = info.ObjectId;
             enemyAI.PosInfo = info.PositionInfo;
