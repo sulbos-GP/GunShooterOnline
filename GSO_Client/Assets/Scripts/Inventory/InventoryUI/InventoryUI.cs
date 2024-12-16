@@ -5,15 +5,15 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
-    //±×¸®µå¿Í ¹è°æ»çÀÌÀÇ ¿ÀÇÁ¼Â
+    //ï¿½×¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     public const float offsetX = 0;
     public const float offsetY = 0;
 
-    public GridObject instantGrid; //ÇØ´ç ÀÎº¥Åä¸®¿¡¼­ »ý¼ºµÈ ±×¸®µå
+    public GridObject instantGrid; //ï¿½Ø´ï¿½ ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
 
     public TextMeshProUGUI weightText;
 
-    //ÀÎº¥Åä¸® ´ÝÀ»½Ã ¾ÆÀÌÅÛ ¸ðµÎ Á¦°Å
+    //ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     protected virtual void OnDisable()
     {
         InventoryController.instantItemDic.Clear();
@@ -24,7 +24,7 @@ public class InventoryUI : MonoBehaviour
     }
 
     /// <summary>
-    /// ÇÃ·¹ÀÌ¾î°¡ ÀÎº¥Åä¸®ÀÇ UI¸¦ È°¼ºÈ­ÇÏ°Å³ª ¹Ú½º¿Í ÀÎÅÍ·ºÆ®ÇÏ¿© ÀÎº¥Åä¸®°¡ ¿­¸±°æ¿ì packetÀ¸·Î ÇØ´ç ÀúÀå¼Ò¿¡ ÀÖ´Â ¾ÆÀÌÅÛÀÇ µ¥ÀÌÅÍ¸¦ ¹ÞÀ½
+    /// ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ UIï¿½ï¿½ È°ï¿½ï¿½È­ï¿½Ï°Å³ï¿½ ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Í·ï¿½Æ®ï¿½Ï¿ï¿½ ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ packetï¿½ï¿½ï¿½ï¿½ ï¿½Ø´ï¿½ ï¿½ï¿½ï¿½ï¿½Ò¿ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í¸ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public virtual void InventorySet()
     {
@@ -44,7 +44,7 @@ public class InventoryUI : MonoBehaviour
 
 
 
-    #region ¾ÆÀÌÅÛ ºí¸µÅ©
+    #region ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å©
     public Coroutine blinkCoroutine = null;
     public void StartBlink()
     {
@@ -68,7 +68,7 @@ public class InventoryUI : MonoBehaviour
         weightText.color = Color.red;
         while (elapsedTime < transitionTime)
         {
-            // °æ°ú ½Ã°£¿¡ µû¶ó »ö»ó º¯È­
+            // ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È­
             weightText.color = Color.Lerp(Color.red, Color.white, elapsedTime / transitionTime);
             elapsedTime += Time.deltaTime;
             yield return null;
