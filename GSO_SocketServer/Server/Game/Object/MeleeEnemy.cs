@@ -39,7 +39,7 @@ namespace Server.Game.Object
 
         public override void DoAttack()
         {
-            //base.DoAttack();
+            base.DoAttack();
             AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
             attack.Init(this, attackPolygon, 10);
 

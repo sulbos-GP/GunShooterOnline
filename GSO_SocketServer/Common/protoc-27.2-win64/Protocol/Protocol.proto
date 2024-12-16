@@ -431,8 +431,11 @@ message S_AiSpawn{ //40
 message S_AiAttackReady //  S_AI_ATTACK = 41;
 { 
     int32 ObjectId = 1;
-    float dirX = 2; // 원거리
-    float dirY = 3; //원거리
+
+    Vector2Info start = 2;//원거리 쏘는 위치
+    Vector2Info dir = 3; //원거리 쏘는 방향
+
+
     ShapeInfo shape = 4; // 근거리
 }
 
@@ -487,6 +490,12 @@ message Vector2IntInfo{
     int32 y = 2;
 }  
 
+
+
+message Vector2Info{
+    float x = 1;
+    float y = 2;
+}  
 
 // Caustion : must sync Collision.Shapes.Shape.ShapeType Enum
 message ShapeInfo{
