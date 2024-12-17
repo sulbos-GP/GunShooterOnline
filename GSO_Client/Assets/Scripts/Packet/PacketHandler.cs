@@ -377,7 +377,7 @@ internal class PacketHandler
         }
 
         //플레이어의 인벤토리의 경우
-        if(packet.SourceObjectId == 0)
+        if(packet.SourceObjectId == InventoryController.PlayerSlotId)
         {
             //장착칸 설정
             foreach (PS_GearInfo packetItem in packet.GearInfos)
@@ -415,8 +415,8 @@ internal class PacketHandler
             playerGrid.objectId = packet.SourceObjectId;
             playerGrid.PlaceItemInGrid(packetItemList);
 
-            InventoryController.UpdatePlayerWeight();
-            InventoryController.UpdateOtherWeight(); //other인벤이 없을경우 other의 무게 텍스트를 초기화 하기위해 필요
+            InventoryController.UpdateInvenWeight();
+            InventoryController.UpdateInvenWeight(false); //other인벤이 없을경우 other의 무게 텍스트를 초기화 하기위해 필요
         }
         //타인의 인벤토리의 경우
         else
@@ -431,7 +431,7 @@ internal class PacketHandler
 
             boxGrid.objectId = packet.SourceObjectId;
             boxGrid.PlaceItemInGrid(packetItemList);
-            InventoryController.UpdateOtherWeight();
+            InventoryController.UpdateInvenWeight(false);
         }
     }
 
@@ -493,7 +493,7 @@ internal class PacketHandler
 
     private static void IsGearSlotOrGrid(int objectId, ref EquipSlotBase equipSlot, ref GridObject gridObject)
     {
-        if (objectId > 0 && objectId <= 7)
+        if (objectId > InventoryController.PlayerSlotId && objectId <= InventoryController.MaxEquipSlots)
         {
             equipSlot = InventoryController.equipSlotDic[objectId];
         }
@@ -505,7 +505,7 @@ internal class PacketHandler
 
     private static GridObject GetGridObject(int objectId)
     {
-        return objectId == 0 ? InventoryController.Instance.playerInvenUI.instantGrid : InventoryController.Instance.otherInvenUI.instantGrid;
+        return objectId == InventoryController.PlayerSlotId ? InventoryController.Instance.playerInvenUI.instantGrid : InventoryController.Instance.otherInvenUI.instantGrid;
     }
 
     internal static void S_MoveItemHandler(PacketSession session, IMessage message)
@@ -531,7 +531,7 @@ internal class PacketHandler
 
         if (packet.IsSuccess)
         {
-            if (packet.DestinationObjectId > 0 && packet.DestinationObjectId <= 7)
+            if (packet.DestinationObjectId > InventoryController.PlayerSlotId && packet.DestinationObjectId <= InventoryController.MaxEquipSlots)
             {
                 //도착지점이 장착칸 -> 해당 아이템을 장착칸에 장착
                 if (!destinationEquip.SetItemEquip(targetItem)) //장착 실패시 원위치로
@@ -556,8 +556,8 @@ internal class PacketHandler
             inventory.UndoItem(targetItem);
         }
 
-        InventoryController.UpdatePlayerWeight();
-        InventoryController.UpdateOtherWeight();
+        InventoryController.UpdateInvenWeight();
+        InventoryController.UpdateInvenWeight(false);
     }
 
     internal static void S_DeleteItemHandler(PacketSession session, IMessage message)
@@ -587,8 +587,8 @@ internal class PacketHandler
         }
 
         inventory.DestroyItem(targetItem);
-        InventoryController.UpdatePlayerWeight();
-        InventoryController.UpdateOtherWeight();
+        InventoryController.UpdateInvenWeight();
+        InventoryController.UpdateInvenWeight(false);
     }
 
     internal static void S_MergeItemHandler(PacketSession session, IMessage message)
@@ -652,8 +652,8 @@ internal class PacketHandler
             inventory.UndoItem(combinedItem);
         }
 
-        InventoryController.UpdatePlayerWeight();
-        InventoryController.UpdateOtherWeight();
+        InventoryController.UpdateInvenWeight();
+        InventoryController.UpdateInvenWeight(false);
     }
 
 
@@ -667,6 +667,7 @@ internal class PacketHandler
         if (sourceItem == null )
         {
             Managers.SystemLog.Message($"S_Divide : can't find object with ObjectId {packet.SourceItem.ObjectId}");
+            Debug.LogError($"S_Divide : can't find object with ObjectId {packet.SourceItem.ObjectId}");
             return;
         }
 
@@ -675,6 +676,7 @@ internal class PacketHandler
             Managers.SystemLog.Message("S_Divide failed");
             inventory.UndoSlot(sourceItem);
             inventory.UndoItem(sourceItem);
+            return;
         }
 
         GridObject sourceGrid = null;
@@ -690,7 +692,7 @@ internal class PacketHandler
         inventory.UndoItem(sourceItem);
         sourceItem.ItemAmount = packet.SourceItem.Amount;
 
-        if (packet.DestinationObjectId > 0 && packet.DestinationObjectId <= 7)
+        if (packet.DestinationObjectId > InventoryController.PlayerSlotId && packet.DestinationObjectId <= InventoryController.MaxEquipSlots)
         {
             //도착지점이 장착칸 -> 이 경우는 소모품의 경우 
             ItemData itemData = new ItemData();
@@ -716,8 +718,8 @@ internal class PacketHandler
         inventory.BackUpSlot(sourceItem);
         inventory.BackUpItem(sourceItem);
 
-        InventoryController.UpdatePlayerWeight();
-        InventoryController.UpdateOtherWeight();
+        InventoryController.UpdateInvenWeight();
+        InventoryController.UpdateInvenWeight(false);
     }
 
     /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ INVENTORY PACKET ENDㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/

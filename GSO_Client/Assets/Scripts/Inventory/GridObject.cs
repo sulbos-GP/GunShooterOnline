@@ -529,8 +529,8 @@ public class GridObject : MonoBehaviour
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
 
-        InventoryController.UpdatePlayerWeight();
-        InventoryController.UpdateOtherWeight();
+        InventoryController.UpdateInvenWeight();
+        InventoryController.UpdateInvenWeight(false);
 
         foreach (ItemObject item in InventoryController.instantItemDic.Values)
         {

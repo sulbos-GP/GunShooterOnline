@@ -37,7 +37,7 @@ public partial class InventoryController
 
     private void InvenUIControlInput(InputAction.CallbackContext context)
     {
-        InvenOnOffBtn();
+        InventoryActiveBtn();
     }
 
     #endregion
@@ -123,7 +123,7 @@ public partial class InventoryController
 
     
 
-    public void InvenOnOffBtn()
+    public void InventoryActiveBtn()
     {
         //자신의 인벤토리 요청
         if (!isActive) {

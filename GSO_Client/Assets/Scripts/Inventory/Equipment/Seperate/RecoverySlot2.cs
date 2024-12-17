@@ -11,4 +11,5 @@ public class RecoverySlot2 : RecoverySlot
         slotId = 6;
         equipType = ItemType.Recovery;
     }
+
 }
