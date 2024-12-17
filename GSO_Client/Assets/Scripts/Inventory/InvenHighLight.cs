@@ -46,7 +46,7 @@ public class InvenHighLight : MonoBehaviour
     }
 
     /// <summary>
-    /// 하이라이트의 사이즈를 해당 크기로
+    /// 하이라이트의 사이즈를 해당 
     /// </summary>
     public void SetSize(Vector2 _size)
     {

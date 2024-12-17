@@ -404,7 +404,7 @@ internal class PacketHandler
                     continue;
                 }
 
-                ItemObject newItem = ItemObject.CreateNewItemObj(targetItem, targetSlot.transform);
+                ItemObject newItem = ItemObject.InstantItemObj(targetItem, targetSlot.transform);
                 targetSlot.SetItemEquip(newItem);
             }
 
@@ -413,7 +413,7 @@ internal class PacketHandler
 
             GridObject playerGrid = inventory.playerInvenUI.instantGrid;
             playerGrid.objectId = packet.SourceObjectId;
-            playerGrid.PlaceItemInGrid(packetItemList);
+            playerGrid.PlaceItemsInGrid(packetItemList);
 
             InventoryController.UpdateInvenWeight();
             InventoryController.UpdateInvenWeight(false); //other인벤이 없을경우 other의 무게 텍스트를 초기화 하기위해 필요
@@ -430,7 +430,7 @@ internal class PacketHandler
             GridObject boxGrid = otherInvenUI.instantGrid;
 
             boxGrid.objectId = packet.SourceObjectId;
-            boxGrid.PlaceItemInGrid(packetItemList);
+            boxGrid.PlaceItemsInGrid(packetItemList);
             InventoryController.UpdateInvenWeight(false);
         }
     }
@@ -698,7 +698,7 @@ internal class PacketHandler
             ItemData itemData = new ItemData();
             itemData.SetItemData(packet.DestinationItem);
 
-            ItemObject newItem = ItemObject.CreateNewItemObj(itemData, destinationEquip.transform);
+            ItemObject newItem = ItemObject.InstantItemObj(itemData, destinationEquip.transform);
 
             if (!destinationEquip.SetItemEquip(newItem))
             {
@@ -712,7 +712,7 @@ internal class PacketHandler
             ItemData newData = new ItemData();
             newData.SetItemData(packet.DestinationItem);
 
-            destinationGrid.CreateItemObjAndPlace(newData);
+            destinationGrid.PlaceItemAfterCreate(newData);
         }
 
         inventory.BackUpSlot(sourceItem);

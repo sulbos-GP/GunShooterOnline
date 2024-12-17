@@ -13,7 +13,7 @@ public class ItemObject : MonoBehaviour
 {
     public const int maxItemMergeAmount = 64;
 
-    public static ItemObject CreateNewItemObj(ItemData data, Transform parent = null)
+    public static ItemObject InstantItemObj(ItemData data, Transform parent = null)
     {
         ItemObject newItem = Managers.Resource.Instantiate("UI/InvenUI/ItemUI", parent).GetComponent<ItemObject>();
         newItem.SetItem(data);
@@ -124,7 +124,7 @@ public class ItemObject : MonoBehaviour
         Init();
         this.itemData = itemData;
         itemRect = GetComponent<RectTransform>();
-        itemSprite = FindItemSprtie(itemData);
+        itemSprite = GetItemSprite(itemData);
         isOnSearching = false;
         ItemAmount = itemData.amount;
 
@@ -140,8 +140,6 @@ public class ItemObject : MonoBehaviour
             isHide = false;
         }
 
-
-
         Vector2 size = new Vector2();
         size.X = itemData.width * GridObject.WidthOfTile; 
         size.Y = itemData.height * GridObject.HeightOfTile;
@@ -153,7 +151,7 @@ public class ItemObject : MonoBehaviour
         itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile + 50, itemData.height * GridObject.HeightOfTile - 50);
     }
 
-    public static Sprite FindItemSprtie(ItemData itemData)
+    public static Sprite GetItemSprite(ItemData itemData)
     {
         Sprite itemSprite = Resources.Load<Sprite>($"Sprite/Item/{itemData.iconName}");
 
@@ -225,25 +223,11 @@ public class ItemObject : MonoBehaviour
         Rotate(itemData.rotate);
     }
 
-    public void RotateLeft()
-    {
-        itemData.rotate = (itemData.rotate - 1) % 4;
-        Rotate(itemData.rotate);
-    }
-
     public void Rotate(int rotateInt)
     {
         itemRect.sizeDelta = new UnityEngine.Vector2(Width* GridObject.WidthOfTile, Height*GridObject.HeightOfTile);
        
         imageUI.GetComponent< RectTransform >().rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
-        
-    }
-
-    public void MergeItem(ItemObject targetItem, int mergeAmount)
-    {
-        targetItem.ItemAmount += mergeAmount;
-        ItemAmount -= mergeAmount;
-
     }
 
     public void TextControl()
