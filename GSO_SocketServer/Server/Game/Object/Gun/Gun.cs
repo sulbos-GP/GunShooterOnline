@@ -64,6 +64,8 @@ namespace Server.Game
         public void Init(WeaponInventory weapon)
         {
             weaponInven = weapon;
+
+            weapon.MainGun.CurAmmo = 100;
             //ResetGun();
         }
 

@@ -82,6 +82,7 @@ public class ScopeSkill : SkillObj
         while (true)
         {
             var now = Program.ServerTickCount;
+           // Console.Write(now + ", ");
 
             if (_pq.Count == 0)
                 return;

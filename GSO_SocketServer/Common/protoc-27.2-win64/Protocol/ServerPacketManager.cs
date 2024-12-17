@@ -50,7 +50,9 @@ class PacketManager
 		_onRecv.Add((ushort)MsgId.CChangeAppearance, MakePacket<C_ChangeAppearance>);
 		_handler.Add((ushort)MsgId.CChangeAppearance, PacketHandler.C_ChangeAppearanceHandler);		
 		_onRecv.Add((ushort)MsgId.CInputData, MakePacket<C_InputData>);
-		_handler.Add((ushort)MsgId.CInputData, PacketHandler.C_InputDataHandler);
+		_handler.Add((ushort)MsgId.CInputData, PacketHandler.C_InputDataHandler);		
+		_onRecv.Add((ushort)MsgId.CPong, MakePacket<C_Pong>);
+		_handler.Add((ushort)MsgId.CPong, PacketHandler.C_PongHandler);
 	}
 
 	public void OnRecvPacket(PacketSession session, ArraySegment<byte> buffer)

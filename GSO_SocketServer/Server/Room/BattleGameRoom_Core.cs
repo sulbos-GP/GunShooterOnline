@@ -390,19 +390,28 @@ namespace Server
 
             if (type == GameObjectType.Player)
             {
-
-                bool t =  _playerDic.Remove(id);
-
-                if(t == true)
+                if(_playerDic.TryGetValue(id, out var player) == true)
                 {
-                    Console.WriteLine($"LeaveGame id : {id}");
+                    bool t = _playerDic.Remove(id);
+
+                    if (t == true)
+                    {
+                        Console.WriteLine($"LeaveGame id : {id}");
+                    }
+
+                    if (MatchInfo.Remove(id) == false)
+                    {
+                        Console.WriteLine("MatchInfo.Remove(id) == false");
+                    }
+                    ((ClientSession)player.Session).MyPlayer = null;
+
+                }
+                else
+                {
+                    Console.WriteLine("Error_playerDic.TryGetValue is fail ");
                 }
 
-                if (MatchInfo.Remove(id) == false)
-                {
-                    Console.WriteLine("MatchInfo.Remove(id) == false");
-                }
-               
+
 
             }
             else if (type == GameObjectType.Enemyai)
@@ -469,5 +478,38 @@ namespace Server
             Program.web.Lobby.PostPlayerStats(player.UID, outcome).Wait();
 #endif
         }
+
+
+
+
+
+        public void CheakPing(ClientSession session)
+        {
+            if (session == null || session.MyPlayer == null)
+            {
+                return;
+            }
+
+            S_Ping s_Ping = new S_Ping();
+            s_Ping.IsEnd = false;
+            s_Ping.Tick = LogicTimer.Tick;
+
+            //Console.WriteLine($"SendTick : {LogicTimer.Tick} ") ;
+            session.Send(s_Ping);
+
+            if(session.Cheak())
+            {
+                PushAfter(100 , CheakPing, session);
+            }
+        }
+
+
+
+
+
+
+
+
+
     }
 }

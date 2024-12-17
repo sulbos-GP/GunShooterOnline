@@ -56,7 +56,7 @@ namespace Server
                 }
                 else
                 {
-                    Console.WriteLine($"{shape.Parent.info.Name} is hit with {temp.distance} distance");
+                    //Console.WriteLine($"{shape.Parent.info.Name} is hit with {temp.distance} distance");
                 }
 
 

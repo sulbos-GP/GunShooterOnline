@@ -2,6 +2,7 @@
 using LiteNetLib;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -52,6 +53,65 @@ namespace ServerCore
 	{
 		public SessionManager mSessionManager;
         public NetPeer mPeer;
+
+
+
+		public uint _rtt;
+		public uint RTT
+		{
+			get
+			{
+				//return CustomMath.CalculateFilteredMean(RTTs);
+
+				return _rtt; 
+
+            }
+			set
+			{
+				/*if(RTTs.Count > 10)
+				{
+					RTTs.RemoveRange(0, 5);
+				}*/
+				RTTs.Add(value);
+
+				_rtt = CustomMath.CalculateFilteredMean(RTTs);
+			}
+		}
+
+        uint index = 0;
+		public uint Rindex = 0;
+
+		//public List<(uint,uint)> RTTs = new List<(uint, uint)>();
+		public List<uint> RTTs = new List<uint>();
+		
+        public Dictionary<uint, ulong> LastTick = new Dictionary<uint, ulong>();
+
+
+		public bool Cheak()
+		{
+            LastTick.Add(index++, LogicTimer.Tick);
+
+			return true;
+
+			if(RTTs.Count < 5)
+			{
+				return true;
+			}
+			else
+			{
+                RTTs.Clear();
+
+                return false;
+
+
+            }
+
+
+
+
+        }
+
+
 
         public int mPing;
         public int mId;
