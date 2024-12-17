@@ -1257,7 +1257,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -1581,7 +1581,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4480,7 +4480,7 @@ MonoBehaviour:
     m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
     m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
     m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 1, g: 1, b: 1, a: 0.5019608}
+    m_DisabledColor: {r: 1, g: 1, b: 1, a: 1}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -6887,10 +6887,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1790032448}
     m_Modifications:
-    - target: {fileID: 240676492041862842, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: targetSlot
-      value: 
-      objectReference: {fileID: 0}
     - target: {fileID: 6010234835040452517, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6970,10 +6966,6 @@ PrefabInstance:
     - target: {fileID: 6010234835040452517, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7660558166948046290, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
-      propertyPath: m_Sprite
-      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 8343530780001536972, guid: 952258b8e4dc21946b6ad541a6e04f87, type: 3}
       propertyPath: m_Name

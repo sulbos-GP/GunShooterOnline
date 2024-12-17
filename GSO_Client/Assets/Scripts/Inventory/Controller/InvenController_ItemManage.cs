@@ -2,6 +2,9 @@ using UnityEngine;
 
 public partial class InventoryController
 {
+    /// <summary>
+    /// 아이템을 집거나 놓을때의 상호작용
+    /// </summary>
     private void ItemEvent()
     {
         if (isItemSelected) 
@@ -58,7 +61,6 @@ public partial class InventoryController
 
             if (isGridSelected)
             {
-                
                 gridPosition = WorldToGridPos();
                 
                 ItemObject clickedItem = selectedGrid.GetItem(gridPosition.x, gridPosition.y);
@@ -82,7 +84,10 @@ public partial class InventoryController
         }
     }
 
-    
+    /// <summary>
+    /// pos에 해당하는 위치에 아이템이 존재할경우 그리드의 아이템 제거 및 selectedItem으로 지정
+    /// </summary>
+    /// <param name="pos"></param>
     private void ItemGet(Vector2Int pos)
     {
         if (!isGridSelected) { return; }
@@ -129,6 +134,9 @@ public partial class InventoryController
         
     }
 
+    /// <summary>
+    /// 아이템을 장착칸에 배치할 경우
+    /// </summary>
     private void ItemReleaseInEquip(ItemObject item, EquipSlotBase slot)
     {
         if (slot.equipType == item.itemData.item_type)
@@ -140,24 +148,45 @@ public partial class InventoryController
             }
             else
             {
-                if (slot.equipItemObj != null)
+                if (slot.equipItemObj != null) //장착칸에 아이템이 존재함
                 {
                     if (CheckAbleToMerge(item, slot.equipItemObj))
                     {
-
+                        //합칠 수 있을 경우
                         int needAmount = selectedItem.ItemAmount + slot.equipItemObj.ItemAmount <= ItemObject.maxItemMergeAmount
                             ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - slot.equipItemObj.ItemAmount;
 
                         InventoryPacket.SendMergeItemPacket(item, slot.equipItemObj, needAmount);
                     }
-                    else
+                    else if (item.itemData.item_type == slot.equipType) //교체가 가능할 경우
                     {
+                        //교체 패킷 생성?
+                        //들고 있는 아이템 장착 및 원래 있던 아이템을 들고있는 아이템이 있던 위치로 이동
+                        //원래 있던 위치가 장착칸이라면 똑같이 장착하고 인벤토리라면 배치 가능여부 확인후 배치. 배치 불가능시 바닥에 버리기(상자생성)
+                        
+
+                        //임시로 교체가 가능한 경우를 막기
+                        UndoSlot(SelectedItem);
+                        UndoItem(SelectedItem);
+                    }
+                    else 
+                    {
+                        //배치가 불가능
                         UndoSlot(SelectedItem);
                         UndoItem(SelectedItem);
                     }
                 }
-                else
+                else //장착칸이 비어있으니 그냥 배치
                 {
+                    if(slot.slotId == item.backUpParentId) 
+                    {
+                        //장착칸에 방금뺀 아이템을 다시 배치할 경우 예외처리
+                        UndoSlot(SelectedItem);
+                        UndoItem(SelectedItem);
+                        return;
+                    }
+
+                    //문제가 없다면 move
                     InventoryPacket.SendMoveItemPacket(item);
                 }
             } 
@@ -169,12 +198,17 @@ public partial class InventoryController
         }
     }
 
+    /// <summary>
+    /// 아이템을 삭제할경우
+    /// </summary>
     private void ItemReleaseInDelete()
     {
         InventoryPacket.SendDeleteItemPacket(selectedItem);
     }
 
-    
+    /// <summary>
+    /// 아이템을 인벤토리 그리드에 배치할경우
+    /// </summary>
     private void ItemReleaseInGrid(ItemObject item, Vector2Int pos)
     {
         if (itemPlaceableInGrid)
@@ -186,15 +220,8 @@ public partial class InventoryController
             UndoSlot(item);
             UndoItem(item);
         }
-
-       
     }
 
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <param name="item"></param>
-    /// <param name="pos"></param>
     private void HandleItemPlacementInGrid(ItemObject item, Vector2Int pos)
     {
         if (isDivideMode)
@@ -237,6 +264,7 @@ public partial class InventoryController
 
     public void DestroyItem(ItemObject targetItem)
     {
+        //딕셔너리에서 삭제 및 아이템 오브젝트 삭제
         instantItemDic.Remove(targetItem.itemData.objectId);
         targetItem.DestroyItem();
     }

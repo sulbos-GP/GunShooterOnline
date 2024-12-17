@@ -188,7 +188,7 @@ public class Gun : MonoBehaviour
         UIManager.Instance.SetActiveReloadBtn(false);
         UIManager.Instance.SetAmmoText();
 
-        Image delayImage = UIManager.Instance.ReloadBtn.transform.GetChild(2).GetComponent<Image>();
+        Image delayImage = UIManager.Instance.ReloadBtn.transform.GetChild(1).GetComponent<Image>();
 
         delayImage.fillAmount = 1;
         float elapseTime = 0f;

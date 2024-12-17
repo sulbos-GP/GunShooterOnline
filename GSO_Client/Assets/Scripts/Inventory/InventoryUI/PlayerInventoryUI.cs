@@ -31,6 +31,7 @@ public class PlayerInventoryUI : InventoryUI
         instantGrid.InstantGrid(newSize, equipBag.total_weight); // 가방의 크기로 바꿀것
     }
 
+    //주어진 가방의 아이디로 검색하여 변경
     public bool SetInventoryGrid(int itemId)
     {
         if (!TryGetBagData(itemId, out Data_master_item_backpack targetBag))
@@ -47,10 +48,13 @@ public class PlayerInventoryUI : InventoryUI
         return true;
     }
 
+    /// <summary>
+    /// 기본 가방으로 변경
+    /// </summary>
     public bool ResetInventoryGrid()
     {
         // 기본 가방 데이터 불러오기
-        if (!TryGetBagData(-1, out Data_master_item_backpack basicBag))
+        if (!TryGetBagData(300, out Data_master_item_backpack basicBag))
         {
             return false;
         }
@@ -60,7 +64,7 @@ public class PlayerInventoryUI : InventoryUI
     }
 
     //인벤토리가 열려있을때 가방 교체 로직
-    public bool ChangeInvenSize(Data_master_item_backpack targetBag)
+    private bool ChangeInvenSize(Data_master_item_backpack targetBag)
     {
         if (IsSameBag(targetBag)) // 같은 가방이면 변화 없이 성공
         {
@@ -82,7 +86,7 @@ public class PlayerInventoryUI : InventoryUI
         return true;
     }
 
-    // 바꿀 가방의 무게가 현재 가지고 있는 아이템들의 무게를 감당가능한가
+    // 바꿀 가방의 무게가 현재 가지고 있는 아이템들의 무게를 감당가능하면 true
     private bool CompareChangeWeight(Data_master_item_backpack targetBag)
     {
         if (targetBag.total_weight < instantGrid.GridWeight)
@@ -96,20 +100,6 @@ public class PlayerInventoryUI : InventoryUI
     //가방 db에서 해당 아이디로 검색. 존재하면 true
     public bool TryGetBagData(int itemId, out Data_master_item_backpack bagData)
     {
-        //todo -> 기본 가방의 데이터가 생김
-        if (itemId == -1)
-        {
-            Data_master_item_backpack noBag = new Data_master_item_backpack()
-            {
-                Key = -1,
-                total_scale_x = 2,
-                total_scale_y = 2,
-                total_weight = 5,
-            };
-            bagData = noBag;
-            return true;
-        }
-
         bagData = Data_master_item_backpack.GetData(itemId);
         if (bagData == null)
         {
@@ -130,8 +120,4 @@ public class PlayerInventoryUI : InventoryUI
     {
         return currentBag.total_scale_x > newSize.x || currentBag.total_scale_y > newSize.y;
     }
-
-
-    
-
 }
