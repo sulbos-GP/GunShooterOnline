@@ -738,7 +738,8 @@ internal class PacketHandler
         
         Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
-        
+
+        Debug.Log($"startPoint {startPoint},hitPoint {hitPoint} ");
 
         if (shootingPlayer.GetComponent<CreatureController>().Id == Managers.Object.MyPlayer.Id)
         {
@@ -941,7 +942,7 @@ internal class PacketHandler
             Managers.Network.Send(c_Pong);
 
             _last = LogicTimer.Tick;
-            Debug.Log("Last : "+ _last);
+            //Debug.Log("Last : "+ _last);
         }
 
     }

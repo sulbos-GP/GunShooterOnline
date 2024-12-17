@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Numerics;
 using Google.Protobuf.Protocol;
+using Server.Game.Object.Gear;
 using ServerCore;
 using WebCommonLibrary.Models.GameDB;
 using static System.Net.Mime.MediaTypeNames;
@@ -126,7 +127,7 @@ public class CreatureObj : GameObject
         //할일 TODO : 만약 주인이 또 스킬이거나 하는 경우!!
         //TODO : 진짜 딜량 구하기 지승현 241019
         Player p = this as Player;
-        if (p != null)
+        if (p != null && p.gear != null)
         {
             damage = Math.Max(damage - p.gear.GetPartItem(WebCommonLibrary.Enum.EGearPart.Armor).Data.amount, 0);
 

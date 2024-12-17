@@ -4,13 +4,16 @@ using System.Collections.Generic;
 using System.Numerics;
 using Vector2 = System.Numerics.Vector2;
 using Differ;
+using Server.Game;
+using ServerCore;
+using System.Collections.Concurrent;
 
 namespace Server
 {
 
     public class DDA
     {
-        LoadMap loadMap = new LoadMap();
+       // LoadMap loadMap = new LoadMap();
 
         public static readonly Vector2 unityOffset = new Vector2(0.5f, 0.5f);
         //public static readonly Vector2 unityOffset = Vector2.Zero;
@@ -18,13 +21,19 @@ namespace Server
         int mapWidth;
         int mapHeight;
         int[,] vecMap;
-        public void Init()
-        {
-            loadMap.loadMap(0);
 
-            mapWidth = loadMap.Width;
-            mapHeight = loadMap.Height;
-            vecMap = loadMap._collisions;
+        public Vector2Int Bleft { get; private set; }
+
+        public void Init(Map m)
+        {
+            //loadMap.loadMap("Forest", "./{mapName}.txt");
+            //loadMap.Init();
+
+            mapWidth = m.Width;
+            mapHeight = m.Height;
+            vecMap = m.GetMap();
+            Bleft = m.Bleft;
+            Console.WriteLine(Bleft.x + "," + Bleft.y);
         }
         //Vector2 vIntersection;
         bool bTileFound;
@@ -62,7 +71,12 @@ namespace Server
             if (_endPos == null)
                 return null;
 
-            offeset = new Vector2((int)(loadMap.Width / 2), (int)(loadMap.Height / 2));
+            //_startPos = new Vector2(_startPos.Y, _startPos.X);
+            //_endPos = new Vector2(_endPos.Value.Y, _endPos.Value.Y);
+
+
+            // offeset = new Vector2((int)(mapWidth / 2), (int)(mapHeight / 2));
+            offeset = new Vector2(-Bleft.x, -Bleft.y);
 
 
             Vector2 vtargetPos = (Vector2)_endPos + offeset + unityOffset;
@@ -153,8 +167,9 @@ namespace Server
                 RaycastHit2D res = new RaycastHit2D();
                 res.hitPoint = _startPos + vRayDir * fDistance;
                 res.distance = fDistance;
+                Console.WriteLine($"Intersection found at: ({res.hitPoint})");
                 return res;
-                //Debug.Log($"Intersection found at: ({vIntersection.X}, {vIntersection.Y})");
+
             }
             else
             {

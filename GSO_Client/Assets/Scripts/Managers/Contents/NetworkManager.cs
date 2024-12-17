@@ -105,7 +105,7 @@ public class NetworkManager
     public uint Rtt { get; private set; }
     public void ResetTick(ulong _server, uint _rtt)
     {
-        Debug.Log($"Rtt : {_rtt}, Server Tick  : {_server} ,Clinet {LogicTimer.Tick}");
+        //Debug.Log($"Rtt : {_rtt}, Server Tick  : {_server} ,Clinet {LogicTimer.Tick}");
 
         Rtt = _rtt;
         mNetworkService.mLogicTimer.ResetTick(_server);
