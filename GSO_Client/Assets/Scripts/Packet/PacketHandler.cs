@@ -409,16 +409,14 @@ internal class PacketHandler
             }
 
             //플레이어의 인벤토리
-            inventory.playerInvenUI.InventorySet(); //그리드 생성됨
+            inventory.playerInvenUI.InventorySet(); //그리드 생성
 
             GridObject playerGrid = inventory.playerInvenUI.instantGrid;
             playerGrid.objectId = packet.SourceObjectId;
             playerGrid.PlaceItemInGrid(packetItemList);
 
             InventoryController.UpdatePlayerWeight();
-            InventoryController.UpdateOtherWeight();
-
-            playerGrid.PrintInvenContents();
+            InventoryController.UpdateOtherWeight(); //other인벤이 없을경우 other의 무게 텍스트를 초기화 하기위해 필요
         }
         //타인의 인벤토리의 경우
         else
@@ -434,11 +432,7 @@ internal class PacketHandler
             boxGrid.objectId = packet.SourceObjectId;
             boxGrid.PlaceItemInGrid(packetItemList);
             InventoryController.UpdateOtherWeight();
-
-            boxGrid.PrintInvenContents();
         }
-
-        inventory.DebugDic();
     }
 
     /// <summary>
