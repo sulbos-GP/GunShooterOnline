@@ -21,13 +21,14 @@ public class GridInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
                 inven.playerInvenUI.SetWeightText(inven.playerInvenUI.instantGrid.GridWeight, inven.playerInvenUI.instantGrid.limitWeight);
             else if (inven.SelectedItem.parentObjId > 7)
                 inven.otherInvenUI.SetWeightText(inven.otherInvenUI.instantGrid.GridWeight, inven.otherInvenUI.instantGrid.limitWeight);
-
             return;
         }
-
-        AdjustWeight(inven, inven.SelectedItem.parentObjId, inven.SelectedItem.itemWeight, true);
-        AdjustWeight(inven, inven.SelectedItem.backUpParentId, inven.SelectedItem.itemWeight, false);
+        double increaseItemWeight = inven.isDivideMode ? inven.SelectedItem.itemData.item_weight : inven.SelectedItem.itemWeight;
+        double decreaseItemWeight = inven.isDivideMode ? inven.SelectedItem.itemWeight - inven.SelectedItem.itemData.item_weight : inven.SelectedItem.itemWeight;
+        InventoryController.AdjustWeight(inven, inven.SelectedItem.parentObjId, increaseItemWeight, true);
+        InventoryController.AdjustWeight(inven, inven.SelectedItem.backUpParentId, decreaseItemWeight, false);
     }
+
     public void OnPointerExit(PointerEventData eventData)
     {
         InventoryController inven = InventoryController.Instance;
@@ -42,25 +43,5 @@ public class GridInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         InventoryController.UpdateInvenWeight(false);
     }
 
-    private void AdjustWeight(InventoryController inven, int parentId, double weight, bool isAdding)
-    {
-        double curWeight, resultWeight;
-
-        if (parentId == 0 && inven.playerInvenUI?.instantGrid != null)
-        {
-            curWeight = inven.playerInvenUI.instantGrid.GridWeight;
-            resultWeight = isAdding ? curWeight + weight : curWeight - weight;
-            inven.playerInvenUI.SetWeightText(resultWeight, inven.playerInvenUI.instantGrid.limitWeight);
-        }
-        else if (parentId > 7 && inven.otherInvenUI?.instantGrid != null)
-        {
-            curWeight = inven.otherInvenUI.instantGrid.GridWeight;
-            resultWeight = isAdding ? curWeight + weight : curWeight - weight;
-            inven.otherInvenUI.SetWeightText(resultWeight, inven.otherInvenUI.instantGrid.limitWeight);
-        }
-        else
-        {
-            Debug.Log("장비칸이거나 유효하지 않은 아이디입니다.");
-        }
-    }
+    
 }

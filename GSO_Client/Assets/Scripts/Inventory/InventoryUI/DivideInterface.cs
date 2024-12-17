@@ -87,36 +87,19 @@ public class DivideInterface : MonoBehaviour
         InventoryController inven = InventoryController.Instance;
         GridObject playerGridObj = inven.playerInvenUI.instantGrid;
 
-        // 0~1 값을 1~(maxAmountIndex-1)로 변환
+        // 0~maxAmountIndex 값을 1~(maxAmountIndex-1)로 변환
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 2)) + 1;
         UpdateCountText();
 
-        UpdateInvenWeightText(playerGridObj.GridWeight);
+        //여기서부터 weight 텍스트 변화
+        //parentObjId에는 무게 가산, backupParenObjId에는 무게 감산, 같으면 무게변화 없음
+        if(targetItem.parentObjId == targetItem.backUpParentId)
+        {
+            return;
+        }
 
-        if (InventoryController.IsPlayerSlot(objectId))
-        {
-            if (!InventoryController.IsPlayerSlot(targetItem.backUpParentId))
-            {
-                // 플레이어 그리드 -> 상대 그리드
-                UpdateInvenWeightText(playerGridObj.GridWeight + targetItem.itemData.item_weight * splitAmountIndex);
-            }
-        }
-        else
-        {
-            if (InventoryController.IsPlayerSlot(targetItem.backUpParentId))
-            {
-                // 상대 그리드 -> 플레이어 그리드
-                UpdateInvenWeightText(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex);
-            }
-        }
-    }
-    private void UpdateInvenWeightText(double currentWeight)
-    {
-        InventoryController inven = InventoryController.Instance;
-        GridObject playerGridObj = inven.playerInvenUI.instantGrid;
-        double roundedWeight = Math.Round(currentWeight, 2);
-        inven.playerInvenUI.weightText.text = $"WEIGHT \n{roundedWeight} / {playerGridObj.limitWeight}";
-        inven.playerInvenUI.weightText.color = roundedWeight > playerGridObj.limitWeight ? Color.red : Color.white;
+        InventoryController.AdjustWeight(inven, targetItem.parentObjId, targetItem.itemData.item_weight * splitAmountIndex, true);
+        InventoryController.AdjustWeight(inven, targetItem.backUpParentId, targetItem.itemData.item_weight * splitAmountIndex, false);
     }
 
     private void UpdateCountText()
@@ -134,25 +117,16 @@ public class DivideInterface : MonoBehaviour
 
     public void OnConfirmButtonClicked()
     {
-        Debug.Log("아이템이 " + splitAmountIndex +" 만큼 분리됨.");
-            
-
         if (overlapItem != null)
         {
+            //오버렙이 있다면 머지 패킷
             InventoryPacket.SendMergeItemPacket(targetItem, overlapItem, splitAmountIndex);
         }
-        else if (splitAmountIndex == targetItem.ItemAmount)
-        {
-            //이제 안쓸지도(0이거나 전체를 보낼 경우를 제외시킴)
-            InventoryPacket.SendMoveItemPacket(targetItem, targetPos);
-        }
-        else if(splitAmountIndex < targetItem.ItemAmount)
+        else
         {
             InventoryPacket.SendDivideItemPacket(targetItem, targetPos, splitAmountIndex);
         }
 
-
-        InventoryController.Instance.playerInvenUI.weightText.color = Color.white;
         DestroyInterface();
     }
 

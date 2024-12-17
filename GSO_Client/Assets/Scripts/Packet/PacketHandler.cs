@@ -648,8 +648,8 @@ internal class PacketHandler
         }
         else
         {
-            inventory.UndoSlot(combinedItem);
-            inventory.UndoItem(combinedItem);
+            inventory.UndoSlot(mergedItem);
+            inventory.UndoItem(mergedItem);
         }
 
         InventoryController.UpdateInvenWeight();

@@ -27,7 +27,9 @@ public partial class InventoryController
 
         selectedRect.position = new UnityEngine.Vector2(mousePosInput.X, mousePosInput.Y);
 
-        if (divideCheckOff || isDivideMode || selectedItem.ItemAmount <= 1)
+        //divide체크가 꺼져있거나 이미 나누기모드 거나 아이템의 개수가 1이하거나 
+        if (divideCheckOff || isDivideMode || selectedItem.ItemAmount <= 1 
+            || selectedItem.backUpParentId != selectedItem.parentObjId) //자신의 원래위치가 아니면 return
             return;
 
         bool itemMoved = false; //아이템이 움직였는지 체크. 2초이상 안움직이면 나누기 모드
@@ -43,6 +45,7 @@ public partial class InventoryController
         if (itemMoved)
         {
             divideCheckOff = true;
+            dragTime = 0;
             return;
         }
 
@@ -107,7 +110,6 @@ public partial class InventoryController
         }
 
         invenHighlight.Show(true);
-        invenHighlight.SetSize(selectedItem);
 
         if (isGridSelected)
         {
@@ -125,7 +127,8 @@ public partial class InventoryController
         {
             invenHighlight.SetColor(HighlightColor.Red);
             invenHighlight.SetHighlightParent(null);
-            InvenHighLight.highlightObj.transform.position = selectedItem.transform.position;
+            invenHighlight.SetSize(new Vector2(selectedItem.Width, selectedItem.Height));
+            invenHighlight.highlightObj.transform.position = selectedItem.transform.position;
         }
         return;
         
@@ -133,18 +136,21 @@ public partial class InventoryController
 
     private void HighlightForDelete()
     {
-        if(InvenHighLight.highlightObj.transform.position == deleteUI.transform.position)
+        if(invenHighlight.highlightObj.transform.position == deleteUI.transform.position)
         {
             return;
         }
         invenHighlight.SetColor(HighlightColor.Yellow);
-        InvenHighLight.highlightObj.transform.SetParent(deleteUI);
-        InvenHighLight.highlightObj.transform.position = deleteUI.transform.position;
+
+        RectTransform deleteRect = deleteUI.GetComponent<RectTransform>();
+        invenHighlight.SetHighlightParent(deleteUI.gameObject);
+        invenHighlight.SetSize(new Vector2(deleteRect.rect.width / GridObject.WidthOfTile, deleteRect.rect.height / GridObject.HeightOfTile));
+        invenHighlight.highlightObj.transform.localPosition = Vector3.zero;
     }
 
     private void HighlightForEquip()
     {
-        if(InvenHighLight.highlightObj.transform.position == selectedEquip.transform.position)
+        if(invenHighlight.highlightObj.transform.position == selectedEquip.transform.position)
         {
             return;
         }
@@ -157,8 +163,12 @@ public partial class InventoryController
         {
             invenHighlight.SetColor(selectedEquip.equipItemObj != null ? HighlightColor.Yellow : HighlightColor.Green);
         }
-        InvenHighLight.highlightObj.transform.SetParent(selectedEquip.transform);
-        InvenHighLight.highlightObj.transform.position = selectedEquip.transform.position;
+
+        invenHighlight.SetHighlightParent(selectedEquip.gameObject);
+        RectTransform equipRect = selectedEquip.GetComponent<RectTransform>();
+        Debug.Log($"{equipRect.rect.width / GridObject.WidthOfTile}, {equipRect.rect.height / GridObject.HeightOfTile}");
+        invenHighlight.SetSize(new Vector2(equipRect.rect.width / GridObject.WidthOfTile, equipRect.rect.height / GridObject.HeightOfTile));
+        invenHighlight.highlightObj.transform.localPosition = Vector3.zero;
     }
 
     private void HighlightForGrid()
@@ -174,6 +184,7 @@ public partial class InventoryController
         Color32 highlightColor = selectedGrid.PlaceCheckInGridHighLight(selectedItem, gridPosition.x, gridPosition.y, ref overlapItem);
         invenHighlight.SetColor(highlightColor);
         invenHighlight.SetHighlightParent(selectedGrid.gameObject);
+        invenHighlight.SetSize(new Vector2(selectedItem.Width, selectedItem.Height));
         invenHighlight.SetPositionOnGridByPos(selectedGrid, selectedItem, gridPosition.x, gridPosition.y);
     }
 }
