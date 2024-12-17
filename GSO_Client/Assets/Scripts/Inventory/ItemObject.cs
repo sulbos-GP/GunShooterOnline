@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using TMPro;
 using UnityEditor;
+using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
@@ -137,6 +139,9 @@ public class ItemObject : MonoBehaviour
         else
         {
             imageUI.sprite = itemSprite != null ?  itemSprite : hideSprite;
+            Debug.Log($"itemName : {itemData.item_name} , itemPirce : {itemData.item_sell_price}");
+            //Item Sprite OutLine Material
+            SetMaterialOutLine(imageUI);
             isHide = false;
         }
 
@@ -171,24 +176,36 @@ public class ItemObject : MonoBehaviour
         searchingCoroutine = StartCoroutine(SearchingTimer(itemData.item_searchTime));
     }
 
+    public void SetMaterialOutLine(Image imageUI)
+    {
+        if(itemData.item_sell_price<=500)
+            imageUI.material = Resources.Load<Material>("Material/WhiteOutLine");
+        else if(itemData.item_sell_price<=1000)
+            imageUI.material = Resources.Load<Material>("Material/YellowOutLine");
+        else if(itemData.item_sell_price<=1500)
+            imageUI.material = Resources.Load<Material>("Material/RedOutLine");
+        else
+            imageUI.material = Resources.Load<Material>("Material/PurpleOutLine");
+    }
+
     private IEnumerator SearchingTimer(float duration)
     {
         float timeRemaining = duration;
 
         searchTimerUI.gameObject.SetActive(true);
-
+        AudioManager.instance.PlaySound("Search",gameObject.GetComponent<AudioSource>());
         while (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
             int seconds = Mathf.FloorToInt(timeRemaining);
             int milliseconds = Mathf.FloorToInt((timeRemaining - seconds) * 10); // One decimal place
-
+    
             searchTimerUI.text = string.Format("{0}:{1}", seconds, milliseconds);
             yield return null;
         }
-
+        gameObject.GetComponent<AudioSource>().Stop();
         RevealItem();
-
+        SetMaterialOutLine(imageUI);
         searchTimerUI.gameObject.SetActive(false);
         searchingCoroutine = null;
     }

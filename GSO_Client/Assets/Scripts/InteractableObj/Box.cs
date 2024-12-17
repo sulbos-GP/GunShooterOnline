@@ -58,6 +58,7 @@ public class Box : InteractableObject
         {
             InventoryPacket.SendLoadInvenPacket();
             InventoryPacket.SendLoadInvenPacket(objectId);
+            AudioManager.instance.PlaySound("ChestOpenCreak",gameObject.GetComponent<AudioSource>());
         }
         else
         {
