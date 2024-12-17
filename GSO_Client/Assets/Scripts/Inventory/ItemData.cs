@@ -91,8 +91,6 @@ public class ItemData
 
     #endregion
 
-
-    
     #region Ps_ItemInfo
     /// <summary>
     /// ItemDataInfo�� �ش� ��ũ��Ʈ�� ������ ����
@@ -158,13 +156,13 @@ public class ItemData
     #endregion
 
 
-    public int objectId;    // �ش� �������� �����ϸ� ������ ���̵�
-    public int itemId;      // �������� ������ �����ϴ� �ڵ�
-    public Vector2Int pos;  // �������� �׸��� �� ��ǥ���� ��ġ
-    public int rotate;      // �������� ȸ���ڵ�(rotate * 90)
+    public int objectId;  
+    public int itemId;   
+    public Vector2Int pos; 
+    public int rotate;      
     public int amount;
 
-    public bool isSearched; //Ŭ�����忡�� �� �������� �˻��Ǿ����� Ȯ��
+    public bool isSearched;
 
     public string item_name;
     public double item_weight;
@@ -179,6 +177,6 @@ public class ItemData
     public string iconName;
 
     //PS_ItemAttributes
-    public int durability; //�ش� �������� ���� ��� ���� ������
-    public int loadedAmmo; //�ش� �������� ���� ��� �ش� �����ۿ� ������ �Ѿ� ��
+    public int durability;
+    public int loadedAmmo;
 }

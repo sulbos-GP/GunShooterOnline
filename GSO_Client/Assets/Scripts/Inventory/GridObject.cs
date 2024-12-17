@@ -41,7 +41,6 @@ public class GridObject : MonoBehaviour
     private void Awake()
     {
         gridRect = GetComponent<RectTransform>();
-        
     }
     
     /// <summary>
@@ -86,30 +85,17 @@ public class GridObject : MonoBehaviour
         Managers.SystemLog.Message($"SetGridPosition 완료");
     }
 
-    ///// <summary>
-    ///// 그리드를 보여주기만 할경우에 부모객체에서 사용.
-    ///// 주의. 그리드를 옮겨야하는 경우에 이걸로 그리드의 크기를 바꾸면 그리드간의 크기차이가 발생
-    ///// </summary>
-    //public void SetGridScale(RectTransform parentRect)
-    //{
-    //    RectTransform childRect = GetComponent<RectTransform>();
-
-    //    float widthScale = parentRect.rect.width / childRect.rect.width;
-    //    float heightScale = parentRect.rect.height / childRect.rect.height;
-    //    childRect.localScale = new Vector3(widthScale, heightScale, 1);
-    //}
-
     /// <summary>
-    /// 패킷에서 아템을 넣을것;
+    /// 아이템들을 그리드에배치
     /// </summary>
     /// <param name="itemData"></param>
-    public void PlaceItemInGrid(List<ItemData> itemData)
+    public void PlaceItemsInGrid(List<ItemData> itemData)
     {
         if (itemData.Count != 0)
         {
             foreach (ItemData item in itemData)
             {
-                CreateItemObjAndPlace(item);
+                PlaceItemAfterCreate(item);
             }
         }
 
@@ -120,9 +106,9 @@ public class GridObject : MonoBehaviour
     /// 받아온 데이터를 토대로 아이템 생성후 해당 그리드에 아이템 배치
     /// </summary>
     /// <param name="itemData"></param>
-    public ItemObject CreateItemObjAndPlace(ItemData itemData)
+    public ItemObject PlaceItemAfterCreate(ItemData itemData)
     {
-        ItemObject itemObj = ItemObject.CreateNewItemObj(itemData, transform);
+        ItemObject itemObj = ItemObject.InstantItemObj(itemData, transform);
 
         //아이템을 해당 그리드에 배치하고 아이템 객체의 위치또한 맞게 변경
         PlaceItem(itemObj, itemData.pos.x, itemData.pos.y);
@@ -136,7 +122,7 @@ public class GridObject : MonoBehaviour
     /// 마우스의 현 위치를 그리드의 타일 위치로 변환
     /// </summary>
     /// <param name="mousePosition">마우스 위치</param>
-    public Vector2Int MouseToGridPosition(Vector2 mousePosition)
+    public Vector2Int GetGridPosByMousePos(Vector2 mousePosition)
     {
         if (gridRect == null) return Vector2Int.zero;
         mousePosOnGrid.X = mousePosition.X - gridRect.position.x;
@@ -145,109 +131,6 @@ public class GridObject : MonoBehaviour
         tileGridPos.y = (int)(mousePosOnGrid.Y / HeightOfTile);
         return tileGridPos;
     }
-
-    /// <summary>
-    /// 컨트롤러의 업데이트마다 실행
-    /// 해당 그리드의 위치에 아이템을 배치가 가능한지 여부와 그에 따른 색을 반환
-    /// </summary>
-    public Color32 PlaceCheckInGridHighLight(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
-    {
-        overlapItem = null;
-        InventoryController.Instance.itemPlaceableInGrid = false;
-        //아이템이 그리드 밖으로 나갈시 취소
-        if (!BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height))
-        {
-            Debug.Log("boundary error");
-            return HighlightColor.Red;
-        }
-
-        //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
-        if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
-        {
-            if (!placeItem.itemData.isItemConsumeable
-                || placeItem.itemData.itemId != overlapItem.itemData.itemId
-                || overlapItem.ItemAmount >= ItemObject.maxItemMergeAmount)
-            {
-                //현재 겹치는 아이템이 있지만 머지의 기준을 충족하지 못함
-                Debug.Log($"merge error");
-                return HighlightColor.Red;
-            }
-        }
-
-        if(objectId == 0) //플레이어의 인벤토리에서만 무게 적용
-        {
-            //무게에 의해 배치가 불가능할 경우 취소
-            if (!CheckGridWeight(InventoryController.Instance.playerInvenUI,placeItem, overlapItem))
-            {
-                Debug.Log("weight error");
-                return HighlightColor.Red;
-            }
-        }
-        else //otherInventory의 경우
-        {
-            if (!CheckGridWeight(InventoryController.Instance.otherInvenUI, placeItem, overlapItem))
-            {
-                Debug.Log("weight error");
-                return HighlightColor.Red;
-            }
-        }
-        
-
-        InventoryController.Instance.itemPlaceableInGrid = true;
-        return HighlightColor.Green;
-    }
-
-     
-    /// <summary>
-    /// 그리드에 placeItem을 추가할때의 무게
-    /// </summary>
-    private bool CheckGridWeight(InventoryUI targetUI,ItemObject placeItem, ItemObject overlapItem)
-    {
-        GridObject targetGrid = targetUI.instantGrid; //타겟 그리드 = 타겟UI에서 생성된 그리드
-
-        double curWeight = targetGrid.GridWeight; 
-
-        //그리드에 존재하는 아이템들의 무게
-        double itemWeight = 0;
-
-        //이동 전 그리드와 이동 후 그리드가 다를때만 아이템의 무게를 가산 => 이동전후 그리드가 같다면 그리드가 자신의 아이템을 다른 위치로 옮긴것 = 이미 무게가 가산됨
-        if (!(placeItem.backUpParentId == 0 && targetUI == InventoryController.Instance.playerInvenUI) 
-            && !(placeItem.backUpParentId != 0 && targetUI == InventoryController.Instance.otherInvenUI)) 
-        {
-            itemWeight = placeItem.itemWeight;
-            if (overlapItem != null) //머지의 경우
-            {
-                int giveAmount = placeItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
-                        ? placeItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
-
-                int ableAmount = (int)Math.Round((targetGrid.limitWeight - curWeight) / placeItem.itemData.item_weight); //남은 무게에서 채울수 있는 개수
-                itemWeight = giveAmount > ableAmount ? placeItem.itemData.item_weight * ableAmount : itemWeight = placeItem.itemData.item_weight * giveAmount;
-            }
-            else if (InventoryController.Instance.isDivideMode) //나누기의 경우
-            {
-                itemWeight = placeItem.itemData.item_weight; //최소한의 개수인 1개의 무게가 들어갈수 있다면 성공판정
-            }
-        }
-        
-        double resultWeight = Math.Round(curWeight + itemWeight,2);
-        if (resultWeight > targetGrid.limitWeight)
-        {
-            targetUI.weightText.color = Color.red;
-        }
-        else
-        {
-            targetUI.weightText.color = Color.white;
-        }
-
-
-        if (resultWeight > targetGrid.limitWeight)
-        {
-            return false;
-        }
-
-        return true;
-    }
-
 
     /// <summary>
     /// 해당 좌표에 있는 아이템 반환
@@ -385,27 +268,7 @@ public class GridObject : MonoBehaviour
         Debug.Log($"Grid weight updated: {GridWeight}");
     }
    
-    /// <summary>
-    /// 머지아이템 기능에 사용, 놓으려는 아이템의 자리에 아이템이 있는지 체크함
-    /// </summary>
-    public bool OverLapCheck(int posX, int posY, int width, int height, ref ItemObject overlapItem)
-    {
-        //아이템 슬롯 순회
-        for (int x = 0; x < width; x++)
-        {
-            for (int y = 0; y < height; y++)
-            {
-                //해당 아이템 슬롯이 비어있지 않을 경우 
-                if (ItemSlot[posX + x, posY + y] != null)
-                {
-                    overlapItem = ItemSlot[posX + x, posY + y];
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
+   
 
     /// <summary>
     /// InventoryItemSlot을 출력
@@ -454,20 +317,114 @@ public class GridObject : MonoBehaviour
         Debug.Log(content);
     }
 
+    //------------------------------------------------------placeable Check------------------------------------------------------
 
     /// <summary>
-    /// 아이템의 크기가 그리드를 빠져나가는지 체크
+    /// 컨트롤러의 업데이트마다 실행
+    /// 해당 그리드의 위치에 아이템을 배치가 가능한지 여부와 그에 따른 색을 반환
     /// </summary>
-    public bool BoundaryCheck(int posX, int posY, int width, int height)
+    public Color32 CheckPlaceableInGrid(ItemObject placeItem, int posX, int posY, ref ItemObject overlapItem)
     {
-        return posX >= 0 && posY >= 0 && posX + width <= gridSize.x && posY + height <= gridSize.y;
+        overlapItem = null;
+        InventoryController.Instance.itemPlaceableInGrid = false;
+        //아이템이 그리드 밖으로 나갈시 취소
+        if (!BoundaryCheck(posX, posY, placeItem.Width, placeItem.Height))
+        {
+            Debug.Log("boundary error");
+            return HighlightColor.Red;
+        }
+
+        //겹치는 아이템이 있다면 overlapItem변수에 할당. 여기서부터 오버랩 아이템 지정됨
+        if (OverLapCheck(posX, posY, placeItem.Width, placeItem.Height, ref overlapItem))
+        {
+            if (!placeItem.itemData.isItemConsumeable
+                || placeItem.itemData.itemId != overlapItem.itemData.itemId
+                || overlapItem.ItemAmount >= ItemObject.maxItemMergeAmount)
+            {
+                //현재 겹치는 아이템이 있지만 머지의 기준을 충족하지 못함
+                Debug.Log($"merge error");
+                return HighlightColor.Red;
+            }
+        }
+
+        if (objectId == 0) //플레이어의 인벤토리에서만 무게 적용
+        {
+            //무게에 의해 배치가 불가능할 경우 취소
+            if (!CheckGridWeight(InventoryController.Instance.playerInvenUI, placeItem, overlapItem))
+            {
+                Debug.Log("weight error");
+                return HighlightColor.Red;
+            }
+        }
+        else //otherInventory의 경우
+        {
+            if (!CheckGridWeight(InventoryController.Instance.otherInvenUI, placeItem, overlapItem))
+            {
+                Debug.Log("weight error");
+                return HighlightColor.Red;
+            }
+        }
+
+
+        InventoryController.Instance.itemPlaceableInGrid = true;
+        return HighlightColor.Green;
     }
 
 
     /// <summary>
-    /// 해당 공간안에 아이템의 크기만큼의 공간이 되는지 확인
+    /// 그리드에 placeItem을 추가할때의 무게
     /// </summary>
-    public bool CheckAvailableSpace(int posX, int posY, int width, int height)
+    private bool CheckGridWeight(InventoryUI targetUI, ItemObject placeItem, ItemObject overlapItem)
+    {
+        GridObject targetGrid = targetUI.instantGrid; //타겟 그리드 = 타겟UI에서 생성된 그리드
+
+        double curWeight = targetGrid.GridWeight;
+
+        //그리드에 존재하는 아이템들의 무게
+        double itemWeight = 0;
+
+        //이동 전 그리드와 이동 후 그리드가 다를때만 아이템의 무게를 가산 => 이동전후 그리드가 같다면 그리드가 자신의 아이템을 다른 위치로 옮긴것 = 이미 무게가 가산됨
+        if (!(placeItem.backUpParentId == 0 && targetUI == InventoryController.Instance.playerInvenUI)
+            && !(placeItem.backUpParentId != 0 && targetUI == InventoryController.Instance.otherInvenUI))
+        {
+            itemWeight = placeItem.itemWeight;
+            if (overlapItem != null) //머지의 경우
+            {
+                int giveAmount = placeItem.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
+                        ? placeItem.ItemAmount : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
+
+                int ableAmount = (int)Math.Round((targetGrid.limitWeight - curWeight) / placeItem.itemData.item_weight); //남은 무게에서 채울수 있는 개수
+                itemWeight = giveAmount > ableAmount ? placeItem.itemData.item_weight * ableAmount : itemWeight = placeItem.itemData.item_weight * giveAmount;
+            }
+            else if (InventoryController.Instance.isDivideMode) //나누기의 경우
+            {
+                itemWeight = placeItem.itemData.item_weight; //최소한의 개수인 1개의 무게가 들어갈수 있다면 성공판정
+            }
+        }
+
+        double resultWeight = Math.Round(curWeight + itemWeight, 2);
+        if (resultWeight > targetGrid.limitWeight)
+        {
+            targetUI.weightText.color = Color.red;
+        }
+        else
+        {
+            targetUI.weightText.color = Color.white;
+        }
+
+
+        if (resultWeight > targetGrid.limitWeight)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// 머지아이템 기능에 사용, 놓으려는 아이템의 자리에 아이템이 있는지 체크함
+    /// </summary>
+    private bool OverLapCheck(int posX, int posY, int width, int height, ref ItemObject overlapItem)
     {
         //아이템 슬롯 순회
         for (int x = 0; x < width; x++)
@@ -477,35 +434,22 @@ public class GridObject : MonoBehaviour
                 //해당 아이템 슬롯이 비어있지 않을 경우 
                 if (ItemSlot[posX + x, posY + y] != null)
                 {
-                    return false;
+                    overlapItem = ItemSlot[posX + x, posY + y];
+                    return true;
                 }
             }
         }
-        return true;
+
+        return false;
     }
 
-   /// <summary>
-   /// 아이템의 크기만큼 들어갈 장소를 찾음
-   /// ?를 쓴 이유는 마지막 리턴값에 널값을 허용하기 위함
-   /// </summary>
-   public Vector2Int? FindSpaceForObject(ItemObject itemToInsert)
-   {
-       int width = gridSize.x - (itemToInsert.Width - 1);
-       int height = gridSize.y - (itemToInsert.Height - 1);
-
-       for (int y = 0; y < height; y++)
-       {
-           for (int x = 0; x < width; x++)
-           {
-               if (CheckAvailableSpace(x, y, itemToInsert.Width, itemToInsert.Height) == true)
-               {
-                   return new Vector2Int(x, y);
-               }
-           }
-       }
-       return null;
-   }
-
+    /// <summary>
+    /// 아이템의 크기가 그리드를 빠져나가는지 체크
+    /// </summary>
+    private bool BoundaryCheck(int posX, int posY, int width, int height)
+    {
+        return posX >= 0 && posY >= 0 && posX + width <= gridSize.x && posY + height <= gridSize.y;
+    }
 
     /// <summary>
     /// 가방의 변화로 그리드의 크기를 변경 및 스프라이트 재배치

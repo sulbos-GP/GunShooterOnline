@@ -181,7 +181,7 @@ public partial class InventoryController
 
         gridPositionIndex = gridPosition;
 
-        Color32 highlightColor = selectedGrid.PlaceCheckInGridHighLight(selectedItem, gridPosition.x, gridPosition.y, ref overlapItem);
+        Color32 highlightColor = selectedGrid.CheckPlaceableInGrid(selectedItem, gridPosition.x, gridPosition.y, ref overlapItem);
         invenHighlight.SetColor(highlightColor);
         invenHighlight.SetHighlightParent(selectedGrid.gameObject);
         invenHighlight.SetSize(new Vector2(selectedItem.Width, selectedItem.Height));

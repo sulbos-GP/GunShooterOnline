@@ -57,7 +57,7 @@ public partial class InventoryController
             position.Y += (selectedItem.Height - 1) * GridObject.HeightOfTile / 2;
         }
 
-        return selectedGrid.MouseToGridPosition(position);
+        return selectedGrid.GetGridPosByMousePos(position);
     }
 
     /// <summary>

@@ -42,7 +42,7 @@ public class IQuickSlot : MonoBehaviour
         itemData = item;
         GetComponent<Button>().interactable = true;
 
-        Sprite itemSprite = ItemObject.FindItemSprtie(item);
+        Sprite itemSprite = ItemObject.GetItemSprite(item);
         itemImage.sprite = itemSprite;
         UpdateItemAmount(item.amount);
         StartCoroutine(OnCooltime(Data_master_item_use.GetData(item.itemId).cool_time));
