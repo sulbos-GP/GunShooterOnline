@@ -10,7 +10,7 @@ using Server.Game;
 using ServerCore;
 using Server.Game.Object.Item;
 using Server.Game.Object;
-using Google.Protobuf.WellKnownTypes;
+
 
 namespace Server.Game;
 
@@ -177,8 +177,8 @@ public class Map
 
         roomSize = new Vector2Int(int.Parse(size[0]), int.Parse(size[1]));
 
-        Height = roomSize.x;
-        Width = roomSize.y;
+        Width = roomSize.x;
+        Height  = roomSize.y;
 
         Tright = new Vector2Int(Bleft.x + (roomSize.x - 1), Bleft.y + (roomSize.y - 1));
 
@@ -378,6 +378,11 @@ public class Map
 
     public bool ApplyMove(GameObject gameObject, Vector2Int dest, bool cheakObjects = true, bool collision = true)
     {
+
+
+        //Console.WriteLine("이동"+  new Vector2(dest.x + Width, dest.y + Height));
+
+
         ApplyLeave(gameObject);
 
         if (gameObject.gameRoom == null)
@@ -532,6 +537,12 @@ public class Map
         p.Session.Send(roomPacket);
     }*/
 
+
+
+    public int[,] GetMap()
+    {
+        return _collisions;
+    }
 
     #region A* PathFinding
 

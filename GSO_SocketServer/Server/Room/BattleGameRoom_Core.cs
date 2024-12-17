@@ -39,6 +39,7 @@ namespace Server
         public bool IsGameEnd { get; protected set; } = false;
 
         QuadTreeManager quadTreeManager = new QuadTreeManager();
+        RaycastManager raycastManager = new RaycastManager();
 
         public Map map { get; private set; }
         public BattleGameRoom()
@@ -53,7 +54,7 @@ namespace Server
         {
             map = new Map(r: this);
             map.Init();
-
+            raycastManager.Init(map);
             playTime = new Stopwatch();
         }
 
@@ -124,7 +125,7 @@ namespace Server
         }
 
 
-
+        
 
 
         public override void EnterGame(object obj)

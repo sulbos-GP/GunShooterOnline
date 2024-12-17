@@ -90,6 +90,13 @@ public class Player : CreatureObj
     public List<GameObject> Targets { get; set; } = new(); //스킬 공격
 
 
+    public override void Update()
+    {
+        base.Update();
+
+    }
+
+
     public override void OnDamaged(GameObject attacker, int damage)
     {
        /* if (DamageReflexAction != null)

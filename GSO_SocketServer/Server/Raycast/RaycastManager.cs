@@ -5,20 +5,22 @@ using Vector2 = System.Numerics.Vector2;
 using Server.Game;
 using ObjectManager = Server.Game.ObjectManager;
 using System;
+using static Humanizer.On;
 
 namespace Server
 {
     public class RaycastManager
     {
-        public static RaycastManager Instance;
+        //public static RaycastManager Instance = new RaycastManager();
         static DDA _dda = new DDA(); //안에 맵 데이터 있음
         private static int _index = 0;
+        Map map;
 
-        private void Awake()
+        public void Init(Map m)
         {
             //Physics2D.Raycast()
-            Instance = this;
-            _dda.Init();
+            map = m;
+            _dda.Init(m);
         }
 
         private void OnEnable()
