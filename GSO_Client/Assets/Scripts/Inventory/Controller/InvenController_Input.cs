@@ -37,7 +37,7 @@ public partial class InventoryController
 
     private void InvenUIControlInput(InputAction.CallbackContext context)
     {
-        InvenOnOffBtn();
+        InventoryActiveBtn();
     }
 
     #endregion
@@ -57,7 +57,7 @@ public partial class InventoryController
             position.Y += (selectedItem.Height - 1) * GridObject.HeightOfTile / 2;
         }
 
-        return selectedGrid.MouseToGridPosition(position);
+        return selectedGrid.GetGridPosByMousePos(position);
     }
 
     /// <summary>
@@ -75,7 +75,7 @@ public partial class InventoryController
 
         if (isActive)
         {
-            if (InvenHighLight.highlightObj == null)
+            if (invenHighlight.highlightObj == null)
             {
                 invenHighlight.InstantHighlighter();
             }
@@ -88,7 +88,7 @@ public partial class InventoryController
         }
         else
         {
-            if (InvenHighLight.highlightObj != null)
+            if (invenHighlight.highlightObj != null)
             {
                 invenHighlight.DestroyHighlighter();
             }
@@ -123,7 +123,7 @@ public partial class InventoryController
 
     
 
-    public void InvenOnOffBtn()
+    public void InventoryActiveBtn()
     {
         //자신의 인벤토리 요청
         if (!isActive) {

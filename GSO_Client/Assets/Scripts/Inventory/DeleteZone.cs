@@ -29,17 +29,6 @@ public class DeleteZone : MonoBehaviour
         uiImage = GetComponent<Image>();
     }
 
-
-    private void OnEnable()
-    {
-        Init();
-    }
-
-    private void Init()
-    {
-        
-    }
-
     private void ChangeImage()
     {
         if (isOn&& InventoryController.Instance.isItemSelected)
