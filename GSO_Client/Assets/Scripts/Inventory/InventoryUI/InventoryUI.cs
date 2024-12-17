@@ -38,7 +38,16 @@ public class InventoryUI : MonoBehaviour
             weightText.text = $"-";
         }
 
-        weightText.text = $"WEIGHT \n {GridWeigt} / {limitWeight}";
+        if (GridWeigt > limitWeight) 
+        { 
+            weightText.color = Color.red;
+        }
+        else
+        {
+            weightText.color = Color.white;
+        }
+
+        weightText.text = $"WEIGHT {GridWeigt} / {limitWeight}";
     }
 
 
