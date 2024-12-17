@@ -167,7 +167,7 @@ public class UIManager : MonoBehaviour
         Transform dieContent = DieUI.transform.GetChild(2).GetComponent<ScrollRect>().content;
         dieContent.Find("KillName").GetComponent<TextMeshProUGUI>().text = "Killer : ";
         dieContent.Find("KillName").GetComponent<TextMeshProUGUI>().text += attackerName;
-        //StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));   //12/16 박성훈 : UI개편후 없어짐?
+        StartCoroutine(TextAlpha(DieUI.GetComponent<CanvasGroup>(), Duration));
     }
 
     public IEnumerator SetHitEffect()

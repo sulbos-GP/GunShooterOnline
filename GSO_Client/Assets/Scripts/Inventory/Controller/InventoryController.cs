@@ -33,7 +33,7 @@ public partial class InventoryController : MonoBehaviour
                 //아직 없음
                 break;
             case ItemType.Bag:
-                return playerInvenUI.SetInventoryGrid(item.itemId);
+                    return playerInvenUI.SetInventoryGrid(item.itemId);
             case ItemType.Recovery:
                 UIManager.Instance.SetIQuickSlot(slotId, item);
                 break;

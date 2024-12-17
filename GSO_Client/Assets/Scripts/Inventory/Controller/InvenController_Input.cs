@@ -4,7 +4,7 @@ using Vector2 = System.Numerics.Vector2;
 
 public partial class InventoryController
 {
-    #region PlayerInput ¾×¼Ç
+    #region PlayerInput ï¿½×¼ï¿½
     private void OnTouchPos(InputAction.CallbackContext context)
     {
         UnityEngine.Vector2 pos = context.ReadValue<UnityEngine.Vector2>();
@@ -15,8 +15,8 @@ public partial class InventoryController
     private void OnTouchStart(InputAction.CallbackContext context)
     {
         isPress = true;
-        //¿©±â¼­ ¾ÆÀÌÅÛ ÀÌº¥Æ®¸¦ ÇÏ´Â°Ô º£½ºÆ®ÀÌ³ª ¿©±â°¡ ½ÇÇàµÇ°í ´ÙÀ½ ÇÁ·¹ÀÓ¿¡ ±×¸®µå°¡ ÇÒ´çµÊ.
-        //gridInteract¸¦ ´ëÃ¼ÇÏ¿© ÅÍÄ¡À§Ä¡¿¡ UI¸¦ ¾ò´Â ÄÚµå°¡ ÀÖÀ»½Ã ¼öÁ¤ÇÒ°Í
+        //ï¿½ï¿½ï¿½â¼­ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½Ï´Â°ï¿½ ï¿½ï¿½ï¿½ï¿½Æ®ï¿½Ì³ï¿½ ï¿½ï¿½ï¿½â°¡ ï¿½ï¿½ï¿½ï¿½Ç°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ó¿ï¿½ ï¿½×¸ï¿½ï¿½å°¡ ï¿½Ò´ï¿½ï¿½.
+        //gridInteractï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½Ï¿ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½Ä¡ï¿½ï¿½ UIï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Úµå°¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò°ï¿½
     }
 
     private void OnTouchEnd(InputAction.CallbackContext context)
@@ -31,7 +31,7 @@ public partial class InventoryController
 
     private void OnMouseRightClickInput(InputAction.CallbackContext context)
     {
-        //¿¡µðÅÍ µð¹ö±× ¿ë
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
         RotateItemRight();
     }
 
@@ -44,15 +44,15 @@ public partial class InventoryController
 
 
     /// <summary>
-    /// ¸¶¿ì½ºÀÇ À§Ä¡¸¦ Grid»óÀÇ Å¸ÀÏ À§Ä¡·Î º¯È¯
+    /// ï¿½ï¿½ï¿½ì½ºï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ Gridï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½È¯
     /// </summary>
     private Vector2Int WorldToGridPos()
     {
         Vector2 position = mousePosInput;
-        //¾ÆÀÌÅÛÀ» µé°íÀÖ´Ù¸é
+        //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´Ù¸ï¿½
         if (selectedItem != null)
         {
-            //¾ÆÀÌÅÛÀÌ ¸¶¿ì½º Áß¾Ó¿¡ ¿Àµµ·Ï º¸Á¤
+            //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ì½º ï¿½ß¾Ó¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             position.X -= (selectedItem.Width - 1) * GridObject.WidthOfTile / 2;
             position.Y += (selectedItem.Height - 1) * GridObject.HeightOfTile / 2;
         }
@@ -61,7 +61,7 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// ÄÁÆ®·Ñ·¯¿¡¼­ ¾ÆÀÌÅÛ ¿ìÈ¸Àü ¸í·É
+    /// ï¿½ï¿½Æ®ï¿½Ñ·ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     public void RotateItemRight()
     {
@@ -125,14 +125,15 @@ public partial class InventoryController
 
     public void InventoryActiveBtn()
     {
-        //ÀÚ½ÅÀÇ ÀÎº¥Åä¸® ¿äÃ»
+        //ï¿½Ú½ï¿½ï¿½ï¿½ ï¿½Îºï¿½ï¿½ä¸® ï¿½ï¿½Ã»
         if (!isActive) {
-            //ÀÎº¥Åä¸®¸¦ Å³ °æ¿ì
+            //ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ Å³ ï¿½ï¿½ï¿½
             InventoryPacket.SendLoadInvenPacket();
+            AudioManager.instance.PlaySound("ShowInventory",AudioManager.instance.GetComponent<AudioSource>());
         }
         else
         {
-            //ÀÎº¥Åä¸®¸¦ ´ÝÀ» °æ¿ì
+            //ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
             if (otherInvenUI.instantGrid != null) { InventoryPacket.SendCloseInvenPacket(otherInvenUI.instantGrid.objectId); return; }
             if (playerInvenUI.instantGrid != null) { InventoryPacket.SendCloseInvenPacket(); }
         }
