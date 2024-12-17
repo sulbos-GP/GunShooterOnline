@@ -38,8 +38,8 @@ public class GridInteract : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             return;
         }
 
-        InventoryController.UpdatePlayerWeight(); //모든 아이템의 무게를 원래대로
-        InventoryController.UpdateOtherWeight();
+        InventoryController.UpdateInvenWeight(); //모든 아이템의 무게를 원래대로
+        InventoryController.UpdateInvenWeight(false);
     }
 
     private void AdjustWeight(InventoryController inven, int parentId, double weight, bool isAdding)

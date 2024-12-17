@@ -22,6 +22,6 @@ public class RecoverySlot : EquipSlotBase
 
     public virtual void UpdateQuickSlotAmount(int amount)
     {
-
+        ItemQuickSlotsParent.GetChild(slotId - ConsumeSlotStartId).GetComponent<IQuickSlot>().UpdateItemAmount(amount);
     }
 }

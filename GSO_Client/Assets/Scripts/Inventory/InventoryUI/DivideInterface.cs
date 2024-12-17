@@ -91,14 +91,14 @@ public class DivideInterface : MonoBehaviour
         splitAmountIndex = Mathf.RoundToInt(value * (maxAmountIndex - 2)) + 1;
         UpdateCountText();
 
-        UpdatePlayerWeightText(playerGridObj.GridWeight);
+        UpdateInvenWeightText(playerGridObj.GridWeight);
 
         if (InventoryController.IsPlayerSlot(objectId))
         {
             if (!InventoryController.IsPlayerSlot(targetItem.backUpParentId))
             {
                 // 플레이어 그리드 -> 상대 그리드
-                UpdatePlayerWeightText(playerGridObj.GridWeight + targetItem.itemData.item_weight * splitAmountIndex);
+                UpdateInvenWeightText(playerGridObj.GridWeight + targetItem.itemData.item_weight * splitAmountIndex);
             }
         }
         else
@@ -106,11 +106,11 @@ public class DivideInterface : MonoBehaviour
             if (InventoryController.IsPlayerSlot(targetItem.backUpParentId))
             {
                 // 상대 그리드 -> 플레이어 그리드
-                UpdatePlayerWeightText(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex);
+                UpdateInvenWeightText(playerGridObj.GridWeight - targetItem.itemData.item_weight * splitAmountIndex);
             }
         }
     }
-    private void UpdatePlayerWeightText(double currentWeight)
+    private void UpdateInvenWeightText(double currentWeight)
     {
         InventoryController inven = InventoryController.Instance;
         GridObject playerGridObj = inven.playerInvenUI.instantGrid;
