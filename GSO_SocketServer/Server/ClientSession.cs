@@ -73,7 +73,14 @@ namespace Server
         public override void OnConnected(EndPoint endPoint)
         {
             Console.WriteLine($"OnConnected  123: {endPoint}");
+          
+            /* 
+             * LastTick = LogicTimer.Tick;
+             * S_Ping s_Ping = new S_Ping();
+              s_Ping.IsEnd = false;
+              s_Ping.Tick = LogicTimer.Tick;
 
+              Send(s_Ping);*/
             //Program.Room.Push(() => Program.Room.Enter(this));
         }
 

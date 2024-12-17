@@ -117,6 +117,19 @@ public class Gun : MonoBehaviour
     //발사버튼 누를시
     public void Fire(Vector2 dir)
     {
+        #region 임시 무한
+        var cRay2 = new C_RaycastShoot //서버에서 이패킷을 받는다면 해당 아이템데이터의 총알을 감소
+        {
+            StartPosX = _fireStartPos.position.x,
+            StartPosY = _fireStartPos.position.y,
+            DirX = dir.x,
+            DirY = dir.y,
+        };
+
+        Managers.Network.Send(cRay2);
+        #endregion
+
+
         if (WeaponData  == null) 
         {
             Debug.Log("현재 총을 들고 있지 않음");

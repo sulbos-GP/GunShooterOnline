@@ -924,6 +924,32 @@ internal class PacketHandler
         enemy.SetAniamtionAttack();
     }
 
+
+    static ulong _last = 0;
+    internal static void S_PingHandler(PacketSession session, IMessage message)
+    {
+        S_Ping packet = message as S_Ping;
+
+        if(packet.IsEnd  == true)
+        {
+
+            Managers.Network.ResetTick(packet.Tick, (uint)(LogicTimer.Tick - _last) / 2);
+
+        }
+        else
+        {
+            //LogicTimer.Tick = packet.Tick;
+            
+            C_Pong c_Pong = new C_Pong();
+            //c_Pong.Tick = LogicTimer.Tick;
+            Managers.Network.Send(c_Pong);
+
+            _last = LogicTimer.Tick;
+            Debug.Log("Last : "+ _last);
+        }
+
+    }
+
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
          var skillPacket = message as S_Skill;

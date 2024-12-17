@@ -1231,8 +1231,12 @@ namespace Server
 
             player.Session.Send(joinServer);
 
-
+            //PushAfter(100 ,CheakPing(player.Session));
+             PushAfter(400 ,CheakPing, player.Session);
+             //CheakPing( player.Session);
         }
+
+      
 
 
     }
