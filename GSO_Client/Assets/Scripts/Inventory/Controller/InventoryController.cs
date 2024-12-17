@@ -258,6 +258,9 @@ public partial class InventoryController : MonoBehaviour
         {
             Managers.Resource.Destroy(itemPreviewInstance);
         }
+
+        UpdateInvenWeight();
+        UpdateInvenWeight(false);
     }
 
     
@@ -332,6 +335,31 @@ public partial class InventoryController : MonoBehaviour
         targetUI.SetWeightText(
             targetUI.instantGrid.GridWeight,
             targetUI.instantGrid.limitWeight);
+    }
+
+    /// <summary>
+    /// 아이템의 무게에 따른 증감 후 텍스트 적용
+    /// </summary>
+    public static void AdjustWeight(InventoryController inven,int parentId, double weight, bool isAdding)
+    {
+        double curWeight, resultWeight;
+
+        if (parentId == 0 && inven.playerInvenUI?.instantGrid != null)
+        {
+            curWeight = inven.playerInvenUI.instantGrid.GridWeight;
+            resultWeight = isAdding ? curWeight + weight : curWeight - weight;
+            inven.playerInvenUI.SetWeightText(resultWeight, inven.playerInvenUI.instantGrid.limitWeight);
+        }
+        else if (parentId > 7 && inven.otherInvenUI?.instantGrid != null)
+        {
+            curWeight = inven.otherInvenUI.instantGrid.GridWeight;
+            resultWeight = isAdding ? curWeight + weight : curWeight - weight;
+            inven.otherInvenUI.SetWeightText(resultWeight, inven.otherInvenUI.instantGrid.limitWeight);
+        }
+        else
+        {
+            Debug.Log("장비칸이거나 유효하지 않은 아이디입니다.");
+        }
     }
 
     [ContextMenu("아이템 보기")]

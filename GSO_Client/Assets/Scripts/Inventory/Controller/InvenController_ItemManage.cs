@@ -220,8 +220,6 @@ public partial class InventoryController
             UndoSlot(item);
             UndoItem(item);
         }
-
-       
     }
 
     private void HandleItemPlacementInGrid(ItemObject item, Vector2Int pos)

@@ -75,7 +75,7 @@ public partial class InventoryController
 
         if (isActive)
         {
-            if (InvenHighLight.highlightObj == null)
+            if (invenHighlight.highlightObj == null)
             {
                 invenHighlight.InstantHighlighter();
             }
@@ -88,7 +88,7 @@ public partial class InventoryController
         }
         else
         {
-            if (InvenHighLight.highlightObj != null)
+            if (invenHighlight.highlightObj != null)
             {
                 invenHighlight.DestroyHighlighter();
             }
