@@ -195,17 +195,17 @@ public class ItemObject : MonoBehaviour
         float timeRemaining = duration;
 
         searchTimerUI.gameObject.SetActive(true);
-
+        AudioManager.instance.PlaySound("Search",gameObject.GetComponent<AudioSource>());
         while (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
             int seconds = Mathf.FloorToInt(timeRemaining);
             int milliseconds = Mathf.FloorToInt((timeRemaining - seconds) * 10); // One decimal place
-
+    
             searchTimerUI.text = string.Format("{0}:{1}", seconds, milliseconds);
             yield return null;
         }
-
+        gameObject.GetComponent<AudioSource>().Stop();
         RevealItem();
         SetMaterialOutLine(imageUI);
         searchTimerUI.gameObject.SetActive(false);

@@ -129,6 +129,7 @@ public partial class InventoryController
         if (!isActive) {
             //�κ��丮�� ų ���
             InventoryPacket.SendLoadInvenPacket();
+            AudioManager.instance.PlaySound("ShowInventory",AudioManager.instance.GetComponent<AudioSource>());
         }
         else
         {
