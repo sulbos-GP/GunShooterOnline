@@ -278,7 +278,7 @@ public partial class InventoryController : MonoBehaviour
 
     public void SetSelectedObjectToLastSibling(Transform child)
     {
-        if (child == null || child.gameObject.name == "InventoryUI")
+        if (child == null || child.parent.name == "Canvas")
             return;
 
         child.SetAsLastSibling();

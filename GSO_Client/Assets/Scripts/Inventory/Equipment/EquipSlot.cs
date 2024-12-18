@@ -17,7 +17,7 @@ public class EquipSlotBase : MonoBehaviour
     public ItemType equipType; // 이 슬롯에 허용되는 아이템 유형
     public ItemObject equipItemObj; // 현재 장착된 아이템오브젝트 @@ 인벤토리가 열려있을때만 있음
 
-    private Vector2 originalItemSize = Vector2.zero;
+    private Vector2 originalItemSize = Vector2.one;
     private bool isInit = false;
 
     private void Awake()
@@ -69,7 +69,6 @@ public class EquipSlotBase : MonoBehaviour
         item.itemData.rotate = 0;
         item.Rotate(0);
         RectTransform itemRect = item.GetComponent<RectTransform>();
-        originalItemSize = itemRect.localScale;
         SetItemObjSize(item);
         itemRect.localPosition = Vector3.zero;
     }
@@ -116,7 +115,6 @@ public class EquipSlotBase : MonoBehaviour
 
         //장착 해제에 성공한 경우
         equipItemObj.GetComponent<RectTransform>().localScale = originalItemSize;
-        originalItemSize = Vector2.zero;
 
         if (!RemoveItemEffects()) //플레이어의 기어 딕셔너리에서 제거
         {
