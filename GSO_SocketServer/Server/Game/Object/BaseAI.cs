@@ -8,6 +8,7 @@ using Server.Game.Utils;
 using ServerCore;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Numerics;
@@ -38,6 +39,8 @@ namespace Server.Game.Object
         public float maxDistance; //스폰지점과 10만큼 떨어지면 귀환
         public float spawnerDistance; //스폰존 범위
 
+        private int StoreMoveTime = 0;
+        private const int MoveTime = 100;
 
         public float Speed;
         public int AttackDamage;
@@ -100,6 +103,8 @@ namespace Server.Game.Object
             });
 
             _state.ChangeState(IdleState);
+
+            StoreMoveTime = Environment.TickCount;
             #endregion
 
             {
@@ -158,8 +163,12 @@ namespace Server.Game.Object
 
             DetectObject.Update();
 
-
-             gameRoom.HandleMove( this, PosInfo );
+            int currentTickCount = Environment.TickCount;
+            if (StoreMoveTime + MoveTime < currentTickCount)
+            {
+                gameRoom.HandleMove(this, PosInfo);
+                StoreMoveTime = currentTickCount;
+            }
         }
 
 

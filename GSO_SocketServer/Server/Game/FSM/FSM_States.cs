@@ -302,6 +302,7 @@ namespace Server.Game.FSM
             GameObject target = Owner.target;
             if (target == null)
             {
+                Owner._state.ChangeState(Owner.ReturnState);
                 return;
             }
 
@@ -436,6 +437,11 @@ namespace Server.Game.FSM
 
                 //TODO : 공격
                 Owner.DoAttack();
+                if (Owner.target != null)
+                {
+                    Owner._state.ChangeState(Owner.ReturnState);
+                    return;
+                }
 
                 float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
                 if (distanceToTarget <= Owner.chaseRange)
