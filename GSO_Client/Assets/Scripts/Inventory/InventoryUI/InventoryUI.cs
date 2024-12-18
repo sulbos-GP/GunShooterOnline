@@ -5,15 +5,13 @@ using UnityEngine;
 
 public class InventoryUI : MonoBehaviour
 {
-    //�׸���� �������� ������
     public const float offsetX = 0;
     public const float offsetY = 0;
 
-    public GridObject instantGrid; //�ش� �κ��丮���� ������ �׸���
+    public GridObject instantGrid; 
 
     public TextMeshProUGUI weightText;
 
-    //�κ��丮 ������ ������ ��� ����
     protected virtual void OnDisable()
     {
         InventoryController.instantItemDic.Clear();
@@ -22,14 +20,12 @@ public class InventoryUI : MonoBehaviour
             Managers.Resource.Destroy(instantGrid.gameObject);
         }
     }
-
-    /// <summary>
-    /// �÷��̾ �κ��丮�� UI�� Ȱ��ȭ�ϰų� �ڽ��� ���ͷ�Ʈ�Ͽ� �κ��丮�� ������� packet���� �ش� ����ҿ� �ִ� �������� �����͸� ����
-    /// </summary>
     public virtual void InventorySet()
     {
         instantGrid = Managers.Resource.Instantiate("UI/InvenUI/GridUI", transform).GetComponent<GridObject>();
     }
+
+    
 
     public void SetWeightText(double GridWeigt, double limitWeight, bool valid = true)
     {
@@ -53,7 +49,7 @@ public class InventoryUI : MonoBehaviour
 
 
 
-    #region ������ ����ũ
+    #region Blink
     public Coroutine blinkCoroutine = null;
     public void StartBlink()
     {

@@ -15,6 +15,4 @@ public class OtherInventoryUI : InventoryUI
     {
         base.InventorySet();
     }
-
-    
 }

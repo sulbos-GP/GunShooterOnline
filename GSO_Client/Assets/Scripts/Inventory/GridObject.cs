@@ -46,7 +46,7 @@ public class GridObject : MonoBehaviour
     /// <summary>
     /// 인벤토리에서 그리드를 생성할때 사용
     /// </summary>
-    public void InstantGrid(Vector2Int _gridSize, double gridWeigth = 100f, bool NotAlignPos = false)
+    public void InstantGrid(Vector2Int _gridSize, double gridWeigth = 100f, bool DontAlignPos = false)
     {
         Managers.SystemLog.Message($"InstantGrid");
         if (gridRect == null) gridRect = GetComponent<RectTransform>();
@@ -66,7 +66,7 @@ public class GridObject : MonoBehaviour
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
 
-        if (!NotAlignPos)
+        if (!DontAlignPos)
         {
             SetGridPosition();
         }
@@ -78,11 +78,16 @@ public class GridObject : MonoBehaviour
     /// </summary>
     private void SetGridPosition()
     {
-        Managers.SystemLog.Message($"SetGridPosition ");
-        //그리드가 벽에 딱 붙지 않게 약간의 오프셋을 둠 -> 수정할것 : 중앙에 오도록
-        Vector2 offsetGridPosition = new Vector2(InventoryUI.offsetX, InventoryUI.offsetY);
-        transform.GetComponent<RectTransform>().anchoredPosition = new UnityEngine.Vector2(offsetGridPosition.X, offsetGridPosition.Y);
-        Managers.SystemLog.Message($"SetGridPosition 완료");
+        RectTransform gridRect = transform.GetComponent<RectTransform>();
+        Vector2 parentSize = new Vector2(transform.parent.GetComponent<RectTransform>().rect.size.x, transform.parent.GetComponent<RectTransform>().rect.size.y);
+        Vector2 childSize = new Vector2(gridRect.rect.size.x, gridRect.rect.size.y);
+
+        // 자식 객체의 Anchored Position 계산
+        float posX = (parentSize.X - childSize.X) / 2;
+        float posY = -(parentSize.Y - childSize.Y) / 2;
+
+        // 자식 객체의 위치 설정
+        gridRect.anchoredPosition = new UnityEngine.Vector2(posX, posY);
     }
 
     /// <summary>
@@ -472,9 +477,12 @@ public class GridObject : MonoBehaviour
         BackUpSlot = new ItemObject[width, height];
         Vector2 rectSize = new Vector2(width * WidthOfTile, height * HeightOfTile);
         gridRect.sizeDelta = new UnityEngine.Vector2(rectSize.X, rectSize.Y);
+        SetGridPosition();
+
 
         InventoryController.UpdateInvenWeight();
         InventoryController.UpdateInvenWeight(false);
+
 
         foreach (ItemObject item in InventoryController.instantItemDic.Values)
         {
