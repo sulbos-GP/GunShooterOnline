@@ -587,13 +587,24 @@ namespace Server
             sourceMovelItem.Y = destinationGridY;
             sourceMovelItem.Rotate = destinationRotation;
 
+            bool isPlacement = destinationStorage.InsertItem(sourceMovelItem);
+            if (false == isPlacement)
+            {
+                sourceStorage.InsertItem(sourceMovelItem);
+
+                packet.IsSuccess = false;
+                packet.SourceMoveItem = oldSourceMoveItemInfo;
+                packet.DestinationMoveItem = oldSourceMoveItemInfo;
+                player.Session.Send(packet);
+                return;
+            }
+
             if (destinationObjectId == (int)EGearPart.Backpack)
             {
                 //가방을 장착 하였을 경우
                 List<ItemObject> items = player.inventory.storage.Items;
 
                 player.gear.GetPart(EGearPart.Backpack).ClearStorage();
-                destinationStorage.InsertItem(sourceMovelItem);
 
                 if (false == player.inventory.MakeInventory())
                 {
@@ -614,22 +625,7 @@ namespace Server
                     return;
                 }
             }
-            else
-            {
-                bool isPlacement = destinationStorage.InsertItem(sourceMovelItem);
-                if (false == isPlacement)
-                {
-                    sourceStorage.InsertItem(sourceMovelItem);
-
-                    packet.IsSuccess = false;
-                    packet.SourceMoveItem = oldSourceMoveItemInfo;
-                    packet.DestinationMoveItem = oldSourceMoveItemInfo;
-                    player.Session.Send(packet);
-                    return;
-                }
-            }
-
-            if (sourceObjectId == (int)EGearPart.Backpack)
+            else if (sourceObjectId == (int)EGearPart.Backpack)
             {
                 //가방을 이동한 경우
                 List<ItemObject> items = player.inventory.storage.Items;
@@ -1071,6 +1067,13 @@ namespace Server
                 {
                     t.Session.Send(status);
                 }
+            }
+#elif RELEASE
+            if (tempPlayer.Count == 2)
+            {
+                Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
+                GameStart();
+
             }
 #else
             if (tempPlayer.Count == 1) // 초코파이 접속할 인원에 따라 변경

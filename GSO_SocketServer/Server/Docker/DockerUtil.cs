@@ -20,7 +20,7 @@ namespace Server.Docker
                 return cgroupLine.Split('/').Last();
             }
 
-            return string.Empty;
+            return "SomeConnectionKey";
 #else
             return "DummyContainer";
 #endif
@@ -32,7 +32,7 @@ namespace Server.Docker
             string ip = Environment.GetEnvironmentVariable("HOST_IP");
             if (ip == null)
             {
-                return string.Empty;
+                return "127.0.0.1";
             }
             return ip;
 #else
@@ -46,7 +46,7 @@ namespace Server.Docker
             string port = Environment.GetEnvironmentVariable("HOST_PORT");
             if (port == null)
             {
-                return 0;
+                return 7777;
             }
             return int.Parse(port);
 #else
@@ -56,12 +56,22 @@ namespace Server.Docker
 
         public static int GetRegister()
         {
-            return Convert.ToInt32(Environment.GetEnvironmentVariable("REGISTER"));
+            string register = Environment.GetEnvironmentVariable("REGISTER");
+            if (register == null)
+            {
+                return 100;
+            }
+            return int.Parse(register);
         }
 
         public static int GetBacklog()
         {
-            return Convert.ToInt32(Environment.GetEnvironmentVariable("BACKLOG"));
+            string backlog = Environment.GetEnvironmentVariable("BACKLOG");
+            if (backlog == null)
+            {
+                return 100;
+            }
+            return int.Parse(backlog);
         }
     }
 }
