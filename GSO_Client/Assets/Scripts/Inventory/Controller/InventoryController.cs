@@ -1,5 +1,6 @@
 using Google.Protobuf.Protocol;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,18 +11,10 @@ public partial class InventoryController : MonoBehaviour
 {
     public static InventoryController Instance;
 
-    private const int MaxEquipSlots = 7;
-    private const int PlayerSlotId = 0;
+    public const int MaxEquipSlots = 7;
+    public const int PlayerSlotId = 0;
 
-    private Dictionary<int, ItemData> EquipDict = new Dictionary<int, ItemData>();
-    /*앞으로 사용할 기어 딕셔너리. 장착을 조작할때는 이 딕셔너리를 참조하여 변경
-    * 1번 주무기
-    * 2번 보조무기
-    * 3번 방어구
-    * 4번 가방
-    * 5~7번 소모품
-    */
-    //딕셔너리의 아이템 검색
+    private Dictionary<int, ItemData> EquipDict = new Dictionary<int, ItemData>(); //장착아이템 딕셔너리
     public bool SetEquipItem(int slotId, ItemData item)
     {
         if(item == null)
@@ -40,7 +33,7 @@ public partial class InventoryController : MonoBehaviour
                 //아직 없음
                 break;
             case ItemType.Bag:
-                return playerInvenUI.SetInventoryGrid(item.itemId);
+                    return playerInvenUI.SetInventoryGrid(item.itemId);
             case ItemType.Recovery:
                 UIManager.Instance.SetIQuickSlot(slotId, item);
                 break;
@@ -91,69 +84,58 @@ public partial class InventoryController : MonoBehaviour
 
         return EquipDict[GearCode];
     }
-    public ItemData GetItemInDictByItemObjId(int objId)
-    {
-        ItemData findData = EquipDict.Values.FirstOrDefault(data => data.objectId == objId);
-        if(findData == null)
-        {
-            return null;
-        }
 
-        return findData;
-    }
+    public static Dictionary<int, EquipSlotBase> equipSlotDic { get; private set; } = new Dictionary<int, EquipSlotBase>(); //장착칸을 아이디별로 저장
+    public static Dictionary<int, ItemObject> instantItemDic { get; private set; } = new Dictionary<int, ItemObject>(); //생성된 아이템. 인벤토리를 닫으면 클리어
 
-    public static Dictionary<int, EquipSlotBase> equipSlotDic { get; private set; } = new Dictionary<int, EquipSlotBase>();
-    public static Dictionary<int, ItemObject> instantItemDic { get; private set; } = new Dictionary<int, ItemObject>(); //인벤토리를 닫으면 초기화됨
-
-    //UI
+    [Header("UI Component")]
     public GameObject inventoryUI;
     public PlayerInventoryUI playerInvenUI;
     public OtherInventoryUI otherInvenUI;
     public Transform deleteUI;
     public Button rotateBtn;
 
-    //플레이어 조작
+    [Header("PlayerInput")]
+    public bool isActive = false; //UI가 켜져 있는가?
+    [SerializeField] private Vector2Int gridPosition;
     private PlayerInput playerInput;
     private Vector2 mousePosInput;
-    [SerializeField] private Vector2Int gridPosition;
     private Vector2Int gridPositionIndex;
     private bool isPress = false; //화면이 눌려진 상태인가?
-    public bool isActive = false; //UI가 켜져 있는가?
+    
 
-    //아이템
+    [Header("Interact Item")]
     [SerializeField] private ItemObject selectedItem;
     private RectTransform selectedRect;
-    private ItemObject overlapItem;
-
     public bool isItemSelected;
+    private ItemObject overlapItem;
+    
 
-    //그리드
+    [Header("Interact grid")]
     [SerializeField] private GridObject selectedGrid;
     public bool isGridSelected;
     public bool itemPlaceableInGrid; //아이템이 그리드에 들어갈수 있는가?
 
-    //장착칸
+    [Header("Interact equipslot")]
     [SerializeField] private EquipSlotBase selectedEquip;
     private bool isEquipSelected;
 
-    //하이라이트
+    [Header("highlight")]
     private InvenHighLight invenHighlight;
-  
-    //아이템 삭제
+
+    [Header("Divide&Merge Variable")]
     public bool isOnDelete;
+    public bool isDivideMode;
+    public bool isDivideInterfaceOn;
 
-    //아이템 나누기
     private const float maxDragTime = 2f;
-
     private GameObject itemPreviewInstance;
     private Vector2 lastDragPosition;
     private float dragTime = 0f;
-
-    public bool isDivideMode;
     private bool divideCheckOff;
-    public bool isDivideInterfaceOn;
+    
 
-    #region 옵저버
+    #region Observer
     public ItemObject SelectedItem
     {
         get => selectedItem;
@@ -249,7 +231,7 @@ public partial class InventoryController : MonoBehaviour
         if (inventoryBtn != null)
         {
             inventoryBtn.onClick.RemoveAllListeners();
-            inventoryBtn.onClick.AddListener(InvenOnOffBtn);
+            inventoryBtn.onClick.AddListener(InventoryActiveBtn);
         }
 
         rotateBtn.onClick.RemoveAllListeners();
@@ -257,7 +239,7 @@ public partial class InventoryController : MonoBehaviour
     }
 
     /// <summary>
-    /// 모든 셀렉션 초기화
+    /// 아이템 인터렉트 종료 후 초기화
     /// </summary>
     public void ResetSelection()
     {
@@ -276,17 +258,12 @@ public partial class InventoryController : MonoBehaviour
         {
             Managers.Resource.Destroy(itemPreviewInstance);
         }
+
+        UpdateInvenWeight();
+        UpdateInvenWeight(false);
     }
 
-    [ContextMenu("아이템 보기")]
-    public void DebugDic()
-    {
-        Debug.Log($"itemDic");
-        foreach (ItemObject item in instantItemDic.Values)
-        {
-            Debug.Log("Key: " + item.itemData.objectId + ", Value: " + item.itemData.item_name);
-        }
-    }
+    
 
     private void EquipSlotsSet()
     {
@@ -313,15 +290,12 @@ public partial class InventoryController : MonoBehaviour
     }
 
 
-
-    //static 함수들
-
     /// <summary>
     /// 해당 아이디가 장착칸의 아이디인지
     /// </summary>
     public static bool IsEquipSlot(int objectId)
     {
-        return objectId > 0 && objectId <= 7;
+        return objectId > PlayerSlotId && objectId <= MaxEquipSlots;
     }
 
     /// <summary>
@@ -329,7 +303,7 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     public static bool IsPlayerSlot(int objectId)
     {
-        return !(objectId > 0 && objectId <= 7) && objectId == 0;
+        return !(objectId > PlayerSlotId && objectId <= MaxEquipSlots) && objectId == PlayerSlotId;
     }
 
     /// <summary>
@@ -337,38 +311,66 @@ public partial class InventoryController : MonoBehaviour
     /// </summary>
     public static bool IsOtherSlot(int objectId)
     {
-        return !(objectId > 0 && objectId <= 7) && objectId != 0;
+        return !(objectId > PlayerSlotId && objectId <= MaxEquipSlots) && objectId != PlayerSlotId;
+    }
+
+    public static void UpdateInvenWeight(bool isPlayerInven = true)
+    {
+        InventoryUI targetUI;
+        if (isPlayerInven) 
+        {
+            targetUI = Instance.playerInvenUI;
+        }
+        else
+        {
+            targetUI= Instance.otherInvenUI;
+        }
+
+        if (targetUI.instantGrid == null)
+        {
+            targetUI.SetWeightText(0, 0, false);
+            return;
+        }
+        targetUI.instantGrid.UpdateGridWeight();
+        targetUI.SetWeightText(
+            targetUI.instantGrid.GridWeight,
+            targetUI.instantGrid.limitWeight);
     }
 
     /// <summary>
-    /// 플레이어 인벤의 무게를 업데이트
+    /// 아이템의 무게에 따른 증감 후 텍스트 적용
     /// </summary>
-    public static void UpdatePlayerWeight()
+    public static void AdjustWeight(InventoryController inven,int parentId, double weight, bool isAdding)
     {
-        if (Instance.playerInvenUI.instantGrid == null)
+        double curWeight, resultWeight;
+
+        if (parentId == 0 && inven.playerInvenUI?.instantGrid != null)
         {
-            Instance.playerInvenUI.SetWeightText(0, 0, false);
-            return;
+            curWeight = inven.playerInvenUI.instantGrid.GridWeight;
+            resultWeight = isAdding ? curWeight + weight : curWeight - weight;
+            inven.playerInvenUI.SetWeightText(resultWeight, inven.playerInvenUI.instantGrid.limitWeight);
         }
-        Instance.playerInvenUI.instantGrid.UpdateGridWeight();
-        Instance.playerInvenUI.SetWeightText(
-            Instance.playerInvenUI.instantGrid.GridWeight,
-            Instance.playerInvenUI.instantGrid.limitWeight);
+        else if (parentId > 7 && inven.otherInvenUI?.instantGrid != null)
+        {
+            curWeight = inven.otherInvenUI.instantGrid.GridWeight;
+            resultWeight = isAdding ? curWeight + weight : curWeight - weight;
+            inven.otherInvenUI.SetWeightText(resultWeight, inven.otherInvenUI.instantGrid.limitWeight);
+        }
+        else
+        {
+            Debug.Log("장비칸이거나 유효하지 않은 아이디입니다.");
+        }
     }
 
-    public static void UpdateOtherWeight()
+    [ContextMenu("아이템 보기")]
+    public void DebugDic()
     {
-        if (Instance.otherInvenUI.instantGrid == null)
+        Debug.Log($"itemDic");
+        foreach (ItemObject item in instantItemDic.Values)
         {
-            Instance.otherInvenUI.SetWeightText(0,0, false);
-            return;
+            Debug.Log("Key: " + item.itemData.objectId + ", Value: " + item.itemData.item_name);
         }
-        Instance.otherInvenUI.instantGrid.UpdateGridWeight();
-        Instance.otherInvenUI.SetWeightText(
-            Instance.otherInvenUI.instantGrid.GridWeight,
-            Instance.otherInvenUI.instantGrid.limitWeight);
     }
-
 }
 
 

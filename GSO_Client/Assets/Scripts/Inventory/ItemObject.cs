@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Versioning;
 using TMPro;
 using UnityEditor;
+using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
@@ -13,7 +15,7 @@ public class ItemObject : MonoBehaviour
 {
     public const int maxItemMergeAmount = 64;
 
-    public static ItemObject CreateNewItemObj(ItemData data, Transform parent = null)
+    public static ItemObject InstantItemObj(ItemData data, Transform parent = null)
     {
         ItemObject newItem = Managers.Resource.Instantiate("UI/InvenUI/ItemUI", parent).GetComponent<ItemObject>();
         newItem.SetItem(data);
@@ -124,7 +126,7 @@ public class ItemObject : MonoBehaviour
         Init();
         this.itemData = itemData;
         itemRect = GetComponent<RectTransform>();
-        itemSprite = FindItemSprtie(itemData);
+        itemSprite = GetItemSprite(itemData);
         isOnSearching = false;
         ItemAmount = itemData.amount;
 
@@ -137,10 +139,11 @@ public class ItemObject : MonoBehaviour
         else
         {
             imageUI.sprite = itemSprite != null ?  itemSprite : hideSprite;
+            Debug.Log($"itemName : {itemData.item_name} , itemPirce : {itemData.item_sell_price}");
+            //Item Sprite OutLine Material
+            SetMaterialOutLine(imageUI);
             isHide = false;
         }
-
-
 
         Vector2 size = new Vector2();
         size.X = itemData.width * GridObject.WidthOfTile; 
@@ -153,7 +156,7 @@ public class ItemObject : MonoBehaviour
         itemRect.localPosition = new UnityEngine.Vector2(itemData.width * GridObject.WidthOfTile + 50, itemData.height * GridObject.HeightOfTile - 50);
     }
 
-    public static Sprite FindItemSprtie(ItemData itemData)
+    public static Sprite GetItemSprite(ItemData itemData)
     {
         Sprite itemSprite = Resources.Load<Sprite>($"Sprite/Item/{itemData.iconName}");
 
@@ -173,24 +176,36 @@ public class ItemObject : MonoBehaviour
         searchingCoroutine = StartCoroutine(SearchingTimer(itemData.item_searchTime));
     }
 
+    public void SetMaterialOutLine(Image imageUI)
+    {
+        if(itemData.item_sell_price<=500)
+            imageUI.material = Resources.Load<Material>("Material/WhiteOutLine");
+        else if(itemData.item_sell_price<=1000)
+            imageUI.material = Resources.Load<Material>("Material/YellowOutLine");
+        else if(itemData.item_sell_price<=1500)
+            imageUI.material = Resources.Load<Material>("Material/RedOutLine");
+        else
+            imageUI.material = Resources.Load<Material>("Material/PurpleOutLine");
+    }
+
     private IEnumerator SearchingTimer(float duration)
     {
         float timeRemaining = duration;
 
         searchTimerUI.gameObject.SetActive(true);
-
+        AudioManager.instance.PlaySound("Search",gameObject.GetComponent<AudioSource>());
         while (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
             int seconds = Mathf.FloorToInt(timeRemaining);
             int milliseconds = Mathf.FloorToInt((timeRemaining - seconds) * 10); // One decimal place
-
+    
             searchTimerUI.text = string.Format("{0}:{1}", seconds, milliseconds);
             yield return null;
         }
-
+        gameObject.GetComponent<AudioSource>().Stop();
         RevealItem();
-
+        SetMaterialOutLine(imageUI);
         searchTimerUI.gameObject.SetActive(false);
         searchingCoroutine = null;
     }
@@ -225,25 +240,11 @@ public class ItemObject : MonoBehaviour
         Rotate(itemData.rotate);
     }
 
-    public void RotateLeft()
-    {
-        itemData.rotate = (itemData.rotate - 1) % 4;
-        Rotate(itemData.rotate);
-    }
-
     public void Rotate(int rotateInt)
     {
         itemRect.sizeDelta = new UnityEngine.Vector2(Width* GridObject.WidthOfTile, Height*GridObject.HeightOfTile);
        
         imageUI.GetComponent< RectTransform >().rotation = Quaternion.Euler(0, 0, 90 * rotateInt);
-        
-    }
-
-    public void MergeItem(ItemObject targetItem, int mergeAmount)
-    {
-        targetItem.ItemAmount += mergeAmount;
-        ItemAmount -= mergeAmount;
-
     }
 
     public void TextControl()

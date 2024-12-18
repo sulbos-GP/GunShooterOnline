@@ -34,7 +34,7 @@ namespace Server
         }
 
 
-        public static int mFramesPerSecond { get; internal set; } = LogicTimer.mFramesPerSecond; //50
+        public static int mFramesPerSecond { get; internal set; } = LogicTimer.mFramesPerSecond; //50ms
         public static int ServerIntervalTick { get; internal set; } = 1000 / mFramesPerSecond;
 
         public static int minutes = 30;

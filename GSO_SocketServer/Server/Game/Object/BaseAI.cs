@@ -18,6 +18,8 @@ namespace Server.Game.Object
 {
     public class BaseAI : CreatureObj
     {
+        //public float Attack;
+
 
         #region FSM
         public FSMController _state;
@@ -45,6 +47,8 @@ namespace Server.Game.Object
         public float attackRange;      //공격 거리 , 범위안에 들어오면 타겟을 향해 공격 실행, 공격이 끝나면 타겟의 거리에 따라 반복 공격, 추격 혹은 의심 혹은 귀환
         public float attackDelay;      //공격후 잠시 대기하는 시간
         public float disappearTime; //죽은 적이 3초뒤에 삭제됨
+
+
 
         //public List<GameObject> targets;
         public GameObject target
@@ -86,6 +90,7 @@ namespace Server.Game.Object
             attackRange = 2f;      //공격 거리 , 범위안에 들어오면 타겟을 향해 공격 실행, 공격이 끝나면 타겟의 거리에 따라 반복 공격, 추격 혹은 의심 혹은 귀환
             attackDelay = 2f;      //공격후 잠시 대기하는 시간
             disappearTime = 3f;    //죽은 적이 3초뒤에 삭제됨
+            AttackDamage = 3;
 
             stat.MergeFrom(new StatInfo()
             {
@@ -379,6 +384,21 @@ namespace Server.Game.Object
        /* private Vector2 laststart;
         private Vector2 lastend;*/
 
+
+
+        public bool CheakTargetVisual(Vector2 dir)
+        {
+            RaycastHit2D hit2D = RaycastManager.Raycast(CellPos, dir, 100, new List<GameObject>() { this }); //충돌객체 체크
+            
+            if(hit2D != null && hit2D.Collider != null)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public void PathFinding_Update(Vector2 start, Vector2 end, bool checkObjects = false)
         {

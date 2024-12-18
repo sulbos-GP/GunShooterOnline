@@ -8,12 +8,13 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static Humanizer.In;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace Server
 {
 
-    internal class LoadMap
+    public class LoadMap
     {
 
 
@@ -23,16 +24,21 @@ namespace Server
 
 
 
-        public void loadMap(int mapId, string pathPrefix)
+        public void loadMap(string mapName, string pathPrefix = "")
         {
-
+/*
             //var Distance = 22;
 
             //----------------------------------------
-
+            mapName = "Forest";
 
             // Collision 관련 파일
-            var text = File.ReadAllText(pathPrefix);
+#if DOCKER
+        var text = File.ReadAllText("/app/MapData/" + $"{mapName}.txt");
+#else
+
+            var text = File.ReadAllText(" ./../../../../../MapData/" + $"{mapName}.txt");
+#endif
             var reader = new StringReader(text);
 
             var _ = reader.ReadLine();
@@ -40,16 +46,18 @@ namespace Server
             var minIndex = reader.ReadLine().Split('/');
 
 
-            var Bleft = new Vector2Int(int.Parse(minIndex[0]), int.Parse(minIndex[1]));
-            var roomSize = int.Parse(reader.ReadLine());
+            Bleft = new Vector2Int(int.Parse(minIndex[0]), int.Parse(minIndex[1]));
+            var size = reader.ReadLine().Split('/');
 
-            Width = roomSize;
-            Height = roomSize;
+            roomSize = new Vector2Int(int.Parse(size[0]), int.Parse(size[1]));
 
-            var Tright = new Vector2Int(Bleft.x + (roomSize - 1), Bleft.y + (roomSize - 1));
+            Height = roomSize.x;
+            Width = roomSize.y;
+
+            Tright = new Vector2Int(Bleft.x + (roomSize.x - 1), Bleft.y + (roomSize.y - 1));
 
 
-            _collisions = new int[roomSize, roomSize];
+            _collisions = new int[roomSize.x, roomSize.y];
             //_objects = new GameObject[roomSize, roomSize];
 
 
@@ -86,9 +94,10 @@ namespace Server
             //	int y = int.Parse(Console.ReadLine());
             //	bool k = CanGo(new Vector2Int(x, y), false);
             //             Console.WriteLine(k);
-            //}
+            //}*/
         }
 
+       
     }
     
 }

@@ -42,7 +42,7 @@ class PacketHandler
         if (clientSession.MyPlayer == null)
         {
             Console.WriteLine(clientSession.MyPlayer is null);
-            Thread.Sleep(1000);
+            //Thread.Sleep(1000);
         }
         Player player = clientSession.MyPlayer;
 
@@ -187,6 +187,8 @@ class PacketHandler
         //Console.WriteLine($"C_RaycastShootHandler0");
 
         Player player = clientSession.MyPlayer;
+        if (player == null)
+            return;
         player.gameRoom.Push(player.gameRoom.HandleRayCast, player, new Vector2(packet.StartPosX, packet.StartPosY), new Vector2(packet.DirX, packet.DirY));
     }
 
@@ -197,6 +199,12 @@ class PacketHandler
         Console.WriteLine($"C_ExitPacketHandler");
 
         Player player = clientSession.MyPlayer;
+
+        if(player == null) //Lobby
+        {
+            return;
+        }
+
         if (packet.IsNormal == true)
             player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
         else
@@ -209,6 +217,8 @@ class PacketHandler
         Console.WriteLine("C_JoinServerHandler");
 
         //Task.Delay(1000).Wait();
+
+       
 
         //접속 요청
         ClientSession clientSession = session as ClientSession;
@@ -297,5 +307,33 @@ class PacketHandler
 
 
         player.gameRoom.Push(player.gameRoom.HandleInputData, player, packet);
+    }
+
+    internal static void C_PongHandler(PacketSession session, IMessage message)
+    {
+        //C_Pong packet = (C_Pong)message;
+        ClientSession clientSession = session as ClientSession;
+
+        ulong last;
+        if(session.LastTick.TryGetValue(session.Rindex++, out last) == true)
+        {
+            session.RTT = (uint)(LogicTimer.Tick - last) / 2;
+            //Console.WriteLine("1. session.RTT : " + session.RTT);
+        }
+        else
+        {
+            Console.WriteLine("C_PongHandler 에러");
+        }
+
+        //Console.WriteLine($"2. Pong RTT = {session.RTT}  ");
+
+        S_Ping s_Ping = new S_Ping();
+        s_Ping.IsEnd = true;
+        s_Ping.Tick = LogicTimer.Tick + session.RTT;
+
+        //Console.WriteLine($"3. current = {LogicTimer.Tick} Predict = {LogicTimer.Tick + session.RTT}  ");
+
+        clientSession.Send(s_Ping);
+
     }
 }

@@ -7,7 +7,7 @@ namespace ServerCore
 {
     public class LogicTimer
     {
-        public const float mFramesPerSecond = 60.0f;
+        public const float mFramesPerSecond = 50.0f;
         public const float mFixedDelta = 1.0f / mFramesPerSecond;
 
         private double mAccumulator;
@@ -17,6 +17,10 @@ namespace ServerCore
         private readonly Action mAction;
 
         public float LerpAlpha => (float)mAccumulator / mFixedDelta;
+
+        public static ulong Tick { get; private set; }
+            
+
 
         public LogicTimer(Action action)
         {
@@ -44,9 +48,17 @@ namespace ServerCore
 
             while (mAccumulator >= mFixedDelta)
             {
+                Tick++;
+
                 mAction();
                 mAccumulator -= mFixedDelta;
             }
         }
+
+        public void ResetTick(ulong _tick)
+        {
+            Tick = _tick;
+        }
+
     }
 }

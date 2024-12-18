@@ -216,13 +216,13 @@ public class WorldGenerator
             {
                 _base = _tr.GetComponent<Tilemap>();
             }
-            else if (_tr.name.Contains("Wall") == true)
-            {
-                _wall = _tr.GetComponent<Tilemap>();
-            } 
-            else if (_tr.name.Contains("HiddenWall") == true)
+            else if (_tr.name  == "W_HiddenWall")
             {
                 _hiddenWall = _tr.GetComponent<Tilemap>();
+            }
+            else if (_tr.name == "W_Wall")
+            {
+                _wall = _tr.GetComponent<Tilemap>();
             } 
             else if (_tr.name.Contains("Box") == true)
             {
@@ -280,7 +280,7 @@ public class WorldGenerator
                 //Debug.Log(currnet);
 
                 TileBase wallTile = _wall.GetTile(new Vector3Int(x, y, 0));
-                TileBase hiddenWallTile = _wall.GetTile(new Vector3Int(x, y, 0));
+                TileBase hiddenWallTile = _hiddenWall.GetTile(new Vector3Int(x, y, 0));
                 TileBase boxTile = _box.GetTile(new Vector3Int(x, y, 0));
                 TileBase exitTile = _exit.GetTile(new Vector3Int(x, y, 0));
                 TileBase spawnTile = _spawn.GetTile(new Vector3Int(x, y, 0));

@@ -49,6 +49,7 @@ namespace Server
 
             creature.CellPos = new Vector2(movePosInfo.PosX, movePosInfo.PosY);
 
+
             //TODO : 삭제
             map.ApplyMove(creature,
                 new Vector2Int((int)Math.Round(movePosInfo.PosX), (int)Math.Round(movePosInfo.PosY)));
@@ -1234,8 +1235,12 @@ namespace Server
 
             player.Session.Send(joinServer);
 
-
+            //PushAfter(100 ,CheakPing(player.Session));
+             PushAfter(400 ,CheakPing, player.Session);
+             //CheakPing( player.Session);
         }
+
+      
 
 
     }

@@ -9,19 +9,14 @@ using UnityEngine.UI;
 
 public class IQuickSlot : MonoBehaviour
 {
-    //������ ��ư 1, 2, 3�� ������Ʈ�� ����
     public int SlotId;
 
-    public Sprite defaultSprite;
-
-    //������Ʈ
-    public Image itemImage;
-    public TextMeshProUGUI itemAmountText;
-    public Image coolTimeImage;
-
-    public ItemData itemData;
-    
-    public bool isReady;
+    [SerializeField]private Sprite defaultSprite;
+    [SerializeField] private Image itemImage;
+    [SerializeField] private TextMeshProUGUI itemAmountText;
+    [SerializeField] private Image coolTimeImage;
+    [SerializeField] private ItemData itemData;
+    [SerializeField] private bool isReady;
     private Coroutine cooltimer;
 
     private void Awake()
@@ -38,9 +33,6 @@ public class IQuickSlot : MonoBehaviour
         ResetSlot();
     }
 
-    /// <summary>
-    /// ������ �̹����� ���� �ؽ�Ʈ ����
-    /// </summary>
     public void SetSlot(ItemData item)
     {
         if (itemData != null && itemData.itemId == item.itemId)
@@ -50,7 +42,7 @@ public class IQuickSlot : MonoBehaviour
         itemData = item;
         GetComponent<Button>().interactable = true;
 
-        Sprite itemSprite = ItemObject.FindItemSprtie(item);
+        Sprite itemSprite = ItemObject.GetItemSprite(item);
         itemImage.sprite = itemSprite;
         UpdateItemAmount(item.amount);
         StartCoroutine(OnCooltime(Data_master_item_use.GetData(item.itemId).cool_time));
@@ -68,9 +60,6 @@ public class IQuickSlot : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// ������ ������ ���� -> ����Ʈ �̹��� �� �ؽ�Ʈ�� ����
-    /// </summary>
     public void ResetSlot()
     {
         itemImage.sprite = defaultSprite;
@@ -88,20 +77,15 @@ public class IQuickSlot : MonoBehaviour
         GetComponent<Button>().interactable = false;
     }
 
-    /// <summary>
-    /// ��ϵ� �������� ���. �̰� �������� ����� ���;��ҵ�
-    /// </summary>
     public void UseQuickSlot(ItemData item)
     {
         if (item == null)
         {
-            Debug.Log("�������� ��ϵǾ����� ����");
             return;
         }
 
-        if (!CheckAbleToUse())//������ ���
+        if (!CheckAbleToUse())
         {
-            Debug.Log("������ ��� ����");
             return;
         }
 
@@ -111,12 +95,12 @@ public class IQuickSlot : MonoBehaviour
 
         Managers.Network.Send(inputPacket);
 
-        item.amount -= 1; //�������� ���� ����
+        item.amount -= 1;
 
         UpdateItemAmount(item.amount);
         Data_master_item_use consumeData = Data_master_item_use.GetData(item.itemId);
 
-        StartCoroutine(OnBuffMark(consumeData.duration)); //���ӽð� ���� �� ��ũ ����
+        StartCoroutine(OnBuffMark(consumeData.duration));
         StartCoroutine(OnCooltime(consumeData.cool_time));
     }
 
@@ -126,19 +110,16 @@ public class IQuickSlot : MonoBehaviour
 
         if (myPlayer == null)
         {
-            Debug.Log("�������� ������ �÷��̾ ã�� ����");
             return false;
         }
 
         if (!isReady)
         {
-            Debug.Log("���� ��Ȱ��ȭ ������");
             return false;
         }
 
         if (cooltimer != null)
         {
-            Debug.Log("��Ÿ���� ���ư��� ��");
             return false;
         }
         return true;
@@ -159,12 +140,10 @@ public class IQuickSlot : MonoBehaviour
             float remainingTimeRatio = 1 - (elapseTime / (float)cooltime);
             coolTimeImage.fillAmount = remainingTimeRatio;
 
-            // ��� �ð� ������Ʈ
             elapseTime += Time.deltaTime;
             yield return null;
         }
 
-        // ��Ÿ�� ���� �� �ʱ�ȭ
         coolTimeImage.fillAmount = 0;
         thisBtn.interactable = true;
         cooltimer = null;

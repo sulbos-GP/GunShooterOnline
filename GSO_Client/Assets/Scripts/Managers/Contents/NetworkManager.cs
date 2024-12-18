@@ -17,6 +17,9 @@ public class NetworkManager
 
     public static ClientNetworkService mNetworkService = new ClientNetworkService();
     
+
+
+
     private IPAddress ipAddr;
 
     public int AccountId { get; set; }
@@ -99,8 +102,15 @@ public class NetworkManager
 
     }
 
+    public uint Rtt { get; private set; }
+    public void ResetTick(ulong _server, uint _rtt)
+    {
+        //Debug.Log($"Rtt : {_rtt}, Server Tick  : {_server} ,Clinet {LogicTimer.Tick}");
 
+        Rtt = _rtt;
+        mNetworkService.mLogicTimer.ResetTick(_server);
 
+    }
 
 
     public void Disconnect()

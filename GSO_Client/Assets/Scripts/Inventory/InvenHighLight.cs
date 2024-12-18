@@ -12,7 +12,7 @@ public struct HighlightColor
 
 public class InvenHighLight : MonoBehaviour
 {
-    public static GameObject highlightObj;
+    public GameObject highlightObj;
 
     private RectTransform highlightRect;
     public GameObject highlightPrefab;
@@ -46,14 +46,13 @@ public class InvenHighLight : MonoBehaviour
     }
 
     /// <summary>
-    /// 하이라이트의 사이즈를 해당 아이템의 크기로
+    /// 하이라이트의 사이즈를 해당 
     /// </summary>
-    /// <param name="targetItem">기준아이템</param>
-    public void SetSize(ItemObject targetItem)
+    public void SetSize(Vector2 _size)
     {
         Vector2 size = new Vector2();
-        size.X = targetItem.Width * GridObject.WidthOfTile;
-        size.Y = targetItem.Height* GridObject.HeightOfTile;
+        size.X = _size.X * GridObject.WidthOfTile;
+        size.Y = _size.Y* GridObject.HeightOfTile;
         
         highlightRect.sizeDelta = new UnityEngine.Vector2(size.X, size.Y);
     }

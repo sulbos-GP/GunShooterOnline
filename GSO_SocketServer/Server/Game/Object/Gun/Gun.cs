@@ -64,6 +64,8 @@ namespace Server.Game
         public void Init(WeaponInventory weapon)
         {
             weaponInven = weapon;
+
+            weapon.MainGun.CurAmmo = 39;
             //ResetGun();
         }
 
@@ -97,23 +99,26 @@ namespace Server.Game
 
             DecreaseAmmo();
 
-            Console.WriteLine($"attacker : {attacker}\n" +
+          /*  Console.WriteLine($"attacker : {attacker}\n" +
                 $"pos : {pos.X},{pos.Y}\n" +
-                $"dir : {dir.X},{dir.Y}");
+                $"dir : {dir.X},{dir.Y}");*/
 
             //정규분포를 사용한 발사
             Vector2 direction = CalculateNormal(dir);
             Vector2 endPos = GetEndPos(pos, direction);
 
             RaycastHit2D hit2D = RaycastManager.Raycast(pos, direction, GunData.distance, new List<GameObject>() { ownerPlayer }); //충돌객체 체크
+            
             //충돌된 객체 없음
             if (hit2D.Collider == null)
             {
-
-                BroadcastHitPacket(-1, attacker, pos, endPos);
-                Console.WriteLine("hit is null");
+               
+                BroadcastHitPacket(-1, attacker, pos, hit2D.hitPoint.Value);
+                //Console.WriteLine("hit is WALL");
                 await WaitForReadyToFire();
                 return;
+               
+
             }
 
             GameObject hitObject = hit2D.Collider.Parent;
@@ -166,14 +171,14 @@ namespace Server.Game
             Vector2 endPos = pos + normalizedDir * GunData.distance;
 
             float distance = Vector2.Distance(pos, endPos);
-            Console.WriteLine($"이동거리 = {distance}");
+            //Console.WriteLine($"이동거리 = {distance}");
             return endPos;
         }
 
         private void DecreaseAmmo()
         {
             CurAmmo = Math.Max(--CurAmmo, 0);
-            Console.WriteLine($"CurAmmo = {CurAmmo}");
+            //Console.WriteLine($"CurAmmo = {CurAmmo}");
             if (CurAmmo == 0)
             {
                 UsingGunState = GunState.Empty;

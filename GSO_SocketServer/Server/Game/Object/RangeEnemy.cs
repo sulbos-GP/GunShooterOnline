@@ -19,10 +19,11 @@ namespace Server.Game.Object
             info.Name = "RangeEnemy";
             chaseRange = 8;
             attackRange = 6;
+            //Attack = 3;
 
             stat.MergeFrom(new StatInfo()
             {
-                //Attack = 3,
+                AttackSpeed = 3,
                 Hp = 150,
                 MaxHp = 150,
                 AttackRange = 10,
@@ -53,13 +54,22 @@ namespace Server.Game.Object
 
             rangeAttackDir = Vector2.Normalize(target.CellPos - CellPos);
 
-          /*  S_AiAttackReady s_AiAttackReady = new S_AiAttackReady();
+            /*  S_AiAttackReady s_AiAttackReady = new S_AiAttackReady();
 
-            s_AiAttackReady.ObjectId = Id;
-            s_AiAttackReady.DirX = _rangeAttackDir.X;
-            s_AiAttackReady.DirY = _rangeAttackDir.Y;
+              s_AiAttackReady.ObjectId = Id;
+              s_AiAttackReady.DirX = _rangeAttackDir.X;
+              s_AiAttackReady.DirY = _rangeAttackDir.Y;
 
-            gameRoom.BroadCast(s_AiAttackReady);*/
+              gameRoom.BroadCast(s_AiAttackReady);*/
+
+
+
+
+
+
+
+
+
 
             gameRoom.PushAfter((int)(attackDelay * 1000), AttakHandle);
 
@@ -87,7 +97,7 @@ namespace Server.Game.Object
             if (hitObject == null)
             {
                 BroadcastHitPacket(-1, this, CellPos, hit2D.hitPoint.Value);
-                Console.WriteLine("hit is null");
+                Console.WriteLine("hit Wall");
                 return;
             }
 
