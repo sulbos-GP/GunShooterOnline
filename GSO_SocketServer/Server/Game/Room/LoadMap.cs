@@ -23,16 +23,16 @@ namespace Server
 
 
 
-        public void loadMap(int mapId, string pathPrefix = "../../../../../Common/MapData")
+        public void loadMap(int mapId, string pathPrefix)
         {
 
             //var Distance = 22;
 
             //----------------------------------------
-            var mapName = "Map_2";
+
 
             // Collision 관련 파일
-            var text = File.ReadAllText(" ./../../../../GSO_Client/Assets/Resources/ "+ $"/ Data/{mapName}.txt");
+            var text = File.ReadAllText(pathPrefix);
             var reader = new StringReader(text);
 
             var _ = reader.ReadLine();

@@ -54,19 +54,36 @@ namespace Server.Database.Handler
 
         }
 
-        public void AddMySQL<TMySQL>(EDatabase type, string connectionString) where TMySQL : MySQL, new()
+        public void AddMySQL<TMySQL>(EDatabase type, string server, string password, string database) where TMySQL : MySQL, new()
         {
-            databases[type] = connectionString;
+            string connection = $"Server={server};user=root;Password={password};Database={database};Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True";
+            databases[type] = connection;
         }
 
         public void initializeAndLoadData()
         {
+
 #if DOCKER
-            AddMySQL<GameDB>(EDatabase.Game, $"Server={Docker.DockerUtil.GetHostIP()};user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
-            AddMySQL<MasterDB>(EDatabase.Master, $"Server={Docker.DockerUtil.GetHostIP()};user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+
+            string server = "gamepli-db.cfk4ckioaflf.ap-northeast-2.rds.amazonaws.com";
+            string password = "GAMEpli412!";
+
+            AddMySQL<GameDB>(EDatabase.Game, server, password, "game_database");
+            AddMySQL<MasterDB>(EDatabase.Master, server, password, "master_database");
+
+#elif RELEASE
+            string server = "gamepli-db.cfk4ckioaflf.ap-northeast-2.rds.amazonaws.com";
+            string password = "GAMEpli412!";
+
+            AddMySQL<GameDB>(EDatabase.Game, server, password, "game_database");
+            AddMySQL<MasterDB>(EDatabase.Master, server, password, "master_database");
 #else
-            AddMySQL<GameDB>(EDatabase.Game, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=game_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
-            AddMySQL<MasterDB>(EDatabase.Master, "Server=127.0.0.1;user=root;Password=!Q2w3e4r;Database=master_database;Pooling=true;Min Pool Size=0;Max Pool Size=40;AllowUserVariables=True;");
+
+            string server = "127.0.0.1";
+            string password = "!Q2w3e4r";
+
+            AddMySQL<GameDB>(EDatabase.Game, server, password, "game_database");
+            AddMySQL<MasterDB>(EDatabase.Master, server, password, "master_database");
 #endif
 
             context = new MasterDatabaseContext(databases[EDatabase.Master]);
