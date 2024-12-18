@@ -181,21 +181,31 @@ public class Player : CreatureObj
             return;
         }
 
-        Storage inventoryStorage = this.inventory.storage;
-        if(false == this.inventory.storage.ScanItem(useItem))
+        EGearPart part = (EGearPart)slotId;
+        if(slotId < (int)EGearPart.PocketFirst || (int)EGearPart.PocketThird < slotId)
         {
             return;
         }
 
-        if(false == inventoryStorage.DecreaseAmount(useItem, 1))
+        Storage pocket = this.gear.GetPart(part);
+        if(false == pocket.ScanItem(useItem))
         {
             return;
         }
 
-        if (false == inventoryStorage.DeleteItem(useItem))
+        if(false == pocket.DecreaseAmount(useItem, 1))
         {
-            inventoryStorage.IncreaseAmount(useItem, 1);
             return;
+        }
+
+        ItemObject item = pocket.GetItem();
+        if (0 == item.Amount)
+        {
+            if (false == pocket.DeleteItem(useItem))
+            {
+                pocket.IncreaseAmount(useItem, 1);
+                return;
+            }
         }
 
         ItemManager.Instance.UseIteme(this, useItem.ItemId);

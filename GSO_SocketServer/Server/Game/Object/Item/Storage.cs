@@ -243,7 +243,7 @@ namespace Server.Game
 
 
         /// <summary>
-        /// 아이템 수량 감소 (return이  -1 일 경우 실패, 0이면 삭제 해야함)
+        /// 아이템 수량 감소
         /// </summary>
         public bool DecreaseAmount(ItemObject item, int amount)
         {
