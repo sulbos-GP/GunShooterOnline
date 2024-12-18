@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Reflection.PortableExecutable;
 using System.Text;
@@ -79,6 +80,8 @@ namespace ServerCore
             if (session != null)
             {
                 session.mPing = latency;
+
+                //Console.WriteLine($"Ping : {latency}");
             }
         }
 

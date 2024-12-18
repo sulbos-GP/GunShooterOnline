@@ -56,7 +56,11 @@ enum MsgId{
   S_AI_SPAWN = 40;
   S_AI_ATTACK_READY = 41;
   S_AI_ATTACK_SHOT = 42;
+
+  S_PING = 43;
+  C_PONG = 44;
 }
+
 
 enum GameObjectType{
     NONEOBJECT = 0;
@@ -443,6 +447,16 @@ message S_AiAttackShot //  S_AI_ATTACK = 42;
 { 
     int32 ObjectId = 1;
 }
+ 
+message S_Ping{  //43
+    bool IsEnd = 1; //서버가 예측까지
+    uint64 Tick = 2;
+}
+
+message C_Pong{   //44
+    uint64 Tick = 1;
+}
+
 
 //--------------- END message --------------------
 

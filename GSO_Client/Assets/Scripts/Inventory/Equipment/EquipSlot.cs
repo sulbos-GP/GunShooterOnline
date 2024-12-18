@@ -9,12 +9,16 @@ using UnityEngine;
 
 public class EquipSlotBase : MonoBehaviour
 {
+    protected const int ConsumeSlotStartId = 5;
+    private const float slotOffsetRatio = 0.8f;
+
+    [Header("Slot Variable")]
     public int slotId;
     public ItemType equipType; // 이 슬롯에 허용되는 아이템 유형
     public ItemObject equipItemObj; // 현재 장착된 아이템오브젝트 @@ 인벤토리가 열려있을때만 있음
-    private Vector2 originalItemSize = Vector2.zero;
 
-    bool isInit = false;
+    private Vector2 originalItemSize = Vector2.zero;
+    private bool isInit = false;
 
     private void Awake()
     {
@@ -23,6 +27,7 @@ public class EquipSlotBase : MonoBehaviour
             Init();
         }
     }
+
     protected virtual void OnDisable()
     {
         foreach (Transform child in transform)
@@ -61,27 +66,22 @@ public class EquipSlotBase : MonoBehaviour
 
     public void SetEquipItemObj(ItemObject item)
     {
-        Managers.SystemLog.Message($"SetEquipItemObj");
-        
         item.itemData.rotate = 0;
         item.Rotate(0);
         RectTransform itemRect = item.GetComponent<RectTransform>();
         originalItemSize = itemRect.localScale;
         SetItemObjSize(item);
         itemRect.localPosition = Vector3.zero;
-        Managers.SystemLog.Message($"SetEquipItemObj 완료");
     }
 
     private void SetItemObjSize(ItemObject item)
     {
-        Managers.SystemLog.Message($"SetItemObjSize");
-
         RectTransform slotRect = GetComponent<RectTransform>();
         RectTransform itemRect = item.GetComponent<RectTransform>();
 
         // 슬롯의 width와 height 가져오기
-        float slotWidth = slotRect.rect.width;
-        float slotHeight = slotRect.rect.height;
+        float slotWidth = slotRect.rect.width * slotOffsetRatio;
+        float slotHeight = slotRect.rect.height * slotOffsetRatio;
 
         // 아이템의 width와 height 가져오기
         float itemWidth = itemRect.rect.width;

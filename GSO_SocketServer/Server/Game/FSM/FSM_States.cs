@@ -338,7 +338,7 @@ namespace Server.Game.FSM
             float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             //Console.WriteLine($"close to chase target pos:{distanceToTarget}");
             
-            if (distanceToTarget < Owner.attackRange)
+            if (distanceToTarget < Owner.attackRange && Owner.CheakTargetVisual(Owner.target.CellPos - Owner.CellPos))
             {
                 //공격 범위에 들어온다면 즉시 공격상태로 전환
                 Owner._state.ChangeState(Owner.AttackState);

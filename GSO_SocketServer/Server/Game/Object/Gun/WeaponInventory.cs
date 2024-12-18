@@ -87,7 +87,7 @@ namespace Server.Game
                     return null;
             }
         }
-        internal void Fire(Player attacker, Vector2 pos, Vector2 dir)
+        public void Fire(Player attacker, Vector2 pos, Vector2 dir)
         {
             if (GetCurrentWeapon().UsingGunState != GunState.Shootable)
             {
