@@ -25,17 +25,11 @@ namespace Server.Game.Object
                 Hp = 150,
                 MaxHp = 150,
                 AttackRange = 10,
-
                 //방어력
 
             });
-
             Speed = 2;
-
-
         }
-
-
 
         public override void DoAttack()
         {
@@ -51,6 +45,5 @@ namespace Server.Game.Object
 
             this.gameRoom.PushAfter(100, attack.Destroy);
         }
-
     }
 }
