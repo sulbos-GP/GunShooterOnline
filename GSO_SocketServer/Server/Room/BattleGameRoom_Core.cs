@@ -412,7 +412,7 @@ namespace Server
                     Console.WriteLine("Error_playerDic.TryGetValue is fail ");
                 }
 
-
+                CheakAllPlayerLeave();
 
             }
             else if (type == GameObjectType.Enemyai)
@@ -435,7 +435,7 @@ namespace Server
             BroadCast(despawnPacket);
 
 
-            CheakAllPlayerLeave();
+
 
 
         }
@@ -506,7 +506,10 @@ namespace Server
 
 
 
+        public void ResetServer()
+        {
 
+        }
 
 
 

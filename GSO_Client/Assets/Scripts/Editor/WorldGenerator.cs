@@ -270,12 +270,12 @@ public class WorldGenerator
 
         Vector2Int currnet = ArrayMin;
 
-        for (int y = _base.cellBounds.yMin; y <= _base.cellBounds.yMax; y++)
+        for (int y = _base.cellBounds.yMin; y <= _base.cellBounds.yMax ; y++)
         //for (int y = _base.cellBounds.yMax - 1; y >= _base.cellBounds.yMin ; y--)
         {
             currnet.x = ArrayMin.x;
 
-            for (int x = _base.cellBounds.xMin; x <= _base.cellBounds.xMax; x++)
+            for (int x = _base.cellBounds.xMin; x <= _base.cellBounds.xMax ; x++)
             {
                 //Debug.Log(currnet);
 

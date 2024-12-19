@@ -56,6 +56,13 @@ namespace ServerCore
             return true;
         }
 
+        public void ResetServer()
+        {
+
+        }
+
+
+
         public void Stop()
         {
 
@@ -81,6 +88,12 @@ namespace ServerCore
 
             Environment.Exit(0);
         }
+
+
+
+
+
+
 
         public void OnCoreWorkLoop()
         {
