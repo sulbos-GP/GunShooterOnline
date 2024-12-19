@@ -143,8 +143,6 @@ namespace Server.Game
             //exitPlayer.inventory.ClearInventory();
             ObjectManager.Instance.Remove(exitPlayer.inventory.Id);
 
-            exitPlayer.gameRoom.LeaveGame(exitPlayer.Id);
-
             S_ExitGame exitPacket = new S_ExitGame()
             {
                 IsSuccess = true,
@@ -158,10 +156,10 @@ namespace Server.Game
             exitPlayer.gameRoom.BroadCast(despawnPacket);
 
 
+            exitPlayer.gameRoom.LeaveGame(exitPlayer.Id);
+
             //사람 전부 나가면 gameserver.Stop();
             //gameserver.Stop();
-
-
 
             //stop 부분에 모든 남아있는 플레이어 처리!!!!
         }
