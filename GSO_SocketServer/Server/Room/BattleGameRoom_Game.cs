@@ -1165,14 +1165,12 @@ namespace Server
               enemy.Init(map.aispawnZones[0].CellPos);
               EnterGame(enemy);*/
 
-            foreach (Player p in tempPlayer)
+            foreach (Player p in _playerDic.Values)
             {
-
                 EnterGame(p);
             }
 
-
-           
+            #region Start
             S_GameStart s_GameStart = new S_GameStart()
             {
                 RoomId = this.RoomId,
@@ -1216,6 +1214,9 @@ namespace Server
             }
 
             BroadCast(s_GameStart);
+            #endregion
+
+
 
             foreach (var p in _playerDic.Values)
             {

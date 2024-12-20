@@ -112,7 +112,7 @@ namespace Server
 
         public override void Clear()
         {
-            
+            sessions = new List<Session>();
 
         }
 

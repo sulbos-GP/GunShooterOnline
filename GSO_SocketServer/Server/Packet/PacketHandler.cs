@@ -230,9 +230,19 @@ class PacketHandler
             Console.WriteLine("packet.Credential is null -> debug mode");
         }
 
+        GameRoom gameRoom = Program.gameserver.gameRoom;
+        if(gameRoom.sessions.Contains(clientSession) == false) //클라이언트 세션이 없으면
+        {
+            gameRoom.sessions.Add(clientSession); //추가
+        } 
+        else //있으면
+        {
+            return;
+        }
 
 
-        GameState state = Program.gameserver.gameRoom.CurrentGameState;
+
+        GameState state = gameRoom.CurrentGameState;
         if (state == GameState.ALIVE)
         {
 

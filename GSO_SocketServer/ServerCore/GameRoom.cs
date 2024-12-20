@@ -29,7 +29,7 @@ namespace ServerCore
 
 
 
-        List<Session> mSessions = new List<Session>();
+        public List<Session> sessions = new List<Session>();
         //JobQueue mJobQueue = new JobQueue();
         List<ArraySegment<byte>> mPendingList = new List<ArraySegment<byte>>();
 
