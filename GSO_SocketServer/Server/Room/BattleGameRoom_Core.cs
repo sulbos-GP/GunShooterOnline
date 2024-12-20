@@ -19,6 +19,7 @@ using WebCommonLibrary.Models.GameDatabase;
 using Server.Game.Quest.Interfaces;
 using Server.Game.Object;
 using Google.Protobuf.WellKnownTypes;
+using System.Runtime.ConstrainedExecution;
 
 namespace Server
 {
@@ -52,6 +53,7 @@ namespace Server
         /// </summary>
         public override void Init()
         {
+            tempPlayer = new List<Player>();
             map = new Map(r: this);
             map.Init();
             raycastManager.Init(map);
@@ -74,6 +76,8 @@ namespace Server
 
         public override void Start()
         {
+            Console.WriteLine("GameRoom Start");
+            Init();
 
         }
 
@@ -90,20 +94,39 @@ namespace Server
             // 나머지 사람들 전부 쫓아 내기
             IsGameEnd = true;
 
-            //프로그램 종료 하기
-            //CheakGameDone();
+           
         }
 
         public override void Clear()
         {
+            
+
         }
 
+
+        public override void Reset()
+        {
+
+            Console.WriteLine("ResetServer");
+            Stop();
+            Clear();
+            _playerDic.Clear();
+            _enemyDic.Clear();
+            _skillObjDic.Clear();
+            MatchInfo.Clear();
+
+       
+            ObjectManager.Instance.Reset();
+
+            Start();
+
+        }
 
         private bool CheakAllPlayerLeave()
         {
             if (_playerDic.Values.Count == 0)
             {
-                Stop();
+                Reset();
                 return true;
             }
 
@@ -506,11 +529,7 @@ namespace Server
 
 
 
-        public void ResetServer()
-        {
-
-        }
-
+   
 
 
 
