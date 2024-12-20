@@ -128,7 +128,7 @@ public class GameObject
         get => new(PosInfo.PosX, PosInfo.PosY);
         set
         {
-            info.PositionInfo.Tick = LogicTimer.Tick;
+            //info.PositionInfo.Tick = LogicTimer.Tick;
             info.PositionInfo.PosX = value.X;
             info.PositionInfo.PosY = value.Y;
 
