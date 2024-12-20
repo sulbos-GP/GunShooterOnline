@@ -1,11 +1,13 @@
 ﻿using Google.Protobuf.Protocol;
 using Server.Game.Object.Attack;
+using Server.Game.Object.Item;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Enum;
 
 namespace Server.Game.Object
 {
@@ -41,6 +43,24 @@ namespace Server.Game.Object
                 float top = 3;
                 attackPolygon = ShapeManager.CreateCenterSquare(left, top, width);
             }*/
+        }
+
+        public override void OnDead(GameObject attacker)
+        {
+            BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
+            boxObject.SetBox(this.CellPos, EBoxSize.Large);
+            boxObject.AddItem("Aug", 1);
+            boxObject.AddItem("7.29mm", 20);
+            boxObject.AddRandgeItem(EItemType.Spoil, 1, 2);
+            boxObject.FitBox();
+            gameRoom.map.rootableObjects.Add(boxObject);
+
+            S_Spawn spawnPacket = new S_Spawn();
+            spawnPacket.Objects.Add(boxObject.info);
+            gameRoom.BroadCast(spawnPacket);
+
+            base.OnDead(attacker);
+
         }
 
         public Vector2 rangeAttackDir;

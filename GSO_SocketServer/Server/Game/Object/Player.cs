@@ -119,19 +119,26 @@ public class Player : CreatureObj
 
         S_Spawn spawnPacket = new S_Spawn();
         {
+            Vector2 gearBoxCellPos = new Vector2(this.CellPos.X + 0.5f, this.CellPos.Y + 0.5f);
             BoxObject gearBoxObject = ObjectManager.Instance.Add<BoxObject>();
-            gearBoxObject.CellPos = new Vector2(this.CellPos.X + 0.5f, this.CellPos.Y + 0.5f);
 
-            gearBoxObject.SetItemObjects(this.gear.GetPartItems());
+            gearBoxObject.SetBox(gearBoxCellPos, EBoxSize.Large);
+            foreach(var item in this.gear.GetPartItems())
+            {
+                gearBoxObject.AddItem(item);
+            }
+            gearBoxObject.FitBox();
+
             gameRoom.map.rootableObjects.Add(gearBoxObject);
             spawnPacket.Objects.Add(gearBoxObject.info);
         }
 
         {
+            Vector2 inventoryBoxCellPos = new Vector2(this.CellPos.X - 0.5f, this.CellPos.Y - 0.5f);
             BoxObject inventoryBoxObject = ObjectManager.Instance.Add<BoxObject>();
-            inventoryBoxObject.CellPos = new Vector2(this.CellPos.X - 0.5f, this.CellPos.Y - 0.5f);
+            
+            inventoryBoxObject.SetStorage(inventoryBoxCellPos, this.inventory.storage);
 
-            inventoryBoxObject.SetStorage(this.inventory.storage);
             gameRoom.map.rootableObjects.Add(inventoryBoxObject);
             spawnPacket.Objects.Add(inventoryBoxObject.info);
         }

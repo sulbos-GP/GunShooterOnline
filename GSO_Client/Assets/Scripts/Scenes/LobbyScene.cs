@@ -5,10 +5,17 @@ using Google.Protobuf.Protocol;
 using TMPro;
 using Ubiety.Dns.Core;
 using UnityEngine;
+using static LobbyScene;
 
 public class LobbyScene : BaseScene
 {
-    public bool DebugMode;
+    public enum EConnectMode
+    {
+        LAN,    //자신의 컴퓨터에 서버를 열은 경우
+        WAN,    //다른 사람 서버에 접속하고 싶은 경우
+        AWS     //AWS 서버에 접속하고 싶은 경우
+    }
+    public EConnectMode ConnectMode = EConnectMode.LAN;
 
     [SerializeField] private GameObject Store;
 
@@ -24,20 +31,40 @@ public class LobbyScene : BaseScene
     protected override void Init()
     {
         base.Init();
-#if UNITY_EDITOR
-        Ip = "127.0.0.1";
+
         string[] files = null;
 
-#elif UNITY_ANDROID
-        Ip = "10.0.2.2";
-         BetterStreamingAssets.Initialize();
-        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
-#endif
-        if(DebugMode)
-            Ip = "113.60.249.123";
+#if UNITY_EDITOR
+        files = null;
 
-        if (DebugMode)
-            Ip = "113.60.249.123";
+#elif UNITY_ANDROID
+        BetterStreamingAssets.Initialize();
+        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+#endif 
+
+        switch (ConnectMode)
+        {
+            case EConnectMode.LAN:
+#if UNITY_EDITOR
+                Ip = "127.0.0.1";
+
+#elif UNITY_ANDROID
+                Ip = "10.0.2.2";
+                BetterStreamingAssets.Initialize();
+                string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+#endif
+                break;
+            case EConnectMode.WAN:
+                Ip = "113.60.249.123";
+                break;
+            case EConnectMode.AWS:
+                Ip = "13.209.221.183";
+                break;
+            default:
+
+                break;
+        }
+
         ExcelReader.CopyExcel(files);
         SceneType = Define.Scene.Lobby;
         Screen.SetResolution(1920, 1080, false);
