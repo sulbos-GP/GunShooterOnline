@@ -1,11 +1,13 @@
 ﻿using Google.Protobuf.Protocol;
 using Server.Game.Object.Attack;
+using Server.Game.Object.Item;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using WebCommonLibrary.Enum;
 
 namespace Server.Game.Object
 {
@@ -29,6 +31,22 @@ namespace Server.Game.Object
 
             });
             Speed = 2;
+        }
+
+        public override void OnDead(GameObject attacker)
+        {
+            BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
+            boxObject.SetBox(this.CellPos, EBoxSize.Large);
+            boxObject.AddRandgeItem(EItemType.Defensive, 1, 1);
+            boxObject.AddRandgeItem(EItemType.Spoil, 1, 2);
+            boxObject.FitBox();
+            gameRoom.map.rootableObjects.Add(boxObject);
+
+            S_Spawn spawnPacket = new S_Spawn();
+            spawnPacket.Objects.Add(boxObject.info);
+            gameRoom.BroadCast(spawnPacket);
+
+            base.OnDead(attacker);
         }
 
         public override void DoAttack()

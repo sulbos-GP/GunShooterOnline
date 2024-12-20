@@ -197,21 +197,9 @@ namespace Server.Game.Object
             if (gameRoom == null)
                 return;
 
-            
-
             {
                 _state.ChangeState(new DeadState(this));
             }
-
-            BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
-            boxObject.CellPos = this.CellPos;
-            boxObject.SetRandomItem(1, 3, EBoxSize.Small, EItemType.Spoil);
-            gameRoom.map.rootableObjects.Add(boxObject);
-
-            S_Spawn spawnPacket = new S_Spawn();
-            spawnPacket.Objects.Add(boxObject.info);
-            gameRoom.BroadCast(spawnPacket);
-
 
             base.OnDead(attacker);
 
