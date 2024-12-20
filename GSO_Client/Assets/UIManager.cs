@@ -34,12 +34,20 @@ public class UIManager : MonoBehaviour
     public Transform IQuickSlot { get; private set; }
 
     public Image HitImage{get; private set;}
+    
+    public Image FadeImage { get; private set; }
+    public TextMeshProUGUI LoadingText { get; private set; }
 
 
     public float Duration = 2.0f;
     private bool isDie;
     private bool _init = false;
     private float _alphaTime = 3f;
+    
+    //Fade Var
+    public float _fadeDuration = 1.0f;
+    public float _textDuration = 0.5f; // 텍스트 변경 간격
+    private bool isLoading = true;
 
     
     private MyPlayerController myPlayer => Managers.Object.MyPlayer;
@@ -55,6 +63,7 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         isDie = false;
+        StartCoroutine(AnimateLoadingText());
     }
 
 
@@ -140,11 +149,118 @@ public class UIManager : MonoBehaviour
                     HitImage = child.GetComponent<Image>();
                     HitImage.color = Color.clear;
                     break;
+                case "FadeImage":
+                    FadeImage = child.GetComponent<Image>();
+                    LoadingText = child.GetChild(0).GetComponent<TextMeshProUGUI>();
+                    break;
             }
         }
 
         DieUI.gameObject.SetActive(false);
     }
+    
+    //=======FadeIn/Out Code//
+    public void StartFadeIn()
+    {
+        FadeImage.gameObject.SetActive(true);
+        StartCoroutine(FadeIn());
+    }
+
+    public void StartFadeOut()
+    {
+        FadeImage.gameObject.SetActive(true);
+        StartCoroutine(FadeOut());
+    }
+    
+    private IEnumerator AnimateLoadingText()
+    {
+        while (isLoading) // 로딩 상태가 true인 동안 반복
+        {
+            // "Loading.", "Loading..", "Loading..." 순으로 변경
+            LoadingText.text = "Loading.";
+            yield return new WaitForSeconds(_textDuration);
+
+            LoadingText.text = "Loading..";
+            yield return new WaitForSeconds(_textDuration);
+
+            LoadingText.text = "Loading...";
+            yield return new WaitForSeconds(_textDuration);
+        }
+
+        // 조건 만족 시 페이드 아웃 실행
+        StartCoroutine(FadeOut());
+    }
+    public void StopLoading() // 조건 만족 시 호출
+    {
+        isLoading = false; // 로딩 상태 종료
+    }
+    
+    private IEnumerator FadeIn()
+    {
+        float elapsedTime = 0f;
+        Color imageColor = FadeImage.color;
+        Color textColor = LoadingText.color;
+
+        while (elapsedTime < _fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            // 동일한 Alpha 값 적용
+            float alpha = Mathf.Lerp(0f, 1f, elapsedTime / _fadeDuration);
+
+            // 이미지와 텍스트의 Alpha를 같은 비율로 조정
+            imageColor.a = alpha;
+            FadeImage.color = imageColor;
+
+            textColor.a = alpha;
+            LoadingText.color = textColor;
+
+            yield return null;
+        }
+
+        // 최종 Alpha 값 설정 (완전 불투명)
+        imageColor.a = 1f;
+        FadeImage.color = imageColor;
+
+        textColor.a = 1f;
+        LoadingText.color = textColor;
+        FadeImage.gameObject.SetActive(false);
+    }
+
+    private IEnumerator FadeOut()
+    {
+        float elapsedTime = 0f;
+
+        Color imageColor = FadeImage.color;
+        Color textColor = LoadingText.color;
+
+        while (elapsedTime < _fadeDuration)
+        {
+            elapsedTime += Time.deltaTime;
+
+            // 동일한 Alpha 값 적용
+            float alpha = Mathf.Lerp(1f, 0f, elapsedTime / _fadeDuration);
+
+            // 이미지와 텍스트의 Alpha를 같은 비율로 조정
+            imageColor.a = alpha;
+            FadeImage.color = imageColor;
+
+            textColor.a = alpha;
+            LoadingText.color = textColor;
+
+            yield return null;
+        }
+
+        // 최종 Alpha 값 설정 (완전 투명)
+        imageColor.a = 0f;
+        FadeImage.color = imageColor;
+
+        textColor.a = 0f;
+        LoadingText.color = textColor;
+        FadeImage.gameObject.SetActive(false);
+    }
+    
+    //=====================//
     
 
     private IEnumerator TextAlpha(CanvasGroup group,float duration)
