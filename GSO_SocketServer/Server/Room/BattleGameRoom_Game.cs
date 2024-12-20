@@ -1033,7 +1033,7 @@ namespace Server
 
 
 
-        List<Player> tempPlayer = new List<Player>();
+        List<Player> tempPlayer;
 
         public void HandleClientLoadGame(Player player)
         {
