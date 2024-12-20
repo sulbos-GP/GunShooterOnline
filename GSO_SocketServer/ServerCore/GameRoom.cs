@@ -25,6 +25,7 @@ namespace ServerCore
         public abstract void Start();
         public abstract void Stop();
         public abstract void Clear();
+        public abstract void Reset();
 
         public abstract void BroadCast(IMessage message);
 

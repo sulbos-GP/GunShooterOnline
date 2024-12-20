@@ -28,8 +28,7 @@ namespace Server.Server
 
             BattleGameRoom room = new BattleGameRoom();
             this.SetChannel(true, room, 0);
-
-            room.Init();
+            room.Start();
 
             mCoreWorkThread.Start();
             mGameLogicTimer.Start();
