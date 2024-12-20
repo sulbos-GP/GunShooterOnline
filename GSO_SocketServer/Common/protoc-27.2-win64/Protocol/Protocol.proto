@@ -59,8 +59,33 @@ enum MsgId{
 
   S_PING = 43;
   C_PONG = 44;
+
+  S_ERROR = 45; //에러 패킷
 }
 
+enum ErrorType {
+    SUCCESS = 0;                // * 에러 없음
+    SERVER_LOADING = 1;      // * 서버 로딩 중
+    CONNECTION_LOST = 2;     // 연결 끊김
+    TIMEOUT = 3;             // 요청 시간 초과
+    INVALID_REQUEST = 4;     // 잘못된 요청
+    UNAUTHORIZED = 5;        // 권한 없음
+    FORBIDDEN = 6;           // 접근 금지
+    RESOURCE_NOT_FOUND = 7;  // 리소스 찾을 수 없음
+    INTERNAL_SERVER_ERROR = 8; // 서버 내부 오류
+    MAINTENANCE_MODE = 9;    // 서버 점검 중
+    DATA_CORRUPTION = 10;    // 데이터 손상
+    DUPLICATE_ACTION = 11;   // 중복된 행동
+    RATE_LIMIT_EXCEEDED = 12; // 요청 제한 초과
+    VERSION_MISMATCH = 13;   // 클라이언트-서버 버전 불일치
+    PAYMENT_REQUIRED = 14;   // 결제 필요
+    BANNED = 15;             // 사용자가 차단됨
+    INVALID_SESSION = 16;    // 세션 무효
+    OUT_OF_RESOURCES = 17;   // 리소스 부족
+    MATCHMAKING_FAILED = 18; // * 매칭 실패
+    INVALID_GAME_STATE = 19; // 잘못된 게임 상태
+    CHEATING_DETECTED = 20;  // 부정 행위 감지
+}
 
 enum GameObjectType{
     NONEOBJECT = 0;
@@ -455,6 +480,11 @@ message S_Ping{  //43
 
 message C_Pong{   //44
     uint64 Tick = 1;
+}
+
+message S_Error{ //45 에러패킷
+    ErrorType ErrorCode = 1;
+    string ErrorStr = 2; 
 }
 
 
