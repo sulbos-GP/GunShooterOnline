@@ -160,16 +160,6 @@ public class UIManager : MonoBehaviour
     }
     
     //=======FadeIn/Out Code//
-    public void StartFadeIn()
-    {
-        StartCoroutine(FadeIn());
-    }
-
-    public void StartFadeOut()
-    {
-        StartCoroutine(FadeOut());
-    }
-    
     private IEnumerator AnimateLoadingText()
     {
         while (isLoading) // 로딩 상태가 true인 동안 반복
@@ -226,6 +216,10 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
+        float dotCount = PlayerPrefs.GetInt("dotCount");
+        LoadingText.text = "Loading";
+        for(int i=0; i<dotCount; i++)
+            LoadingText.text += ".";
         float elapsedTime = 0f;
 
         Color imageColor = FadeImage.color;
@@ -244,7 +238,7 @@ public class UIManager : MonoBehaviour
 
             textColor.a = alpha;
             LoadingText.color = textColor;
-
+            
             yield return null;
         }
 
@@ -254,6 +248,7 @@ public class UIManager : MonoBehaviour
 
         textColor.a = 0f;
         LoadingText.color = textColor;
+        FadeImage.transform.SetSiblingIndex(0);
     }
     
     //=====================//
