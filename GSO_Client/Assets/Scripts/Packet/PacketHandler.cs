@@ -268,11 +268,7 @@ internal class PacketHandler
             Managers.SystemLog.Message("S_JoinServer : fail");
             return;
         }
-
-
-        //접속 완료
-        Managers.Scene.LoadScene(Define.Scene.Forest);
-
+        //방 접속 완료(대기)
 
         Managers.SystemLog.Message("S_JoinServer : success");
 
@@ -294,7 +290,10 @@ internal class PacketHandler
     {
         Managers.SystemLog.Message("S_GameStartHandler");
         S_GameStart packet = message as S_GameStart;
-
+        
+        //씬 접속 완료
+        Managers.Scene.LoadScene(Define.Scene.Forest);
+        
         //자신의 플레이어 외에 다른 플레이어 생성
         foreach (ObjectInfo obj in packet.Objects)
         {
@@ -960,6 +959,7 @@ internal class PacketHandler
                 {
                     NotifyUI.instance.SetContent("Not Error");
                     NotifyUI.instance.SetTitle("Not Error");
+                    NotifyUI.instance.Show();
                 }
                 break;
             case ErrorType.ServerLoading:
@@ -969,6 +969,7 @@ internal class PacketHandler
                 {
                     NotifyUI.instance.SetContent("ServerLoading:" +  s_Error.ErrorStr);
                     NotifyUI.instance.SetTitle("ServerLoading");
+                    NotifyUI.instance.Show();
                 }
                 break;
             case ErrorType.ConnectionLost:
@@ -1025,6 +1026,7 @@ internal class PacketHandler
                 {
                     NotifyUI.instance.SetContent("MatchmakingFailed:"+s_Error.ErrorStr);
                     NotifyUI.instance.SetTitle("MatchmakingFailed");
+                    NotifyUI.instance.Show();
                 }
                 break;
             case ErrorType.InvalidGameState:
