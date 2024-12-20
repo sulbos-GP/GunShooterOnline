@@ -268,11 +268,7 @@ internal class PacketHandler
             Managers.SystemLog.Message("S_JoinServer : fail");
             return;
         }
-
-
-        //접속 완료
-        Managers.Scene.LoadScene(Define.Scene.Forest);
-
+        //방 접속 완료(대기)
 
         Managers.SystemLog.Message("S_JoinServer : success");
 
@@ -294,7 +290,10 @@ internal class PacketHandler
     {
         Managers.SystemLog.Message("S_GameStartHandler");
         S_GameStart packet = message as S_GameStart;
-
+        
+        //씬 접속 완료
+        Managers.Scene.LoadScene(Define.Scene.Forest);
+        
         //자신의 플레이어 외에 다른 플레이어 생성
         foreach (ObjectInfo obj in packet.Objects)
         {
