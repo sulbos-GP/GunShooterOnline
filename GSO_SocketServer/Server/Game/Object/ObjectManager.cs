@@ -28,7 +28,19 @@ internal class ObjectManager
 
 
     private readonly Dictionary<int, ScopeObject> _scopes = new();  //DetectObject.OwnerId
-    public static ObjectManager Instance { get; } = new();
+    public static ObjectManager Instance { get; private set; } = new();
+
+
+    public void Reset()
+    {
+        ObjectManager.Instance = new();
+    }
+
+
+
+
+
+
 
     public T Add<T>() where T : GameObject, new()
     {
