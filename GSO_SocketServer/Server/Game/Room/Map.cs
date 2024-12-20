@@ -224,7 +224,7 @@ public class Map
                 if (_collisions[i, j] == 2) // 박스
                 {
                     BoxObject rb = ObjectManager.Instance.Add<BoxObject>();
-                    rb.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset));
+                    rb.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset), false);
                     rootableObjects.Add(rb);
                 }
                 else if (_collisions[i, j] == 3) //탈출구

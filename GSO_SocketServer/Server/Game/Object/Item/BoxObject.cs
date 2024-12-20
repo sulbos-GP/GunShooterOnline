@@ -66,119 +66,132 @@ namespace Server.Game.Object.Item
             return isOpen;
         }
 
-        public void Init(Vector2 pos)
+        public void Init(Vector2 pos, bool isAdvancedBox)
         {
+            if(isAdvancedBox)
+            {
+                SetBox(pos, EBoxSize.Large);
+                AddItem("군용더블백", 1);
+                AddItem("방탄조끼", 1);
+                AddItem("금괴", 1);
+                AddItem("의약품상자", 1);
+                AddItem("아드레날린", 1);
+                FitBox();
+            }
+            else
+            {
+                SetBox(pos, EBoxSize.Large);
+                AddRandgeItem(EItemType.Spoil, 3, 5);
+                FitBox();
+            }
+        }
 
-            //SetAdvancedBox();
-
-            //SetRandomItem(3, 5, EBoxSize.Large, EItemType.Spoil);
-            SetRandomItem(3, 5, EBoxSize.Large, EItemType.Bag);
+        public void SetBox(Vector2 pos, EBoxSize size)
+        {
+            SetStorageAndBoxInfo(size);
             CellPos = pos;
         }
 
-        //저장소 그대로 가져올 경우
-        public void SetStorage(Storage storage)
+        public void SetBox(Vector2 pos, int x, int y, double weight)
         {
-            SetStorageAndBoxInfo(storage.Scale_X, storage.Scale_Y, (float)storage.MaxWeight + 1.0f);
+            SetStorageAndBoxInfo(x, y, weight);
+            CellPos = pos;
+        }
+
+        public void SetStorage(Vector2 pos, Storage storage)
+        {
+            SetBox(pos, storage.Scale_X, storage.Scale_Y, storage.MaxWeight);
             this.storage = storage;
         }
 
-        //아이템 한개 가져올 경우
-        public void SetItemObject(ItemObject itemObject)
+        public bool AddItem(string name, int amount)
         {
-            SetStorageAndBoxInfo(itemObject.Width, itemObject.Height, (float)(itemObject.Weight * itemObject.Amount) + 1.0f);
-            PlaceItem(itemObject);
+            return AddItem(InstanceItemUnit(GetItemDataWithName(name), amount));
         }
 
-        //아이템 여러개 가져올 경우
-        public void SetItemObjects(List<ItemObject> items)
+        public bool AddItem(int id, int amount)
         {
-            SetStorageAndBoxInfo(EBoxSize.Large);
+            return AddItem(InstanceItemUnit(GetItemDataWithId(id), amount));
+        }
 
-            foreach (var item in items)
+        public bool AddItem(EItemType type, int amount)
+        {
+            return AddItem(InstanceItemUnit(GetItemDataWithType(type), amount));
+        }
+
+        public void AddRandgeItem(EItemType type, int min, int max, int retry = 10)
+        {
+            if(max < min)
             {
-                PlaceItem(item);
+                min = max;
             }
 
-            SetFitStorage();
-        }
-
-        //기획상 고정 아이템
-        public void SetAdvancedBox()
-        {
-            SetStorageAndBoxInfo(EBoxSize.Medium);
-
-            ItemObject backpack = InstanceItemUnit(GetItemDataWithName("군용더블백"), 1);
-            ObjectManager.Instance.Add(backpack);
-            PlaceItem(backpack);
-
-            ItemObject armor = InstanceItemUnit(GetItemDataWithName("방탄조끼"), 1);
-            ObjectManager.Instance.Add(armor);
-            PlaceItem(armor);
-
-            ItemObject medicine = InstanceItemUnit(GetItemDataWithName("의약품상자"), 2);
-            ObjectManager.Instance.Add(medicine);
-            PlaceItem(medicine);
-
-            ItemObject adrenaline = InstanceItemUnit(GetItemDataWithName("아드레날린"), 2);
-            ObjectManager.Instance.Add(adrenaline);
-            PlaceItem(adrenaline);
-
-            ItemObject gold = InstanceItemUnit(GetItemDataWithName("금괴"), 1);
-            ObjectManager.Instance.Add(gold);
-            PlaceItem(gold);
-
-            SetFitStorage();
-        }
-
-        //랜덤 일반 상자
-        public void SetRandomItem(int min, int max, EBoxSize boxSize, EItemType type)
-        {
-            SetStorageAndBoxInfo(boxSize);
-
-            const int MaxRetry = 10;
-            int retry = 0;
+            int maxRetry = retry;
+            int curRetry = 0;
 
             Random rand = new Random();
             int maxCount = rand.Next(min, max);
-            int count = 0;
-            while(count < maxCount)
+            int curCount = 0;
+            while (curCount < maxCount)
             {
                 FMasterItemBase data = GetItemDataWithType(type);
-                ItemObject newItem = InstanceItemUnit(data, 1);
+                int amount = rand.Next(1, data.amount);
 
-                if(true == PlaceItem(newItem))
+                if(true == AddItem(InstanceItemUnit(data, amount)))
                 {
-                    count++;
+                    curCount++;
                 }
                 else
                 {
-                    ObjectManager.Instance.Remove(newItem.Id);
-                    if (retry > MaxRetry)
+                    if (curRetry > maxRetry)
                     {
                         break;
                     }
-                    retry++;
+                    curRetry++;
                 }
+            }
+        }
 
+        public bool AddItem(ItemObject item)
+        {
+            if (item == null)
+            {
+                return false;
             }
 
-            SetFitStorage();
+            if (item.LimitAmount < item.Amount)
+            {
+                return false;
+            }
+
+            if (false == PlaceItem(item))
+            {
+                ObjectManager.Instance.Remove(item.Id);
+                return false;
+            }
+
+            return true;
         }
-        
-        private void SetStorageAndBoxInfo(int x, int y, float weight)
+
+        private void SetStorageAndBoxInfo(int x, int y, double weight)
         {
             info.Box = new BoxInfo()
             {
                 X = x,
                 Y = y,
-                Weight = weight,
+                Weight = (float)Math.Ceiling(weight),
             };
 
             this.storage.Init(x, y, weight);
         }
 
-        private void SetFitStorage()
+        private void SetStorageAndBoxInfo(EBoxSize boxSize)
+        {
+            var (boxX, boxY, boxWeight) = GetBoxSize(boxSize);
+            SetStorageAndBoxInfo(boxX, boxY, (float)boxWeight);
+        }
+
+        public void FitBox()
         {
             this.storage.Fit();
 
@@ -186,14 +199,8 @@ namespace Server.Game.Object.Item
             {
                 X = this.storage.Scale_X,
                 Y = this.storage.Scale_Y,
-                Weight = (float)this.storage.MaxWeight,
+                Weight = (float)Math.Ceiling(this.storage.MaxWeight),
             };
-        }
-
-        private void SetStorageAndBoxInfo(EBoxSize boxSize)
-        {
-            var (boxX, boxY, boxWeight) = GetBoxSize(boxSize);
-            SetStorageAndBoxInfo(boxX, boxY, (float)boxWeight);
         }
 
         private bool PlaceItem(ItemObject item)
@@ -299,6 +306,11 @@ namespace Server.Game.Object.Item
         private FMasterItemBase GetItemDataWithName(string name)
         {
             return DatabaseHandler.Context.MasterItemBase.FirstOrDefault(item => item.Value.name == name).Value;
+        }
+
+        private FMasterItemBase GetItemDataWithId(int id)
+        {
+            return DatabaseHandler.Context.MasterItemBase.FirstOrDefault(item => item.Value.item_id == id).Value;
         }
 
     }
