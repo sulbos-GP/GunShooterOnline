@@ -1222,7 +1222,7 @@ namespace Server
                 EventBus.Publish(EEventBusType.Play, p, "PLAY_IN");
             }
 
-            IsGameStarted = true;
+            CurrentGameState = GameState.INGAME;
 
 
 

@@ -231,15 +231,20 @@ class PacketHandler
         }
 
 
-        Player p = ObjectManager.Instance.Add<Player>();
-        {
-            p.Session = clientSession;
-            p.info.Name = packet.Name + clientSession.SessionId;
-            p.info.PositionInfo.PosX = 0;
-            p.info.PositionInfo.PosY = 0;
-            //p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
 
-          
+        GameState state = Program.gameserver.gameRoom.CurrentGameState;
+        if (state == GameState.ALIVE)
+        {
+
+            Player p = ObjectManager.Instance.Add<Player>();
+            {
+                p.Session = clientSession;
+                p.info.Name = packet.Name + clientSession.SessionId;
+                p.info.PositionInfo.PosX = 0;
+                p.info.PositionInfo.PosY = 0;
+                //p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+
+
 
 #if DOCKER
             //이거 uid를 검사해서 올바르게 넣어주면 됨
@@ -264,22 +269,43 @@ class PacketHandler
 
 #else
 
-            p.UID = cnt++;
+                p.UID = cnt++;
 #endif
 
-            //p.stat
+                //p.stat
 
+            }
+
+
+            clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
+            clientSession.MyPlayer = p;
+
+            BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
+            Console.WriteLine("!@#");
+            // enter로 이동
+            room.Push(room.HandleJoin, packet.Credential, clientSession.MyPlayer);
+            ObjectManager.Instance.DebugObjectDics();
+        }
+        else if (state == GameState.LOADING)
+        {
+            S_Error errorPacket = new S_Error();
+            errorPacket.ErrorCode = ErrorType.ServerLoading;
+            clientSession.Send(errorPacket);
+
+        }
+        else if (state == GameState.INGAME)
+        {
+            S_Error errorPacket = new S_Error();
+            errorPacket.ErrorCode = ErrorType.MatchmakingFailed;
+            clientSession.Send(errorPacket);
+
+        }
+        else
+        {
+            Console.WriteLine("ERROR GAME SERVER DEAD");
         }
 
 
-        clientSession.Room = Program.gameserver.gameRoom as BattleGameRoom;
-        clientSession.MyPlayer = p;
-
-        BattleGameRoom room = (BattleGameRoom)Program.gameserver.gameRoom; //나중에 null로 바꿔도 참조가능
-        Console.WriteLine("!@#");
-        // enter로 이동
-        room.Push(room.HandleJoin, packet.Credential, clientSession.MyPlayer);
-        ObjectManager.Instance.DebugObjectDics();
     }
 
     internal static void C_ChangeAppearanceHandler(PacketSession session, IMessage message)

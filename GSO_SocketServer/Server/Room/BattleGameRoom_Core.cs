@@ -36,7 +36,11 @@ namespace Server
         public Dictionary<int, MatchOutcome> MatchInfo = new Dictionary<int, MatchOutcome>();
 
         private Stopwatch playTime = new Stopwatch();
-        public bool IsGameStarted { get; protected set; } = false;
+        //public bool IsGameStarted { get; protected set; } = false;
+
+
+
+
         public bool IsGameEnd { get; protected set; } = false;
 
         QuadTreeManager quadTreeManager = new QuadTreeManager();
@@ -76,8 +80,13 @@ namespace Server
 
         public override void Start()
         {
+            CurrentGameState = GameState.LOADING;
+
             Console.WriteLine("GameRoom Start");
             Init();
+
+            CurrentGameState = GameState.ALIVE;
+
 
         }
 
@@ -94,7 +103,10 @@ namespace Server
             // 나머지 사람들 전부 쫓아 내기
             IsGameEnd = true;
 
-           
+            if(CurrentGameState != GameState.LOADING)
+                CurrentGameState = GameState.DEAD;
+
+
         }
 
         public override void Clear()
@@ -106,6 +118,7 @@ namespace Server
 
         public override void Reset()
         {
+            CurrentGameState = GameState.LOADING;
 
             Console.WriteLine("ResetServer");
             Stop();
@@ -238,7 +251,7 @@ namespace Server
                 }
 
 
-                if (IsGameStarted == true)  //나중에 다시 접속하는 player라면
+                if (CurrentGameState == GameState.INGAME)  //나중에 다시 접속하는 player라면
                 {
                     Console.WriteLine("=========== IsGameStarted ===========");
 
@@ -320,7 +333,7 @@ namespace Server
 
 
 
-            if (IsGameStarted == true)   //나중에 다시 접속하는 player라면
+            if (CurrentGameState == GameState.INGAME)  //나중에 다시 접속하는 player라면
             {
                 var spawnpacket = new S_Spawn();
                 spawnpacket.Objects.Add(gameObject.info);
