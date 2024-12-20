@@ -773,11 +773,13 @@ namespace Server
             if(room != null)
             {
                 BoxObject boxObject = ObjectManager.Instance.Add<BoxObject>();
-                boxObject.CellPos = player.CellPos;
-                boxObject.SetItemObject(deleteItem);
-                room.map.rootableObjects.Add(boxObject);
+
+                boxObject.SetBox(player.CellPos, EBoxSize.Large);
+                boxObject.AddItem(deleteItem);
+                boxObject.FitBox();
 
                 S_Spawn spawnPacket = new S_Spawn();
+                room.map.rootableObjects.Add(boxObject);
                 spawnPacket.Objects.Add(boxObject.info);
                 room.BroadCast(spawnPacket);
             }
