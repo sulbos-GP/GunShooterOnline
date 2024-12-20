@@ -209,6 +209,7 @@ public class WorldGenerator
         Tilemap _spawn = null;
         Tilemap _mine = null;
         Tilemap _aiSpawn = null;
+        Tilemap _premiumBox = null;
 
         foreach (Transform _tr in tr)
         {
@@ -224,9 +225,13 @@ public class WorldGenerator
             {
                 _wall = _tr.GetComponent<Tilemap>();
             } 
-            else if (_tr.name.Contains("Box") == true)
+            else if (_tr.name == "W_Box")
             {
                 _box = _tr.GetComponent<Tilemap>();
+            } 
+            else if (_tr.name  == "W_PremiumBox")
+            {
+                _premiumBox = _tr.GetComponent<Tilemap>();
             }
             else if (_tr.name.Contains("ExitZone") == true)
             {
@@ -286,6 +291,7 @@ public class WorldGenerator
                 TileBase spawnTile = _spawn.GetTile(new Vector3Int(x, y, 0));
                 TileBase mineTile = _mine.GetTile(new Vector3Int(x, y, 0));
                 TileBase aiSpawnTile = _aiSpawn.GetTile(new Vector3Int(x, y, 0));
+                TileBase PremiumTile = _premiumBox.GetTile(new Vector3Int(x, y, 0));
 
 
                 if (wallTile != null)
@@ -352,6 +358,15 @@ public class WorldGenerator
                 {
                     if (map[currnet.x, currnet.y] == 0)
                         map[currnet.x, currnet.y] = 6;
+                    else
+                    {
+                        Debug.Log("에러 : 충돌");
+                    }
+                } 
+                else if(PremiumTile != null)
+                {
+                    if (map[currnet.x, currnet.y] == 0)
+                        map[currnet.x, currnet.y] = 7;
                     else
                     {
                         Debug.Log("에러 : 충돌");
