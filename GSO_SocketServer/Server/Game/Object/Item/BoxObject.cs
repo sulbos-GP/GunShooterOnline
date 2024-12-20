@@ -68,14 +68,15 @@ namespace Server.Game.Object.Item
 
         public void Init(Vector2 pos, bool isAdvancedBox)
         {
+            isAdvancedBox = true;
             if(isAdvancedBox)
             {
-                SetBox(pos, EBoxSize.Medium);
+                SetBox(pos, EBoxSize.Large);
                 AddItem("군용더블백", 1);
                 AddItem("방탄조끼", 1);
-                AddItem("의약품상자", 3);
-                AddItem("아드레날린", 3);
                 AddItem("금괴", 1);
+                AddItem("의약품상자", 1);
+                AddItem("아드레날린", 1);
                 FitBox();
             }
             else
@@ -92,7 +93,7 @@ namespace Server.Game.Object.Item
             CellPos = pos;
         }
 
-        public void SetBox(Vector2 pos, int x, int y, float weight)
+        public void SetBox(Vector2 pos, int x, int y, double weight)
         {
             SetStorageAndBoxInfo(x, y, weight);
             CellPos = pos;
@@ -100,7 +101,7 @@ namespace Server.Game.Object.Item
 
         public void SetStorage(Vector2 pos, Storage storage)
         {
-            SetBox(pos, storage.Scale_X, storage.Scale_Y, (float)storage.MaxWeight + 1.0f);
+            SetBox(pos, storage.Scale_X, storage.Scale_Y, storage.MaxWeight);
             this.storage = storage;
         }
 
@@ -173,13 +174,13 @@ namespace Server.Game.Object.Item
             return true;
         }
 
-        private void SetStorageAndBoxInfo(int x, int y, float weight)
+        private void SetStorageAndBoxInfo(int x, int y, double weight)
         {
             info.Box = new BoxInfo()
             {
                 X = x,
                 Y = y,
-                Weight = weight,
+                Weight = (float)Math.Ceiling(weight),
             };
 
             this.storage.Init(x, y, weight);
@@ -199,7 +200,7 @@ namespace Server.Game.Object.Item
             {
                 X = this.storage.Scale_X,
                 Y = this.storage.Scale_Y,
-                Weight = (float)this.storage.MaxWeight,
+                Weight = (float)Math.Ceiling(this.storage.MaxWeight),
             };
         }
 
