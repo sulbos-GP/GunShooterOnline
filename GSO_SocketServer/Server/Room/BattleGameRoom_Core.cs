@@ -20,6 +20,7 @@ using Server.Game.Quest.Interfaces;
 using Server.Game.Object;
 using Google.Protobuf.WellKnownTypes;
 using System.Runtime.ConstrainedExecution;
+using System.Threading;
 
 namespace Server
 {
@@ -131,6 +132,8 @@ namespace Server
        
             ObjectManager.Instance.Reset();
 
+
+            Thread.Sleep(5000);
             Start();
 
         }
