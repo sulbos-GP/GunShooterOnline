@@ -51,11 +51,11 @@ public class BaseController : MonoBehaviour
         set => Stat.AttackRange = value;
     }
 
-    public int CurrentPlanetId
+   /* public int CurrentPlanetId
     {
         get => _positionInfo.CurrentRoomId;
         set => _positionInfo.CurrentRoomId = value;
-    }
+    }*/
 
     public PositionInfo PosInfo
     {
@@ -70,7 +70,7 @@ public class BaseController : MonoBehaviour
             CellPos = new Vector3(value.PosX, value.PosY, 0);
             //State = value.State;
             Dir = new Vector2(value.DirX, value.DirY);
-            CurrentPlanetId = value.CurrentRoomId;
+            //CurrentPlanetId = value.CurrentRoomId;
             RotationZ = value.RotZ;
         }
     }

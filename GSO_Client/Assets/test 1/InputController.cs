@@ -415,7 +415,7 @@ public class InputController : MonoBehaviour
             var movePack = new C_Move();
             movePack.PositionInfo = new PositionInfo
             {
-                CurrentRoomId = 0,
+                /*Tick = 0,*/
                 DirX = lookInput.x,
                 DirY = lookInput.y,
                 PosX = transform.position.x,

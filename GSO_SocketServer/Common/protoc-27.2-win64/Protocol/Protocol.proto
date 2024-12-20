@@ -171,7 +171,8 @@ message S_Despawn{                            //3
 
 message S_Move{                              //4
   int32 objectId = 1;
-  PositionInfo positionInfo = 2;
+  uint64 tick = 2;
+  PositionInfo positionInfo = 3;
 }
 
 
@@ -422,6 +423,7 @@ message C_InputData {  //35
 message S_GundataUpdate{  //37 (지승현)추후 많은 데이터 업데이트 예정
     bool isSuccess = 1;
     PS_GearInfo gunData = 2;  
+    float GunRoation = 3;
 }
 
 
@@ -504,6 +506,8 @@ message ObjectInfo{
     //CreatureState state = 9;
 }
 
+
+
 message StatInfo{
   int32 class = 1;
   int32 hp = 2;
@@ -514,12 +518,12 @@ message StatInfo{
 
 
 message PositionInfo{
-  uint64 tick = 1;
-  float dirX = 2;
-  float dirY = 3;
-  float posX = 4;
-  float posY = 5;
-  float rotZ = 6;
+  //uint64 tick = 1;
+  float dirX = 1;
+  float dirY = 2;
+  float posX = 3;
+  float posY = 4;
+  float rotZ = 5;
 }
 
 message BoxInfo

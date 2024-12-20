@@ -272,6 +272,14 @@ internal class PacketHandler
 
         Managers.SystemLog.Message("S_JoinServer : success");
 
+
+        C_EnterGame c_EnterGame = new C_EnterGame();
+        //c_EnterGame.Credential =
+
+        Managers.Network.Send(c_EnterGame);
+        Debug.Log("Send c_EnterGame In GameScene");
+
+
     }
 
     internal static void S_WaitingStatusHandler(PacketSession session, IMessage message)

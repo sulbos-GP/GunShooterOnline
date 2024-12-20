@@ -14,11 +14,7 @@ public class GameScene : BaseScene
 
     private void Start()
     {
-        C_EnterGame c_EnterGame = new C_EnterGame();
-        //c_EnterGame.Credential =
-
-        Managers.Network.Send(c_EnterGame);
-        Debug.Log("Send c_EnterGame In GameScene"); 
+      
     }
 
     protected override void Init()

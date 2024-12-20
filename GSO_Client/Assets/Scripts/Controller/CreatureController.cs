@@ -278,7 +278,7 @@ public class CreatureController : BaseController
         Debug.Log("Id = " + Id);
 
         Debug.Log("PosInfo = " + PosInfo);
-        Debug.Log(" PosInfo.CurrentRoomId = " + PosInfo.CurrentRoomId);
+        //Debug.Log(" PosInfo.CurrentRoomId = " + PosInfo.CurrentRoomId);
         Debug.Log("Stat = " + Stat);
         Debug.Log("Hp = " + Hp);
         Debug.Log("OwnerId = " + OwnerId);
