@@ -955,72 +955,83 @@ internal class PacketHandler
         {
             case ErrorType.Success:
                 //성공
-                Debug.Log("게임 접속 성공");
+                Debug.Log("에러 없음");
+                if (NotifyUI.instance != null)
+                {
+                    NotifyUI.instance.SetContent("Not Error");
+                    NotifyUI.instance.SetTitle("Not Error");
+                }
                 break;
             case ErrorType.ServerLoading:
                 //서버 초기화중
-                Debug.Log( "서버 초기화중 " +  s_Error.ErrorStr); //241220 승현ErrorStr는 없다고 생각하고 그냥
-                if(NotifyUI.instance != null)
-                    NotifyUI.instance.SetContent(s_Error.ErrorStr);
+                Debug.Log("ServerLoading:" +  s_Error.ErrorStr); //241220 승현ErrorStr는 없다고 생각하고 그냥
+                if (NotifyUI.instance != null)
+                {
+                    NotifyUI.instance.SetContent("ServerLoading:" +  s_Error.ErrorStr);
+                    NotifyUI.instance.SetTitle("ServerLoading");
+                }
                 break;
             case ErrorType.ConnectionLost:
-                Debug.Log("서버 접속 실패 " + s_Error.ErrorStr);
+                Debug.Log("ConnectionLost:" + s_Error.ErrorStr);
                 break;
             case ErrorType.Timeout:
-                Debug.Log("접속 시간 초과 " + s_Error.ErrorStr);
+                Debug.Log("Timeout:" + s_Error.ErrorStr);
                 break;
             case ErrorType.InvalidRequest:
-                Debug.Log("잘못된 요청 " + s_Error.ErrorStr);
+                Debug.Log("InvalidRequest:" + s_Error.ErrorStr);
                 break;
             case ErrorType.Unauthorized:
-                Debug.Log("권한 없음 " + s_Error.ErrorStr);
+                Debug.Log("Unauthorized:" + s_Error.ErrorStr);
                 break;
             case ErrorType.Forbidden:
-                Debug.Log("접속 금지 " + s_Error.ErrorStr);
+                Debug.Log("Forbidden:" + s_Error.ErrorStr);
                 break;
             case ErrorType.ResourceNotFound:
-                Debug.Log("잘못된 요청 " + s_Error.ErrorStr);
+                Debug.Log("ResourceNotFound:" + s_Error.ErrorStr);
                 break;
             case ErrorType.InternalServerError:
-                Debug.Log("리소스를 찾을 수 없음 " + s_Error.ErrorStr);
+                Debug.Log("InternalServerError:" + s_Error.ErrorStr);
                 break;
             case ErrorType.MaintenanceMode:
-                Debug.Log("유지보수 모드 " + s_Error.ErrorStr);
+                Debug.Log("MaintenanceMode:" + s_Error.ErrorStr);
                 break;
             case ErrorType.DataCorruption:
-                Debug.Log("데이터 손상 " + s_Error.ErrorStr);
+                Debug.Log("DataCorruption:" + s_Error.ErrorStr);
                 break;
             case ErrorType.DuplicateAction:
-                Debug.Log("중복 요청 오류 " + s_Error.ErrorStr);
+                Debug.Log("DuplicateAction:" + s_Error.ErrorStr);
                 break;
             case ErrorType.RateLimitExceeded:
-                Debug.Log("대기 시간 초과 " + s_Error.ErrorStr);
+                Debug.Log("RateLimitExceeded:" + s_Error.ErrorStr);
                 break;
             case ErrorType.VersionMismatch:
-                Debug.Log("잘못된 요청 " + s_Error.ErrorStr);
+                Debug.Log("VersionMismatch:" + s_Error.ErrorStr);
                 break;
             case ErrorType.PaymentRequired:
-                Debug.Log("버전 불 일치 " + s_Error.ErrorStr);
+                Debug.Log("PaymentRequired:" + s_Error.ErrorStr);
                 break;
             case ErrorType.Banned:
-                Debug.Log("권한 박탈 " + s_Error.ErrorStr);
+                Debug.Log("Banned:" + s_Error.ErrorStr);
                 break;
             case ErrorType.InvalidSession:
-                Debug.Log("잘못된 세션 " + s_Error.ErrorStr);
+                Debug.Log("InvalidSession:" + s_Error.ErrorStr);
                 break;
             case ErrorType.OutOfResources:
-                Debug.Log("리소스 부족 " + s_Error.ErrorStr);
+                Debug.Log("OutOfResources:" + s_Error.ErrorStr);
                 break;
             case ErrorType.MatchmakingFailed:
-                Debug.Log("게임 이미 시작 " + s_Error.ErrorStr);
-                if(NotifyUI.instance != null)
-                    NotifyUI.instance.SetContent(s_Error.ErrorStr);
+                Debug.Log("MatchmakingFailed:" + s_Error.ErrorStr);
+                if (NotifyUI.instance != null)
+                {
+                    NotifyUI.instance.SetContent("MatchmakingFailed:"+s_Error.ErrorStr);
+                    NotifyUI.instance.SetTitle("MatchmakingFailed");
+                }
                 break;
             case ErrorType.InvalidGameState:
-                Debug.Log("게임 상태 요청 실패 " + s_Error.ErrorStr);
+                Debug.Log("InvalidGameState:" + s_Error.ErrorStr);
                 break;
             case ErrorType.CheatingDetected:
-                Debug.Log("부정 행위 감지 " + s_Error.ErrorStr);
+                Debug.Log("CheatingDetected:" + s_Error.ErrorStr);
                 break;
             default:
                 break;
