@@ -960,6 +960,7 @@ internal class PacketHandler
                 {
                     NotifyUI.instance.SetContent("Not Error");
                     NotifyUI.instance.SetTitle("Not Error");
+                    NotifyUI.instance.Show();
                 }
                 break;
             case ErrorType.ServerLoading:
@@ -969,6 +970,7 @@ internal class PacketHandler
                 {
                     NotifyUI.instance.SetContent("ServerLoading:" +  s_Error.ErrorStr);
                     NotifyUI.instance.SetTitle("ServerLoading");
+                    NotifyUI.instance.Show();
                 }
                 break;
             case ErrorType.ConnectionLost:
@@ -1025,6 +1027,7 @@ internal class PacketHandler
                 {
                     NotifyUI.instance.SetContent("MatchmakingFailed:"+s_Error.ErrorStr);
                     NotifyUI.instance.SetTitle("MatchmakingFailed");
+                    NotifyUI.instance.Show();
                 }
                 break;
             case ErrorType.InvalidGameState:
