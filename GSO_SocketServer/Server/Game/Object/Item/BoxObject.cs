@@ -71,8 +71,8 @@ namespace Server.Game.Object.Item
 
             //SetAdvancedBox();
 
-            SetRandomItem(3, 5, EBoxSize.Large, EItemType.Spoil);
-
+            //SetRandomItem(3, 5, EBoxSize.Large, EItemType.Spoil);
+            SetRandomItem(3, 5, EBoxSize.Large, EItemType.Bag);
             CellPos = pos;
         }
 

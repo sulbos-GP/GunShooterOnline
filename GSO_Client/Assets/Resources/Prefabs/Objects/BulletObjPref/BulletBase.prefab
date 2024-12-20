@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -6
   m_Sprite: {fileID: 0}
   m_Color: {r: 1, g: 0.9220363, b: 0, a: 1}
   m_FlipX: 0
@@ -126,11 +126,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7820c7e1d1383b1468f733f542275cf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _shooterId: 1
-  _damage: 10
-  _range: 3
-  _dir: {x: 0.9086105, y: -0.41764447, z: 0}
-  EndPos: {x: 0, y: 0}
+  startPos: {x: 0, y: 0}
+  endPos: {x: 0, y: 0}
   speed: 80
 --- !u!1 &5672516245653577947
 GameObject:
