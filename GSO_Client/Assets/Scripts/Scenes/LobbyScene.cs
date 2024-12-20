@@ -39,7 +39,7 @@ public class LobbyScene : BaseScene
 
 #elif UNITY_ANDROID
         BetterStreamingAssets.Initialize();
-        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+        files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
 #endif 
 
         switch (ConnectMode)
@@ -51,7 +51,7 @@ public class LobbyScene : BaseScene
 #elif UNITY_ANDROID
                 Ip = "10.0.2.2";
                 BetterStreamingAssets.Initialize();
-                string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+                files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
 #endif
                 break;
             case EConnectMode.WAN:
@@ -116,13 +116,6 @@ public class LobbyScene : BaseScene
             Uid = credential.uid,
         };*/
         Managers.Network.Send(c_JoinServer);
-
-
-
-
-
-
-
 
         //C_JoinServer c_JoinServer = new C_JoinServer();
         //c_JoinServer.Name = "jish";

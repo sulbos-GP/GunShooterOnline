@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Runtime.Versioning;
 using TMPro;
 using UnityEditor;
-using UnityEditor.iOS;
 using UnityEngine;
 using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
