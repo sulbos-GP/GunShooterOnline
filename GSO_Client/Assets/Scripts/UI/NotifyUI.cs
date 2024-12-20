@@ -15,6 +15,7 @@ public class NotifyUI : MonoBehaviour
         if(instance == null)
             instance = this;
         Init();
+        Hide();
     }
 
     private void Init()
@@ -36,5 +37,10 @@ public class NotifyUI : MonoBehaviour
     public void Hide()
     {
         gameObject.SetActive(false);
+    }
+
+    public void Show()
+    {
+        gameObject.SetActive(true);
     }
 }
