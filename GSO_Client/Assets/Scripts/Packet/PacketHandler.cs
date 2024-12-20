@@ -270,7 +270,11 @@ internal class PacketHandler
             Managers.SystemLog.Message("S_JoinServer : fail");
             return;
         }
-        //방 접속 완료(대기)
+
+
+        //접속 완료
+        Managers.Scene.LoadScene(Define.Scene.Forest);
+
 
         Managers.SystemLog.Message("S_JoinServer : success");
 
@@ -300,10 +304,7 @@ internal class PacketHandler
     {
         Managers.SystemLog.Message("S_GameStartHandler");
         S_GameStart packet = message as S_GameStart;
-        
-        //씬 접속 완료
-        Managers.Scene.LoadScene(Define.Scene.Forest);
-        
+
         //자신의 플레이어 외에 다른 플레이어 생성
         foreach (ObjectInfo obj in packet.Objects)
         {
@@ -324,6 +325,8 @@ internal class PacketHandler
             //player.SpawnPlayer(vec2);
             Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + obj.ObjectId);
         }
+        
+        UIManager.Instance.StopLoading();
 
         //obj가 플레이어인 경우 장착칸 1번 확인해서 
 
