@@ -947,6 +947,64 @@ internal class PacketHandler
 
     }
 
+    internal static void S_ErrorHandler(PacketSession session, IMessage message)
+    {
+        S_Error s_Error = message as S_Error;
+
+        switch (s_Error.ErrorCode)
+        {
+            case ErrorType.Success:
+                //성공
+                break;
+            case ErrorType.ServerLoading:
+                //서버 초기화중
+                Debug.Log( "서버 초기화중 " +  s_Error.ErrorStr); //241220 승현ErrorStr는 없다고 생각하고 그냥
+                break;
+            case ErrorType.ConnectionLost:
+                break;
+            case ErrorType.Timeout:
+                break;
+            case ErrorType.InvalidRequest:
+                break;
+            case ErrorType.Unauthorized:
+                break;
+            case ErrorType.Forbidden:
+                break;
+            case ErrorType.ResourceNotFound:
+                break;
+            case ErrorType.InternalServerError:
+                break;
+            case ErrorType.MaintenanceMode:
+                break;
+            case ErrorType.DataCorruption:
+                break;
+            case ErrorType.DuplicateAction:
+                break;
+            case ErrorType.RateLimitExceeded:
+                break;
+            case ErrorType.VersionMismatch:
+                break;
+            case ErrorType.PaymentRequired:
+                break;
+            case ErrorType.Banned:
+                break;
+            case ErrorType.InvalidSession:
+                break;
+            case ErrorType.OutOfResources:
+                break;
+            case ErrorType.MatchmakingFailed:
+                // 이미 게임 시작
+
+                break;
+            case ErrorType.InvalidGameState:
+                break;
+            case ErrorType.CheatingDetected:
+                break;
+            default:
+                break;
+        }
+    }
+
     /* internal static void S_SkillHandler(PacketSession session, IMessage message)
      {
          var skillPacket = message as S_Skill;
