@@ -188,7 +188,6 @@ public class UIManager : MonoBehaviour
         // 조건 만족 시 페이드 아웃 실행
         StartCoroutine(FadeOut());
     }
-    [ContextMenu("StopLoading")]
     public void StopLoading() // 조건 만족 시 호출
     {
         isLoading = false; // 로딩 상태 종료
