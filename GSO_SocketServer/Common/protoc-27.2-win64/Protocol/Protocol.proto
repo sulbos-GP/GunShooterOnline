@@ -514,7 +514,7 @@ message StatInfo{
 
 
 message PositionInfo{
-  int32 currentRoomId = 1;
+  uint64 tick = 1;
   float dirX = 2;
   float dirY = 3;
   float posX = 4;
