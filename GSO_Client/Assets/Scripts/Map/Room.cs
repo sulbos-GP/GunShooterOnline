@@ -116,7 +116,7 @@ public class Room : MonoBehaviour
         {
             currentPlayers.Add(collision.gameObject);
             MyPlayerController mc;
-         /*   if (collision.TryGetComponent(out mc))
+         /*   if (  .TryGetComponent(out mc))
                 if (mc.CurrentPlanetId != RoomId)
                     mc.CurrentPlanetId = RoomId;*/
         }

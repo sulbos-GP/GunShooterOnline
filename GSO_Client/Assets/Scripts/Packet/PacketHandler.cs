@@ -23,6 +23,8 @@ internal class PacketHandler
     /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ GAMESYSTEM PACKET START ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
     public static void S_EnterGameHandler(PacketSession session, IMessage packet)
     {
+        
+        
         Managers.SystemLog.Message("S_EnterGameHandler");
         var enterGamePacket = (S_EnterGame)packet;
 
