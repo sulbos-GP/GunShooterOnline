@@ -12,6 +12,13 @@ public class SceneManagerEx
 
         SceneManager.LoadScene(GetSceneName(type));
     }
+    
+    public void UnLoadScene(Define.Scene type)
+    {
+        //Managers.Clear();
+
+        SceneManager.UnloadSceneAsync(GetSceneName(type));
+    }
 
     private string GetSceneName(Define.Scene type)
     {

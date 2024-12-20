@@ -15,6 +15,7 @@ using System.Security.Cryptography.Xml;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 
@@ -25,7 +26,7 @@ internal class PacketHandler
     {
         Managers.SystemLog.Message("S_EnterGameHandler");
         var enterGamePacket = (S_EnterGame)packet;
-
+        
         UIManager.Instance.leftTime = enterGamePacket.GameData.LeftTime* 60;
 
         Managers.SystemLog.Message($"{enterGamePacket.Player}");
@@ -269,19 +270,19 @@ internal class PacketHandler
             return;
         }
 
-
+        Managers.Scene.LoadScene(Define.Scene.loading);
         //접속 완료
-        Managers.Scene.LoadScene(Define.Scene.Forest);
+        //Managers.Scene.LoadScene(Define.Scene.Forest);
 
 
         Managers.SystemLog.Message("S_JoinServer : success");
 
 
-        C_EnterGame c_EnterGame = new C_EnterGame();
+        /*C_EnterGame c_EnterGame = new C_EnterGame();
         //c_EnterGame.Credential =
 
         Managers.Network.Send(c_EnterGame);
-        Debug.Log("Send c_EnterGame In GameScene");
+        Debug.Log("Send c_EnterGame In GameScene");*/
 
 
     }
@@ -302,7 +303,8 @@ internal class PacketHandler
     {
         Managers.SystemLog.Message("S_GameStartHandler");
         S_GameStart packet = message as S_GameStart;
-
+        FadeManager.instance.SetLoadComplete();
+        
         //자신의 플레이어 외에 다른 플레이어 생성
         foreach (ObjectInfo obj in packet.Objects)
         {
@@ -347,6 +349,7 @@ internal class PacketHandler
 
         //    targetSlot.ApplyItemEffects(data);
         //}
+        
     }
     /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ GAMESYSTEM PACKET END ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
