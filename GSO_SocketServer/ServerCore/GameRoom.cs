@@ -7,10 +7,23 @@ using System.Collections.Generic;
 
 namespace ServerCore
 {
+    public enum GameState
+    {
+        NONE = 0,
+        ALIVE = 1, // 서버 준비 완료
+        LOADING = 2, // 로드 중
+        INGAME= 3, //게임 중
+        DEAD = 4,
+    }
+
+
     public abstract class GameRoom : JobSerializer
     {
         //public GameRoomManager mGameRoomManager;
         public byte mGameRoomNumber;
+
+        public GameState CurrentGameState { get; protected set; } = GameState.NONE;
+        
 
         public int RoomId { get; set; }
 

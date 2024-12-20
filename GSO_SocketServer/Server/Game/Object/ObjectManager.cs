@@ -8,6 +8,7 @@ using Server.Game.Object;
 using Server.Game.Object.Attack;
 using Server.Game.Object.Item;
 using Server.Game.Object.Shape;
+using ServerCore;
 
 namespace Server.Game;
 
@@ -341,6 +342,12 @@ internal class ObjectManager
 
     public void Update()
     {
+       /* TODO : 업데이트 위치 바꾸고 
+        * 다음 주석 추가하기
+        * if (gameRoom.CurrentGameState != GameState.INGAME)
+            return;*/
+
+
         foreach (Player p in _players.Values)
         {
             p.Update();
