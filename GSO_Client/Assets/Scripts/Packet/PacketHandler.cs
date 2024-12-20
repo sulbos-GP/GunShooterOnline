@@ -323,6 +323,8 @@ internal class PacketHandler
             //player.SpawnPlayer(vec2);
             Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + obj.ObjectId);
         }
+        
+        UIManager.Instance.StopLoading();
 
         //obj가 플레이어인 경우 장착칸 1번 확인해서 
 
