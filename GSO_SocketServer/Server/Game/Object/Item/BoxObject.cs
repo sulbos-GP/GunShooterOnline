@@ -68,7 +68,6 @@ namespace Server.Game.Object.Item
 
         public void Init(Vector2 pos, bool isAdvancedBox)
         {
-            isAdvancedBox = true;
             if(isAdvancedBox)
             {
                 SetBox(pos, EBoxSize.Large);
