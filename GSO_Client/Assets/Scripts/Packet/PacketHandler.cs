@@ -368,6 +368,8 @@ internal class PacketHandler
             {
                 inventory.invenUIControl(false);
             }
+
+            InventoryController.Instance.OnWaitSwitchPacket = false;
             return;
         }
 
@@ -460,6 +462,7 @@ internal class PacketHandler
         if (!packet.IsSuccess)
         {
             Managers.SystemLog.Message("S_CloseInventory : Didn't accepted by Server");
+            InventoryController.Instance.OnWaitSwitchPacket = false;
             return;
         }
 
