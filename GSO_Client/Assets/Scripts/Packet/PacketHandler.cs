@@ -115,7 +115,7 @@ internal class PacketHandler
             return;
         }
 
-        Managers.SystemLog.Message("S_MoveHandler : " + go.name);
+        //Managers.SystemLog.Message("S_MoveHandler : " + go.name);
         if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
         {
             return;
@@ -881,7 +881,7 @@ internal class PacketHandler
     internal static void S_AiMoveHandler(PacketSession session, IMessage message)
     {
         S_AiMove packet = message as S_AiMove;
-        Managers.SystemLog.Message($"S_AiMove {packet.ObjectId}");
+        //Managers.SystemLog.Message($"S_AiMove {packet.ObjectId}");
         
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
         Vector2 instance = enemy.transform.position;
