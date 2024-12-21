@@ -302,6 +302,7 @@ namespace Server.Game.FSM
             GameObject target = Owner.target;
             if (target == null)
             {
+                Owner._state.ChangeState(Owner.ReturnState);
                 return;
             }
 
