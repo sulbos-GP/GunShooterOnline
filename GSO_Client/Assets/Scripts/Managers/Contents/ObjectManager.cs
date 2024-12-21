@@ -147,7 +147,7 @@ public class ObjectManager
         }*/
         else if (type == GameObjectType.Box)
         {
-            var go = Managers.Resource.Instantiate($"Objects/Box"); //생성할 오브젝트 경로(박스)
+            var go = Managers.Resource.Instantiate($"Objects/AdvancedBox"); //생성할 오브젝트 경로(박스)
             go.name = $"{info.Name}"; //이름설정
             go.transform.position = new Vector2(info.PositionInfo.PosX, info.PositionInfo.PosY);
             if (_objects.TryAdd(info.ObjectId, go) == false)
