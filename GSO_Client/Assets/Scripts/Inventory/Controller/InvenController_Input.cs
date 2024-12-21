@@ -4,7 +4,7 @@ using Vector2 = System.Numerics.Vector2;
 
 public partial class InventoryController
 {
-    #region PlayerInput �׼�
+    #region PlayerInput
     private void OnTouchPos(InputAction.CallbackContext context)
     {
         UnityEngine.Vector2 pos = context.ReadValue<UnityEngine.Vector2>();
@@ -15,8 +15,6 @@ public partial class InventoryController
     private void OnTouchStart(InputAction.CallbackContext context)
     {
         isPress = true;
-        //���⼭ ������ �̺�Ʈ�� �ϴ°� ����Ʈ�̳� ���Ⱑ ����ǰ� ���� �����ӿ� �׸��尡 �Ҵ��.
-        //gridInteract�� ��ü�Ͽ� ��ġ��ġ�� UI�� ��� �ڵ尡 ������ �����Ұ�
     }
 
     private void OnTouchEnd(InputAction.CallbackContext context)
@@ -31,7 +29,6 @@ public partial class InventoryController
 
     private void OnMouseRightClickInput(InputAction.CallbackContext context)
     {
-        //������ ����� ��
         RotateItemRight();
     }
 
@@ -41,18 +38,11 @@ public partial class InventoryController
     }
 
     #endregion
-
-
-    /// <summary>
-    /// ���콺�� ��ġ�� Grid���� Ÿ�� ��ġ�� ��ȯ
-    /// </summary>
     private Vector2Int WorldToGridPos()
     {
         Vector2 position = mousePosInput;
-        //�������� ����ִٸ�
         if (selectedItem != null)
         {
-            //�������� ���콺 �߾ӿ� ������ ����
             position.X -= (selectedItem.Width - 1) * GridObject.WidthOfTile / 2;
             position.Y += (selectedItem.Height - 1) * GridObject.HeightOfTile / 2;
         }
@@ -60,9 +50,6 @@ public partial class InventoryController
         return selectedGrid.GetGridPosByMousePos(position);
     }
 
-    /// <summary>
-    /// ��Ʈ�ѷ����� ������ ��ȸ�� ����
-    /// </summary>
     public void RotateItemRight()
     {
         if (!isItemSelected) { return; }
@@ -80,7 +67,6 @@ public partial class InventoryController
                 invenHighlight.InstantHighlighter();
             }
 
-            Debug.Log("touchinput On");
             playerInput = Managers.Object.MyPlayer.playerInput;
             playerInput.Player.Disable();
             InvenInputOn();
@@ -93,7 +79,6 @@ public partial class InventoryController
                 invenHighlight.DestroyHighlighter();
             }
 
-            Debug.Log("touchinput Off");
             InvenInputOff();
             playerInput.Player.Enable();
         }
@@ -121,21 +106,30 @@ public partial class InventoryController
         playerInput.UI.InventoryControl.performed += InvenUIControlInput;
     }
 
-    
+    public int? interactBoxId;
 
     public void InventoryActiveBtn()
     {
-        //�ڽ��� �κ��丮 ��û
+        if (OnWaitSwitchPacket)
+        {
+            return;
+        }
+
         if (!isActive) {
-            //�κ��丮�� ų ���
             InventoryPacket.SendLoadInvenPacket();
             AudioManager.instance.PlaySound("ShowInventory",AudioManager.instance.GetComponent<AudioSource>());
         }
         else
         {
-            //�κ��丮�� ���� ���
-            if (otherInvenUI.instantGrid != null) { InventoryPacket.SendCloseInvenPacket(otherInvenUI.instantGrid.objectId); return; }
-            if (playerInvenUI.instantGrid != null) { InventoryPacket.SendCloseInvenPacket(); }
+            if (interactBoxId != null) 
+            { 
+                InventoryPacket.SendCloseInvenPacket((int)interactBoxId); 
+
+            }
+            else 
+            { 
+                InventoryPacket.SendCloseInvenPacket(); 
+            }
         }
     }
 

@@ -10,6 +10,7 @@ public class InventoryPacket
         packet.SourceObjectId = objectId;
         Managers.Network.Send(packet);
         Debug.Log($"C_SendLoadInven : {objectId}의 인벤토리 요청 전송");
+        InventoryController.Instance.OnWaitSwitchPacket = true;
     }
 
     public static void SendCloseInvenPacket(int objectId = 0)
@@ -17,6 +18,7 @@ public class InventoryPacket
         C_CloseInventory packet = new C_CloseInventory();
         packet.SourceObjectId = objectId;
         Managers.Network.Send(packet);
+        InventoryController.Instance.OnWaitSwitchPacket = true;
         Debug.Log($"C_SendCloseInven : {objectId}의 인벤토리 종료 행동 전송");
     }
 
