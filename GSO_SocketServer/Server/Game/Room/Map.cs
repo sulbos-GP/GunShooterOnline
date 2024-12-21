@@ -255,7 +255,7 @@ public class Map
                     aispawnZones.Add(AIspawn);
 
                 }
-                else if (_collisions[i, j] == 6) // 프리미엄 박스
+                else if (_collisions[i, j] == 7) // 프리미엄 박스
                 {
                     BoxObject box = ObjectManager.Instance.Add<BoxObject>();
                     box.Init(new Vector2(i + Bleft.x + xOffset, j + Bleft.y + yOffset), true);
