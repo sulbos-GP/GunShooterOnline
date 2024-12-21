@@ -18,8 +18,8 @@ namespace Server.Game.Object
             base.Init(pos);
 
             info.Name = "MeleeEnemy";
-            chaseRange = 8;
-            attackRange = 2f;
+            chaseRange = 8f;
+            attackRange = 1f;
 
             stat.MergeFrom(new StatInfo()
             {
