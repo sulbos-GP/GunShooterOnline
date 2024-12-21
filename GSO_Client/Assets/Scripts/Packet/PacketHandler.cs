@@ -360,6 +360,8 @@ internal class PacketHandler
         S_LoadInventory packet = message as S_LoadInventory;
         InventoryController inventory = InventoryController.Instance;
 
+        InventoryController.Instance.OnWaitSwitchPacket = false;
+
         //불러오기에 실패할경우 인벤토리가 off상태로 보장
         if (!packet.IsSuccess)
         {
@@ -368,8 +370,6 @@ internal class PacketHandler
             {
                 inventory.invenUIControl(false);
             }
-
-            InventoryController.Instance.OnWaitSwitchPacket = false;
             return;
         }
 
@@ -389,17 +389,17 @@ internal class PacketHandler
         }
 
         //플레이어의 인벤토리의 경우
-        if(packet.SourceObjectId == InventoryController.PlayerSlotId)
+        if (packet.SourceObjectId == InventoryController.PlayerSlotId)
         {
             //장착칸 설정
             foreach (PS_GearInfo packetItem in packet.GearInfos)
             {
                 EquipSlotBase targetSlot = InventoryController.equipSlotDic[(int)packetItem.Part];
                 ItemData targetItem;
-                
+
                 ItemData gearedItem = inventory.GetItemInDictByGearCode((int)packetItem.Part);
 
-                if(gearedItem != null)
+                if (gearedItem != null)
                 {
                     gearedItem.SetItemData(packetItem.Item);
                     targetItem = gearedItem;
@@ -410,7 +410,7 @@ internal class PacketHandler
                     targetItem.SetItemData(packetItem.Item);
                 }
 
-                if(targetItem.itemId == 300)
+                if (targetItem.itemId == 300)
                 {
                     Debug.Log("300번 기본가방은 생성안함 = 제외");
                     continue;
@@ -446,8 +446,6 @@ internal class PacketHandler
             InventoryController.UpdateInvenWeight(false);
             InventoryPacket.SendLoadInvenPacket();
         }
-
-        InventoryController.Instance.OnWaitSwitchPacket = false;
     }
 
     /// <summary>
@@ -458,22 +456,20 @@ internal class PacketHandler
         S_CloseInventory packet = message as S_CloseInventory;
         Managers.SystemLog.Message("S_CloseInventory");
         InventoryController inventory = InventoryController.Instance;
+        InventoryController.Instance.OnWaitSwitchPacket = false;
+        InventoryController.Instance.interactBoxId = null;
 
         if (!packet.IsSuccess)
         {
             Managers.SystemLog.Message("S_CloseInventory : Didn't accepted by Server");
-            InventoryController.Instance.OnWaitSwitchPacket = false;
+            
             return;
         }
-
-        InventoryController.Instance.interactBoxId = null;
 
         if (InventoryController.Instance.isActive)//인벤토리가 켜져 있으면 끔
         {
             InventoryController.Instance.invenUIControl(false);
         }
-
-        InventoryController.Instance.OnWaitSwitchPacket = false;
     }
 
     /// <summary>

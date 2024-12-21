@@ -112,6 +112,7 @@ public partial class InventoryController
     {
         if (OnWaitSwitchPacket)
         {
+            Debug.LogError("InvenController : 패킷 답장을 대기중...");
             return;
         }
 
