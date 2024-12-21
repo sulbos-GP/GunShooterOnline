@@ -19,7 +19,7 @@ namespace Server.Game.Object
 
             info.Name = "MeleeEnemy";
             chaseRange = 8;
-            attackRange = 1f;
+            attackRange = 2f;
 
             stat.MergeFrom(new StatInfo()
             {
