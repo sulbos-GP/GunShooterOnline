@@ -212,25 +212,36 @@ internal class PacketHandler
 
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)
     {
+        //모든 플레이어에게 전송되는 핸들러
         S_ExitGame packet = message as S_ExitGame;
         Managers.SystemLog.Message("S_ExitGame");
+
         if (Managers.Object.MyPlayer == null)
         {
             return;
         }
 
-        if(packet.IsSuccess == true)
+        
+        if (!packet.IsSuccess)
         {
-            var player = Managers.Object.FindById(packet.PlayerId);
-
-            //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
-            if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+            //실패했을경우 exit을 보낸 플레이어의 exitzone 반응 제거
+            if (packet.PlayerId != Managers.Object.MyPlayer.Id)
             {
-                //플레이어는 자신의 장착칸과 인벤토리의 내용을 서버에 전송?
-                //return;
+                return;
             }
 
-            //클라이언트의 모든 오브젝트의 내용 클리어
+            ExitZone exitZone = Managers.Object.FindById(packet.ExitId).GetComponent<ExitZone>();
+            if (exitZone != null)
+            {
+                exitZone.CancelExit(packet.RetryTime / 1000.0f);
+            }
+        }
+
+        var targetPlayer = Managers.Object.FindById(packet.PlayerId);
+
+        //나간 플레이어의 경우 초기화 및 씬 이동
+        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+        {
             Managers.Object.Clear();
             Managers.Object.DebugDics();
 
@@ -244,18 +255,11 @@ internal class PacketHandler
             {
                 Managers.Scene.LoadScene(Define.Scene.Lobby);
             }
+        }
 
-            //Managers.Resource.Destroy(player);
-            //Managers.Object.Remove(packet.PlayerId);
-        }
-        else
-        {
-            ExitZone exitZone = Managers.Object.FindById(packet.ExitId).GetComponent<ExitZone>();
-            if (exitZone != null)
-            {
-                exitZone.CancelExit(packet.RetryTime / 1000.0f);
-            }
-        }
+        //오브젝트 딕셔너리에서 해당 플레이어를 삭제 ( 나와 다른 플레이어에게 동일하게 적용)
+        Managers.Resource.Destroy(targetPlayer);
+        Managers.Object.Remove(packet.PlayerId);
 
     }
 
@@ -316,11 +320,11 @@ internal class PacketHandler
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
 
-            //if (player == null)
+            //if (targetPlayer == null)
             //{
             //    continue;
             //}
-            //player.SpawnPlayer(vec2);
+            //targetPlayer.SpawnPlayer(vec2);
             Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + obj.ObjectId);
         }
         
@@ -372,11 +376,8 @@ internal class PacketHandler
                 inventory.invenUIControl(false);
             }
 
-            if (packet.SourceObjectId != InventoryController.PlayerSlotId)
-            {
-                InventoryController.Instance.interactBoxId = null;
-            }
-
+            InventoryController.Instance.interactBoxId = null;
+ 
             return;
         }
 
