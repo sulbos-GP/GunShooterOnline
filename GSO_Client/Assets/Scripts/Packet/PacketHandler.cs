@@ -361,15 +361,22 @@ internal class PacketHandler
         InventoryController inventory = InventoryController.Instance;
 
         InventoryController.Instance.OnWaitSwitchPacket = false;
-
+        
         //불러오기에 실패할경우 인벤토리가 off상태로 보장
         if (!packet.IsSuccess)
         {
             Managers.SystemLog.Message("S_LoadInventory : fail to load");
+
             if (inventory.isActive)
             {
                 inventory.invenUIControl(false);
             }
+
+            if (packet.SourceObjectId != InventoryController.PlayerSlotId)
+            {
+                InventoryController.Instance.interactBoxId = null;
+            }
+
             return;
         }
 
