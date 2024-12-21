@@ -432,7 +432,6 @@ internal class PacketHandler
         else
         {
             Box box = Managers.Object.FindById(packet.SourceObjectId).GetComponent<Box>();
-            //box.interactable = false;
 
             OtherInventoryUI otherInvenUI = inventory.otherInvenUI;
             otherInvenUI.InventorySet();
@@ -441,8 +440,12 @@ internal class PacketHandler
 
             boxGrid.objectId = packet.SourceObjectId;
             boxGrid.PlaceItemsInGrid(packetItemList);
+
             InventoryController.UpdateInvenWeight(false);
+
         }
+
+        InventoryController.Instance.OnWaitSwitchPacket = false;
     }
 
     /// <summary>
@@ -460,22 +463,14 @@ internal class PacketHandler
             return;
         }
 
-        //if(packet.SourceObjectId != 0) 서버에서도 확인하니 생략
-        //{
-        //    //박스의 interactable을 
-        //    GameObject target = Managers.Object.FindById(packet.SourceObjectId);
-        //    if(target == null)
-        //    {
-        //        Managers.SystemLog.Message($"S_CloseInventory : fail to find with ObjectId {packet.SourceObjectId}");
-        //        return;
-        //    }
-        //    target.GetComponent<Box>().interactable = true;
-        //}
+        InventoryController.Instance.interactBoxId = null;
 
         if (InventoryController.Instance.isActive)//인벤토리가 켜져 있으면 끔
         {
             InventoryController.Instance.invenUIControl(false);
         }
+
+        InventoryController.Instance.OnWaitSwitchPacket = false;
     }
 
     /// <summary>

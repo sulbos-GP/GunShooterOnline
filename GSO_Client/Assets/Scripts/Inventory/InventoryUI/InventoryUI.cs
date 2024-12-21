@@ -22,7 +22,10 @@ public class InventoryUI : MonoBehaviour
     }
     public virtual void InventorySet()
     {
-        instantGrid = Managers.Resource.Instantiate("UI/InvenUI/GridUI", transform).GetComponent<GridObject>();
+        if(instantGrid == null)
+        {
+            instantGrid = Managers.Resource.Instantiate("UI/InvenUI/GridUI", transform).GetComponent<GridObject>();
+        }
     }
 
     
