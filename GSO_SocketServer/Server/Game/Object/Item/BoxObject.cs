@@ -70,6 +70,7 @@ namespace Server.Game.Object.Item
         {
             if(isAdvancedBox)
             {
+                info.Name = "AdvancedBox";
                 SetBox(pos, EBoxSize.Large);
                 AddItem("군용더블백", 1);
                 AddItem("방탄조끼", 1);
