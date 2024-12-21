@@ -51,7 +51,7 @@ namespace Server.Game.Object.Attack
             
             if (other != null && other.gameRoom != null && other.gameRoom == this.gameRoom)
             {
-                GameObject owner = ObjectManager.Instance.Find<GameObject>(this.OwnerId);
+                BaseAI owner = ObjectManager.Instance.Find<BaseAI>(this.OwnerId);
                 if(owner == null)
                 {
                     return;
@@ -71,6 +71,12 @@ namespace Server.Game.Object.Attack
 
                 Console.WriteLine($"{info.Name} to {this.damage}");
                 player.OnDamaged(owner, this.damage);
+
+                if(player.Hp <= 0)
+                {
+                    owner.target = null;
+                }
+
             }
         }
     }

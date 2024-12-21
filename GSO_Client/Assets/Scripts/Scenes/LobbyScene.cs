@@ -110,7 +110,7 @@ public class LobbyScene : BaseScene
 
 
         C_JoinServer c_JoinServer = new C_JoinServer();
-        c_JoinServer.Name = "jish";
+        c_JoinServer.Name = "Player";
         /*c_JoinServer.Credential = new CredentiaInfo()
         {
             Uid = credential.uid,
