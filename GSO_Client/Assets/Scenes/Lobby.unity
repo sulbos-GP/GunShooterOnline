@@ -677,7 +677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c281d3335b7fb4fa1ce43ce7ad1f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConnectMode: 0
+  ConnectMode: 2
   Store: {fileID: 0}
   Profile: {fileID: 0}
   Coins: {fileID: 0}
