@@ -87,6 +87,7 @@ namespace Server
             }
 
             //게임 종료
+#if DEBUG
             {
                 Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
                 
@@ -96,6 +97,7 @@ namespace Server
 
                 gameserver.Stop();
             }
+#endif
         }
     }
 }
