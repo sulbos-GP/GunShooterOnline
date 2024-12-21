@@ -442,7 +442,7 @@ internal class PacketHandler
             boxGrid.PlaceItemsInGrid(packetItemList);
 
             InventoryController.UpdateInvenWeight(false);
-
+            InventoryPacket.SendLoadInvenPacket();
         }
 
         InventoryController.Instance.OnWaitSwitchPacket = false;
