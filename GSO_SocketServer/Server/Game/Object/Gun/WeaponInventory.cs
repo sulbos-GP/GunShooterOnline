@@ -12,7 +12,7 @@ namespace Server.Game
 
     public class WeaponInventory
     {
-
+        private float Angle;
 
         private enum currentWeapon
         {
@@ -69,13 +69,14 @@ namespace Server.Game
                 case currentWeapon.SUB:
                     return PE_GearPart.SubWeapon;
                 default:
-                    Console.WriteLine("Error : currentType is Zero");
+                    //Console.WriteLine("Error : currentType is Zero");
                     return PE_GearPart.None;
             }
         }
     
         public Gun GetCurrentWeapon()
         {
+
             switch (current)
             {
                 case currentWeapon.MAIN:
@@ -148,6 +149,33 @@ namespace Server.Game
             GetCurrentWeapon().Reload();
 
         }
+
+
+        public void SetRotion(float angle)
+        {
+
+            if(GetCurrentWeaponGearPart() != PE_GearPart.None)
+            {
+                S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
+                //S_GundataAppearance gunDataUpdate = new S_GundataAppearance();
+                gunDataUpdate.OwnerId = ownerPlayer.Id;
+                gunDataUpdate.GunData = new PS_GearInfo
+                {
+                    Part = GetCurrentWeaponGearPart(),
+                    Item = GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
+                };
+
+                gunDataUpdate.GunRoation = new GunAppearacneInfo
+                {
+                    Roation = angle,
+                };
+                // ownerPlayer.Session.Send(gunDataUpdate);
+
+                ownerPlayer.gameRoom.BroadCast(gunDataUpdate);
+            }
+            
+        }
+
     }
 
 }

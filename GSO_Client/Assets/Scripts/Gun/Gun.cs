@@ -43,12 +43,17 @@ public class Gun : MonoBehaviour
 
         //Debug Line
         gunLine = GetComponent<AimLine>();
-        gunLine.Init();
+        if(gunLine != null)
+        {
+            gunLine.Init();
 
-        //게임 시작시 실행할 루틴
-        _fireStartPos = transform.GetChild(0);
-        _fireParticlePos = _fireStartPos.GetChild(0);
-        _animator = _fireParticlePos.GetComponent<Animator>();
+            //게임 시작시 실행할 루틴
+            _fireStartPos = transform.GetChild(0);
+            _fireParticlePos = _fireStartPos.GetChild(0);
+            _animator = _fireParticlePos.GetComponent<Animator>();
+
+        }
+
         ResetGun();
     }
 
@@ -79,6 +84,37 @@ public class Gun : MonoBehaviour
        
     }
 
+    /// <summary>
+    /// 나중에 추가
+    /// </summary>
+    public void SetGunRoation(Vector2 dir)
+    {
+        
+        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+        //var gunTrn = transform.GetChild(0);
+        //transform.parent.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+
+
+        //Debug.Log("Dir" + angle);
+
+        C_InputData inputPacket = new C_InputData();
+        inputPacket.GunRoation = new GunAppearacneInfo() { Roation = angle };
+        Managers.Network.Send(inputPacket);
+
+    }
+
+
+    public void GunRoationHandle(float angle)
+    {
+        transform.parent.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+
+    }
+
+
+
+
+
+
     public void ResetGun()
     {
         WeaponData = null;
@@ -86,7 +122,7 @@ public class Gun : MonoBehaviour
         CurAmmo = 0;
         gunState = GunState.Empty;
         GetComponent<SpriteRenderer>().sprite = null;
-        gunLine.OffAimLine();
+        gunLine?.OffAimLine();
         UIManager.Instance.SetAmmoText();
     }
 
