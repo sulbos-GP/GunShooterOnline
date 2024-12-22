@@ -37,7 +37,11 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySound(String keyword, AudioSource source)
     {
+        //키워드에 해당하는 클립 없을 때
         if (!audioclips.ContainsKey(keyword))
+            return;
+        //실행 중이면서 현재 키워드 소리가 실행되고 있을 때
+        if (source.isPlaying && source.clip.name == keyword)
             return;
         
         List<AudioClip> audioclipList = audioclips[keyword];
@@ -53,5 +57,11 @@ public class AudioManager : MonoBehaviour
             source.Stop();
         source.Play();
         Debug.Log($"{keyword} play success");
+    }
+
+    public void StopSound(AudioSource source)
+    {
+        if(source.isPlaying)
+            source.Stop();
     }
 }

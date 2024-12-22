@@ -153,6 +153,7 @@ public class CreatureController : BaseController
         if ((nextPos - transform.position).sqrMagnitude != 0)
         {
             animator.SetBool("IsMove", true);
+            AudioManager.instance.PlaySound("Move", gameObject.GetComponent<AudioSource>());
             if (creaturePos.x < nextPos.x)
             {
                 transform.localScale = basicScale;
@@ -169,6 +170,7 @@ public class CreatureController : BaseController
                 return;
             }
             animator.SetBool("IsMove", false);
+            AudioManager.instance.StopSound(gameObject.GetComponent<AudioSource>());
         }
             
 
