@@ -369,10 +369,10 @@ public class InputController : MonoBehaviour
         while (isFiring)
         {
             Gun playerGun = Managers.Object.MyPlayer.GetComponentInChildren<Gun>();
-            /*if(playerGun.gunState != GunState.Shootable)
+            if(playerGun.gunState != GunState.Shootable)
             {
                 break;
-            }*/
+            }
             playerGun.Fire(lookInput); // �߻� �޼��� ȣ��
             yield return new WaitForSeconds(playerGun.GetFireRate());
         }
