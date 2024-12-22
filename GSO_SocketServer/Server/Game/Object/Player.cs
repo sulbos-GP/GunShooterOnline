@@ -117,8 +117,10 @@ public class Player : CreatureObj
         if (gameRoom == null)
             return;
 
-
-        weapon.CancelReload();
+        if (weapon.GetCurrentWeapon() != null&& weapon.GetCurrentWeapon().IsReload())
+        {
+            weapon.CancelReload();
+        }
 
         S_Spawn spawnPacket = new S_Spawn();
         {

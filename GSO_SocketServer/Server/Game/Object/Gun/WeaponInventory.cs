@@ -99,11 +99,11 @@ namespace Server.Game
 
         internal void ResetGun()
         {
-            if (GetCurrentWeapon().IsReload())
+            if (GetCurrentWeapon() != null && GetCurrentWeapon().IsReload())
             {
-                CancelReload();
+               CancelReload();
             }
-            
+
             GetCurrentWeapon().ResetGun();
             current = currentWeapon.None;
         }
