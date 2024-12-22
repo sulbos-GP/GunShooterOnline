@@ -23,7 +23,7 @@ namespace Server.Game.Object
 
 
         #region FSM
-        public FSMController _state;
+        public FSMController state;
 
         public IdleState IdleState;
         public RoundState RoundState;
@@ -82,7 +82,7 @@ namespace Server.Game.Object
             ReturnState = new ReturnState(this);
             StunState = new StunState(this);
 
-            _state = new FSMController(this);
+            state = new FSMController(this);
 
             maxDistance = 10;
             spawnerDistance = 5;
@@ -102,7 +102,7 @@ namespace Server.Game.Object
                 MaxHp = 20,
             });
 
-            _state.ChangeState(IdleState);
+            state.ChangeState(IdleState);
 
             StoreMoveTime = Environment.TickCount;
             #endregion
@@ -158,7 +158,7 @@ namespace Server.Game.Object
             //이거는 
 
 
-            _state.Update();
+            state.Update();
 
             DetectObject.Update();
 
@@ -197,7 +197,7 @@ namespace Server.Game.Object
                 return;
 
             {
-                _state.ChangeState(new DeadState(this));
+                state.ChangeState(new DeadState(this));
             }
 
             base.OnDead(attacker);
@@ -214,7 +214,7 @@ namespace Server.Game.Object
             if (Hp > 0)
             {
                 this.target = attacker;
-                _state.ChangeState(this.ChaseState);
+                state.ChangeState(this.ChaseState);
             }
 
         }

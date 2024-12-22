@@ -83,11 +83,11 @@ namespace Server.Game.FSM
                 return;
             }
 
-            GameObject target = Owner.DetectObject.GetNearestObject();
-            if (target != null)
+            GameObject _target = Owner.DetectObject.GetNearestObject();
+            if (_target != null)
             {
-                Owner.target = target;
-                Owner._state.ChangeState(Owner.CheckState);
+                Owner.target = _target;
+                Owner.state.ChangeState(Owner.CheckState);
                 return;
             }
 
@@ -95,7 +95,7 @@ namespace Server.Game.FSM
             //`Console.WriteLine($"Wait idle to round:{(storeTickCount + idleToRoundTime) - currentTickCount}");
             if (storeTickCount + idleToRoundTime < currentTickCount)
             {
-                Owner._state.ChangeState(Owner.RoundState);
+                Owner.state.ChangeState(Owner.RoundState);
             }
         }
 
@@ -139,11 +139,11 @@ namespace Server.Game.FSM
                 return;
             }
 
-            GameObject target = Owner.DetectObject.GetNearestObject();
-            if (target != null)
+            GameObject _target = Owner.DetectObject.GetNearestObject();
+            if (_target != null)
             {
-                Owner.target = target;
-                Owner._state.ChangeState(Owner.CheckState);
+                Owner.target = _target;
+                Owner.state.ChangeState(Owner.CheckState);
                 return;
             }
 
@@ -153,7 +153,7 @@ namespace Server.Game.FSM
             //Console.WriteLine($"close to target pos:{dist}");
             if (dist < 1f)
             {
-                Owner._state.ChangeState(Owner.IdleState);
+                Owner.state.ChangeState(Owner.IdleState);
                 return;
             }
         }
@@ -216,7 +216,7 @@ namespace Server.Game.FSM
             int currentTickCount = Environment.TickCount;
             if (storeTickCount + checkToReturnTime < currentTickCount)
             {
-                Owner._state.ChangeState(Owner.ReturnState);
+                Owner.state.ChangeState(Owner.ReturnState);
                 return;
             }
 
@@ -232,7 +232,7 @@ namespace Server.Game.FSM
                 float distanceToPlayer = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
                 if (distanceToPlayer <= Owner.chaseRange)
                 {
-                    Owner._state.ChangeState(Owner.ChaseState);
+                    Owner.state.ChangeState(Owner.ChaseState);
                     return;
                 }
             }
@@ -253,7 +253,7 @@ namespace Server.Game.FSM
             //대기시간이 지난시점에서 타겟이 없으면 귀환 있다면 타겟위치 재할당
             if (Owner.target == null)
             {
-                Owner._state.ChangeState(Owner.ReturnState);
+                Owner.state.ChangeState(Owner.ReturnState);
             }
             else
             {
@@ -277,7 +277,7 @@ namespace Server.Game.FSM
 
     public class ChaseState : StateBase
     {
-        private const int chaseToReturnTime = 10000;
+        private const int chaseToReturnTime = 5000;
         private int storeTickCount = 0;
 
         public ChaseState(BaseAI owner) : base(owner, MobState.Chase)
@@ -302,7 +302,7 @@ namespace Server.Game.FSM
             GameObject target = Owner.target;
             if (target == null)
             {
-                Owner._state.ChangeState(Owner.ReturnState);
+                Owner.state.ChangeState(Owner.ReturnState);
                 return;
             }
 
@@ -318,7 +318,7 @@ namespace Server.Game.FSM
             int currentTickCount = Environment.TickCount;
             if (storeTickCount + chaseToReturnTime < currentTickCount)
             {
-                Owner._state.ChangeState(Owner.ReturnState);
+                Owner.state.ChangeState(Owner.ReturnState);
                 return;
             }
 
@@ -342,7 +342,7 @@ namespace Server.Game.FSM
             if (distanceToTarget < Owner.attackRange && Owner.CheakTargetVisual(Owner.target.CellPos - Owner.CellPos))
             {
                 //공격 범위에 들어온다면 즉시 공격상태로 전환
-                Owner._state.ChangeState(Owner.AttackState);
+                Owner.state.ChangeState(Owner.AttackState);
                 return;
             }
             //else if (distanceToTarget > Owner.chaseRange && distanceToTarget <=Owner.detectionRange)
@@ -361,12 +361,12 @@ namespace Server.Game.FSM
             if (distanceToTarget <= Owner.attackRange)
             {
                 //공격 범위에 들어온다면 즉시 공격상태로 전환
-                Owner._state.ChangeState(Owner.AttackState);
+                Owner.state.ChangeState(Owner.AttackState);
                 return;
             }
             if (distanceToTarget > Owner.chaseRange && distanceToTarget <= Owner.detectionRange)
             {
-                Owner._state.ChangeState(Owner.CheckState);
+                Owner.state.ChangeState(Owner.CheckState);
             }
         }
 
@@ -424,7 +424,7 @@ namespace Server.Game.FSM
             GameObject target = Owner.target;
             if (target == null)
             {
-                Owner._state.ChangeState(Owner.ReturnState);
+                Owner.state.ChangeState(Owner.ReturnState);
                 return;
             }
 
@@ -442,13 +442,13 @@ namespace Server.Game.FSM
                 if (distanceToTarget <= Owner.chaseRange)
                 {
                     //추격범위 안이라면 추격상태 전환
-                    Owner._state.ChangeState(Owner.ChaseState);
+                    Owner.state.ChangeState(Owner.ChaseState);
                     return;
                 }
                 else if (distanceToTarget <= Owner.detectionRange)
                 {
                     //감지범위 안이라면 경계상태 전환
-                    Owner._state.ChangeState(Owner.CheckState);
+                    Owner.state.ChangeState(Owner.CheckState);
                     return;
                 }
             }
@@ -494,8 +494,8 @@ namespace Server.Game.FSM
         {
             base.Enter();
 
-       
 
+            Owner.target = null;
             Owner.PathFinding_Once(Owner.CellPos, Owner.spawnPoint, checkObjects: false);
         }
 
@@ -521,7 +521,7 @@ namespace Server.Game.FSM
             //Console.WriteLine($"close to spawn point:{distanceToTargetPos}");
             if (distanceToTargetPos <= 1f)
             {
-                Owner._state.ChangeState(Owner.IdleState);
+                Owner.state.ChangeState(Owner.IdleState);
                 return;
             }
         }
@@ -564,7 +564,7 @@ namespace Server.Game.FSM
             //거리에 따른 상태 변화
             if (Owner.target == null)  //타겟이 없다면 귀환
             {
-                Owner._state.ChangeState(Owner.ReturnState);
+                Owner.state.ChangeState(Owner.ReturnState);
                 return;
             }
 
@@ -572,17 +572,17 @@ namespace Server.Game.FSM
             //타겟이 있다면 타겟과의 거리에 따라 패턴 변경
             if (distanceToTarget <= Owner.attackRange)
             {
-                Owner._state.ChangeState(Owner.AttackState);
+                Owner.state.ChangeState(Owner.AttackState);
                 return;
             }
             else if (distanceToTarget <= Owner.chaseRange)
             {
-                Owner._state.ChangeState(Owner.ChaseState);
+                Owner.state.ChangeState(Owner.ChaseState);
                 return;
             }
             else if (distanceToTarget <= Owner.detectionRange)
             {
-                Owner._state.ChangeState(Owner.CheckState);
+                Owner.state.ChangeState(Owner.CheckState);
                 return;
             }
         }
