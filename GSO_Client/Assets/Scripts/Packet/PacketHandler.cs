@@ -25,6 +25,7 @@ internal class PacketHandler
     {
         Managers.SystemLog.Message("S_EnterGameHandler");
         var enterGamePacket = (S_EnterGame)packet;
+        Managers.Object.Clear();
 
         UIManager.Instance.leftTime = enterGamePacket.GameData.LeftTime* 60;
 

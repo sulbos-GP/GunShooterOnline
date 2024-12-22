@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using Google.Protobuf;
@@ -32,28 +33,23 @@ public class NetworkManager
     }
 
 
-    public void SettingConnection(string ip, int port, string token)
+    public bool SettingConnection(string ip, int port, string token)
     {
 
         Disconnect();
 
+        mNetworkService.Stop();
+
         ipAddr = IPAddress.Parse(ip);
-
-
-        //ipAddr = IPAddress.Loopback;
         IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
-
         Func<Session> session = () => { return _session; };
-
-
-
-        Debug.Log($"tryConnection to {ipAddr}");
+        Managers.SystemLog.Message($"tryConnection to {ipAddr}:{port}");
 
         mNetworkService.Init(endPoint, session, token);
-        mNetworkService.Start();
 
-
+        return mNetworkService.Start();
     }
+
    
 
     

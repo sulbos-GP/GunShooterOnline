@@ -129,11 +129,12 @@ namespace Server
             _skillObjDic.Clear();
             MatchInfo.Clear();
 
-       
+            
+
             ObjectManager.Instance.Reset();
 
 
-            Thread.Sleep(5000);
+            //Thread.Sleep(5000);
             Start();
 
         }
@@ -451,8 +452,11 @@ namespace Server
                     Console.WriteLine("Error_playerDic.TryGetValue is fail ");
                 }
 
-                CheakAllPlayerLeave();
-
+                if (_playerDic.Values.Count == 0)
+                {
+                    CurrentGameState = GameState.LOADING;
+                    PushAfter(1000, Reset);
+                }
             }
             else if (type == GameObjectType.Enemyai)
             {
@@ -472,8 +476,6 @@ namespace Server
             S_Despawn despawnPacket = new S_Despawn();
             despawnPacket.ObjcetIds.Add(id);
             BroadCast(despawnPacket);
-
-
 
 
 
