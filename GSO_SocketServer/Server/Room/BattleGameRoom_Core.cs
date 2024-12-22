@@ -151,7 +151,7 @@ namespace Server
             _skillObjDic.Clear();
             MatchInfo.Clear();
 
-            
+            ClearJobs();
 
             ObjectManager.Instance.Reset();
 
