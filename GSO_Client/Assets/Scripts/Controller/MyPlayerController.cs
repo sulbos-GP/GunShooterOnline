@@ -332,6 +332,8 @@ public partial class MyPlayerController : PlayerController
         {
             UIManager.Instance.ReloadBtn.interactable = false;
             SendChangeGunPacket(0, slotNumber); //총을 들고있지 않을 경우 0(널값) 전송
+            Managers.Object.MyPlayer.usingGun.curGunEquipSlot = 0;
+            Managers.Object.MyPlayer.usingGun.ResetGun();
             return;
         }
         else if(equipptedItem.item_type != ItemType.Weapon)

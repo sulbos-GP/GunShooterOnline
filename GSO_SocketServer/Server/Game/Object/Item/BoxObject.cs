@@ -30,7 +30,7 @@ namespace Server.Game.Object.Item
 
         public BoxObject()
         {
-            info.Name = "Box" + Id;
+            info.Name = "Box";
 
             ObjectType = GameObjectType.Box;
 
