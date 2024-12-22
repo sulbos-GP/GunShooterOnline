@@ -323,6 +323,7 @@ public partial class MyPlayerController : PlayerController
 
     public async void ChangeUseGun(int slotNumber)
     {
+        if(slotNumber != 1 && slotNumber != 2) return;
         await Task.Delay(100);
 
         InventoryController inven = InventoryController.Instance;

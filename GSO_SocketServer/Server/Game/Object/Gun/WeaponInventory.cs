@@ -98,8 +98,8 @@ namespace Server.Game
 
         internal void ResetGun()
         {
-            current = currentWeapon.None;
             GetCurrentWeapon().ResetGun();
+            current = currentWeapon.None;
         }
 
         internal void SetGunData(PS_GearInfo info)

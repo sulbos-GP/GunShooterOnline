@@ -51,14 +51,14 @@ public class Box : InteractableObject
     [ContextMenu("box interact")]
     public override void Interact()
     {
-        // if(InventoryController.Instance.interactBoxId != null)
-        // {
-        //     return;
-        // }
-        //
-        // InventoryController.Instance.interactBoxId = objectId;
-        // InventoryPacket.SendLoadInvenPacket(objectId);
-        //
+        if (InventoryController.Instance.interactBoxId != null)
+        {
+            return;
+        }
+
+        InventoryController.Instance.interactBoxId = objectId;
+        InventoryPacket.SendLoadInvenPacket(objectId);
+
         AudioManager.instance.PlaySound("ChestOpenCreak", gameObject.GetComponent<AudioSource>());
     }
 
