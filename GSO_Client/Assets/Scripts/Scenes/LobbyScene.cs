@@ -1,3 +1,4 @@
+using System.Collections;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -5,7 +6,7 @@ using Google.Protobuf.Protocol;
 using TMPro;
 using Ubiety.Dns.Core;
 using UnityEngine;
-using static LobbyScene;
+using UnityEngine.UI;
 
 public class LobbyScene : BaseScene
 {
@@ -17,16 +18,10 @@ public class LobbyScene : BaseScene
     }
     public EConnectMode ConnectMode = EConnectMode.LAN;
 
-    [SerializeField] private GameObject Store;
+    public string Ip = "";
 
-    [SerializeField] private GameObject Profile;
-
-    [SerializeField] private GameObject Coins;
-
-
-
-    // public string Ip = "127.0.0.1";
-    public string Ip = "10.0.2.2";
+    [SerializeField]
+    public Button PlayButton;
 
     protected override void Init()
     {
@@ -39,7 +34,7 @@ public class LobbyScene : BaseScene
 
 #elif UNITY_ANDROID
         BetterStreamingAssets.Initialize();
-        string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
+        files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
 #endif 
 
         switch (ConnectMode)
@@ -50,8 +45,6 @@ public class LobbyScene : BaseScene
 
 #elif UNITY_ANDROID
                 Ip = "10.0.2.2";
-                BetterStreamingAssets.Initialize();
-                string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
 #endif
                 break;
             case EConnectMode.WAN:
@@ -65,14 +58,38 @@ public class LobbyScene : BaseScene
                 break;
         }
 
+        PlayButton.interactable = false;
+
         ExcelReader.CopyExcel(files);
         SceneType = Define.Scene.Lobby;
         Screen.SetResolution(1920, 1080, false);
-        Debug.Log("신 초기화 로비");
-        //Managers.Network.ConnectToGame("ec2-3-36-85-125.ap-northeast-2.compute.amazonaws.com");
 
-        Managers.Network.SettingConnection(Ip, 7777, "SomeConnectionKey");
-        //Managers.Network.ConnectToGame();
+        Managers.Instance.StartCoroutine(WaitForConnection());
+
+    }
+
+    IEnumerator WaitForConnection()
+    {
+        const int MaxRetryConnect = 10;
+        int retryCount = 0;
+        while (retryCount < MaxRetryConnect)
+        {
+
+            yield return new WaitForSeconds(2.0f);
+
+            retryCount++;
+            if(false == Managers.Network.SettingConnection(Ip, 7777, "SomeConnectionKey"))
+            {
+                Managers.SystemLog.Message($"서버 접속에 실패하여 재시도 합니다. {MaxRetryConnect - retryCount}");
+                PlayButton.interactable = false;
+            }
+            else
+            {
+                Managers.SystemLog.Message("서버 접속에 성공하였습니다.");
+                PlayButton.interactable = true;
+                break;
+            }
+        }
     }
 
     public override void Clear()
@@ -107,9 +124,10 @@ public class LobbyScene : BaseScene
     {
         //Managers.Scene.LoadScene(Define.Scene.Forest);
 
+        Managers.SystemLog.Message("서버 참여 요청");
 
-
-        
+        C_JoinServer c_JoinServer = new C_JoinServer();
+        c_JoinServer.Name = "Player";
         /*c_JoinServer.Credential = new CredentiaInfo()
         {
             Uid = credential.uid,
@@ -117,6 +135,13 @@ public class LobbyScene : BaseScene
         C_JoinServer c_JoinServer = new C_JoinServer();
         c_JoinServer.Name = "jish";
         Managers.Network.Send(c_JoinServer);
+
+        //C_JoinServer c_JoinServer = new C_JoinServer();
+        //c_JoinServer.Name = "jish";
+        ////c_JoinServer.credential
+        //Managers.Network.Send(c_JoinServer);
+
+        //Debug.Log("Send C_JoinServer in LobbyScene"); 
 
         /*
         C_EnterGame c_EnterGame = new C_EnterGame();

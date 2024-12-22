@@ -26,7 +26,7 @@ public class DeleteZone : MonoBehaviour
 
     private void Awake()
     {
-        uiImage = GetComponent<Image>();
+        uiImage = transform.GetChild(0).GetComponent<Image>();
     }
 
     private void ChangeImage()

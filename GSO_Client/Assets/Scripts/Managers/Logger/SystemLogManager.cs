@@ -72,6 +72,10 @@ public class SystemLogManager
     /// </summary>
     public void Message(string message)
     {
+        if (logMessages.Count + 1 > 50)
+        {
+            logMessages.Clear();
+        }
         logMessages.Add(message);
         UpdateLogDisplay();
     }
