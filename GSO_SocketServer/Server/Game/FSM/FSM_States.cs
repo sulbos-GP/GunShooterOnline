@@ -147,7 +147,7 @@ namespace Server.Game.FSM
                 return;
             }
 
-
+            Owner.MoveAI();
 
             float dist = Vector2.Distance(targetPos, Owner.CellPos);
             //Console.WriteLine($"close to target pos:{dist}");

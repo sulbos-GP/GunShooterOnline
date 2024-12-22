@@ -277,7 +277,7 @@ namespace Server.Game.Object.Item
             }
             else if(size == EBoxSize.Large)
             {
-                x = 5;
+                x = 6;
                 y = 7;
                 weight = 40;
             }
