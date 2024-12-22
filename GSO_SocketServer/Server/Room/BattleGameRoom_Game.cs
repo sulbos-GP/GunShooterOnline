@@ -1050,6 +1050,26 @@ namespace Server
 
         List<Player> tempPlayer;
 
+
+
+        public void HandleClientLeave(Player player)
+        {
+            Console.WriteLine("tempPlayer count" + tempPlayer.Count);
+            if(tempPlayer.Contains(player) == true){
+                tempPlayer.Remove(player);
+
+            }
+
+            Console.WriteLine("tempPlayer count after " + tempPlayer.Count);
+
+        }
+
+
+
+
+
+
+
         public void HandleClientLoadGame(Player player)
         {
 
@@ -1097,7 +1117,7 @@ namespace Server
 
             }
 #else
-            if (tempPlayer.Count == 1) // 초코파이 접속할 인원에 따라 변경
+            if (tempPlayer.Count == 2) // 초코파이 접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
@@ -1129,14 +1149,13 @@ namespace Server
                 }
             }
 
-            int count = 2;
+            int count = 0;
             foreach (AISpawnZone zone in map.aispawnZones)
             {
-                if(count-- <= 0)
-                      continue;
 
+                count++;
 
-                if(count == 1)
+                if (count % 2 == 1)
                 {
                     RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
                     {

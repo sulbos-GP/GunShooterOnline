@@ -67,6 +67,8 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             base.Enter();
+            Owner.target = null;
+
             storeTickCount = Environment.TickCount;
         }
 
@@ -605,6 +607,7 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             base.Enter();
+            Owner.target = null;
 
             //사라지는 시간동안 대기 후 사망 후처리 진행
             //Owner.gameRoom.PushAfter((int)(Owner.disappearTime*1000), DestroyOwner);
