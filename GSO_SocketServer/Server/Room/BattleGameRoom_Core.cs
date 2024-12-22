@@ -139,16 +139,13 @@ namespace Server
 
         }
 
-        private bool CheakAllPlayerLeave()
+        private void CheakAllPlayerLeave()
         {
             if (_playerDic.Values.Count == 0)
             {
-                Reset();
-                return true;
+                CurrentGameState = GameState.LOADING;
+                PushAfter(1000, Reset);
             }
-
-
-            return false;
         }
 
 
@@ -452,11 +449,8 @@ namespace Server
                     Console.WriteLine("Error_playerDic.TryGetValue is fail ");
                 }
 
-                if (_playerDic.Values.Count == 0)
-                {
-                    CurrentGameState = GameState.LOADING;
-                    PushAfter(1000, Reset);
-                }
+                CheakAllPlayerLeave();
+                
             }
             else if (type == GameObjectType.Enemyai)
             {

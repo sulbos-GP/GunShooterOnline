@@ -88,15 +88,21 @@ namespace Server
 
             //게임 종료
 #if DEBUG
-            {
-                Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
-                
-                Task.Delay(minutes * 60 * 1000).Wait();
+            
 
-                Console.WriteLine("Stop game server");
+                while(true)
+                {
+                    Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
 
-                gameserver.Stop();
-            }
+                    Task.Delay(minutes * 60 * 1000).Wait();
+                    //Task.Delay(5000).Wait();
+
+                    Console.WriteLine("Stop game server");
+                    gameserver.ResetServer();
+                    //gameserver.Stop();
+                }
+
+
 #endif
         }
     }
