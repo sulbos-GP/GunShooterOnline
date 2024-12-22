@@ -337,11 +337,16 @@ public class InputController : MonoBehaviour
 
     private void Aim(Vector2 dir) //돌리기
     {
-        //pivot ȸ��
+        //pivot 회전
+
+        Debug.Log("Dir" + dir);
+
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         var gunTrn = transform.GetChild(0);
         gunTrn.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
 
+
+        
         aimFov.SetAimDirection(dir); //fov ȸ��
         FlipGunSprite(dir.x);
     }
@@ -410,8 +415,16 @@ public class InputController : MonoBehaviour
         UpdateServer();
     }
 
+
+    Vector2 last;
     private void UpdateServer()
     {
+
+        Vector2 currentPosition = new Vector2(transform.position.x, transform.position.y);
+
+        // 위치 차이가 0.1 이상일 때만 실행
+        if (Vector2.Distance(last, currentPosition) > 0.1f)
+        {
             var movePack = new C_Move();
             movePack.PositionInfo = new PositionInfo
             {
@@ -422,7 +435,12 @@ public class InputController : MonoBehaviour
                 PosY = transform.position.y,
                 RotZ = transform.rotation.z,
             };
+
             Managers.Network.Send(movePack);
+
+            // 마지막 위치를 현재 위치로 갱신
+            last = currentPosition;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

@@ -117,6 +117,9 @@ public class Player : CreatureObj
         if (gameRoom == null)
             return;
 
+
+        weapon.CancelReload();
+
         S_Spawn spawnPacket = new S_Spawn();
         {
             Vector2 gearBoxCellPos = new Vector2(this.CellPos.X + 0.5f, this.CellPos.Y + 0.5f);

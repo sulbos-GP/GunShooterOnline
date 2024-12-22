@@ -130,6 +130,11 @@ namespace Server.Game
 
         }
 
+        public void CancelReload()
+        {
+            GetCurrentWeapon().CancelReload();
+        }
+
         internal void Reload()
         {
             GetCurrentWeapon().Reload();

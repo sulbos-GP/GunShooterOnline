@@ -201,21 +201,27 @@ public class Gun : MonoBehaviour
             elapseTime += Time.deltaTime;
             yield return null;
         }
-
-
-        //나중에 패킷매니저에서 리로드 결과 받아오기
-        //CurAmmo = reloadAmount;
-        gunState = GunState.Shootable;
-        UIManager.Instance.SetActiveReloadBtn(true);
-        UIManager.Instance.SetAmmoText();
-
-        //(TODO) 인벤에 총알의 양을 감소시킴
     }
 
     public void ReloadDone(int reloadAmount)
     {
         CurAmmo = reloadAmount;
         gunState = GunState.Shootable;
+        UIManager.Instance.SetActiveReloadBtn(true);
+        UIManager.Instance.SetAmmoText();
+    }
+
+    public void ReloadFail()
+    {
+        if(CurAmmo == 0)
+        {
+            gunState = GunState.Empty;
+        }
+        else
+        {
+            gunState = GunState.Shootable;
+        }
+
         UIManager.Instance.SetActiveReloadBtn(true);
         UIManager.Instance.SetAmmoText();
     }

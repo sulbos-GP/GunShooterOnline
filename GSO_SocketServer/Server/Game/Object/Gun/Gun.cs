@@ -232,14 +232,43 @@ namespace Server.Game
 
             }
 
-
+            _Reload = true;
 
 
         }
 
+        bool _Reload = true;    
+
+        /// <summary>
+        /// 취소 되면 : 총 장전중에 인벤에 넣기, 플레이어 죽기, 
+        /// </summary>
+        public void CancelReload()
+        {
+            _Reload = false;
+        }
+
+
+
+
         //실질적인 재장전
         private async void HandleReload()
         {
+            if (_Reload == false)
+            {
+
+                S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
+                gunDataUpdate.IsSuccess = false;
+                gunDataUpdate.GunData = new PS_GearInfo
+                {
+                    Part = weaponInven.GetCurrentWeaponGearPart(),
+                    Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
+                };
+                ownerPlayer.Session.Send(gunDataUpdate);
+
+                return;
+            }
+
+
             //CurAmmo = GunData.reload_round;
             UsingGunState = GunState.Shootable;
 
@@ -333,7 +362,7 @@ namespace Server.Game
 
             Console.WriteLine($"Current Ammo : {gunItemData.Loaded_ammo}, Max Ammo :  {GunData.reload_round}");
 
-
+            _Reload = false;
         }
 
         //다음 발사까지 대기

@@ -321,9 +321,10 @@ public partial class MyPlayerController : PlayerController
         quickSlotBtn2.onClick.AddListener(() => ChangeUseGun(2));
     }
 
-    private async void ChangeUseGun(int slotNumber)
+    public async void ChangeUseGun(int slotNumber)
     {
         await Task.Delay(100);
+
         InventoryController inven = InventoryController.Instance;
         ItemData equipptedItem = inven.GetItemInDictByGearCode(slotNumber);
         if (equipptedItem == null)
@@ -366,9 +367,6 @@ public partial class MyPlayerController : PlayerController
             packet.GunType.Part = PE_GearPart.SubWeapon;
 
         }
-
-
-
 
         Managers.Network.Send(packet);
         Debug.Log($"C_ChangeAppearance 전송 {packet.ObjectId}, {packet.GunType.Part}");
