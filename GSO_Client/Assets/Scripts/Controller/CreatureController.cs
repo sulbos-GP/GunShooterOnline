@@ -155,13 +155,11 @@ public class CreatureController : BaseController
             animator.SetBool("IsMove", true);
             if (creaturePos.x < nextPos.x)
             {
-                transform.localScale = reverseScale;
-                Debug.Log("우");
+                transform.localScale = basicScale;
             }
             else
             {
-                transform.localScale = basicScale;
-                Debug.Log("좌");
+                transform.localScale = reverseScale;
             }
         }
         else

@@ -13,8 +13,6 @@ public class Box : InteractableObject
     public Vector2Int size;
     public double weight;
 
-    public bool interactable;
-
     public Material mat { get;  set; }
     private void Awake()
     {
@@ -28,7 +26,6 @@ public class Box : InteractableObject
         mat = Instantiate(originalMaterial);
         // 이 복제본을 자식 오브젝트의 SpriteRenderer에 적용
         transform.GetChild(0).GetComponent<SpriteRenderer>().material = mat;
-        interactable = true; 
         interactRange = 2;
         invenUI = InventoryController.Instance.otherInvenUI;
         SetTriggerSize();
@@ -54,16 +51,15 @@ public class Box : InteractableObject
     [ContextMenu("box interact")]
     public override void Interact()
     {
-        if (interactable)
-        {
-            InventoryPacket.SendLoadInvenPacket();
-            InventoryPacket.SendLoadInvenPacket(objectId);
-            AudioManager.instance.PlaySound("ChestOpenCreak",gameObject.GetComponent<AudioSource>());
-        }
-        else
-        {
-            Debug.Log("불가");
-        }
+        // if(InventoryController.Instance.interactBoxId != null)
+        // {
+        //     return;
+        // }
+        //
+        // InventoryController.Instance.interactBoxId = objectId;
+        // InventoryPacket.SendLoadInvenPacket(objectId);
+        //
+        AudioManager.instance.PlaySound("ChestOpenCreak", gameObject.GetComponent<AudioSource>());
     }
 
     protected override void OnTriggerEnter2D(Collider2D collision)

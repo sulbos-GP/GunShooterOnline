@@ -249,7 +249,7 @@ class PacketHandler
             Player p = ObjectManager.Instance.Add<Player>();
             {
                 p.Session = clientSession;
-                p.info.Name = packet.Name + clientSession.SessionId;
+                p.info.Name = packet.Name + cnt;
                 p.info.PositionInfo.PosX = 0;
                 p.info.PositionInfo.PosY = 0;
                 //p.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;

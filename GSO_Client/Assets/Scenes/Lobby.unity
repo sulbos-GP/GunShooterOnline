@@ -678,10 +678,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ConnectMode: 0
-  Store: {fileID: 0}
-  Profile: {fileID: 0}
-  Coins: {fileID: 0}
   Ip: 10.0.2.2
+  PlayButton: {fileID: 63131421}
 --- !u!1 &1565354865
 GameObject:
   m_ObjectHideFlags: 0

@@ -65,8 +65,8 @@ namespace Server.Game
         {
             weaponInven = weapon;
 
-            weapon.MainGun.CurAmmo = 39;
-            //ResetGun();
+            //weapon.MainGun.CurAmmo = 39;
+            ResetGun();
         }
 
         //클라로부터 사용할 총을 지정하여 ChangeAppearence 패킷을 받은 경우 => 총의 번호가 유효할 경우

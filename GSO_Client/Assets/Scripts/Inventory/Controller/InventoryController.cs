@@ -94,6 +94,8 @@ public partial class InventoryController : MonoBehaviour
     public OtherInventoryUI otherInvenUI;
     public Transform deleteUI;
     public Button rotateBtn;
+    public bool OnWaitSwitchPacket;
+
 
     [Header("PlayerInput")]
     public bool isActive = false; //UI가 켜져 있는가?
