@@ -260,8 +260,12 @@ public class CreatureController : BaseController
             return;
         IsDead = true;
         //TO - DO : 2024.10.08 수정 예정
-        if (Managers.Object.MyPlayer.Hp==0)
+        if (Managers.Object.MyPlayer.Hp == 0)
+        {
             UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
+            AudioManager.instance.StopAllSounds();
+        }
+
         Debug.Log(transform.name + "Dead");
         //GameObject effect = Managers.Resource.Instantiate("Effect/DieEffect");
         //effect.transform.position = transform.position;
