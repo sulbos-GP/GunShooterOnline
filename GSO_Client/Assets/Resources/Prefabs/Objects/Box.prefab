@@ -117,7 +117,6 @@ MonoBehaviour:
   interactRange: 0
   size: {x: 0, y: 0}
   weight: 0
-  interactable: 0
 --- !u!114 &6181354331980278802
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -385,7 +384,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a3837a0e898d3c94b9eac3a396dd9a28, type: 2}
+  - {fileID: 2100000, guid: 8980473ab7fc5174ca8ed2d7e9893282, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

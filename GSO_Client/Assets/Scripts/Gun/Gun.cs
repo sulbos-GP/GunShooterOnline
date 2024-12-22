@@ -207,6 +207,7 @@ public class Gun : MonoBehaviour
             elapseTime += Time.deltaTime;
             yield return null;
         }
+        AudioManager.instance.PlaySound("Reload",gameObject.GetComponent<AudioSource>());
     }
 
     public void ReloadDone(int reloadAmount)
