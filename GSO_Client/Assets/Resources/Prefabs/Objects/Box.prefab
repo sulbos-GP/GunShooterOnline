@@ -117,7 +117,6 @@ MonoBehaviour:
   interactRange: 0
   size: {x: 0, y: 0}
   weight: 0
-  interactable: 0
 --- !u!114 &6181354331980278802
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -123,7 +123,8 @@ public class LobbyScene : BaseScene
     public void GamePlay()
     {
         //Managers.Scene.LoadScene(Define.Scene.Forest);
-
+        AudioManager.instance.PlaySound("Play",PlayButton.GetComponent<AudioSource>());
+        
         Managers.SystemLog.Message("서버 참여 요청");
 
         C_JoinServer c_JoinServer = new C_JoinServer();

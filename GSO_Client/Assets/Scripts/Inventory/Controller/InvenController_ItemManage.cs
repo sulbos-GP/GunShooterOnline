@@ -3,7 +3,7 @@ using UnityEngine;
 public partial class InventoryController
 {
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» Áý°Å³ª ³õÀ»¶§ÀÇ »óÈ£ÀÛ¿ë
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Å³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È£ï¿½Û¿ï¿½
     /// </summary>
     private void ItemEvent()
     {
@@ -13,6 +13,7 @@ public partial class InventoryController
             {
                 ItemReleaseInEquip(selectedItem, selectedEquip);
                 ResetSelection();
+                AudioManager.instance.PlaySound("ItemInteract",AudioManager.instance.GetComponent<AudioSource>());
                 return;
             }
             if (isOnDelete)
@@ -25,13 +26,14 @@ public partial class InventoryController
             {
                 gridPosition = WorldToGridPos();
                 ItemReleaseInGrid(selectedItem, gridPosition);
-                
                 ResetSelection();
+                AudioManager.instance.PlaySound("ItemInteract",AudioManager.instance.GetComponent<AudioSource>());
                 return;
             }
             UndoSlot(SelectedItem);
             UndoItem(SelectedItem);
             ResetSelection();
+            AudioManager.instance.PlaySound("ItemInteract",AudioManager.instance.GetComponent<AudioSource>());
         }
         else
         {
@@ -46,8 +48,9 @@ public partial class InventoryController
                         {
                             return;
                         }
-                        selectedEquip.SetEquipItemObj(SelectedItem); //½ÇÆÐ½Ã ¿øÀ§Ä¡·Î
+                        selectedEquip.SetEquipItemObj(SelectedItem); //ï¿½ï¿½ï¿½Ð½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä¡ï¿½ï¿½
                         ResetSelection();
+                        AudioManager.instance.PlaySound("ItemInteract",AudioManager.instance.GetComponent<AudioSource>());
                         return;
                     }
                     if (selectedItem != null)
@@ -64,7 +67,7 @@ public partial class InventoryController
                 gridPosition = WorldToGridPos();
                 
                 ItemObject clickedItem = selectedGrid.GetItem(gridPosition.x, gridPosition.y);
-                if (clickedItem == null) { Debug.Log("ÇØ´ç À§Ä¡¿¡ ¾ÆÀÌÅÛÀÌ¾øÀ½");  return; }
+                if (clickedItem == null) { Debug.Log("ï¿½Ø´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½");  return; }
 
 
                 if (clickedItem.isHide == true)
@@ -78,6 +81,7 @@ public partial class InventoryController
                 else
                 {
                     ItemGet(gridPosition);
+                    AudioManager.instance.PlaySound("ItemInteract",AudioManager.instance.GetComponent<AudioSource>());
                 }
                 return;
             }
@@ -85,7 +89,7 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// pos¿¡ ÇØ´çÇÏ´Â À§Ä¡¿¡ ¾ÆÀÌÅÛÀÌ Á¸ÀçÇÒ°æ¿ì ±×¸®µåÀÇ ¾ÆÀÌÅÛ Á¦°Å ¹× selectedItemÀ¸·Î ÁöÁ¤
+    /// posï¿½ï¿½ ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò°ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ selectedItemï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     /// </summary>
     /// <param name="pos"></param>
     private void ItemGet(Vector2Int pos)
@@ -97,19 +101,19 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ³ª´­ °æ¿ì
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
     /// </summary>
     private void ItemDivide(ItemObject item, Vector2Int gridPos)
     {
         DivideInterface divideInterface = Managers.Resource.Instantiate("UI/InvenUI/DivideItemInterface", item.transform.parent).GetComponent<DivideInterface>();
         divideInterface.SetInterfacePos();
 
-        //ÀÏ´Ü divide¸ðµå¿¡¼­ »èÁ¦·Î °¥°æ¿ì¿¡´Â µð¹ÙÀÌµå Àû¿ë¾øÀÌ ±×³É ÀüÃ¼ ¾ÆÀÌÅÛ »èÁ¦ÀÓ
+        //ï¿½Ï´ï¿½ divideï¿½ï¿½å¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ì¿¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
         if (IsEquipSlot(item.parentObjId))
         {
             EquipSlotBase target =equipSlotDic[item.parentObjId];
-            //¿Å±ä À§Ä¡°¡ ÀåÂøÄ­
+            //ï¿½Å±ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä­
             if (item.backUpParentId == selectedEquip.slotId)
             {
                 UndoSlot(item);
@@ -120,7 +124,7 @@ public partial class InventoryController
         }
         else
         {
-            //¿Å±ä À§Ä¡°¡ ±×¸®µå
+            //ï¿½Å±ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½×¸ï¿½ï¿½ï¿½
             if (item.backUpParentId == selectedGrid.objectId && item.backUpItemPos == gridPos)
             {
                 UndoSlot(item);
@@ -135,7 +139,7 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ÀåÂøÄ­¿¡ ¹èÄ¡ÇÒ °æ¿ì
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½
     /// </summary>
     private void ItemReleaseInEquip(ItemObject item, EquipSlotBase slot)
     {
@@ -148,45 +152,45 @@ public partial class InventoryController
             }
             else
             {
-                if (slot.equipItemObj != null) //ÀåÂøÄ­¿¡ ¾ÆÀÌÅÛÀÌ Á¸ÀçÇÔ
+                if (slot.equipItemObj != null) //ï¿½ï¿½ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                 {
                     if (CheckAbleToMerge(item, slot.equipItemObj))
                     {
-                        //ÇÕÄ¥ ¼ö ÀÖÀ» °æ¿ì
+                        //ï¿½ï¿½Ä¥ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
                         int needAmount = selectedItem.ItemAmount + slot.equipItemObj.ItemAmount <= ItemObject.maxItemMergeAmount
                             ? selectedItem.ItemAmount : ItemObject.maxItemMergeAmount - slot.equipItemObj.ItemAmount;
 
                         InventoryPacket.SendMergeItemPacket(item, slot.equipItemObj, needAmount);
                     }
-                    else if (item.itemData.item_type == slot.equipType) //±³Ã¼°¡ °¡´ÉÇÒ °æ¿ì
+                    else if (item.itemData.item_type == slot.equipType) //ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
                     {
-                        //±³Ã¼ ÆÐÅ¶ »ý¼º?
-                        //µé°í ÀÖ´Â ¾ÆÀÌÅÛ ÀåÂø ¹× ¿ø·¡ ÀÖ´ø ¾ÆÀÌÅÛÀ» µé°íÀÖ´Â ¾ÆÀÌÅÛÀÌ ÀÖ´ø À§Ä¡·Î ÀÌµ¿
-                        //¿ø·¡ ÀÖ´ø À§Ä¡°¡ ÀåÂøÄ­ÀÌ¶ó¸é ¶È°°ÀÌ ÀåÂøÇÏ°í ÀÎº¥Åä¸®¶ó¸é ¹èÄ¡ °¡´É¿©ºÎ È®ÀÎÈÄ ¹èÄ¡. ¹èÄ¡ ºÒ°¡´É½Ã ¹Ù´Ú¿¡ ¹ö¸®±â(»óÀÚ»ý¼º)
+                        //ï¿½ï¿½Ã¼ ï¿½ï¿½Å¶ ï¿½ï¿½ï¿½ï¿½?
+                        //ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ìµï¿½
+                        //ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ä­ï¿½Ì¶ï¿½ï¿½ ï¿½È°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½ ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½É¿ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡. ï¿½ï¿½Ä¡ ï¿½Ò°ï¿½ï¿½É½ï¿½ ï¿½Ù´Ú¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(ï¿½ï¿½ï¿½Ú»ï¿½ï¿½ï¿½)
                         
 
-                        //ÀÓ½Ã·Î ±³Ã¼°¡ °¡´ÉÇÑ °æ¿ì¸¦ ¸·±â
+                        //ï¿½Ó½Ã·ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¸¦ ï¿½ï¿½ï¿½ï¿½
                         UndoSlot(SelectedItem);
                         UndoItem(SelectedItem);
                     }
                     else 
                     {
-                        //¹èÄ¡°¡ ºÒ°¡´É
+                        //ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½Ò°ï¿½ï¿½ï¿½
                         UndoSlot(SelectedItem);
                         UndoItem(SelectedItem);
                     }
                 }
-                else //ÀåÂøÄ­ÀÌ ºñ¾îÀÖÀ¸´Ï ±×³É ¹èÄ¡
+                else //ï¿½ï¿½ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½ï¿½Ä¡
                 {
                     if(slot.slotId == item.backUpParentId) 
                     {
-                        //ÀåÂøÄ­¿¡ ¹æ±Ý»« ¾ÆÀÌÅÛÀ» ´Ù½Ã ¹èÄ¡ÇÒ °æ¿ì ¿¹¿ÜÃ³¸®
+                        //ï¿½ï¿½ï¿½ï¿½Ä­ï¿½ï¿½ ï¿½ï¿½Ý»ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ã³ï¿½ï¿½
                         UndoSlot(SelectedItem);
                         UndoItem(SelectedItem);
                         return;
                     }
 
-                    //¹®Á¦°¡ ¾ø´Ù¸é move
+                    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ù¸ï¿½ move
                     InventoryPacket.SendMoveItemPacket(item);
                 }
             } 
@@ -199,7 +203,7 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» »èÁ¦ÇÒ°æ¿ì
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò°ï¿½ï¿½
     /// </summary>
     private void ItemReleaseInDelete()
     {
@@ -207,7 +211,7 @@ public partial class InventoryController
     }
 
     /// <summary>
-    /// ¾ÆÀÌÅÛÀ» ÀÎº¥Åä¸® ±×¸®µå¿¡ ¹èÄ¡ÇÒ°æ¿ì
+    /// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îºï¿½ï¿½ä¸® ï¿½×¸ï¿½ï¿½å¿¡ ï¿½ï¿½Ä¡ï¿½Ò°ï¿½ï¿½
     /// </summary>
     private void ItemReleaseInGrid(ItemObject item, Vector2Int pos)
     {
@@ -264,7 +268,7 @@ public partial class InventoryController
 
     public void DestroyItem(ItemObject targetItem)
     {
-        //µñ¼Å³Ê¸®¿¡¼­ »èÁ¦ ¹× ¾ÆÀÌÅÛ ¿ÀºêÁ§Æ® »èÁ¦
+        //ï¿½ï¿½Å³Ê¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½ï¿½ï¿½ï¿½
         instantItemDic.Remove(targetItem.itemData.objectId);
         targetItem.DestroyItem();
     }
