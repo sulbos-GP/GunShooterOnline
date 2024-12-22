@@ -874,6 +874,10 @@ internal class PacketHandler
             {
                 Managers.Object.MyPlayer.usingGun.ReloadDone(packet.GunData.Item.Attributes.LoadedAmmo);
             }
+            else
+            {
+                Managers.Object.MyPlayer.usingGun.ReloadFail();
+            }
 
         }
         else
