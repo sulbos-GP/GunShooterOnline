@@ -244,6 +244,7 @@ namespace Server.Game
         /// </summary>
         public void CancelReload()
         {
+            Console.WriteLine("장전취소");
             _Reload = false;
         }
 
