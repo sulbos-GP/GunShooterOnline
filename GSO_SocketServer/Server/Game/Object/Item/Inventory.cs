@@ -110,7 +110,15 @@ namespace Server.Game
                 int scaleY = backpackData.total_scale_y;
                 double weight = backpackData.total_weight;
 
-                this.storage_id = backpackItem.UnitStorageId.Value;
+                if(null != backpackItem.UnitStorageId)
+                {
+                    this.storage_id = backpackItem.UnitStorageId.Value;
+                }
+                else
+                {
+                    this.storage_id = 0;
+                }
+                
                 storage.Init(scaleX, scaleY, weight);
 
                 Console.WriteLine($"Player.UID[{owner.UID}] 가방 아이디 {this.storage_id}");

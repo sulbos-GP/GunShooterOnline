@@ -82,9 +82,40 @@ namespace Server.Game.Object.Item
             else
             {
                 SetBox(pos, EBoxSize.Large);
-                AddRandgeItem(EItemType.Spoil, 3, 5);
+                RandomBox(3, 5);
                 FitBox();
             }
+        }
+
+        public void RandomBox(int min, int max)
+        {
+            Random random = new Random();
+            int count = random.Next(min, max);
+
+            while (count > 0)
+            {
+                foreach (EItemType type in Enum.GetValues(typeof(EItemType)))
+                {
+
+                    if(type == EItemType.None)
+                    {
+                        continue;
+                    }
+
+                    int chance = GetItemProbability(type);
+                    if (random.Next(1, 101) <= chance)
+                    {
+                        FMasterItemBase data = GetItemDataWithType(type);
+                        int amount = random.Next(1, GetItemMaxAmount(type, data.amount));
+
+                        AddItem(InstanceItemUnit(data, amount));
+                        count--;
+
+                        break;
+                    }
+                }
+            }
+
         }
 
         public void SetBox(Vector2 pos, EBoxSize size)
@@ -268,7 +299,7 @@ namespace Server.Game.Object.Item
             int range = 100 * (int)type;
 
             var items = DatabaseHandler.Context.MasterItemBase
-                .Where(item => item.Value.item_id >= range && item.Value.item_id < range + 100)
+                .Where(item => item.Value.item_id >= range + 1 && item.Value.item_id < range + 100)
                 .ToDictionary();
 
             int item_id = rand.Next(items.Keys.Min(), items.Keys.Max());
@@ -302,6 +333,48 @@ namespace Server.Game.Object.Item
             newItem.Init(null, item);
 
             return newItem;
+        }
+
+        private int GetItemProbability(EItemType type)
+        {
+            switch(type)
+            {
+                case EItemType.Weapone:
+                    return 3;
+                case EItemType.Defensive:
+                    return 5;
+                case EItemType.Bag:
+                    return 7;
+                case EItemType.Recovery:
+                    return 23;
+                case EItemType.Bullet:
+                    return 40;
+                case EItemType.Spoil:
+                    return 100;
+                default:
+                    return 0;
+            }
+        }
+
+        private int GetItemMaxAmount(EItemType type, int maxAmount)
+        {
+            switch (type)
+            {
+                case EItemType.Weapone:
+                    return maxAmount;
+                case EItemType.Defensive:
+                    return maxAmount;
+                case EItemType.Bag:
+                    return maxAmount;
+                case EItemType.Recovery:
+                    return (5 < maxAmount) ? 5 : maxAmount;
+                case EItemType.Bullet:
+                    return (20 < maxAmount) ? 20 : maxAmount;
+                case EItemType.Spoil:
+                    return maxAmount;
+                default:
+                    return 0;
+            }
         }
 
         private FMasterItemBase GetItemDataWithName(string name)
