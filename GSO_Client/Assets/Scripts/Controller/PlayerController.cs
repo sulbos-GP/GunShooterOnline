@@ -12,7 +12,9 @@ public class PlayerController : CreatureController
     private float Timer = 0.0f;
     private float moveInterval = 0.5f;
     public AudioSource AudioSource;
-   
+
+    public Gun usingGun { get; protected set; } //플레이어가 들고있는 총(발사하는 총)
+
 
     private void FixedUpdate()
     {
@@ -24,9 +26,19 @@ public class PlayerController : CreatureController
     {
         base.Init();
         Debug.Log("init");
+
         animator = transform.GetChild(1).GetComponent<Animator>();
         characterSprite = transform.GetChild(1).GetComponent<SpriteRenderer>();
         AudioSource = transform.GetComponent<AudioSource>();
+
+        usingGun = transform.Find("Pivot/Gun").GetComponent<Gun>();
+        usingGun.Init();
+
+        Debug.Log("usingGun");
+
+
+        UIManager.Instance.SetReloadBtnListener(usingGun);
+
     }
 
     protected override void UpdateController()

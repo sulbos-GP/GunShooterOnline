@@ -253,6 +253,25 @@ namespace Server.Game
             return _Reload;
         }
 
+
+
+/*        public void SetRotion(float angle)
+        {
+
+            S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
+
+         
+            gunDataUpdate.GunData = new PS_GearInfo
+            {
+                Part = weaponInven.GetCurrentWeaponGearPart(),
+                Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
+            };
+            ownerPlayer.Session.Send(gunDataUpdate);
+        }
+*/
+
+
+
         //실질적인 재장전
         private async void HandleReload()
         {
@@ -260,8 +279,12 @@ namespace Server.Game
             {
 
                 S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
-                gunDataUpdate.IsSuccess = false;
-                
+                gunDataUpdate.GunReloadSuccess = false;
+                gunDataUpdate.GunData = new PS_GearInfo
+                {
+                    Part = weaponInven.GetCurrentWeaponGearPart(),
+                    Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
+                };
                 ownerPlayer.Session.Send(gunDataUpdate);
 
                 return;
@@ -280,8 +303,12 @@ namespace Server.Game
             {
                 await Console.Out.WriteLineAsync("Ammo is null");
                 S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
-                gunDataUpdate.IsSuccess = false;
-               
+                gunDataUpdate.GunReloadSuccess = false;
+                gunDataUpdate.GunData = new PS_GearInfo
+                {
+                    Part = weaponInven.GetCurrentWeaponGearPart(),
+                    Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
+                };
                 ownerPlayer.Session.Send(gunDataUpdate);
 
                 return;      
@@ -350,7 +377,7 @@ namespace Server.Game
 
 
                 S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
-                gunDataUpdate.IsSuccess = true;
+                gunDataUpdate.GunReloadSuccess = true;
                 gunDataUpdate.GunData = new PS_GearInfo
                 {
                     Part = weaponInven.GetCurrentWeaponGearPart(),

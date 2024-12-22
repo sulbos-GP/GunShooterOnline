@@ -63,7 +63,6 @@ namespace Server.Game.Object
 
         }
 
-        public Vector2 rangeAttackDir;
         public override void DoAttack()
         {
             base.DoAttack();
@@ -72,7 +71,6 @@ namespace Server.Game.Object
                         AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
                         attack.Init(this, attackPolygon, 10);*/
 
-            rangeAttackDir = Vector2.Normalize(target.CellPos - CellPos);
 
             /*  S_AiAttackReady s_AiAttackReady = new S_AiAttackReady();
 
