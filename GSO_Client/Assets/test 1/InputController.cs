@@ -5,7 +5,7 @@ using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
 using UnityEngine.UI;
 using Unity.Burst.Intrinsics;
-using static UnityEditor.Progress;
+//using static UnityEditor.Progress;
 
 
 public class InputController : MonoBehaviour

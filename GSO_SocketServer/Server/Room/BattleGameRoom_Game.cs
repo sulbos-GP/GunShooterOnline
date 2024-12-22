@@ -980,7 +980,7 @@ namespace Server
             if (packet.GunRoation != null) 
             {
                 //player.weapon.Angle = packet.GunRoation;
-                Console.WriteLine(packet.GunRoation.Roation);
+                //Console.WriteLine(packet.GunRoation.Roation);
                 player.weapon.SetRotion(packet.GunRoation.Roation);
                 
 
