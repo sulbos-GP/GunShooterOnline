@@ -45,7 +45,7 @@ public class PlayerController : CreatureController
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-        AudioSource.Play();
+        AudioManager.instance.PlaySound("Move",gameObject.GetComponent<AudioSource>());
 
         //rig.MovePosition(rig.position + newVec2);
 
@@ -55,7 +55,7 @@ public class PlayerController : CreatureController
 
     protected override void UpdateIdle()
     {
-        AudioSource.Stop();
+        AudioManager.instance.StopSound(gameObject.GetComponent<AudioSource>());
     }
 
 
