@@ -217,20 +217,7 @@ public class Gun : MonoBehaviour
         UIManager.Instance.SetAmmoText();
     }
 
-    public void ReloadFail()
-    {
-        if(CurAmmo == 0)
-        {
-            gunState = GunState.Empty;
-        }
-        else
-        {
-            gunState = GunState.Shootable;
-        }
-
-        UIManager.Instance.SetActiveReloadBtn(true);
-        UIManager.Instance.SetAmmoText();
-    }
+    
 
     //FovPlayer의 코루틴에서 사용
     public float GetFireRate()
