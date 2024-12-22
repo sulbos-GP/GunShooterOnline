@@ -31,7 +31,7 @@ public class PacketHandler
     public static int cnt = 1;
 
 
-  
+
     internal static void C_EnterGameHandler(PacketSession session, IMessage message)
     {
         // (인게임)1명 입장 패킷
@@ -72,7 +72,7 @@ public class PacketHandler
         BattleGameRoom room = clientSession.Room; //나중에 null로 바꿔도 참조가능
 
 
-        room.Push(room.HandleMove , clientSession.MyPlayer, packet.PositionInfo);
+        room.Push(room.HandleMove, clientSession.MyPlayer, packet.PositionInfo);
 
     }
 
@@ -121,7 +121,7 @@ public class PacketHandler
             player.gameRoom.Push(player.gameRoom.CloseInventoryHandler, player, packet.SourceObjectId);
 
         }
-        
+
     }
 
     internal static void C_SearchItemHandler(PacketSession session, IMessage message)
@@ -196,19 +196,26 @@ public class PacketHandler
     {
         ClientSession clientSession = session as ClientSession;
         C_ExitGame packet = (C_ExitGame)message;
+
         Console.WriteLine($"C_ExitPacketHandler");
 
         Player player = clientSession.MyPlayer;
 
-        if(player == null) //Lobby
+        if (player == null) //Lobby
         {
             return;
         }
 
         if (packet.IsNormal == true)
+        {
             player.gameRoom.Push(player.gameRoom.HandleExitGame, player, packet.ExitId);
+
+        }
         else
+        {
             player.gameRoom.Push(player.gameRoom.LeaveGame, player.Id);
+            player.gameRoom.HandleClientLeave(player);
+        }
 
     }
 
@@ -218,7 +225,7 @@ public class PacketHandler
 
         //Task.Delay(1000).Wait();
 
-       
+
 
         //접속 요청
         ClientSession clientSession = session as ClientSession;
@@ -226,15 +233,16 @@ public class PacketHandler
 
         //인증 과정
 
-        if(packet.Credential ==  null) {
+        if (packet.Credential == null)
+        {
             Console.WriteLine("packet.Credential is null -> debug mode");
         }
 
         GameRoom gameRoom = Program.gameserver.gameRoom;
-        if(gameRoom.sessions.Contains(clientSession) == false) //클라이언트 세션이 없으면
+        if (gameRoom.sessions.Contains(clientSession) == false) //클라이언트 세션이 없으면
         {
             gameRoom.sessions.Add(clientSession); //추가
-        } 
+        }
         else //있으면
         {
             return;
@@ -329,7 +337,7 @@ public class PacketHandler
         Console.WriteLine($"playerid : {packet.ObjectId}");
         //Console.WriteLine($"gunId : {packet.GunId}"); //총의 마스터 아이디 -> 아이템 오브젝트 아이디
         Player player = clientSession.MyPlayer;
-        
+
         player.gameRoom.Push(player.gameRoom.ChangeAppearance, player, packet.ObjectId, packet.GunType);
     }
 
@@ -351,7 +359,7 @@ public class PacketHandler
         ClientSession clientSession = session as ClientSession;
 
         ulong last;
-        if(session.LastTick.TryGetValue(session.Rindex++, out last) == true)
+        if (session.LastTick.TryGetValue(session.Rindex++, out last) == true)
         {
             session.RTT = (uint)(LogicTimer.Tick - last) / 2;
             //Console.WriteLine("1. session.RTT : " + session.RTT);
