@@ -281,11 +281,7 @@ namespace Server.Game
                 S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
                 gunDataUpdate.OwnerId = ownerPlayer.Id;
                 gunDataUpdate.GunReloadSuccess = false;
-                gunDataUpdate.GunData = new PS_GearInfo
-                {
-                    Part = weaponInven.GetCurrentWeaponGearPart(),
-                    Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
-                };
+                
                 ownerPlayer.Session.Send(gunDataUpdate);
 
                 return;
@@ -305,11 +301,7 @@ namespace Server.Game
                 await Console.Out.WriteLineAsync("Ammo is null");
                 S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
                 gunDataUpdate.GunReloadSuccess = false;
-                gunDataUpdate.GunData = new PS_GearInfo
-                {
-                    Part = weaponInven.GetCurrentWeaponGearPart(),
-                    Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
-                };
+                
                 ownerPlayer.Session.Send(gunDataUpdate);
 
                 return;      
