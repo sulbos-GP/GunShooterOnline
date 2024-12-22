@@ -33,6 +33,20 @@ namespace ServerCore
             }
         }
 
+        public void Clear()
+        {
+            while (true)
+            {
+                lock (_lock)
+                {
+                    if (_pq.Count == 0)
+                        return;
+
+                    _pq.Pop();
+                }
+
+            }
+        }
 
         public void Flush()
         {
@@ -56,5 +70,7 @@ namespace ServerCore
                 jobElement.job.Execute();
             }
         }
+
+       
     }
 }
