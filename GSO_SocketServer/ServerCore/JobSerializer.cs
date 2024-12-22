@@ -97,7 +97,7 @@ namespace ServerCore
         }
 
 
-        public void Clear()
+        public void ClearJobs()
         {
             jobtimer.Clear();
 
