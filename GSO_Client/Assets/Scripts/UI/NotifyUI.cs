@@ -36,11 +36,13 @@ public class NotifyUI : MonoBehaviour
 
     public void Hide()
     {
+        AudioManager.instance.PlaySound("OK",transform.Find("Buttons/Button").GetComponent<AudioSource>());
         gameObject.SetActive(false);
     }
 
     public void Show()
     {
+        AudioManager.instance.PlaySound("Warning",transform.Find("Buttons/Button").GetComponent<AudioSource>());
         gameObject.SetActive(true);
     }
 }
