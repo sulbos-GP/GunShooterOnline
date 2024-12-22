@@ -247,8 +247,10 @@ namespace Server.Game
             _Reload = false;
         }
 
-
-
+        public bool IsReload()
+        {
+            return _Reload;
+        }
 
         //실질적인 재장전
         private async void HandleReload()

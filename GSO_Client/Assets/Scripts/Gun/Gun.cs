@@ -192,30 +192,42 @@ public class Gun : MonoBehaviour
 
         delayImage.fillAmount = 1;
         float elapseTime = 0f;
-        while (elapseTime < WeaponData.reload_time)
+
+        int reloadTime = WeaponData.reload_time;
+        while (elapseTime < reloadTime)
         {
-            float remainingTimeRatio = 1 - (elapseTime / WeaponData.reload_time);
+            if(WeaponData == null)
+            {
+                StopCoroutine(ReloadCoroutine());
+            }
+            float remainingTimeRatio = 1 - (elapseTime / reloadTime);
             delayImage.fillAmount = remainingTimeRatio;
 
             // 경과 시간 업데이트
             elapseTime += Time.deltaTime;
             yield return null;
         }
-
-
-        //나중에 패킷매니저에서 리로드 결과 받아오기
-        //CurAmmo = reloadAmount;
-        gunState = GunState.Shootable;
-        UIManager.Instance.SetActiveReloadBtn(true);
-        UIManager.Instance.SetAmmoText();
-
-        //(TODO) 인벤에 총알의 양을 감소시킴
     }
 
     public void ReloadDone(int reloadAmount)
     {
         CurAmmo = reloadAmount;
         gunState = GunState.Shootable;
+        UIManager.Instance.SetActiveReloadBtn(true);
+        UIManager.Instance.SetAmmoText();
+    }
+
+    public void ReloadFail()
+    {
+        if(CurAmmo == 0)
+        {
+            gunState = GunState.Empty;
+        }
+        else
+        {
+            gunState = GunState.Shootable;
+        }
+
         UIManager.Instance.SetActiveReloadBtn(true);
         UIManager.Instance.SetAmmoText();
     }

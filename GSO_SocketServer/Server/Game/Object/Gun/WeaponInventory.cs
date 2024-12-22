@@ -98,14 +98,24 @@ namespace Server.Game
 
         internal void ResetGun()
         {
-            current = currentWeapon.None;
+            if (GetCurrentWeapon().IsReload())
+            {
+                CancelReload();
+            }
+            
             GetCurrentWeapon().ResetGun();
+            current = currentWeapon.None;
         }
 
         internal void SetGunData(PS_GearInfo info)
         {
             int gunId = 0;
 
+            if (GetCurrentWeapon() != null && GetCurrentWeapon().IsReload())
+            {
+                CancelReload();
+
+            }
             switch (info.Part)
             {
                 case PE_GearPart.None:
@@ -123,8 +133,6 @@ namespace Server.Game
               
             }
 
-
-            
 
             GetCurrentWeapon().SetGunData(gunId);
 

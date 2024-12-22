@@ -321,15 +321,19 @@ public partial class MyPlayerController : PlayerController
         quickSlotBtn2.onClick.AddListener(() => ChangeUseGun(2));
     }
 
-    private async void ChangeUseGun(int slotNumber)
+    public async void ChangeUseGun(int slotNumber)
     {
+        if(slotNumber != 1 && slotNumber != 2) return;
         await Task.Delay(100);
+
         InventoryController inven = InventoryController.Instance;
         ItemData equipptedItem = inven.GetItemInDictByGearCode(slotNumber);
         if (equipptedItem == null)
         {
             UIManager.Instance.ReloadBtn.interactable = false;
             SendChangeGunPacket(0, slotNumber); //총을 들고있지 않을 경우 0(널값) 전송
+            Managers.Object.MyPlayer.usingGun.curGunEquipSlot = 0;
+            Managers.Object.MyPlayer.usingGun.ResetGun();
             return;
         }
         else if(equipptedItem.item_type != ItemType.Weapon)
@@ -366,9 +370,6 @@ public partial class MyPlayerController : PlayerController
             packet.GunType.Part = PE_GearPart.SubWeapon;
 
         }
-
-
-
 
         Managers.Network.Send(packet);
         Debug.Log($"C_ChangeAppearance 전송 {packet.ObjectId}, {packet.GunType.Part}");
