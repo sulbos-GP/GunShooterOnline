@@ -132,8 +132,6 @@ public class LobbyScene : BaseScene
         {
             Uid = credential.uid,
         };*/
-        C_JoinServer c_JoinServer = new C_JoinServer();
-        c_JoinServer.Name = "jish";
         Managers.Network.Send(c_JoinServer);
 
         //C_JoinServer c_JoinServer = new C_JoinServer();
