@@ -192,9 +192,15 @@ public class Gun : MonoBehaviour
 
         delayImage.fillAmount = 1;
         float elapseTime = 0f;
-        while (elapseTime < WeaponData.reload_time)
+
+        int reloadTime = WeaponData.reload_time;
+        while (elapseTime < reloadTime)
         {
-            float remainingTimeRatio = 1 - (elapseTime / WeaponData.reload_time);
+            if(WeaponData == null)
+            {
+                StopCoroutine(ReloadCoroutine());
+            }
+            float remainingTimeRatio = 1 - (elapseTime / reloadTime);
             delayImage.fillAmount = remainingTimeRatio;
 
             // 경과 시간 업데이트
@@ -211,20 +217,7 @@ public class Gun : MonoBehaviour
         UIManager.Instance.SetAmmoText();
     }
 
-    public void ReloadFail()
-    {
-        if(CurAmmo == 0)
-        {
-            gunState = GunState.Empty;
-        }
-        else
-        {
-            gunState = GunState.Shootable;
-        }
-
-        UIManager.Instance.SetActiveReloadBtn(true);
-        UIManager.Instance.SetAmmoText();
-    }
+    
 
     //FovPlayer의 코루틴에서 사용
     public float GetFireRate()

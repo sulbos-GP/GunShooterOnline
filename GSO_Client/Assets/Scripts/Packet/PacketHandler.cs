@@ -801,19 +801,18 @@ internal class PacketHandler
         Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
 
-    
+
 
     internal static void S_ChangeAppearanceHandler(PacketSession session, IMessage message)
     {
         S_ChangeAppearance packet = message as S_ChangeAppearance;
         Managers.SystemLog.Message("S_ChangeAppearanceHandler");
-        Managers.SystemLog.Message($"S_ChangeAppearanceHandler {packet.ObjectId}, {packet.GunType.Part}");
 
         GameObject targetPlayer = Managers.Object.FindById(packet.ObjectId);
 
         SpriteRenderer gunSprite = targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
-            
-        if (packet.GunType.Part == 0)
+
+        if (packet.GunType == null ||  packet.GunType.Part == 0)
         {
             //총의 스프라이트
             gunSprite.sprite = null;
@@ -852,7 +851,6 @@ internal class PacketHandler
         Managers.SystemLog.Message("S_GundataUpdateHandler");
         if (!packet.IsSuccess)
         {
-            Managers.Object.MyPlayer.usingGun.ReloadFail();
             return;
         }
 

@@ -244,11 +244,14 @@ namespace Server.Game
         /// </summary>
         public void CancelReload()
         {
+            Console.WriteLine("장전취소");
             _Reload = false;
         }
 
-
-
+        public bool IsReload()
+        {
+            return _Reload;
+        }
 
         //실질적인 재장전
         private async void HandleReload()
@@ -258,11 +261,7 @@ namespace Server.Game
 
                 S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
                 gunDataUpdate.IsSuccess = false;
-                gunDataUpdate.GunData = new PS_GearInfo
-                {
-                    Part = weaponInven.GetCurrentWeaponGearPart(),
-                    Item = weaponInven.GetCurrentWeapon().gunItemData.ConvertItemInfo(ownerPlayer.Id)
-                };
+                
                 ownerPlayer.Session.Send(gunDataUpdate);
 
                 return;
@@ -280,7 +279,12 @@ namespace Server.Game
             if (ammos == null || ammos.Count == 0)
             {
                 await Console.Out.WriteLineAsync("Ammo is null");
-                return;         //DOTO : 실패 페킷 보내기
+                S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
+                gunDataUpdate.IsSuccess = false;
+               
+                ownerPlayer.Session.Send(gunDataUpdate);
+
+                return;      
 
             }
 

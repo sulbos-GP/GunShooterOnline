@@ -41,6 +41,12 @@ public partial class InventoryController : MonoBehaviour
                 Debug.Log("장착불가능한 아이템입니다.");
                 break;
         }
+
+        if (Managers.Object.MyPlayer.usingGun != null && slotId == Managers.Object.MyPlayer.usingGun.curGunEquipSlot)
+        {
+            Managers.Object.MyPlayer.ChangeUseGun(slotId);
+        }
+
         return true;
     }
     public bool UnsetEquipItem(int slotId)
@@ -53,7 +59,7 @@ public partial class InventoryController : MonoBehaviour
         switch (EquipDict[slotId].item_type)
         {
             case ItemType.Weapon:
-                return UIManager.Instance.SetWQuickSlot(slotId, 0);
+                 UIManager.Instance.SetWQuickSlot(slotId, 0); break;
             case ItemType.Defensive:
                 break;
             case ItemType.Bag:
@@ -66,13 +72,19 @@ public partial class InventoryController : MonoBehaviour
                 }
                 break;
             case ItemType.Recovery:
-                return UIManager.Instance.SetIQuickSlot(slotId, null);
+                UIManager.Instance.SetIQuickSlot(slotId, null); break;
             default:
                 Debug.Log("장착불가능한 아이템입니다.");
                 return false;
         }
 
         EquipDict[slotId] = null;
+
+
+        if (slotId == Managers.Object.MyPlayer.usingGun.curGunEquipSlot)
+        {
+            Managers.Object.MyPlayer.ChangeUseGun(slotId);
+        }
         return true;
     }
     public ItemData GetItemInDictByGearCode(int GearCode)
