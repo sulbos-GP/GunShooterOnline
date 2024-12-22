@@ -144,6 +144,7 @@ public class EquipSlotBase : MonoBehaviour
         {
             return false;
         }
+
         return true;
     }
 }
