@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
     private Dictionary<string, List<AudioClip>> audioclips;
+    private List<AudioSource> audioSources;
     private void Awake()
     {
         if(instance == null)
@@ -32,6 +33,8 @@ public class AudioManager : MonoBehaviour
             audioclips[namePart].Add(clip);
         }
         
+        audioSources = new List<AudioSource>();
+        
         Debug.Log("Audio Load Complete");
     }
 
@@ -44,6 +47,8 @@ public class AudioManager : MonoBehaviour
         if (source.isPlaying && source.clip.name == keyword)
             return;
         
+        if(!audioSources.Contains(source))
+            audioSources.Add(source);
         List<AudioClip> audioclipList = audioclips[keyword];
         if (audioclipList.Count > 1)
         {
@@ -62,6 +67,12 @@ public class AudioManager : MonoBehaviour
     public void StopSound(AudioSource source)
     {
         if(source.isPlaying)
+            source.Stop();
+    }
+
+    public void StopAllSounds()
+    {
+        foreach(var source in audioSources)
             source.Stop();
     }
 }

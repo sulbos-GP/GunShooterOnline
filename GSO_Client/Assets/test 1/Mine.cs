@@ -15,25 +15,32 @@ public class Mine : MonoBehaviour
 
     IEnumerator Explo(string name, int id)
     {
-        // Æ®¸®°Å ¼³Á¤ ¹× ¾Ö´Ï¸ÞÀÌ¼Ç ½ÃÀÛ
-        sprite.color = new Color(1,1,1,1) ; //Åõ¸íµµ Á¦°Å
+        // Æ®ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ ï¿½ï¿½ï¿½ï¿½
+        sprite.color = new Color(1,1,1,1) ; //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         animator.ResetTrigger(name);
         animator.SetTrigger(name);
+        AudioManager.instance.PlaySound("Explosion",gameObject.GetComponent<AudioSource>());
 
-        // »óÅÂ Á¤º¸ °¡Á®¿À±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
         AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
         while (!stateInfo.IsName(name))
         {
             stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            yield return null; // ´ë±â
+            yield return null; // ï¿½ï¿½ï¿½
         }
 
-        // ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ³¡³¯ ¶§±îÁö ´ë±â
+        // ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½
         while (stateInfo.normalizedTime < 1.0f)
         {
             stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            yield return null; // ´ë±â
+            yield return null; // ï¿½ï¿½ï¿½
+        }
+
+        sprite.enabled = false;
+        while (gameObject.GetComponent<AudioSource>().isPlaying)
+        {
+            yield return null;
         }
         Managers.Object.Remove(id);
     }
