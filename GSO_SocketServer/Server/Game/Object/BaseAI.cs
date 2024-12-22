@@ -85,7 +85,7 @@ namespace Server.Game.Object
             state = new FSMController(this);
 
             maxDistance = 10;
-            spawnerDistance = 5;
+            spawnerDistance = 10f;
 
             Speed = 5f;
             detectionRange = 10f;  //감지 거리 , 감지범위의 크기 = *2 . 트리거로 감지범위 안에 들어온 적이 있으면 해당 방향으로 중간속도 이동. 감지범위밖으로 나가고 3초뒤 귀환
@@ -286,6 +286,8 @@ namespace Server.Game.Object
 
             float x = MathF.Cos(angle) * distance;
             float z = MathF.Sin(angle) * distance;
+
+            Console.Write($"{center.X + x}, {center.Y}");
 
             return new Vector2(center.X + x, center.Y);
         }
