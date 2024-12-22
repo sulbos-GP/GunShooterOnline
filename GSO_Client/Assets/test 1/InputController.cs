@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using Google.Protobuf.Protocol;
 using UnityEngine.UI;
 using Unity.Burst.Intrinsics;
+using static UnityEditor.Progress;
 
 
 public class InputController : MonoBehaviour
@@ -339,24 +340,42 @@ public class InputController : MonoBehaviour
     {
         //pivot 회전
 
-        Debug.Log("Dir" + dir);
 
-        float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+
+        /*float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         var gunTrn = transform.GetChild(0);
         gunTrn.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
 
 
-        
+        Debug.Log("Dir" + angle);
+
+        C_InputData inputPacket = new C_InputData();
+        inputPacket.GunRoation = angle;
+
+        Managers.Network.Send(inputPacket);*/
+
+
+
+        Gun g = transform.GetChild(0).GetChild(0).GetComponent<Gun>();
+        if(g != null)
+        {
+            g.SetGunRoation(dir);
+        }
+
+
         aimFov.SetAimDirection(dir); //fov ȸ��
         FlipGunSprite(dir.x);
     }
+
+
+
 
     private void FlipGunSprite(float inputX)
     {
         //���⿡ ���� ���� xȸ���� �ø�
 
         //float newAngle = MoveTowardsAngle(currentAngle, targetAngle, rotationSpeed);
-        Debug.Log(inputX)
+        //Debug.Log(inputX);
 
         if (inputX > 0)
         {

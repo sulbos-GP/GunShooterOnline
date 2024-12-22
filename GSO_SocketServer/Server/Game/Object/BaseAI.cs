@@ -292,8 +292,14 @@ namespace Server.Game.Object
 
         //원래는 상속해서 만들고 해당 몬스터에 따라서 만들어야 하는거 알쥐?
         //어택 오브젝트도 마찬가지인거 알쥐?
+
+        public Vector2 rangeAttackDir;
+
         public virtual void DoAttack()
         {
+            rangeAttackDir = Vector2.Normalize(target.CellPos - CellPos);
+
+
             S_AiAttackReady attackReadyPacket = new S_AiAttackReady()
             {
                 ObjectId = Id,
