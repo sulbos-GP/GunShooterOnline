@@ -117,7 +117,7 @@ public class Player : CreatureObj
         if (gameRoom == null)
             return;
 
-        if (weapon.GetCurrentWeapon() != null&& weapon.GetCurrentWeapon().IsReload())
+        if (weapon.GetCurrentWeapon() != null && weapon.GetCurrentWeapon().IsReload())
         {
             weapon.CancelReload();
         }

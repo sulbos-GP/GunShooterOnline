@@ -73,6 +73,10 @@ namespace Server.Game
         public void SetGunData(int gunItemId) //여기의 id는 총의 오브젝트 ID
         {
             gunItemData = ObjectManager.Instance.Find<ItemObject>(gunItemId);
+
+            if (gunItemData == null)
+                return;
+
             GunData = DatabaseHandler.Context.MasterItemWeapon.Find(gunItemData.ItemId);
             UsingGunState = CurAmmo == 0 ? GunState.Empty : GunState.Shootable;
         }
@@ -288,6 +292,8 @@ namespace Server.Game
                 };
                 ownerPlayer.Session.Send(gunDataUpdate);
 
+
+                _Reload = true;
                 return;
             }
 
@@ -304,6 +310,7 @@ namespace Server.Game
             {
                 await Console.Out.WriteLineAsync("Ammo is null");
                 S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
+                gunDataUpdate.OwnerId = ownerPlayer.Id;
                 gunDataUpdate.GunReloadSuccess = false;
                 gunDataUpdate.GunData = new PS_GearInfo
                 {
@@ -378,6 +385,7 @@ namespace Server.Game
 
 
                 S_GundataUpdate gunDataUpdate = new S_GundataUpdate();
+                gunDataUpdate.OwnerId = ownerPlayer.Id;
                 gunDataUpdate.GunReloadSuccess = true;
                 gunDataUpdate.GunData = new PS_GearInfo
                 {

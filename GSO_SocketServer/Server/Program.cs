@@ -90,17 +90,17 @@ namespace Server
 #if DEBUG
             
 
-                while(true)
+              /*  while(true)
                 {
                     Console.WriteLine("Shutting down the server after {0} minutes.", minutes);
 
-                    Task.Delay(minutes * 60 * 1000).Wait();
-                    //Task.Delay(5000).Wait();
+                    //Task.Delay(minutes * 60 * 1000).Wait();
+                    //Task.Delay(60000).Wait();
 
                     Console.WriteLine("Stop game server");
                     gameserver.ResetServer();
                     //gameserver.Stop();
-                }
+                }*/
 
 
 #endif

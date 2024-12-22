@@ -51,10 +51,10 @@ public class Gun : MonoBehaviour
             _fireStartPos = transform.GetChild(0);
             _fireParticlePos = _fireStartPos.GetChild(0);
             _animator = _fireParticlePos.GetComponent<Animator>();
+            ResetGun();
 
         }
 
-        ResetGun();
     }
 
     public void SetGunStat(ItemData _itemData)
