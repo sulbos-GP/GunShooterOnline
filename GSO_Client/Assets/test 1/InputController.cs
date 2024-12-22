@@ -354,6 +354,10 @@ public class InputController : MonoBehaviour
     private void FlipGunSprite(float inputX)
     {
         //���⿡ ���� ���� xȸ���� �ø�
+
+        //float newAngle = MoveTowardsAngle(currentAngle, targetAngle, rotationSpeed);
+        Debug.Log(inputX);
+
         if (inputX > 0)
         {
             gunSpriteRenderer.flipX = false;
