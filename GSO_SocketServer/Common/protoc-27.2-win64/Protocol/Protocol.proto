@@ -61,6 +61,8 @@ enum MsgId{
   C_PONG = 44;
 
   S_ERROR = 45; //에러 패킷
+
+
 }
 
 enum ErrorType {
@@ -418,12 +420,16 @@ message C_InputData {  //35
     bool reload = 1;
     int32 itemId = 2;
     int32 itemSoltId = 3;
+    GunAppearacneInfo gunRoation = 4;
 }
 
 message S_GundataUpdate{  //37 (지승현)추후 많은 데이터 업데이트 예정
-    bool isSuccess = 1;
-    PS_GearInfo gunData = 2;  
-    float GunRoation = 3;
+    int32 ownerId = 1;
+    bool GunReloadSuccess = 2;
+    //bool Roation = 2;
+    PS_GearInfo gunData = 3;  
+
+    GunAppearacneInfo gunRoation = 4;
 }
 
 
@@ -490,6 +496,8 @@ message S_Error{ //45 에러패킷
 }
 
 
+
+
 //--------------- END message --------------------
 
 //--------------- INFO -------------------- 기생하는 친구들
@@ -506,7 +514,9 @@ message ObjectInfo{
     //CreatureState state = 9;
 }
 
-
+message GunAppearacneInfo{
+    float roation = 1;
+}
 
 message StatInfo{
   int32 class = 1;

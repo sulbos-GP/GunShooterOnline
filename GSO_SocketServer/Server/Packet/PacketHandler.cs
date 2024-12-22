@@ -337,7 +337,7 @@ class PacketHandler
     {
         ClientSession clientSession = session as ClientSession;
         C_InputData packet = (C_InputData)message;
-        Console.WriteLine($"[C_InputData]");
+        //Console.WriteLine($"[C_InputData]");
 
         Player player = clientSession.MyPlayer;
 

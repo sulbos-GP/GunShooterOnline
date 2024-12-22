@@ -21,7 +21,7 @@ public partial class MyPlayerController : PlayerController
     public PlayerInput playerInput;
     private GameInfoBar _gameInfoBar; // HP+ Exp + Info
     private VirtualJoystick _joystick;
-    public Gun usingGun { get; private set; } //플레이어가 들고있는 총(발사하는 총)
+    //public Gun usingGun { get; private set; } //플레이어가 들고있는 총(발사하는 총)
     
     //----------------------------------위: 사용 / 아래:사용안하는듯--------------------------
     //private ButtonSkill _butnSkill;
@@ -83,10 +83,8 @@ public partial class MyPlayerController : PlayerController
     }
     protected override void Init()
     {
-        usingGun = transform.Find("Pivot/Gun").GetComponent<Gun>();
-        usingGun.Init();
+      
         InitWeaponQuickSlot();
-        UIManager.Instance.SetReloadBtnListener(usingGun);
         
 
         //base 무시
@@ -343,6 +341,8 @@ public partial class MyPlayerController : PlayerController
         UIManager.Instance.ReloadBtn.interactable = true;
         usingGun.SetGunStat(equipptedItem);
         usingGun.curGunEquipSlot = slotNumber;
+        Debug.Log("usingGun : " + usingGun);
+
         SendChangeGunPacket(equipptedItem.objectId, slotNumber);
     }
 

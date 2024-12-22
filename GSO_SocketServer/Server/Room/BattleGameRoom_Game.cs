@@ -9,6 +9,7 @@ using ServerCore;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
@@ -976,6 +977,18 @@ namespace Server
 
             }
 
+            if (packet.GunRoation != null) 
+            {
+                //player.weapon.Angle = packet.GunRoation;
+                Console.WriteLine(packet.GunRoation.Roation);
+                player.weapon.SetRotion(packet.GunRoation.Roation);
+                
+
+
+
+            }
+
+
         }
 
         ////////////////////////////////////////////
@@ -1084,7 +1097,7 @@ namespace Server
 
             }
 #else
-            if (tempPlayer.Count == 1) // 초코파이 접속할 인원에 따라 변경
+            if (tempPlayer.Count == 2) // 초코파이 접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();

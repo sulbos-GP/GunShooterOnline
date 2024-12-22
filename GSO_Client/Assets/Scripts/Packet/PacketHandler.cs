@@ -810,6 +810,7 @@ internal class PacketHandler
 
         GameObject targetPlayer = Managers.Object.FindById(packet.ObjectId);
 
+
         SpriteRenderer gunSprite = targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
 
         if (packet.GunType == null ||  packet.GunType.Part == 0)
@@ -818,6 +819,8 @@ internal class PacketHandler
             gunSprite.sprite = null;
             return;
         }
+        //var t = targetPlayer.GetComponent<PlayerController>().usingGun = packet.GunType.Part;
+
 
         Sprite targetSprite = Resources.Load<Sprite>($"Sprite/Item/{Data_master_item_base.GetData(packet.GunType.Item.ItemId).icon}");
         if(targetSprite == null)
@@ -849,13 +852,50 @@ internal class PacketHandler
     {
         S_GundataUpdate packet = message as S_GundataUpdate;
         Managers.SystemLog.Message("S_GundataUpdateHandler");
-        if (!packet.IsSuccess)
+
+        var go = Managers.Object.FindById(packet.OwnerId);
+
+        if (go == null)
         {
-            Managers.Object.MyPlayer.usingGun.ReloadFail();
+            Debug.Log("아이디를 찾지못함");
             return;
         }
 
-        Managers.Object.MyPlayer.usingGun.ReloadDone(packet.GunData.Item.Attributes.LoadedAmmo);
+        if(go  == Managers.Object.MyPlayer)
+        {
+
+            if (packet.GunRoation != null)
+            {
+                Managers.Object.MyPlayer.usingGun.GunRoationHandle(packet.GunRoation.Roation);
+                return;
+            }
+
+            if (packet.GunReloadSuccess == false)
+            {
+                Managers.Object.MyPlayer.usingGun.ReloadFail();
+                return;
+            }
+            else
+            {
+                Managers.Object.MyPlayer.usingGun.ReloadDone(packet.GunData.Item.Attributes.LoadedAmmo);
+
+            }
+
+
+        }
+        else
+        {
+
+            if(packet.GunRoation != null)
+            {
+                PlayerController r = go.GetComponent<PlayerController>();
+                var t = r.usingGun;
+                t.GunRoationHandle(packet.GunRoation.Roation);
+
+            }
+
+        }
+      
     }
 
     internal static void S_TrapActionHandler(PacketSession session, IMessage message)
