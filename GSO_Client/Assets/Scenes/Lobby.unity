@@ -677,11 +677,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f6c281d3335b7fb4fa1ce43ce7ad1f7e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ConnectMode: 2
-  Store: {fileID: 0}
-  Profile: {fileID: 0}
-  Coins: {fileID: 0}
+  ConnectMode: 0
   Ip: 10.0.2.2
+  PlayButton: {fileID: 63131421}
 --- !u!1 &1565354865
 GameObject:
   m_ObjectHideFlags: 0
