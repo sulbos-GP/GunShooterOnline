@@ -801,40 +801,32 @@ internal class PacketHandler
         Managers.SystemLog.Message($"S_RaycastShoot : startPos {startPoint}, endPos {hitPoint}");
     }
 
-    
+
 
     internal static void S_ChangeAppearanceHandler(PacketSession session, IMessage message)
     {
         S_ChangeAppearance packet = message as S_ChangeAppearance;
         Managers.SystemLog.Message("S_ChangeAppearanceHandler");
-        Managers.SystemLog.Message($"S_ChangeAppearanceHandler {packet.ObjectId}, {packet.GunType.Part}");
-
-        if(packet.ObjectId == Managers.Object.MyPlayer.Id)
-        {
-            //return;
-        }
 
         GameObject targetPlayer = Managers.Object.FindById(packet.ObjectId);
-       
-            
-        if (packet.GunType.Part == 0)
+
+        SpriteRenderer gunSprite = targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>();
+
+        if (packet.GunType == null ||  packet.GunType.Part == 0)
         {
-            Managers.SystemLog.Message("S_ChangeAppearanceHandler : no usingGun in hand");
-            targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = null;
+            //총의 스프라이트
+            gunSprite.sprite = null;
             return;
         }
 
-        //Sprite targetSprite = Resources.Load<Sprite>($"Sprite/Item/{Data_master_item_base.GetData(packet.GunId).icon}");
         Sprite targetSprite = Resources.Load<Sprite>($"Sprite/Item/{Data_master_item_base.GetData(packet.GunType.Item.ItemId).icon}");
         if(targetSprite == null)
         {
             Managers.SystemLog.Message("S_ChangeAppearanceHandler : Can't find item with packet.GunId");
+            Debug.LogError("S_ChangeAppearanceHandler : Can't find item with packet.GunId");
+            return;
         }
-        Managers.SystemLog.Message($"S_ChangeAppearanceHandler : spriteName : {targetSprite.name}");
-
-        targetPlayer.transform.GetChild(0).GetChild(0).GetComponent<SpriteRenderer>().sprite = targetSprite;
-        Managers.SystemLog.Message($"S_ChangeAppearanceHandler : targetPlayer : {targetPlayer.name}");
-        
+        gunSprite.sprite = targetSprite;
     }
     /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ GUN PACKET END ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
@@ -856,13 +848,14 @@ internal class PacketHandler
     internal static void S_GundataUpdateHandler(PacketSession session, IMessage message)
     {
         S_GundataUpdate packet = message as S_GundataUpdate;
-
-       // Managers.SystemLog.Message($"{packet.GunData}");
         Managers.SystemLog.Message("S_GundataUpdateHandler");
+        if (!packet.IsSuccess)
+        {
+            Managers.Object.MyPlayer.usingGun.ReloadFail();
+            return;
+        }
 
-        //서버 완성시 해제
         Managers.Object.MyPlayer.usingGun.ReloadDone(packet.GunData.Item.Attributes.LoadedAmmo);
-
     }
 
     internal static void S_TrapActionHandler(PacketSession session, IMessage message)
