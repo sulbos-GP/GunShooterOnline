@@ -851,7 +851,6 @@ internal class PacketHandler
         Managers.SystemLog.Message("S_GundataUpdateHandler");
         if (!packet.IsSuccess)
         {
-            Managers.Object.MyPlayer.usingGun.ReloadFail();
             return;
         }
 

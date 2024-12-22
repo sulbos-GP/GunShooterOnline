@@ -356,7 +356,7 @@ public class InputController : MonoBehaviour
         //���⿡ ���� ���� xȸ���� �ø�
 
         //float newAngle = MoveTowardsAngle(currentAngle, targetAngle, rotationSpeed);
-        Debug.Log(inputX)
+        Debug.Log(inputX);
 
         if (inputX > 0)
         {
