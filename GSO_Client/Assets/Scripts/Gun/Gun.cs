@@ -111,10 +111,6 @@ public class Gun : MonoBehaviour
     }
 
 
-
-
-
-
     public void ResetGun()
     {
         WeaponData = null;

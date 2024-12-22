@@ -870,17 +870,10 @@ internal class PacketHandler
                 //return;
             }
 
-            if (packet.GunReloadSuccess == false)
-            {
-                //Managers.Object.MyPlayer.usingGun.ReloadFail();
-                //return;
-            }
-            else
+            if (packet.GunReloadSuccess)
             {
                 Managers.Object.MyPlayer.usingGun.ReloadDone(packet.GunData.Item.Attributes.LoadedAmmo);
-
             }
-
 
         }
         else
@@ -891,11 +884,8 @@ internal class PacketHandler
                 PlayerController r = go.GetComponent<PlayerController>();
                 var t = r.usingGun;
                 t.GunRoationHandle(packet.GunRoation.Roation);
-
             }
-
         }
-      
     }
 
     internal static void S_TrapActionHandler(PacketSession session, IMessage message)
