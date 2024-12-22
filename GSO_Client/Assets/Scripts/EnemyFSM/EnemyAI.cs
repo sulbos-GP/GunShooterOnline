@@ -87,8 +87,6 @@ public class EnemyAI : CreatureController
         AttackShape.SetPosition(2, bottomRight);
         AttackShape.SetPosition(3, bottomLeft);
         AttackShape.SetPosition(4, topLeft);
-
-        Debug.Log($"공격범위 그리기 완료 start : {start}, dir : {dir}");
     }
 
 
