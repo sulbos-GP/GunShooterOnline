@@ -62,6 +62,7 @@ public partial class MyPlayerController : PlayerController
     }
 
 
+
     private void CheakUpdateInfoBar()
     {
         //hp나 스텟이 바뀌면 호출
@@ -89,8 +90,9 @@ public partial class MyPlayerController : PlayerController
 
         //base 무시
         base.Init();
-        
-        return;
+
+        UIManager.Instance.SetReloadBtnListener(usingGun);
+
 
     }
 

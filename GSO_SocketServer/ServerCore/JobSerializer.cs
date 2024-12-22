@@ -97,6 +97,14 @@ namespace ServerCore
         }
 
 
+        public void Clear()
+        {
+            jobtimer.Clear();
+
+            lock (_lock)
+                _jobQueue.Clear();
+        }
+
         public void Flush()
         {
             jobtimer.Flush();

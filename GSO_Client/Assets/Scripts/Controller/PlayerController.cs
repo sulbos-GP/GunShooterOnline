@@ -37,7 +37,6 @@ public class PlayerController : CreatureController
         Debug.Log("usingGun");
 
 
-        UIManager.Instance.SetReloadBtnListener(usingGun);
 
     }
 
