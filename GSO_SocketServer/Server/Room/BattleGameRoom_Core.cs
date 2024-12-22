@@ -86,6 +86,8 @@ namespace Server
             Console.WriteLine("GameRoom Start");
             Init();
 
+            PushAfter(Program.minutes * 60 * 1000, Reset);
+
             CurrentGameState = GameState.ALIVE;
 
 
@@ -120,6 +122,26 @@ namespace Server
         public override void Reset()
         {
             CurrentGameState = GameState.LOADING;
+
+
+            foreach (Player p in _playerDic.Values)
+            {
+                //p.OnDead(null);
+                S_ExitGame exit = new S_ExitGame()
+                {
+                    IsSuccess = true,
+                    PlayerId = p.Id,
+                };
+
+                p.Session.Send(exit);
+
+                
+
+            }
+
+
+            PacketHandler.cnt = 1;
+
 
             Console.WriteLine("ResetServer");
             Stop();

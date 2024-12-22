@@ -25,10 +25,10 @@ using WebCommonLibrary.Enum;
 using WebCommonLibrary.Error;
 using WebCommonLibrary.Models.GameDB;
 
-class PacketHandler
+public class PacketHandler
 {
     //GWANHO TEMP
-    private static int cnt = 1;
+    public static int cnt = 1;
 
 
   

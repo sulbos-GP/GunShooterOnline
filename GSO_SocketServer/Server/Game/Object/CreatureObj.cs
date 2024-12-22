@@ -48,7 +48,14 @@ public class CreatureObj : GameObject
     
         var diePacket = new S_Die();
         diePacket.ObjectId = Id;
-        diePacket.AttackerId = attacker.Id;
+       
+        if(attacker != null)
+        {
+            diePacket.AttackerId = attacker.Id;
+        } 
+        else{  //서버 종료처리
+            diePacket.AttackerId = -1;
+        }
 
         room.BroadCast(diePacket);
         //room.Push(room.BroadCast , diePacket);
@@ -67,7 +74,6 @@ public class CreatureObj : GameObject
         if (player != null)
         {
             gameRoom.PostPlayerStats(Id);
-
         }
 
         ObjectManager.Instance.Remove(Id);

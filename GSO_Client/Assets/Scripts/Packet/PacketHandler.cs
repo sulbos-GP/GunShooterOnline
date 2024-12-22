@@ -861,7 +861,7 @@ internal class PacketHandler
             return;
         }
 
-        if(go  == Managers.Object.MyPlayer)
+        if(packet.OwnerId == Managers.Object.MyPlayer.Id)
         {
 
             if (packet.GunRoation != null)
