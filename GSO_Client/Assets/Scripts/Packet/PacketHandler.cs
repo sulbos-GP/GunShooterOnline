@@ -872,7 +872,7 @@ internal class PacketHandler
 
             if (packet.GunReloadSuccess == false)
             {
-                Managers.Object.MyPlayer.usingGun.ReloadFail();
+                //Managers.Object.MyPlayer.usingGun.ReloadFail();
                 return;
             }
             else
