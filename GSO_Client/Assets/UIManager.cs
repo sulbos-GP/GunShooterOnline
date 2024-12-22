@@ -229,6 +229,10 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator FadeOut()
     {
+        float dotCount = PlayerPrefs.GetInt("dotCount");
+        LoadingText.text = "Loading";
+        for(int i=0; i<dotCount; i++)
+            LoadingText.text += ".";
         float elapsedTime = 0f;
 
         Color imageColor = FadeImage.color;
@@ -247,7 +251,7 @@ public class UIManager : MonoBehaviour
 
             textColor.a = alpha;
             LoadingText.color = textColor;
-
+            
             yield return null;
         }
 

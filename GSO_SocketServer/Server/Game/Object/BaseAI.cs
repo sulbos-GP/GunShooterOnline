@@ -227,7 +227,7 @@ namespace Server.Game.Object
 
         private bool MoveToTarget(Vector2 target, float speed)
         {
-            if(Vector2.Distance(target, CellPos) <= 0.01)
+            if(Vector2.Distance(target, CellPos) <= 0.02)
             {
                 return true;
             }
@@ -439,7 +439,8 @@ namespace Server.Game.Object
 
             if (path != null)
             {
-                bool t = MoveToTarget(new Vector2(lastTargetPos.Value.x, lastTargetPos.Value.y), Speed);
+                Vector2 targetPos = new Vector2(lastTargetPos.Value.x, lastTargetPos.Value.y);
+                bool t = MoveToTarget(targetPos, Speed);
                 if (t)
                 {
                     lastTargetPos = null;

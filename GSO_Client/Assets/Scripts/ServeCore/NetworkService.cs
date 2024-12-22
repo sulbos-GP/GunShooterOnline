@@ -30,22 +30,27 @@ namespace ServerCore
         protected abstract bool OnStart();
         protected abstract bool OnStop();
 
-        public void Start()
+        public bool Start()
         {
             if (true == mManager.IsRunning)
             {
-                return;
+                return false;
             }
 
             if (false == OnStart())
             {
-                return;
+                return false;
             }
 
+            if (mWorkThread == null)
+            {
+                mWorkThread = new Thread(OnWorkLoop);
+            }
             mWorkThread.Start();
+
             mLogicTimer.Start();
 
-            
+            return true;
 
         }
 
@@ -67,7 +72,12 @@ namespace ServerCore
                 mManager.Stop(true);
             }
 
-            if(mLogicTimer != null)
+            if (mWorkThread != null)
+            {
+                mWorkThread = null;
+            }
+
+            if (mLogicTimer != null)
             {
                 mLogicTimer.Stop();
             }

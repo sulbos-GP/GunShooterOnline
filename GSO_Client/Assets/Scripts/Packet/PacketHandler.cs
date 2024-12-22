@@ -15,6 +15,7 @@ using System.Security.Cryptography.Xml;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 
@@ -27,6 +28,7 @@ internal class PacketHandler
         
         Managers.SystemLog.Message("S_EnterGameHandler");
         var enterGamePacket = (S_EnterGame)packet;
+        Managers.Object.Clear();
 
         UIManager.Instance.leftTime = enterGamePacket.GameData.LeftTime* 60;
 
@@ -117,7 +119,7 @@ internal class PacketHandler
             return;
         }
 
-        Managers.SystemLog.Message("S_MoveHandler : " + go.name);
+        //Managers.SystemLog.Message("S_MoveHandler : " + go.name);
         if (Managers.Object.MyPlayer.Id == movePacket.ObjectId)
         {
             return;
@@ -214,25 +216,36 @@ internal class PacketHandler
 
     internal static void S_ExitGameHandler(PacketSession session, IMessage message)
     {
+        //모든 플레이어에게 전송되는 핸들러
         S_ExitGame packet = message as S_ExitGame;
         Managers.SystemLog.Message("S_ExitGame");
+
         if (Managers.Object.MyPlayer == null)
         {
             return;
         }
 
-        if(packet.IsSuccess == true)
+        
+        if (!packet.IsSuccess)
         {
-            var player = Managers.Object.FindById(packet.PlayerId);
-
-            //나간 플레이어는 이미 디스트로이 된 상태이며 그 외의 플레이어에게서 처리될 패킷
-            if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+            //실패했을경우 exit을 보낸 플레이어의 exitzone 반응 제거
+            if (packet.PlayerId != Managers.Object.MyPlayer.Id)
             {
-                //플레이어는 자신의 장착칸과 인벤토리의 내용을 서버에 전송?
-                //return;
+                return;
             }
 
-            //클라이언트의 모든 오브젝트의 내용 클리어
+            ExitZone exitZone = Managers.Object.FindById(packet.ExitId).GetComponent<ExitZone>();
+            if (exitZone != null)
+            {
+                exitZone.CancelExit(packet.RetryTime / 1000.0f);
+            }
+        }
+
+        var targetPlayer = Managers.Object.FindById(packet.PlayerId);
+
+        //나간 플레이어의 경우 초기화 및 씬 이동
+        if (packet.PlayerId == Managers.Object.MyPlayer.Id)
+        {
             Managers.Object.Clear();
             Managers.Object.DebugDics();
 
@@ -246,18 +259,11 @@ internal class PacketHandler
             {
                 Managers.Scene.LoadScene(Define.Scene.Lobby);
             }
+        }
 
-            //Managers.Resource.Destroy(player);
-            //Managers.Object.Remove(packet.PlayerId);
-        }
-        else
-        {
-            ExitZone exitZone = Managers.Object.FindById(packet.ExitId).GetComponent<ExitZone>();
-            if (exitZone != null)
-            {
-                exitZone.CancelExit(packet.RetryTime / 1000.0f);
-            }
-        }
+        //오브젝트 딕셔너리에서 해당 플레이어를 삭제 ( 나와 다른 플레이어에게 동일하게 적용)
+        Managers.Resource.Destroy(targetPlayer);
+        Managers.Object.Remove(packet.PlayerId);
 
     }
 
@@ -271,19 +277,19 @@ internal class PacketHandler
             return;
         }
 
-
+        Managers.Scene.LoadScene(Define.Scene.loading);
         //접속 완료
-        Managers.Scene.LoadScene(Define.Scene.Forest);
+        //Managers.Scene.LoadScene(Define.Scene.Forest);
 
 
         Managers.SystemLog.Message("S_JoinServer : success");
 
 
-        C_EnterGame c_EnterGame = new C_EnterGame();
+        /*C_EnterGame c_EnterGame = new C_EnterGame();
         //c_EnterGame.Credential =
 
         Managers.Network.Send(c_EnterGame);
-        Debug.Log("Send c_EnterGame In GameScene");
+        Debug.Log("Send c_EnterGame In GameScene");*/
 
 
     }
@@ -304,7 +310,8 @@ internal class PacketHandler
     {
         Managers.SystemLog.Message("S_GameStartHandler");
         S_GameStart packet = message as S_GameStart;
-
+        FadeManager.instance.SetLoadComplete();
+        
         //자신의 플레이어 외에 다른 플레이어 생성
         foreach (ObjectInfo obj in packet.Objects)
         {
@@ -318,11 +325,11 @@ internal class PacketHandler
             player.Hp = Stats.Hp;
             player.MaxHp = Stats.MaxHp;
 
-            //if (player == null)
+            //if (targetPlayer == null)
             //{
             //    continue;
             //}
-            //player.SpawnPlayer(vec2);
+            //targetPlayer.SpawnPlayer(vec2);
             Managers.SystemLog.Message("S_SpawnHandler : spawnID : " + obj.ObjectId);
         }
         
@@ -349,6 +356,7 @@ internal class PacketHandler
 
         //    targetSlot.ApplyItemEffects(data);
         //}
+        
     }
     /*ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ GAMESYSTEM PACKET END ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ*/
 
@@ -362,14 +370,20 @@ internal class PacketHandler
         S_LoadInventory packet = message as S_LoadInventory;
         InventoryController inventory = InventoryController.Instance;
 
+        InventoryController.Instance.OnWaitSwitchPacket = false;
+        
         //불러오기에 실패할경우 인벤토리가 off상태로 보장
         if (!packet.IsSuccess)
         {
             Managers.SystemLog.Message("S_LoadInventory : fail to load");
+
             if (inventory.isActive)
             {
                 inventory.invenUIControl(false);
             }
+
+            InventoryController.Instance.interactBoxId = null;
+ 
             return;
         }
 
@@ -389,17 +403,17 @@ internal class PacketHandler
         }
 
         //플레이어의 인벤토리의 경우
-        if(packet.SourceObjectId == InventoryController.PlayerSlotId)
+        if (packet.SourceObjectId == InventoryController.PlayerSlotId)
         {
             //장착칸 설정
             foreach (PS_GearInfo packetItem in packet.GearInfos)
             {
                 EquipSlotBase targetSlot = InventoryController.equipSlotDic[(int)packetItem.Part];
                 ItemData targetItem;
-                
+
                 ItemData gearedItem = inventory.GetItemInDictByGearCode((int)packetItem.Part);
 
-                if(gearedItem != null)
+                if (gearedItem != null)
                 {
                     gearedItem.SetItemData(packetItem.Item);
                     targetItem = gearedItem;
@@ -410,7 +424,7 @@ internal class PacketHandler
                     targetItem.SetItemData(packetItem.Item);
                 }
 
-                if(targetItem.itemId == 300)
+                if (targetItem.itemId == 300)
                 {
                     Debug.Log("300번 기본가방은 생성안함 = 제외");
                     continue;
@@ -434,7 +448,6 @@ internal class PacketHandler
         else
         {
             Box box = Managers.Object.FindById(packet.SourceObjectId).GetComponent<Box>();
-            //box.interactable = false;
 
             OtherInventoryUI otherInvenUI = inventory.otherInvenUI;
             otherInvenUI.InventorySet();
@@ -443,7 +456,9 @@ internal class PacketHandler
 
             boxGrid.objectId = packet.SourceObjectId;
             boxGrid.PlaceItemsInGrid(packetItemList);
+
             InventoryController.UpdateInvenWeight(false);
+            InventoryPacket.SendLoadInvenPacket();
         }
     }
 
@@ -455,24 +470,15 @@ internal class PacketHandler
         S_CloseInventory packet = message as S_CloseInventory;
         Managers.SystemLog.Message("S_CloseInventory");
         InventoryController inventory = InventoryController.Instance;
+        InventoryController.Instance.OnWaitSwitchPacket = false;
+        InventoryController.Instance.interactBoxId = null;
 
         if (!packet.IsSuccess)
         {
             Managers.SystemLog.Message("S_CloseInventory : Didn't accepted by Server");
+            
             return;
         }
-
-        //if(packet.SourceObjectId != 0) 서버에서도 확인하니 생략
-        //{
-        //    //박스의 interactable을 
-        //    GameObject target = Managers.Object.FindById(packet.SourceObjectId);
-        //    if(target == null)
-        //    {
-        //        Managers.SystemLog.Message($"S_CloseInventory : fail to find with ObjectId {packet.SourceObjectId}");
-        //        return;
-        //    }
-        //    target.GetComponent<Box>().interactable = true;
-        //}
 
         if (InventoryController.Instance.isActive)//인벤토리가 켜져 있으면 끔
         {
@@ -881,7 +887,7 @@ internal class PacketHandler
     internal static void S_AiMoveHandler(PacketSession session, IMessage message)
     {
         S_AiMove packet = message as S_AiMove;
-        Managers.SystemLog.Message($"S_AiMove {packet.ObjectId}");
+        //Managers.SystemLog.Message($"S_AiMove {packet.ObjectId}");
         
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
         Vector2 instance = enemy.transform.position;
