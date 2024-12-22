@@ -22,20 +22,20 @@ public class Mine : MonoBehaviour
         AudioManager.instance.PlaySound("Explosion",gameObject.GetComponent<AudioSource>());
 
         // ���� ���� ��������
-        AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        //AnimatorStateInfo stateInfo = animator.GetCurrentAnimatorStateInfo(0);
 
-        while (!stateInfo.IsName(name))
-        {
-            stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            yield return null; // ���
-        }
+        //while (!stateInfo.IsName(name))
+        //{
+        //    stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        //    yield return null; // ���
+        //}
 
-        // �ִϸ��̼��� ���� ������ ���
-        while (stateInfo.normalizedTime < 1.0f)
-        {
-            stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-            yield return null; // ���
-        }
+        //// �ִϸ��̼��� ���� ������ ���
+        //while (stateInfo.normalizedTime < 1.0f)
+        //{
+        //    stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+        //    yield return null; // ���
+        //}
 
         sprite.enabled = false;
         while (gameObject.GetComponent<AudioSource>().isPlaying)
