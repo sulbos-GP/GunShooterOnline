@@ -268,7 +268,8 @@ public class Gun : MonoBehaviour
 
     public void StartEffect()
     {
-        audioSource.PlayOneShot(audioClips[currentIndex],0.7f);
+        AudioManager.instance.PlayOneShot("2gunshot",audioSource,0.7f);
+        //audioSource.PlayOneShot(audioClips[currentIndex],0.7f);
         currentIndex = (currentIndex + 1) % audioClips.Length;
         _animator.SetTrigger("Fire");
     }
