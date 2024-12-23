@@ -102,7 +102,7 @@ namespace Server
             else
             {
                 //검출시 벽 위치 보내기
-                Console.WriteLine("벽이야");
+                //Console.WriteLine("벽이야");
                 return _ddaRes;
             }
             #endregion
