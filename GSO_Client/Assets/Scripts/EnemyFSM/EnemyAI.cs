@@ -123,10 +123,23 @@ public class EnemyAI : CreatureController
         if (attackerId == -1)
             return;
 
+        IsDead = true;
+        Debug.Log(transform.name + "Dead");
+
+        Managers.Object.RemoveWithoutDestroy(Id);
+
         SetAniamtionDead();
+
+        //사망 후 3초뒤 파괴?
+        Invoke("DestoryEnemy", 3);
     }
 
-    
+    private void DestoryEnemy()
+    {
+        Managers.Resource.Destroy(gameObject);
+    }
+
+
 
     private void OnDrawGizmos()
     {
