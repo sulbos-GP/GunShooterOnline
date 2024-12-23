@@ -1,4 +1,4 @@
-using GooglePlayGames;
+//using GooglePlayGames;
 using NPOI.SS.Formula.Functions;
 using System.Collections.Generic;
 using TMPro;
@@ -89,7 +89,7 @@ public class UI_Profile : LobbyUI
         }
         else
         {
-            Managers.SystemLog.Message($"Metadata¸¦ ºÒ·¯¿À´Âµ¥ ½ÇÆĞÇÏ¿´½À´Ï´Ù. [{response.error_code}]");
+            Managers.SystemLog.Message($"Metadataë¥¼ ë¶ˆëŸ¬ì˜¤ëŠ”ë° ì‹¤íŒ¨í•˜ì˜€ìŠµë‹ˆë‹¤. [{response.error_code}]");
         }
     }
 
@@ -117,7 +117,7 @@ public class UI_Profile : LobbyUI
         int curLevel                = (profile.experience < 100) ? 1 : profile.experience / 100;
         int nextLevel               = curLevel + 1;
         this.level.text             = curLevel.ToString();
-        this.nextLevel.text         = $"´ÙÀ½ º¸»ó ·©Å© : {nextLevel}";
+        this.nextLevel.text         = $"ë‹¤ìŒ ë³´ìƒ ë­í¬ : {nextLevel}";
 
         int curExperience           = (profile.experience % 100);
         this.experience.text        = $"{curExperience} / 100";

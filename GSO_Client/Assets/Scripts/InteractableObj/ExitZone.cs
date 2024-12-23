@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class ExitZone : InteractableObject
 {
-    // public GameObject gameEndUI;¾ÆÁ÷¾øÀ½
+    // public GameObject gameEndUI;ì•„ì§ì—†ìŒ
 
-    public float exitTime;  //³ª°¡´Âµ¥ °É¸®´Â ½Ã°£
-    private float remainingTime; // ³²Àº ½Ã°£
-    private bool isExiting = false; // ÇöÀç Å»Ãâ ÁßÀÎÁö ¿©ºÎ
+    public float exitTime;  //ë‚˜ê°€ëŠ”ë° ê±¸ë¦¬ëŠ” ì‹œê°„
+    private float remainingTime; // ë‚¨ì€ ì‹œê°„
+    private bool isExiting = false; // í˜„ì¬ íƒˆì¶œ ì¤‘ì¸ì§€ ì—¬ë¶€
 
     private Coroutine exitCoroutine;
     private Coroutine retryCoroutine;
 
-    public GameObject timerTextPref; //»ı¼ºÇÒ Å¸ÀÌ¸ÓÀÇ ÇÁ¸®ÆÕ
-    private GameObject timerUI; //ÇÁ¸®ÆÕÀ¸·Î »ı¼ºÇÑ UI°´Ã¼
-    private TextMeshProUGUI timeText; //Å¸ÀÌ¸Ó °´Ã¼ÀÇ ÅØ½ºÆ®UI
+    public GameObject timerTextPref; //ìƒì„±í•  íƒ€ì´ë¨¸ì˜ í”„ë¦¬íŒ¹
+    private GameObject timerUI; //í”„ë¦¬íŒ¹ìœ¼ë¡œ ìƒì„±í•œ UIê°ì²´
+    private TextMeshProUGUI timeText; //íƒ€ì´ë¨¸ ê°ì²´ì˜ í…ìŠ¤íŠ¸UI
 
     private void Awake()
     {
@@ -76,11 +76,11 @@ public class ExitZone : InteractableObject
     [ContextMenu("ExitZone Cancel")]
     public void CancelExit(float retryTime)
     {
-        //ÇÇ°İµÇ°Å³ª ¿òÁ÷ÀÏ °æ¿ì isExitingÀ» false·Î º¯È¯ÇÒ°Í
+        //í”¼ê²©ë˜ê±°ë‚˜ ì›€ì§ì¼ ê²½ìš° isExitingì„ falseë¡œ ë³€í™˜í• ê²ƒ
         if (exitCoroutine != null)
         {
             Debug.Log("ExitZone Cancel");
-            StopCoroutine(exitCoroutine); // ÄÚ·çÆ¾ ÁßÁö
+            StopCoroutine(exitCoroutine); // ì½”ë£¨í‹´ ì¤‘ì§€
 
             timeText = null;
             Managers.Resource.Destroy(timerUI);
@@ -101,7 +101,7 @@ public class ExitZone : InteractableObject
         while (retryTime > 0)
         {
             retryTime -= 0.1f;
-            yield return new WaitForSeconds(0.1f); // 1ÃÊ¸¶´Ù ¾÷µ¥ÀÌÆ®
+            yield return new WaitForSeconds(0.1f); // 1ì´ˆë§ˆë‹¤ ì—…ë°ì´íŠ¸
         }
 
         Debug.Log("End RetryCoroutine");
@@ -132,7 +132,7 @@ public class ExitZone : InteractableObject
                 timeText.text = string.Format("{0}:{1}", seconds, milliseconds);
             }
 
-            yield return new WaitForSeconds(0.1f); // 1ÃÊ¸¶´Ù ¾÷µ¥ÀÌÆ®
+            yield return new WaitForSeconds(0.1f); // 1ì´ˆë§ˆë‹¤ ì—…ë°ì´íŠ¸
         }
     }
 

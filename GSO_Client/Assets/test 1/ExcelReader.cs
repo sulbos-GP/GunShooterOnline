@@ -70,7 +70,7 @@ public class ExcelReader
         fileList =  Directory.GetFiles(Application.persistentDataPath,"*.xlsx", SearchOption.TopDirectoryOnly);
         Debug.Log("유니티 안드로이드");
 #endif
-
+        fileList = Directory.GetFiles(Application.dataPath + EXCEL_PATH, "*.xlsx", SearchOption.TopDirectoryOnly);
         List<ISheet> sheetList = GetSheet(fileList);
         for (int i = 0; i < sheetList.Count; i++)
         {

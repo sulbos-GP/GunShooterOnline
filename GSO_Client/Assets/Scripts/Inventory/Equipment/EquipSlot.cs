@@ -14,8 +14,8 @@ public class EquipSlotBase : MonoBehaviour
 
     [Header("Slot Variable")]
     public int slotId;
-    public ItemType equipType; // ÀÌ ½½·Ô¿¡ Çã¿ëµÇ´Â ¾ÆÀÌÅÛ À¯Çü
-    public ItemObject equipItemObj; // ÇöÀç ÀåÂøµÈ ¾ÆÀÌÅÛ¿ÀºêÁ§Æ® @@ ÀÎº¥Åä¸®°¡ ¿­·ÁÀÖÀ»¶§¸¸ ÀÖÀ½
+    public ItemType equipType; // ì´ ìŠ¬ë¡¯ì— í—ˆìš©ë˜ëŠ” ì•„ì´í…œ ìœ í˜•
+    public ItemObject equipItemObj; // í˜„ì¬ ì¥ì°©ëœ ì•„ì´í…œì˜¤ë¸Œì íŠ¸ @@ ì¸ë²¤í† ë¦¬ê°€ ì—´ë ¤ìˆì„ë•Œë§Œ ìˆìŒ
 
     private Vector2 originalItemSize = Vector2.one;
     private bool isInit = false;
@@ -32,7 +32,7 @@ public class EquipSlotBase : MonoBehaviour
     {
         foreach (Transform child in transform)
         {
-            // ÀÚ½Ä °´Ã¼¸¦ »èÁ¦
+            // ìì‹ ê°ì²´ë¥¼ ì‚­ì œ
             Managers.Resource.Destroy(child.gameObject);
         }
     }
@@ -42,14 +42,14 @@ public class EquipSlotBase : MonoBehaviour
         isInit = true;
     }
 
-    //ÀÎº¥Åä¸®¸¦ ÅëÇÑ ÀåÂø: ÇÃ·¹ÀÌ¾î ±â¾î¿¡ Ãß°¡ + ¾ÆÀÌÅÛ ¿ÀºêÁ§Æ® º¯Çü
+    //ì¸ë²¤í† ë¦¬ë¥¼ í†µí•œ ì¥ì°©: í”Œë ˆì´ì–´ ê¸°ì–´ì— ì¶”ê°€ + ì•„ì´í…œ ì˜¤ë¸Œì íŠ¸ ë³€í˜•
     public bool SetItemEquip(ItemObject item, bool isQuickInfo = false)
     {
         if (!isQuickInfo)
         {
-            if (!ApplyItemEffects(item.itemData)) //ÇÃ·¹ÀÌ¾îÀÇ ±â¾î µñ¼Å³Ê¸®¿¡ Ãß°¡
+            if (!ApplyItemEffects(item.itemData)) //í”Œë ˆì´ì–´ì˜ ê¸°ì–´ ë”•ì…”ë„ˆë¦¬ì— ì¶”ê°€
             {
-                Debug.Log("Àû¿ë½ÇÆĞ");
+                Debug.Log("ì ìš©ì‹¤íŒ¨");
                 return false;
             }
         }
@@ -59,7 +59,7 @@ public class EquipSlotBase : MonoBehaviour
         equipItemObj.backUpParentId = slotId;
         item.transform.SetParent(transform);
 
-        //¾ÆÀÌÅÛ ¿ÀºêÁ§Æ® º¯È­
+        //ì•„ì´í…œ ì˜¤ë¸Œì íŠ¸ ë³€í™”
         SetEquipItemObj(item);
         return true;
     }
@@ -78,47 +78,47 @@ public class EquipSlotBase : MonoBehaviour
         RectTransform slotRect = GetComponent<RectTransform>();
         RectTransform itemRect = item.GetComponent<RectTransform>();
 
-        // ½½·ÔÀÇ width¿Í height °¡Á®¿À±â
+        // ìŠ¬ë¡¯ì˜ widthì™€ height ê°€ì ¸ì˜¤ê¸°
         float slotWidth = slotRect.rect.width * slotOffsetRatio;
         float slotHeight = slotRect.rect.height * slotOffsetRatio;
 
-        // ¾ÆÀÌÅÛÀÇ width¿Í height °¡Á®¿À±â
+        // ì•„ì´í…œì˜ widthì™€ height ê°€ì ¸ì˜¤ê¸°
         float itemWidth = itemRect.rect.width;
         float itemHeight = itemRect.rect.height;
 
-        // ³Êºñ¿Í ³ôÀÌ ºñÀ² °è»ê
+        // ë„ˆë¹„ì™€ ë†’ì´ ë¹„ìœ¨ ê³„ì‚°
         float widthRatio = slotWidth / itemWidth;
         float heightRatio = slotHeight / itemHeight;
 
-        // ÃÖ¼Ò ºñÀ² ¼±ÅÃ (½½·Ô Å©±â¿¡ ¸Â°Ô ºñÀ² Á¶Á¤)
+        // ìµœì†Œ ë¹„ìœ¨ ì„ íƒ (ìŠ¬ë¡¯ í¬ê¸°ì— ë§ê²Œ ë¹„ìœ¨ ì¡°ì •)
         float scaleRatio = Mathf.Min(widthRatio, heightRatio);
 
-        // ¾ÆÀÌÅÛÀÇ scale Á¶Á¤ (ÀÚ½Ä °´Ã¼¿¡ Àû¿ë)
+        // ì•„ì´í…œì˜ scale ì¡°ì • (ìì‹ ê°ì²´ì— ì ìš©)
         itemRect.localScale = new Vector3(scaleRatio, scaleRatio, 1f);
 
-        // À§Ä¡ Á¤·Ä º¸Á¤ (Áß¾Ó Á¤·Ä)
+        // ìœ„ì¹˜ ì •ë ¬ ë³´ì • (ì¤‘ì•™ ì •ë ¬)
         itemRect.anchoredPosition = Vector2.zero;
 
-        Managers.SystemLog.Message($"SetItemObjSize: ¿Ï·á (Slot: {slotWidth}x{slotHeight}, Item: {itemWidth}x{itemHeight}, Scale: {scaleRatio})");
+        Managers.SystemLog.Message($"SetItemObjSize: ì™„ë£Œ (Slot: {slotWidth}x{slotHeight}, Item: {itemWidth}x{itemHeight}, Scale: {scaleRatio})");
     }
 
 
 
-    // ¾ÆÀÌÅÛ ÀåÂø ÇØÁ¦
+    // ì•„ì´í…œ ì¥ì°© í•´ì œ
     public bool UnsetItemEquip()
     {
         if (equipItemObj == null)
         {
-            Debug.Log("ÀÌ¹Ì ÀåÂøµÈ ¾ÆÀÌÅÛÀÌ ¾øÀ½");
+            Debug.Log("ì´ë¯¸ ì¥ì°©ëœ ì•„ì´í…œì´ ì—†ìŒ");
             return false;
         }
 
-        //ÀåÂø ÇØÁ¦¿¡ ¼º°øÇÑ °æ¿ì
+        //ì¥ì°© í•´ì œì— ì„±ê³µí•œ ê²½ìš°
         equipItemObj.GetComponent<RectTransform>().localScale = originalItemSize;
 
-        if (!RemoveItemEffects()) //ÇÃ·¹ÀÌ¾îÀÇ ±â¾î µñ¼Å³Ê¸®¿¡¼­ Á¦°Å
+        if (!RemoveItemEffects()) //í”Œë ˆì´ì–´ì˜ ê¸°ì–´ ë”•ì…”ë„ˆë¦¬ì—ì„œ ì œê±°
         {
-            Debug.Log("Á¦°Å½ÇÆĞ");
+            Debug.Log("ì œê±°ì‹¤íŒ¨");
             return false;
         }
 
@@ -126,10 +126,10 @@ public class EquipSlotBase : MonoBehaviour
         return true;
     }
 
-    //ÀÎº¥Åä¸®¸¦ ÅëÇÏÁö ¾ÊÀº ÀåÂø : ÇÃ·¹ÀÌ¾îÀÇ gear¿¡ ÀÇÇÑ ÀåÂø + ÀåÂø È¤Àº ÇØÁ¦¿¡ µû¸¥ ÆÄ¶ó¹ÌÅÍ º¯È­ Àû¿ë
+    //ì¸ë²¤í† ë¦¬ë¥¼ í†µí•˜ì§€ ì•Šì€ ì¥ì°© : í”Œë ˆì´ì–´ì˜ gearì— ì˜í•œ ì¥ì°© + ì¥ì°© í˜¹ì€ í•´ì œì— ë”°ë¥¸ íŒŒë¼ë¯¸í„° ë³€í™” ì ìš©
     public virtual bool ApplyItemEffects(ItemData item)
     {
-        Debug.Log("¾ÆÀÌÅÛ ÀåÂø");
+        Debug.Log("ì•„ì´í…œ ì¥ì°©");
         if(!InventoryController.Instance.SetEquipItem(slotId, item))
         {
             return false;
@@ -139,7 +139,7 @@ public class EquipSlotBase : MonoBehaviour
 
     public virtual bool RemoveItemEffects()
     {
-        Debug.Log("¾ÆÀÌÅÛ ÇØÁ¦");
+        Debug.Log("ì•„ì´í…œ í•´ì œ");
         if (!InventoryController.Instance.UnsetEquipItem(slotId))
         {
             return false;

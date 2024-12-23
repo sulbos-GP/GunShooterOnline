@@ -75,10 +75,10 @@ public class UI_QuickInfo : LobbyUI
     
     public override void UpdateUI()
     {
-        //±âÁ¸ÀÇ ¾ÆÀÌÅÛµéÀÌ ÀÖ´Ù¸é ÃÊ±âÈ­ : ÀÌºÎºĞÀº µû·Î »©¼­ ´İ°Å³ª ÃÊ±âÈ­¶§ ¼±Ã³¸®·Î ³Ö¾îµµ µÊ
+        //ê¸°ì¡´ì˜ ì•„ì´í…œë“¤ì´ ìˆë‹¤ë©´ ì´ˆê¸°í™” : ì´ë¶€ë¶„ì€ ë”°ë¡œ ë¹¼ì„œ ë‹«ê±°ë‚˜ ì´ˆê¸°í™”ë•Œ ì„ ì²˜ë¦¬ë¡œ ë„£ì–´ë„ ë¨
         if (instantItemObjs.Count != 0)
         {
-            Managers.SystemLog.Message($"updateUI : ±âÁ¸ ¾ÆÀÌÅÛ Á¦°Å");
+            Managers.SystemLog.Message($"updateUI : ê¸°ì¡´ ì•„ì´í…œ ì œê±°");
             for (int i = instantItemObjs.Count-1; i >= 0; i--)
             {
                 if (instantItemObjs[i] != null)
@@ -87,18 +87,18 @@ public class UI_QuickInfo : LobbyUI
                 }
                 else
                 {
-                    Managers.SystemLog.Message($"updateUI : Null °´Ã¼ ¹ß°ß, Á¦°Å ½ºÅµ");
+                    Managers.SystemLog.Message($"updateUI : Null ê°ì²´ ë°œê²¬, ì œê±° ìŠ¤í‚µ");
                 }
             }
 
             instantItemObjs.Clear();
-            Managers.SystemLog.Message($"Å¬¸®¾î ¿Ï·á");
+            Managers.SystemLog.Message($"í´ë¦¬ì–´ ì™„ë£Œ");
         }
 
         quickResetBtn.gameObject.SetActive(true);
         quickInfoUI.SetActive(true);
 
-        //ÀåÂø ¾ÆÀÌÅÛ ¼³Á¤
+        //ì¥ì°© ì•„ì´í…œ ì„¤ì •
         List<DB_GearUnit> gears = Managers.Web.Models.Gear;
 
         if (gears == null)
@@ -123,33 +123,33 @@ public class UI_QuickInfo : LobbyUI
             EquipSlotBase target = equipSlots.GetValueOrDefault(gearCode, null);
             if(target == null)
             {
-                Managers.SystemLog.Message($"ÀåÂøÄ­À» ¼±ÅÃÇÏÁö ¸øÇÔ : {unit.gear.part}");
+                Managers.SystemLog.Message($"ì¥ì°©ì¹¸ì„ ì„ íƒí•˜ì§€ ëª»í•¨ : {unit.gear.part}");
             }
             target.SetItemEquip(gearItem, true);
             Managers.SystemLog.Message($"Item = {itemData.itemId} size = {itemData.width},{itemData.height}, amount = {itemData.amount}");
         }
 
-        //±×¸®µå »ı¼º ¹× ¼³Á¤
+        //ê·¸ë¦¬ë“œ ìƒì„± ë° ì„¤ì •
         Vector2Int size = new Vector2Int(3, 2);
         if (equipSlots[4].equipItemObj != null)
         {
             Data_master_item_backpack bagData = Data_master_item_backpack.GetData(equipSlots[4].equipItemObj.itemData.itemId);
             if (bagData == null)
             {
-                Managers.SystemLog.Message($"°¡¹æ Ã¼Å© : °¡¹æ µ¥ÀÌÅÍ¸¦ Ã£Áö¸øÇÔ");
+                Managers.SystemLog.Message($"ê°€ë°© ì²´í¬ : ê°€ë°© ë°ì´í„°ë¥¼ ì°¾ì§€ëª»í•¨");
             }
             size = new Vector2Int(bagData.total_scale_x, bagData.total_scale_y);
-            Managers.SystemLog.Message($"°¡¹æ Ã¼Å© : °¡¹æÀÇ »çÀÌÁî = {size.x} , {size.y}");
+            Managers.SystemLog.Message($"ê°€ë°© ì²´í¬ : ê°€ë°©ì˜ ì‚¬ì´ì¦ˆ = {size.x} , {size.y}");
         }
         else
         {
-            Managers.SystemLog.Message($"°¡¹æ Ã¼Å© : °¡¹æ ¾øÀ½ ±âº»»çÀÌÁî·Î");
+            Managers.SystemLog.Message($"ê°€ë°© ì²´í¬ : ê°€ë°© ì—†ìŒ ê¸°ë³¸ì‚¬ì´ì¦ˆë¡œ");
         }
 
         infoGrid.InstantGrid(new Vector2Int(size.x, size.y), 100, true);
-        Managers.SystemLog.Message($"ÃÖÁ¾ gridSize = {size.x} , {size.y}");
+        Managers.SystemLog.Message($"ìµœì¢… gridSize = {size.x} , {size.y}");
 
-        //ÀÎº¥Åä¸® ¾ÆÀÌÅÛ ¼³Á¤
+        //ì¸ë²¤í† ë¦¬ ì•„ì´í…œ ì„¤ì •
         List<DB_ItemUnit> items = Managers.Web.Models.Inventory;
         if (items == null)
         {
@@ -194,9 +194,9 @@ public class UI_QuickInfo : LobbyUI
     }
 
     /// <summary>
-    /// ÇöÀç Âø¿ëÇÑ Àåºñ¸¦ °¡Á®¿À°í ÀÌÈÄ¿¡ °¡¹æÀÌ Á¸ÀçÇÑ´Ù¸é ÀúÀå¼Ò¿¡¼­ ¾ÆÀÌÅÛÀ» ºÒ·¯¿Í Ã¤¿î´Ù
+    /// í˜„ì¬ ì°©ìš©í•œ ì¥ë¹„ë¥¼ ê°€ì ¸ì˜¤ê³  ì´í›„ì— ê°€ë°©ì´ ì¡´ì¬í•œë‹¤ë©´ ì €ì¥ì†Œì—ì„œ ì•„ì´í…œì„ ë¶ˆëŸ¬ì™€ ì±„ìš´ë‹¤
     /// 
-    /// ½ºÅÈÀº ³ªÁß¿¡ ¾ÆÁ÷ °èÈ¹ ¾øÀ½
+    /// ìŠ¤íƒ¯ì€ ë‚˜ì¤‘ì— ì•„ì§ ê³„íš ì—†ìŒ
     /// </summary>
     private void OnClickQuickInfo()
     {
@@ -230,7 +230,7 @@ public class UI_QuickInfo : LobbyUI
     }
 
     /// <summary>
-    /// Àåºñ¿¡ ÀÖ´Â ¾ÆÀÌÅÛ Á¤º¸µé
+    /// ì¥ë¹„ì— ìˆëŠ” ì•„ì´í…œ ì •ë³´ë“¤
     /// </summary>
     private void OnProcessLoadStorage(LoadStorageRes response)
     {
@@ -289,7 +289,7 @@ public class UI_QuickInfo : LobbyUI
     }
 
     /// <summary>
-    /// ÀúÀå¼Ò(°¡¹æ)¿¡ ÀÖ´Â ¾ÆÀÌÅÛ Á¤º¸µé
+    /// ì €ì¥ì†Œ(ê°€ë°©)ì— ìˆëŠ” ì•„ì´í…œ ì •ë³´ë“¤
     /// </summary>
     private void OnProcessResetStorage(ResetStorageRes response)
     {

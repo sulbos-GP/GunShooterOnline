@@ -1,5 +1,5 @@
 using Google.Protobuf.Protocol;
-using GooglePlayGames.BasicApi;
+//using GooglePlayGames.BasicApi;
 using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections;
@@ -9,9 +9,9 @@ using UnityEngine;
 
 public class PlayerInventoryUI : InventoryUI
 {
-    public TextMeshProUGUI moneyText; //µ·¿¡ ´ëÇÑ Á¤º¸°¡ ³ª¿Ã½Ã Ãß°¡
+    public TextMeshProUGUI moneyText; //ëˆì— ëŒ€í•œ ì •ë³´ê°€ ë‚˜ì˜¬ì‹œ ì¶”ê°€
                                       //
-    public Data_master_item_backpack equipBag; //ÇöÀç ÀåÂøÇÑ °¡¹æ
+    public Data_master_item_backpack equipBag; //í˜„ì¬ ì¥ì°©í•œ ê°€ë°©
 
     protected override void OnDisable()
     {
@@ -19,7 +19,7 @@ public class PlayerInventoryUI : InventoryUI
     }
 
     /// <summary>
-    /// ÇÚµé·¯¿¡¼­ ºÒ·ÁÁú ÇÔ¼ö
+    /// í•¸ë“¤ëŸ¬ì—ì„œ ë¶ˆë ¤ì§ˆ í•¨ìˆ˜
     /// </summary>
     public override void InventorySet()
     {
@@ -27,11 +27,11 @@ public class PlayerInventoryUI : InventoryUI
 
         Vector2Int newSize = new Vector2Int(equipBag.total_scale_x,equipBag.total_scale_y);
 
-        //»ı¼ºµÈ ±×¸®µå¸¦ ÃÊ±â¼¼ÆÃÇÏ°í µé¾îÀÖ´Â ¾ÆÀÌÅÛ
-        instantGrid.InstantGrid(newSize, equipBag.total_weight); // °¡¹æÀÇ Å©±â·Î ¹Ù²Ü°Í
+        //ìƒì„±ëœ ê·¸ë¦¬ë“œë¥¼ ì´ˆê¸°ì„¸íŒ…í•˜ê³  ë“¤ì–´ìˆëŠ” ì•„ì´í…œ
+        instantGrid.InstantGrid(newSize, equipBag.total_weight); // ê°€ë°©ì˜ í¬ê¸°ë¡œ ë°”ê¿€ê²ƒ
     }
 
-    //ÁÖ¾îÁø °¡¹æÀÇ ¾ÆÀÌµğ·Î °Ë»öÇÏ¿© º¯°æ
+    //ì£¼ì–´ì§„ ê°€ë°©ì˜ ì•„ì´ë””ë¡œ ê²€ìƒ‰í•˜ì—¬ ë³€ê²½
     public bool SetInventoryGrid(int itemId)
     {
         if (!TryGetBagData(itemId, out Data_master_item_backpack targetBag))
@@ -44,40 +44,40 @@ public class PlayerInventoryUI : InventoryUI
             return ChangeInvenSize(targetBag);
         }
 
-        equipBag = targetBag; //¸ÇÃ³À½¿¡ °¡¹æÀ» ÀåÂøÇÒ°æ¿ì
+        equipBag = targetBag; //ë§¨ì²˜ìŒì— ê°€ë°©ì„ ì¥ì°©í• ê²½ìš°
         return true;
     }
 
     /// <summary>
-    /// ±âº» °¡¹æÀ¸·Î º¯°æ
+    /// ê¸°ë³¸ ê°€ë°©ìœ¼ë¡œ ë³€ê²½
     /// </summary>
     public bool ResetInventoryGrid()
     {
-        // ±âº» °¡¹æ µ¥ÀÌÅÍ ºÒ·¯¿À±â
+        // ê¸°ë³¸ ê°€ë°© ë°ì´í„° ë¶ˆëŸ¬ì˜¤ê¸°
         if (!TryGetBagData(300, out Data_master_item_backpack basicBag))
         {
             return false;
         }
 
-        // ±âº» °¡¹æ ÀåÂø
+        // ê¸°ë³¸ ê°€ë°© ì¥ì°©
         return ChangeInvenSize(basicBag);
     }
 
-    //ÀÎº¥Åä¸®°¡ ¿­·ÁÀÖÀ»¶§ °¡¹æ ±³Ã¼ ·ÎÁ÷
+    //ì¸ë²¤í† ë¦¬ê°€ ì—´ë ¤ìˆì„ë•Œ ê°€ë°© êµì²´ ë¡œì§
     private bool ChangeInvenSize(Data_master_item_backpack targetBag)
     {
-        if (IsSameBag(targetBag)) // °°Àº °¡¹æÀÌ¸é º¯È­ ¾øÀÌ ¼º°ø
+        if (IsSameBag(targetBag)) // ê°™ì€ ê°€ë°©ì´ë©´ ë³€í™” ì—†ì´ ì„±ê³µ
         {
             return true;
         }
 
         Vector2Int newSize = new Vector2Int(targetBag.total_scale_x, targetBag.total_scale_y);
 
-        //°¡¹æÀ» »©°Å³ª ±³Ã¼°¡ °¡´ÉÇÑÁö ÆÇ´Ü
+        //ê°€ë°©ì„ ë¹¼ê±°ë‚˜ êµì²´ê°€ ê°€ëŠ¥í•œì§€ íŒë‹¨
         if (IsBagSizeReducing(equipBag, newSize) &&
             (!instantGrid.CheckAvailableToChange(newSize) || !CompareChangeWeight(targetBag)))
         {
-            Debug.Log("ÇØ´ç °¡¹æ¿¡ ³õÀ» ¼ö ¾øÀ½");
+            Debug.Log("í•´ë‹¹ ê°€ë°©ì— ë†“ì„ ìˆ˜ ì—†ìŒ");
             return false;
         }
 
@@ -86,7 +86,7 @@ public class PlayerInventoryUI : InventoryUI
         return true;
     }
 
-    // ¹Ù²Ü °¡¹æÀÇ ¹«°Ô°¡ ÇöÀç °¡Áö°í ÀÖ´Â ¾ÆÀÌÅÛµéÀÇ ¹«°Ô¸¦ °¨´ç°¡´ÉÇÏ¸é true
+    // ë°”ê¿€ ê°€ë°©ì˜ ë¬´ê²Œê°€ í˜„ì¬ ê°€ì§€ê³  ìˆëŠ” ì•„ì´í…œë“¤ì˜ ë¬´ê²Œë¥¼ ê°ë‹¹ê°€ëŠ¥í•˜ë©´ true
     private bool CompareChangeWeight(Data_master_item_backpack targetBag)
     {
         if (targetBag.total_weight < instantGrid.GridWeight)
@@ -97,7 +97,7 @@ public class PlayerInventoryUI : InventoryUI
         return true;
     }
 
-    //°¡¹æ db¿¡¼­ ÇØ´ç ¾ÆÀÌµğ·Î °Ë»ö. Á¸ÀçÇÏ¸é true
+    //ê°€ë°© dbì—ì„œ í•´ë‹¹ ì•„ì´ë””ë¡œ ê²€ìƒ‰. ì¡´ì¬í•˜ë©´ true
     public bool TryGetBagData(int itemId, out Data_master_item_backpack bagData)
     {
         bagData = Data_master_item_backpack.GetData(itemId);
@@ -109,13 +109,13 @@ public class PlayerInventoryUI : InventoryUI
         return true;
     }
 
-    // ÇöÀç ÀåÂøÇÑ °¡¹æ°ú ¹Ù²Ü °¡¹æÀÌ °°À¸¸é true
+    // í˜„ì¬ ì¥ì°©í•œ ê°€ë°©ê³¼ ë°”ê¿€ ê°€ë°©ì´ ê°™ìœ¼ë©´ true
     private bool IsSameBag(Data_master_item_backpack targetBag)
     {
         return equipBag.Key == targetBag.Key;
     }
 
-    // °¡¹æÀÇ »çÀÌÁî°¡ ÁÙ¾îµé¸é true
+    // ê°€ë°©ì˜ ì‚¬ì´ì¦ˆê°€ ì¤„ì–´ë“¤ë©´ true
     private bool IsBagSizeReducing(Data_master_item_backpack currentBag, Vector2Int newSize)
     {
         return currentBag.total_scale_x > newSize.x || currentBag.total_scale_y > newSize.y;

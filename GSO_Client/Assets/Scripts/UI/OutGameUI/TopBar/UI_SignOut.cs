@@ -1,4 +1,4 @@
-using GooglePlayGames;
+//using GooglePlayGames;
 using Org.BouncyCastle.Bcpg;
 using System;
 using System.Collections;
@@ -36,7 +36,7 @@ public class UI_SingOut : MonoBehaviour
 
         var packet = new SignOutReq()
         {
-            cause = "°ÔÀÓ ³ª°¡±â"
+            cause = "ê²Œìž„ ë‚˜ê°€ê¸°"
         };
 
         GsoWebService service = new GsoWebService();

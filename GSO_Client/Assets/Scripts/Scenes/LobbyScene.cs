@@ -35,7 +35,10 @@ public class LobbyScene : BaseScene
 #elif UNITY_ANDROID
         BetterStreamingAssets.Initialize();
         files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
-#endif 
+#elif UNITY_STANDALONE_WIN
+        string streamingAssetsPath = Application.streamingAssetsPath;
+        files = Directory.GetFiles(streamingAssetsPath, "*.xlsx", SearchOption.AllDirectories);
+#endif
 
         switch (ConnectMode)
         {
@@ -59,7 +62,6 @@ public class LobbyScene : BaseScene
         }
 
         PlayButton.interactable = false;
-
         ExcelReader.CopyExcel(files);
         SceneType = Define.Scene.Lobby;
         Screen.SetResolution(1920, 1080, false);

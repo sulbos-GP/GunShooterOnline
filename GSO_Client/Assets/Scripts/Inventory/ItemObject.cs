@@ -5,7 +5,7 @@ using System.Runtime.Versioning;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.InputSystem.Android;
+//using UnityEngine.InputSystem.Android;
 using UnityEngine.UI;
 using static System.TimeZoneInfo;
 using Vector2 = System.Numerics.Vector2;

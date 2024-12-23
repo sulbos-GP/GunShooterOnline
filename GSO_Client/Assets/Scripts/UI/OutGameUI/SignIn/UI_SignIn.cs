@@ -1,5 +1,5 @@
-using GooglePlayGames;
-using GooglePlayGames.BasicApi;
+//using GooglePlayGames;
+//using GooglePlayGames.BasicApi;
 using UnityEngine;
 using TMPro;
 using static AuthorizeResource;
@@ -30,63 +30,63 @@ public class SignInUI : MonoBehaviour
 
     void Start()
     {
-        PlayGamesPlatform.DebugLogEnabled = true;
-        PlayGamesPlatform.Activate();
+        //PlayGamesPlatform.DebugLogEnabled = true;
+        //PlayGamesPlatform.Activate();
 
         AutoSignIn();
     }
 
     /// <summary>
-    /// ÀÚµ¿ ·Î±×ÀÎ (±ÇÀå)
+    /// ìë™ ë¡œê·¸ì¸ (ê¶Œì¥)
     /// </summary>
     private void AutoSignIn()
     {
         try
         {
-            ResultMessage("±¸±Û ÇÃ·¹ÀÌ ¼­ºñ½º ÀÚµ¿ ÀÎÁõ ½Ãµµ...");
-            PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
+            ResultMessage("êµ¬ê¸€ í”Œë ˆì´ ì„œë¹„ìŠ¤ ìë™ ì¸ì¦ ì‹œë„...");
+            //PlayGamesPlatform.Instance.Authenticate(ProcessAuthentication);
         }
         catch (Exception error)
         {
             mSingInButton.gameObject.SetActive(true);
-            ResultMessage($"ÀÚµ¿ ÀÎÁõ ½ÇÆĞ : {error.Message}");
+            ResultMessage($"ìë™ ì¸ì¦ ì‹¤íŒ¨ : {error.Message}");
         }
     }
 
     /// <summary>
-    /// ÀÚµ¿ ·Î±×ÀÎÀÌ ¾ÈµÇ¾úÀ» °æ¿ì (¿¡·¯ »óÈ² or Å×½ºÆ®)
-    /// ÀÌ°Íµµ ±ÇÀå »çÇ×ÀÌ ¾Æ´Ï¶ó¼­ ¾È¾¸
+    /// ìë™ ë¡œê·¸ì¸ì´ ì•ˆë˜ì—ˆì„ ê²½ìš° (ì—ëŸ¬ ìƒí™© or í…ŒìŠ¤íŠ¸)
+    /// ì´ê²ƒë„ ê¶Œì¥ ì‚¬í•­ì´ ì•„ë‹ˆë¼ì„œ ì•ˆì”€
     /// </summary>
     public void OnClickSignIn()
     {
         try
         {
-            ResultMessage("±¸±Û ÇÃ·¹ÀÌ ¼­ºñ½º ¼öµ¿ ÀÎÁõ ½Ãµµ...");
-            PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
+            ResultMessage("êµ¬ê¸€ í”Œë ˆì´ ì„œë¹„ìŠ¤ ìˆ˜ë™ ì¸ì¦ ì‹œë„...");
+            //PlayGamesPlatform.Instance.ManuallyAuthenticate(ProcessAuthentication);
         }
         catch (Exception error)
         {
-            ResultMessage($"¼öµ¿ ÀÎÁõ ½ÇÆĞ : {error.Message}");
+            ResultMessage($"ìˆ˜ë™ ì¸ì¦ ì‹¤íŒ¨ : {error.Message}");
         }
     }
 
     /// <summary>
-    /// ¼öµ¿ ·Î±×¾Æ¿ô (¹ÌÁö¿ø)
+    /// ìˆ˜ë™ ë¡œê·¸ì•„ì›ƒ (ë¯¸ì§€ì›)
     /// </summary>
     private void OnClickSignOut()
     {
-        //¹ÌÁö¿ø
+        //ë¯¸ì§€ì›
     }
 
     /// <summary>
-    /// ÀÎÁõ Ã³¸®
+    /// ì¸ì¦ ì²˜ë¦¬
     /// </summary>
-    private void ProcessAuthentication(SignInStatus status)
+    /*private void ProcessAuthentication(SignInStatus status)
     {
 
         if (status == SignInStatus.Success)
         {
-            ResultMessage($"±¸±Û ÇÃ·¹ÀÌ ¼­ºñ½º ÀÎÁõ ¼º°ø");
+            ResultMessage($"êµ¬ê¸€ í”Œë ˆì´ ì„œë¹„ìŠ¤ ì¸ì¦ ì„±ê³µ");
 
             string userId = PlayGamesPlatform.Instance.GetUserId();
             AuthenticationReq packet = new AuthenticationReq()
@@ -98,7 +98,7 @@ public class SignInUI : MonoBehaviour
              try
              {
 
-                 ResultMessage("À¯Àú È®ÀÎ ¿äÃ»...");
+                 ResultMessage("ìœ ì € í™•ì¸ ìš”ì²­...");
 
                  GsoWebService service = new GsoWebService();
                  AuthenticationRequest request = service.mAuthorizeResource.GetAuthenticationRequest(packet);
@@ -106,62 +106,62 @@ public class SignInUI : MonoBehaviour
              }
              catch (HttpRequestException error)
              {
-                 ResultMessage($"À¯Àú È®ÀÎ ½ÇÆĞ : {error.Message}");
+                 ResultMessage($"ìœ ì € í™•ì¸ ì‹¤íŒ¨ : {error.Message}");
              }
 
         }
         else if (status == SignInStatus.InternalError)
         {
-            //±¸±Û ÇÃ·¹ÀÌ ·Î±×ÀÎ ¿¡·¯
+            //êµ¬ê¸€ í”Œë ˆì´ ë¡œê·¸ì¸ ì—ëŸ¬
             mSingInButton.gameObject.SetActive(true);
-            ResultMessage("ÀÎÁõ µµÁß ¿¡·¯°¡ ¹ß»ıÇÏ¿´½À´Ï´Ù.");
+            ResultMessage("ì¸ì¦ ë„ì¤‘ ì—ëŸ¬ê°€ ë°œìƒí•˜ì˜€ìŠµë‹ˆë‹¤.");
         }
         else if (status == SignInStatus.Canceled)
         {
-            //¸ğ¹ÙÀÏ·Î ½ÇÇàÀ» ¾ÈÇÒ °æ¿ì
+            //ëª¨ë°”ì¼ë¡œ ì‹¤í–‰ì„ ì•ˆí•  ê²½ìš°
             mSingInButton.gameObject.SetActive(true);
-            ResultMessage("ÀÎÁõÀÌ Ãë¼Ò µÇ¾ú½À´Ï´Ù.");
+            ResultMessage("ì¸ì¦ì´ ì·¨ì†Œ ë˜ì—ˆìŠµë‹ˆë‹¤.");
         }
 
-    }
+    }*/
 
     /// <summary>
-    /// ±âÁ¸¿¡ ÀÖ´ø À¯ÀúÀÎÁö È®ÀÎÈÄ ¼­¹öÄÚµå ¿äÃ»
+    /// ê¸°ì¡´ì— ìˆë˜ ìœ ì €ì¸ì§€ í™•ì¸í›„ ì„œë²„ì½”ë“œ ìš”ì²­
     /// </summary>
     private void OnProcessAuthentication(AuthenticationRes response)
     {
 
         try
         {
-            ResultMessage("±¸±Û ÇÃ·¹ÀÌ ¼­¹ö ÄÚµå ¿äÃ»...");
+            ResultMessage("êµ¬ê¸€ í”Œë ˆì´ ì„œë²„ ì½”ë“œ ìš”ì²­...");
 
-            //±âÁ¸¿¡ ÀÖ´ø À¯Àú¶ó¸é False
-            //»õ·Î¿î À¯Àú¶ó¸é True
+            //ê¸°ì¡´ì— ìˆë˜ ìœ ì €ë¼ë©´ False
+            //ìƒˆë¡œìš´ ìœ ì €ë¼ë©´ True
             bool forceRefreshToken = (response.error_code != WebErrorCode.None);
 
-            //ÅäÅ«À» ¾ò±âÀ§ÇÑ ÀÏÈ¸¿ë Code¹Ş¾Æ¿À±â
-            PlayGamesPlatform.Instance.RequestServerSideAccess(forceRefreshToken, ProcessServerAuthCode);
+            //í† í°ì„ ì–»ê¸°ìœ„í•œ ì¼íšŒìš© Codeë°›ì•„ì˜¤ê¸°
+            //PlayGamesPlatform.Instance.RequestServerSideAccess(forceRefreshToken, ProcessServerAuthCode);
         }
         catch (Exception error)
         {
-            ResultMessage($"¼­¹ö ÄÚµå ¿äÃ» ½ÇÆĞ : {error.Message}");
+            ResultMessage($"ì„œë²„ ì½”ë“œ ìš”ì²­ ì‹¤íŒ¨ : {error.Message}");
         }
     }
 
     /// <summary>
-    /// À¥ ¼­¹ö ·Î±×ÀÎ ¿äÃ»
+    /// ì›¹ ì„œë²„ ë¡œê·¸ì¸ ìš”ì²­
     /// </summary>
     private void ProcessServerAuthCode(string code)
     {
         if(code is null)
         {
-            ResultMessage("±¸±Û ÇÃ·¹ÀÌ ¼­¹ö ÄÚµå ¿äÃ» ½ÇÆĞ");
+            ResultMessage("êµ¬ê¸€ í”Œë ˆì´ ì„œë²„ ì½”ë“œ ìš”ì²­ ì‹¤íŒ¨");
             return;
         }
 
         try
         {
-            ResultMessage("·Î±×ÀÎ ¿äÃ» ½Ãµµ...");
+            ResultMessage("ë¡œê·¸ì¸ ìš”ì²­ ì‹œë„...");
 
             var header = new HeaderCheackVersion
             {
@@ -171,7 +171,7 @@ public class SignInUI : MonoBehaviour
 
             var body = new SignInReq()
             {
-                user_id = PlayGamesPlatform.Instance.GetUserId(),
+                //user_id = PlayGamesPlatform.Instance.GetUserId(),
                 server_code = code,
                 service = "Google"
             };
@@ -182,39 +182,39 @@ public class SignInUI : MonoBehaviour
         }
         catch (HttpRequestException error)
         {
-            ResultMessage($"·Î±×ÀÎ ¿äÃ» ½ÇÆĞ : {error.Message}");
+            ResultMessage($"ë¡œê·¸ì¸ ìš”ì²­ ì‹¤íŒ¨ : {error.Message}");
         }
 
     }
 
     /// <summary>
-    /// À¥ ¼­¹ö ·Î±×ÀÎ ÀÀ´ä
+    /// ì›¹ ì„œë²„ ë¡œê·¸ì¸ ì‘ë‹µ
     /// </summary>
     private void ProcessAccessToken(SignInRes response)
     {
 
         if (response.error_code != WebErrorCode.None)
         {
-            ResultMessage($"·Î±×ÀÎ ¿äÃ» ½ÇÆĞ : {response.error_description}");
+            ResultMessage($"ë¡œê·¸ì¸ ìš”ì²­ ì‹¤íŒ¨ : {response.error_description}");
             return;
         }
         else
         {
-            ResultMessage("·Î±×ÀÎ ¿äÃ» ¼º°ø");
+            ResultMessage("ë¡œê·¸ì¸ ìš”ì²­ ì„±ê³µ");
         }
 
         BetterStreamingAssets.Initialize();
         string[] files = BetterStreamingAssets.GetFiles("/", "*.xlsx", SearchOption.AllDirectories);
         ExcelReader.CopyExcel(files);
-        //WebClientService °ª ³Ö¾îÁÖ±â
-        //UserData´Â Áö¼ÓÀûÀ¸·Î µé°í ÀÖÀ» °Í
+        //WebClientService ê°’ ë„£ì–´ì£¼ê¸°
+        //UserDataëŠ” ì§€ì†ì ìœ¼ë¡œ ë“¤ê³  ìˆì„ ê²ƒ
         {
             Managers.Web.Models.Credential = response.credential;
             Managers.Web.Models.Data = response.userData;
             Managers.Web.Models.DailyData = response.DailyLoads;
         }
 
-        //·Îºñ·Î ÀÌµ¿
+        //ë¡œë¹„ë¡œ ì´ë™
         {
             Managers.Scene.LoadScene(Define.Scene.Shelter);
         }
