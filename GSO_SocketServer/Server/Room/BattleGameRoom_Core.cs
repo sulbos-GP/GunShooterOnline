@@ -22,6 +22,7 @@ using Google.Protobuf.WellKnownTypes;
 using System.Runtime.ConstrainedExecution;
 using System.Threading;
 using Server.Server;
+using System.Reflection.Metadata;
 
 namespace Server
 {
@@ -43,12 +44,13 @@ namespace Server
         private Stopwatch playTime = new Stopwatch();
         //public bool IsGameStarted { get; protected set; } = false;
 
+        private float StartTick;
 
         public float LeftTime
         {
             get
             {
-                return Program.minutes * 60  - LogicTimer.Tick * LogicTimer.mFixedDelta;
+                return Program.minutes * 60  - (LogicTimer.Tick- StartTick) * LogicTimer.mFixedDelta;
             }
         }
 
@@ -89,6 +91,7 @@ namespace Server
 
         }
 
+
         public override void Start()
         {
             CurrentGameState = GameState.LOADING;
@@ -96,7 +99,7 @@ namespace Server
             Console.WriteLine("GameRoom Start");
             Init();
 
-            PushAfter(Program.minutes * 60 * 1000, Reset);
+    
 
             CurrentGameState = GameState.ALIVE;
 
@@ -137,6 +140,7 @@ namespace Server
             CurrentGameState = GameState.LOADING;
 
             Program.gameserver.mGameLogicTimer.Reset();
+            StartTick = LogicTimer.Tick;
 
             foreach (Player p in _playerDic.Values)
             {
