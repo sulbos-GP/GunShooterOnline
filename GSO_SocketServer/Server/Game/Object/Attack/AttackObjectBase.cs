@@ -38,7 +38,7 @@ namespace Server.Game.Object.Attack
             polygon.Parent = this;
             this.currentShape = polygon;
 
-            //CellPos = owner.CellPos;
+            CellPos = polygon.position;
         }
 
         public void Destroy()
@@ -48,7 +48,7 @@ namespace Server.Game.Object.Attack
 
         public override void OnCollision(GameObject other)
         {
-            
+            //Console.WriteLine("COLLL ========== " + other.ObjectType.ToString());
             if (other != null && other.gameRoom != null && other.gameRoom == this.gameRoom)
             {
                 BaseAI owner = ObjectManager.Instance.Find<BaseAI>(this.OwnerId);
@@ -58,7 +58,9 @@ namespace Server.Game.Object.Attack
                 }
 
                 Player player = other as Player;
-                if (player == null)
+                /*player ??= other.GetOwner() as Player;*/
+
+                if(player == null)
                 {
                     return;
                 }

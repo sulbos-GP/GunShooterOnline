@@ -119,7 +119,7 @@ namespace QuadTree
                     result = s1.test(s2);
                     if (result != null && (MathF.Abs(result.overlap) > 0))
                     {
-                       /* if (g1.ObjectType == Google.Protobuf.Protocol.GameObjectType.Noneobject && g2.ObjectType == Google.Protobuf.Protocol.GameObjectType.Player)
+                        /*if (g1.ObjectType == Google.Protobuf.Protocol.GameObjectType.Enemyai && g2.ObjectType == Google.Protobuf.Protocol.GameObjectType.Attack)
                         {
                             Console.WriteLine("Scope가 Player 충돌");
                         }*/

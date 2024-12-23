@@ -16,7 +16,7 @@ namespace Server.Game.Object
         public override void Init(Vector2 pos)
         {
             base.Init(pos);
-
+            
             info.Name = "MeleeEnemy";
             chaseRange = 8f;
             attackRange = 1f;
@@ -56,7 +56,7 @@ namespace Server.Game.Object
 
 
             Console.WriteLine("melee Attack - 1");
-            gameRoom.PushAfter((int)(1 * 500), AttakHandle);
+            gameRoom.PushAfter((int)(1 * 200), AttakHandle);
 
         }
 
@@ -69,7 +69,7 @@ namespace Server.Game.Object
 
             S_AiAttackShot attackShotPacket = new S_AiAttackShot()
             {
-                ObjectId = this.Id
+                ObjectId = this.Id,
             };
             this.gameRoom.BroadCast(attackShotPacket);
 
