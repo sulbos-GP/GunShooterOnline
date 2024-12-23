@@ -254,6 +254,7 @@ namespace Server.Game.Object
                 return;
             }
 
+            //Console.WriteLine("POS : " + path[path.Count - 1].x + ", "+ path[path.Count - 1].y);
 
             while (currentTargetIndex < path.Count)
             {
@@ -385,7 +386,6 @@ namespace Server.Game.Object
 
         }
 
-        public Vector2Int? lastTargetPos;
        /* private Vector2 laststart;
         private Vector2 lastend;*/
 
@@ -403,6 +403,13 @@ namespace Server.Game.Object
             {
                 return false;
             }
+        }
+
+        public Vector2Int? lastTargetPos;
+
+        public void PathFinding_Update_Reset()
+        {
+            lastTargetPos = null;
         }
 
         public void PathFinding_Update(Vector2 start, Vector2 end, bool checkObjects = false)

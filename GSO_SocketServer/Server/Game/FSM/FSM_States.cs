@@ -120,7 +120,8 @@ namespace Server.Game.FSM
         public override void Enter()
         {
             base.Enter();
-            targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
+            //targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, Owner.spawnerDistance);
+            targetPos = Owner.GetRandomPosInSpawnZone(Owner.spawnPoint, 1); //1223
 
 
             Owner.PathFinding_Once(Owner.CellPos, targetPos, checkObjects: false);
@@ -149,7 +150,6 @@ namespace Server.Game.FSM
                 return;
             }
 
-            Owner.MoveAI();
 
             float dist = Vector2.Distance(targetPos, Owner.CellPos);
             //Console.WriteLine($"close to target pos:{dist}");
@@ -158,6 +158,10 @@ namespace Server.Game.FSM
                 Owner.state.ChangeState(Owner.IdleState);
                 return;
             }
+
+
+            Owner.MoveAI();
+
         }
 
         //종료
@@ -211,7 +215,6 @@ namespace Server.Game.FSM
                 return;
             }
 
-            Owner.MoveAI();
 
 
             //이상이 없다면 돌아감
@@ -246,7 +249,8 @@ namespace Server.Game.FSM
             //    return;
             //}
 
-          
+            Owner.MoveAI();
+
 
         }
 
@@ -292,6 +296,7 @@ namespace Server.Game.FSM
         {
             base.Enter();
             storeTickCount = Environment.TickCount;
+            Owner.PathFinding_Update_Reset();
         }
 
         public override void Update()
@@ -375,6 +380,7 @@ namespace Server.Game.FSM
         //종료
         public override void Exit()
         {
+            Owner.PathFinding_Update_Reset();
 
         }
     }
@@ -514,8 +520,7 @@ namespace Server.Game.FSM
                 return;
             }
 
-            //집으로 귀환
-            Owner.MoveAI();
+       
 
 
             //스폰존 내의 랜덤한 타겟위치로 이동후 대기상태로 전환
@@ -526,6 +531,10 @@ namespace Server.Game.FSM
                 Owner.state.ChangeState(Owner.IdleState);
                 return;
             }
+
+
+            //집으로 귀환
+            Owner.MoveAI();
         }
 
         //종료
