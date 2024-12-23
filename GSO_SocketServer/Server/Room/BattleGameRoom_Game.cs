@@ -1152,8 +1152,11 @@ namespace Server
             int count = 0;
             foreach (AISpawnZone zone in map.aispawnZones)
             {
-                if (count >= 1)
+                count++;
+
+                if (count >= 2)
                     continue;
+
                 MeleeEnemy enemy = ObjectManager.Instance.Add<MeleeEnemy>();
                 {
                     //enemy.info.Name = "AI";
@@ -1165,38 +1168,48 @@ namespace Server
                 EnterGame(enemy);
 
 
-                count++;
-            
-                   
-
-               /* if (count % 2 == 1)
+                RangeEnemy enemy2 = ObjectManager.Instance.Add<RangeEnemy>();
                 {
-                    RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
-                    {
-                        //enemy.info.Name = "AI";
-                        enemy.CellPos = zone.CellPos;
-                        enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
-
-                    }
-                    enemy.Init(zone.CellPos);
-                    EnterGame(enemy);
+                    //enemy.info.Name = "AI";
+                    enemy2.CellPos = zone.CellPos;
+                    enemy2.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
 
                 }
-                else
-                {
-                    MeleeEnemy enemy = ObjectManager.Instance.Add<MeleeEnemy>();
-                    {
-                        //enemy.info.Name = "AI";
-                        enemy.CellPos = zone.CellPos;
-                        enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+                enemy2.Init(zone.CellPos);
+                EnterGame(enemy2);
 
-                    }
-                    enemy.Init(zone.CellPos);
-                    EnterGame(enemy);
-                }*/
-            
-            
-            
+
+
+
+
+                /* if (count % 2 == 1)
+                 {
+                     RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
+                     {
+                         //enemy.info.Name = "AI";
+                         enemy.CellPos = zone.CellPos;
+                         enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+
+                     }
+                     enemy.Init(zone.CellPos);
+                     EnterGame(enemy);
+
+                 }
+                 else
+                 {
+                     MeleeEnemy enemy = ObjectManager.Instance.Add<MeleeEnemy>();
+                     {
+                         //enemy.info.Name = "AI";
+                         enemy.CellPos = zone.CellPos;
+                         enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+
+                     }
+                     enemy.Init(zone.CellPos);
+                     EnterGame(enemy);
+                 }*/
+
+
+
             }
 
 
