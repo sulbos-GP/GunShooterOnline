@@ -154,6 +154,7 @@ public class CreatureController : BaseController
         {
             animator.SetBool("IsMove", true);
             AudioManager.instance.PlaySound("Move", gameObject.GetComponent<AudioSource>());
+            //Debug.Log($"{gameObject.name} is Move");
             if (creaturePos.x < nextPos.x)
             {
                 transform.localScale = basicScale;
@@ -165,11 +166,13 @@ public class CreatureController : BaseController
         }
         else
         {
+            //Debug.Log($"{gameObject.name} is Idle");
             if (nextPos == creaturePos && !animator.GetBool("IsMove"))
             {
                 return;
             }
             animator.SetBool("IsMove", false);
+            //Debug.Log($"{gameObject.name} is IdleAnimation");
             AudioManager.instance.StopSound(gameObject.GetComponent<AudioSource>());
         }
             

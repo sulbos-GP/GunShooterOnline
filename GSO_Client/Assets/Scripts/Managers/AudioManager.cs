@@ -64,6 +64,29 @@ public class AudioManager : MonoBehaviour
         Debug.Log($"{keyword} play success");
     }
 
+    public void PlayOneShot(String keyword, AudioSource source , float speed)
+    {
+        //키워드에 해당하는 클립 없을 때
+        if (!audioclips.ContainsKey(keyword))
+            return;
+        
+        if(!audioSources.Contains(source))
+            audioSources.Add(source);
+        List<AudioClip> audioclipList = audioclips[keyword];
+        if (audioclipList.Count > 1)
+        {
+            int index = Random.Range(0, audioclipList.Count);
+            source.clip = audioclipList[index];
+        }
+        else
+            source.clip = audioclipList.First();
+        
+        if(source.isPlaying)
+            source.Stop();
+        source.PlayOneShot(source.clip, speed);
+        Debug.Log($"{keyword} play success");
+    }
+
     public void StopSound(AudioSource source)
     {
         if(source.isPlaying)
