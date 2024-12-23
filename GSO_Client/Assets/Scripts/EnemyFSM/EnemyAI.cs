@@ -63,6 +63,7 @@ public class EnemyAI : CreatureController
         AttackShape.SetPosition(2, center + rect.bottomRight);
         AttackShape.SetPosition(3, center + rect.bottomLeft);
         AttackShape.SetPosition(4, center + rect.topLeft);
+        
         Debug.Log($"공격범위 그리기 완료 center : {center} ");
     }
 

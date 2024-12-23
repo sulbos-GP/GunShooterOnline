@@ -930,7 +930,7 @@ internal class PacketHandler
         //Debug.Log(packet.PosList.ToList().Count); 
         foreach (Vector2IntInfo info in packet.PosList)
         {
-            //Debug.DrawLine(instance, new Vector2(info.X,info.Y), Color.red);
+            Debug.DrawLine(instance, new Vector2(info.X,info.Y), Color.red);
             instance = new Vector2(info.X, info.Y);
         }
     }
