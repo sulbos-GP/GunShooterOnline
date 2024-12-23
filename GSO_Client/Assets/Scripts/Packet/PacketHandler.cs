@@ -239,6 +239,8 @@ internal class PacketHandler
             {
                 exitZone.CancelExit(packet.RetryTime / 1000.0f);
             }
+
+            return;
         }
 
         var targetPlayer = Managers.Object.FindById(packet.PlayerId);
