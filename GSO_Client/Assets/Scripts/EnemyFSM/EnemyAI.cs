@@ -106,9 +106,9 @@ public class EnemyAI : CreatureController
     public void SetAniamtionAttack()
     {
         animator.SetTrigger("IsAttack");
-        var audioSource = gameObject.transform.Find("Pivot/Gun").GetComponent<AudioSource>();
+        var audioSource = gameObject.transform.Find("Pivot/Gun");
         if(audioSource!=null)
-            AudioManager.instance.PlayOneShot("2gunshot",audioSource,0.7f);
+            AudioManager.instance.PlayOneShot("2gunshot",audioSource.GetComponent<AudioSource>(),0.7f);
         else
             AudioManager.instance.PlayOneShot("Dogbite", transform.GetChild(0).GetComponent<AudioSource>(), 1.0f);
     }
