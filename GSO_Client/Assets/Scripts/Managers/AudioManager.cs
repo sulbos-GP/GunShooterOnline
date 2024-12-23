@@ -95,7 +95,11 @@ public class AudioManager : MonoBehaviour
 
     public void StopAllSounds()
     {
-        foreach(var source in audioSources)
-            source.Stop();
+        foreach (var source in audioSources)
+        {
+            if(source!=null)
+                source.Stop();
+        }
+            
     }
 }
