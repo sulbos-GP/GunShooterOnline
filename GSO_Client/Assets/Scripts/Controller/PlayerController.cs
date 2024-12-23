@@ -90,7 +90,11 @@ public class PlayerController : CreatureController
         IsDead = true;
 
         if (Managers.Object.MyPlayer.Hp == 0)
+        {
             UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
+            AudioManager.instance.StopAllSounds();
+        }
+
         Debug.Log(transform.name + "Dead");
 
         Managers.Object.RemoveWithoutDestroy(Id);
