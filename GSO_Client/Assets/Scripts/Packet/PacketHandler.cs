@@ -30,7 +30,7 @@ internal class PacketHandler
         var enterGamePacket = (S_EnterGame)packet;
         Managers.Object.Clear();
 
-        UIManager.Instance.leftTime = enterGamePacket.GameData.LeftTime* 60;
+        UIManager.Instance.leftTime = enterGamePacket.GameData.LeftTime;
 
         Managers.SystemLog.Message($"{enterGamePacket.Player}");
         Managers.Object.Add(enterGamePacket.Player, true);
@@ -239,6 +239,8 @@ internal class PacketHandler
             {
                 exitZone.CancelExit(packet.RetryTime / 1000.0f);
             }
+
+            return;
         }
 
         var targetPlayer = Managers.Object.FindById(packet.PlayerId);
@@ -754,6 +756,12 @@ internal class PacketHandler
         //총을 쏜 객체만 
         GameObject shootingPlayer = Managers.Object.FindById(packet.ShootPlayerId);
         
+        if (shootingPlayer == null)
+        {
+            Debug.LogWarning("shootingPlayer is null");
+        }
+
+
         Vector2 hitPoint = new Vector2(packet.HitPointX, packet.HitPointY);
         Vector2 startPoint = new Vector2(packet.StartPosX, packet.StartPosY);
 
@@ -922,7 +930,7 @@ internal class PacketHandler
         //Debug.Log(packet.PosList.ToList().Count); 
         foreach (Vector2IntInfo info in packet.PosList)
         {
-            //Debug.DrawLine(instance, new Vector2(info.X,info.Y), Color.red);
+            Debug.DrawLine(instance, new Vector2(info.X,info.Y), Color.red);
             instance = new Vector2(info.X, info.Y);
         }
     }

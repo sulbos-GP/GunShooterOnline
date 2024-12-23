@@ -349,6 +349,11 @@ public class PacketHandler
 
         Player player = clientSession.MyPlayer;
 
+        if( player == null )
+        {
+            Console.WriteLine("ERROR : MyPlayer is null");
+            return;
+        }
 
         player.gameRoom.Push(player.gameRoom.HandleInputData, player, packet);
     }

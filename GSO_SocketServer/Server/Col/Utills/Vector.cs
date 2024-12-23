@@ -132,5 +132,11 @@ namespace Utils
         {
             return new Vector2(v.x,v.y);
         }
+
+        public static implicit operator Vector(Vector2 v)
+        {
+            return new Vector(v.X, v.Y);
+
+        }
     }
 }
