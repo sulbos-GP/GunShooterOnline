@@ -21,11 +21,15 @@ using Server.Game.Object;
 using Google.Protobuf.WellKnownTypes;
 using System.Runtime.ConstrainedExecution;
 using System.Threading;
+using Server.Server;
 
 namespace Server
 {
     public partial class BattleGameRoom : GameRoom
     {
+      
+        //GameServer _server;
+
         //GameServer Onstart에서 받아옴
         public List<int> connectPlayer = new List<int>();
 
@@ -40,7 +44,13 @@ namespace Server
         //public bool IsGameStarted { get; protected set; } = false;
 
 
-
+        public float LeftTime
+        {
+            get
+            {
+                return Program.minutes * 60  - LogicTimer.Tick * LogicTimer.mFixedDelta;
+            }
+        }
 
         public bool IsGameEnd { get; protected set; } = false;
 
@@ -117,12 +127,16 @@ namespace Server
             sessions = new List<Session>();
 
         }
-
+       /* public void ConnectServer(GameServer gameServer)
+        {
+            _server = gameServer;
+        }*/
 
         public override void Reset()
         {
             CurrentGameState = GameState.LOADING;
 
+            Program.gameserver.mGameLogicTimer.Reset();
 
             foreach (Player p in _playerDic.Values)
             {
@@ -265,7 +279,7 @@ namespace Server
 
                     enterPacket.GameData = new GameDataInfo()
                     {
-                        LeftTime = Program.minutes
+                        LeftTime = LeftTime
                     };
 
                     player.Session.Send(enterPacket);

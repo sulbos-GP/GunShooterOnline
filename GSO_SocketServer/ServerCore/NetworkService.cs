@@ -56,10 +56,7 @@ namespace ServerCore
             return true;
         }
 
-        public virtual void ResetServer()
-        {
-            
-        }
+        
 
 
 
@@ -164,12 +161,12 @@ namespace ServerCore
         protected override Task<bool> OnStop() { return Task.FromResult(false); }
 
 
-        public override void ResetServer()
+     /*   public override void ResetServer()
         {
             base.ResetServer();
 
             gameRoom.Reset();
-        }
+        }*/
 
 
         public void OnLogicUpdate()
