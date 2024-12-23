@@ -268,6 +268,7 @@ public class CreatureController : BaseController
             UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
         }
 
+        animator.SetTrigger("IsDie");
         Debug.Log(transform.name + "Dead");
         //GameObject effect = Managers.Resource.Instantiate("Effect/DieEffect");
         //effect.transform.position = transform.position;
