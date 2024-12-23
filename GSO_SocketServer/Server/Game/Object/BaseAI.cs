@@ -301,6 +301,7 @@ namespace Server.Game.Object
         {
             rangeAttackDir = Vector2.Normalize(target.CellPos - CellPos);
 
+            attackPolygon.position = CellPos;
 
             S_AiAttackReady attackReadyPacket = new S_AiAttackReady()
             {

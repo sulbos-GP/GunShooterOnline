@@ -24,8 +24,8 @@ namespace Server.Game.Object
             stat.MergeFrom(new StatInfo()
             {
                 //Attack = 3,
-                Hp = 150,
-                MaxHp = 150,
+                Hp = 100,
+                MaxHp = 100,
                 AttackRange = 10,
                 //방어력
 
