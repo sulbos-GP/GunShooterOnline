@@ -544,7 +544,7 @@ GameObject:
   - component: {fileID: 3152987139657766021}
   - component: {fileID: 9110463276720194432}
   - component: {fileID: 1789148133344747608}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ObjectSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -606,7 +606,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 1
   m_Sprite: {fileID: 309628545801974608, guid: 564fedabfe62bd5439a41debe47e7d9a, type: 3}
   m_Color: {r: 1, g: 0, b: 0, a: 1}
   m_FlipX: 0
@@ -650,7 +650,7 @@ GameObject:
   - component: {fileID: 1633866404250258004}
   - component: {fileID: 6361606375201274275}
   - component: {fileID: 9164105959369575777}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Gun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
