@@ -1159,7 +1159,7 @@ namespace Server
             {
                 count++;
 
-                if (count >= 2)
+               /* if (count >= 2)
                     continue;
 
                 MeleeEnemy enemy = ObjectManager.Instance.Add<MeleeEnemy>();
@@ -1181,13 +1181,13 @@ namespace Server
 
                 }
                 enemy2.Init(zone.CellPos);
-                EnterGame(enemy2);
+                EnterGame(enemy2);*/
 
 
 
 
 
-                /* if (count % 2 == 1)
+                 if (count % 2 == 1)
                  {
                      RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
                      {
@@ -1211,7 +1211,7 @@ namespace Server
                      }
                      enemy.Init(zone.CellPos);
                      EnterGame(enemy);
-                 }*/
+                 }
 
 
 
