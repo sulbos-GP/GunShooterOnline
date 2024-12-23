@@ -103,7 +103,7 @@ public class PlayerController : CreatureController
         AudioSource.Stop();
 
         //사망 후 3초뒤 파괴?
-        Invoke("DestoryPlayer", 3);
+        Invoke("DestoryEnemy", 3);
     }
 
     private void DestoryPlayer()
