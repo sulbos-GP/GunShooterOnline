@@ -1135,6 +1135,11 @@ namespace Server
         private void GameStart()
         {
             Console.WriteLine("============ GameStart ============");
+
+            PushAfter(Program.minutes * 60 * 1000, Reset);
+            StartTick = LogicTimer.Tick;
+
+
             map.SpawnPlayers(tempPlayer.ToArray());
 
             foreach (Player p in tempPlayer)

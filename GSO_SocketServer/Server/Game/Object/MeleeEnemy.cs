@@ -56,7 +56,7 @@ namespace Server.Game.Object
 
 
             Console.WriteLine("melee Attack - 1");
-            gameRoom.PushAfter((int)(1 * 1000), AttakHandle);
+            gameRoom.PushAfter((int)(1 * 500), AttakHandle);
 
         }
 
