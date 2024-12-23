@@ -440,7 +440,7 @@ namespace Server.Game.FSM
 
             int currentTickCount = Environment.TickCount;
             //Console.WriteLine($"Wait attack:{(storeTickCount + waitAttackTime) - currentTickCount}");
-            if (storeTickCount + waitAttackTime + Owner.attackDelay * 1000 < currentTickCount)
+            if (storeTickCount + waitAttackTime  + Owner.attackDelay * 1000 < currentTickCount)
             {
 
                 //TODO : 공격
