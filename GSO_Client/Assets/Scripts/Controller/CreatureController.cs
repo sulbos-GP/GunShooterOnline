@@ -263,10 +263,10 @@ public class CreatureController : BaseController
             return;
         IsDead = true;
         //TO - DO : 2024.10.08 수정 예정
-        if (Managers.Object.MyPlayer.Hp == 0)
+        /*if (Managers.Object.MyPlayer.Hp == 0)
         {
             UIManager.Instance.SetDieMessage(Managers.Object.FindById(attackerId).name);
-        }
+        }*/
 
         animator.SetTrigger("IsDie");
         Debug.Log(transform.name + "Dead");
