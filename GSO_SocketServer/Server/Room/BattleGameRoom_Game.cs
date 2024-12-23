@@ -1152,10 +1152,24 @@ namespace Server
             int count = 0;
             foreach (AISpawnZone zone in map.aispawnZones)
             {
+                if (count >= 1)
+                    continue;
+                MeleeEnemy enemy = ObjectManager.Instance.Add<MeleeEnemy>();
+                {
+                    //enemy.info.Name = "AI";
+                    enemy.CellPos = zone.CellPos;
+                    enemy.gameRoom = Program.gameserver.gameRoom as BattleGameRoom;
+
+                }
+                enemy.Init(zone.CellPos);
+                EnterGame(enemy);
+
 
                 count++;
+            
+                   
 
-                if (count % 2 == 1)
+               /* if (count % 2 == 1)
                 {
                     RangeEnemy enemy = ObjectManager.Instance.Add<RangeEnemy>();
                     {
@@ -1179,7 +1193,7 @@ namespace Server
                     }
                     enemy.Init(zone.CellPos);
                     EnterGame(enemy);
-                }
+                }*/
             
             
             
