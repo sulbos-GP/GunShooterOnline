@@ -92,7 +92,7 @@ public class Gun : MonoBehaviour
         
         float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
         //var gunTrn = transform.GetChild(0);
-        //transform.parent.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
+        transform.parent.rotation = Quaternion.Euler(new Vector3(0, 0, angle - 90f));
 
 
         //Debug.Log("Dir" + angle);

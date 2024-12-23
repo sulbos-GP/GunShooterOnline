@@ -20,7 +20,7 @@ namespace Server.Game.Object
             info.Name = "MeleeEnemy";
             chaseRange = 8f;
             attackRange = 1f;
-            attackDelay = 0.1f;
+            attackDelay = 1f;
 
             stat.MergeFrom(new StatInfo()
             {
@@ -56,7 +56,7 @@ namespace Server.Game.Object
 
 
             Console.WriteLine("melee Attack - 1");
-            gameRoom.PushAfter((int)(attackDelay * 1000), AttakHandle);
+            gameRoom.PushAfter((int)(1 * 1000), AttakHandle);
 
         }
 
