@@ -71,6 +71,8 @@ namespace Server.Game.Object
 
         public BaseAI()
         {
+
+            //Console.WriteLine("BaseAI-----------------------------");
             ObjectType = GameObjectType.Enemyai;
 
             #region FSM

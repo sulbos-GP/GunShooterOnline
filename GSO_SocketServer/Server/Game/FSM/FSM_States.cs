@@ -387,8 +387,8 @@ namespace Server.Game.FSM
 
     public class AttackState : StateBase
     {
-        private const int waitAttackTime = 500;
-        private int storeTickCount = 0;
+        private const int waitAttackTime = 0;
+        private int storeTickCount = int.MaxValue;
         public AttackState(BaseAI owner) : base(owner, MobState.Attack)
         {
             Owner = owner;

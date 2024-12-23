@@ -121,7 +121,6 @@ public class CreatureObj : GameObject
             return;
 
         GameObject rootAttacker = attacker;
-
         if (attacker.ObjectType == GameObjectType.Enemyai || attacker.ObjectType == GameObjectType.Player)
         {
 
