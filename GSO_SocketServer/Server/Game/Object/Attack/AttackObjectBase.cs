@@ -38,7 +38,7 @@ namespace Server.Game.Object.Attack
             polygon.Parent = this;
             this.currentShape = polygon;
 
-            CellPos = owner.CellPos;
+            //CellPos = owner.CellPos;
         }
 
         public void Destroy()

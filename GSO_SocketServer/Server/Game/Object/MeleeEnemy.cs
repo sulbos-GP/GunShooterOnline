@@ -20,6 +20,7 @@ namespace Server.Game.Object
             info.Name = "MeleeEnemy";
             chaseRange = 8f;
             attackRange = 1f;
+            attackDelay = 0.1f;
 
             stat.MergeFrom(new StatInfo()
             {
@@ -52,6 +53,17 @@ namespace Server.Game.Object
         public override void DoAttack()
         {
             base.DoAttack();
+
+
+            Console.WriteLine("melee Attack - 1");
+            gameRoom.PushAfter((int)(attackDelay * 1000), AttakHandle);
+
+        }
+
+        public void AttakHandle()
+        {
+            Console.WriteLine("melee Attack - 2");
+
             AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
             attack.Init(this, attackPolygon, 10);
 
