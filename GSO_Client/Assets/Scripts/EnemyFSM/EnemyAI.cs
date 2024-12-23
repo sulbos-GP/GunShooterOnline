@@ -106,6 +106,7 @@ public class EnemyAI : CreatureController
     public void SetAniamtionAttack()
     {
         animator.SetTrigger("IsAttack");
+        AudioManager.instance.PlayOneShot("Dogbite", transform.GetChild(0).GetComponent<AudioSource>(), 1.0f);
     }
 
     public void SetAniamtionDead()
