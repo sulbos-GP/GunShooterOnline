@@ -429,8 +429,8 @@ namespace Server.Game.FSM
                 return;
             }
 
-            GameObject target = Owner.target;
-            if (target == null)
+            CreatureObj target = (CreatureObj)Owner.target;
+            if (target == null || target.IsDead)
             {
                 Owner.state.ChangeState(Owner.ReturnState);
                 return;
@@ -440,7 +440,7 @@ namespace Server.Game.FSM
 
             int currentTickCount = Environment.TickCount;
             //Console.WriteLine($"Wait attack:{(storeTickCount + waitAttackTime) - currentTickCount}");
-            if (storeTickCount + waitAttackTime < currentTickCount)
+            if (storeTickCount + waitAttackTime + Owner.attackDelay * 1000 < currentTickCount)
             {
 
                 //TODO : 공격

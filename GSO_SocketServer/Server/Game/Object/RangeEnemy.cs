@@ -89,7 +89,7 @@ namespace Server.Game.Object
 
 
 
-            gameRoom.PushAfter((int)(attackDelay * 1000), AttakHandle);
+            gameRoom.PushAfter((int)(1 * 1000), AttakHandle);
 
         }
 
