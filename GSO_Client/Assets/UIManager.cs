@@ -428,7 +428,7 @@ public class UIManager : MonoBehaviour
 #if UNITY_EDITOR
         Managers.Scene.LoadScene(Define.Scene.Lobby);
 #else
-        Managers.Scene.LoadScene(Define.Scene.Shelter);
+        Managers.Scene.LoadScene(Define.Scene.Lobby);
 #endif
 
     }
