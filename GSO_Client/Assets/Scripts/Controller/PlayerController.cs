@@ -44,6 +44,7 @@ public class PlayerController : CreatureController
     {
         base.UpdateController();
     }
+    
 
     public override void UpdateMoving()
     {
@@ -52,12 +53,11 @@ public class PlayerController : CreatureController
         //    transform.position = CellPos;
         //else
         //    transform.position = Vector3.Lerp(transform.position, CellPos, Time.deltaTime * 10);
-
+        
         //Move
         Rigidbody2D rig = gameObject.GetComponent<Rigidbody2D>();
         Vector2 newVec2 = Dir * 5.0f * Time.fixedDeltaTime;
-        AudioManager.instance.PlaySound("Move",gameObject.GetComponent<AudioSource>());
-
+        //AudioManager.instance.PlaySound("Move",gameObject.GetComponent<AudioSource>());
         //rig.MovePosition(rig.position + newVec2);
 
         //float angle = Mathf.Atan2(Dir.y, Dir.x) * Mathf.Rad2Deg;

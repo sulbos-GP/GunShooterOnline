@@ -238,14 +238,17 @@ public class InputController : MonoBehaviour
         if (callbackContext.started)
         {
             animator.SetBool("IsMove", true);
-            audioSource.Play();
+            //audioSource.Play();
+            AudioManager.instance.PlaySound("Move",audioSource);
             onMove = true;
         }
         if (callbackContext.canceled)
         {
             animator.SetBool("IsMove", false);
-            audioSource.Stop();
+            //audioSource.Stop();
+            AudioManager.instance.StopSound(audioSource);
             onMove = false;
+            UpdateMove();
             return; //���⼭ ��������� ������ �ʱ�ȭ���� ����
         }
 
@@ -429,7 +432,8 @@ public class InputController : MonoBehaviour
         Vector2 newVec2 = direction * 5.0f * Time.fixedDeltaTime;
 
         Rigidbody2D rig = GetComponent<Rigidbody2D>();
-        rig.MovePosition(rig.position + newVec2);
+        if(onMove)
+            rig.MovePosition(rig.position + newVec2);
 
         aimFov.SetOrigin(transform.position); //fov�� �߽��� �÷��̾��� ��ġ�� ����
         basicFov.SetOrigin(transform.position);
@@ -463,6 +467,21 @@ public class InputController : MonoBehaviour
 
             // 마지막 위치를 현재 위치로 갱신
             last = currentPosition;
+        }
+        if (!onMove) // Idle 상태 전달을 위한 마지막 패킷
+        {
+            var movePack = new C_Move();
+            movePack.PositionInfo = new PositionInfo
+            {
+                /*Tick = 0,*/
+                DirX = lookInput.x,
+                DirY = lookInput.y,
+                PosX = transform.position.x,
+                PosY = transform.position.y,
+                RotZ = transform.rotation.z,
+            };
+
+            Managers.Network.Send(movePack);
         }
     }
 
