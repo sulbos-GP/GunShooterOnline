@@ -152,6 +152,13 @@ namespace Server.Game.Object
 
         private  void BroadcastHitPacket(int hitObjectId, GameObject attacker, Vector2 startPos, Vector2 hitPoint)
         {
+
+            S_AiAttackShot attack = new S_AiAttackShot
+            {
+                ObjectId = attacker.Id
+            };
+            attacker.gameRoom.BroadCast(attack);
+
             S_RaycastShoot hit = new S_RaycastShoot
             {
                 HitObjectId = hitObjectId,

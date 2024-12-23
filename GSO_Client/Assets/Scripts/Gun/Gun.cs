@@ -253,6 +253,10 @@ public class Gun : MonoBehaviour
 
     public void ReloadFail()
     {
+        if(itemData == null)
+        {
+            return;
+        }
         gunState = CurAmmo <= 0 ? GunState.Empty : GunState.Shootable;
         UIManager.Instance.SetActiveReloadBtn(true);
         UIManager.Instance.SetAmmoText();

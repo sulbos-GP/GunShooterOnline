@@ -99,7 +99,10 @@ public class IQuickSlot : MonoBehaviour
 
         UpdateItemAmount(item.amount);
         Data_master_item_use consumeData = Data_master_item_use.GetData(item.itemId);
-        AudioManager.instance.PlayOneShot("Bandage",gameObject.GetComponent<AudioSource>(),1.0f);
+        if(item.itemId == 402)
+            AudioManager.instance.PlayOneShot("Bandage",gameObject.GetComponent<AudioSource>(),1.0f);
+        else if(item.itemId == 404)
+            AudioManager.instance.PlayOneShot("Cigarret",gameObject.GetComponent<AudioSource>(),1.0f);
         StartCoroutine(OnBuffMark(consumeData.duration));
         StartCoroutine(OnCooltime(consumeData.cool_time));
     }
