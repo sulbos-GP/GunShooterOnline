@@ -338,7 +338,11 @@ public class PacketHandler
         //Console.WriteLine($"gunId : {packet.GunId}"); //총의 마스터 아이디 -> 아이템 오브젝트 아이디
         Player player = clientSession.MyPlayer;
 
-        player.gameRoom.Push(player.gameRoom.ChangeAppearance, player, packet.ObjectId, packet.GunType);
+        if (player != null)
+        {
+            player.gameRoom.Push(player.gameRoom.ChangeAppearance, player, packet.ObjectId, packet.GunType);
+        }
+
     }
 
     internal static void C_InputDataHandler(PacketSession session, IMessage message)
