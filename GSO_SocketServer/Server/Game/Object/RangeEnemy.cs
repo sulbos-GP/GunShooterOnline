@@ -21,6 +21,7 @@ namespace Server.Game.Object
             info.Name = "RangeEnemy";
             chaseRange = 8;
             attackRange = 6;
+            attackDelay = 2;
             //Attack = 3;
 
             stat.MergeFrom(new StatInfo()
