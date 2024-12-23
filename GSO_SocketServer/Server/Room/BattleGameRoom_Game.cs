@@ -1110,14 +1110,14 @@ namespace Server
                 }
             }
 #elif RELEASE
-            if (tempPlayer.Count == 2)
+            if (tempPlayer.Count == 3)
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
 
             }
 #else
-            if (tempPlayer.Count == 3) // 초코파이 접속할 인원에 따라 변경
+            if (tempPlayer.Count == 1) // 초코파이 접속할 인원에 따라 변경
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();
