@@ -874,7 +874,7 @@ internal class PacketHandler
 
             if (packet.GunRoation != null)
             {
-                Managers.Object.MyPlayer.usingGun.GunRoationHandle(packet.GunRoation.Roation);
+                //Managers.Object.MyPlayer.usingGun.GunRoationHandle(packet.GunRoation.Roation);
                 //return;
             }
 
