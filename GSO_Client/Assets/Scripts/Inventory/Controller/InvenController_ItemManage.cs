@@ -238,7 +238,8 @@ public partial class InventoryController
             {
                 if (CheckAbleToMerge(item, overlapItem))
                 {
-                    int needAmount = item.ItemAmount + overlapItem.ItemAmount <= ItemObject.maxItemMergeAmount
+                    
+                    int needAmount = item.ItemAmount + overlapItem.ItemAmount <= Data_master_item_base.GetData(item.itemData.itemId).amount
                         ? item.ItemAmount 
                         : ItemObject.maxItemMergeAmount - overlapItem.ItemAmount;
 
@@ -260,10 +261,10 @@ public partial class InventoryController
 
     public bool CheckAbleToMerge(ItemObject item, ItemObject _overlapItem)
     {
-        return item.itemData.isItemConsumeable &&
-               item.itemData.itemId == _overlapItem.itemData.itemId &&
-               _overlapItem.ItemAmount < ItemObject.maxItemMergeAmount &&
-               !_overlapItem.isHide;
+        return item.itemData.isItemConsumeable && //소모품
+               item.itemData.itemId == _overlapItem.itemData.itemId && //동일한 아이템
+               _overlapItem.ItemAmount < Data_master_item_base.GetData(item.itemData.itemId).amount && //최대 가능 개수 보다 작은
+               !_overlapItem.isHide; //밝혀진 아이템
     }
 
     public void DestroyItem(ItemObject targetItem)

@@ -239,11 +239,12 @@ public class Gun : MonoBehaviour
             elapseTime += Time.deltaTime;
             yield return null;
         }
-        AudioManager.instance.PlaySound("Reload",gameObject.GetComponent<AudioSource>());
+        
     }
 
     public void ReloadDone(int reloadAmount)
     {
+        AudioManager.instance.PlaySound("Reload",gameObject.GetComponent<AudioSource>()); //완료음은 완료 패킷을 받았을때
         CurAmmo = reloadAmount;
         gunState = GunState.Shootable;
         UIManager.Instance.SetActiveReloadBtn(true);

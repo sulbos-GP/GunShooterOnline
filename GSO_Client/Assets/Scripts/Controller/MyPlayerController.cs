@@ -68,7 +68,8 @@ public partial class MyPlayerController : PlayerController
         //hp나 스텟이 바뀌면 호출
         
         float _hpratio = 0f;
-        if (Stat.MaxHp > 0)
+        if (Stat.
+            Hp > 0)
         {
             _hpratio = Mathf.Max(0, (float)Hp / Stat.MaxHp);
             _gameInfoBar.PlayerHpBarHandle.GetComponent<Image>().fillAmount = _hpratio;
