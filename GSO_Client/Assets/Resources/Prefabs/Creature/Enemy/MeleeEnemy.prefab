@@ -639,7 +639,7 @@ GameObject:
   - component: {fileID: 4724087579224340939}
   - component: {fileID: 3685237794039196589}
   - component: {fileID: 2385922432284103686}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: ObjectSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
