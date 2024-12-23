@@ -66,7 +66,7 @@ namespace Server.Game.Object
         public override void DoAttack()
         {
             base.DoAttack();
-            Console.WriteLine("Range Attack - 1");
+            //Console.WriteLine("Range Attack - 1");
             /*
                         AttackObjectBase attack = ObjectManager.Instance.Add<AttackObjectBase>();
                         attack.Init(this, attackPolygon, 10);*/
@@ -95,7 +95,7 @@ namespace Server.Game.Object
 
         public void AttakHandle()
         {
-            Console.WriteLine("Range Attack - 2");
+            //Console.WriteLine("Range Attack - 2");
 
 
             RaycastHit2D hit2D = RaycastManager.Raycast(CellPos, rangeAttackDir, 100, new List<GameObject>() { this }); //충돌객체 체크
