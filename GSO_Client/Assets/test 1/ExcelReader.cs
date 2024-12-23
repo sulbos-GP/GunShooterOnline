@@ -40,7 +40,7 @@ public class ExcelReader
                 string filePath = Path.Combine(Application.streamingAssetsPath, file);
                 string filePerPath = Path.Combine(Application.persistentDataPath, file);
 
-                byte[] fileData = BetterStreamingAssets.ReadAllBytes(file);
+                byte[] fileData = File.ReadAllBytes(filePath);
 
                 string destinationPath = Path.Combine(Application.persistentDataPath, file);
 
@@ -69,6 +69,9 @@ public class ExcelReader
         //string filePerPath = Path.Combine(Application.persistentDataPath, "Item.xlsx");
         fileList =  Directory.GetFiles(Application.persistentDataPath,"*.xlsx", SearchOption.TopDirectoryOnly);
         Debug.Log("유니티 안드로이드");
+#elif UNITY_STANDALONE_WIN
+        fileList = Directory.GetFiles(Application.dataPath + EXCEL_PATH, "*.xlsx", SearchOption.TopDirectoryOnly);
+        Debug.Log("PC 빌드");
 #endif
         fileList = Directory.GetFiles(Application.dataPath + EXCEL_PATH, "*.xlsx", SearchOption.TopDirectoryOnly);
         List<ISheet> sheetList = GetSheet(fileList);
