@@ -346,7 +346,7 @@ namespace Server.Game.FSM
             float distanceToTarget = Vector2.Distance(Owner.target.CellPos, Owner.CellPos);
             //Console.WriteLine($"close to chase target pos:{distanceToTarget}");
             
-            if (distanceToTarget < Owner.attackRange && Owner.CheakTargetVisual(Owner.target.CellPos - Owner.CellPos))
+            if (distanceToTarget < Owner.attackRange - 1 && Owner.CheakTargetVisual(Owner.target.CellPos - Owner.CellPos))
             {
                 //공격 범위에 들어온다면 즉시 공격상태로 전환
                 Owner.state.ChangeState(Owner.AttackState);
@@ -408,10 +408,17 @@ namespace Server.Game.FSM
             {
                 return;
             }
-
             storeTickCount = Environment.TickCount;
+            Console.WriteLine("Enter Attack State : " + storeTickCount);
 
-           
+            /*if (storeTickCount == 0)
+            {
+                storeTickCount = Environment.TickCount;
+                Console.WriteLine("Enter Attack State : "+ storeTickCount);
+
+            }*/
+
+
         }
 
         public override void Update()

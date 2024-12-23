@@ -400,6 +400,7 @@ namespace Server.Game.Object
 
         public bool CheakTargetVisual(Vector2 dir)
         {
+            //return true;
             RaycastHit2D hit2D = RaycastManager.Raycast(CellPos, dir, 100, new List<GameObject>() { this }); //충돌객체 체크
             
             if(hit2D != null && hit2D.Collider != null)
@@ -428,7 +429,7 @@ namespace Server.Game.Object
                  {
 
                  }*/
-                Console.WriteLine(" PathFinding_Update");
+                Console.WriteLine(" PathFinding_Update 123");
 
                 path = gameRoom.map.FindPath(start, end, checkObjects: false); 
 

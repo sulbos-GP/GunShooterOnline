@@ -167,7 +167,7 @@ namespace Server
                 RaycastHit2D res = new RaycastHit2D();
                 res.hitPoint = _startPos + vRayDir * fDistance;
                 res.distance = fDistance;
-                Console.WriteLine($"Intersection found at: ({res.hitPoint})");
+                //Console.WriteLine($"Intersection found at: ({res.hitPoint})");
                 return res;
 
             }
