@@ -97,14 +97,20 @@ namespace Server
             {
             	GameRoom room = Room;
 
-                if(MyPlayer == null)
+                if(MyPlayer != null)
                 {
 
-                    Console.WriteLine("MyPlayer is null");
+                    Console.WriteLine("MyPlayer");
+                    room.Push(() => room.LeaveGame(MyPlayer.Id));
+
+                }
+                else
+                {
+                    room.Push(() => room.LeaveGame(SessionId));
+
                 }
 
-            	room.Push(() => room.LeaveGame(MyPlayer.Id));
-            	Room = null;
+                Room = null;
             }
             mSessionManager.Remove(this);
 

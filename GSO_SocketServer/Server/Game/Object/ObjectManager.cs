@@ -35,6 +35,7 @@ internal class ObjectManager
     public void Reset()
     {
         ObjectManager.Instance = new();
+
         _players.Clear();
         _rootable.Clear();
         _exit.Clear();
@@ -43,6 +44,12 @@ internal class ObjectManager
         _mines.Clear();
         _attacks.Clear();
         _enemys.Clear();
+
+
+        foreach (var item in _scopes)
+        {
+
+        }
         _scopes.Clear();
 
     }

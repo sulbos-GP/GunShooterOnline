@@ -506,6 +506,12 @@ namespace Server
                     Console.WriteLine("MatchInfo.Remove(id) == false");
                 }
             }
+            else
+            {
+                //Console.WriteLine("Error id");
+
+                return;
+            }
 
             S_Despawn despawnPacket = new S_Despawn();
             despawnPacket.ObjcetIds.Add(id);
