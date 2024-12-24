@@ -115,6 +115,24 @@ internal class Managers : MonoBehaviour
     {
         // Application 처음 시작시 (True)
         // 이탈 False, 복귀 True
+       /* if (!focus)
+        {
+            Debug.Log("Application lost focus.");
+            C_ExitGame packet = new C_ExitGame()
+            {
+                IsNormal = false,
+                PlayerId = Managers.Object.MyPlayer != null ? Managers.Object.MyPlayer.Id : 0,
+                //ExitId = objectId
+            };
+            Managers.Network.Send(packet);
+            Debug.Log("강제 종료");
+
+            // 데이터 저장 및 정리 작업 수행
+        }
+        else
+        {
+            Debug.Log("Application regained focus.");
+        }*/
     }
 
     /// <summary>
@@ -161,6 +179,12 @@ internal class Managers : MonoBehaviour
         }
     }
 #endif
+
+
+
+
+
+
 
     /// <summary>
     /// Application이 종료되었을 경우

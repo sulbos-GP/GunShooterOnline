@@ -566,6 +566,8 @@ namespace Server
                 return;
             }
 
+            Console.WriteLine("Ping");
+
             S_Ping s_Ping = new S_Ping();
             s_Ping.IsEnd = false;
             s_Ping.Tick = LogicTimer.Tick;
