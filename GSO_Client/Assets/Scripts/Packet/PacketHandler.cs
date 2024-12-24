@@ -929,6 +929,14 @@ internal class PacketHandler
         //Managers.SystemLog.Message($"S_AiMove {packet.ObjectId}");
         
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
+
+        if(enemy == null)
+        {
+            Console.WriteLine("Enemy is null");
+
+            return;
+        }
+
         Vector2 instance = enemy.transform.position;
 
         //Debug.Log(packet.PosList.ToList().Count); 
@@ -945,6 +953,13 @@ internal class PacketHandler
 
         GameObject enemy = Managers.Object.FindById(packet.ObjectId);
 
+        if(enemy == null)
+        {
+            Console.WriteLine("Enemy is null");
+            return;
+        }
+
+
         enemy.GetComponent<EnemyAI>().SetData(packet);
     }
 
@@ -953,7 +968,15 @@ internal class PacketHandler
         S_AiAttackReady packet = message as S_AiAttackReady;
 
         EnemyAI enemy = Managers.Object.FindById(packet.ObjectId).GetComponent<EnemyAI>();
-        if(packet.Start != null)
+
+
+        if (enemy == null)
+        {
+            Console.WriteLine("Enemy is null");
+            return;
+        }
+
+        if (packet.Start != null)
         {
             //원거리
             enemy.DrawAttackLine(new Vector2(packet.Start.X, packet.Start.Y), new Vector2(packet.Dir.X, packet.Dir.Y));
@@ -974,6 +997,13 @@ internal class PacketHandler
         S_AiAttackShot packet = message as S_AiAttackShot;
 
         EnemyAI enemy = Managers.Object.FindById(packet.ObjectId).GetComponent<EnemyAI>();
+
+        if (enemy == null)
+        {
+            Console.WriteLine("Enemy is null");
+            return;
+        }
+
         enemy.ClearLine();
         enemy.SetAniamtionAttack();
     }
