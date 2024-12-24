@@ -32,7 +32,7 @@ CREATE TABLE `gear` (
   KEY `FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id` (`unit_attributes_id`),
   CONSTRAINT `FK_gear_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`),
   CONSTRAINT `FK_gear_unit_attributes_id_unit_attributes_unit_attributes_id` FOREIGN KEY (`unit_attributes_id`) REFERENCES `unit_attributes` (`unit_attributes_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=146 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=856 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,7 @@ CREATE TABLE `gear` (
 
 LOCK TABLES `gear` WRITE;
 /*!40000 ALTER TABLE `gear` DISABLE KEYS */;
-INSERT INTO `gear` VALUES (116,1,'main_weapon',189),(117,1,'sub_weapon',190),(118,1,'armor',191),(119,1,'backpack',192),(120,1,'pocket_first',193),(121,1,'pocket_third',194),(122,2,'main_weapon',198),(123,2,'sub_weapon',199),(124,2,'armor',200),(125,2,'backpack',201),(126,2,'pocket_first',202),(127,2,'pocket_third',203),(128,3,'main_weapon',207),(129,3,'sub_weapon',208),(130,3,'armor',209),(131,3,'backpack',210),(132,3,'pocket_first',211),(133,3,'pocket_third',212),(134,4,'main_weapon',216),(135,4,'sub_weapon',217),(136,4,'armor',218),(137,4,'backpack',219),(138,4,'pocket_first',220),(139,4,'pocket_third',221),(140,5,'main_weapon',225),(141,5,'sub_weapon',226),(142,5,'armor',227),(143,5,'backpack',228),(144,5,'pocket_first',229),(145,5,'pocket_third',230);
+INSERT INTO `gear` VALUES (778,1,'main_weapon',1200),(779,1,'sub_weapon',1201),(780,1,'armor',1202),(781,1,'backpack',1203),(782,1,'pocket_first',1204),(783,1,'pocket_third',1205),(784,2,'main_weapon',1209),(785,2,'sub_weapon',1210),(786,2,'armor',1211),(787,2,'backpack',1212),(788,2,'pocket_first',1213),(789,2,'pocket_third',1214),(790,3,'main_weapon',1218),(791,3,'sub_weapon',1219),(792,3,'armor',1220),(793,3,'backpack',1221),(794,3,'pocket_first',1222),(795,3,'pocket_third',1223),(796,4,'main_weapon',1227),(797,4,'sub_weapon',1228),(798,4,'armor',1229),(799,4,'backpack',1230),(800,4,'pocket_first',1231),(801,4,'pocket_third',1232),(802,5,'main_weapon',1236),(803,5,'sub_weapon',1237),(804,5,'armor',1238),(805,5,'backpack',1239),(806,5,'pocket_first',1240),(807,5,'pocket_third',1241),(808,6,'main_weapon',1245),(809,6,'sub_weapon',1246),(810,6,'armor',1247),(811,6,'backpack',1248),(812,6,'pocket_first',1249),(813,6,'pocket_third',1250),(814,7,'main_weapon',1254),(815,7,'sub_weapon',1255),(816,7,'armor',1256),(817,7,'backpack',1257),(818,7,'pocket_first',1258),(819,7,'pocket_third',1259),(820,8,'main_weapon',1263),(821,8,'sub_weapon',1264),(822,8,'armor',1265),(823,8,'backpack',1266),(824,8,'pocket_first',1267),(825,8,'pocket_third',1268),(826,9,'main_weapon',1272),(827,9,'sub_weapon',1273),(828,9,'armor',1274),(829,9,'backpack',1275),(830,9,'pocket_first',1276),(831,9,'pocket_third',1277),(832,10,'main_weapon',1281),(833,10,'sub_weapon',1282),(834,10,'armor',1283),(835,10,'backpack',1284),(836,10,'pocket_first',1285),(837,10,'pocket_third',1286),(838,11,'main_weapon',1290),(839,11,'sub_weapon',1291),(840,11,'armor',1292),(841,11,'backpack',1293),(842,11,'pocket_first',1294),(843,11,'pocket_third',1295),(853,12,'sub_weapon',1312),(854,12,'backpack',1313),(855,12,'pocket_first',1314);
 /*!40000 ALTER TABLE `gear` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +59,7 @@ CREATE TABLE `storage` (
   PRIMARY KEY (`storage_id`),
   KEY `FK_storage_uid_user_uid` (`uid`),
   CONSTRAINT `FK_storage_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=165 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +68,7 @@ CREATE TABLE `storage` (
 
 LOCK TABLES `storage` WRITE;
 /*!40000 ALTER TABLE `storage` DISABLE KEYS */;
-INSERT INTO `storage` VALUES (34,NULL,'backpack'),(35,NULL,'backpack'),(36,NULL,'backpack'),(37,NULL,'backpack'),(38,NULL,'backpack');
+INSERT INTO `storage` VALUES (151,NULL,'backpack'),(152,NULL,'backpack'),(153,NULL,'backpack'),(154,NULL,'backpack'),(155,NULL,'backpack'),(156,NULL,'backpack'),(157,NULL,'backpack'),(158,NULL,'backpack'),(159,NULL,'backpack'),(160,NULL,'backpack'),(161,NULL,'backpack'),(162,NULL,'backpack'),(163,NULL,'backpack'),(164,NULL,'backpack');
 /*!40000 ALTER TABLE `storage` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,7 +91,7 @@ CREATE TABLE `storage_unit` (
   KEY `FK_storage_unit_id_att_id_uatt_att_id` (`unit_attributes_id`),
   CONSTRAINT `FK_storage_unit_id_att_id_uatt_att_id` FOREIGN KEY (`unit_attributes_id`) REFERENCES `unit_attributes` (`unit_attributes_id`) ON DELETE CASCADE,
   CONSTRAINT `FK_storage_unit_storage_id_storage_storage_id` FOREIGN KEY (`storage_id`) REFERENCES `storage` (`storage_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=465 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -100,7 +100,7 @@ CREATE TABLE `storage_unit` (
 
 LOCK TABLES `storage_unit` WRITE;
 /*!40000 ALTER TABLE `storage_unit` DISABLE KEYS */;
-INSERT INTO `storage_unit` VALUES (70,34,0,0,0,195),(71,34,0,2,0,196),(72,34,2,0,0,197),(73,35,0,0,0,204),(74,35,0,2,0,205),(75,35,2,0,0,206),(76,36,0,0,0,213),(77,36,0,2,0,214),(78,36,2,0,0,215),(79,37,0,0,0,222),(80,37,0,2,0,223),(81,37,2,0,0,224),(82,38,0,0,0,231),(83,38,0,2,0,232),(84,38,2,0,0,233);
+INSERT INTO `storage_unit` VALUES (427,151,0,0,0,1206),(428,151,0,2,0,1207),(429,151,2,0,0,1208),(430,152,0,0,0,1215),(431,152,0,2,0,1216),(432,152,2,0,0,1217),(433,153,0,0,0,1224),(434,153,0,2,0,1225),(435,153,2,0,0,1226),(436,154,0,0,0,1233),(437,154,0,2,0,1234),(438,154,2,0,0,1235),(439,155,0,0,0,1242),(440,155,0,2,0,1243),(441,155,2,0,0,1244),(442,156,0,0,0,1251),(443,156,0,2,0,1252),(444,156,2,0,0,1253),(445,157,0,0,0,1260),(446,157,0,2,0,1261),(447,157,2,0,0,1262),(448,158,0,0,0,1269),(449,158,0,2,0,1270),(450,158,2,0,0,1271),(451,159,0,0,0,1278),(452,159,0,2,0,1279),(453,159,2,0,0,1280),(454,160,0,0,0,1287),(455,160,0,2,0,1288),(456,160,2,0,0,1289),(457,161,0,0,0,1296),(458,161,0,2,0,1297),(459,161,2,0,0,1298),(464,164,0,0,0,1315);
 /*!40000 ALTER TABLE `storage_unit` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -123,7 +123,7 @@ CREATE TABLE `unit_attributes` (
   KEY `FK_unit_attributes_unit_storage_id_storage_storage_id` (`unit_storage_id`),
   CONSTRAINT `FK_unit_attributes_item_id_master_item_base_item_id` FOREIGN KEY (`item_id`) REFERENCES `master_database`.`master_item_base` (`item_id`),
   CONSTRAINT `FK_unit_attributes_unit_storage_id_storage_storage_id` FOREIGN KEY (`unit_storage_id`) REFERENCES `storage` (`storage_id`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=234 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=1316 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -132,7 +132,7 @@ CREATE TABLE `unit_attributes` (
 
 LOCK TABLES `unit_attributes` WRITE;
 /*!40000 ALTER TABLE `unit_attributes` DISABLE KEYS */;
-INSERT INTO `unit_attributes` VALUES (189,102,0,0,NULL,1),(190,101,0,0,NULL,1),(191,201,100,0,NULL,1),(192,302,0,0,34,1),(193,402,0,0,NULL,5),(194,404,0,0,NULL,15),(195,402,0,0,NULL,5),(196,502,0,0,NULL,10),(197,404,0,0,NULL,15),(198,102,0,0,NULL,1),(199,101,0,0,NULL,1),(200,201,100,0,NULL,1),(201,302,0,0,35,1),(202,402,0,0,NULL,5),(203,404,0,0,NULL,15),(204,402,0,0,NULL,5),(205,502,0,0,NULL,10),(206,404,0,0,NULL,15),(207,102,0,0,NULL,1),(208,101,0,0,NULL,1),(209,201,100,0,NULL,1),(210,302,0,0,36,1),(211,402,0,0,NULL,5),(212,404,0,0,NULL,15),(213,402,0,0,NULL,5),(214,502,0,0,NULL,10),(215,404,0,0,NULL,15),(216,102,0,0,NULL,1),(217,101,0,0,NULL,1),(218,201,100,0,NULL,1),(219,302,0,0,37,1),(220,402,0,0,NULL,5),(221,404,0,0,NULL,15),(222,402,0,0,NULL,5),(223,502,0,0,NULL,10),(224,404,0,0,NULL,15),(225,102,0,0,NULL,1),(226,101,0,0,NULL,1),(227,201,100,0,NULL,1),(228,302,0,0,38,1),(229,402,0,0,NULL,5),(230,404,0,0,NULL,15),(231,402,0,0,NULL,5),(232,502,0,0,NULL,10),(233,404,0,0,NULL,15);
+INSERT INTO `unit_attributes` VALUES (1200,102,0,0,NULL,1),(1201,101,0,0,NULL,1),(1202,201,100,0,NULL,1),(1203,302,0,0,151,1),(1204,402,0,0,NULL,5),(1205,404,0,0,NULL,15),(1206,402,0,0,NULL,5),(1207,502,0,0,NULL,10),(1208,404,0,0,NULL,15),(1209,102,0,0,NULL,1),(1210,101,0,0,NULL,1),(1211,201,100,0,NULL,1),(1212,302,0,0,152,1),(1213,402,0,0,NULL,5),(1214,404,0,0,NULL,15),(1215,402,0,0,NULL,5),(1216,502,0,0,NULL,10),(1217,404,0,0,NULL,15),(1218,102,0,0,NULL,1),(1219,101,0,0,NULL,1),(1220,201,100,0,NULL,1),(1221,302,0,0,153,1),(1222,402,0,0,NULL,5),(1223,404,0,0,NULL,15),(1224,402,0,0,NULL,5),(1225,502,0,0,NULL,10),(1226,404,0,0,NULL,15),(1227,102,0,0,NULL,1),(1228,101,0,0,NULL,1),(1229,201,100,0,NULL,1),(1230,302,0,0,154,1),(1231,402,0,0,NULL,5),(1232,404,0,0,NULL,15),(1233,402,0,0,NULL,5),(1234,502,0,0,NULL,10),(1235,404,0,0,NULL,15),(1236,102,0,0,NULL,1),(1237,101,0,0,NULL,1),(1238,201,100,0,NULL,1),(1239,302,0,0,155,1),(1240,402,0,0,NULL,5),(1241,404,0,0,NULL,15),(1242,402,0,0,NULL,5),(1243,502,0,0,NULL,10),(1244,404,0,0,NULL,15),(1245,102,0,0,NULL,1),(1246,101,0,0,NULL,1),(1247,201,100,0,NULL,1),(1248,302,0,0,156,1),(1249,402,0,0,NULL,5),(1250,404,0,0,NULL,15),(1251,402,0,0,NULL,5),(1252,502,0,0,NULL,10),(1253,404,0,0,NULL,15),(1254,102,0,0,NULL,1),(1255,101,0,0,NULL,1),(1256,201,100,0,NULL,1),(1257,302,0,0,157,1),(1258,402,0,0,NULL,5),(1259,404,0,0,NULL,15),(1260,402,0,0,NULL,5),(1261,502,0,0,NULL,10),(1262,404,0,0,NULL,15),(1263,102,0,0,NULL,1),(1264,101,0,0,NULL,1),(1265,201,100,0,NULL,1),(1266,302,0,0,158,1),(1267,402,0,0,NULL,5),(1268,404,0,0,NULL,15),(1269,402,0,0,NULL,5),(1270,502,0,0,NULL,10),(1271,404,0,0,NULL,15),(1272,102,0,0,NULL,1),(1273,101,0,0,NULL,1),(1274,201,100,0,NULL,1),(1275,302,0,0,159,1),(1276,402,0,0,NULL,5),(1277,404,0,0,NULL,15),(1278,402,0,0,NULL,5),(1279,502,0,0,NULL,10),(1280,404,0,0,NULL,15),(1281,102,0,0,NULL,1),(1282,101,0,0,NULL,1),(1283,201,100,0,NULL,1),(1284,302,0,0,160,1),(1285,402,0,0,NULL,5),(1286,404,0,0,NULL,15),(1287,402,0,0,NULL,5),(1288,502,0,0,NULL,10),(1289,404,0,0,NULL,15),(1290,102,0,0,NULL,1),(1291,101,0,0,NULL,1),(1292,201,100,0,NULL,1),(1293,302,0,0,161,1),(1294,402,0,0,NULL,5),(1295,404,0,0,NULL,15),(1296,402,0,0,NULL,5),(1297,502,0,0,NULL,10),(1298,404,0,0,NULL,15),(1312,101,0,0,NULL,1),(1313,300,0,0,164,1),(1314,402,0,0,NULL,1),(1315,501,0,0,NULL,12);
 /*!40000 ALTER TABLE `unit_attributes` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,7 +158,7 @@ CREATE TABLE `user` (
   `recent_ticket_dt` datetime NOT NULL DEFAULT current_timestamp() COMMENT '최근 티켓 사용 일시',
   PRIMARY KEY (`uid`),
   UNIQUE KEY `nickname` (`nickname`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -167,7 +167,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (1,'a_1','a_1',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(2,'a_2','a_2',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(3,'a_3','a_3',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(4,'a_4','a_4',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(5,'a_5','a_5',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(6,'a_6','a_6',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(7,'a_7','a_7',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(8,'a_8','a_8',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(9,'a_9','a_9',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(10,'a_10','a_10',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(11,'111273423436160748486',NULL,1,0,5,0,'Google','1//0eB5OREZb-rkmCgYIARAAGA4SNwF-L9Irx1Dzyy1HfroA0GW3-1vNWj420SUp11-UMDRBClbmN9yzFtRvtWlMhSSyVAg8cYOdNHM','2024-09-03 15:54:25','2024-09-04 17:48:34','2024-09-29 17:29:47'),(12,'a_4003771818344972651','장송',100,1080,12,2,'Google','1//0eHJmnKKtHgK8CgYIARAAGA4SNwF-L9IrCbicAPbqk9-Xwurgu2ifLckSxIkoTrs4_UiSMq00mPum_eIKFNXo8CXRZ6qMxvvi9hA','2024-09-04 17:54:48','2024-10-18 05:08:18','2024-10-15 06:52:07');
+INSERT INTO `user` VALUES (1,'a_1','a_1',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(2,'a_2','a_2',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(3,'a_3','a_3',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(4,'a_4','a_4',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(5,'a_5','a_5',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(6,'a_6','a_6',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(7,'a_7','a_7',1,0,5,0,'Google',NULL,'2024-08-29 19:29:40','2024-08-29 19:29:40','2024-09-29 17:29:47'),(8,'a_8','a_8',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(9,'a_9','a_9',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(10,'a_10','a_10',1,0,5,0,'Google',NULL,'2024-08-29 19:29:41','2024-08-29 19:29:41','2024-09-29 17:29:47'),(11,'111273423436160748486',NULL,1,0,5,0,'Google','1//0eB5OREZb-rkmCgYIARAAGA4SNwF-L9Irx1Dzyy1HfroA0GW3-1vNWj420SUp11-UMDRBClbmN9yzFtRvtWlMhSSyVAg8cYOdNHM','2024-09-03 15:54:25','2024-09-04 17:48:34','2024-09-29 17:29:47'),(12,'a_4003771818344972651','이관호',340,1450,10,4,'Google','1//0eHJmnKKtHgK8CgYIARAAGA4SNwF-L9IrCbicAPbqk9-Xwurgu2ifLckSxIkoTrs4_UiSMq00mPum_eIKFNXo8CXRZ6qMxvvi9hA','2024-09-04 17:54:48','2024-12-12 08:48:27','2024-12-12 08:48:27'),(13,'g02653505751708925358','Gwanho',100,0,-1,0,'Google','1//0emzTMwJGIK-KCgYIARAAGA4SNwF-L9IrgCpazGQ6TVe6MfnGNDw38BEP1XC2g2bLA7vWfTQefMZHez7N8cWwap1n1HQC21VnmBU','2024-10-29 20:27:22','2024-10-29 11:38:48','2024-10-29 11:36:47');
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,7 +189,7 @@ CREATE TABLE `user_level_reward` (
   KEY `FK_user_level_reward_master_reward_level_id` (`reward_id`),
   CONSTRAINT `FK_user_level_reward_master_reward_level_id` FOREIGN KEY (`reward_id`) REFERENCES `master_database`.`master_reward_level` (`reward_id`) ON DELETE CASCADE,
   CONSTRAINT `FK_user_reward_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -198,6 +198,7 @@ CREATE TABLE `user_level_reward` (
 
 LOCK TABLES `user_level_reward` WRITE;
 /*!40000 ALTER TABLE `user_level_reward` DISABLE KEYS */;
+INSERT INTO `user_level_reward` VALUES (1,12,10001,1,'2024-10-19 17:13:27'),(2,12,10002,0,NULL);
 /*!40000 ALTER TABLE `user_level_reward` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -228,7 +229,7 @@ CREATE TABLE `user_metadata` (
 
 LOCK TABLES `user_metadata` WRITE;
 /*!40000 ALTER TABLE `user_metadata` DISABLE KEYS */;
-INSERT INTO `user_metadata` VALUES (1,0,0,0,0,0,0,0),(2,0,0,0,0,0,0,0),(3,0,0,0,0,0,0,0),(4,0,0,0,0,0,0,0),(5,0,0,0,0,0,0,0),(6,0,0,0,0,0,0,0),(7,0,0,0,0,0,0,0),(8,0,0,0,0,0,0,0),(9,0,0,0,0,0,0,0),(10,0,0,0,0,0,0,0),(11,0,0,0,0,0,0,0),(12,1,0,0,0,3,1,2);
+INSERT INTO `user_metadata` VALUES (1,0,0,0,0,0,0,0),(2,0,0,0,0,0,0,0),(3,0,0,0,0,0,0,0),(4,0,0,0,0,0,0,0),(5,0,0,0,0,0,0,0),(6,0,0,0,0,0,0,0),(7,0,0,0,0,0,0,0),(8,0,0,0,0,0,0,0),(9,0,0,0,0,0,0,0),(10,0,0,0,0,0,0,0),(11,0,0,0,0,0,0,0),(12,1,0,0,0,3,1,2),(13,1,0,0,0,0,1,0);
 /*!40000 ALTER TABLE `user_metadata` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -251,7 +252,7 @@ CREATE TABLE `user_register_quest` (
   KEY `FK_user_register_quest_master_quest_base_id` (`quest_id`),
   CONSTRAINT `FK_user_register_quest_master_quest_base_id` FOREIGN KEY (`quest_id`) REFERENCES `master_database`.`master_quest_base` (`quest_id`) ON DELETE CASCADE,
   CONSTRAINT `FK_user_register_quest_uid_user_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=73 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -260,7 +261,7 @@ CREATE TABLE `user_register_quest` (
 
 LOCK TABLES `user_register_quest` WRITE;
 /*!40000 ALTER TABLE `user_register_quest` DISABLE KEYS */;
-INSERT INTO `user_register_quest` VALUES (55,12,20002,0,1,'2024-10-18 03:38:47'),(56,12,30002,0,1,'2024-10-18 03:39:02'),(57,12,40002,0,1,'2024-10-18 03:39:02');
+INSERT INTO `user_register_quest` VALUES (64,13,20004,0,0,'2024-10-29 11:32:11'),(65,13,30002,0,0,'2024-10-29 11:32:11'),(66,13,40002,1,0,'2024-10-29 11:32:11'),(70,12,20002,0,0,'2024-12-12 08:48:27'),(71,12,30003,0,0,'2024-12-12 08:48:27'),(72,12,40001,0,0,'2024-12-12 08:48:27');
 /*!40000 ALTER TABLE `user_register_quest` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -287,7 +288,7 @@ CREATE TABLE `user_skill` (
 
 LOCK TABLES `user_skill` WRITE;
 /*!40000 ALTER TABLE `user_skill` DISABLE KEYS */;
-INSERT INTO `user_skill` VALUES (1,1500,350,0.06),(2,1500,350,0.06),(3,1500,350,0.06),(4,1500,350,0.06),(5,1500,350,0.06),(6,1500,350,0.06),(7,1500,350,0.06),(8,1500,350,0.06),(9,1500,350,0.06),(10,1500,350,0.06),(11,1500,350,0.06),(12,1500,350,0.06);
+INSERT INTO `user_skill` VALUES (1,1500,350,0.06),(2,1500,350,0.06),(3,1500,350,0.06),(4,1500,350,0.06),(5,1500,350,0.06),(6,1500,350,0.06),(7,1500,350,0.06),(8,1500,350,0.06),(9,1500,350,0.06),(10,1500,350,0.06),(11,1500,350,0.06),(12,1500,350,0.06),(13,1500,350,0.06);
 /*!40000 ALTER TABLE `user_skill` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -300,4 +301,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-18 15:42:33
+-- Dump completed on 2024-12-13 21:58:30

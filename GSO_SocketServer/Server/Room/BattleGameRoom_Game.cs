@@ -1110,7 +1110,7 @@ namespace Server
                 }
             }
 #elif RELEASE
-            if (tempPlayer.Count == 3)
+            if (tempPlayer.Count == 2)
             {
                 Console.WriteLine("connectPlayer.Count  is zero. -> only use Debug ");
                 GameStart();

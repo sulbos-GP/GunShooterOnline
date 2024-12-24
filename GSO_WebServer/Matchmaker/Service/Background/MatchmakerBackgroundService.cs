@@ -11,7 +11,7 @@ namespace Matchmaker.Service.Background
     {
         private PeriodicTimer?  mTimer = null;
         private const double    mPeriodicMilliseconds = 1000;               //1초마다 매칭 검색
-        private const int       mPlayerCapacity = 3;                        //최대 매치될 인원
+        private const int       mPlayerCapacity = 1;                        //최대 매치될 인원
         private const int       mMaxWaitTimeCount = 120;                    //최대로 기다릴 수 있는 시간 (X초 이상 기다린 플레이어 모두 참여)
         private const long      mExpandingRatingRangeTimeCount = 10;        //X초마다 레이팅 범위 증가
 
