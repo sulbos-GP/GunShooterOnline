@@ -38,7 +38,7 @@ public class NetworkManager
 
         Disconnect();
 
-        mNetworkService.Stop();
+
 
         ipAddr = IPAddress.Parse(ip);
         IPEndPoint endPoint = new IPEndPoint(ipAddr, port);
@@ -113,6 +113,8 @@ public class NetworkManager
     {
         if(_session != null)
             _session.Disconnect();
+
+        mNetworkService.Stop();
     }
 
 

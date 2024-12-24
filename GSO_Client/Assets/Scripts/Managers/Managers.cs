@@ -86,7 +86,7 @@ internal class Managers : MonoBehaviour
             s_instance = go.GetComponent<Managers>();
 
             //s_instance._version.SetAppVersion(Application.version);
-            s_instance._environment.InitEnviromentSetting(EEnvironmentState.Standard);
+            s_instance._environment.InitEnviromentSetting(EEnvironmentState.Emulator);
 
             //s_instance._data.InventorySet();
 
@@ -123,6 +123,11 @@ internal class Managers : MonoBehaviour
     private void OnApplicationPause(bool pause)
     {
         //이탈 True, 복귀 False
+
+        if (pause)
+        {
+            Managers.Network.Disconnect();
+        }
 
         if (Web != null)
         {
@@ -165,20 +170,22 @@ internal class Managers : MonoBehaviour
     /// <summary>
     /// Application이 종료되었을 경우
     /// </summary>
-    private void OnApplicationQuit()
+    void OnApplicationQuit()
     {
+        //Managers.Network.Disconnect();
 
-        if(Managers.Object.MyPlayer != null)
+        if (Managers.Object.MyPlayer != null)
         {
             
-            C_ExitGame packet = new C_ExitGame()
-            {
-                IsNormal = false,
-                PlayerId = Managers.Object.MyPlayer != null ? Managers.Object.MyPlayer.Id : 0,
-                //ExitId = objectId
-            };
-            Managers.Network.Send(packet);
-            Debug.Log("강제 종료");
+
+            //C_ExitGame packet = new C_ExitGame()
+            //{
+            //    IsNormal = false,
+            //    PlayerId = Managers.Object.MyPlayer != null ? Managers.Object.MyPlayer.Id : 0,
+            //    //ExitId = objectId
+            //};
+            //Managers.Network.Send(packet);
+            //Debug.Log("강제 종료");
         }
         else
         {
