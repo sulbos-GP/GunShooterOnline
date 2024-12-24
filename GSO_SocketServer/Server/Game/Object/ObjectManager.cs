@@ -35,6 +35,16 @@ internal class ObjectManager
     public void Reset()
     {
         ObjectManager.Instance = new();
+        _players.Clear();
+        _rootable.Clear();
+        _exit.Clear();
+        _items.Clear();
+        _playerSpawn.Clear();
+        _mines.Clear();
+        _attacks.Clear();
+        _enemys.Clear();
+        _scopes.Clear();
+
     }
 
 
