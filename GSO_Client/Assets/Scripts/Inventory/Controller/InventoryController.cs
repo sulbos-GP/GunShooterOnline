@@ -258,8 +258,6 @@ public partial class InventoryController : MonoBehaviour
     public void ResetSelection()
     {
         SelectedItem = null;
-        SelectedGrid = null;
-        SelectedEquip = null;
         overlapItem = null;
         isPress = false;
         isOnDelete = false;
