@@ -80,6 +80,15 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""UIActive"",
+                    ""type"": ""Button"",
+                    ""id"": ""876ffe6f-d494-474b-bc56-5c23f27c7550"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -234,6 +243,17 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""KeyboardMouse;GamePad"",
                     ""action"": ""Test"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ed51d921-483d-41dd-ab98-0bf0152621ad"",
+                    ""path"": ""<Keyboard>/u"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UIActive"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -399,6 +419,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_Player_Move = m_Player.FindAction("Move", throwIfNotFound: true);
         m_Player_Interaction = m_Player.FindAction("Interaction", throwIfNotFound: true);
         m_Player_Test = m_Player.FindAction("Test", throwIfNotFound: true);
+        m_Player_UIActive = m_Player.FindAction("UIActive", throwIfNotFound: true);
         // UI
         m_UI = asset.FindActionMap("UI", throwIfNotFound: true);
         m_UI_MouseRightClick = m_UI.FindAction("MouseRightClick", throwIfNotFound: true);
@@ -472,6 +493,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Move;
     private readonly InputAction m_Player_Interaction;
     private readonly InputAction m_Player_Test;
+    private readonly InputAction m_Player_UIActive;
     public struct PlayerActions
     {
         private @PlayerInput m_Wrapper;
@@ -482,6 +504,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @Move => m_Wrapper.m_Player_Move;
         public InputAction @Interaction => m_Wrapper.m_Player_Interaction;
         public InputAction @Test => m_Wrapper.m_Player_Test;
+        public InputAction @UIActive => m_Wrapper.m_Player_UIActive;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -509,6 +532,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Test.started += instance.OnTest;
             @Test.performed += instance.OnTest;
             @Test.canceled += instance.OnTest;
+            @UIActive.started += instance.OnUIActive;
+            @UIActive.performed += instance.OnUIActive;
+            @UIActive.canceled += instance.OnUIActive;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -531,6 +557,9 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @Test.started -= instance.OnTest;
             @Test.performed -= instance.OnTest;
             @Test.canceled -= instance.OnTest;
+            @UIActive.started -= instance.OnUIActive;
+            @UIActive.performed -= instance.OnUIActive;
+            @UIActive.canceled -= instance.OnUIActive;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -644,6 +673,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnMove(InputAction.CallbackContext context);
         void OnInteraction(InputAction.CallbackContext context);
         void OnTest(InputAction.CallbackContext context);
+        void OnUIActive(InputAction.CallbackContext context);
     }
     public interface IUIActions
     {

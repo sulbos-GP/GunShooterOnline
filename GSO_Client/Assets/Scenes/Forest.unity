@@ -1468,6 +1468,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FadeImage
       objectReference: {fileID: 0}
+    - target: {fileID: 7930509356402473168, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -6650,6 +6654,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f47f60c593c019544ba112ef44dced77, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isActive: 1
   leftTime: 0
   Duration: 2
   _fadeDuration: 1

@@ -70,6 +70,7 @@ public class InputController : MonoBehaviour
         playerInput.Player.Enable();
         playerInput.Player.Look.performed += OnLookInput;
         playerInput.Player.Look.canceled += OnLookInput;
+        playerInput.Player.UIActive.performed += SetUIActive;
         //playerInput.Player.Fire.started += OnStartFireInput;
         //playerInput.Player.Fire.canceled += OnStopFireInput;
         playerInput.Player.Reload.performed += OnReloadInput;
@@ -85,6 +86,7 @@ public class InputController : MonoBehaviour
         playerInput.Player.Look.canceled -= OnMove;
         //playerInput.Player.Fire.started -= OnStartFireInput;
         //playerInput.Player.Fire.canceled -= OnStopFireInput;
+        playerInput.Player.UIActive.performed -= SetUIActive;
         playerInput.Player.Reload.performed -= OnReloadInput;
         playerInput.Player.Move.started -= OnMove;
         playerInput.Player.Move.performed -= OnMove;
@@ -191,7 +193,15 @@ public class InputController : MonoBehaviour
         }
     }
 
-    
+    private void SetUIActive(InputAction.CallbackContext callbackContext)
+    {
+        if (Managers.Object.MyPlayer.IsDead)
+        {
+            return;
+        }
+
+        UIManager.Instance.SetUIActive();
+    }
 
     private void OnInteraction(InputAction.CallbackContext callbackContext)
     {

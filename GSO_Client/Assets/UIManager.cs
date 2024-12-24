@@ -12,6 +12,29 @@ public class UIManager : MonoBehaviour
 {
     public static UIManager Instance;
 
+    public bool isActive = true;
+
+    [ContextMenu("UI")]
+    public void SetUIActive()
+    {
+        isActive = !isActive;
+
+        //활성화 조절할 요소
+        GameObject canvas = GameObject.Find("Canvas");
+        canvas.transform.Find("LeftJoystick").gameObject.SetActive(isActive); 
+        canvas.transform.Find("RightJoystick").gameObject.SetActive(isActive); 
+        WQuickSlot.gameObject.SetActive(isActive);
+        IQuickSlot.gameObject.SetActive(isActive);
+        HealthText.transform.parent.gameObject.SetActive(isActive);
+        AmmoText.transform.parent.gameObject.SetActive(isActive);
+        ReloadBtn.gameObject.SetActive(isActive);
+        InteractBtn.gameObject.SetActive(isActive);
+        TimeText.transform.parent.gameObject.SetActive(isActive);
+        QuestUI.gameObject.SetActive(isActive);
+        HitImage.gameObject.SetActive(isActive);
+        InventoryBtn.gameObject.SetActive(isActive);
+    }
+
     public GameObject DieUI { get; private set; }
     public UI_Quest QuestUI { get; private set; }
 
@@ -269,6 +292,11 @@ public class UIManager : MonoBehaviour
 
     private IEnumerator TextAlpha(CanvasGroup group,float duration)
     {
+        if (!isActive)
+        {
+            yield break;
+        }
+
         float elapsedTime = 0f;
 
         while(elapsedTime<duration)
@@ -304,6 +332,10 @@ public class UIManager : MonoBehaviour
 
     public void SetTimeUI(float time)
     {
+        if (!isActive)
+        {
+            return;
+        }
         int minutes = (int)(time / 60);
         int seconds = (int)(time % 60);
         TimeText.text = $"{minutes:D2}:{seconds:D2}";
@@ -311,6 +343,7 @@ public class UIManager : MonoBehaviour
 
     private void UpdateTime()
     {
+        
         leftTime -= Time.deltaTime;
         SetTimeUI(leftTime);
     }
@@ -318,6 +351,10 @@ public class UIManager : MonoBehaviour
 
     public void SetHpText()
     {
+        if (!isActive)
+        {
+            return;
+        }
         float MaxHP = myPlayer.MaxHp;
         float HP = myPlayer.Hp;
         HealthText.text = $"HP : {(HP / MaxHP)*100}% ";
@@ -325,6 +362,10 @@ public class UIManager : MonoBehaviour
 
     public void SetAmmoText()
     {
+        if (!isActive)
+        {
+            return;
+        }
         if (myPlayer.usingGun.gunState == GunState.Reloading)
             AmmoText.text = "Reloading";
         else
@@ -353,6 +394,11 @@ public class UIManager : MonoBehaviour
 
     public bool SetWQuickSlot(int slotId, int itemId = 0)
     {
+        if (!isActive)
+        {
+            return false;
+        }
+
         Button targetBtn;
         switch (slotId)
         {
@@ -397,6 +443,10 @@ public class UIManager : MonoBehaviour
 
     public bool SetIQuickSlot(int slotId, ItemData itemdata)
     {
+        if (!isActive)
+        {
+            return false;
+        }
         IQuickSlot targetSlot = IQuickSlot.GetChild(slotId - 5).GetComponent<IQuickSlot>();
         if (targetSlot == null)
         {

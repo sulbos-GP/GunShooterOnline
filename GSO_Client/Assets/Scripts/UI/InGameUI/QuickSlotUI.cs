@@ -128,8 +128,6 @@ public class IQuickSlot : MonoBehaviour
         return true;
     }
 
-
-
     private IEnumerator OnCooltime(double cooltime)
     {
         Button thisBtn = GetComponent<Button>();
