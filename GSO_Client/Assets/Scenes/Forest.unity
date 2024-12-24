@@ -1394,27 +1394,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7030634470262396062, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7030634470262396062, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7030634470262396062, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7030634470262396062, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
       propertyPath: m_AnchorMin.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7030634470262396062, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1920
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7030634470262396062, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1080
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7030634470262396062, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1467,10 +1467,6 @@ PrefabInstance:
     - target: {fileID: 7930509356402473168, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
       propertyPath: m_Name
       value: FadeImage
-      objectReference: {fileID: 0}
-    - target: {fileID: 7930509356402473168, guid: 2f3a0c4a56e07684da3720fe0b6e5571, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
