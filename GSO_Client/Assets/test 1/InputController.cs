@@ -438,7 +438,9 @@ public class InputController : MonoBehaviour
         aimFov.SetOrigin(transform.position); //fov�� �߽��� �÷��̾��� ��ġ�� ����
         basicFov.SetOrigin(transform.position);
 
+#if UNITY_EDITOR
         gameObject.GetComponent<DebugShape>().UpdateDrawLine();
+#endif
         UpdateServer();
     }
 

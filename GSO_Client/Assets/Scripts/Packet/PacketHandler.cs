@@ -35,7 +35,9 @@ internal class PacketHandler
         Managers.SystemLog.Message($"{enterGamePacket.Player}");
         Managers.Object.Add(enterGamePacket.Player, true);
 
+#if UNITY_EDITOR
         Managers.Object.MyPlayer.GetComponent<DebugShape>().SetDrawLine(enterGamePacket.Player.Shape.Width, enterGamePacket.Player.Shape.Height);
+#endif
 
         var Stats = enterGamePacket.Player.StatInfo;
         Managers.Object.MyPlayer.Hp = Stats.Hp;
@@ -81,12 +83,13 @@ internal class PacketHandler
         foreach (var info in spawnPacket.Objects)
         {
             Managers.Object.Add(info, false);
+#if UNITY_EDITOR
             DebugShape ds = Managers.Object.FindById(info.ObjectId).GetComponent<DebugShape>();
             if (ds != null)
             {
                 ds.SetDrawLine(info.Shape.Width, info.Shape.Height);
             }
-
+#endif
             var type = (info.ObjectId >> 24) & 0x7f;
             var creature = Managers.Object.FindById(info.ObjectId).GetComponent<CreatureController>();
             if(creature == null)
@@ -135,11 +138,13 @@ internal class PacketHandler
         cc.PosInfo = movePacket.PositionInfo;//??
 
         //디버그라인 업데이트
+#if UNITY_EDITOR
         var ds = go.GetComponent<DebugShape>();
         if(ds != null)
         {
             ds.UpdateDrawLine();
         }
+#endif
     }
 
     public static void S_ChangeHpHandler(PacketSession session, IMessage message)

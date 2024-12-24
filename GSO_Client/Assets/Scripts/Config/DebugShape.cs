@@ -34,6 +34,7 @@ public class DebugShape : MonoBehaviour
     private bool isLineSet;
     public void Init()
     {
+#if UNITY_EDITOR
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.positionCount = 5; // 사각형을 만들기 위해 5개의 점이 필요합니다.
         lineRenderer.loop = false; // 마지막 점이 처음으로 연결되지 않도록 설정합니다.
@@ -42,15 +43,19 @@ public class DebugShape : MonoBehaviour
         lineRenderer.startColor = Color.red;
         lineRenderer.endColor = Color.red;
         isLineSet = false;
+#endif
     }
 
     private void Awake()
     {
+#if UNITY_EDITOR
         Init();
+#endif
     }
 
     public void SetDrawLine(float width, float height)
     {
+#if UNITY_EDITOR
         isLineSet = true;
 
         _width = width;
@@ -60,6 +65,7 @@ public class DebugShape : MonoBehaviour
 
         // LineRenderer의 점 위치 설정
         UpdateDrawLine();
+#endif
     }
 
     [ContextMenu("히트박스 그리기")]
