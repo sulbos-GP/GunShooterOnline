@@ -775,7 +775,10 @@ internal class PacketHandler
             {
                 Debug.LogError("S_RaycastShootHandler error : 총 스크립트를 찾을수 없음");
             }
+
+#if UNITY_EDITOR
             shooterGun.gunLine.SetBulletLine(startPoint, hitPoint);
+#endif
 
             shooterGun.UseAmmo();
             UIManager.Instance.SetAmmoText();

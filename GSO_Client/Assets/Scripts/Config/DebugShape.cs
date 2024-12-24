@@ -65,6 +65,7 @@ public class DebugShape : MonoBehaviour
     [ContextMenu("히트박스 그리기")]
     public void UpdateDrawLine()
     {
+#if UNITY_EDITOR
         if (!isLineSet)
         {
             return;
@@ -75,11 +76,14 @@ public class DebugShape : MonoBehaviour
         lineRenderer.SetPosition(2, (Vector2)gameObject.transform.position + rect.bottomRight);
         lineRenderer.SetPosition(3, (Vector2)gameObject.transform.position + rect.bottomLeft);
         lineRenderer.SetPosition(4, (Vector2)gameObject.transform.position + rect.topLeft);
+#endif
     }
 
     [ContextMenu("히트박스 지우기")]
     public void ClearDrawLine()
     {
+#if UNITY_EDITOR
         lineRenderer.positionCount = 0;
+#endif
     }
 }
