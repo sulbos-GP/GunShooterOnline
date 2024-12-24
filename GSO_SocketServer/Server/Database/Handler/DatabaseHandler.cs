@@ -1,5 +1,6 @@
 ﻿using Server.Database.Game;
 using Server.Database.Master;
+using Server.Docker;
 using Server.Web;
 using System;
 using System.Collections.Generic;
@@ -65,8 +66,8 @@ namespace Server.Database.Handler
 
 #if DOCKER
 
-            string server = "gamepli-db.cfk4ckioaflf.ap-northeast-2.rds.amazonaws.com";
-            string password = "GAMEpli412!";
+            string server = DockerUtil.GetHostIP();
+            string password = "!Q2w3e4r";
 
             AddMySQL<GameDB>(EDatabase.Game, server, password, "game_database");
             AddMySQL<MasterDB>(EDatabase.Master, server, password, "master_database");
