@@ -2,6 +2,8 @@
 
 > 2D 모바일 익스트랙션 서바이벌 슈터 게임
 
+  [![Video Label](http://img.youtube.com/vi/444oGjuMZwc/0.jpg)](https://youtu.be/444oGjuMZwc)
+
 ## 게임 소개
 
 | 항목 | 내용 |
